@@ -15,6 +15,7 @@
 # along with this program.If not, see <http://www.gnu.org/licenses/>.
 
 import struct
+import logging
 from lib.cuckoo.common.abstracts import Signature
 
 IMAGE_DOS_SIGNATURE                 = 0x5A4D
@@ -31,6 +32,8 @@ EXECUTABLE_FLAGS                    = 0x10 | 0x20 | 0x40 | 0x80
 EXTRACTION_MIN_SIZE                 = 0x1001
 
 PLUGX_SIGNATURE                     = 0x5658
+
+log = logging.getLogger(__name__)
 
 def IsPEImage(buf, size):
     if not size:
@@ -50,8 +53,12 @@ def IsPEImage(buf, size):
         offset = 0
         while offset < PE_HEADER_LIMIT-86:
             #ToDo
-            machine_probe = struct.unpack("<H", buf[offset:offset+2])[0]
-            if machine_probe == IMAGE_FILE_MACHINE_I386 or machine_probe == IMAGE_FILE_MACHINE_AMD64:
+            try:
+                machine_probe = struct.unpack("<H", buf[offset:offset+2])[0]
+            except struct.error:
+                machine_probe = ""
+                log.warning("Machine probe unpck failed, follow")
+            if machine_probe and machine_probe in (IMAGE_FILE_MACHINE_I386, IMAGE_FILE_MACHINE_AMD64):
                 nt_headers = buf[offset-4:offset+252]
                 break
             offset = offset + 2
