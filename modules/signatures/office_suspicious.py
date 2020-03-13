@@ -62,7 +62,7 @@ class OfficeAnamalousFeature(Signature):
                     edittime = self.results["static"]["office"]["Metadata"]["SummaryInformation"]["total_edit_time"]
                     createtime = self.results["static"]["office"]["Metadata"]["SummaryInformation"]["create_time"]
                     lastsaved = self.results["static"]["office"]["Metadata"]["SummaryInformation"]["last_saved_time"]
-                    if edittime > 0 and createtime == "None" and lastsaved == "None":
+                    if int(edittime) > 0 and createtime == "None" and lastsaved == "None":
                         self.data.append({"creation_anomaly" : "The file appears to have an edit time yet has no creation time or last saved time. This can be a sign of an automated document creation kit."})
 
         if "static" in self.results and "office" in self.results["static"]:
