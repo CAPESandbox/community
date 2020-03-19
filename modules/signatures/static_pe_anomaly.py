@@ -126,7 +126,7 @@ class StaticPEPDBPath(Signature):
     description = "The PE file contains a PDB path"
     severity = 1
     confidence = 80
-    weight = 20
+    weight = 1
     categories = ["static"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
