@@ -12,7 +12,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 from lib.cuckoo.common.abstracts import Signature
 
 class Static_Java(Signature):
@@ -33,43 +32,52 @@ class Static_Java(Signature):
         # https://www.virusbtn.com/virusbulletin/archive/2013/06/vb201306-Java-null
 
         functions = [".invoke(",".getMethod(","class.forName(",".getClass(",".getField(",".getConstructor(",".newInstance("]
-        permissions = ["setSecurityManager","getSecurityManager","doPrivileged","AllPermission"]
+        permissions = [
+            #string, reversed, hexed, hexed with :, hexed with space
+            "setSecurityManager", "reganaMytiruceStes", "73657453656375726974794d616e61676572", "73:65:74:53:65:63:75:72:69:74:79:4d:61:6e:61:67:65:72", "73 65 74 53 65 63 75 72 69 74 79 4d 61 6e 61 67 65 72",
+            "getSecurityManager", "reganaMytiruceSteg", "67657453656375726974794d616e61676572", "67:65:74:53:65:63:75:72:69:74:79:4d:61:6e:61:67:65:72", "67 65 74 53 65 63 75 72 69 74 79 4d 61 6e 61 67 65 72",
+            "doPrivileged", "degelivirPod", "646f50726976696c65676564", "64:6f:50:72:69:76:69:6c:65:67:65:64", "64 6f 50 72 69 76 69 6c 65 67 65 64",
+            "AllPermission", "noissimrePllA", "416c6c5065726d697373696f6e", "41:6c:6c:50:65:72:6d:69:73:73:69:6f:6e", "41 6c 6c 50 65 72 6d 69 73 73 69 6f 6e",
+        ]
 
-        if "static" in self.results and "java" in self.results["static"] and "decompiled" in self.results["static"]["java"]:
-            decompiled = self.results["static"]["java"]["decompiled"]
-            for functions in functions:
-                reflection += decompiled.count(functions)    
-            if reflection > 0:           
-                self.data.append({"obfuscation_reflection" : "Contains %s occurrences of potential Java reflection indirect function call obfuscation" % (reflection)})
-                self.weight += 1
+        decompiled = self.results.get("static", {}).get("java", {}).get("decompiled", "")
+        if not decompiled:
+            return False
 
-            # Checks for strings in clear, reversed & hex formattings. Hex conversion code from http://stackoverflow.com/questions/12214801/print-a-string-as-hex-bytes)
-            for permissions in permissions:
-                if permissions in decompiled or permissions[::-1] in decompiled or ''.join(x.encode('hex') for x in permissions) in decompiled or ':'.join(x.encode('hex') for x in permissions) in decompiled or ' '.join(x.encode('hex') for x in permissions) in decompiled:
-                    self.data.append({"security_permissions" : "Contains %s potentially used to modify the security level" % (permissions)})
-                    self.severity = 3
-                    self.weight += 1
+        decompiled = self.results["static"]["java"]["decompiled"]
+        for functions in functions:
+            reflection += decompiled.count(functions)
+        if reflection > 0:
+            self.data.append({"obfuscation_reflection" : "Contains %s occurrences of potential Java reflection indirect function call obfuscation" % (reflection)})
+            self.weight += 1
 
-            if "URL(" in decompiled or "URLEncoder.encode(" in decompiled or "openConnection(" in decompiled:
-                self.data.append({"http" : "Contains ability to make HTTP connections" })
-                self.weight += 1
-
-            if ".exec(" in decompiled or ".getRuntime(" in decompiled:
-                self.data.append({"execute" : "Contains ability to run executable code" })
+        # Checks for strings in clear, reversed & hex formattings. Hex conversion code from http://stackoverflow.com/questions/12214801/print-a-string-as-hex-bytes)
+        for permissions in permissions:
+            if permissions in decompiled:
+                self.data.append({"security_permissions" : "Contains %s potentially used to modify the security level" % (permissions)})
                 self.severity = 3
                 self.weight += 1
 
-            if "OutputStream" in decompiled and ".ser" in decompiled:
-                self.data.append({"serialized_object" : "Contains use of a Java serialized object" })
-                self.weight += 1
+        if "URL(" in decompiled or "URLEncoder.encode(" in decompiled or "openConnection(" in decompiled:
+            self.data.append({"http" : "Contains ability to make HTTP connections" })
+            self.weight += 1
 
-            # Check individual string length for possible obfuscation
-            for string in decompiled.split():
-                if len(string) > 150:
-                    self.data.append({"string_length" : "Contains very large strings indicative of obfuscation" })
-                    self.severity = 3
-                    self.weight += 1
-                    break
+        if ".exec(" in decompiled or ".getRuntime(" in decompiled:
+            self.data.append({"execute" : "Contains ability to run executable code" })
+            self.severity = 3
+            self.weight += 1
+
+        if "OutputStream" in decompiled and ".ser" in decompiled:
+            self.data.append({"serialized_object" : "Contains use of a Java serialized object" })
+            self.weight += 1
+
+        # Check individual string length for possible obfuscation
+        for string in decompiled.split():
+            if len(string) > 150:
+                self.data.append({"string_length" : "Contains very large strings indicative of obfuscation" })
+                self.severity = 3
+                self.weight += 1
+                break
 
             # Specific Exploit Detections
             # http://stopmalvertising.com/malware-reports/watering-hole-attack-cve-2012-4792-and-cve-2012-0507.html
