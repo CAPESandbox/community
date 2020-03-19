@@ -24,29 +24,29 @@ class Static_Java(Signature):
     minimum = "1.3"
 
     def run(self):
-        reflection = 0
-        exploit = 0
-
-        # https://www.fireeye.com/content/dam/fireeye-www/global/en/current-threats/pdfs/wp-a-daily-grind-filtering-java-vulnerabilities.pdf
-        # https://www.fireeye.com/content/dam/fireeye-www/global/en/current-threats/pdfs/rpt-java-vulnerabilities.pdf
-        # https://www.virusbtn.com/virusbulletin/archive/2013/06/vb201306-Java-null
-
-        functions = [".invoke(",".getMethod(","class.forName(",".getClass(",".getField(",".getConstructor(",".newInstance("]
-        permissions = [
-            #string, reversed, hexed, hexed with :, hexed with space
-            "setSecurityManager", "reganaMytiruceStes", "73657453656375726974794d616e61676572", "73:65:74:53:65:63:75:72:69:74:79:4d:61:6e:61:67:65:72", "73 65 74 53 65 63 75 72 69 74 79 4d 61 6e 61 67 65 72",
-            "getSecurityManager", "reganaMytiruceSteg", "67657453656375726974794d616e61676572", "67:65:74:53:65:63:75:72:69:74:79:4d:61:6e:61:67:65:72", "67 65 74 53 65 63 75 72 69 74 79 4d 61 6e 61 67 65 72",
-            "doPrivileged", "degelivirPod", "646f50726976696c65676564", "64:6f:50:72:69:76:69:6c:65:67:65:64", "64 6f 50 72 69 76 69 6c 65 67 65 64",
-            "AllPermission", "noissimrePllA", "416c6c5065726d697373696f6e", "41:6c:6c:50:65:72:6d:69:73:73:69:6f:6e", "41 6c 6c 50 65 72 6d 69 73 73 69 6f 6e",
-        ]
 
         decompiled = self.results.get("static", {}).get("java", {}).get("decompiled", "")
         if not decompiled:
             return False
 
-        decompiled = self.results["static"]["java"]["decompiled"]
-        for functions in functions:
-            reflection += decompiled.count(functions)
+        # https://www.fireeye.com/content/dam/fireeye-www/global/en/current-threats/pdfs/wp-a-daily-grind-filtering-java-vulnerabilities.pdf
+        # https://www.fireeye.com/content/dam/fireeye-www/global/en/current-threats/pdfs/rpt-java-vulnerabilities.pdf
+        # https://www.virusbtn.com/virusbulletin/archive/2013/06/vb201306-Java-null
+
+        functions = (".invoke(", ".getMethod(", "class.forName(", ".getClass(", ".getField(", ".getConstructor(", ".newInstance(")
+        permissions = (
+            #string, reversed, hexed, hexed with :, hexed with space
+            "setSecurityManager", "reganaMytiruceStes", "73657453656375726974794d616e61676572", "73:65:74:53:65:63:75:72:69:74:79:4d:61:6e:61:67:65:72", "73 65 74 53 65 63 75 72 69 74 79 4d 61 6e 61 67 65 72",
+            "getSecurityManager", "reganaMytiruceSteg", "67657453656375726974794d616e61676572", "67:65:74:53:65:63:75:72:69:74:79:4d:61:6e:61:67:65:72", "67 65 74 53 65 63 75 72 69 74 79 4d 61 6e 61 67 65 72",
+            "doPrivileged", "degelivirPod", "646f50726976696c65676564", "64:6f:50:72:69:76:69:6c:65:67:65:64", "64 6f 50 72 69 76 69 6c 65 67 65 64",
+            "AllPermission", "noissimrePllA", "416c6c5065726d697373696f6e", "41:6c:6c:50:65:72:6d:69:73:73:69:6f:6e", "41 6c 6c 50 65 72 6d 69 73 73 69 6f 6e",
+        )
+
+        reflection = 0
+        exploit = 0
+
+        reflection = sum([decompiled.count(functions) for functions in functions])
+
         if reflection > 0:
             self.data.append({"obfuscation_reflection" : "Contains %s occurrences of potential Java reflection indirect function call obfuscation" % (reflection)})
             self.weight += 1
