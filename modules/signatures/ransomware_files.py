@@ -141,6 +141,7 @@ class RansomwareFiles(Signature):
             (".*\\\\ClopReadMe\.txt$", ["Clop-CryptoMix"]),
             (".*\\\\Fix-Your-Files\.txt$", ["SNAKE"]),
             (".*\\\\__________WHY FILES NOT WORK__________\.txt$", ["Hydra Ransomware"]),
+            (".*\\\\.readme2unlock\.txt$", ["DoppelPaymer"]),
 
         ]
 
