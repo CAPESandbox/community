@@ -74,3 +74,20 @@ class ThemidaPacked(Signature):
                 self.description = "The following process appear to have been packed with Themida: " + procs
 
         return hit
+
+class ThemidaPackedSection(Signature):
+    name = "packer_themida"
+    description = "Executable file is packed/obfuscated with Themida"
+    severity = 2
+    categories = ["packer"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    ttp = ["T1045"]
+
+    def run(self):
+        for section in self.results.get("static", {}).get("pe", {}).get("sections", []):
+            if section["name"].lower().startswith(".themida"):
+                self.data.append({"section" : section})
+                return True
+
+        return False
