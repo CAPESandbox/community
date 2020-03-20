@@ -501,7 +501,7 @@ class CAPE_PlugX(Signature):
         if call["api"] == "RtlDecompressBuffer":
             dos_header = self.get_raw_argument(call, "UncompressedBuffer")[:2]
             #IMAGE_DOS_SIGNATURE or PLUGX_SIGNATURE
-            if dos_header in ("MZ", "VX"):
+            if dos_header in ("MZ", "XV", "GULP"):
                 self.compressed_binary = True
 
         if call["api"] == "memcpy":

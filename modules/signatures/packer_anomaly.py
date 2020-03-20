@@ -46,6 +46,7 @@ class PackerUnknownPESectionName(Signature):
             ".rsrc",
             ".shared",
             ".text",
+            ".themida",
             ".titan",
             ".tls",
             ".upx",
