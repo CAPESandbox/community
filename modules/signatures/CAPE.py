@@ -162,31 +162,6 @@ class CAPE_Decryption(Signature):
         if self.encrypted_binary is True:
             return True
 
-class CAPE_RegBinary(Signature):
-    name = "RegBinary"
-    description = "Behavioural detection: PE binary written to registry."
-    severity = 1
-    categories = ["malware"]
-    authors = ["kevoreilly"]
-    minimum = "1.3"
-    evented = True
-
-    filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "RegCreateKeyExA", "RegCreateKeyExW"])
-
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.reg_binary = False
-
-    def on_call(self, call, process):
-        if call["api"] == "RegSetValueExA" or call["api"] == "RegSetValueExW":
-            buf = self.get_raw_argument(call, "Buffer")
-            size = self.get_raw_argument(call, "BufferLength")
-            self.reg_binary = IsPEImage(buf, size)
-
-    def on_complete(self):
-        if self.reg_binary is True:
-            return True
-
 class CAPE_Extraction(Signature):
     name = "Extraction"
     description = "Behavioural detection: Executable code extraction"
