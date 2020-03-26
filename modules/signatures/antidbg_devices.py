@@ -38,8 +38,10 @@ class AntiDBGDevices(Signature):
             ".*ICEXT$"
         ]
 
+        detected = False
         for indicator in indicators:
             if self.check_file(pattern=indicator, regex=True):
-                return True
+                self.data.append({"pattern": indicator})
+                detected = True
 
-        return False
+        return detected
