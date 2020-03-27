@@ -14,19 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.If not, see <http://www.gnu.org/licenses/>.
 
-import struct
 import logging
 from lib.cuckoo.common.abstracts import Signature
-
-IMAGE_DOS_SIGNATURE                 = 0x5A4D
-IMAGE_NT_SIGNATURE                  = 0x00004550
-OPTIONAL_HEADER_MAGIC_PE            = 0x10b
-OPTIONAL_HEADER_MAGIC_PE_PLUS       = 0x20b
-IMAGE_FILE_EXECUTABLE_IMAGE         = 0x0002
-IMAGE_FILE_MACHINE_I386             = 0x014c
-IMAGE_FILE_MACHINE_AMD64            = 0x8664
-DOS_HEADER_LIMIT                    = 0x40
-PE_HEADER_LIMIT                     = 0x200
+from lib.cuckoo.common.objects import IsPEImage
 
 EXECUTABLE_FLAGS                    = 0x10 | 0x20 | 0x40 | 0x80
 EXTRACTION_MIN_SIZE                 = 0x1001
@@ -34,58 +24,6 @@ EXTRACTION_MIN_SIZE                 = 0x1001
 PLUGX_SIGNATURE                     = 0x5658
 
 log = logging.getLogger(__name__)
-
-def IsPEImage(buf, size):
-    if not size:
-        return False
-    if size < DOS_HEADER_LIMIT:
-        return False
-    buf = buf.encode("utf-8")
-    dos_header = buf[:DOS_HEADER_LIMIT]
-    nt_headers = None
-
-    if size < PE_HEADER_LIMIT:
-        return False
-
-    # Check for sane value in e_lfanew
-    e_lfanew, = struct.unpack("<L", dos_header[60:64])
-    if not e_lfanew or e_lfanew > PE_HEADER_LIMIT:
-        offset = 0
-        while offset < PE_HEADER_LIMIT-86:
-            #ToDo
-            try:
-                machine_probe = struct.unpack("<H", buf[offset:offset+2])[0]
-            except struct.error:
-                machine_probe = ""
-                log.warning("Machine probe unpck failed, follow")
-            if machine_probe and machine_probe in (IMAGE_FILE_MACHINE_I386, IMAGE_FILE_MACHINE_AMD64):
-                nt_headers = buf[offset-4:offset+252]
-                break
-            offset = offset + 2
-    else:
-        nt_headers = buf[e_lfanew:e_lfanew+256]
-
-    if nt_headers is None:
-        return False
-
-    #if ((pNtHeader->FileHeader.Machine == 0) || (pNtHeader->FileHeader.SizeOfOptionalHeader == 0 || pNtHeader->OptionalHeader.SizeOfHeaders == 0))
-    if struct.unpack("<H", nt_headers[4:6]) == 0 or struct.unpack("<H", nt_headers[20:22]) == 0 or struct.unpack("<H", nt_headers[84:86]) == 0:
-        return False
-
-    #if (!(pNtHeader->FileHeader.Characteristics & IMAGE_FILE_EXECUTABLE_IMAGE))
-    if (struct.unpack("<H", nt_headers[22:24])[0] & IMAGE_FILE_EXECUTABLE_IMAGE) == 0:
-        return False
-
-    #if (pNtHeader->FileHeader.SizeOfOptionalHeader & (sizeof (ULONG_PTR) - 1))
-    if struct.unpack("<H", nt_headers[20:22])[0] & 3 != 0:
-        return False
-
-    #if ((pNtHeader->OptionalHeader.Magic != IMAGE_NT_OPTIONAL_HDR32_MAGIC) && (pNtHeader->OptionalHeader.Magic != IMAGE_NT_OPTIONAL_HDR64_MAGIC))
-    if struct.unpack("<H", nt_headers[24:26])[0] != OPTIONAL_HEADER_MAGIC_PE and struct.unpack("<H", nt_headers[24:26])[0] != OPTIONAL_HEADER_MAGIC_PE_PLUS:
-        return False
-
-    # To pass the above tests it should now be safe to assume it's a PE image
-    return True
 
 class CAPE_Compression(Signature):
     name = "Compression"
