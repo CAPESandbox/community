@@ -189,7 +189,7 @@ class CAPE_InjectionCreateRemoteThread(Signature):
                     #procname = self.get_name_from_pid(self.handle_map[handle])
                     #desc = "{0}({1}) -> {2}({3})".format(process["process_name"], str(process["process_id"]),
                     #                                     procname, self.handle_map[handle])
-                    self.data.append({"Injection": desc})
+                    #self.data.append({"Injection": desc})
                     return True
         elif (call["api"] == "CreateRemoteThread" or call["api"].startswith("NtCreateThread") or call["api"].startswith("NtCreateThreadEx")):
             handle = self.get_argument(call, "ProcessHandle")

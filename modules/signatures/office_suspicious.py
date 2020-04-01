@@ -48,7 +48,7 @@ class OfficeAnamalousFeature(Signature):
                     words = self.results["static"]["office"]["Metadata"]["SummaryInformation"]["num_words"]
                     if words == "0" or words == "None":
                         self.data.append({"content" : "The file appears to have no content."})
-                        
+
         if package != "xls" and "static" in self.results and "office" in self.results["static"]:
             if "Metadata" in self.results["static"]["office"]:
                 if "SummaryInformation" in self.results["static"]["office"]["Metadata"]:
@@ -62,7 +62,7 @@ class OfficeAnamalousFeature(Signature):
                     edittime = self.results["static"]["office"]["Metadata"]["SummaryInformation"]["total_edit_time"]
                     createtime = self.results["static"]["office"]["Metadata"]["SummaryInformation"]["create_time"]
                     lastsaved = self.results["static"]["office"]["Metadata"]["SummaryInformation"]["last_saved_time"]
-                    if int(edittime) > 0 and createtime == "None" and lastsaved == "None":
+                    if edittime and int(edittime) > 0 and createtime == "None" and lastsaved == "None":
                         self.data.append({"creation_anomaly" : "The file appears to have an edit time yet has no creation time or last saved time. This can be a sign of an automated document creation kit."})
 
         if "static" in self.results and "office" in self.results["static"]:
@@ -96,7 +96,7 @@ class OfficeAnamalousFeature(Signature):
                            if re.match("^[a-zA-Z0-9]{6,}$", lastauthor):
                                self.data.append({"last_saved_format" : "The file was last saved by an author containing a mix of numerical and upper case characters in an unlikely pattern indicative of an automated document creation kit."})
 
-            
+
         if self.data:
             ret = True
 
@@ -115,7 +115,6 @@ class OfficeDDECommand(Signature):
 
     def run(self):
         ret = False
-        strings = []
         if "static" in self.results and "office_dde" in self.results["static"]:
             dde = self.results["static"]["office_dde"]
             self.data.append({"command" : dde})
