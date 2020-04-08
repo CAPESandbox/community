@@ -93,7 +93,7 @@ class MINERS(Signature):
 
     def run(self):
 
-        if any([domain in self.pool_domains for domain in self.results.get("network", {}).get("domains", [])]):
+        if any([domain["domain"] in self.pool_domains for domain in self.results.get("network", {}).get("domains", [])]):
             self.malfamily = "crypto miner"
             return True
         return False
