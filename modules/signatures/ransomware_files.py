@@ -142,6 +142,8 @@ class RansomwareFiles(Signature):
             (".*\\\\Fix-Your-Files\.txt$", ["SNAKE"]),
             (".*\\\\__________WHY FILES NOT WORK__________\.txt$", ["Hydra Ransomware"]),
             (".*\\\\.readme2unlock\.txt$", ["DoppelPaymer"]),
+            (".*\\\\How_To_Decrypt_My_Files\.txt$", ["Ragnarok"]),
+            (".*\\\\RGNR_[A-Z0-9]{8}\.txt$", ["RagnarLocker"]),
 
         ]
 
