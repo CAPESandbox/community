@@ -92,6 +92,8 @@ class RansomwareExtensions(Signature):
             (".*\.HCY$", ["HildaCrypt"]),
             (".*\.guarded$", ["GarrantyDecrypt"]),
             (".*\.lilocked$", ["Lilocked"]),
+            (".*\.ragnarok_cry$", ["Ragnarok"]),
+            (".*\.ragnar_[A-Z0-9]{8}$", ["RagnarLocker"]),
         ]
 
         for indicator in indicators:
