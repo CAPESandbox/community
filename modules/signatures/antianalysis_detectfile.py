@@ -9,7 +9,7 @@ class AntiAnalysisDetectFile(Signature):
     description = "Attempts to identify installed analysis tools by a known file location"
     severity = 3
     categories = ["anti-analysis"]
-    authors = ["KillerInstinct", "Brad Spengler"]
+    authors = ["KillerInstinct", "Brad Spengler", "ditekshen"]
     minimum = "1.2"
     ttp = ["T1063"]
 
@@ -37,6 +37,21 @@ class AntiAnalysisDetectFile(Signature):
             "^[A-Za-z]:\\\\ComboFix",
             "^[A-Za-z]:\\\\Program\\ Files(\\ \(x86\))?\\\\FFDec",
             "^[A-Za-z]:\\\\Program\\ Files(\\ \(x86\))?\\\\Wireshark",
+            "^[A-Za-z]:\\\\bin\\\\AHookMonitor\.dll$",
+            "^[A-Za-z]:\\\\bin\\\\hookanaapp\.exe$",
+            "^[A-Za-z]:\\\\bsa\\\\log_api",
+            "^[A-Za-z]:\\\\AVCTestSuite\\\\AVCTestSuite\.exe$",
+            "^[A-Za-z]:\\\\ipf\\\\BDCore_U\.dll$",
+            "^[A-Za-z]:\\\\Kit\\\\procexp\.exe$",
+            "^[A-Za-z]:\\\\manual\\\\grabme\.exe$",
+            "^[A-Za-z]:\\\\manual\\\\SilipTCPIP\.exe$",
+            "^[A-Za-z]:\\\\MWS\\\\bin\\\\agent",
+            "^[A-Za-z]:\\\\original\\\\AutoRepGui",
+            "^[A-Za-z]:\\\\totalcmd\\\\gfiles",
+            "^[A-Za-z]:\\\\tracer\\\\FortiTracer\.exe$",
+            "^[A-Za-z]:\\\\tracer\\\\mdare32_0\.sys$",
+            "^[A-Za-z]:\\\\plugins\\\\(import|process)\\\\.*\.dll$",
+            "^[A-Za-z]:\\\\sandbox_svc",
         ]
         ret = False
         for indicator in file_indicators:
