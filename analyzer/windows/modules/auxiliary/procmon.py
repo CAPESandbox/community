@@ -33,7 +33,7 @@ class Procmon(Auxiliary, Thread):
         bin_path = os.path.join(ROOT, "bin")
         self.procmon_exe = os.path.join(bin_path, "procmon.exe")
         self.procmon_pmc = os.path.join(bin_path, "procmon.pmc")
-        self.procmon_pml = os.path.join(bin_path, "procmon.pml")
+        self.procmon_pml = os.path.join(bin_path, "procmon")
         self.procmon_xml = os.path.join(bin_path, "procmon.xml")
 
         if not os.path.exists(self.procmon_exe) or not os.path.exists(self.procmon_pmc):
@@ -45,7 +45,7 @@ class Procmon(Auxiliary, Thread):
             )
 
         # Start process monitor in the background.
-        subprocess.call([
+        subprocess.Popen([
             self.procmon_exe,
             "/AcceptEula",
             "/Quiet",
@@ -70,7 +70,7 @@ class Procmon(Auxiliary, Thread):
             # Convert the process monitor log into a readable XML file.
             subprocess.call([
                 self.procmon_exe,
-                "/OpenLog", self.procmon_pml,
+                "/OpenLog", self.procmon_pml+".PML",
                 "/LoadConfig", self.procmon_pmc,
                 "/SaveAs", self.procmon_xml,
                 "/SaveApplyFilter",
