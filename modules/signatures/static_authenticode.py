@@ -13,6 +13,7 @@ class Authenticode(Signature):
     categories = ["static"]
     authors = ["Optiv"]
     minimum = "1.3"
+    ttp = ["T1116"]
 
     def run(self):
         found_sig = False
@@ -24,3 +25,25 @@ class Authenticode(Signature):
                     found_sig = True
 
         return found_sig
+
+class InvalidAuthenticodeSignature(Signature):
+    name = "invalid_authenticode_signature"
+    description = "Authenticode signature is invalid"
+    severity = 2
+    confidence = 30
+    categories = ["static"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    ttp = ["T1116"]
+
+    def run(self):
+        ret = False
+        if "static" in self.results and "pe" in self.results["static"]:
+            if "guest_signers" in self.results["static"]["pe"] and self.results["static"]["pe"]:
+                signer = self.results["static"]["pe"] and self.results["static"]["pe"]["guest_signers"]
+                if not signer["aux_valid"]:
+                    error = signer["aux_error_desc"]
+                    self.data.append({"authenticode error": "%s" % (error) })
+                    ret = True
+
+        return ret
