@@ -143,7 +143,7 @@ class NetworkDNSBlockChain(Signature):
         ]
 
         for indicator in domain_indictors:
-            if self.check_domain(patter=indicator, regex=True):
+            if self.check_domain(pattern=indicator, regex=True):
                 self.data.append({"domain": indicator})
                 return True
 
@@ -183,7 +183,7 @@ class NetworkDNSOpenNIC(Signature):
         ]
 
         for indicator in domain_indictors:
-            if self.check_domain(patter=indicator, regex=True):
+            if self.check_domain(pattern=indicator, regex=True):
                 self.data.append({"domain": indicator})
                 return True
 
