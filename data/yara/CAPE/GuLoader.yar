@@ -11,6 +11,7 @@ rule GuLoader {
         $s5 = "Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce" fullword ascii
         $s6 = "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko" fullword ascii
         $s7 = "Startup key" fullword ascii
+        $s8 = "\\qemu-ga\\qga.state" ascii
 
         $l1 = "shell32" fullword ascii
         $l2 = "kernel32" fullword ascii
@@ -32,5 +33,5 @@ rule GuLoader {
         $url3 = "http://myurl/myfile.bin" fullword ascii
         $url4 = "http" ascii // fallback
     condition:
-        3 of ($s*) and 2 of ($l*) and 2 of ($o*) and 1 of ($url*)
+        (3 of ($s*) and 2 of ($l*) and 2 of ($o*) and 1 of ($url*)) or (4 of ($s*) and 3 of ($l*) and 2 of ($o*))
 }
