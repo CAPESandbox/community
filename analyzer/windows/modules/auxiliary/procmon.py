@@ -26,15 +26,15 @@ class Procmon(Auxiliary, Thread):
         self.startupinfo = subprocess.STARTUPINFO()
         self.startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
-    def run(self):
-        if not self.enabled:
-            return False
-
         bin_path = os.path.join(ROOT, "bin")
         self.procmon_exe = os.path.join(bin_path, "procmon.exe")
         self.procmon_pmc = os.path.join(bin_path, "procmon.pmc")
         self.procmon_pml = os.path.join(bin_path, "procmon")
         self.procmon_xml = os.path.join(bin_path, "procmon.xml")
+
+    def run(self):
+        if not self.enabled:
+            return False
 
         if not os.path.exists(self.procmon_exe) or not os.path.exists(self.procmon_pmc):
             raise CuckooPackageError(
@@ -58,9 +58,7 @@ class Procmon(Auxiliary, Thread):
         while not os.path.exists(self.procmon_pml) or not os.path.getsize(self.procmon_pml):
             time.sleep(0.1)
 
-        if self.enabled:
-            return True
-        return False
+        return True
 
     def stop(self):
         try:
