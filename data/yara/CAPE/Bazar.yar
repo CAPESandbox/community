@@ -1,4 +1,4 @@
-rule bazarbackdoor {
+rule Bazar {
 
 meta:
  description = "Detects BazarBackdoor injected 64-bit malware"
@@ -6,7 +6,7 @@ meta:
  reference = "https://twitter.com/pancak3lullz/status/1252303608747565057"
  tlp = "white"
  date = "2020-04-24"
- cape_type = "BazarBackdoor Payload"
+ cape_type = "Bazar Payload"
 
 strings:
  $str1 = "%id%"
