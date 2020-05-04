@@ -6,7 +6,7 @@ class RansomwareExtensions(Signature):
     severity = 3
     families = []
     categories = ["ransomware"]
-    authors = ["Kevin Ross"]
+    authors = ["Kevin Ross", "bartblaze"]
     minimum = "1.2"
     ttp = ["T1486"]
 
@@ -93,6 +93,7 @@ class RansomwareExtensions(Signature):
             (".*\.guarded$", ["GarrantyDecrypt"]),
             (".*\.lilocked$", ["Lilocked"]),
             (".*\.ragnarok_cry$", ["Ragnarok"]),
+            (".*\.ragnarok$", ["Ragnarok"]),
             (".*\.ragnar_[A-Z0-9]{8}$", ["RagnarLocker"]),
         ]
 
