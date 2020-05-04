@@ -44,6 +44,10 @@ class EncryptedIOC(Signature):
             "verisign.com",
             "symantec.com",
             "thawte.com",
+            "v1.0.3705",
+            "v1.1.4322",
+            "v2.0.50727",
+            "v4.0.30319"
         ]
         dedup = list()
         extracted_data= False
