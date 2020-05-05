@@ -12,6 +12,7 @@ rule GuLoader {
         $s6 = "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko" fullword ascii
         $s7 = "Startup key" fullword ascii
         $s8 = "\\qemu-ga\\qga.state" ascii
+        $s9 = "WScript.Shell" ascii
 
         $l1 = "shell32" fullword ascii
         $l2 = "kernel32" fullword ascii
@@ -27,6 +28,7 @@ rule GuLoader {
         $o7 = "APPDATA=" nocase wide
         $o8 = "RegAsm.exe" fullword wide
         $o9 = "ProgramFiles=" fullword wide
+        $o10 = "TEMP=" fullword wide
 
         $url1 = "https://drive.google.com/uc?export=download&id=" ascii
         $url2 = "https://onedrive.live.com/download?cid=" ascii

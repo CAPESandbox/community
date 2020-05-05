@@ -8,8 +8,8 @@ rule AgentTeslaV2 {
         $s2 = "GetPrivateProfileString" ascii
         $s3 = "get_OSFullName" ascii
         $s4 = "get_PasswordHash" ascii
-        $s5 = "#\"(')'*)+','-'/.0.1.2.3.54647498:9;9=<>=?=" wide
-        $s6 = "\"!#!$!%!&!-," wide
+        $s5 = "remove_Key" ascii
+        $s6 = "FtpWebRequest" ascii
         $s7 = "logins" fullword wide
         $s8 = "keylog" fullword wide
         $s9 = "1.85 (Hash, version 2, native byte-order)" wide
