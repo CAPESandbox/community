@@ -144,6 +144,8 @@ class RansomwareFiles(Signature):
             (".*\\\\.readme2unlock\.txt$", ["DoppelPaymer"]),
             (".*\\\\How_To_Decrypt_My_Files\.txt$", ["Ragnarok"]),
             (".*\\\\RGNR_[A-Z0-9]{8}\.txt$", ["RagnarLocker"]),
+            (".*\\\\H0w_T0_Rec0very_Files\.txt$", ["PwndLocker"]),
+            (".*\\\\[HOW TO RECOVER FILES]\.txt$", ["ProLock"]),
 
         ]
 
