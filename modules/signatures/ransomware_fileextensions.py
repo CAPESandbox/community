@@ -74,7 +74,7 @@ class RansomwareExtensions(Signature):
             (".*\.no_more_ransom$", ["Troldesh"]),
             (".*_luck$", ["CryptoLuck"]),
             (".*\.CHIP$", ["CHIP"]),
-            ("\.KRAB$", ["GandCrab"]),
+            (".*\.KRAB$", ["GandCrab"]),
             (".*\.DALE$", ["CHIP"]),
             (".*\.sexy$", ["PayDay"]),
             (".*\.kraken$", ["Kraken"]),
@@ -95,6 +95,11 @@ class RansomwareExtensions(Signature):
             (".*\.ragnarok_cry$", ["Ragnarok"]),
             (".*\.ragnarok$", ["Ragnarok"]),
             (".*\.ragnar_[A-Z0-9]{8}$", ["RagnarLocker"]),
+            (".*\.key$", ["PwndLocker"]),
+            (".*\.pwnd$", ["PwndLocker"]),
+            (".*\.ProLock$", ["ProLock"]),
+            (".*\.abcd$", ["LockBit"]),
+            (".*\.lockbit$", ["LockBit"]),
         ]
 
         for indicator in indicators:
