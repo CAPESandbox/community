@@ -1,2 +1,2 @@
 #### To update current files:
-* [malpedia.json](https://raw.githubusercontent.com/MISP/misp-galaxy/master/clusters/malpedia.json)
+* malpedia.json -> `python3 malpedia.py`
