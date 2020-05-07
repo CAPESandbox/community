@@ -86,6 +86,7 @@ class MINERS(Signature):
         "xmr.pool.minergate.com",
         "pool.hashvault.pro",
         "tube.pool.gntl.co.uk",
+        "pamz0x.ru",
     ]
 
     def __init__(self, *args, **kwargs):
