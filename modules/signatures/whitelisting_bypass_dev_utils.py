@@ -125,6 +125,14 @@ class SpwansDotNetDevUtiliy(Signature):
                             if not spawnapp:
                                 spawnapp = cmdline
                             self.data.append({"Process": procname + " > " + spawnapp})
+            # Handle cases were CommandLine is null
+            elif appname:
+                flags = int(self.get_argument(call, "CreationFlags"), 16)
+                # CREATE_SUSPENDED or CREATE_SUSPENDED|CREATE_NO_WINDOW
+                if flags & 0x4 or flags & 0x08000004:
+                    if re.search(tool, applname):
+                        procname = process["process_name"]
+                        self.data.append({"Process": procname + " > " + applname})
 
     def on_complete(self):
         if len(self.data) > 0:
