@@ -102,7 +102,7 @@ class SpwansDotNetDevUtiliy(Signature):
 
         if call["api"] == "CreateProcessInternalA" or call["api"] == "CreateProcessInternalW":
             cmdline = self.get_argument(call, "CommandLine").lower()
-            applname = appname = self.get_argument(call, "ApplicationName")
+            appname = self.get_argument(call, "ApplicationName")
             if cmdline:
                 flags = int(self.get_argument(call, "CreationFlags"), 16)
                 # CREATE_SUSPENDED or CREATE_SUSPENDED|CREATE_NO_WINDOW
@@ -126,7 +126,7 @@ class SpwansDotNetDevUtiliy(Signature):
                                 spawnapp = cmdline
                             self.data.append({"Process": procname + " > " + spawnapp})
             # Handle cases were CommandLine is null
-            elif applname:
+            elif appname:
                 flags = int(self.get_argument(call, "CreationFlags"), 16)
                 # CREATE_SUSPENDED or CREATE_SUSPENDED|CREATE_NO_WINDOW
                 if flags & 0x4 or flags & 0x08000004:
