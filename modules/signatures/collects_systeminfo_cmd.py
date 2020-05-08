@@ -30,6 +30,7 @@ class SystemInfoDiscoveryCMD(Signature):
         indicators = [
             "([A-Za-z]:\\\\Windows\\\\System32\\\\)?hostname(.exe)?.*",
             "([A-Za-z]:\\\\Windows\\\\System32\\\\)?systeminfo(.exe)?.*",
+            "([A-Za-z]:\\\\Windows\\\\System32\\\\)?net(.exe)?\sconfig(Server|Workstation)",
         ]
 
         for indicator in indicators:
@@ -96,13 +97,16 @@ class SystemNetworkDiscoveryCMD(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1016", "S0103"]
+    ttp = ["T1016", "S0103", "S0359"]
     evented = True
 
     def on_complete(self):
         indicators = [
             "([A-Za-z]:\\\\Windows\\\\System32\\\\)?route(.exe)?.*",
             ".*netsh(\")?\swlan\sshow\s(profile|networks).*",
+            "([A-Za-z]:\\\\Windows\\\\System32\\\\)?ipconfig(.exe)?.*",
+            "([A-Za-z]:\\\\Windows\\\\System32\\\\)?nltest(.exe)?.*",
+            ".*net\sview.*",
         ]
 
         for indicator in indicators:
