@@ -80,7 +80,7 @@ class BlackRATRegistryKeys(Signature):
                     self.match = True
                 elif value == "ID" and re.match(self.regpat, name):
                     self.match = True
-    
+
     def on_complete(self):
         return self.match
 
@@ -106,7 +106,7 @@ class BlackRATNetworkActivity(Signature):
             if buff:
                 if "x00>Clientx, Version=" in buff:
                     self.match = True
-    
+
     def on_complete(self):
         return self.match
 
@@ -134,20 +134,19 @@ class BlackRATAPIs(Signature):
     def on_call(self, call, process):
         if call["api"] == "RtlDecompressBuffer":
             ubuff = self.get_argument(call, "UncompressedBuffer")
-            if ubuff:
-                if ubuff.startswith("MZ"):
-                    self.rtldecmz = True
-                    self.score += 1
+            if ubuff and ubuff.startswith("MZ"):
+                self.rtldecmz = True
+                self.score += 1
 
         if call["api"] == "CreateProcessInternalW":
             appname = self.get_argument(call, "ApplicationName")
             if appname:
                 if re.match(self.msbuild, appname) or re.match(self.regasm, appname):
-                    flags = self.get_argument(call, "CreationFlags")
+                    flags = int(self.get_argument(call, "CreationFlags"), 16)
                     # CREATE_SUSPENDED|CREATE_NO_WINDOW
-                    if flags & 0x08000004:
+                    if flags & 0x4 or flags & 0x08000004:
                         self.score += 2
-        
+
         if call["api"] == "CryptHashData":
             buff = self.get_argument(call, "Buffer")
             if buff:
