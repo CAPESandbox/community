@@ -2,7 +2,7 @@ rule GuLoader {
     meta:
         author = "ditekshen"
         description = "Shellcode injector and downloader"
-        cape_type = "Shellcode injector and downloader"
+        cape_type = "Shellcode injector"
     strings:
         $s1 = "wininet.dll" fullword ascii
         $s2 = "ShellExecuteW" fullword ascii
