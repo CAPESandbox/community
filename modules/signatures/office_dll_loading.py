@@ -22,7 +22,7 @@ class OfficeAddinLoading(Signature):
     categories = ["office", "persistence", "evasion", "execution"]
     authors = ["bartblaze"]
     minimum = "1.3"
-	evented = True
+    evented = True
     ttp = ["T1137"]
 
     def run(self):
