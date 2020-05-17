@@ -27,10 +27,10 @@ class OfficeAddinLoading(Signature):
 
     def run(self):
         indicators = [
-		".*\\AppData\\Roaming\\Microsoft\\Word\\startup\\*.wll",
-		".*\\AppData\\Roaming\\Microsoft\\Excel\\XLSTART\\*.xll",
-		".*\\AppData\\Roaming\\Microsoft\\AddIns\\*.xlam",
-		".*\\AppData\\Roaming\\Microsoft\\AddIns\\*.xla"
+        ".*\\AppData\\Roaming\\Microsoft\\Word\\startup\\*.wll",
+        ".*\\AppData\\Roaming\\Microsoft\\Excel\\XLSTART\\*.xll",
+        ".*\\AppData\\Roaming\\Microsoft\\AddIns\\*.xlam",
+        ".*\\AppData\\Roaming\\Microsoft\\AddIns\\*.xla"
         ]
 
         for indicator in indicators:
@@ -39,7 +39,7 @@ class OfficeAddinLoading(Signature):
                 self.data.append({"file": match})
                 return True
 
-        return False 
+        return False
 
 class OfficePerfKey(Signature):
     name = "office_perfkey"
@@ -48,7 +48,7 @@ class OfficePerfKey(Signature):
     categories = ["office", "persistence", "evasion", "execution"]
     authors = ["bartblaze"]
     minimum = "1.3"
-	ttp = ["T1137"]
+    ttp = ["T1137"]
 
     def run(self):
         indicators = [
@@ -61,4 +61,4 @@ class OfficePerfKey(Signature):
                 self.data.append({"regkey": match})
                 return True
 
-        return False 
+        return False
