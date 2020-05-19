@@ -26,7 +26,7 @@ rule SunDown_EK_Memory
             $sundownflash3 = "9090909090909090909090909090909090909090909090909090909090909090909090EB" nocase ascii wide
 
         condition:
-                all of ($sundownflash*) or all of ($sundownslight*)
+            all of ($sundownflash*) or all of ($sundownslight*)
 }
 rule SunDown_EK_Memory2
 {
