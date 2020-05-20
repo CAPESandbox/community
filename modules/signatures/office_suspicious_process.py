@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class OfficeSuspiciousProcesses(Signature):
     name = "office_suspicious_processes"
-    description = "Office document spawned a series of suspicious children processes"
+    description = "Office document spawned a series of suspicious child processes"
     severity = 3
     categories = ["evasion", "execution", "dropper", "office", "lolbin"]
     authors = ["ditekshen"]
