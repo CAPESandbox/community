@@ -20,13 +20,13 @@ class ArkeiFiles(Signature):
     description = "Creates Arkei infostealer directories and/or files"
     severity = 3
     categories = ["RAT"]
-    families = ["Warzone"]
+    families = ["Arkei"]
     authors = ["ditekshen"]
     minimum = "1.3"
 
     def run(self):
         indicators = [
-            ".*\\\\ProgramData\Areki-.*",
+            ".*\\\\ProgramData\\\\Arkei-.*",
         ]
 
         for indicator in indicators:
