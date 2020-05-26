@@ -1,12 +1,13 @@
 rule CobaltStrikeBeacon
 {
     meta:
-      author = "JPCERTCC"
-      description = "Cobalt Strike Payload"
-      ref = "https://raw.githubusercontent.com/JPCERTCC/aa-tools/master/cobaltstrikescan.py"
-      cape_type = "Cobalt Strike Payload"
+      author = "enzo"
+      description = "Cobalt Strike Beacon Payload"
+      cape_type = "CobaltStrikeBeacon Payload"
     strings:
-      $v1 = { 73 70 72 6E 67 00 }
-      $v2 = { 69 69 69 69 }
-    condition: $v1 and $v2
+      $ver3a = { 69 68 69 68 69 6b ?? ?? 69 }
+      $ver3b = { 69 69 69 69 }
+      $ver4a = { 2e 2f 2e 2f 2e 2c ?? ?? 2e }
+      $ver4b = { 2e 2e 2e 2e }
+    condition: all of ($ver3*) or all of ($ver4*)
 }
