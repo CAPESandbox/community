@@ -41,25 +41,24 @@ class PersistsDotNetDevUtility(Signature):
         ]
         self.sname = str()
         self.dname = str()
-    
+
     filter_apinames = set(["CopyFileA", "CopyFileW", "CopyFileExW", "RegSetValueExA", "RegSetValueExW"])
 
     def on_call(self, call, process):
         if call["api"].startswith("CopyFile"):
-            self.sname = self.get_argument(call, "ExistingFileName").lower()
+            self.sname = self.get_argument(call, "ExistingFileName")
             if self.sname:
                 for tool in self.devtools:
-                    if re.search(tool, self.sname):
-                        self.dname = self.get_argument(call, "NewFileName").lower()
+                    if re.search(tool, self.sname.lower()):
+                        self.dname = self.get_argument(call, "NewFileName")
 
         if call["api"] == "RegSetValueExA" or call["api"] == "RegSetValueExW":
-            buff = self.get_argument(call, "Buffer").lower()
-            if buff and self.dname:
-                if self.dname in buff:
-                    self.data.append({"Copy": self.sname + " > " + self.dname})
-                    fname = self.get_argument(call, "FullName")
-                    if fname:
-                        self.data.append({"Regkey": fname})
+            buff = self.get_argument(call, "Buffer")
+            if buff.lower() and self.dname.lower() and self.dname.lower() in buff.lower():
+                self.data.append({"Copy": self.sname.lower() + " > " + self.dname.lower()})
+                fname = self.get_argument(call, "FullName")
+                if fname:
+                    self.data.append({"Regkey": fname})
 
     def on_complete(self):
         if len(self.data) > 0:
@@ -89,16 +88,16 @@ class SpwansDotNetDevUtiliy(Signature):
         self.sname = str()
         self.dname = str()
         self.executecopy = False
-    
+
     filter_apinames = set(["CreateProcessInternalA", "CreateProcessInternalW", "CopyFileA", "CopyFileW", "CopyFileExW"])
 
     def on_call(self, call, process):
         if call["api"].startswith("CopyFile"):
-            self.sname = self.get_argument(call, "ExistingFileName").lower()
+            self.sname = self.get_argument(call, "ExistingFileName")
             if self.sname:
                 for tool in self.devtools:
-                    if re.search(tool, self.sname):
-                        self.dname = self.get_argument(call, "NewFileName").lower()
+                    if re.search(tool, self.sname.lower()):
+                        self.dname = self.get_argument(call, "NewFileName")
 
         if call["api"] == "CreateProcessInternalA" or call["api"] == "CreateProcessInternalW":
             cmdline = self.get_argument(call, "CommandLine").lower()
@@ -114,11 +113,11 @@ class SpwansDotNetDevUtiliy(Signature):
                                 if re.search(tool, appname):
                                     procname = process["process_name"]
                                     self.data.append({"Process": procname + " > " + appname})
-                        elif self.dname and self.dname in cmdline:
+                        elif self.dname and self.dname.lower() in cmdline:
                             self.executecopy = True
                             procname = process["process_name"]
-                            self.data.append({"Copy": self.sname + " > " + self.dname})
-                            self.data.append({"Process": procname + " > " + self.dname})
+                            self.data.append({"Copy": self.sname.lower() + " > " + self.dname.lower()})
+                            self.data.append({"Process": procname + " > " + self.dname.lower()})
                         elif re.search(tool, cmdline):
                             procname = process["process_name"]
                             spawnapp = self.get_argument(call, "ApplicationName")
@@ -130,9 +129,10 @@ class SpwansDotNetDevUtiliy(Signature):
                 flags = int(self.get_argument(call, "CreationFlags"), 16)
                 # CREATE_SUSPENDED or CREATE_SUSPENDED|CREATE_NO_WINDOW
                 if flags & 0x4 or flags & 0x08000004:
-                    if re.search(tool, applname):
-                        procname = process["process_name"]
-                        self.data.append({"Process": procname + " > " + applname})
+                    for tool in self.devtools:
+                        if re.search(tool, appname):
+                            procname = process["process_name"]
+                            self.data.append({"Process": procname + " > " + appname})
 
     def on_complete(self):
         if len(self.data) > 0:
