@@ -97,7 +97,7 @@ class RansomwareExtensions(Signature):
             (".*\.ragnar_[A-Z0-9]{8}$", ["RagnarLocker"]),
             (".*\.key$", ["PwndLocker"]),
             (".*\.pwnd$", ["PwndLocker"]),
-            (".*\.ProLock$", ["ProLock"]),
+            (".*\.pr[o0]L[o0]ck$", ["ProLock"]),
             (".*\.abcd$", ["LockBit"]),
             (".*\.lockbit$", ["LockBit"]),
         ]
