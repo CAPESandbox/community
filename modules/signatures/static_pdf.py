@@ -14,7 +14,7 @@ class Static_PDF(Signature):
         exploit = 0
 
         if "static" in self.results and "pdf" in self.results["static"]:
-            if "PDF" in self.results["target"]["file"]["type"]:            
+            if "PDF" in self.results["target"]["file"].get("type", ""):            
                 if "Data After EOF" in self.results["static"]["pdf"]["Info"]:
                     if self.results["static"]["pdf"]["Info"]["Data After EOF"] != "0":
                         self.data.append({"data_after_eof" : "PDF contains data after the declared end of file" })

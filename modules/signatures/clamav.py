@@ -42,7 +42,7 @@ class ClamAV(Signature):
                     if not clam_no_score_re.search(detection):
                         self.weight = 3
                     if "type" in self.results["target"]["file"]:
-                        entry = "%s, type:%s" % (entry,self.results["target"]["file"]["type"])
+                        entry = "%s, type:%s" % (entry,self.results["target"]["file"].get("type", ""))
                     self.data.append({self.results["target"]["file"]["sha256"]: entry})
 
         if "suricata" in self.results and self.results["suricata"]:

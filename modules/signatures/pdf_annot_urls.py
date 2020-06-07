@@ -28,7 +28,7 @@ class PDF_Annot_URLs(Signature):
     def run(self):
         found_URLs = False
         if "static" in self.results and "pdf" in self.results["static"]:
-            if "PDF" in self.results["target"]["file"]["type"]:
+            if "PDF" in self.results["target"]["file"].get("type", ""):
                 if "Annot_URLs" in self.results["static"]["pdf"]:
                     for entry in self.results["static"]["pdf"]["Annot_URLs"]:
                         entrylower = entry.lower()

@@ -50,7 +50,7 @@ class ModifyProxy(Signature):
         ]
         # Get rid of a PDF false positive
         if "file" in self.results["target"]:
-            if "PDF" in self.results["target"]["file"]["type"] or self.results["info"]["package"] == "pdf":
+            if "PDF" in self.results["target"]["file"].get("type", "") or self.results["info"]["package"] == "pdf":
                 ignore = True
 
         if ignore:
