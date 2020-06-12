@@ -6,13 +6,14 @@ rule GuLoader {
     strings:
         $s1 = "wininet.dll" fullword ascii
         $s2 = "ShellExecuteW" fullword ascii
-        $s3 = "SHCreateDirectoryExW" fullword ascii
-        $s4 = "Software\\Microsoft\\Windows\\CurrentVersion\\Run" fullword ascii
-        $s5 = "Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce" fullword ascii
-        $s6 = "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko" fullword ascii
-        $s7 = "Startup key" fullword ascii
-        $s8 = "\\qemu-ga\\qga.state" ascii
-        $s9 = "WScript.Shell" ascii
+        $s3 = "Software\\Microsoft\\Windows\\CurrentVersion\\Run" fullword ascii
+        $s4 = "Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce" fullword ascii
+        $s5 = "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko" fullword ascii
+        $s6 = "Startup key" fullword ascii
+        $s7 = "\\qemu-ga\\qga.state" ascii nocase
+        $s8 = "\\qga\\qga.exe" ascii nocase
+        $s9 = "\\Qemu-ga\\qemu-ga.exe" ascii nocase
+        $s10 = "WScript.Shell" ascii
 
         $l1 = "shell32" fullword ascii
         $l2 = "kernel32" fullword ascii
@@ -23,9 +24,9 @@ rule GuLoader {
         $o2 = "\\syswow64\\" fullword wide
         $o3 = "\\system32\\" fullword wide
         $o4 = "\\Microsoft.NET\\Framework\\" fullword wide
-        $o5 = "USERPROFILE=" wide nocase
+        $o5 = "USERPROFILE=" fullword wide
         $o6 = "windir=" fullword wide
-        $o7 = "APPDATA=" nocase wide
+        $o7 = "APPDATA=" fullword wide
         $o8 = "RegAsm.exe" fullword wide
         $o9 = "ProgramFiles=" fullword wide
         $o10 = "TEMP=" fullword wide
