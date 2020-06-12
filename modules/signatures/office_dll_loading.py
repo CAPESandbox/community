@@ -13,6 +13,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+try:
+    import re2 as re
+except ImportError:
+    import re
+
 from lib.cuckoo.common.abstracts import Signature
 
 class OfficeAddinLoading(Signature):
@@ -62,3 +67,121 @@ class OfficePerfKey(Signature):
                 return True
 
         return False
+
+from lib.cuckoo.common.abstracts import Signature
+
+class OfficeVBLLoad(Signature):
+    name = "office_vb_load"
+    description = "Office loads VB DLLs, indicative of Office Macros"
+    severity = 2
+    categories = ["office", "macros"]
+    authors = ["ditekshen"]
+    minimum = "1.3"
+    ttp = ["T1137", "T1204"]
+    evented = True
+
+    filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.officeprocs = ["winword.exe", "excel.exe", "powerpnt.exe"]
+        self.vbdlls = ["vbe7intl.dll", "vbe7.dll", "vbeui.dll"]
+        self.score = int()
+        
+    def on_call(self, call, process):
+        processname = process["process_name"]
+        if processname:
+            if processname.lower() in self.officeprocs:
+                dllname = self.get_argument(call, "FileName")
+                if dllname:
+                    for dll in self.vbdlls:
+                        if dll in dllname.lower():
+                            self.score += 1
+                            if self.score >= 2:
+                                return True
+
+class OfficeWMILoad(Signature):
+    name = "office_wmi_load"
+    description = "Office loads WMI DLLs, indicative of Office Macros executing WMI commands"
+    severity = 2
+    categories = ["office", "macros"]
+    authors = ["ditekshen"]
+    minimum = "1.3"
+    ttp = ["T1137", "T1204"]
+    evented = True
+
+    filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.officeprocs = ["winword.exe", "excel.exe", "powerpnt.exe"]
+        
+    def on_call(self, call, process):
+        processname = process["process_name"]
+        if processname:
+            if processname.lower() in self.officeprocs:
+                dllname = self.get_argument(call, "FileName")
+                if dllname:
+                    if "wbemdisp.dll" in dllname.lower():
+                        return True
+
+class OfficeCOMLoad(Signature):
+    name = "office_com_load"
+    description = "Office loads COM DLLs, indicative of Office Macros spawning CMD process for execution"
+    severity = 2
+    categories = ["office", "macros"]
+    authors = ["ditekshen"]
+    minimum = "1.3"
+    ttp = ["T1137", "T1204"]
+    evented = True
+
+    filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.officeprocs = ["winword.exe", "excel.exe", "powerpnt.exe"]
+        self.comdlls = ["combase.dll", "coml2.dll", "comsvcs.dll"]
+        
+    def on_call(self, call, process):
+        score = int()
+        processname = process["process_name"]
+        if processname:
+            if processname.lower() in self.officeprocs:
+                dllname = self.get_argument(call, "FileName")
+                if dllname:
+                    for dll in self.comdlls:
+                        if dll in dllname.lower():
+                            return True
+
+class OfficeDotNetLoad(Signature):
+    name = "office_dotnet_load"
+    description = "Office loads .NET assembly or DLL, indicative of suspicious Office Macros activities"
+    severity = 2
+    categories = ["office", "macros"]
+    authors = ["ditekshen"]
+    minimum = "1.3"
+    ttp = ["T1137", "T1204"]
+    evented = True
+
+    filter_apinames = set(["LdrLoadDll"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.officeprocs = ["winword.exe", "excel.exe", "powerpnt.exe"]
+        self.dotnetpaths = [
+            "[A-Z]:\\\\Windows\\\\assembly\\\\.*",
+            "[A-Z]:\\\\Windows\\\\Microsoft.NET\\\\assembly\\\\GAC_MSIL.*",
+        ]
+        
+    def on_call(self, call, process):
+        processname = process["process_name"]
+        if processname:
+            if processname.lower() in self.officeprocs:
+                dllname = self.get_argument(call, "FileName")
+                if dllname:
+                    if "clr.dll" in dllname.lower():
+                        return True
+                    else:
+                        for dllpath in self.dotnetpaths:
+                            if re.search(dllpath, dllname.lower(), re.IGNORECASE):
+                                return True
