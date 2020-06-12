@@ -17,6 +17,13 @@ rule NetWire
         $exe6 = "SYSTEM\\CurrentControlSet\\Control\\ProductOptions"
         $exe7 = "%s\\.purple\\accounts.xml"
 
+        $s1 = "-w %d >nul 2>&1" ascii
+        $s2 = "[Log Started]" ascii
+        $s3 = "DEL /s \"%s\" >nul 2>&1" fullword ascii
+        $s4 = "start /b \"\" cmd /c del \"%%~f0\"&exit /b" fullword ascii
+        $s5 = ":deleteSelf" ascii
+        $s6 = "%s\\%s.bat" fullword ascii
+
     condition:
-        all of them
+        all of ($exe*) or all of ($s*)
 }
