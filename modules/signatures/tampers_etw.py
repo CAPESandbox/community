@@ -15,13 +15,6 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-try:
-    import re2 as re
-except ImportError:
-    import re
-
-from lib.cuckoo.common.abstracts import Signature
-
 class TampersETW(Signature):
     name = "tampers_etw"
     description = "Tampers with ETW"
