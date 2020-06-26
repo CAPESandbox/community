@@ -99,7 +99,9 @@ class RansomwareExtensions(Signature):
             (".*\.pwnd$", ["PwndLocker"]),
             (".*\.pr[o0]L[o0]ck$", ["ProLock"]),
             (".*\.abcd$", ["LockBit"]),
-            (".*\.lockbit$", ["LockBit"]),
+            (".*\.thanos$", ["Tycoon"]),
+            (".*\.grinch$", ["Tycoon"]),
+            (".*\.redrum$", ["Tycoon"]),
         ]
 
         for indicator in indicators:
