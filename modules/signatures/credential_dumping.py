@@ -82,3 +82,28 @@ class RegistryCredentialDumping(Signature):
                 self.data.append({"command" : cmdline})
 
         return ret
+
+class RegistryCredentialStoreAccess(Signature):
+    name = "registry_credential_store_access"
+    description = "Accessed credential storage registry keys"
+    severity = 3
+    categories = ["persistence", "lateral_movement", "credential_dumping"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttp = ["T1003"]
+
+    def run(self):
+        ret = False
+        reg_indicators = [
+                "HKEY_LOCAL_MACHINE\\\\SAM$",
+                "HKEY_LOCAL_MACHINE\\\\SYSTEM$",
+        ]
+
+        for indicator in reg_indicators:
+            match = self.check_key(pattern=indicator, regex=True)
+            if match:
+                self.data.append({"Key": match})
+                ret = True
+
+        return ret
