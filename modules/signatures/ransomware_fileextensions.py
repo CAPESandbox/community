@@ -103,6 +103,7 @@ class RansomwareExtensions(Signature):
             (".*\.grinch$", ["Tycoon"]),
             (".*\.redrum$", ["Tycoon"]),
             (".*\.corona-lock", ["CovidRansomware"]),
+            (".*wasted$", ["WastedLocker"]),
         ]
 
         for indicator in indicators:
