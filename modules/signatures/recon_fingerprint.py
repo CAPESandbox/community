@@ -34,7 +34,9 @@ class Fingerprint(Signature):
         ]
 
         for indicator in indicators:
-            if self.check_read_key(pattern=indicator, regex=True):
+            match = self.check_read_key(pattern=indicator, regex=True):
+            if match:
+                self.data.append({"regkey": match})
                 return True
  
         return False
