@@ -13,12 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-try:
-    import re2 as re
-except ImportError:
-    import re
-
 from lib.cuckoo.common.abstracts import Signature
+
 
 class MassLoggerFiles(Signature):
     name = "masslogger_files"
@@ -39,14 +35,14 @@ class MassLoggerFiles(Signature):
         ]
         score = 0
 
-        indicators.append(".*\\\\AppData\\\\Local\\\\Temp\\\\[A-F0-9]{10}\\\\" + user + "_.*_[A-F0-9]{10}_\d{2}-\d{2}-\d{4}\s.*.zip")
+        indicators.append(".*\\\\AppData\\\\Local\\\\Temp\\\\[A-F0-9]{10}\\\\" + user.decode("utf-8") + "_.*_[A-F0-9]{10}_\d{2}-\d{2}-\d{4}\s.*.zip")
 
         for indicator in indicators:
             match = self.check_file(pattern=indicator, regex=True)
             if match:
                 score += 1
                 self.data.append({"file": match})
-        
+
         if score >= 3:
             return True
 
