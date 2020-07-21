@@ -33,7 +33,7 @@ class EnablesWDigest(Signature):
         for indicator in reg_indicators:
             match = self.check_write_key(pattern=indicator, regex=True)
             if match:
-                self.data.append({"Key" : match})
+                self.data.append({"Key": match})
                 ret = True
 
         return ret
