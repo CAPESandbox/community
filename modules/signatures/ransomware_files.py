@@ -147,6 +147,7 @@ class RansomwareFiles(Signature):
             (".*\\\\H0w_T0_Rec0very_Files\.txt$", ["PwndLocker"]),
             (".*\\\\\[HOW TO RECOVER FILES\]\.txt$", ["ProLock"]),
             (".*\\\\CONTI_README\.txt$", ["Conti"]),
+            (".*\\\\!*_read_me!\.txt$", ["RansomEXX"]),
         ]
 
         for ioc in file_list:
