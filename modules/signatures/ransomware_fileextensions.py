@@ -106,6 +106,7 @@ class RansomwareExtensions(Signature):
             (".*\.*wasted$", ["WastedLocker"]),
             (".*\.CONTI$", ["Conti"]),
             (".*\.vhd$", ["VHD"]),
+            (".*\.ragn@r_[A-Z0-9]{8}$", ["RagnarLocker"]),
         ]
 
         for indicator in indicators:
