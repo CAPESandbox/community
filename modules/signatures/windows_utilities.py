@@ -251,7 +251,7 @@ class WMICCommandSuspicious(Signature):
             "antivirusproduct",
             "baseboard",
             "bios",
-            "compuersystem",
+            "computersystem",
             "datafile",
             "diskdrive",
             "group",
