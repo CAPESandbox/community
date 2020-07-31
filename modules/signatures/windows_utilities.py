@@ -420,3 +420,32 @@ class DotNETCSCBuild(Signature):
                 self.data.append({"command" : cmdline})
 
         return ret
+
+class UsesWindowsUtilitiesCipher(Signature):
+    name = "uses_windows_utilities_cipher"
+    description = "Uses cipher.exe to wipe the free space, as seen in some ransomware"
+    severity = 3
+    confidence = 80
+    categories = ["commands", "impact"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    ttp = ["T1485"]
+
+    evented = True
+
+    def run(self):
+        utilities = [
+            "cipher ",
+            "cipher.exe",
+        ]
+
+        ret = False
+        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            for utility in utilities:
+                if utility in lower:
+                    ret = True
+                    self.data.append({"command" : cmdline})
+
+        return ret
