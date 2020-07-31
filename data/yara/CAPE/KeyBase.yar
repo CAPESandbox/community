@@ -6,7 +6,7 @@ meta:
 	date = "2019-02"
 	hash = "cafe2d12fb9252925fbd1acb9b7648d6"
 	tlp = "White"
-  cape_type = "KeyBase Payload"
+  	cape_type = "KeyBase Payload"
 
 strings:	
 	$s1 = " End:]" ascii wide

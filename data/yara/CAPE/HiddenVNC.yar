@@ -6,6 +6,7 @@ meta:
 	author = "@bartblaze"
 	date = "2020-01"
 	tlp = "White"
+	cape_type = "HiddenVNC"
 	
 strings:
 	$ = "#hvnc" ascii wide
