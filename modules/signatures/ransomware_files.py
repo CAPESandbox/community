@@ -129,7 +129,7 @@ class RansomwareFiles(Signature):
             (".*\\\\Readme_now\.txt$", ["Syrk"]),
             (".*\\\\!_Notice_!\.txt$", ["TFlower"]),
             (".*\\\\@Please_Read_Me@\.txt$", ["WannaCry"]),
-            (".*\\\\_readme\.txt$", ["Moka"]),
+            (".*\\\\_readme\.txt$", ["STOP-Djvu"]),
             (".*\\\\#FOX_README#\.rtf$", ["Fox"]),
             (".*\\\\Restore-My-Files\.txt$", ["Goodmen", "LockBit"]),
             (".*\\\\HOW_DECRYPT_FILES\.txt$", ["Estemani"]),
@@ -140,7 +140,7 @@ class RansomwareFiles(Signature):
             (".*\\\\HOW_TO_RECOVER_DATA\.html$", ["MedusaLocker"]),
             (".*\\\\ClopReadMe\.txt$", ["Clop-CryptoMix"]),
             (".*\\\\Fix-Your-Files\.txt$", ["SNAKE"]),
-            (".*\\\\__________WHY FILES NOT WORK__________\.txt$", ["Hydra Ransomware"]),
+            (".*\\\\__________WHY FILES NOT WORK__________\.txt$", ["Hydra"]),
             (".*\\\\.readme2unlock\.txt$", ["DoppelPaymer"]),
             (".*\\\\How_To_Decrypt_My_Files\.txt$", ["Ragnarok"]),
             (".*\\\\RGNR_[A-Z0-9]{8}\.txt$", ["RagnarLocker"]),
@@ -149,6 +149,9 @@ class RansomwareFiles(Signature):
             (".*\\\\CONTI_README\.txt$", ["Conti"]),
             (".*\\\\!*_read_me!\.txt$", ["RansomEXX"]),
             (".*\\\\!\$R4GN4R_[A-Z0-9]{8}\$!\.txt$", ["RagnarLocker"]),
+            (".*\\\\[0-9]{6}-readme.html$", ["Avaddon"]),
+            (".*\\\\[A-Za-z]{6}_readme.txt$", ["Avaddon"]),
+            (".*\\\\[A-Z0-9]{6}-Readme.txt$", ["NetWalker"]),
         ]
 
         for ioc in file_list:
