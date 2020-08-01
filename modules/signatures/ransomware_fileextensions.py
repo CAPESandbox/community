@@ -109,6 +109,7 @@ class RansomwareExtensions(Signature):
             (".*\.ragn@r_[A-Z0-9]{8}$", ["RagnarLocker"]),
             (".*\.WannaCash", ["WannaCash"]),
             (".*\.avdn", ["Avaddon"]),
+            (".*\.mailto", ["Netwalker-Mailto"]),
         ]
 
         for indicator in indicators:
