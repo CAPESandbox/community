@@ -451,3 +451,34 @@ class UsesWindowsUtilitiesCipher(Signature):
                     self.data.append({"command" : cmdline})
 
         return ret
+
+class UsesWindowsUtilitiesClickOnce(Signature):
+    name = "uses_windows_utilities_clickonce"
+    description = "Leverages ClickOnce Deployment Manifests for download or installation"
+    severity = 0.5
+    confidence = 20
+    categories = ["commands", "evasion"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    references = ["http://blog.redxorblue.com/2020/07/one-click-to-compromise-fun-with.html"]
+    ttp = ["T1218"]
+
+    evented = True
+
+    def run(self):
+        utilities = [
+            "dfsvc ",
+            "dfsvc.exe",
+            "dfshim.dll",
+        ]
+
+        ret = False
+        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            for utility in utilities:
+                if utility in lower:
+                    ret = True
+                    self.data.append({"command" : cmdline})
+
+        return ret
