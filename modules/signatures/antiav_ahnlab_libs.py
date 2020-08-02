@@ -15,7 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class BitdefenderDetectLibs(Signature):
+class AhnlabDetectLibs(Signature):
     name = "antiav_ahnlab_libs"
     description = "Detects AhnLab Antivirus through the presence of a library"
     severity = 3
