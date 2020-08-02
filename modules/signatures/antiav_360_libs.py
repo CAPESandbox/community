@@ -15,7 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class BitdefenderDetectLibs(Signature):
+class QihooDetectLibs(Signature):
     name = "antiav_360_libs"
     description = "Detects Qihoo 360 Antivirus through the presence of a library"
     severity = 3
