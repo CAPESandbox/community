@@ -166,6 +166,8 @@ class SuspiciousCommandTools(Signature):
             "sc.exe",
             "shareenum",
             "shellrunas",
+            "takeown ",
+            "takeown.exe",
             "taskkill",
             "volumeid",
             "vssadmin",
