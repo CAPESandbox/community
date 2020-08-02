@@ -104,6 +104,7 @@ class RansomwareExtensions(Signature):
             (".*\.redrum$", ["Tycoon"]),
             (".*\.corona-lock", ["CovidRansomware"]),
             (".*\.*wasted$", ["WastedLocker"]),
+            (".*\.*wasted_info$", ["WastedLocker"]),
             (".*\.CONTI$", ["Conti"]),
             (".*\.vhd$", ["VHD"]),
             (".*\.ragn@r_[A-Z0-9]{8}$", ["RagnarLocker"]),
