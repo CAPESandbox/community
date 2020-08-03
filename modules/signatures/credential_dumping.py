@@ -107,3 +107,26 @@ class RegistryCredentialStoreAccess(Signature):
                 ret = True
 
         return ret
+
+ class RegistryLSASecretsAccess(Signature):
+    name = "registry_lsa_secrets_access"
+    description = "Accesses LSA Secrets that are stored in registry"
+    severity = 3
+    categories = ["credential_dumping"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    evented = True
+    ttp = ["T1003"]
+
+    def run(self):
+        indicators = [
+            "HKEY_LOCAL_MACHINE\\\\SECURITY\\\\Policy\\\\Secrets$",
+        ]
+
+        for indicator in indicators:
+            match = self.check_key(pattern=indicator, regex=True)
+            if match:
+                self.data.append({"regkey": match})
+                return True
+
+        return False    
