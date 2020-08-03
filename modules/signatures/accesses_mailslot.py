@@ -19,11 +19,10 @@ class AccessesMailslot(Signature):
     name = "accesses_mailslot"
     description = "Performs a Mailslot ping, used to get Domain Controller information"
     severity = 0.5
-    categories = ["credential_access"]
+    categories = ["discovery"]
     authors = ["bartblaze"]
     minimum = "1.2"
     evented = True
-    ttp = ["T1003"]
     references = ["https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/2cff75a9-5871-4493-a704-017b506f8df0"]
 
     def run(self):
