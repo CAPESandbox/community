@@ -6,9 +6,7 @@ class UsesRemoteDesktopSession(Signature):
     categories = ["access"]
     authors = ["bartblaze"]
     minimum = "1.2"
-    evented = True
     ttp = ["T1021"]
-
     evented = True
 
     def run(self):
