@@ -23,6 +23,8 @@ class SnakeRansomMutexes(Signature):
     families = ["Snake"]
     authors = ["bartblaze"]
     minimum = "0.5"
+    evented = True
+    ttp = ["T1486"]
 
     def run(self):
         indicators = [
