@@ -108,9 +108,10 @@ class RansomwareExtensions(Signature):
             (".*\.CONTI$", ["Conti"]),
             (".*\.vhd$", ["VHD"]),
             (".*\.ragn@r_[A-Z0-9]{8}$", ["RagnarLocker"]),
-            (".*\.WannaCash", ["WannaCash"]),
-            (".*\.avdn", ["Avaddon"]),
-            (".*\.mailto", ["Netwalker-Mailto"]),
+            (".*\.WannaCash$", ["WannaCash"]),
+            (".*\.avdn$", ["Avaddon"]),
+            (".*\.mailto", ["Netwalker-Mailto"]), #Appends additional email and/or extension after .mailto
+            (".*\.GNNCRY$", ["GonnaCry"]),
         ]
 
         for indicator in indicators:
