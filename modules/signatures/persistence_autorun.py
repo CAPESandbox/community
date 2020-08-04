@@ -214,3 +214,26 @@ class Autorun(Signature):
                 self.found_autorun = True
 
         return self.found_autorun
+
+class PersistenceSafeBoot(Signature):
+    name = "persistence_safeboot"
+    description = "Adds itself to the Safe Mode boot to ensure its start"
+    severity = 3
+    categories = ["persistence"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    evented = True
+    ttp = ["T1060"]
+
+    def run(self):
+        indicators = [
+            ".*\\\\System\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\SafeBoot\\\\Minimal\\\\.*",
+        ]
+
+        for indicator in indicators:
+            match = self.check_write_key(pattern=indicator, regex=True)
+            if match:
+                self.data.append({"regkey" : match})
+                return True
+
+        return False 
