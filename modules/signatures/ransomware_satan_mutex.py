@@ -23,6 +23,8 @@ class SatanMutexes(Signature):
     families = ["Satan", "DBGer", "Lucky", "5ss5c"]
     authors = ["bartblaze"]
     minimum = "0.5"
+    evented = True
+    ttp = ["T1486"]
 
     def run(self):
         indicators = [

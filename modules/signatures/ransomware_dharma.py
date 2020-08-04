@@ -15,12 +15,12 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class SnakeRansomMutexes(Signature):
-    name = "snake_ransom_mutexes"
-    description = "Creates a known Snake ransomware mutex"
+class DharmaMutexes(Signature):
+    name = "dharma_mutexes"
+    description = "Creates a known Dharma/Crysis ransomware variant mutex"
     severity = 3
     categories = ["ransomware"]
-    families = ["Snake"]
+    families = ["Dharma", "Crysis", "Wadhrama"]
     authors = ["bartblaze"]
     minimum = "0.5"
     evented = True
@@ -28,7 +28,7 @@ class SnakeRansomMutexes(Signature):
 
     def run(self):
         indicators = [
-			"EKANS$",
+			"syncronize_[A-Z0-9]{6,7}$",
         ]
 
         for indicator in indicators:

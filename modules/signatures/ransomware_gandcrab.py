@@ -23,6 +23,7 @@ class GandCrabMutexes(Signature):
     families = ["GandCrab"]
     authors = ["ditekshen"]
     minimum = "0.5"
+    ttp = ["T1486"]
 
     def run(self):
         indicators = [

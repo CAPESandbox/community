@@ -23,7 +23,9 @@ class StopRansomMutexes(Signature):
     families = ["STOP", "Djvu", "Keypass"]
     authors = ["bartblaze"]
     minimum = "0.5"
-
+    evented = True
+    ttp = ["T1486"]
+	
     def run(self):
         indicators = [
 			"{36A698B9-D67C-4E07-BE82-0EC5B14B4DF5}$",

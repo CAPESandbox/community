@@ -39,7 +39,7 @@ class OfficeAddinLoading(Signature):
         ]
 
         for indicator in indicators:
-            match = self.check_file(pattern=indicator)
+            match = self.check_write_file(pattern=indicator)
             if match:
                 self.data.append({"file": match})
                 return True
@@ -61,7 +61,7 @@ class OfficePerfKey(Signature):
         ]
 
         for indicator in indicators:
-            match = self.check_key(pattern=indicator, regex=True)
+            match = self.check_write_key(pattern=indicator, regex=True)
             if match:
                 self.data.append({"regkey": match})
                 return True
