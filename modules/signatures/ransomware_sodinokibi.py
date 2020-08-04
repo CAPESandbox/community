@@ -17,6 +17,7 @@ class sodinokibi(Signature):
 	authors = ["@NaxoneZ"]
 	minimum = "1.2"
 	evented = True
+	ttp = ["T1486"]
 	samples = {
 	"Sodinokibi":
 		{
