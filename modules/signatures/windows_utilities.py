@@ -454,7 +454,7 @@ class UsesWindowsUtilitiesCipher(Signature):
 
 class UsesWindowsUtilitiesClickOnce(Signature):
     name = "uses_windows_utilities_clickonce"
-    description = "Leverages ClickOnce Deployment Manifests for download or installation"
+    description = "Uses ClickOnce Deployment Manifests for download or installation"
     severity = 0.5
     confidence = 20
     categories = ["commands", "evasion"]
@@ -482,3 +482,33 @@ class UsesWindowsUtilitiesClickOnce(Signature):
                     self.data.append({"command" : cmdline})
 
         return ret
+
+class UsesWindowsUtilitiesMode(Signature):
+    name = "uses_windows_utilities_mode"
+    description = "Uses MODE to configure a system device or change the code page"
+    severity = 0.5
+    confidence = 20
+    categories = ["commands"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    references = ["https://www.robvanderwoude.com/mode.php"]
+
+    evented = True
+
+    def run(self):
+        utilities = [
+            "mode con ",
+            "mode lpt ",
+            "mode com ",
+        ]
+
+        ret = False
+        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            for utility in utilities:
+                if utility in lower:
+                    ret = True
+                    self.data.append({"command" : cmdline})
+
+        return ret    
