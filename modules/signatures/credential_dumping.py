@@ -108,7 +108,7 @@ class RegistryCredentialStoreAccess(Signature):
 
         return ret
 
- class RegistryLSASecretsAccess(Signature):
+class RegistryLSASecretsAccess(Signature):
     name = "registry_lsa_secrets_access"
     description = "Accesses LSA Secrets that are stored in registry"
     severity = 3
