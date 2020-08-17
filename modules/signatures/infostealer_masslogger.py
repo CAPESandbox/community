@@ -13,8 +13,62 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+try:
+    import re2 as re
+except ImportError:
+    import re
+
 from lib.cuckoo.common.abstracts import Signature
 
+class MassLoggerVersion(Signature):
+    name = "masslogger_version"
+    description = "MassLogger infostealer version detected"
+    severity = 3
+    categories = ["infostealer"]
+    families = ["MassLogger"]
+    authors = ["ditekshen"]
+    minimum = "1.3"
+    evented = True
+
+    filter_apinames = set(["NtWriteFile"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.pathpat = "[A-Z]:\\\\.*\\\\AppData\\\\Local\\\\Temp\\\\[A-F0-9]{10}\\\\Log\.txt$"
+        self.verpat = "MassLogger\sv\d+\.\d+\.\d+\.\d+"
+
+    def on_call(self, call, process):
+        handle = self.get_argument(call, "HandleName")
+        if handle:
+            if re.match(self.pathpat, handle):
+                buff = self.get_argument(call, "Buffer")
+                if buff and "MassLogger" in buff:
+                    version = re.search(self.verpat, buff)
+                    if version:
+                        self.data.append({"Version": version})
+                        return True
+
+class MassLoggerArtifacts(Signature):
+    name = "masslogger_artifacts"
+    description = "MassLogger infostealer artifacts detected"
+    severity = 3
+    categories = ["infostealer"]
+    families = ["MassLogger"]
+    authors = ["ditekshen"]
+    minimum = "1.3"
+    evented = True
+
+    filter_apinames = set(["FindFirstFileExW"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.artifact = "[A-Z]:\\\\Windows\\\\assembly\\\\NativeImages_v.*\MassLoggerBin.*"
+        
+    def on_call(self, call, process):
+        filename = self.get_argument(call, "FileName")
+        if filename and re.match(self.artifact, filename):
+            self.data.append({"Artifact": filename})
+            return True
 
 class MassLoggerFiles(Signature):
     name = "masslogger_files"
