@@ -84,6 +84,8 @@ class SpwansDotNetDevUtiliy(Signature):
             re.compile("[A-Za-z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\MSBuild\.exe", re.IGNORECASE),
             re.compile("[A-Za-z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\RegSvcs\.exe", re.IGNORECASE),
             re.compile("[A-Za-z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\InstallUtil\.exe", re.IGNORECASE),
+            re.compile("[A-Za-z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\mscorsvw\.exe", re.IGNORECASE),
+            re.compile("[A-Z]:\\\\\\\\Windows\\\\\\\\Microsoft\.NET\\\\\\\\Framework\\\\\\\\v.*\\\\\\\\MSBuild\.exe", re.IGNORECASE)
         ]
         self.sname = str()
         self.dname = str()
