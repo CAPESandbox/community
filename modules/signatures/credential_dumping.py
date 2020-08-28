@@ -130,3 +130,29 @@ class RegistryLSASecretsAccess(Signature):
                 return True
 
         return False    
+
+class FileCredentialStoreAccess(Signature):
+    name = "file_credential_store_access"
+    description = "Accessed credential storage files"
+    severity = 3
+    categories = ["credential_access", "credential_dumping"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+	evented = True
+    ttp = ["T1003"]	
+
+    def run(self):
+        indicators = [
+            "C:\\\\Windows\\\\repair\\\\sam",
+			"C:\\\\Windows\\\\System32\\\\config\\\\RegBack\\\\SAM",
+			"C:\\\\Windows\\\\system32\\\\config\\\\SAM",
+        ]
+
+        for indicator in indicators:
+            match = self.check_file(pattern=indicator, regex=True)
+            if match:
+                self.data.append({"file": match})
+                return True
+
+        return False    
+    
