@@ -143,7 +143,7 @@ class UACBypassCMSTP(Signature):
 
         return self.ret
     
-    class UACBypassFodhelper(Signature):
+class UACBypassFodhelper(Signature):
     name = "uac_bypass_fodhelper"
     description = Uses fodhelper.exe sendkeys technique to bypass User Access Control (UAC)"
     severity = 3
