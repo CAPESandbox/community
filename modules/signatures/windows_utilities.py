@@ -512,3 +512,152 @@ class UsesWindowsUtilitiesMode(Signature):
                     self.data.append({"command" : cmdline})
 
         return ret    
+
+class UsesWindowsUtilitiesNltest(Signature):
+    name = "uses_windows_utilities_nltest"
+    description = "Uses nltest to query the Domain Controller"
+    severity = 3
+    categories = ["discovery"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+	references = ["https://ss64.com/nt/nltest.html"]
+    ttp = ["T1016", "T1482"]
+
+    evented = True
+
+    def run(self):
+        utilities = [
+            "nltest ",
+			"nltest.exe",
+        ]
+
+        ret = False
+        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            for utility in utilities:
+                if utility in lower:
+                    ret = True
+                    self.data.append({"command" : cmdline})
+
+        return ret
+
+		
+class UsesWindowsUtilitiesNTDSutil(Signature):
+    name = "uses_windows_utilities_ntdsutil"
+    description = "Uses ntdsutil to potentially dump ntds.dit, dump the Active Directory or other actions"
+    severity = 3
+    categories = ["discovery"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+	references = ["https://ss64.com/nt/ntdsutil.html"]
+    ttp = ["T1003"]
+
+    evented = True
+
+    def run(self):
+        utilities = [
+            "ntdsutil ",
+			"ntdsutil.exe",
+        ]
+
+        ret = False
+        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            for utility in utilities:
+                if utility in lower:
+                    ret = True
+                    self.data.append({"command" : cmdline})
+
+        return ret
+
+class UsesWindowsUtilitiesCSVDELDFIDE(Signature):
+    name = "uses_windows_utilities_csvde_ldifde"
+    description = "Attempts to Import or Export Active Directory data to a file"
+    severity = 3
+    categories = ["discovery"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+	references = ["https://ss64.com/nt/csvde.html"]
+    ttp = ["T1087"]
+
+    evented = True
+
+    def run(self):
+        utilities = [
+            "CSVDE ",
+			"CSVDE.exe",
+            "LDIFDE ",
+			"LDIFDE.exe",			
+        ]
+
+        ret = False
+        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            for utility in utilities:
+                if utility in lower:
+                    ret = True
+                    self.data.append({"command" : cmdline})
+
+        return ret
+
+class UsesWindowsUtilitiesDSQuery(Signature):
+    name = "uses_windows_utilities_dsquery"
+    description = "Searches for an Active Directory object"
+    severity = 3
+    categories = ["discovery"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+	references = ["https://ss64.com/nt/dsquery.html"]
+    ttp = ["T1069", "T1482", "T1087"]
+
+    evented = True
+
+    def run(self):
+        utilities = [
+            "DSQuery ",
+			"DSQuery.exe",	
+        ]
+
+        ret = False
+        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            for utility in utilities:
+                if utility in lower:
+                    ret = True
+                    self.data.append({"command" : cmdline})
+
+        return ret
+		
+class UsesWindowsUtilitiesAppCmd(Signature):
+    name = "uses_windows_utilities_appcmd"
+    description = "Uses the IIS Command Line Tool, likely for installing a service or loading a file"
+    severity = 3
+    categories = ["evasion"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+	references = ["https://docs.microsoft.com/en-us/iis/get-started/getting-started-with-iis/getting-started-with-appcmdexe"]
+    ttp = ["T1202"]
+
+    evented = True
+
+    def run(self):
+        utilities = [
+            "AppCmd ",
+			"AppCmd.exe",	
+        ]
+
+        ret = False
+        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            for utility in utilities:
+                if utility in lower:
+                    ret = True
+                    self.data.append({"command" : cmdline})
+
+        return ret		    
+    
