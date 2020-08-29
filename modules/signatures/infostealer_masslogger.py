@@ -62,7 +62,7 @@ class MassLoggerArtifacts(Signature):
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.artifact = "[A-Z]:\\\\Windows\\\\assembly\\\\NativeImages_v.*\MassLoggerBin.*"
+        self.artifact = "[A-Z]:\\\\Windows\\\\assembly\\\\NativeImages_v.*\\\\MassLoggerBin.*"
         
     def on_call(self, call, process):
         filename = self.get_argument(call, "FileName")
@@ -88,9 +88,12 @@ class MassLoggerFiles(Signature):
             ".*\\\\AppData\\\\Local\\\\Temp\\\\[A-F0-9]{10}\\\\DotNetZip-.*\.tmp$",
         ]
         score = 0
-
-        indicators.append(".*\\\\AppData\\\\Local\\\\Temp\\\\[A-F0-9]{10}\\\\" + user.decode("utf-8") + "_.*_[A-F0-9]{10}_\d{2}-\d{2}-\d{4}\s.*.zip")
-
+        
+        try:
+            indicators.append(".*\\\\AppData\\\\Local\\\\Temp\\\\[A-F0-9]{10}\\\\" + user.decode("utf-8") + "_.*_[A-F0-9]{10}_\d{2}-\d{2}-\d{4}\s.*.zip")
+        except Exception as err:
+            return False
+        
         for indicator in indicators:
             match = self.check_file(pattern=indicator, regex=True)
             if match:
