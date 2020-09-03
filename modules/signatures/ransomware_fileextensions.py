@@ -113,6 +113,10 @@ class RansomwareExtensions(Signature):
             (".*\.mailto", ["Netwalker-Mailto"]), #Appends additional email and/or extension after .mailto
             (".*\.GNNCRY$", ["GonnaCry"]),
             (".*\.XONIF$", ["Fonix"]),
+            (".*\.HACKED$", ["Smaug"]),
+            (".*\.NEFILIM$", ["Nefilim"]),
+            (".*\.NEPHILIM$", ["Nefilim"]),
+            (".*\.NEF1LIM$", ["Nefilim"]),
         ]
 
         for indicator in indicators:
