@@ -152,6 +152,10 @@ class RansomwareFiles(Signature):
             (".*\\\\[0-9]{6}-readme.html$", ["Avaddon"]),
             (".*\\\\[A-Za-z]{6}_readme.txt$", ["Avaddon"]),
             (".*\\\\[A-Z0-9]{6}-Readme.txt$", ["NetWalker"]),
+            (".*\\\\[a-z]{5}_readme.txt$", ["Avaddon"]),
+            (".*\\\\conti\.txt$", ["Conti"]),
+            (".*\\\\README\.[0-9]{8}\.TXT$", ["DarkSide"]),
+            
         ]
 
         for ioc in file_list:
