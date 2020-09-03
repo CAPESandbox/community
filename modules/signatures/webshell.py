@@ -54,7 +54,7 @@ class WebShellFiles(Signature):
     categories = ["Webshell"]
     authors = ["bartblaze"]
     minimum = "0.5"
-	ttp = ["T1505"]
+    ttp = ["T1505"]
 	
     def run(self):
         indicators = [
@@ -76,7 +76,7 @@ class OWAWebShellFiles(Signature):
     categories = ["Webshell"]
     authors = ["bartblaze"]
     minimum = "0.5"
-	ttp = ["T1505"]
+    ttp = ["T1505"]
 	
     def run(self):
         indicators = [
