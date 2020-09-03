@@ -17,13 +17,14 @@ class HTTP_Request(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.request = dict()
         self.lasthost = str()
+        self.urls = list()
         self.host_whitelist = ["acroipm.adobe.com",
                                "acroipm2.adobe.com",
                                "microsoft.com",
                                "apps.identrust.com"]
 
     filter_apinames = set(["HttpOpenRequestA", "HttpOpenRequestW", "InternetConnectA",
-                           "InternetConnectW"])
+                           "InternetConnectW", "WinHttpGetProxyForUrl"])
 
 
     def on_call(self, call, process):
@@ -48,6 +49,12 @@ class HTTP_Request(Signature):
                 if uri != "/" and uri != "":
                     self.request[self.lasthost]["uris"].append(uri)
                     self.request[self.lasthost]["curhandle"] = call["return"]
+        elif call["api"] == "WinHttpGetProxyForUrl":
+            url = self.get_argument(call, "Url")
+            if url:
+                for wlhost in self.host_whitelist:
+                    if wlhost not in url:
+                        self.urls.append(url)
 
     def on_complete(self):
         ret = False
@@ -55,6 +62,9 @@ class HTTP_Request(Signature):
         for host in self.request.keys():
             for uri in self.request[host]["uris"]:
                 self.data.append({"url": "{}:{}/{}".format(host, self.request[host]["port"], uri)})
+
+        for url in self.urls:
+            self.data.append({"url": url})
 
         if len(self.data) > 0:
             ret = True
