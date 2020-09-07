@@ -67,7 +67,7 @@ class RansomwareExtensions(Signature):
             (".*\.lock93$", ["Lock93"]),
             (".*\.Alcatraz$", ["Alcatraz-Locker"]),
             (".*\.dCrypt$", ["DummyLocker"]),
-#            (".*\.enc$", ["encryptJJS"]),
+            #(".*\.enc$", ["encryptJJS"]),
             (".*\.rnsmwr$", ["Gremit"]),
             (".*\.da_vinci_code$", ["Troldesh"]),
             (".*\.magic_software_syndicate$", ["Troldesh"]),
@@ -99,20 +99,23 @@ class RansomwareExtensions(Signature):
             (".*\.pwnd$", ["PwndLocker"]),
             (".*\.pr[o0]L[o0]ck$", ["ProLock"]),
             (".*\.abcd$", ["LockBit"]),
+            (".*\.lockbit$", ["LockBit"]),
+            (".*\.corona-lock", ["CovidRansomware"]),
             (".*\.thanos$", ["Tycoon"]),
             (".*\.grinch$", ["Tycoon"]),
             (".*\.redrum$", ["Tycoon"]),
-            (".*\.corona-lock", ["CovidRansomware"]),
             (".*\.*wasted$", ["WastedLocker"]),
-            (".*\.*wasted_info$", ["WastedLocker"]),
             (".*\.CONTI$", ["Conti"]),
             (".*\.vhd$", ["VHD"]),
             (".*\.ragn@r_[A-Z0-9]{8}$", ["RagnarLocker"]),
             (".*\.WannaCash$", ["WannaCash"]),
             (".*\.avdn$", ["Avaddon"]),
-            (".*\.mailto", ["Netwalker-Mailto"]), #Appends additional email and/or extension after .mailto
+            # Appends additional email and/or extension after .mailto
+            (".*\.mailto", ["Netwalker-Mailto"]),
             (".*\.GNNCRY$", ["GonnaCry"]),
             (".*\.XONIF$", ["Fonix"]),
+            (".*\.pandemic$", ["Pandemic"]),
+            (".*\.ROGER$", ["ROGER"]),
         ]
 
         for indicator in indicators:
