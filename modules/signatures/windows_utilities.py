@@ -660,4 +660,26 @@ class UsesWindowsUtilitiesAppCmd(Signature):
                     self.data.append({"command" : cmdline})
 
         return ret		    
-    
+  
+class SuspiciousMpCmdRunUse(Signature):
+    name = "suspicious_mpcmdrun_use"
+    description = "Suspicious use of MpCmdRun was detected"
+    severity = 3
+    categories = ["commands"]
+    authors = ["ditekshen"]
+    minimum = "1.3"
+    evented = True
+    ttp = ["T1105"]
+
+    def run(self):
+        indicator = [
+            ".*MpCmdRun(\.exe)?.*-url.*",
+        ]
+
+        for indicator in indicators:
+            match = self.check_executed_command(pattern=indicator, regex=True)
+            if match:
+                self.data.append({"command": match})
+                retrun True
+
+        return False  

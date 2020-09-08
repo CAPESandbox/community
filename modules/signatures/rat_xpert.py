@@ -17,16 +17,22 @@ from lib.cuckoo.common.abstracts import Signature
 
 class XpertRATMutexes(Signature):
     name = "xpertrat_mutexes"
-    description = "Creates Xpert RAT mutexes"
+    description = "XpertRAT RAT mutexes detected"
     severity = 3
     categories = ["RAT"]
-    families = ["Xpert"]
+    families = ["XpertRAT"]
     authors = ["ditekshen"]
-    minimum = "0.5"
+    minimum = "1.3"
+    evented = True
 
     def run(self):
         indicators = [
-            "G2L6E3O1-E775-G5J4-R4C2-P5F660S1R4A8",
+            "^G2L6E3O1-E775-G5J4-R4C2-P5F660S1R4A8$",
+            "^H0U2K1E4-X5W2-F3C0-W441-A6P5N3Y338D1$",
+            "^G2G228Q5-P8H1-G1U7-U4L6-D1K007E3Y0Y8$",
+            "^Q0V4O1A8-O5N3-X331-D1M0-A2W3Q6D8C2R6$",
+            "^L7N5H8T1-D8F4-W0G0-J2H6-T8S8Y5H224P8$",
+            "^D7X4P1B8-Q5O3-S1E1-N0C3-X4R7E8E2T6P3$",
         ]
 
         for indicator in indicators:
@@ -39,24 +45,36 @@ class XpertRATMutexes(Signature):
 
 class XpertRATFiles(Signature):
     name = "xpertrat_files"
-    description = "Creates Xpert RAT files"
+    description = "XpertRAT RAT files detected"
     severity = 3
     categories = ["RAT"]
-    families = ["Xpert"]
+    families = ["XpertRAT"]
     authors = ["ditekshen"]
-    minimum = "0.5"
+    minimum = "1.3"
+    evented = True
 
     def run(self):
-        indicators = [
-            ".*\\\\ut$",
-            ".*\\\\Temp\\\\.*\.bmp"
-            ".*\\\\G2L6E3O1-E775-G5J4-R4C2-P5F660S1R4A8$"
-        ]
+        score = 0
+        indicators = list()
+        user = self.get_environ_entry(self.get_initial_process(), "UserName")
+        guid = "[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}"
+
+        try:
+            indicators.append(".*\\\\AppData\\\\Local\\\\Temp\\\\" + user.decode("utf-8") + "\.bmp")
+        except Exception as err:
+            return False
+
+        indicators.append(".*\\\\AppData\\\\Roaming\\\\" + guid + "\\\\ut$")
+        indicators.append(".*\\\\AppData\\\\Roaming\\\\" + guid + "\\\\" + guid + "\.(exe|pas)")
 
         for indicator in indicators:
             match = self.check_write_file(pattern=indicator, regex=True)
             if match:
+                score += 1
                 self.data.append({"file": match})
-                return True
+
+        if score >= 2:
+            return True
 
         return False
+    
