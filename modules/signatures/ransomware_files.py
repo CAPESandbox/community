@@ -131,7 +131,7 @@ class RansomwareFiles(Signature):
             (".*\\\\@Please_Read_Me@\.txt$", ["WannaCry"]),
             (".*\\\\_readme\.txt$", ["STOP-Djvu"]),
             (".*\\\\#FOX_README#\.rtf$", ["Fox"]),
-            (".*\\\\Restore-My-Files\.txt$", ["Goodmen", "LockBit"]),
+            (".*\\\\Restore-My-Files\.txt$", ["LockBit"]),
             (".*\\\\HOW_DECRYPT_FILES\.txt$", ["Estemani"]),
             (".*\\\\[A-Z0-9]{6}-Readme\.txt$", ["Koko", "Mailto"]),
             (".*\\\\#README\.lilocked$", ["Lilocked"]),
@@ -155,8 +155,6 @@ class RansomwareFiles(Signature):
             (".*\\\\[a-z]{5}_readme.txt$", ["Avaddon"]),
             (".*\\\\conti\.txt$", ["Conti"]),
             (".*\\\\README\.[0-9]{8}\.TXT$", ["DarkSide"]),
-            
-        ]
 
         for ioc in file_list:
             if self.check_write_file(pattern=ioc[0], regex=True):
