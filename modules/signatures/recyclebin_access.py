@@ -27,7 +27,7 @@ class Accesses_RecycleBin(Signature):
     severity = 1
     categories = ["evasion", "execution", "collection"]
     authors = ["bartblaze"]
-	minimum = "1.3"
+    minimum = "1.3"
     ttp = ["T1074"]
     evented = True
 

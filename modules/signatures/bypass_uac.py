@@ -150,10 +150,10 @@ class UACBypassFodhelper(Signature):
     categories = ["persistence"]
     authors = ["bartblaze"]
     minimum = "1.2"
+    reference = ["https://winscripting.blog/2017/05/12/first-entry-welcome-and-uac-bypass/"]
     evented = True
     ttp = ["T1548"]
-	reference = ["https://winscripting.blog/2017/05/12/first-entry-welcome-and-uac-bypass/"]
-
+    
     def run(self):
         ret = False
         reg_indicators = [
