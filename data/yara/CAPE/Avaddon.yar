@@ -14,6 +14,8 @@ rule Avaddon {
       $s8 = "\"ip\":\"" fullword ascii wide
       $s9 = ".?AUANEventIsGetExternalIP@@" fullword ascii
       $s10 = ".?AUANEventGetCpuMax@@" fullword ascii
+      $s11 = "\"hdd\":\"" fullword ascii
+      $s12 = "\"ext\":\"" fullword ascii wide      
    condition:
       uint16(0) == 0x5a4d and 8 of them
 }

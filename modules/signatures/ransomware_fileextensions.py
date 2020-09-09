@@ -114,6 +114,10 @@ class RansomwareExtensions(Signature):
             (".*\.mailto", ["Netwalker-Mailto"]),
             (".*\.GNNCRY$", ["GonnaCry"]),
             (".*\.XONIF$", ["Fonix"]),
+            (".*\.HACKED$", ["Smaug"]),
+            (".*\.NEFILIM$", ["Nefilim"]),
+            (".*\.NEPHILIM$", ["Nefilim"]),
+            (".*\.NEF1LIM$", ["Nefilim"]),
             (".*\.pandemic$", ["Pandemic"]),
             (".*\.ROGER$", ["ROGER"]),
         ]
