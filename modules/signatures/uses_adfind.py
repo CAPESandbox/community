@@ -20,7 +20,7 @@ class ADFind(Signature):
     categories = ["discovery"]
     authors = ["bartblaze"]
     minimum = "1.3"
-	references = ["http://www.joeware.net/freetools/tools/adfind/"]
+    references = ["http://www.joeware.net/freetools/tools/adfind/"]
     ttp = ["T1069"]
 
     evented = True

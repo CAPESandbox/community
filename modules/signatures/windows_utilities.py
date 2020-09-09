@@ -520,7 +520,7 @@ class UsesWindowsUtilitiesNltest(Signature):
     categories = ["discovery"]
     authors = ["bartblaze"]
     minimum = "1.3"
-	references = ["https://ss64.com/nt/nltest.html"]
+    references = ["https://ss64.com/nt/nltest.html"]
     ttp = ["T1016", "T1482"]
 
     evented = True
@@ -550,7 +550,7 @@ class UsesWindowsUtilitiesNTDSutil(Signature):
     categories = ["discovery"]
     authors = ["bartblaze"]
     minimum = "1.3"
-	references = ["https://ss64.com/nt/ntdsutil.html"]
+    references = ["https://ss64.com/nt/ntdsutil.html"]
     ttp = ["T1003"]
 
     evented = True
@@ -579,7 +579,7 @@ class UsesWindowsUtilitiesCSVDELDFIDE(Signature):
     categories = ["discovery"]
     authors = ["bartblaze"]
     minimum = "1.3"
-	references = ["https://ss64.com/nt/csvde.html"]
+    references = ["https://ss64.com/nt/csvde.html"]
     ttp = ["T1087"]
 
     evented = True
@@ -610,7 +610,7 @@ class UsesWindowsUtilitiesDSQuery(Signature):
     categories = ["discovery"]
     authors = ["bartblaze"]
     minimum = "1.3"
-	references = ["https://ss64.com/nt/dsquery.html"]
+    references = ["https://ss64.com/nt/dsquery.html"]
     ttp = ["T1069", "T1482", "T1087"]
 
     evented = True
@@ -639,7 +639,7 @@ class UsesWindowsUtilitiesAppCmd(Signature):
     categories = ["evasion"]
     authors = ["bartblaze"]
     minimum = "1.3"
-	references = ["https://docs.microsoft.com/en-us/iis/get-started/getting-started-with-iis/getting-started-with-appcmdexe"]
+    references = ["https://docs.microsoft.com/en-us/iis/get-started/getting-started-with-iis/getting-started-with-appcmdexe"]
     ttp = ["T1202"]
 
     evented = True
@@ -678,6 +678,29 @@ class SuspiciousMpCmdRunUse(Signature):
 
         for indicator in indicators:
             match = self.check_executed_command(pattern=indicator, regex=True)
+            if match:
+                self.data.append({"command": match})
+                retrun True
+
+        return False  
+
+class MultipleExplorerInstances(Signature):
+    name = "multiple_explorer_instances"
+    description = "Spawns another instance of explorer"
+    severity = 2
+    categories = ["commands", "evasiob"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    references = ["https://twitter.com/CyberRaiju/status/1273597319322058752"]
+    evented = True
+
+    def run(self):
+        indicator = [
+            "explorer.exe /root",
+        ]
+
+        for indicator in indicators:
+            match = self.check_executed_command(pattern=indicator)
             if match:
                 self.data.append({"command": match})
                 retrun True
