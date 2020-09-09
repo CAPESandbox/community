@@ -120,6 +120,7 @@ class RansomwareExtensions(Signature):
             (".*\.NEF1LIM$", ["Nefilim"]),
             (".*\.pandemic$", ["Pandemic"]),
             (".*\.ROGER$", ["ROGER"]),
+            (".*\.coin$", ["Jackpot"]),
         ]
 
         for indicator in indicators:
