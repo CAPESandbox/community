@@ -155,10 +155,9 @@ class RansomwareFiles(Signature):
             (".*\\\\[a-z]{5}_readme.txt$", ["Avaddon"]),
             (".*\\\\conti\.txt$", ["Conti"]),
             (".*\\\\!!_FILES_ENCRYPTED_\.txt$", ["Sfile-Escal"]),
-            (".*\\\\payment request\.txt$", ["Jackpot"]),
-            (".*\\\\payment request\.html$", ["Jackpot"]),
+            (".*\\\\payment request\.(txt|html)$", ["Jackpot"]),
             (".*\\\\r3adm3\.txt$", ["ContiV2"]),
-        ]	
+        ]
 
         for ioc in file_list:
             if self.check_write_file(pattern=ioc[0], regex=True):
