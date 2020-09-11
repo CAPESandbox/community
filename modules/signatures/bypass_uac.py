@@ -51,7 +51,7 @@ class UACBypassEventvwr(Signature):
                 cmdline = self.get_argument(call, "CommandLine")
                 if ("mmc " in cmdline.lower() or "mmc.exe" in cmdline.lower()) and "eventvwr.msc" in cmdline.lower():
                     self.data.append({"cmdline": cmdline })
-                    self.ret = True   
+                    self.ret = True
 
     def on_complete(self):
         return self.ret
@@ -122,7 +122,7 @@ class UACBypassCMSTP(Signature):
                     self.droppedinf.append(filename)
                     self.inf = True
 
-        # This is for a file being moved/renamed into .inf. This is to avoid a possible evasion that could be created by dropped the content in a .txt or something and then renaming the file/moving it into a .inf for use my cmstp. Also in case of copying .inf files into new ones too.        
+        # This is for a file being moved/renamed into .inf. This is to avoid a possible evasion that could be created by dropped the content in a .txt or something and then renaming the file/moving it into a .inf for use my cmstp. Also in case of copying .inf files into new ones too.
         if call["api"] in ("CopyFileExA","CopyFileExW","MoveFileWithProgressW","MoveFileWithProgressTransactedW"):
             origfile = self.get_argument(call, "ExistingFileName")
             destfile = self.get_argument(call, "NewFileName")
@@ -142,10 +142,10 @@ class UACBypassCMSTP(Signature):
                         self.ret = True
 
         return self.ret
-    
+
 class UACBypassFodhelper(Signature):
     name = "uac_bypass_fodhelper"
-    description = Uses fodhelper.exe sendkeys technique to bypass User Access Control (UAC)"
+    description = "Uses fodhelper.exe sendkeys technique to bypass User Access Control (UAC)"
     severity = 3
     categories = ["persistence"]
     authors = ["bartblaze"]
@@ -153,7 +153,7 @@ class UACBypassFodhelper(Signature):
     reference = ["https://winscripting.blog/2017/05/12/first-entry-welcome-and-uac-bypass/"]
     evented = True
     ttp = ["T1548"]
-    
+
     def run(self):
         ret = False
         reg_indicators = [

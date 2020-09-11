@@ -49,7 +49,7 @@ class LsassCredentialDumping(Signature):
                     self.lsasshandle.append(self.get_argument(call, "ProcessHandle"))
                     self.readaccessprocs.append(pname)
                     self.ret = True
-            
+
         if call["api"] == "ReadProcessMemory":
             if self.get_argument(call, "ProcessHandle") in self.lsasshandle:
                 pname = process["process_name"].lower()
@@ -129,7 +129,7 @@ class RegistryLSASecretsAccess(Signature):
                 self.data.append({"regkey": match})
                 return True
 
-        return False    
+        return False
 
 class FileCredentialStoreAccess(Signature):
     name = "file_credential_store_access"
@@ -138,14 +138,14 @@ class FileCredentialStoreAccess(Signature):
     categories = ["credential_access", "credential_dumping"]
     authors = ["bartblaze"]
     minimum = "1.3"
-	evented = True
-    ttp = ["T1003"]	
+    evented = True
+    ttp = ["T1003"]
 
     def run(self):
         indicators = [
             "C:\\\\Windows\\\\repair\\\\sam",
-			"C:\\\\Windows\\\\System32\\\\config\\\\RegBack\\\\SAM",
-			"C:\\\\Windows\\\\system32\\\\config\\\\SAM",
+            "C:\\\\Windows\\\\System32\\\\config\\\\RegBack\\\\SAM",
+            "C:\\\\Windows\\\\system32\\\\config\\\\SAM",
         ]
 
         for indicator in indicators:
@@ -154,5 +154,5 @@ class FileCredentialStoreAccess(Signature):
                 self.data.append({"file": match})
                 return True
 
-        return False    
-    
+        return False
+
