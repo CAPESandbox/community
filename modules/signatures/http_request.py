@@ -9,7 +9,7 @@ class HTTP_Request(Signature):
     description = "Performs HTTP requests potentially not found in PCAP."
     severity = 2
     categories = ["network"]
-    authors = ["enzok"]
+    authors = ["enzok", "ditekshen"]
     minimum = "1.2"
     evented = True
 
@@ -24,7 +24,7 @@ class HTTP_Request(Signature):
                                "apps.identrust.com"]
 
     filter_apinames = set(["HttpOpenRequestA", "HttpOpenRequestW", "InternetConnectA",
-                           "InternetConnectW", "WinHttpGetProxyForUrl"])
+                           "InternetConnectW", "WinHttpGetProxyForUrl", "InternetOpenUrlW", "InternetOpenUrlA"])
 
 
     def on_call(self, call, process):
@@ -51,6 +51,12 @@ class HTTP_Request(Signature):
                     self.request[self.lasthost]["curhandle"] = call["return"]
         elif call["api"] == "WinHttpGetProxyForUrl":
             url = self.get_argument(call, "Url")
+            if url:
+                for wlhost in self.host_whitelist:
+                    if wlhost not in url:
+                        self.urls.append(url)
+        elif call["api"].startswith("InternetOpenUrl"):
+            url = self.get_argument(call, "URL")
             if url:
                 for wlhost in self.host_whitelist:
                     if wlhost not in url:
