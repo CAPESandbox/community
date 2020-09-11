@@ -13,6 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from lib.cuckoo.common.abstracts import Signature
+
 class ADFind(Signature):
     name = "uses_adfind"
     description = "Queries the Active Directory using AdFind"
@@ -28,7 +30,7 @@ class ADFind(Signature):
     def run(self):
         utilities = [
             "adfind ",
-			"adfind.exe",		
+			"adfind.exe",
         ]
 
         ret = False
@@ -40,4 +42,4 @@ class ADFind(Signature):
                     ret = True
                     self.data.append({"command" : cmdline})
 
-        return ret	
+        return ret

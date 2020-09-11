@@ -13,6 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from lib.cuckoo.common.abstracts import Signature
+
 class DisablesEventLogging(Signature):
     name = "disables_event_logging"
     description = "Disables Event Logging"
@@ -34,4 +36,4 @@ class DisablesEventLogging(Signature):
                 self.data.append({"regkey" : match})
                 return True
 
-        return False 
+        return False

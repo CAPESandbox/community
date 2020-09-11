@@ -9,6 +9,8 @@ from lib.cuckoo.common.config import Config
 from lib.cuckoo.common.exceptions import CuckooCriticalError
 from lib.cuckoo.common.exceptions import CuckooMachineError
 
+from sqlalchemy.exc import SQLAlchemyError
+
 logging.getLogger("boto3").setLevel(logging.CRITICAL)
 logging.getLogger("botocore").setLevel(logging.CRITICAL)
 log = logging.getLogger(__name__)

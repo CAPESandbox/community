@@ -13,6 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from lib.cuckoo.common.abstracts import Signature
+
 class DisablesBackups(Signature):
     name = "disables_backups"
     description = "Disables backups, often seen in ransomware"
@@ -44,4 +46,4 @@ class DisablesBackups(Signature):
                 self.data.append({"regkey" : match})
                 return True
 
-        return False 
+        return False

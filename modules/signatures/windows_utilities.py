@@ -511,7 +511,7 @@ class UsesWindowsUtilitiesMode(Signature):
                     ret = True
                     self.data.append({"command" : cmdline})
 
-        return ret    
+        return ret
 
 class UsesWindowsUtilitiesNltest(Signature):
     name = "uses_windows_utilities_nltest"
@@ -542,7 +542,7 @@ class UsesWindowsUtilitiesNltest(Signature):
 
         return ret
 
-		
+
 class UsesWindowsUtilitiesNTDSutil(Signature):
     name = "uses_windows_utilities_ntdsutil"
     description = "Uses ntdsutil to potentially dump ntds.dit, dump the Active Directory or other actions"
@@ -589,7 +589,7 @@ class UsesWindowsUtilitiesCSVDELDFIDE(Signature):
             "CSVDE ",
 			"CSVDE.exe",
             "LDIFDE ",
-			"LDIFDE.exe",			
+			"LDIFDE.exe",
         ]
 
         ret = False
@@ -618,7 +618,7 @@ class UsesWindowsUtilitiesDSQuery(Signature):
     def run(self):
         utilities = [
             "DSQuery ",
-			"DSQuery.exe",	
+			"DSQuery.exe",
         ]
 
         ret = False
@@ -631,7 +631,7 @@ class UsesWindowsUtilitiesDSQuery(Signature):
                     self.data.append({"command" : cmdline})
 
         return ret
-		
+
 class UsesWindowsUtilitiesAppCmd(Signature):
     name = "uses_windows_utilities_appcmd"
     description = "Uses the IIS Command Line Tool, likely for installing a service or loading a file"
@@ -647,7 +647,7 @@ class UsesWindowsUtilitiesAppCmd(Signature):
     def run(self):
         utilities = [
             "AppCmd ",
-			"AppCmd.exe",	
+			"AppCmd.exe",
         ]
 
         ret = False
@@ -659,8 +659,8 @@ class UsesWindowsUtilitiesAppCmd(Signature):
                     ret = True
                     self.data.append({"command" : cmdline})
 
-        return ret		    
-  
+        return ret
+
 class SuspiciousMpCmdRunUse(Signature):
     name = "suspicious_mpcmdrun_use"
     description = "Suspicious use of MpCmdRun was detected"
@@ -672,7 +672,7 @@ class SuspiciousMpCmdRunUse(Signature):
     ttp = ["T1105"]
 
     def run(self):
-        indicator = [
+        indicators = [
             ".*MpCmdRun(\.exe)?.*-url.*",
         ]
 
@@ -680,9 +680,9 @@ class SuspiciousMpCmdRunUse(Signature):
             match = self.check_executed_command(pattern=indicator, regex=True)
             if match:
                 self.data.append({"command": match})
-                retrun True
+                return True
 
-        return False  
+        return False
 
 class MultipleExplorerInstances(Signature):
     name = "multiple_explorer_instances"
@@ -695,7 +695,7 @@ class MultipleExplorerInstances(Signature):
     evented = True
 
     def run(self):
-        indicator = [
+        indicators = [
             "explorer.exe /root",
         ]
 
@@ -703,6 +703,6 @@ class MultipleExplorerInstances(Signature):
             match = self.check_executed_command(pattern=indicator)
             if match:
                 self.data.append({"command": match})
-                retrun True
+                return True
 
-        return False  
+        return False

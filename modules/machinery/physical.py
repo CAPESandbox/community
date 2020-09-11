@@ -126,7 +126,7 @@ class Physical(Machinery):
 
         try:
             status = server.get_status()
-        except xmlrpc.client..Fault as e:
+        except xmlrpc.client.Fault as e:
             # Contacted Agent, but it threw an error.
             log.debug("Agent error: %s (%s) (Error: %s).",
                       machine.id, machine.ip, e)
