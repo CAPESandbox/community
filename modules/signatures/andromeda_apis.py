@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class Andromeda_APIs(Signature):
     name = "andromeda_behavior"
-    description = "Exhibits behavior characteristic of Andromeda/Gamarue malware"
+    description = Exhibits behavior characteristic of Andromeda/Gamarue malware"
     weight = 3
     severity = 3
     categories = ["trojan"]
