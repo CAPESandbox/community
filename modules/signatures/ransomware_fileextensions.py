@@ -121,6 +121,7 @@ class RansomwareExtensions(Signature):
             (".*\.pandemic$", ["Pandemic"]),
             (".*\.ROGER$", ["ROGER"]),
             (".*\.coin$", ["Jackpot"]),
+            (".*\.[[a-z0-9]{8}-[a-z0-9]{8}]$", ["Cryakl-CryLock"]),
         ]
 
         for indicator in indicators:
