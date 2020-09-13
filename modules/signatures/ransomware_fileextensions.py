@@ -121,6 +121,7 @@ class RansomwareExtensions(Signature):
             (".*\.ROGER$", ["ROGER"]),
             (".*\.coin$", ["Jackpot"]),
             (".*\.[[a-z0-9]{8}-[a-z0-9]{8}]$", ["Cryakl-CryLock"]),
+            (".*\\\\HACKED\.txt$", ["Smaug"]),
             (".*\.crypted$", ["Hakbit-Thanos"]),
         ]
 
