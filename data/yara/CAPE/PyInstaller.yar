@@ -7,6 +7,7 @@ meta:
 	author = "@bartblaze"
 	date = "2020-01"
 	tlp = "White"
+	cape_type = "PyInstaller file"
 	
 strings:
 	$ = "pyi-windows-manifest-filename" ascii wide
