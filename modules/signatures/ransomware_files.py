@@ -157,6 +157,7 @@ class RansomwareFiles(Signature):
             (".*\\\\!!_FILES_ENCRYPTED_\.txt$", ["Sfile-Escal"]),
             (".*\\\\payment request\.(txt|html)$", ["Jackpot"]),
             (".*\\\\r3adm3\.txt$", ["ContiV2"]),
+            (".*\\\\HACKED\.txt$", ["Smaug"]),
         ]
 
         for ioc in file_list:
