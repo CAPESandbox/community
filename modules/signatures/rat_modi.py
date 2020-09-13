@@ -16,8 +16,8 @@
 from lib.cuckoo.common.abstracts import Signature
 
 class ModiRATBehavior(Signature):
-    name = "modirat_bheavior"
-    description = "Exhibts behavior charactersitcs of MoDiRAT"
+    name = "modirat_behavior"
+    description = "Exhibits behavioral characteristics of MoDiRAT"
     severity = 3
     categories = ["rat"]
     families = ["MoDiRAT"]

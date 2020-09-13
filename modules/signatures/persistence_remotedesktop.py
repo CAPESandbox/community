@@ -19,7 +19,6 @@ class PersistenceRDPRegistry(Signature):
     name = "persistence_rdp_registry"
     description = "Modifies Terminal Server registry keys for persistence"
     severity = 3
-    confidence = 100
     categories = ["persistence"]
     authors = ["bartblaze"]
     minimum = "1.2"
@@ -29,8 +28,8 @@ class PersistenceRDPRegistry(Signature):
     def run(self):
         ret = False
         reg_indicators = [
-            ".*\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\Terminal Server\\\\fSingleSessionPerUser$",
-            ".*\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\Terminal Server\\\\fDenyTSConnections$",
+            ".*\\\\Control\\\\Terminal Server\\\\fSingleSessionPerUser$",
+            ".*\\\\Control\\\\Terminal Server\\\\fDenyTSConnections$",
         ]
 
         for indicator in reg_indicators:

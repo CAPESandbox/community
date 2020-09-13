@@ -20,11 +20,11 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
-#This is experimental, but should detect suspicious behaviour where malware stores or writes data/files to the recycler
+#Detects suspicious behaviour where malware stores or writes data/files to the recycler
 class Accesses_RecycleBin(Signature):
     name = "accesses_recyclebin"
-    description = "Manipulates data from or to the Recycle Bin."
-    severity = 1
+    description = "Manipulates data from or to the Recycle Bin"
+    severity = 2
     categories = ["evasion", "execution", "collection"]
     authors = ["bartblaze"]
     minimum = "1.3"
