@@ -114,7 +114,6 @@ class RansomwareExtensions(Signature):
             (".*\.mailto", ["Netwalker-Mailto"]),
             (".*\.GNNCRY$", ["GonnaCry"]),
             (".*\.XONIF$", ["Fonix"]),
-            (".*\.HACKED$", ["Smaug"]),
             (".*\.NEFILIM$", ["Nefilim"]),
             (".*\.NEPHILIM$", ["Nefilim"]),
             (".*\.NEF1LIM$", ["Nefilim"]),
@@ -122,6 +121,7 @@ class RansomwareExtensions(Signature):
             (".*\.ROGER$", ["ROGER"]),
             (".*\.coin$", ["Jackpot"]),
             (".*\.[[a-z0-9]{8}-[a-z0-9]{8}]$", ["Cryakl-CryLock"]),
+            (".*\.crypted$", ["Hakbit-Thanos"]),
         ]
 
         for indicator in indicators:
