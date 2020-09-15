@@ -427,7 +427,6 @@ class UsesWindowsUtilitiesCipher(Signature):
     name = "uses_windows_utilities_cipher"
     description = "Uses cipher.exe to wipe the free space, as seen in some ransomware"
     severity = 3
-    confidence = 80
     categories = ["commands", "impact"]
     authors = ["bartblaze"]
     minimum = "1.3"
@@ -455,8 +454,7 @@ class UsesWindowsUtilitiesCipher(Signature):
 class UsesWindowsUtilitiesClickOnce(Signature):
     name = "uses_windows_utilities_clickonce"
     description = "Uses ClickOnce Deployment Manifests for download or installation"
-    severity = 0.5
-    confidence = 20
+    severity = 1
     categories = ["commands", "evasion"]
     authors = ["bartblaze"]
     minimum = "1.3"
@@ -486,8 +484,7 @@ class UsesWindowsUtilitiesClickOnce(Signature):
 class UsesWindowsUtilitiesMode(Signature):
     name = "uses_windows_utilities_mode"
     description = "Uses MODE to configure a system device or change the code page"
-    severity = 0.5
-    confidence = 20
+    severity = 1
     categories = ["commands"]
     authors = ["bartblaze"]
     minimum = "1.3"
@@ -522,13 +519,12 @@ class UsesWindowsUtilitiesNltest(Signature):
     minimum = "1.3"
     references = ["https://ss64.com/nt/nltest.html"]
     ttp = ["T1016", "T1482"]
-
     evented = True
 
     def run(self):
         utilities = [
             "nltest ",
-			"nltest.exe",
+            "nltest.exe ",
         ]
 
         ret = False
@@ -552,13 +548,12 @@ class UsesWindowsUtilitiesNTDSutil(Signature):
     minimum = "1.3"
     references = ["https://ss64.com/nt/ntdsutil.html"]
     ttp = ["T1003"]
-
     evented = True
 
     def run(self):
         utilities = [
             "ntdsutil ",
-			"ntdsutil.exe",
+            "ntdsutil.exe ",
         ]
 
         ret = False
@@ -581,15 +576,14 @@ class UsesWindowsUtilitiesCSVDELDFIDE(Signature):
     minimum = "1.3"
     references = ["https://ss64.com/nt/csvde.html"]
     ttp = ["T1087"]
-
     evented = True
 
     def run(self):
         utilities = [
             "CSVDE ",
-			"CSVDE.exe",
+            "CSVDE.exe ",
             "LDIFDE ",
-			"LDIFDE.exe",
+            "LDIFDE.exe ",
         ]
 
         ret = False
@@ -612,13 +606,12 @@ class UsesWindowsUtilitiesDSQuery(Signature):
     minimum = "1.3"
     references = ["https://ss64.com/nt/dsquery.html"]
     ttp = ["T1069", "T1482", "T1087"]
-
     evented = True
 
     def run(self):
         utilities = [
             "DSQuery ",
-			"DSQuery.exe",
+            "DSQuery.exe ",
         ]
 
         ret = False
@@ -641,13 +634,12 @@ class UsesWindowsUtilitiesAppCmd(Signature):
     minimum = "1.3"
     references = ["https://docs.microsoft.com/en-us/iis/get-started/getting-started-with-iis/getting-started-with-appcmdexe"]
     ttp = ["T1202"]
-
     evented = True
 
     def run(self):
         utilities = [
             "AppCmd ",
-			"AppCmd.exe",
+            "AppCmd.exe ",
         ]
 
         ret = False
@@ -688,7 +680,7 @@ class MultipleExplorerInstances(Signature):
     name = "multiple_explorer_instances"
     description = "Spawns another instance of explorer"
     severity = 2
-    categories = ["commands", "evasiob"]
+    categories = ["commands", "evasion"]
     authors = ["bartblaze"]
     minimum = "1.3"
     references = ["https://twitter.com/CyberRaiju/status/1273597319322058752"]
@@ -706,3 +698,30 @@ class MultipleExplorerInstances(Signature):
                 return True
 
         return False
+
+class UsesWindowsUtilitiesFinger(Signature):
+    name = "uses_windows_utilities_finger"
+    description = "Uses the TCPIP Finger Command for downloading files or connecting to a remote server"
+    severity = 3
+    categories = ["evasion"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    ttp = ["T1202"]
+    evented = True
+
+    def run(self):
+        utilities = [
+            "finger ",
+            "finger.exe ",
+        ]
+
+        ret = False
+        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            for utility in utilities:
+                if utility in lower:
+                    ret = True
+                    self.data.append({"command" : cmdline})
+
+        return ret
