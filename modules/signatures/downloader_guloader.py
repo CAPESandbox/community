@@ -25,7 +25,7 @@ class GuLoaderAPIs(Signature):
     description = "Exhibits behavior characteristics of GuLoader"
     severity = 3
     categories = ["downloder","injection", "shellcode"]
-    families = ["GuLoader"]
+    families = ["GuLoader", "CloudEye"]
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
@@ -35,7 +35,11 @@ class GuLoaderAPIs(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.regpattern = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VBA\Monitors"
-        self.filepattern = "^[A-Z]:\\\\ProgramData\\\\qemu-ga\\\\qga.state$"
+        self.filepatterns = [
+            "^[A-Z]:\\\\ProgramData\\\\qemu-ga\\\\qga.state$",
+            "^[A-Z]:\\\\Program\sFiles(\s\(x86\))?\\\\Qemu-ga\\\\qemu-ga.exe$",
+            "^[A-Z]:\\\\Program\sFiles(\s\(x86\))?\\\\qga\\\\qga.exe$",
+        ]
         self.uapattern = "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko"
         self.useragent = str()
         self.regmatch = False
@@ -47,8 +51,9 @@ class GuLoaderAPIs(Signature):
             desiredaccess = int(self.get_argument(call, "DesiredAccess"), 16)
             if desiredaccess and desiredaccess & 0x80100080:
                 filename = self.get_argument(call, "FileName")
-                if filename and re.match(self.filepattern, filename, re.IGNORECASE):
-                    self.filematch = True
+                for pat in self.filepatterns:
+                    if filename and re.match(pat, filename, re.IGNORECASE):
+                        self.filematch = True
 
         if call["api"] == "RegOpenKeyExA":
             fullname = self.get_argument(call, "FullName")

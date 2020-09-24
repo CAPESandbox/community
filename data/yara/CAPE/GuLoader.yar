@@ -36,5 +36,5 @@ rule GuLoader {
         $url3 = "http://myurl/myfile.bin" fullword ascii
         $url4 = "http" ascii // fallback
     condition:
-        (3 of ($s*) and 2 of ($l*) and 2 of ($o*) and 1 of ($url*)) or (4 of ($s*) and 3 of ($l*) and 2 of ($o*))
+        (4 of ($s*) and 3 of ($l*) and 3 of ($o*) and 1 of ($url*)) or (5 of ($s*) and 3 of ($l*) and 3 of ($o*))
 }
