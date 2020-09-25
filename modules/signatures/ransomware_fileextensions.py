@@ -122,6 +122,8 @@ class RansomwareExtensions(Signature):
             (".*\.coin$", ["Jackpot"]),
             (".*\.[[a-z0-9]{8}-[a-z0-9]{8}]$", ["Cryakl-CryLock"]),
             (".*\.crypted$", ["Hakbit-Thanos"]),
+            (".*\.tx_locked$", ["ThunderX"]),
+            (".*\.[A-Z0-9]{64}$", ["SunCrypt"]),
         ]
 
         for indicator in indicators:

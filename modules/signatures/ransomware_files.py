@@ -44,7 +44,7 @@ class RansomwareFiles(Signature):
             (".*\\\\howto_restore_files.*\.(txt|html)$", ["TeslaCrypt", "AlphaCrypt"]),
             (".*\\\\+-xxx-HELP-xxx-+.*\.(png|txt|html)$", ["TeslaCrypt", "AlphaCrypt"]),
             (".*\\\\HELP_RECOVER_instructions\+.*\.(txt|html)$", ["TeslaCrypt", "AlphaCrypt"]),
-            (".*\\\\YOUR_FILES_ARE_ENCRYPTED\.HTML$", ["Chimera"]),
+            #(".*\\\\YOUR_FILES_ARE_ENCRYPTED\.HTML$", ["Chimera"]),
             (".*\\\\_?how_recover.*\.(txt|html)$", ["TeslaCrypt", "AlphaCrypt"]),
             (".*\\\\cl_data.*\.bak$", ["WinPlock"]),
             (".*\\\\READ\ ME\ FOR\ DECRYPT\.txt$", ["Fakben"]),
@@ -158,6 +158,7 @@ class RansomwareFiles(Signature):
             (".*\\\\payment request\.(txt|html)$", ["Jackpot"]),
             (".*\\\\r3adm3\.txt$", ["ContiV2"]),
             (".*\\\\HACKED\.txt$", ["Smaug"]),
+            (".*\\\\YOUR_FILES_ARE_ENCRYPTED\.HTML$", ["SunCrypt"]),
         ]
 
         for ioc in file_list:
