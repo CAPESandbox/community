@@ -146,7 +146,7 @@ class SuspiciousIoctlSCSIPassthough(Signature):
             pname = process["process_name"]
             if pname not in self.pnames:
                 self.pnames.append(pname)
-                self.data.append({"suspicious_ioctl_use": "%s is using the IOCTL_SCSI_PASS_THROUGH or IOCTL_SCSI_PASS_THROUGH_DIRECT control codes to make modifications" %(pname)})
+                self.data.append({"suspicious_deviceiocontrol_ioctl_use": "%s is using the IOCTL_SCSI_PASS_THROUGH or IOCTL_SCSI_PASS_THROUGH_DIRECT control codes to make modifications" %(pname)})
                 self.ret = True
  
     def on_complete(self):
