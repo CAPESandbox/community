@@ -121,3 +121,33 @@ class PhysicalDriveAccess(Signature):
             ret = True
 
         return ret
+
+class SuspiciousIoctlSCSIPassthough(Signature):
+    name = "suspicious_ioctl_scsipassthough"
+    description = "Uses IOCTL_SCSI_PASS_THROUGH control codes to manipulate drive/MBR which may be indicative of a bootkit"
+    severity = 3
+    categories = ["bootkit", "rootkit"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttp = ["T1067"]
+    references = ["http://www.ioctls.net/"]
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.pnames = []
+        self.ret = False
+
+    filter_apinames = set(["DeviceIoControl", "NtDeviceIoControlFile"])
+
+    def on_call(self, call, process):
+        ioctl = self.get_argument(call, "IoControlCode")
+        if ioctl == "0x0004d004" or ioctl == "0x0004d014":
+            pname = process["process_name"]
+            if pname not in self.pnames:
+                self.pnames.append(pname)
+                self.data.append({"suspicious_ioctl_use": "%s is using the IOCTL_SCSI_PASS_THROUGH or IOCTL_SCSI_PASS_THROUGH_DIRECT control codes to make modifications" %(pname)})
+                self.ret = True
+ 
+    def on_complete(self):
+        return self.ret
