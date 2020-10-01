@@ -167,6 +167,8 @@ class BadCerts(Signature):
             "1174c2affb0a364c1b7a231168cfdda5989c04c5",
             # Kimjac ApS
             "af00de8f6172a98de60e2231dd8e5b50f00f1ae9",
+            # ARTBUD RADOM SP Z O O
+            "c1e0c6dc2bc8ea07acb0f8bdb09e6a97ae91e57c",
         ]
 
         for sign in self.results.get("static", {}).get("pe", {}).get("digital_signers", []) or []:
