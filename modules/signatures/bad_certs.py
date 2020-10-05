@@ -169,6 +169,84 @@ class BadCerts(Signature):
             "af00de8f6172a98de60e2231dd8e5b50f00f1ae9",
             # ARTBUD RADOM SP Z O O
             "c1e0c6dc2bc8ea07acb0f8bdb09e6a97ae91e57c",
+            # NEON CRAYON LIMITED (ServHelper and FlawedGrace)
+            "67c4afae16e5e2f98fe26b4597365b3cfed68b58",
+            # THE GREEN PARTNERSHIP LTD (ServHelper and FlawedGrace)
+            "9d5ded35ffd34aa78273f0ebd4d6fa1e5337ac2b",
+            # 1549 LIMITED (ServHelper and FlawedGrace)
+            "ee30aae45ec0a15a6b8b14fbc73ac5c56e293986",
+            # THEESOLUTIONS LTD (ServHelper and FlawedGrace)
+            "750fafa8a30217c17b70ed9d90ee1602562b8b53",
+            # SEVA MEDICAL LTD (BackNet)
+            "9a17d31e9191644945e920bc1e7e08fbd00b62f4",
+            # ClamAV (Gootkit)
+            "104c4183e248d63a6e2ad6766927b070c81afcb6",
+            # Python Software Foundation (GoldenAxe)
+            "c91dcecb3a92a17b063059200b20f5ce251b5a95",
+            # MIKL LIMITED (Lockergoga)
+            "c1b4d57a36e0b6853dd38e3034edf7d99a8b73ad",
+            # ALISA LTD (Lockergoga)
+            "acb38d45108c4f0c8894040646137c95e9bb39d8",
+            # KITTY'S LTD (Lockergoga)
+            "cf933a629598e5e192da2086e6110ad1974f8ec3",
+            # Mozilla Corporation (AutoIt NetWire)
+            "b6b24aea9e983ed6bda9586a145a7ddd7e220196",
+            # FDSMMCME (Emotet)
+            "4d1bc69003b1b1c3d0b43f6c17f81d13e0846ea7",
+            # ULTRA PARTNERS LTD
+            "8291eafa97a36e09e817650f3c877e0270cca423",
+            # WATWGHFC (Zbot)
+            "f0a72ce23e9ab468970472b1be03e428478ebf06",
+            # START ARCHITECTURE LTD (Amadey or ServHelper)
+            "a99b52e0999990c2eb24d1309de7d4e522937080",
+            # SLOW COOKED VENTURES LTD (Ursnif)
+            "0c1ffe7df27537a3dccbde6f7a49e38c4971e852",
+            # TeamViewer GmbH (Ursnif)
+            "c9b8ea3f1438caeee483f2ec610204e0258fad28",
+            # A&D DOMUS LIMITED (Gozi ISFB v3)
+            "c40c5157e96369ceb7e26e756f2d1372128cee7b",
+            # BIT HORIZON LIMITED (Gozi ISFB v3)
+            "8e50ddad9fee70441d9eb225b3032de4358718dc",
+            # tuning buddy limited (Ursnif)
+            "88ef10f0e160b1b4bb8f0777a012f6b30ac88ac8",
+            # DUHANEY LIMITED (FlawedAmmy)
+            "a6277cc8fce0f90a1909e6dac8b02a5115dafb40",
+            # 3AN LIMITED (MegaCortex)
+            "60974f5cc654e6f6c0a7332a9733e42f19186fbb",
+            # ANJELA KEY LIMITED (Rietspoof)
+            "f91651036b09efb57c03a33cb67de79f5283cb83",
+            # BULDOK LIMITED (Retefe)
+            "6750c9224540d7606d3c82c7641f49147c1b3fd0",
+            # BEAT GOES ON LIMITED (Loader and Alina PoS)
+            "d990d584c856bd28eab641c3c3a0f80c0b71c4d7",
+            # FIRNEEZ EUROPE LIMITED (Loader and Alina PoS)
+            "91bcebbfc1c3eb8f60d958fcfe20e648f6ed6507",
+            # GESO LTD (Loader and Alina PoS)
+            "744160f36ba9b0b9277c6a71bf383f1898fd6d89",
+            # REBROSE LEISURE LIMITED (CryptoMix Clop)
+            "871899843b5fd100466e351ca773dac44e936939",
+            # FLOWER DELI LTD (CryptoMix Clop)
+            "900aa9e6ff07c6528ecd71400e6404682e812017",
+            # SUN & STARZ LIMITED (CryptoMix Clop)
+            "1078c0ab5766a48b0d4e04e57f3ab65b68dd797f",
+            # PLAN ALPHA LIMITED (Trickbot .NET Packer)
+            "981b95ffcb259862e7461bc58516d7785de91a8a",
+            # Jean Binquet (Bandook RAT)
+            "bb04986cbd65f0994a544f197fbb26abf91228d9",
+            # Shanghai Hintsoft Co., Ltd. (ZXShell compromised revoked certificate)
+            "98549ae51b7208bda60b7309b415d887c385864b",
+            # JIN CONSULTANCY LIMITED (FlawedAmmy)
+            "ae9e65e26275d014a4a8398569af5eeddf7a472c",
+            # EXEC CONTROL LIMITED (Meterpreter)
+            "f7de21bbdf5effb0f6739d505579907e9f812e6f",
+            # SLOW POKE LTD (NetSupport Manager RAT)
+            "c757e09e7dc5859dbd00b0ccfdd006764c557a3d",
+            # DIGITAL DR (TA505 signed MPress-packed RMS - Remote Manipulator System)
+            "cef53e9ca954d1383a8ece037925aa4de9268f3f",
+            # ORDARA LTD (Lazarus Loader Banker - Redbanc)
+            "de2dad893fdd49d7c0d498c0260acfb272588a2b",
+            # ET HOMES LTD (FlawedAmmy Loader)
+            "8f594f2e0665ffd656160aac235d8c490059a9cc",
         ]
 
         for sign in self.results.get("static", {}).get("pe", {}).get("digital_signers", []) or []:
