@@ -27,7 +27,7 @@ class EnablesWDigest(Signature):
     def run(self):
         ret = False
         reg_indicators = [
-                "HKEY_LOCAL_MACHINE\\\\System\\\\CurrentControlSet\\\\Control\\\\SecurityProviders\\\\Wdigest\\\\UseLogonCredential$"
+                ".*\\\\Control\\\\SecurityProviders\\\\Wdigest\\\\UseLogonCredential$"
         ]
 
         for indicator in reg_indicators:
