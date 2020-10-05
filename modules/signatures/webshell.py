@@ -49,7 +49,7 @@ class WebShellProcesses(Signature):
 
 class WebShellFiles(Signature):
     name = "web_shell_files"
-    description = "Writes to the inetpub default path, typically seen in web shells"
+    description = "Writes to the inetpub or inetsrv default path, typically seen in web shells"
     severity = 2
     categories = ["Webshell"]
     authors = ["bartblaze"]
@@ -59,6 +59,7 @@ class WebShellFiles(Signature):
     def run(self):
         indicators = [
             ".*\\\\inetpub\\\\wwwroot\\\\.*",
+            ".*\\\\System32\\\\inetsrv\\\\.*"
         ]
 
         for indicator in indicators:
@@ -67,7 +68,7 @@ class WebShellFiles(Signature):
                 self.data.append({"file": match})
                 return True
 
-        return False	
+        return False
 
 class OWAWebShellFiles(Signature):
     name = "owa_web_shell_files"
@@ -89,4 +90,4 @@ class OWAWebShellFiles(Signature):
                 self.data.append({"file": match})
                 return True
 
-        return False				
+        return False		
