@@ -29,7 +29,7 @@ class AddsAdminUser(Signature):
     def run(self):
         indicators = ".*net(\.exe)?.*localgroup\sadministrators.*/add"
 
-        match = self.check_executed_command(pattern=indicator, regex=True)
+        match = self.check_executed_command(pattern=indicators, regex=True)
         if match:
             self.data.append({"command": match})
             return True
@@ -48,7 +48,7 @@ class OverwritesAdminPassword(Signature):
     def run(self):
         indicators = ".*net(\.exe)?.*user\sadministrator\s.*"
 
-        match = self.check_executed_command(pattern=indicator, regex=True)
+        match = self.check_executed_command(pattern=indicators, regex=True)
         if match:
             self.data.append({"command": match})
             return True
@@ -67,7 +67,7 @@ class AddsUser(Signature):
     def run(self):
         indicators = ".*net(1)?(\.exe)?\suser\s[^administrator(s)?\s].*/add"
 
-        match = self.check_executed_command(pattern=indicator, regex=True)
+        match = self.check_executed_command(pattern=indicators, regex=True)
         if match:
             self.data.append({"command": match})
             return True
