@@ -348,3 +348,25 @@ class NetworkDOHTLS(Signature):
                 found_matches = True
 
         return found_matches
+
+class NetworkDNSReverseProxy(Signature):
+    name = "network_dns_reverse_proxy"
+    description = "Generates DNS query to online reverse proxy"
+    severity = 2
+    categories = ["network", "dns"]
+    authors = ["ditekshen"]
+    minimum = "1.3"
+    evented = True
+
+    def run(self):
+        domain_indictors = [
+            ".*\.portmap\.io$",
+            ".*\.ngrok\.io$",
+        ]
+
+        for indicator in domain_indictors:
+            if self.check_domain(pattern=indicator, regex=True):
+                self.data.append({"domain": indicator})
+                return True
+
+        return False
