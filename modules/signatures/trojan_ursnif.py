@@ -29,7 +29,7 @@ class UrsnifBehavior(Signature):
     evented = True
 
     def run(self):
-        scroe = 0
+        score = 0
         guid = "[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}"
         regpath = "HKEY_CURRENT_USER\\\\Software\\\\AppDataLow\\\\Software\\\\Microsoft"
         regkeys = [
