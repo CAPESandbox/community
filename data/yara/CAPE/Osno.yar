@@ -28,10 +28,10 @@ rule Osno {
         $cnc2 = "&timestamp=" ascii wide
         $cnc3 = "&session_id=" ascii wide
         $cnc4 = "&aid=" ascii wide
-        $cnc4 = "&secret=" ascii wide
-        $cnc5 = "&api_key" ascii wide
-        $cnc6 = "&session_key=" ascii wide
-        $cnc7 = "&type=" ascii wide
+        $cnc5 = "&secret=" ascii wide
+        $cnc6 = "&api_key" ascii wide
+        $cnc7 = "&session_key=" ascii wide
+        $cnc8 = "&type=" ascii wide
     condition:
         (uint16(0) == 0x5a4d and (6 of ($s*) or 4 of ($txt*) or (4 of ($s*) and 2 of ($txt*)))) or (7 of ($cnc*))
 }
