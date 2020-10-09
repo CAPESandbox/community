@@ -253,7 +253,7 @@ rule INDICATOR_TOOL_PWS_PwDump7 {
 
 rule INDICATOR_TOOL_LTM_SharpExec {
     meta:
-        description = "Detects ShareExec lateral movement tool"
+        description = "Detects SharpExec lateral movement tool"
         author = "ditekSHen"
     strings:
         $s1 = "fileUploaded" fullword ascii
@@ -270,4 +270,18 @@ rule INDICATOR_TOOL_LTM_SharpExec {
         $s12 = "LOGON32_LOGON_NEW_CREDENTIALS" fullword ascii
     condition:
         (uint16(0) == 0x5a4d and 9 of them) or (all of them)
+}
+
+rule INDICATOR_TOOL_PRV_AdvancedRun {
+    meta:
+        description = "Detects NirSoft AdvancedRun privialge escalation tool"
+        author = "ditekSHen"
+    strings:
+        $s1 = "RunAsProcessName" fullword wide
+        $s2 = "Process ID/Name:" fullword wide
+        $s3 = "swinsta.dll" fullword wide
+        $s4 = "User of the selected process0Child of selected process (Using code injection) Specified user name and password" fullword wide
+        $s5 = "\"Current User - Allow UAC Elevation$Current User - Without UAC Elevation#Administrator (Force UAC Elevation)" fullword wide
+    condition:
+        uint16(0) == 0x5a4d and 3 of them
 }
