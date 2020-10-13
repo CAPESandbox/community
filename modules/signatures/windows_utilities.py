@@ -725,3 +725,29 @@ class UsesWindowsUtilitiesFinger(Signature):
                     self.data.append({"command" : cmdline})
 
         return ret
+    
+class UsesWindowsUtilitiesXcopy(Signature):
+    name = "uses_windows_utilities_xcopy"
+    description = "Uses XCOPY for copying files"
+    severity = 3
+    categories = ["evasion"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    evented = True
+
+    def run(self):
+        utilities = [
+            "xcopy ",
+            "xcopy.exe ",
+        ]
+
+        ret = False
+        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            for utility in utilities:
+                if utility in lower:
+                    ret = True
+                    self.data.append({"command" : cmdline})
+
+        return ret
