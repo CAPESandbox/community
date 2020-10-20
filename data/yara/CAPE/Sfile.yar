@@ -5,7 +5,7 @@ meta:
 	author = "@bartblaze"
 	date = "2020-09"
 	tlp = "White"
-	cape_type = "Sfile Ransomware"
+	cape_type = "Sfile Payload"
 
 strings:
 	$pdb = "D:\\code\\ransomware_win\\bin\\ransomware.pdb" ascii wide

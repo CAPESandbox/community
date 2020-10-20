@@ -7,7 +7,7 @@ meta:
 	date = "2019-07"
 	reference = "https://www.proofpoint.com/us/threat-insight/post/chinese-apt-operation-lagtime-it-targets-government-information-technology"
 	tlp = "White"
-	cape_type = "Cotx RAT"
+	cape_type = "Cotx Payload"
 	
 strings:
 	$ = "%4d-%02d-%02d %02d:%02d:%02d" ascii wide

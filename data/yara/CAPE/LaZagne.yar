@@ -6,7 +6,7 @@ meta:
 	date = "2020-01"
 	reference = "https://github.com/AlessandroZ/LaZagne"
 	tlp = "White"
-	cape_type = "LaZagne"
+	cape_type = "LaZagne Payload"
 
 strings:
 	$ = "[!] Specify a directory, not a file !" ascii wide

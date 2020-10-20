@@ -5,7 +5,7 @@ meta:
 	author = "@bartblaze"
 	date = "2020-08"
 	tlp = "White"
-	cape_type = "KPortScan"
+	cape_type = "KPortScan Payload"
 
 strings:
 	$s1 = "KPortScan 3.0" ascii wide

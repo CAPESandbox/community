@@ -5,7 +5,7 @@ meta:
 	author = "@bartblaze"
 	date = "2020-03"
 	tlp = "White"
-	cape_type = "Snake Ransomware Payload"
+	cape_type = "Snake Payload"
 
 strings:
 	$ = "already encrypted!" ascii wide

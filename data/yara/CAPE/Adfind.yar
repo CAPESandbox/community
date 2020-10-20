@@ -6,7 +6,7 @@ meta:
 	date = "2020-08"
 	reference = "http://www.joeware.net/freetools/tools/adfind/"
 	tlp = "White"
-	cape_type = "Adfind"
+	cape_type = "Adfind Payload"
 
 strings:
 	$ = "E:\\DEV\\cpp\\vs\\AdFind\\AdFind\\AdFind.cpp" ascii wide

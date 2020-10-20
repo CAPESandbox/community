@@ -6,7 +6,7 @@ meta:
 	date = "2020-08"
 	reference = "https://github.com/SecureAuthCorp/impacket"
 	tlp = "White"
-	cape_type = "Impacket component"
+	cape_type = "Impacket Payload"
 
 strings:
 	$ = "impacket.crypto" ascii wide

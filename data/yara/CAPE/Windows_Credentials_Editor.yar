@@ -6,7 +6,7 @@ meta:
 	date = "2020-01"
 	reference = "https://www.ampliasecurity.com/research/windows-credentials-editor/"
 	tlp = "White"
-	cape_type = "Windows Credentials Editor"
+	cape_type = "WCE Payload"
 
 strings:
 	$ = "Windows Credentials Editor" ascii wide

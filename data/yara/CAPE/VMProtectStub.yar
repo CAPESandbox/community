@@ -5,7 +5,7 @@ meta:
 	author = "@bartblaze"
 	date = "2020-05"
 	tlp = "White"
-	cape_type = "VMProtect Stub"
+	cape_type = "VMProtect Loader"
 
 strings:	
 $ = ".?AV?$VirtualAllocationManager@VRealAllocationStrategy@@@@" ascii wide

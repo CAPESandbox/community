@@ -5,7 +5,7 @@ meta:
 	author = "@bartblaze"
 	date = "2020-03"
 	tlp = "White"
-	cape_type = "Enigma Stub"
+	cape_type = "Enigma Loader"
 
 strings:	
 	$ = "Enigma anti-emulators plugin - GetProcAddress" ascii wide

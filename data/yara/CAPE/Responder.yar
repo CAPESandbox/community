@@ -6,7 +6,7 @@ meta:
 	date = "2020-08"
 	reference = "https://github.com/lgandx/Responder"
 	tlp = "White"
-	cape_type = "Responder"
+	cape_type = "Responder Payload"
 
 strings:
 	//Only when ran on the host itself
