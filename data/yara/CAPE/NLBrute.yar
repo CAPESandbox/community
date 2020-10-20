@@ -5,7 +5,7 @@ meta:
 	author = "@bartblaze"
 	date = "2020-08"
 	tlp = "White"
-	cape_type = "NLBrute"
+	cape_type = "NLBrute Payload"
 
 strings:
 	$ = "SERVER:PORT@DOMAIN\\USER;PASSWORD" ascii wide

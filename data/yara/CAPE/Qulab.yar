@@ -2,7 +2,7 @@ rule Qulab {
     meta:
         author = "ditekshen"
         description = "Qulab information stealer payload or artifacts"
-        cape_type = "Qulab"
+        cape_type = "Qulab Payload"
     strings:
         $x1 = "QULAB CLIPPER + STEALER" ascii wide
         $x2 = "MASAD CLIPPER + STEALER" ascii wide
