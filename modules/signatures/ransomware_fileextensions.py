@@ -105,7 +105,6 @@ class RansomwareExtensions(Signature):
             (".*\.grinch$", ["Tycoon"]),
             (".*\.redrum$", ["Tycoon"]),
             (".*\.*wasted$", ["WastedLocker"]),
-            (".*\.CONTI$", ["Conti"]),
             (".*\.vhd$", ["VHD"]),
             (".*\.ragn@r_[A-Z0-9]{8}$", ["RagnarLocker"]),
             (".*\.WannaCash$", ["WannaCash"]),
@@ -124,6 +123,8 @@ class RansomwareExtensions(Signature):
             (".*\.crypted$", ["Hakbit-Thanos"]),
             (".*\.tx_locked$", ["ThunderX"]),
             (".*\.[A-Z0-9]{64}$", ["SunCrypt"]),
+            (".*\.CONTI$", ["Conti"]),
+            (".*\.TJODT", ["CONTI"]),
         ]
 
         for indicator in indicators:
