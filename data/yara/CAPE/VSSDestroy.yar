@@ -1,7 +1,7 @@
 rule VSSDestroy {
     meta:
         author = "ditekshen"
-        description = "VSSDestroy ransomware payload"
+        description = "VSSDestroy/Matrix ransomware payload"
         cape_type = "VSSDestroy payload"
     strings:
         $o1 = "[SHARESSCAN]" wide
