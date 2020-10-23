@@ -285,3 +285,88 @@ rule INDICATOR_TOOL_PRV_AdvancedRun {
     condition:
         uint16(0) == 0x5a4d and 3 of them
 }
+
+rule INDICATOR_TOOL_PWS_Amady {
+    meta:
+        description = "Detects password stealer DLL. Dropped by Amady"
+        author = "ditekSHen"
+    strings:
+        $s1 = "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders\\AppData" fullword ascii
+        $s2 = "Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows Messaging Subsystem\\Profiles\\Outlook" ascii
+        $s3 = "\\Mikrotik\\Winbox\\Addresses.cdb" fullword ascii
+        $s4 = "\\HostName" fullword ascii
+        $s5 = "\\Password" fullword ascii
+        $s6 = "SOFTWARE\\RealVNC\\" ascii
+        $s7 = "SOFTWARE\\TightVNC\\" ascii
+        $s8 = "cred.dll" fullword ascii
+    condition:
+        uint16(0) == 0x5a4d and filesize < 400KB and 7 of them
+}
+
+rule INDICATOR_TOOL_SCR_Amady {
+    meta:
+        description = "Detects screenshot stealer DLL. Dropped by Amady"
+        author = "ditekSHen"
+    strings:
+        $s1 = "User-Agent: Uploador" fullword ascii
+        $s2 = "Content-Disposition: form-data; name=\"data\"; filename=\"" fullword ascii
+        $s3 = "WebUpload" fullword ascii
+        $s4 = "Cannot assign a %s to a %s%List does not allow duplicates ($0%x)%String" wide
+        $s5 = "scr.dll" fullword ascii
+    condition:
+        uint16(0) == 0x5a4d and filesize < 700KB and 4 of them
+}
+
+rule INDICATOR_TOOL_EXP_EternalBlue {
+    meta:
+        description = "Detects Windows executables containing EternalBlue explitation artifacts"
+        author = "ditekSHen"
+    strings:
+        $ci1 = "CNEFileIO_" ascii wide
+        $ci2 = "coli_" ascii wide
+        $ci3 = "mainWrapper" ascii wide
+
+        $dp1 = "EXPLOIT_SHELLCODE" ascii wide
+        $dp2 = "ETERNALBLUE_VALIDATE_BACKDOOR" ascii wide
+        $dp3 = "ETERNALBLUE_DOUBLEPULSAR_PRESENT" ascii wide
+        $dp4 = "//service[name='smb']/port" ascii wide
+        $dp5 = /DOUBLEPULSAR_(PROTOCOL_|ARCHITECTURE_|FUNCTION_|DLL_|PROCESS_|COMMAND_|IS_64_BIT)/
+
+        $cm1 = "--DllOrdinal 1 ProcessName lsass.exe --ProcessCommandLine --Protocol SMB --Architecture x64 --Function Rundll" ascii wide
+        $cm2 = "--DllOrdinal 1 ProcessName lsass.exe --ProcessCommandLine --Protocol SMB --Architecture x86 --Function Rundll" ascii wide
+        $cm3 = "--DaveProxyPort=0 --NetworkTimeout 30 --TargetPort 445 --VerifyTarget True --VerifyBackdoor True --MaxExploitAttempts 3 --GroomAllocations 12 --OutConfig" ascii wide
+    condition:
+        uint16(0) == 0x5a4d and (2 of ($ci*)) or (2 of ($dp*)) or (1 of ($dp*) and 1 of ($ci*)) or (1 of ($cm*))
+}
+
+rule INDICATOR_TOOL_EXP_WebLogic {
+    meta:
+        description = "Detects Windows executables containing Weblogic exploits commands"
+        author = "ditekSHen"
+    strings:
+        $s1 = "certutil.exe -urlcache -split -f AAAAA BBBBB & cmd.exe /c BBBBB" ascii
+        $s2 = "powershell (new-object System.Net.WebClient).DownloadFile('AAAAA','BBBBB')" ascii
+    condition:
+        uint16(0) == 0x5a4d and 1 of them
+}
+
+rule INDICATOR_TOOL_EXP_ApacheStrusts {
+    meta:
+        description = "Detects Windows executables containing ApacheStruts exploit artifatcs"
+        author = "ditekSHen"
+    strings:
+        // CVE-2017-5638
+        $x1 = "apache.struts2.ServletActionContext@getResponse" ascii 
+        $e1 = ".getWriter()" ascii
+        $e2 = ".getOutputStream()" ascii
+        $e3 = ".getInputStream()" ascii
+
+        // CVE-2018-11776
+        $x2 = "#_memberAccess" ascii                                   
+        $s1 = "ognl.OgnlContext" ascii
+        $s2 = "ognl.ClassResolver" ascii
+        $s3 = "ognl.TypeConverter" ascii
+        $s4 = "ognl.MemberAccess" ascii
+    condition:
+        (uint16(0) == 0x5a4d or uint16(0) == 0x457f) and ($x1 and 2 of ($e*)) or ($x2 and 1 of ($s*))
+}
