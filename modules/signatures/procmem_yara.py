@@ -32,7 +32,7 @@ class Procmem_Yara(Signature):
             "kazybot_rat", "darkcometconfig",
         ]
 
-        for keyword in ("procdump" ,"procmemory", "extracted", "dropped", "CAPE"):
+        for keyword in ("procdump" ,"procmemory", "extracted", "dropped"):
             if keyword in self.results and self.results[keyword] is not None:
                 for process in self.results.get(keyword, []):
                     pid = process.get("pid", 0)
@@ -41,14 +41,20 @@ class Procmem_Yara(Signature):
                             if (pid, rule["name"]) not in hits:
                                 hits.append((pid, rule["name"]))
 
+        for process in self.results.get("CAPE", {}).get("payloads", []) or []:
+            pid = process.get("pid", 0)
+            for sub_keyword in ("yara", "cape_yara"):
+                for rule in process.get(sub_keyword, []):
+                    if (pid, rule["name"]) not in hits:
+                        hits.append((pid, rule["name"]))
+
         if hits:
             for pid, rule in hits:
                 if rule.lower() in suspicious and self.severity == 1:
                     self.severity = 2
                 elif rule.lower() in malicious and self.severity <= 2:
                     self.severity = 3
-                self.data.append({"Hit": "PID %s trigged the Yara rule '%s'" %
-                                         (pid, rule)})
+                self.data.append({"Hit": "PID %s trigged the Yara rule '%s'" % (pid, rule)})
             return True
 
         return False
