@@ -17,5 +17,5 @@ rule Matiex {
 
       $pdb = "\\Before FprmT\\Document VB project\\FireFox Stub\\FireFox Stub\\obj\\Debug\\VNXT.pdb" ascii
     condition:
-      uint16(0) == 0x5a4d $id or 4 of ($s*) or ($pdb and 2 of them)
+      uint16(0) == 0x5a4d and ($id or 4 of ($s*) or ($pdb and 2 of them))
 }
