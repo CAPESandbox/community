@@ -20,7 +20,6 @@ class MasqueradesProcessName(Signature):
     description = "Attempts to masquerade or mimic a legitimate process or file name"
     severity = 3
     categories = ["masquerading", "evasion", "execution"]
-    families = [""]
     authors = ["ditekshen"]
     minimum = "0.5"
     ttp = ["T1036"]

@@ -25,7 +25,6 @@ class EncryptsSingleHTTPPacket(Signature):
     description = "Encrypts a single HTTP packet"
     severity = 2
     categories = ["network", "encryption"]
-    families = [""]
     authors = ["ditekshen"]
     minimum = "0.5"
     evented = True
