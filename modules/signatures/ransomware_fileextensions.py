@@ -125,6 +125,7 @@ class RansomwareExtensions(Signature):
             (".*\.[A-Z0-9]{64}$", ["SunCrypt"]),
             (".*\.CONTI$", ["Conti"]),
             (".*\.TJODT", ["CONTI"]),
+            (".*\.ReadManual.[A-Z0-9]{8}", ["MountLocker"]),
         ]
 
         for indicator in indicators:
