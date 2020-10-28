@@ -159,6 +159,7 @@ class RansomwareFiles(Signature):
             (".*\\\\r3adm3\.txt$", ["ContiV2"]),
             (".*\\\\HACKED\.txt$", ["Smaug"]),
             (".*\\\\YOUR_FILES_ARE_ENCRYPTED\.HTML$", ["SunCrypt"]),
+            (".*\\\\RecoveryManual\.html$", ["MountLocker"]),
         ]
 
         for ioc in file_list:
