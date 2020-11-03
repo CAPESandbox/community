@@ -34,6 +34,8 @@ class Modiloader_APIs(Signature):
                 self.urls.append("https://cdn.discordapp.com"+url)
             elif url.startswith("/u/0/uc?id="):
                 self.urls.append("https://drive.google.com"+url)
+            elif "basecamp.com/p/" in url:
+                self.urls.append(url)
 
     def on_complete(self):
         if self.urls:
