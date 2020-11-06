@@ -305,3 +305,53 @@ rule INDICATOR_PY_Packed_PyMinifier {
     condition:
         (uint32(0) == 0x6f706d69 or uint16(0) == 0x2123 or uint16(0) == 0x0a0d or uint16(0) == 0x5a4d) and all of them
 }
+
+rule INDICATOR_EXE_Packed_BoxedApp {
+    meta:
+        description = "Detects executables packed with BoxedApp"
+        author = "ditekSHen"
+    strings:
+        $s1 = "BoxedAppSDK_HookFunction" fullword ascii
+        $s2 = "BoxedAppSDK_StaticLib.cpp" ascii
+        $s3 = "embedding BoxedApp into child processes: %s" ascii
+        $s4 = "GetCommandLineA preparing to intercept" ascii
+    condition:
+        uint16(0) == 0x5a4d and 2 of them or
+        for any i in (0 .. pe.number_of_sections) : (
+            (
+                pe.sections[i].name contains ".bxpck"
+            )
+        )
+}
+
+rule INDICATOR_EXE_Packed_eXPressor {
+    meta:
+        description = "Detects executables packed with eXPressor"
+        author = "ditekSHen"
+    strings:
+        $s1 = "eXPressor_InstanceChecker_" fullword ascii
+        $s2 = "This application was packed with an Unregistered version of eXPressor" ascii
+        $s3 = ", please visit www.cgsoftlabs.ro" ascii
+        $s4 = /eXPr-v\.\d+\.\d+/ ascii
+    condition:
+        uint16(0) == 0x5a4d and 2 of them or
+        for any i in (0 .. pe.number_of_sections) : (
+            (
+                pe.sections[i].name contains ".ex_cod"
+            )
+        )
+}
+
+rule INDICATOR_EXE_Packed_MEW {
+    meta:
+        description = "Detects executables packed with MEW"
+        author = "ditekSHen"
+    condition:
+        uint16(0) == 0x5a4d and
+        for any i in (0 .. pe.number_of_sections) : (
+            (
+                pe.sections[i].name == "MEW" or
+                pe.sections[i].name == "\x02\xd2u\xdb\x8a\x16\xeb\xd4"
+            )
+        )
+}
