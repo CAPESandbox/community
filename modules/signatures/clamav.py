@@ -55,7 +55,7 @@ class ClamAV(Signature):
                                 continue
                             if not clam_no_score_re.search(detection):
                                 self.weight = 3
-                            lentry = "%s, suricata_extracted_files, src:%s, sp:%s, dst:%s, dp:%s" % (detection,entry['srcip'], entry['sp'],entry['dstip'],entry['dp'])
+                            lentry = "{}, suricata_extracted_files, src:{}, sp:{}, dst:{}, dp:{}".format(detection,entry.get('srcip',''), entry.get('sp',''),entry.get('dstip',''),entry.get('dp',''))
                             if "http_user_agent" in entry.keys():
                                 lentry  = "%s, ua:%s" % (lentry, entry['http_user_agent'])
                             if "http_uri" in entry.keys():
