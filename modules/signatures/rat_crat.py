@@ -1,4 +1,4 @@
-# Copyright (C) 2019 ditekshen
+# Copyright (C) 2020 ditekshen
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,27 +15,28 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class DisableRunCommand(Signature):
-    name = "disable_run_command"
-    description = "Attempts to disable or modify the Run command from the Start menu and the New Task (Run) command from Task Manager"
+class CRATMutexes(Signature):
+    name = "crat_mutexes"
+    description = "CRAT RAT mutex detected"
     severity = 3
-    categories = ["generic"]
+    categories = ["rat"]
+    families = ["CRAT"]
     authors = ["ditekshen"]
-    minimum = "0.5"
+    minimum = "2.0"
 
     def run(self):
         indicators = [
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoRun.*",
+            "^CRAT$",
+            "CratKeyLog2Mutex",
+            "CratScreenCaptureMutex",
+            "CratClipboardMonitor2Mutex",
+            "^CRAT\d+\.\d+\.\d+\.\d+$",
         ]
 
         for indicator in indicators:
-            reg_match = self.check_write_key(pattern=indicator, regex=True)
-            cmd_match = self.check_executed_command(pattern=indicator, regex=True)
-            if reg_match:
-                self.data.append({"regkey": reg_match})
-                return True
-            elif cmd_match:
-                self.data.append({"command": cmd_match})
+            match = self.check_mutex(pattern=indicator, regex=True)
+            if match:
+                self.data.append({"mutex": match})
                 return True
 
         return False
