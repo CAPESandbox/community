@@ -371,3 +371,33 @@ rule INDICATOR_EXE_Packed_RLPack {
             )
         )
 }
+
+rule INDICATOR_EXE_Packed_Cassandra {
+    meta:
+        description = "Detects executables packed with Cassandra/CyaX"
+        author = "ditekSHen"
+    strings:
+        $s1 = "AntiEM" fullword ascii wide
+        $s2 = "AntiSB" fullword ascii wide
+        $s3 = "Antis" fullword ascii wide
+        $s4 = "XOR_DEC" fullword ascii wide
+        $s5 = "StartInject" fullword ascii wide
+        $s6 = "DetectGawadaka" fullword ascii wide
+        $c1 = "CyaX-Sharp" ascii wide
+        $c2 = "CyaX_Sharp" ascii wide
+        $c3 = "CyaX-PNG" ascii wide
+        $c4 = "CyaX_PNG" ascii wide
+        $pdb = "\\CyaX\\obj\\Debug\\CyaX.pdb" ascii wide
+    condition:
+        (uint16(0) == 0x5a4d and (4 of ($s*) or 2 of ($c*) or $pdb)) or (7 of them)
+}
+
+rule INDICATOR_EXE_Packed_ConfuserEx_Custom {
+    meta:
+        description = "Detects executables packed with ConfuserEx Custom, outside of GIT"
+        author = "ditekSHen"
+    strings:
+        $s1 = { 43 6f 6e 66 75 73 65 72 45 78 20 76 [1-2] 2e [1-2] 2e [1-2] 2d 63 75 73 74 6f 6d }
+    condition:
+        uint16(0) == 0x5a4d and all of them
+}
