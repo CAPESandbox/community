@@ -1,4 +1,6 @@
 files:
   accept:
-  - "**.yar"
-  - "**.yara"
+  - "data/yara/**.yar"
+  - "data/yara/**.yara"
+ignore:
+  - "data/yara/depricated/**"
