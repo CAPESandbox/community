@@ -1,6 +1,6 @@
 files:
   accept:
   - "data/yara/CAPE/*.yar"
-  - "data/yara/memory/.yar"
+  - "data/yara/memory/*.yar"
   - "data/yara/binary/*.yar"
   - "data/yara/urls/*.yar"
