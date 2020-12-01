@@ -1,0 +1,16 @@
+rule:
+  meta:
+    name: read process memory
+    namespace: host-interaction/process
+    author: 
+      - matthew.williams@fireeye.com
+      - "@_re_fox"
+    scope: function
+  features:
+    - and:
+      - api: kernel32.ReadProcessMemory
+      - optional:
+        - or:
+          - api: kernel32.OpenProcess
+          - api: kernel32.VirtualQueryEx
+          - api: psapi.QueryWorkingSet

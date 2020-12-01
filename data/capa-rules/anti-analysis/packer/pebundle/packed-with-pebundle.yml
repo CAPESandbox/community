@@ -1,0 +1,18 @@
+rule:
+  meta:
+    name: packed with pebundle
+    namespace: anti-analysis/packer/pebundle
+    author: "@_re_fox"
+    scope: file
+    att&ck:
+      - Defense Evasion::Obfuscated Files or Information::Software Packing [T1027.002]
+    mbc:
+      - Anti-Static Analysis::Software Packing [F0001]
+    examples:
+      - db9fe790b4e18abf55df31aa0b81e558
+    references:
+      - https://www.hexacorn.com/blog/2016/12/15/pe-section-names-re-visited/
+  features:
+    - or:
+      - section: pebundle
+      - section: PEBundle
