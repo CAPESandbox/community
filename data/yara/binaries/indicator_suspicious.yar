@@ -11,9 +11,11 @@ rule INDICATOR_SUSPICIOUS_Ransomware {
         $cmd4 = "bcdedit /set {default} recoveryenabled no" ascii wide nocase
         $cmd5 = "bcdedit /set {default} bootstatuspolicy ignoreallfailures" ascii wide nocase
         $cmd6 = "wmic SHADOWCOPY DELETE" ascii wide nocase
-        $cmd7 = "wbadmin delete catalog -quiet" ascii wide nocase
+        $wp1 = "wbadmin delete catalog -quiet" ascii wide nocase
+        $wp2 = "wbadmin delete backup" ascii wide nocase
+        $wp3 = "wbadmin delete systemstatebackup" ascii wide nocase
     condition:
-        (uint16(0) == 0x5a4d and 1 of them) or (2 of them)
+        (uint16(0) == 0x5a4d and 2 of ($cmd*) or (1 of ($cmd*) and 1 of ($wp*))) or (4 of them)
 }
 
 rule INDICATOR_SUSPICIOUS_ReflectiveLoader {
@@ -137,8 +139,8 @@ rule INDICATOR_SUSPICIOUS_EXE_SandboxHookingDLL {
         description = "Detects binaries and memory artifcats referencing sandbox DLLs typically observed in sandbox evasion"
         author = "ditekSHen"
     strings:
-        $dll1 = "sbiedll.dll" nocase fullword ascii wide 
-        $dll2 = "dbghelp.dll" nocase fullword ascii wide  
+        $dll1 = "sbiedll.dll" nocase fullword ascii wide
+        // $dll2 = "dbghelp.dll" nocase fullword ascii wide  
         $dll3 = "api_log.dll" nocase fullword ascii wide  
         $dll4 = "pstorec.dll" nocase fullword ascii wide  
         $dll5 = "dir_watch.dll" nocase fullword ascii wide
@@ -161,7 +163,7 @@ rule INDICATOR_SUSPICIOUS_EXE_SandboxHookingDLL {
         $dll22 = "vmcheck32.dll" nocase ascii wide
         $dll23 = "vmcheck64.dll" nocase ascii wide
     condition:
-        uint16(0) == 0x5a4d and 1 of them
+        uint16(0) == 0x5a4d and 3 of them
 }
 
 rule INDICATOR_SUSPICIOUS_AHK_Downloader {

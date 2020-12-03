@@ -370,3 +370,146 @@ rule INDICATOR_TOOL_EXP_ApacheStrusts {
     condition:
         (uint16(0) == 0x5a4d or uint16(0) == 0x457f) and ($x1 and 2 of ($e*)) or ($x2 and 1 of ($s*))
 }
+
+rule INDICATOR_TOOL_SCN_SMBTouch {
+    meta:
+        description = "Detects SMBTouch scanner EternalBlue, EternalChampion, EternalRomance, EternalSynergy"
+        author = "ditekSHen"
+    strings:
+        $s1 = "[+] SMB Touch started" fullword ascii
+        $s2 = "[-] Could not connect to share (0x%08X - %s)" fullword ascii
+        $s3 = "[!] Target could be either SP%d or SP%d," fullword ascii
+        $s4 = "[!] for these SMB exploits they are equivalent" fullword ascii
+        $s5 = "[+] Target is vulnerable to %d exploit%s" fullword ascii
+        $s6 = "[+] Touch completed successfully" fullword ascii
+        $s7 = "Network error while determining exploitability" fullword ascii
+        $s8 = "Named pipe or share required for exploit" fullword ascii
+        $w1 = "UsingNbt" fullword ascii
+        $w2 = "TargetPort" fullword ascii
+        $w3 = "TargetIp" fullword ascii
+        $w4 = "RedirectedTargetPort" fullword ascii
+        $w5 = "RedirectedTargetIp" fullword ascii
+        $w6 = "NtlmHash" fullword ascii
+        $w7 = "\\PIPE\\LANMAN" fullword ascii
+        $w8 = "UserRejected: " fullword ascii
+    condition:
+        uint16(0) == 0x5a4d and (2 of ($s*) or all of ($w*))
+}
+
+rule INDICATOR_TOOL_SCN_NBTScan {
+    meta:
+        description = "Detects NBTScan scanner for open NETBIOS nameservers on a local or remote TCP/IP network"
+        author = "ditekSHen"
+    strings:
+        $s1 = "[%s] is an invalid target (bad IP/hostname)" fullword ascii
+        $s2 = "ERROR: no parse for %s -- %s" fullword ascii
+        $s3 = "add_target failed" fullword ascii
+        $s4 = "   -p <n>    bind to UDP Port <n> (default=%d)" fullword ascii
+        $s5 = "process_response.c" fullword ascii
+        $s6 = "currTarget != 0" fullword ascii
+        $s7 = "parse_target.c" fullword ascii
+        $s8 = "dump_packet.c" fullword ascii
+        $s9 = "parse_target_cb.c" fullword ascii
+        $s10 = "DUMP OF PACKET" fullword ascii
+        $s11 = "lookup_hostname.c" fullword ascii
+    condition:
+        uint16(0) == 0x5a4d and 10 of ($s*)
+}
+
+rule INDICATOR_TOOL_LTM_CompiledImpacket {
+    meta:
+        description = "Detects executables of compiled Impacket's python scripts"
+        author = "ditekSHen"
+    strings:
+        $s1 = "impacket(" fullword ascii
+        $s2 = "impacket.dcerpc(" fullword ascii
+        $s3 = "impacket.krb5(" fullword ascii
+        $s4 = "impacket.smb(" fullword ascii
+        $s5 = "impacket.smb3(" fullword ascii
+        $s6 = "impacket.winregistry(" fullword ascii
+        $s7 = "impacket.ntlm(" fullword ascii
+        $m1 = "inspect(" fullword ascii
+        $m2 = "pickle(" fullword ascii
+        $m3 = "spsexec" fullword ascii
+        $m4 = "schecker" fullword ascii
+    condition:
+        uint16(0) == 0x5a4d and (2 of ($s*) or (3 of ($m*) and 1 of ($s*)))
+}
+
+rule INDICATOR_TOOL_ENC_BestCrypt {
+    meta:
+        description = "Detects BestEncrypt commercial disk encryption and wiping software"
+        author = "ditekSHen"
+    strings:
+        $s1 = "BestCrypt Volume Encryption" wide
+        $s2 = "BCWipe for " wide
+        $s3 = "Software\\Jetico\\BestCrypt" wide
+        $s4 = "%c:\\EFI\\Jetico\\" fullword wide
+    condition:
+        uint16(0) == 0x5a4d and all of them
+}
+
+rule INDICATOR_TOOL_CNC_Earthworm {
+    meta:
+        description = "Detects Earthworm C&C Windows/macOS tool"
+        author = "ditekSHen"
+    strings:
+        $s1 = "lcx_tran 0.0.0.0:%d <--[%4d usec]--> %s:%d" fullword ascii
+        $s2 = "ssocksd 0.0.0.0:%d <--[%4d usec]--> socks server" fullword ascii
+        $s3 = "rcsocks 0.0.0.0:%d <--[%4d usec]--> 0.0.0.0:%d" fullword ascii
+        $s4 = "rssocks %s:%d <--[%4d usec]--> socks server" fullword ascii
+        $s5 = "--> %3d <-- (close)used/unused  %d/%d" fullword ascii
+        $s6 = "<-- %3d --> (open)used/unused  %d/%d" fullword ascii
+        $s7 = "--> %d start server" ascii
+        $s8 = "Error on connect %s:%d [proto_init_cmd_rcsocket]" fullword ascii
+        $url = "http://rootkiter.com/EarthWrom/" nocase fullword ascii
+    condition:
+        (uint16(0) == 0xfacf or uint16(0) == 0x5a4d) and (5 of ($s*) or $url)
+}
+
+rule INDICATOR_TOOL_PET_p0wnedShell {
+    meta:
+        description = "Detects compiled executables of p0wnedShell post-exploitation toolkit"
+        author = "ditekSHen"
+    strings:
+        $s1 = "Use WinRM, PsExec, SMB/WMI to execute commands on remote systems" wide
+        $s2 = "-CreateProcess \"cmd.exe\" -Username \"nt authority\\system\"" wide
+        $s3 = "-Command '\"lsadump::dcsync /user:" wide
+        $s4 = "-Payload windows/meterpreter/reverse_https -Lhost" wide
+        $s5 = "Get-Content ./EncodedPayload.bat" fullword wide
+        $e1 = "OnYNAB+LCAAAAAAABAC8vOeS60iSLvh75yly+rZZVxuqC4KQs3uvLQhFEJIACALoHVuD1oKQBMbuuy+Y4pw8dUTf3R+bZlWVZHh87uHh4vPItv63ZGrCMW+bF7GZ2zL+" wide
+        $e2 = "kuIeAB+LCAAAAAAABADsvWt327iuMPw9v0Jv27Wa7DqJc2ma5nl71vZFTpzx/ZJL+3TlyLZiq7EtjyTHcffZ//0BSEqiKEqWbKczs8941qS2LgAIAiAIguDjfNp3DHOq" wide
+        $e3 = "mZYIAB+LCAAAAAAABADsvflj2zyOMPx7/gptmnftbBIfuZp0t/OOfMZp7PjO0adfX9lSbCWy5Vp2HGfm+d8/ACQl6vCRNp2Z3bVmnioWSRAEQQAESfC/Pmwp8FTtmTFu" wide
+        $e4 = "u9YGAB+LCAAAAAAABADsvW1D40ayKPw9v0Lr4V7ZE8vY5mUY9rKJBzMTnmWAgyGTvYTlCluAdmzJK9nDsEn++1NV/S61ZJmXZJIN52wG7O7q6urq6qrqquoXSfDveZgE" wide
+        $e5 = "T3gDAB+LCAAAAAAABADtvX1f2zq2KPz3yafQzuZcwi5JEydQ2nM7v4cCnc0zQLmE7j3z6+7NmMQBnwY7YzsFTqff/WpJsi3Jki07DlA2mT008ctaS0tL601L0nThjSPX" wide
+        $e6 = "zRgDAB+LCAAAAAAABADtfW1327jR6OdHv4Kr9TmWdiVZkl+SdZs913Gcrm9tx7WcbvekuS4t0TYbiVRJKYmfbf77xeCNeCVBinKcbNStI5HAYDAYDAaDwczNMhovwjjy" wide
+        $e7 = "pxICAB+LCAAAAAAABADtvf17GkeyKPyz+Cvmlfw+ggRhfcXr1X1znsUIx5yVhC7IUbI+fnUHGKRZwww7M1jWyeZ/v1XV3z09wABysnviZ1cBpqe6urqquqq6uno8j4ZZ" wide
+        $e8 = "H4sIAAAAAAAEANy9e3wTVfo4PG1SmkLbCdpgFdSgUeuCbLTAthYk005gQhNahUIVkCqIqKi1TaAuIGBaJRzG27Kuul5wV3fV1fUuUFxNKbTl3oJAuaiouE4paAGBFpB5" wide
+        $k1 = "EasySystemPPID" fullword ascii
+        $k2 = "EasySystemShell" fullword ascii
+        $k3 = "LatMovement" fullword ascii
+        $k4 = "ListenerURL" fullword ascii
+        $k5 = "MeterStager" fullword ascii
+        $k6 = "PatchEventLog" fullword ascii
+    condition:
+        uint16(0) == 0x5a4d and (3 of ($s*) or 7 of ($e*) or all of ($k*) or (2 of ($s*) and 2 of ($e*) and 2 of ($k*)))
+}
+
+rule INDICATOR_TOOL_PWS_Rubeus {
+    meta:
+        description = "Detects Rubeus kerberos defensive/offensive toolset"
+        author = "ditekSHen"
+    strings:
+        $s1 = "(&(samAccountType=805306368)(userAccountControl:1.2.840.113556.1.4.803:=4194304))" fullword wide
+        $s2 = "(!samAccountName=krbtgt)(!(UserAccountControl:1.2.840.113556.1.4.803:=2))" fullword wide
+        $s3 = "rc4opsec" fullword wide
+        $s4 = "pwdlastset" fullword wide
+        $s5 = "LsaEnumerateLogonSessions" fullword ascii
+        $s6 = "extractKerberoastHash" fullword ascii
+        $s7 = "ComputeAllKerberosPasswordHashes" fullword ascii
+        $s8 = "kerberoastDomain" fullword ascii
+        $s9 = "GetUsernamePasswordTGT" fullword ascii
+        $s10 = "WriteUserPasswordToFile" fullword ascii
+    condition:
+        uint16(0) == 0x5a4d and 8 of them
+}
