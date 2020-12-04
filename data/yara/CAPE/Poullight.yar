@@ -1,4 +1,4 @@
-rule MALWARE_Win_Poullight {
+rule Poullight {
     meta:
         author = "ditekSHen"
         description = "Poullight infostealer payload"
