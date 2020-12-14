@@ -138,17 +138,16 @@ class RansomwareMessage(Signature):
                         self.ransomfile.append(filepath)
 
     def on_complete(self):
-        if "dropped" in self.results:
-            for dropped in self.results.get("dropped", []) or []:
-                mimetype = dropped["type"]
-                if "ASCII text" in mimetype:
-                    filename = dropped["name"]
-                    data = dropped.get("data", "")
-                    patterns = "|".join(self.indicators)
-                    if len(data) >= 128:
-                        if len(set(re.findall(patterns, data))) > 1:
-                            if filename not in self.ransomfile:
-                                self.ransomfile.append(filename)
+        for dropped in self.results.get("dropped", []) or []:
+            mimetype = dropped["type"]
+            if "ASCII text" in mimetype:
+                filename = dropped["name"]
+                data = dropped.get("data", "")
+                patterns = "|".join(self.indicators)
+                if len(data) >= 128:
+                    if len(set(re.findall(patterns, data))) > 1:
+                        if filename not in self.ransomfile:
+                            self.ransomfile.append(filename)
 
         if len(self.ransomfile) > 0:
             for filename in self.ransomfile:
