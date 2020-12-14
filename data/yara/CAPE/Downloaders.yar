@@ -12,3 +12,19 @@ rule DLAgent01 {
     condition:
         uint16(0) == 0x5a4d and 4 of them
 }
+
+rule DLAgent02 {
+    meta:
+      author = "ditekSHen"
+      description = "Detects downloader agent"
+      cape_type = "DLAgent02 Downloader Payload"
+    strings:
+        $s1 = "/c timeout {0}" fullword wide
+        $s2 = "^(https?|ftp):\\/\\/" fullword wide
+        $s3 = "HttpWebRequest" fullword ascii
+        $s4 = "GetResponseStream" fullword ascii
+        $s5 = "set_FileName" fullword ascii
+        $s6 = "set_UseShellExecute" fullword ascii
+    condition:
+        uint16(0) == 0x5a4d and filesize < 250KB and all of them
+}
