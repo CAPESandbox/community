@@ -10,3 +10,9 @@ files:
   - "data/yara/memory/*.yar"
   - "data/yara/binary/*.yar"
   - "data/yara/urls/*.yar"
+
+false_positives:
+  ignore:
+   - rule: "shellcode_stack_strings"
+   - rule: "shellcode_get_eip"
+   - rule: "UPX"
