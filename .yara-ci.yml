@@ -15,4 +15,6 @@ false_positives:
   ignore:
    - rule: "shellcode_stack_strings"
    - rule: "shellcode_get_eip"
+   - rule: "shellcode_peb_parsing"
+   - rule: "lsadump"
    - rule: "UPX"
