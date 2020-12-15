@@ -2,7 +2,7 @@ rule QuasarStealer {
     meta:
         author = "ditekshen"
         description = "Detects Quasar infostealer"
-        clamav_sig = "QuasarStealer Payload"
+        cape_type = "QuasarStealer Payload"
     strings:
         $s1 = "PGma.System.MouseKeyHook, Version=5.6.130.0, Culture=neutral, PublicKeyToken=null" fullword ascii
         $s2 = "DQuasar.Common, Version=1.4.0.0, Culture=neutral, PublicKeyToken=null" fullword ascii
