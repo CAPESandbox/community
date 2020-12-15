@@ -196,3 +196,65 @@ rule INDICATOR_SUSPICIOUS_EXE_UACBypass_CMSTPCOM {
     condition:
        uint16(0) == 0x5a4d and (1 of ($guid*) and 1 of ($s*))
 }
+
+rule INDICATOR_SUSPICIOUS_ClearWinLogs {
+    meta:
+        author = "ditekSHen"
+        description = "Detects executables containing commands for clearing Windows Event Logs"
+    strings:
+        $cmd1 = "wevtutil.exe clear-log" ascii wide nocase
+        $cmd2 = "wevtutil.exe cl " ascii wide nocase
+        $cmd3 = ".ClearEventLog()" ascii wide nocase
+        $cmd4 = "Foreach-Object {wevtutil cl \"$_\"}" ascii wide nocase
+        $cmd5 = "('wevtutil.exe el') DO (call :do_clear" ascii wide nocase
+        $cmd6 = "| ForEach { Clear-EventLog $_.Log }" ascii wide nocase
+        $t1 = "wevtutil" ascii wide nocase
+        $l1 = "cl Application" ascii wide nocase
+        $l2 = "cl System" ascii wide nocase
+        $l3 = "cl Setup" ascii wide nocase
+        $l4 = "cl Security" ascii wide nocase
+        $l5 = "sl Security /e:false" ascii wide nocase
+        $ne1 = "wevtutil.exe cl Aplicaci" fullword wide
+        $ne2 = "wevtutil.exe cl Application /bu:C:\\admin\\backup\\al0306.evtx" fullword wide
+        $ne3 = "wevtutil.exe cl Application /bu:C:\\admin\\backups\\al0306.evtx" fullword wide
+    condition:
+        uint16(0) == 0x5a4d and not any of ($ne*) and ((1 of ($cmd*)) or (1 of ($t*) and 4 of ($l*)))
+}
+
+rule INDICATOR_SUSPICIOUS_DisableWinDefender {
+    meta:
+        author = "ditekSHen"
+        description = "Detects executables containing artifcats associated with disabling Widnows Defender"
+    strings:
+        $reg1 = "SOFTWARE\\Microsoft\\Windows Defender\\Features" ascii wide nocase
+        $reg2 = "SOFTWARE\\Policies\\Microsoft\\Windows Defender" ascii wide nocase
+        $s1 = "Set-MpPreference -SignatureDisableUpdateOnStartupWithoutEngine $true" ascii wide nocase
+        $s2 = "Set-MpPreference -DisableArchiveScanning $true" ascii wide nocase
+        $s3 = "Set-MpPreference -DisableIntrusionPreventionSystem $true" ascii wide nocase
+        $s4 = "Set-MpPreference -DisableScriptScanning $true" ascii wide nocase
+        $s5 = "Set-MpPreference -SubmitSamplesConsent 2" ascii wide nocase
+        $s6 = "Set-MpPreference -MAPSReporting 0" ascii wide nocase
+        $s7 = "Set-MpPreference -HighThreatDefaultAction 6" ascii wide nocase
+        $s8 = "Set-MpPreference -ModerateThreatDefaultAction 6" ascii wide nocase
+        $s9 = "Set-MpPreference -LowThreatDefaultAction 6" ascii wide nocase
+        $s10 = "Set-MpPreference -SevereThreatDefaultAction 6" ascii wide nocase
+    condition:
+        uint16(0) == 0x5a4d and (1 of ($reg*) and 1 of ($s*))
+}
+
+rule INDICATOR_SUSPICIOUS_USNDeleteJournal {
+    meta:
+        author = "ditekSHen"
+        description = "Detects executables containing anti-forensic artifcats of deletiing USN change journal. Observed in ransomware"
+    strings:
+        $cmd1 = "fsutil.exe" ascii wide nocase
+        $s1 = "usn deletejournal /D C:" ascii wide nocase
+        $s2 = "fsutil.exe usn deletejournal" ascii wide nocase
+        $s3 = "fsutil usn deletejournal" ascii wide nocase
+        $ne1 = "fsutil usn readdata C:\\Temp\\sample.txt" wide
+        $ne2 = "fsutil transaction query {0f2d8905-6153-449a-8e03-7d3a38187ba1}" wide
+        $ne3 = "fsutil resource start d:\\foobar d:\\foobar\\LogDir\\LogBLF::TxfLog d:\\foobar\\LogDir\\LogBLF::TmLog" wide
+        $ne4 = "fsutil objectid query C:\\Temp\\sample.txt" wide
+    condition:
+        uint16(0) == 0x5a4d and (not any of ($ne*) and (1 of ($cmd*) and 1 of ($s*)))
+}
