@@ -2,7 +2,7 @@ rule Amadey {
     meta:
         author = "ditekSHen"
         description = "Amadey downloader payload"
-        cape_type = "Amady Payload"
+        cape_type = "Amadey Payload"
     strings:
         $s1 = "_ZZ14aGetProgramDirvE11UsersDirRes" fullword ascii
         $s2 = "_libshell32_a" ascii
