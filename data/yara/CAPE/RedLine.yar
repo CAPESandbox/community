@@ -13,11 +13,11 @@ rule RedLineDropperAHK {
         uint16(0) == 0x5a4d and all of them
 }
 
-rule MALWARE_Win_RedLineDropperEXE {
+rule RedLineDropperEXE {
     meta:
       author = "ditekSHen"
       description = "Detects executables dropping RedLine infostealer"
-      clamav_sig = "MALWARE.Win.Trojan.RedLineDropper-EXE"
+      cape_type = "RedLineDropperEXE Payload"
     strings:
         $s1 = "Wizutezinod togeto0Rowadufevomuki futenujilazem jic lefogatenezinor" fullword wide
         $s2 = "6Tatafamobevofaj bizafoju peyovavacoco lizine kezakajuj" fullword wide
@@ -38,11 +38,11 @@ rule MALWARE_Win_RedLineDropperEXE {
         )
 }
 
-rule MALWARE_Win_RedLine {
+rule RedLine {
     meta:
         author = "ditekshen"
         description = "Detects RedLine infostealer"
-        clamav_sig = "MALWARE.Win.Trojan.RedLine"
+        cape_type = "RedLine Payload"
     strings:
         $s1 = { 23 00 2b 00 33 00 3b 00 43 00 53 00 63 00 73 00 }
         $s2 = { 68 10 84 2d 2c 71 ea 7e 2c 71 ea 7e 2c 71 ea 7e
