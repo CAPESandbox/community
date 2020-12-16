@@ -101,21 +101,23 @@ class SuspiciousJSScript(Signature):
             pname = process["process_name"]
             if pname.lower() in ["cscript.exe", "jscript.exe", "mshta.exe", "wscript.exe"]:
                 javascript = self.get_argument(call, "JavaScript")
-                for suspicious in self.suspicious:
-                    if suspicious in javascript.lower():
-                        self.data.append({"Process executing suspicious JavaScript" : pname})
-                        self.ret = True
-                        break
+                if javascript:
+                    for suspicious in self.suspicious:
+                        if suspicious in javascript.lower():
+                            self.data.append({"Process executing suspicious JavaScript" : pname})
+                            self.ret = True
+                            break
 
         if call["api"] == "COleScript_ParseScriptText":
             pname = process["process_name"]
             if pname.lower() in ["cscript.exe", "jscript.exe", "wscript.exe"]:
                 javascript = self.get_argument(call, "Script")
-                for suspicious in self.suspicious:
-                    if suspicious in javascript.lower():
-                        self.data.append({"Process executing suspicious JavaScript" : pname})
-                        self.ret = True
-                        break
+                if javascript:
+                    for suspicious in self.suspicious:
+                        if suspicious in javascript.lower():
+                            self.data.append({"Process executing suspicious JavaScript" : pname})
+                            self.ret = True
+                            break
 
     def on_complete(self):
         return self.ret
