@@ -258,3 +258,26 @@ rule INDICATOR_SUSPICIOUS_USNDeleteJournal {
     condition:
         uint16(0) == 0x5a4d and (not any of ($ne*) and (1 of ($cmd*) and 1 of ($s*)))
 }
+
+rule INDICATOR_SUSPICIOUS_WMIC_Downloader {
+    meta:
+        author = "ditekSHen"
+        description = "Detects files utilizing WMIC for whitelisting bypass and downloading second stage payloads"
+    strings:
+        $s1 = "WMIC.exe os get /format:\"http" wide
+        $s2 = "WMIC.exe computersystem get /format:\"http" wide
+        $s3 = "WMIC.exe dcomapp get /format:\"http" wide
+        $s4 = "WMIC.exe desktop get /format:\"http" wide
+    condition:
+        (uint16(0) == 0x004c or uint16(0) == 0x5a4d) and 1 of them
+}
+
+rule INDICATOR_SUSPICIOUS_PE_ResourceTuner {
+    meta:
+        author = "ditekSHen"
+        description = "Detects executables with modified PE resources usning the unpaid version of Resource Tuner"
+    strings:
+        $s1 = "Modified by an unpaid evaluation copy of Resource Tuner 2 (www.heaventools.com)" fullword wide
+    condition:
+        uint16(0) == 0x5a4d and all of them 
+}
