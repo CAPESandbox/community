@@ -63,6 +63,17 @@ rule RedLine {
         $s4 = "B|BxBtBpBlBhBdB`B\\BXBTBPBLBHBDB@B<B8B4B0B,B(B$B B" fullword wide
         $s5 = " delete[]" fullword ascii
         $s6 = "constructor or from DllMain." ascii
+
+        $x1 = "RedLine.Reburn" ascii
+        $x2 = "RedLine.Client." ascii
+        $x3 = "hostIRemotePanel, CommandLine: " fullword wide
+        $u1 = "<ParseCoinomi>" ascii
+        $u2 = "<ParseBrowsers>" ascii
+        $u3 = "<GrabScreenshot>" ascii
+        $u4 = "UserLogT" fullword ascii
+        $u5 = "FingerPrintT" fullword ascii
+        $u6 = "InstalledBrowserInfoT" fullword ascii
+        $u7 = "RunPE" fullword ascii
     condition:
-        uint16(0) == 0x5a4d and all of them
+        (uint16(0) == 0x5a4d and (all of ($s*) or 2 of ($x*) or all of ($u*) or (1 of ($x*) and 5 of ($u*)))) or (all of ($x*) and 4 of ($s*))
 }
