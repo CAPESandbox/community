@@ -5,6 +5,7 @@ meta:
 	author = "@bartblaze"
 	date = "2020-09"
 	tlp = "White"
+    cape_type = "Parallax Payload"
 
 strings:
 	$ = ".DeleteFile(Wscript.ScriptFullName)" ascii wide
