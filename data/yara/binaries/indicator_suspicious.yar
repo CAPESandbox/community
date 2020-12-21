@@ -281,3 +281,51 @@ rule INDICATOR_SUSPICIOUS_PE_ResourceTuner {
     condition:
         uint16(0) == 0x5a4d and all of them 
 }
+
+rule INDICATOR_SUSPICIOUS_ASEP_REG_Reverse {
+    meta:
+        author = "ditekSHen"
+        description = "Detects file containing reversed ASEP Autorun registry keys"
+    strings:
+        $s1 = "nuR\\noisreVtnerruC\\swodniW\\tfosorciM" ascii wide nocase
+        $s2 = "ecnOnuR\\noisreVtnerruC\\swodniW\\tfosorciM" ascii wide nocase
+        $s3 = "secivreSnuR\\noisreVtnerruC\\swodniW\\tfosorciM" ascii wide nocase
+        $s4 = "xEecnOnuR\\noisreVtnerruC\\swodniW\\tfosorciM" ascii wide nocase
+        $s5 = "ecnOsecivreSnuR\\noisreVtnerruC\\swodniW\\tfosorciM" ascii wide nocase
+        $s6 = "yfitoN\\nogolniW\\noisreVtnerruC\\TN swodniW\\tfosorciM" ascii wide nocase
+        $s7 = "tiniresU\\nogolniW\\noisreVtnerruC\\TN swodniW\\tfosorciM" ascii wide nocase
+        $s8 = "nuR\\rerolpxE\\seiciloP\\noisreVtnerruC\\swodniW\\tfosorciM" ascii wide nocase
+        $s9 = "stnenopmoC dellatsnI\\puteS evitcA\\tfosorciM" ascii wide nocase
+        $s10 = "sLLD_tinIppA\\swodniW\\noisreVtnerruC\\TN swodniW\\tfosorciM" ascii wide nocase
+        $s11 = "snoitpO noitucexE eliF egamI\\noisreVtnerruC\\TN swodniW\\tfosorciM" ascii wide nocase
+        $s12 = "llehS\\nogolniW\\noisreVtnerruC\\TN swodniW\\tfosorciM" ascii wide nocase
+        $s13 = "daol\\swodniW\\noisreVtnerruC\\TN swodniW\\tfosorciM" ascii wide nocase
+        $s14 = "daoLyaleDtcejbOecivreSllehS\\noisreVtnerruC\\swodniW\\tfosorciM" ascii wide nocase
+        $s15 = "nuRotuA\\rossecorP\\dnammoC\\tfosorciM" ascii wide nocase
+        $s16 = "putratS\\sredloF llehS resU\\rerolpxE\\noisreVtnerruC\\swodniW\\tfosorciM" ascii wide nocase
+        $s17 = "sllDtreCppA\\reganaM noisseS\\lortnoC\\teSlortnoCtnerruC\\metsyS" ascii wide nocase
+        $s18 = "sllDtreCppA\\reganaM noisseS\\lortnoC\\100teSlortnoC\\metsyS" ascii wide nocase
+        $s19 = ")tluafeD(\\dnammoC\\nepO\\llehS\\elifexE\\sessalC\\erawtfoS" ascii wide nocase
+        $s20 = ")tluafeD(\\dnammoC\\nepO\\llehS\\elifexE\\sessalC\\edoN2346woW\\erawtfoS" ascii wide nocase
+    condition:
+        1 of them and filesize < 2000KB
+}
+
+rule INDICATOR_SUSPICIOUS_SQLQuery_ConfidentialDataStore {
+    meta:
+        author = "ditekSHen"
+        description = "Detects executables containing SQL queries to confidential data stores. Observed in infostealers"
+    strings:
+        $select = "select " ascii wide nocase
+        $table1 = " from credit_cards" ascii wide nocase
+        $table2 = " from logins" ascii wide nocase
+        $table3 = " from cookies" ascii wide nocase
+        $table4 = " from moz_cookies" ascii wide nocase
+        $column1 = "name" ascii wide nocase
+        $column2 = "password_value" ascii wide nocase
+        $column3 = "encrypted_value" ascii wide nocase
+        $column4 = "card_number_encrypted" ascii wide nocase
+        $column5 = "isHttpOnly" ascii wide nocase
+    condition:
+        uint16(0) == 0x5a4d and 2 of ($table*) and 2 of ($column*) and $select
+}
