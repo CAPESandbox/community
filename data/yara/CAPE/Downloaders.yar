@@ -22,6 +22,7 @@ rule DLAgent02 {
         $x1 = "/c timeout {0}" fullword wide
         $x2 = "^(https?|ftp):\\/\\/" fullword wide
         $x3 = "{0}{1}{2}{3}" wide
+        $x4 = "timeout {0}" fullword wide
         $s1 = "HttpWebRequest" fullword ascii
         $s2 = "GetResponseStream" fullword ascii
         $s3 = "set_FileName" fullword ascii
