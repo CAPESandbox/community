@@ -208,6 +208,7 @@ rule INDICATOR_SUSPICIOUS_ClearWinLogs {
         $cmd4 = "Foreach-Object {wevtutil cl \"$_\"}" ascii wide nocase
         $cmd5 = "('wevtutil.exe el') DO (call :do_clear" ascii wide nocase
         $cmd6 = "| ForEach { Clear-EventLog $_.Log }" ascii wide nocase
+        $cmd7 = "('wevtutil.exe el') DO wevtutil.exe cl \"%s\"" ascii wide nocase
         $t1 = "wevtutil" ascii wide nocase
         $l1 = "cl Application" ascii wide nocase
         $l2 = "cl System" ascii wide nocase
@@ -238,8 +239,9 @@ rule INDICATOR_SUSPICIOUS_DisableWinDefender {
         $s8 = "Set-MpPreference -ModerateThreatDefaultAction 6" ascii wide nocase
         $s9 = "Set-MpPreference -LowThreatDefaultAction 6" ascii wide nocase
         $s10 = "Set-MpPreference -SevereThreatDefaultAction 6" ascii wide nocase
+        $pdb = "\\Disable-Windows-Defender\\obj\\Debug\\Disable-Windows-Defender.pdb" ascii
     condition:
-        uint16(0) == 0x5a4d and (1 of ($reg*) and 1 of ($s*))
+        uint16(0) == 0x5a4d and ((1 of ($reg*) and 1 of ($s*)) or ($pdb))
 }
 
 rule INDICATOR_SUSPICIOUS_USNDeleteJournal {
@@ -328,4 +330,42 @@ rule INDICATOR_SUSPICIOUS_SQLQuery_ConfidentialDataStore {
         $column5 = "isHttpOnly" ascii wide nocase
     condition:
         uint16(0) == 0x5a4d and 2 of ($table*) and 2 of ($column*) and $select
+}
+
+rule INDICATOR_SUSPICIOUS_PWSH_B64Encoded_Concatenated_FileEXEC {
+    meta:
+        author = "ditekSHen"
+        description = "Detects PowerShell scripts containing patterns of base64 encoded files, concatenation and execution"
+    strings:
+        $b1 = "::WriteAllBytes(" ascii
+        $b2 = "::FromBase64String(" ascii
+        $b3 = "::UTF8.GetString(" ascii
+
+        $s1 = "-join" nocase ascii
+        $s2 = "[Char]$_"
+        $s3 = "reverse" nocase ascii
+        $s4 = " += " ascii
+
+        $e1 = "System.Diagnostics.Process" ascii
+        $e2 = /StartInfo\.(Filename|UseShellExecute)/ ascii
+        $e3 = /-eq\s'\.(exe|dll)'\)/ ascii
+        $e4 = /(Get|Start)-(Process|WmiObject)/ ascii
+    condition:
+        #s4 > 10 and ((3 of ($b*)) or (1 of ($b*) and 2 of ($s*) and 1 of ($e*)) or (8 of them))
+}
+
+rule INDICATOR_SUSPICIOUS_JS_Hex_B64Encoded_EXE {
+    meta:
+        author = "ditekSHen"
+        description = "Detects JavaScript files hex and base64 encoded executables"
+    strings:
+        $s1 = ".SaveToFile" ascii
+        $s2 = ".Run" ascii
+        $s3 = "ActiveXObject" ascii
+        $s4 = "fromCharCode" ascii
+        $s5 = "\\x66\\x72\\x6F\\x6D\\x43\\x68\\x61\\x72\\x43\\x6F\\x64\\x65" ascii
+        $binary = "\\x54\\x56\\x71\\x51\\x41\\x41" ascii
+        $pattern = /[\s\{\(\[=]_0x[0-9a-z]{3,6}/ ascii
+    condition:
+        $binary and $pattern and 2 of ($s*) and filesize < 2500KB
 }

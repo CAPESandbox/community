@@ -31,7 +31,7 @@ rule DLAgent02 {
         $s6 = "set_CreateNoWindow" fullword ascii
         $s7 = "DownloadString" fullword ascii
     condition:
-        uint16(0) == 0x5a4d and filesize < 300KB and ((2 of ($x*) and 4 of ($s*)) or (#x3 > 2 and 4 of ($s*)))
+        uint16(0) == 0x5a4d and filesize < 300KB and ((2 of ($x*) and 2 of ($s*)) or (#x3 > 2 and 4 of ($s*)))
 }
 
 rule DLAgent03 {
@@ -50,10 +50,11 @@ rule DLAgent03 {
         $v2_2 = { 6f 70 65 6e ?? ?? ?? ?? ?? 73 65 6e 64 ?? ?? ?? ?? 72 65 73 70 6f 6e 73 65 74 65 78 74 }
         // $pat is slowing down scanning
         //$pat = /[a-f0-9]{168}/ fullword ascii
-        $discord = "https://discord.com/" fullword ascii
+        $url1 = "https://discord.com/" fullword ascii
+        $url2 = "http://www.superutils.com" fullword ascii
     condition:
         //uint16(0) == 0x5a4d and 1 of ($delph*) and $discord and ((all of ($v1*) or all of ($v2*)) or $pat)
-        uint16(0) == 0x5a4d and 1 of ($delph*) and $discord and (all of ($v1*) or all of ($v2*))
+        uint16(0) == 0x5a4d and 1 of ($delph*) and 1 of ($url*) and (all of ($v1*) or 1 of ($v2*))
 }
 
 rule DLAgent04 {
