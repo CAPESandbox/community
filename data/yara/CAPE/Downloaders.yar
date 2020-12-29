@@ -74,3 +74,18 @@ rule DLAgent04 {
     condition:
         uint16(0) == 0x5a4d and filesize < 300KB and #x1 > 1 and 4 of ($s*)
 }
+
+rule DLAgent05 {
+    meta:
+        author = "ditekSHen"
+        description = "Detects an unknown dropper. Typically exisys as a DLL in base64-encoded gzip-compressed file embedded within another executable"
+        cape_type = "DLAgent05 Downloader Payload"
+    strings:
+        $s1 = "MARCUS.dll" fullword ascii wide
+        $s2 = "GZipStream" fullword ascii
+        $s3 = "MemoryStream" fullword ascii
+        $s4 = "proj_name" fullword ascii
+        $s5 = "res_name" fullword ascii
+    condition:
+        uint16(0) == 0x5a4d and all of them
+}
