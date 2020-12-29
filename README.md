@@ -6,3 +6,8 @@
 
 ### Docs
 * [ReadTheDocs](https://capev2.readthedocs.io/en/latest/#)
+
+### Huge special thank you to:
+* @ditekshen
+* @1bartblaze
+* @4kevross33
