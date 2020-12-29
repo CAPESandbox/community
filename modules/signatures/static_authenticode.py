@@ -38,12 +38,11 @@ class InvalidAuthenticodeSignature(Signature):
 
     def run(self):
         ret = False
-        if "static" in self.results and "pe" in self.results["static"]:
-            if "guest_signers" in self.results["static"]["pe"] and self.results["static"]["pe"]:
-                signer = self.results["static"]["pe"] and self.results["static"]["pe"]["guest_signers"]
-                if not signer.get("aux_valid") and signer.get("aux_error_desc"):
-                    error = signer["aux_error_desc"]
-                    self.data.append({"authenticode error": "%s" % (error) })
-                    ret = True
+        if self.results.get("static", {}).get("pe", {}).get("guest_signers"):
+            signer = self.results["static"]["pe"]["guest_signers"]
+            if not signer.get("aux_valid") and signer.get("aux_error_desc"):
+                error = signer["aux_error_desc"]
+                self.data.append({"authenticode error": "%s" % (error) })
+                ret = True
 
         return ret
