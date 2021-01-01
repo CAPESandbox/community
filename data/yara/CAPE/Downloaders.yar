@@ -30,8 +30,12 @@ rule DLAgent02 {
         $s5 = "WebClient" fullword ascii
         $s6 = "set_CreateNoWindow" fullword ascii
         $s7 = "DownloadString" fullword ascii
+        $s8 = "WriteByte" fullword ascii
+        $s9 = "CreateUrlCacheEntryW" fullword ascii
+        $s10 = "HttpStatusCode" fullword ascii
+        $s11 = "FILETIME" fullword ascii
     condition:
-        uint16(0) == 0x5a4d and filesize < 300KB and ((2 of ($x*) and 2 of ($s*)) or (#x3 > 2 and 4 of ($s*)))
+        uint16(0) == 0x5a4d and filesize < 5000KB and ((2 of ($x*) and 2 of ($s*)) or (#x3 > 2 and 4 of ($s*)))
 }
 
 rule DLAgent03 {
