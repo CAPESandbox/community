@@ -369,3 +369,30 @@ rule INDICATOR_SUSPICIOUS_JS_Hex_B64Encoded_EXE {
     condition:
         $binary and $pattern and 2 of ($s*) and filesize < 2500KB
 }
+
+rule INDICATOR_SUSPICIOUS_EXE_PWSH_Downloader {
+    meta:
+        author = "ditekSHen"
+        description = "Detects downloader agent, using PowerShell"
+    strings:
+        $pwsh = "powershell" fullword ascii
+        $bitstansfer = "Start-BitsTransfer" ascii wide
+        $s1 = "GET %s HTTP/1" ascii
+        $s2 = "User-Agent:" ascii
+        $s3 = "-WindowStyle Hidden -ep bypass -file \"" fullword ascii
+        $s4 = "LdrLoadDll" fullword ascii
+    condition:
+        uint16(0) == 0x5a4d and $pwsh and ($bitstansfer or 2 of ($s*))
+}
+
+rule INDICATOR_SUSPICIOUS_PWSH_PasswordCredential_RetrievePassword {
+    meta:
+        author = "ditekSHen"
+        description = "Detects PowerShell content designed to retrieve passwords from host"
+    strings:
+        $namespace = "Windows.Security.Credentials.PasswordVault" ascii wide nocase
+        $method1 = "RetrieveAll()" ascii wide nocase
+        $method2 = ".RetrievePassword()" ascii wide nocase
+    condition:
+       $namespace and 1 of ($method*)
+}
