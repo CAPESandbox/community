@@ -1,8 +1,8 @@
-rule CHUWI {
+rule Chuwi {
     meta:
         author = "ditekSHen"
-        description = "Detects detected unknown RAT. Called CHUWI based on PDB"
-        cape_type = "CHUWI RAT Payload"
+        description = "Detects detected unknown RAT. Called Chuwi based on PDB"
+        cape_type = "Chuwi RAT Payload"
     strings:
         $cmd1 = "shell_command" fullword ascii
         $cmd2 = "check_command" fullword ascii
