@@ -19,5 +19,5 @@ strings:
 	$ = "[Ctrl +" ascii wide fullword
 
 condition:
-	3 of them
+	4 of them
 }
