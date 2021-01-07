@@ -126,6 +126,8 @@ class RansomwareExtensions(Signature):
             (".*\.CONTI$", ["Conti"]),
             (".*\.TJODT", ["CONTI"]),
             (".*\.ReadManual.[A-Z0-9]{8}", ["MountLocker"]),
+            (".*\.pysa$", ["PYSA"]),
+            (".*\.__NIST_[A-Z0-9]{4}__$", ["Babuk"]),
         ]
 
         for indicator in indicators:
