@@ -64,6 +64,6 @@ class SpicyHotPotBehavior(Signature):
         #        self.data.append({"service": match})
 
         if score > 1:
-            return true
+            return True
         
         return False
