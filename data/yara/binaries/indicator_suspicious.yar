@@ -396,3 +396,29 @@ rule INDICATOR_SUSPICIOUS_PWSH_PasswordCredential_RetrievePassword {
     condition:
        $namespace and 1 of ($method*)
 }
+
+rule INDICATOR_SUSPICIOUS_UACBypass_EnvVarScheduledTasks {
+    meta:
+        author = "ditekSHen"
+        description = "detects Windows exceutables potentially bypassing UAC (ab)using Environment Variables in Scheduled Tasks"
+    strings:
+        $s1 = "\\Microsoft\\Windows\\DiskCleanup\\SilentCleanup" ascii wide
+        $s2 = "\\Environment" ascii wide
+        $s3 = "schtasks" ascii wide
+        $s4 = "/v windir" ascii wide
+    condition:
+       all of them
+}
+
+rule INDICATOR_SUSPICIOUS_UACBypass_fodhelper {
+    meta:
+        author = "ditekSHen"
+        description = "detects Windows exceutables potentially bypassing UAC using fodhelper.exe"
+    strings:
+        $s1 = "\\software\\classes\\ms-settings\\shell\\open\\command" ascii wide nocase
+        $s2 = "DelegateExecute" ascii wide
+        $s3 = "fodhelper" ascii wide
+        $s4 = "ConsentPromptBehaviorAdmin" ascii wide
+    condition:
+       all of them
+}
