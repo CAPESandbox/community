@@ -1,10 +1,10 @@
 rule BitRAT {
     meta:
         author = "ditekSHen"
-        description = "BitRAT RAT payload"
+        description = "Detects BitRAT RAT"
         cape_type = "BitRAT Payload"
     strings:
-        $s1 = "\\plg\\pid" fullword ascii
+        $s1 = "\\plg\\" fullword ascii
         $s2 = "klgoff_del" fullword ascii
         $s3 = "files_delete" fullword ascii
         $s4 = "files_zip_start" fullword ascii
@@ -13,6 +13,13 @@ rule BitRAT {
         $s7 = "srv_list" fullword ascii
         $s8 = "con_list" fullword ascii
         $s9 = "ddos_stop" fullword ascii
+        $s10 = "socks5_srv_start" fullword ascii
+        $s11 = "/getUpdates?offset=" fullword ascii
+        $s12 = "Action: /dlex" fullword ascii
+        $s13 = "Action: /clsbrw" fullword ascii
+        $s14 = "Action: /usb" fullword ascii
+        $s15 = "/klg" fullword ascii
+        $s16 = "Slowloris" fullword ascii
         $t1 = "<sz>N/A</sz>" fullword ascii
         $t2 = "<silent>N/A</silent>" fullword ascii
     condition:

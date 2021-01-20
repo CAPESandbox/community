@@ -6,7 +6,6 @@ meta:
 	date = "2020-05"
 	reference = "https://github.com/stascorp/rdpwrap"
 	tlp = "White"
-	cape_type = "RDPWrap Payload"
 
 strings:
 	$ = "rdpwrap.dll" ascii wide

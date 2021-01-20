@@ -127,11 +127,11 @@ class RansomwareMessage(Signature):
 
     filter_apinames = set(["NtWriteFile"])
 
+
     def on_call(self, call, process):
         if call["api"] == "NtWriteFile":
             buff = self.get_raw_argument(call, "Buffer").lower()
             filepath = self.get_raw_argument(call, "HandleName")
-
             if (filepath.lower() == "\\??\\physicaldrive0" or filepath.lower().startswith("\\device\\harddisk")) and len(buff) >= 128:
                 if len(set(re.findall(self.patterns, buff))) > 1:
                     if filepath not in self.ransomfile:
@@ -141,12 +141,12 @@ class RansomwareMessage(Signature):
         for dropped in self.results.get("dropped", []) or []:
             mimetype = dropped["type"]
             if "ASCII text" in mimetype:
-                filename = dropped["name"]
+                filenames = dropped["name"]
                 data = dropped.get("data", "")
                 if len(data) >= 128:
                     if len(set(re.findall(self.patterns, data))) > 1:
-                        if filename not in self.ransomfile:
-                            self.ransomfile.append(filename)
+                        if filenames[0] not in self.ransomfile:
+                            self.ransomfile.append(filenames[0])
 
         if len(self.ransomfile) > 0:
             for filename in self.ransomfile:
@@ -170,9 +170,9 @@ class RansomwareMessageMultipleLocations(Signature):
     def run(self):
         ret = False
         for dropped in self.results.get("dropped", []) or []:
-            if dropped is not None and "ASCII text" in dropped["type"] or dropped["name"].endswith((".txt", ".html", ".hta")):
+            if dropped is not None and "ASCII text" in dropped["type"] or any(name.endswith((".txt", ".html", ".hta")) for name in dropped.get("name") or []):
                 if dropped.get("guest_paths", "") is not None and len(dropped.get("guest_paths", "")) > 50:
                     ret = True
-                    self.data.append({"filename": dropped["name"]})
+                    self.data.append({"filename": dropped["name"][0]})
 
         return ret

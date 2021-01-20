@@ -460,3 +460,55 @@ rule INDICATOR_EXE_Packed_Bonsai {
     condition:
         uint16(0) == 0x5a4d and 2 of ($bonsai*)
 }
+
+rule INDICATOR_EXE_Packed_TriumphLoader {
+    meta:
+        author = "ditekSHen"
+        description = "Detects TriumphLoader"
+    strings:
+        $id1 = "User-Agent: TriumphLoader" ascii wide
+        $id2 = "\\loader\\absent-loader-master\\client\\full\\absentclientfull\\absentclientfull\\absent\\json.hpp" wide
+        $id3 = "\\triumphloader\\triumphloaderfiles\\triumph\\json.h" wide
+        $s1 = "current == '\\\"'" fullword wide
+        $s2 = "00010203040506070809101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263" ascii
+        $s3 = "646566676869707172737475767778798081828384858687888990919293949596979899object key" fullword ascii
+        $s4 = "endptr == token_buffer.data() + token_buffer.size()" fullword wide
+        $s5 = "last - first >= 2 + (-kMinExp - 1) + std::numeric_limits<FloatType>::max_digits10" fullword wide
+        $s6 = "p2 <= (std::numeric_limits<std::uint64_t>::max)() / 10" fullword wide
+    condition:
+        uint16(0) == 0x5a4d and (1 of ($id*) or all of ($s*) or (3 of ($s*) and 1 of ($id*)) or (4 of them and pe.imphash() == "784001f4b755832ae9085d98afc9ce83"))
+}
+
+rule INDICATOR_EXE_Packed_LLVMLoader {
+    meta:
+        author = "ditekSHen"
+        description = "Detects LLVM obfuscator/loader"
+    strings:
+        $s1 = "exeLoaderDll_LLVMO.dll" fullword ascii
+        $s2 = "StartFunc" fullword ascii
+        $s3 = "\\X!;\\Y!," fullword ascii
+        $b = { 64 6c 6c 00 53 74 61 72 74 46 75 6e 63 00 00 00
+               ?? ?? 00 00 00 00 00 00 00 00 00 ?? 96 01 00 00
+               ?? ?? 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+               00 00 00 00 00 00 00 00 00 00 00 ?? ?? ?? 00 00
+               00 00 00 00 00 00 00 00 00 00 00 ?? ?? 45 78 69
+               74 50 72 6f 63 65 73 73 00 4b 45 52 4e 45 4c 33
+               32 2e 64 6c 6c 00 00 00 00 00 00 }
+    condition:
+        (uint16(0) == 0x5a4d or uint16(0) == 0x0158) and ((pe.exports("StartFunc") and 1 of ($s*)) or all of ($s*) or ($b))
+}
+
+rule INDICATOR_EXE_Packed_NoobyProtect {
+    meta:
+        author = "ditekSHen"
+        description = "Detects executables packed with NoopyProtect"
+    strings:
+        $s1 = "NoobyProtect SE" ascii
+    condition:
+        uint16(0) == 0x5a4d and all of them or
+        for any i in (0 .. pe.number_of_sections) : (
+            (
+                pe.sections[i].name == "SE"
+            )
+        )
+}

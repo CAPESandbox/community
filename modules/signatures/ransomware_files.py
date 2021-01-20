@@ -160,7 +160,8 @@ class RansomwareFiles(Signature):
             (".*\\\\HACKED\.txt$", ["Smaug"]),
             (".*\\\\YOUR_FILES_ARE_ENCRYPTED\.HTML$", ["SunCrypt"]),
             (".*\\\\RecoveryManual\.html$", ["MountLocker"]),
-            (".*\\\\How To Restore Your Files.txt", ["BABUK Locker"])
+            (".*\\\\Readme\.README$", ["PYSA"]),
+            (".*\\\\How\sTo\sRestore\sYour\sFiles\.txt$", ["Babuk"]),
         ]
 
         for ioc in file_list:
