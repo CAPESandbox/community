@@ -123,7 +123,7 @@ class RansomwareMessage(Signature):
             "get back my",
             "get back your"
         ]
-
+        self.patterns = "|".join(self.indicators)
 
     filter_apinames = set(["NtWriteFile"])
 
@@ -131,9 +131,9 @@ class RansomwareMessage(Signature):
         if call["api"] == "NtWriteFile":
             buff = self.get_raw_argument(call, "Buffer").lower()
             filepath = self.get_raw_argument(call, "HandleName")
-            patterns = "|".join(self.indicators)
+
             if (filepath.lower() == "\\??\\physicaldrive0" or filepath.lower().startswith("\\device\\harddisk")) and len(buff) >= 128:
-                if len(set(re.findall(patterns, buff))) > 1:
+                if len(set(re.findall(self.patterns, buff))) > 1:
                     if filepath not in self.ransomfile:
                         self.ransomfile.append(filepath)
 
@@ -143,9 +143,8 @@ class RansomwareMessage(Signature):
             if "ASCII text" in mimetype:
                 filename = dropped["name"]
                 data = dropped.get("data", "")
-                patterns = "|".join(self.indicators)
                 if len(data) >= 128:
-                    if len(set(re.findall(patterns, data))) > 1:
+                    if len(set(re.findall(self.patterns, data))) > 1:
                         if filename not in self.ransomfile:
                             self.ransomfile.append(filename)
 
