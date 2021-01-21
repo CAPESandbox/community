@@ -12,5 +12,5 @@ rule AlienCrypter {
         $resp1 = "</p><p>@@@77,90," ascii wide
         $resp2 = "</p><p>@@@HH,JA," ascii wide
     condition:
-        (uint32(0) == 0x5a4d and 3 of them) or (1 of ($resp*) and 2 of ($s*))
+        (uint16(0) == 0x5a4d and 3 of them) or (1 of ($resp*) and 2 of ($s*))
 }
