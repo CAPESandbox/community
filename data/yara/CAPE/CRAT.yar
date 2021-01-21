@@ -10,7 +10,7 @@ rule CRAT {
         $s4 = "Content-Disposition: form-data; name=\"%s\"; filename=\"" ascii
         $s6 = "%serror.log" wide
     condition:
-        uint32(0) == 0x5a4d and all of them
+        uint16(0) == 0x5a4d and all of them
 }
 
 rule CRATPluginKeylogger {
@@ -28,7 +28,7 @@ rule CRATPluginKeylogger {
         $s3 = /KeyLogThread\s(started|finished|terminated)!/ wide
         $s4 = /KeyLog_(x64|x32|Win64|Win32)_DllRelease\.dll/ fullword ascii
     condition:
-        uint32(0) == 0x5a4d and ((all of ($ai*) and 1 of ($s*)) or (3 of ($s*) and 1 of ($ai*)) or 5 of them)
+        uint16(0) == 0x5a4d and ((all of ($ai*) and 1 of ($s*)) or (3 of ($s*) and 1 of ($ai*)) or 5 of them)
 }
 
 rule CRATPluginClipboardMonitor {
@@ -46,7 +46,7 @@ rule CRATPluginClipboardMonitor {
         $s3 = /MonitorClipboardThread\s(finished|terminated)!/ wide
         $s4 = /ClipboardMonitor_(x64|x32|Win64|Win32)_DllRelease\.dll/ fullword ascii
     condition:
-        uint32(0) == 0x5a4d and ((all of ($ai*) and 1 of ($s*)) or (3 of ($s*) and 1 of ($ai*)) or 5 of them)
+        uint16(0) == 0x5a4d and ((all of ($ai*) and 1 of ($s*)) or (3 of ($s*) and 1 of ($ai*)) or 5 of them)
 }
 
 rule CRATPluginScreenCapture {
@@ -68,7 +68,7 @@ rule CRATPluginScreenCapture {
         $s7 = /ScreenCaptureThread\s(finished|terminated)!/ wide
         $s8 = /ScreenCapture_(x64|x32|Win64|Win32)_DllRelease\.dll/ fullword ascii
     condition:
-        uint32(0) == 0x5a4d and ((all of ($ai*) and 1 of ($s*)) or (3 of ($s*) and 1 of ($ai*)) or 6 of them)
+        uint16(0) == 0x5a4d and ((all of ($ai*) and 1 of ($s*)) or (3 of ($s*) and 1 of ($ai*)) or 6 of them)
 }
 
 rule CRATRansomHansom {
@@ -89,5 +89,5 @@ rule CRATRansomHansom {
         $s6 = ".hansom" fullword wide
         $s7 = /Ransom_(x64|x32|Win64|Win32)_DllRelease\.dll/ fullword ascii
     condition:
-        uint32(0) == 0x5a4d and ((2 of ($cmd*) and 2 of ($s*)) or (4 of ($s*) and 1 of ($cmd*)) or 6 of them)
+        uint16(0) == 0x5a4d and ((2 of ($cmd*) and 2 of ($s*)) or (4 of ($s*) and 1 of ($cmd*)) or 6 of them)
 }
