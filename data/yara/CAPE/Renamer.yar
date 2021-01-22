@@ -1,5 +1,6 @@
 import "pe"
 
+// requires Yara v4.0.2+
 rule Renamer {
     meta:
         author = "ditekSHen"
