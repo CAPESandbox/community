@@ -1,7 +1,8 @@
-rule MALWARE_Win_Epsilon {
+rule Epsilon {
     meta:
         author = "ditekSHen"
         description = "Detects Epsilon ransomware"
+        cape_type = "Epsilon Ransomware Payload"
     strings:
         $s1 = ".Speak \"" wide
         $s2 = "chkUpdateRegistry" fullword wide

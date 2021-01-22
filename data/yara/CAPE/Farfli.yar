@@ -1,7 +1,8 @@
-rule MALWARE_Win_Farfli {
+rule Farfli {
     meta:
         author = "ditekSHen"
         description = "Detects Farfli backdoor"
+        cape_type = "Farfli Payload"
     strings:
         $s1 = "%ProgramFiles%\\Google\\" fullword ascii
         $s2 = "%s\\%d.bak" fullword ascii

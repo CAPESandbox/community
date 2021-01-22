@@ -1,7 +1,8 @@
-rule MALWARE_Win_Arechclien2 {
+rule Arechclient2 {
     meta:
         author = "ditekSHen"
-        description = "Detects Arechclien2 RAT"
+        description = "Detects Arechclient2 RAT"
+        cape_type = "Arechclient2 Payload"
     strings:
         $s1 = "\\Google\\Chrome\\User Data\\copiedProf\"" wide
         $s2 = "\",\"BotName\":\"" wide

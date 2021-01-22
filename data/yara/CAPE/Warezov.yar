@@ -1,7 +1,8 @@
-rule MALWARE_Win_Warezov {
+rule Warezov {
     meta:
         author = "ditekSHen"
         description = "Detects Warezov worm/downloader"
+        cape_type = "Warezov Payload"
     strings:
         $s1 = "ft\\Windows\\CurrentVersion\\Run" wide
         $s2 = "DIR%SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run" wide

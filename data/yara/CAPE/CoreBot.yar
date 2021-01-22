@@ -1,7 +1,8 @@
-rule MALWARE_Win_CoreBot {
+rule CoreBot {
     meta:
         author = "ditekSHen"
         description = "Detects CoreBot"
+        cape_type = "CoreBot Payload"
     strings:
         $f1 = "core.cert_fp" fullword ascii
         $f2 = "core.crash_handler" fullword ascii
