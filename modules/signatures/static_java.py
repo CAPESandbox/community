@@ -71,6 +71,60 @@ class Static_Java(Signature):
             self.data.append({"serialized_object" : "Contains use of a Java serialized object" })
             self.weight += 1
 
+        # Specific Exploit Detections
+        # http://stopmalvertising.com/malware-reports/watering-hole-attack-cve-2012-4792-and-cve-2012-0507.html
+        if "AtomicReferenceArray" in decompiled:
+            self.data.append({"cve_2012-0507" : "AtomicReferenceArray type confusion exploit code" })
+            exploit += 1
+
+        # http://blogs.technet.com/b/mmpc/archive/2012/11/21/an-analysis-of-dorkbot-s-infection-vectors-part-2.aspx
+        if "sun.awt.SunToolkit" in decompiled and "getField" in decompiled:
+            self.data.append({"cve_2012-4681" : "com.sun.beans.finder.MethodFinder findMethod exploit code" })
+            exploit += 1
+
+        # http://blogs.technet.com/b/mmpc/archive/2012/11/15/a-technical-analysis-on-new-java-vulnerability-cve-2012-5076.aspx
+        if "ManagedObjectManagerFactory" in decompiled and "GenericConstructor" in decompiled:
+            self.data.append({"cve_2012-5076" : "com.sun.org.glassfish.gmbal vulnerable class exploit code" })
+            exploit += 1
+
+        # http://blogs.technet.com/b/mmpc/archive/2013/01/20/a-technical-analysis-of-a-new-java-vulnerability-cve-2013-0422.aspx
+        if "MethodHandles.Lookup" in decompiled:
+            self.data.append({"cve_2013-0422" : "MethodHandles insecure class exploit code" })
+            exploit += 1
+
+        # https://community.rapid7.com/community/metasploit/blog/2013/02/25/java-abused-in-the-wild-one-more-time
+        if "Introspector.elementFromComplex" in decompiled:
+            self.data.append({"cve_2013-0431" : "Introspector.elementFromComplex remote code execution exploit code" })
+            exploit += 1
+
+        # https://www.trustwave.com/Resources/SpiderLabs-Blog/Fresh-Coffee-Served-by-CoolEK/
+        if "ColorSpace" in decompiled and "BufferedImage" in decompiled:
+            self.data.append({"cve_2013-1493" : "Color conversion memory corruption exploit code" })
+            exploit += 1
+
+        if "MethodHandle" in decompiled and "findStaticSetter" in decompiled:
+            self.data.append({"cve_2013-2423" : "findStaticSetter type confusion exploit code" })
+            exploit += 1
+
+        # http://research.zscaler.com/2014/07/dissecting-cve-2013-2460-java-exploit.html
+        if "ProviderFactory" in decompiled and "getDefaultFactory" in decompiled:
+            self.data.append({"cve_2013-2460" : "ProviderSkeleton insecure invoke method exploit code" })
+            exploit += 1
+
+        # http://malware.dontneedcoffee.com/2013/08/cve-2013-2465-integrating-exploit-kits.html
+        if "DataBufferByte" in decompiled and "BufferedImage" in decompiled and "getNumComponents" in decompiled and "SinglePixelPackedSampleModel" in decompiled or "MultiPixelPackedSampleModel" in decompiled:
+            self.data.append({"cve_2013-2465" : "storeImageArray invalid array indexing exploit code" })
+            exploit += 1
+
+        if "getNumDataElements" in decompiled and "AlphaCompositeClass" in decompiled:
+            self.data.append({"cve_2013-2471" : "getNumDataElements memory corruption exploit code" })
+            exploit += 1
+
+        if exploit > 0:
+            self.description += " and possible exploit code."
+            self.severity = 3
+            self.weight += 1
+
         # Check individual string length for possible obfuscation
         for string in decompiled.split():
             if len(string) > 150:
@@ -78,61 +132,6 @@ class Static_Java(Signature):
                 self.severity = 3
                 self.weight += 1
                 break
-
-            # Specific Exploit Detections
-            # http://stopmalvertising.com/malware-reports/watering-hole-attack-cve-2012-4792-and-cve-2012-0507.html
-            if "AtomicReferenceArray" in decompiled:
-                self.data.append({"cve_2012-0507" : "AtomicReferenceArray type confusion exploit code" })
-                exploit += 1
-
-            # http://blogs.technet.com/b/mmpc/archive/2012/11/21/an-analysis-of-dorkbot-s-infection-vectors-part-2.aspx
-            if "sun.awt.SunToolkit" in decompiled and "getField" in decompiled:
-                self.data.append({"cve_2012-4681" : "com.sun.beans.finder.MethodFinder findMethod exploit code" })
-                exploit += 1
-
-            # http://blogs.technet.com/b/mmpc/archive/2012/11/15/a-technical-analysis-on-new-java-vulnerability-cve-2012-5076.aspx
-            if "ManagedObjectManagerFactory" in decompiled and "GenericConstructor" in decompiled:
-                self.data.append({"cve_2012-5076" : "com.sun.org.glassfish.gmbal vulnerable class exploit code" })
-                exploit += 1
-
-            # http://blogs.technet.com/b/mmpc/archive/2013/01/20/a-technical-analysis-of-a-new-java-vulnerability-cve-2013-0422.aspx
-            if "MethodHandles.Lookup" in decompiled:
-                self.data.append({"cve_2013-0422" : "MethodHandles insecure class exploit code" })
-                exploit += 1
-
-            # https://community.rapid7.com/community/metasploit/blog/2013/02/25/java-abused-in-the-wild-one-more-time
-            if "Introspector.elementFromComplex" in decompiled:
-                self.data.append({"cve_2013-0431" : "Introspector.elementFromComplex remote code execution exploit code" })
-                exploit += 1
-
-            # https://www.trustwave.com/Resources/SpiderLabs-Blog/Fresh-Coffee-Served-by-CoolEK/
-            if "ColorSpace" in decompiled and "BufferedImage" in decompiled:
-                self.data.append({"cve_2013-1493" : "Color conversion memory corruption exploit code" })
-                exploit += 1
-
-            if "MethodHandle" in decompiled and "findStaticSetter" in decompiled:
-                self.data.append({"cve_2013-2423" : "findStaticSetter type confusion exploit code" })
-                exploit += 1
-
-            # http://research.zscaler.com/2014/07/dissecting-cve-2013-2460-java-exploit.html
-            if "ProviderFactory" in decompiled and "getDefaultFactory" in decompiled:
-                self.data.append({"cve_2013-2460" : "ProviderSkeleton insecure invoke method exploit code" })
-                exploit += 1
-
-            # http://malware.dontneedcoffee.com/2013/08/cve-2013-2465-integrating-exploit-kits.html
-            if "DataBufferByte" in decompiled and "BufferedImage" in decompiled and "getNumComponents" in decompiled and "SinglePixelPackedSampleModel" in decompiled or "MultiPixelPackedSampleModel" in decompiled:
-                self.data.append({"cve_2013-2465" : "storeImageArray invalid array indexing exploit code" })
-                exploit += 1
-
-            if "getNumDataElements" in decompiled and "AlphaCompositeClass" in decompiled:
-                self.data.append({"cve_2013-2471" : "getNumDataElements memory corruption exploit code" })
-                exploit += 1
-
-            if exploit > 0:
-                self.description += " and possible exploit code."
-                self.severity = 3
-                self.weight += 1
-
 
         if self.weight:
             return True
