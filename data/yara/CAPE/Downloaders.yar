@@ -93,3 +93,19 @@ rule DLAgent05 {
     condition:
         uint16(0) == 0x5a4d and all of them
 }
+
+rule DLAgent06 {
+    meta:
+      author = "ditekSHen"
+      description = "Detects known downloader agent downloading encoded binaries in patches"
+      cape_type = "DLAgent06 Downloader Payload"
+    strings:
+        $s1 = "totallist" fullword wide
+        $s2 = "LINKS_HERE" fullword wide
+        $s3 = "Load" fullword wide
+        $s4 = "EntryPoint" fullword wide
+        $s5 = "Invoke" fullword wide
+        $s6 = "[SPLITTER]" fullword wide
+    condition:
+        uint16(0) == 0x5a4d and all of them
+}

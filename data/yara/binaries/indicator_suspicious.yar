@@ -422,3 +422,52 @@ rule INDICATOR_SUSPICIOUS_UACBypass_fodhelper {
     condition:
        all of them
 }
+
+rule INDICATOR_SUSPICIOUS_Win_GENERIC01 {
+    meta:
+        author = "ditekSHen"
+        description = "Detects known unamed malicious executables, mostly DLLs"
+    strings:
+        $s1 = "xcopy \"%s\" \"%s\" /e /i /y" fullword ascii
+        $s2 = "LoadFromMemory END---" fullword ascii
+        $s3 = "<<== Message sending:" fullword ascii
+        $s4 = "==>> Message received:" fullword ascii
+        $s5 = "I am virus! Fuck you" ascii
+        $s6 = "TMBMSRV.exe" fullword ascii
+        $s7 = "rtvscan.exe" fullword ascii
+        $s8 = "SPIDer.exe" fullword ascii
+        $s9 = "kxetray.exe" fullword ascii
+    condition:
+        uint16(0) == 0x5a4d and 5 of them
+}
+
+rule INDICATOR_SUSPICIOUS_Win_GENERIC02 {
+    meta:
+        author = "ditekSHen"
+        description = "Detects known unamed malicious executables, mostly DLLs"
+    strings:
+        $s1 = "\\wmkawe_%d.data" ascii
+        $s2 = "\\resmon.resmoncfg" ascii
+        $s3 = "ByPassUAC" fullword ascii
+        $s4 = "rundll32.exe C:\\ProgramData\\Sandboxie\\SbieMsg.dll,installsvc" fullword ascii nocase
+        $s5 = "%s\\SbieMsg." ascii
+        $s6 = "Stupid Japanese" fullword ascii
+    condition:
+        uint16(0) == 0x5a4d and 5 of them
+}
+
+rule INDICATOR_SUSPICIOUS_Win_GENERIC03 {
+    meta:
+        author = "ditekSHen"
+        description = "Detects known unamed malicious executables"
+    strings:
+        $s1 = "{%s-%d-%d}" fullword wide
+        $s2 = "update" fullword wide
+        $s3 = "https://" fullword wide
+        $s4 = "http://" fullword wide
+        $s5 = "configure" fullword ascii
+        $s6 = { 8d 4f 02 e8 8c ff ff ff 8b d8 81 fb 00 dc 00 00 }
+        $s7 = { 83 c1 02 e8 3c ff ff ff 8b c8 ba ff 03 00 00 8d }
+    condition:
+        uint16(0) == 0x5a4d and all of them
+}
