@@ -1,0 +1,16 @@
+rule Phorpiex {
+    meta:
+      author = "ditekSHen"
+      description = "Detects Phorpiex variants"
+      cape_type = "Phorpiex Payload"
+    strings:
+       $s1 = "ShEllExECutE=__\\DriveMgr.exe" fullword wide nocase
+       $s2 = "/c start __ & __\\DriveMgr.exe & exit" fullword wide nocase
+       $s3 = "%s\\autorun.inf" fullword wide
+       $s4 = "svchost." wide
+       $s5 = "%ls\\%d%d" wide
+       $s6 = "bitcoincash:" ascii
+       $s7 = "%ls:*:Enabled:%ls" fullword wide
+    condition:
+        uint16(0) == 0x5a4d and 5 of them
+}
