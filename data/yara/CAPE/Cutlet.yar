@@ -4,7 +4,7 @@ rule Cutlet {
                 author = "@VK_Intel"
                 reference = "Detects the Cutlet ATM malware"
                 date = "2017-12-26"
-                hash = "fac356509a156a8f11ce69f149198108"
+                // hash = "fac356509a156a8f11ce69f149198108"
                 cape_type = "Cutlet Payload"
         strings:
                 // DIEBOLD NIXDORF DLL ATM LIBRARY
