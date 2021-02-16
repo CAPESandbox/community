@@ -471,3 +471,43 @@ rule INDICATOR_SUSPICIOUS_Win_GENERIC03 {
     condition:
         uint16(0) == 0x5a4d and all of them
 }
+
+rule INDICATOR_SUSPICIOUS_Finger_Download_Pattern {
+    meta:
+        author = "ditekSHen"
+        description = "Detects files embedding and abusing the finger command for download"
+    strings:
+        $pat1 = /finger(\.exe)?\s.{1,50}@.{7,}\|/ ascii wide
+        $ne1 = "Nmap service detection probe list" ascii
+    condition:
+       not any of ($ne*) and any of ($pat*)
+}
+
+rule INDICATOR_SUSPICIOUS_EXE_UACBypass_CMSTPCMD {
+    meta:
+        author = "ditekSHen"
+        description = "Detects Windows exceutables bypassing UAC using CMSTP utility, command line and INF"
+    strings:
+        $s1 = "c:\\windows\\system32\\cmstp.exe" ascii wide nocase
+        $s2 = "taskkill /IM cmstp.exe /F" ascii wide nocase
+        $s3 = "CMSTPBypass" fullword ascii
+        $s4 = "CommandToExecute" fullword ascii
+        $s5 = "RunPreSetupCommands=RunPreSetupCommandsSection" fullword wide
+        $s6 = "\"HKLM\", \"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\CMMGR32.EXE\", \"ProfileInstallPath\", \"%UnexpectedError%\", \"\"" fullword wide nocase
+    condition:
+       uint16(0) == 0x5a4d and 3 of them
+}
+
+rule INDICATOR_SUSPICIOUS_JS_WMI_ExecQuery {
+    meta:
+        author = "ditekSHen"
+        description = "Detects JS potentially executing WMI queries"
+    strings:
+        $ex = ".ExecQuery(" ascii nocase
+        $s1 = "GetObject(" ascii nocase
+        $s2 = "String.fromCharCode(" ascii nocase
+        $s3 = "ActiveXObject(" ascii nocase
+        $s4 = ".Sleep(" ascii nocase
+    condition:
+       ($ex and 2 of ($s*))
+}
