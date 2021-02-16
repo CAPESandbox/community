@@ -17,6 +17,13 @@ rule RunningRAT {
         $rev4 = "s% etadpUllD,\"s%\" 23lldnuR" ascii
         $rev5 = "---DNE yromeMmorFdaoL" fullword ascii
         $rev6 = "eMnigulP" fullword ascii
+        $rev7 = "exe.23lldnuR\\" fullword ascii
+        $rev8 = "dnammoc\\nepo\\llehs\\" ascii
+        $rev9 = "\"s%\" k- exe.tsohcvs\\23metsyS\\%%tooRmetsyS%" ascii
+        $rev10 = "emanybtsohteg" fullword ascii
+        $rev11 = "tekcosesolc" fullword ascii
+        $rev12 = "tpokcostes" fullword ascii
+        $rev13 = "emantsohteg" fullword ascii
     condition:
-        uint16(0) == 0x5a4d and (all of ($s*) or all of ($rev*) or 8 of them)
+        uint16(0) == 0x5a4d and (all of ($s*) or 5 of ($rev*) or 8 of them)
 }

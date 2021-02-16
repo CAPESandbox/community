@@ -70,10 +70,28 @@ rule RedLine {
         $u1 = "<ParseCoinomi>" ascii
         $u2 = "<ParseBrowsers>" ascii
         $u3 = "<GrabScreenshot>" ascii
-        $u4 = "UserLogT" fullword ascii
+        $u4 = "UserLog" ascii nocase
         $u5 = "FingerPrintT" fullword ascii
         $u6 = "InstalledBrowserInfoT" fullword ascii
         $u7 = "RunPE" fullword ascii
+        $u8 = "DownloadAndEx" fullword ascii
+        $u9 = ".Data.Applications.Wallets" ascii
+        $u10 = ".Data.Browsers" ascii
+        $u11 = ".Models.WMI" ascii
+        $u12 = "DefenderSucks" wide
+
+        $pat1 = "(((([0-9.])\\d)+){1})" fullword wide
+        $pat2 = "^(?:2131|1800|35\\\\d{3})\\\\d{11}$" fullword wide
+        $pat3 = "6(?:011|5[0-9]{2})[0-9]{12}$/C" fullword wide
+        $pat4 = "Telegramprofiles^(6304|6706|6709|6771)[0-9]{12,15}$" fullword wide
+        $pat5 = "host_key^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14})$" fullword wide
+        $pat6 = "^3(?:0[0-5]|[68][0-9])[0-9]{11}$" wide
+        $pat7 = "settingsprotocol^(5018|5020|5038|6304|6759|6761|6763)[0-9]{8,15}$" wide
+        $pat8 = "Opera GX4[0-9]{12}(?:[0-9]{3})?$cookies" wide
+        $pat9 = "^9[0-9]{15}$Coinomi" wide
+        $pat10 = "wallets^(62[0-9]{14,17})$" wide
+        $pat11 = "^(6334|6767)[0-9]{12}|(6334|6767)[0-9]{14}|(6334|6767)[0-9]{15}$hostpasswordUsername_value" wide
+        $pat12 = "credit_cards^389[0-9]{11}$" wide
     condition:
-        (uint16(0) == 0x5a4d and (all of ($s*) or 2 of ($x*) or all of ($u*) or (1 of ($x*) and 5 of ($u*)))) or (all of ($x*) and 4 of ($s*))
+        (uint16(0) == 0x5a4d and (all of ($s*) or 2 of ($x*) or all of ($u*) or (1 of ($x*) and (5 of ($u*) or 2 of ($pat*))))) or (all of ($x*) and 4 of ($s*))
 }
