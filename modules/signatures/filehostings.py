@@ -4,6 +4,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 log = logging.getLogger(__name__)
 
+
 class Modiloader_APIs(Signature):
     name = "downloads_from_filehosting"
     description = "Downloads probably next stage from public file hosting"
@@ -31,11 +32,13 @@ class Modiloader_APIs(Signature):
             if url.startswith("https://cdn.discordapp.com/attachments/"):
                 self.urls.append(url)
             elif url.startswith("/attachments/"):
-                self.urls.append("https://cdn.discordapp.com"+url)
+                self.urls.append("https://cdn.discordapp.com" + url)
             elif url.startswith("/u/0/uc?id="):
-                self.urls.append("https://drive.google.com"+url)
+                self.urls.append("https://drive.google.com" + url)
             elif "basecamp.com/p/" in url:
                 self.urls.append(url)
+            elif url.startswith("https://anonymousfiles.io/"):
+                self.urls.append(urls)
 
     def on_complete(self):
         if self.urls:
