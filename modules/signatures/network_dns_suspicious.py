@@ -398,7 +398,7 @@ class NetworkDNSTempFileService(Signature):
             "api.sendspace.com",
         ]
 
-        for indicator in domain_indictors:
+        for indicator in domain_indicators:
             if self.check_domain(pattern=indicator, regex=True):
                 self.data.append({"domain": indicator})
                 return True
@@ -430,7 +430,7 @@ class NetworkDNSPasteSite(Signature):
             "hushnote.herokuapp.com",
         ]
 
-        for indicator in domain_indictors:
+        for indicator in domain_indicators:
             if self.check_domain(pattern=indicator, regex=True):
                 self.data.append({"domain": indicator})
                 return True
@@ -456,7 +456,7 @@ class NetworkDNSURLShortener(Signature):
             "rb.gy",
         ]
 
-        for indicator in domain_indictors:
+        for indicator in domain_indicators:
             if self.check_domain(pattern=indicator, regex=True):
                 self.data.append({"domain": indicator})
                 return True
