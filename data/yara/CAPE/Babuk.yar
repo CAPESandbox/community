@@ -2,7 +2,7 @@ rule Babuk {
     meta:
         author = "ditekSHen"
         description = "Detects Babuk ransomware"
-        cape_type = "Babuk Ransomware Payload
+        cape_type = "Babuk Ransomware Payload"
     strings:
         $s1 = "ecdh_pub_k.bin" wide
         $s2 = ".__NIST_K571__" wide

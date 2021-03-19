@@ -24,7 +24,7 @@ class NetworkDNSTunnelingRequest(Signature):
     name = "network_dns_tunneling_request"
     description = "Generates suspicious DNS queries indicative of DNS tunneling"
     severity = 2
-    categories = ["network"]
+    categories = ["network", "dns"]
     authors = ["ditekshen"]
     minimum = "1.3"
     ttp = ["T1048", "T1071", "T1094", "T1320"]
@@ -76,7 +76,7 @@ class NetworkDNSIDN(Signature):
     name = "network_dns_idn"
     description = "Generates a DNS query to IDN/Punycode domain"
     severity = 2
-    categories = ["network",]
+    categories = ["network", "dns"]
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
@@ -100,7 +100,7 @@ class NetworkDNSSuspiciousQueryType(Signature):
     name = "network_dns_suspicious_querytype"
     description = "Generates less common DNS request type"
     severity = 2
-    categories = ["network", "encryption"]
+    categories = ["network", "dns"]
     authors = ["ditekshen"]
     minimum = "1.3"
     ttp = ["T1048", "T1071", "T1094", "T1320"]
@@ -351,7 +351,7 @@ class NetworkDOHTLS(Signature):
 
 class NetworkDNSReverseProxy(Signature):
     name = "network_dns_reverse_proxy"
-    description = "Generates DNS query to online reverse proxy"
+    description = "DNS query to online reverse proxy detected"
     severity = 2
     categories = ["network", "dns"]
     authors = ["ditekshen"]
@@ -362,6 +362,98 @@ class NetworkDNSReverseProxy(Signature):
         domain_indictors = [
             ".*\.portmap\.io$",
             ".*\.ngrok\.io$",
+        ]
+
+        for indicator in domain_indictors:
+            if self.check_domain(pattern=indicator, regex=True):
+                self.data.append({"domain": indicator})
+                return True
+
+        return False
+
+class NetworkDNSTempFileService(Signature):
+    name = "network_dns_temp_file_storage"
+    description = "DNS query to anonymous/temporary file storage service detected"
+    severity = 2
+    categories = ["network"]
+    authors = ["ditekshen"]
+    minimum = "1.2"
+
+    def run(self):
+        domain_indicators = [
+            "plik.root.gg",
+            "gp.tt",
+            "wetransfer.com",
+            "send-anywhere.com",
+            "sendgb.com",
+            "send.firefox.com",
+            "volafile.org",
+            "uploadfiles.io",
+            "sendpace.com",
+            "filedropper.com",
+            "myairbridge.com",
+            "u.teknik.io",
+            "upload.sexy",
+            "digitalassets.ams3.digitaloceanspaces.com",
+            "api.sendspace.com",
+        ]
+
+        for indicator in domain_indictors:
+            if self.check_domain(pattern=indicator, regex=True):
+                self.data.append({"domain": indicator})
+                return True
+
+        return False
+
+class NetworkDNSPasteSite(Signature):
+    name = "network_dns_paste_site"
+    description = "DNS query to a paste site or service detected"
+    severity = 2
+    categories = ["network"]
+    authors = ["ditekshen"]
+    minimum = "1.2"
+
+    def run(self):
+        domain_indicators = [
+            "pastebin.com",
+            "paste.ee",
+            "pastecode.xyz",
+            "rentry.co",
+            "paste.nrecom.net",
+            "hastebin.com",
+            "privatebin.info",
+            "penyacom.org",
+            "controlc.com",
+            "tiny-paste.com",
+            "paste.teknik.io",
+            "privnote.com",
+            "hushnote.herokuapp.com",
+        ]
+
+        for indicator in domain_indictors:
+            if self.check_domain(pattern=indicator, regex=True):
+                self.data.append({"domain": indicator})
+                return True
+
+        return False
+
+class NetworkDNSURLShortener(Signature):
+    name = "network_dns_url_shortener"
+    description = "DNS query to URL Shortener site or service"
+    severity = 2
+    categories = ["network"]
+    authors = ["ditekshen"]
+    minimum = "1.2"
+
+    def run(self):
+        domain_indicators = [
+            "bit.ly",
+            "cutt.ly",
+            "goo.gl",
+            "www.shorturl.at",
+            "n9.cl",
+            "is.gd",
+            "rb.gy",
         ]
 
         for indicator in domain_indictors:
