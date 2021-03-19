@@ -38,7 +38,7 @@ class Modiloader_APIs(Signature):
             elif "basecamp.com/p/" in url:
                 self.urls.append(url)
             elif url.startswith("https://anonymousfiles.io/"):
-                self.urls.append(urls)
+                self.urls.append(url)
 
     def on_complete(self):
         if self.urls:
