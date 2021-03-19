@@ -478,6 +478,7 @@ rule INDICATOR_SUSPICIOUS_Finger_Download_Pattern {
         description = "Detects files embedding and abusing the finger command for download"
     strings:
         $pat1 = /finger(\.exe)?\s.{1,50}@.{7,}\|/ ascii wide
+        $pat2 = "-Command \"finger" ascii wide
         $ne1 = "Nmap service detection probe list" ascii
     condition:
        not any of ($ne*) and any of ($pat*)
@@ -510,4 +511,35 @@ rule INDICATOR_SUSPICIOUS_JS_WMI_ExecQuery {
         $s4 = ".Sleep(" ascii nocase
     condition:
        ($ex and 2 of ($s*))
+}
+
+rule INDICATOR_SUSPICIOUS_PWSHLoader_RunPE {
+    meta:
+        author = "ditekSHen"
+        description = "Detects PowerShell PE loader / executer. Observed MasterMana TTPs"
+    strings:
+        $rp1 = "GetType('RunPe.RunPe'" ascii
+        $rp2 = "GetType(\"RunPe.RunPe\"" ascii
+        $rm1 = "GetMethod('Run'" ascii
+        $rm2 = "GetMethod(\"Run\"" ascii
+        $s1 = ".Invoke(" ascii
+        $s2 = "[Reflection.Assembly]::Load(" ascii
+    condition:
+        all of ($s*) and 1 of ($rp*) and 1 of ($rm*)
+}
+
+rule INDICATOR_SUSPICIOUS_PELoader_RunPE {
+    meta:
+        author = "ditekSHen"
+        description = "Detects PE loader / injector. Observed Gorgon TTPs"
+    strings:
+        $s1 = "commandLine'" fullword ascii
+        $s2 = "RunPe.dll" fullword ascii
+        $s3 = "HandleRun" fullword ascii
+        $s4 = "inheritHandles" fullword ascii
+        $s5 = "BlockCopy" fullword ascii
+        $s6 = "WriteProcessMemory" fullword ascii
+        $s7 = "startupInfo" fullword ascii
+    condition:
+        uint16(0) == 0x5a4d and 6 of them
 }
