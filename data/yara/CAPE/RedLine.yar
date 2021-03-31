@@ -40,7 +40,7 @@ rule RedLineDropperEXE {
 
 rule RedLine {
     meta:
-        author = "ditekshen"
+        author = "ditekshen, @r0ny_123"
         description = "Detects RedLine infostealer"
         cape_type = "RedLine Payload"
     strings:
@@ -93,5 +93,5 @@ rule RedLine {
         $pat11 = "^(6334|6767)[0-9]{12}|(6334|6767)[0-9]{14}|(6334|6767)[0-9]{15}$hostpasswordUsername_value" wide
         $pat12 = "credit_cards^389[0-9]{11}$" wide
     condition:
-        (uint16(0) == 0x5a4d and (all of ($s*) or 2 of ($x*) or all of ($u*) or (1 of ($x*) and (5 of ($u*) or 2 of ($pat*))))) or (all of ($x*) and 4 of ($s*))
+        (uint16(0) == 0x5a4d and (all of ($s*) or 2 of ($x*) or all of ($u*) or (5 of ($u*) or 2 of ($pat*)))) or (all of ($x*) and 4 of ($s*))
 }
