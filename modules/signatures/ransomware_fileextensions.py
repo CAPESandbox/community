@@ -128,6 +128,7 @@ class RansomwareExtensions(Signature):
             (".*\.ReadManual.[A-Z0-9]{8}", ["MountLocker"]),
             (".*\.pysa$", ["PYSA"]),
             (".*\.__NIST_[A-Z0-9]{4}__$", ["Babuk"]),
+            (".*\.phoenix$", ["PhoenixCryptoLocker"]),
         ]
 
         for indicator in indicators:

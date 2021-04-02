@@ -6,7 +6,7 @@ rule BitRAT {
     strings:
         $s1 = "\\plg\\" fullword ascii
         $s2 = "klgoff_del" fullword ascii
-        $s3 = "files_delete" fullword ascii
+        $s3 = "files_delete" ascii
         $s4 = "files_zip_start" fullword ascii
         $s5 = "files_exec" fullword ascii
         $s6 = "drives_get" fullword ascii
@@ -19,7 +19,9 @@ rule BitRAT {
         $s13 = "Action: /clsbrw" fullword ascii
         $s14 = "Action: /usb" fullword ascii
         $s15 = "/klg" fullword ascii
-        $s16 = "Slowloris" fullword ascii
+        $s16 = "klg|" fullword ascii
+        $s17 = "Slowloris" fullword ascii
+        $s18 = "Bot ID:" ascii
         $t1 = "<sz>N/A</sz>" fullword ascii
         $t2 = "<silent>N/A</silent>" fullword ascii
     condition:

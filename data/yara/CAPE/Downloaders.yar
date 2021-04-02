@@ -137,3 +137,19 @@ rule DLAgent07 {
     condition:
         uint16(0) == 0x5a4d and ((2 of ($s*) and 5 of ($o*)) or (all of ($s*) and 2 of ($o*)) or (all of ($x*) and 2 of them))
 }
+
+rule DLAgentGo {
+    meta:
+        author = "ditekSHen"
+        description = "Detects Go-based downloader"
+        cape_type = "DLAgentGo Downloader Payload"
+    strings:
+        $s1 = "main.downloadFile" fullword ascii
+        $s2 = "main.fetchFiles" fullword ascii
+        $s3 = "main.createDefenderAllowanceException" fullword ascii
+        $s4 = "main.unzip" fullword ascii
+        $s5 = "HideWindow" fullword ascii
+        $s6 = "/go/src/installwrap/main.go" ascii
+    condition:
+        uint16(0) == 0x5a4d and 4 of them
+}
