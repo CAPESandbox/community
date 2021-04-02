@@ -92,6 +92,8 @@ rule RedLine {
         $pat10 = "wallets^(62[0-9]{14,17})$" wide
         $pat11 = "^(6334|6767)[0-9]{12}|(6334|6767)[0-9]{14}|(6334|6767)[0-9]{15}$hostpasswordUsername_value" wide
         $pat12 = "credit_cards^389[0-9]{11}$" wide
+        $pat13 = "^(6334|6767)[0-9]{12}|(6334|6767)[0-9]{14}|(6334|6767)[0-9]{15}$NWinordVWinpn.eWinxe*WinhostUsername_value" wide
+        $pat14 = "(KHTML, like Gecko) Chrome/CommandLine" wide
     condition:
-        (uint16(0) == 0x5a4d and (all of ($s*) or 2 of ($x*) or all of ($u*) or (1 of ($x*) and (5 of ($u*) or 2 of ($pat*))))) or (all of ($x*) and 4 of ($s*))
+        (uint16(0) == 0x5a4d and (all of ($s*) or 2 of ($x*) or 7 of ($u*) or 7 of ($pat*) or (1 of ($x*) and (5 of ($u*) or 2 of ($pat*))))) or (all of ($x*) and 4 of ($s*))
 }

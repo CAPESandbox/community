@@ -162,6 +162,7 @@ class RansomwareFiles(Signature):
             (".*\\\\RecoveryManual\.html$", ["MountLocker"]),
             (".*\\\\Readme\.README$", ["PYSA"]),
             (".*\\\\How\sTo\sRestore\sYour\sFiles\.txt$", ["Babuk"]),
+            (".*\\\\\PHOENIX-HELP\.txt", ["PhoenixCryptoLocker"]),
         ]
 
         for ioc in file_list:
