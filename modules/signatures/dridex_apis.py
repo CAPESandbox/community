@@ -18,7 +18,6 @@ except ImportError:
     import re
 
 from lib.cuckoo.common.abstracts import Signature
-from lib.cuckoo.common.signature_utils import DridexDecode_v1
 
 class Dridex_APIs(Signature):
     name = "dridex_behavior"
@@ -148,6 +147,7 @@ class Dridex_APIs(Signature):
         if self.check_write_key(pattern=pattern, regex=True):
             self.ret = True
 
+        """
         if self.extract and self.ret and self.payloadip and "recv" in self.payloadip:
             if "suricata" in self.results and "files" in self.results["suricata"]:
                 for sfile in self.results["suricata"]["files"]:
@@ -161,5 +161,5 @@ class Dridex_APIs(Signature):
                                     for ip in decoded:
                                         self.data.append({"ioc": ip})
                                 break
-
+        """
         return self.ret
