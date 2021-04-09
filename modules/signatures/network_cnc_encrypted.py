@@ -197,6 +197,8 @@ class NetworkCnCHTTPSTempStorageSite(Signature):
             "upload.sexy",
             "digitalassets.ams3.digitaloceanspaces.com",
             "api.sendspace.com",
+            "www.fileden.com",
+            "a.pomf.cat",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
@@ -241,6 +243,36 @@ class NetworkCnCHTTPSUserAgent(Signature):
             for ua in self.useragents:
                 user_agent = "User-Agent: " + ua
                 if user_agent in buff:
+                    self.match = True
+                    self.data.append({"http_request": buff})
+    
+    def on_complete(self):
+        return self.match
+
+class NetworkCnCHTTPSTempURLDNS(Signature):
+    name = "network_cnc_https_temp_urldns"
+    description = "Establishes encrypted HTTPS connection to temporary URL or DNS service"
+    severity = 3
+    categories = ["network", "encryption"]
+    authors = ["ditekshen"]
+    minimum = "1.3"
+    ttp = ["T1032"]
+    evented = True
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.match = False
+        self.domains = [
+            ".requestbin.net",
+        ]
+
+    filter_apinames = set(["SslEncryptPacket"])
+
+    def on_call(self, call, process):
+        buff = self.get_argument(call, "Buffer")
+        if buff:
+            for domain in self.domains:
+                if domain in buff:
                     self.match = True
                     self.data.append({"http_request": buff})
     
