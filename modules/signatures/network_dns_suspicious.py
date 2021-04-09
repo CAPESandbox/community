@@ -34,12 +34,13 @@ class NetworkDNSTunnelingRequest(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.qcount = int()
         self.match = False
-        # base16, bas32, bas32hex, bas64
+        # base16, bas32, bas32hex, bas64, morse code
         self.patterns = [
             re.compile(".*(\.)?[A-Fa-f0-9-_]{12,}.*"),
             re.compile(".*(\.)?[A-Z2-7-_]{15,}.*"),
             re.compile(".*(\.)?[A-V0-9-_]{15,}.*"),
             re.compile(".*(\.)?[A-Za-z0-9-_]{20,}.*"),
+            re.compile("^([01\.]{3,}){5,}.*"),
         ]
         self.dwhitelist = [
             ".inaddr.arpa",
@@ -396,6 +397,8 @@ class NetworkDNSTempFileService(Signature):
             "upload.sexy",
             "digitalassets.ams3.digitaloceanspaces.com",
             "api.sendspace.com",
+            "www.fileden.com",
+            "a.pomf.cat",
         ]
 
         for indicator in domain_indicators:
@@ -457,6 +460,26 @@ class NetworkDNSURLShortener(Signature):
         ]
 
         for indicator in domain_indicators:
+            if self.check_domain(pattern=indicator, regex=True):
+                self.data.append({"domain": indicator})
+                return True
+
+        return False
+
+class NetworkDNSTempURLDNS(Signature):
+    name = "network_dns_temp_urldns"
+    description = "DNS query to temporary URL or DNS site or service detected"
+    severity = 2
+    categories = ["network"]
+    authors = ["ditekshen"]
+    minimum = "1.2"
+
+    def run(self):
+        domain_indicators = [
+            ".*\.requestbin.net$",
+        ]
+
+        for indicator in domain_indictors:
             if self.check_domain(pattern=indicator, regex=True):
                 self.data.append({"domain": indicator})
                 return True

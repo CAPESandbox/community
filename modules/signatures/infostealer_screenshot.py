@@ -40,7 +40,7 @@ class CapturesScreenshot(Signature):
                 if modulename.lower() == "gdiplus.dll":
                     funcationname = self.get_argument(call, "FunctionName")
                     if funcationname:
-                        if funcationname.lower() == "gdipcreatebitmapfromhbitmap":
+                        if funcationname.lower() == "gdipcreatebitmapfromhbitmap" or funcationname.lower() == "gdipcreatebitmapfromscan0":
                             self.capturesc = True
                         if funcationname.lower() == "gdipsaveimagetofile":
                             self.savesc = True
