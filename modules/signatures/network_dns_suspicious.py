@@ -479,7 +479,7 @@ class NetworkDNSTempURLDNS(Signature):
             ".*\.requestbin.net$",
         ]
 
-        for indicator in domain_indictors:
+        for indicator in domain_indicators:
             if self.check_domain(pattern=indicator, regex=True):
                 self.data.append({"domain": indicator})
                 return True
