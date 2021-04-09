@@ -102,20 +102,15 @@ rule DLAgent06 {
     strings:
         $s1 = "totallist" fullword ascii wide
         $s2 = "LINKS_HERE" fullword wide
-        $s3 = "Load" fullword wide
-        $s4 = "EntryPoint" fullword wide
-        $s5 = "Invoke" fullword wide
-        $s6 = "[SPLITTER]" fullword wide
+        $s3 = "[SPLITTER]" fullword wide
         $var2_1 = "DownloadWeb" fullword ascii
         $var2_2 = "WriteByte" fullword ascii
-        $var2_3 = "bigstring" fullword ascii
-        $var2_4 = "MemoryStream" fullword ascii
-        $var2_5 = "DownloadString" fullword ascii
-        $var2_6 = "WebClient" fullword ascii
+        $var2_3 = "MemoryStream" fullword ascii
+        $var2_4 = "DownloadString" fullword ascii
+        $var2_5 = "WebClient" fullword ascii
     condition:
-        uint16(0) == 0x5a4d and all of ($s*) or (5 of ($var2*) and 3 of ($s*))
+        uint16(0) == 0x5a4d and ((all of ($s*) and 2 of ($var2*)) or (4 of ($var2*) and 2 of ($s*)))
 }
-
 
 rule DLAgent07 {
     meta:
@@ -152,4 +147,34 @@ rule DLAgentGo {
         $s6 = "/go/src/installwrap/main.go" ascii
     condition:
         uint16(0) == 0x5a4d and 4 of them
+}
+
+rule DLAgent09 {
+    meta:
+        author = "ditekSHen"
+        description = "Detects known downloader agent"
+        cape_type = "DLAgent09 Downloader Payload"
+    strings:
+        $h1 = "//:ptth" ascii wide nocase
+        $h2 = "//:sptth" ascii wide nocase
+        $s1 = "DownloadString" fullword ascii wide
+        $s2 = "StrReverse" fullword ascii wide
+        $s3 = "FromBase64String" fullword ascii wide
+        $s4 = "WebClient" fullword ascii wide
+    condition:
+        uint16(0) == 0x5a4d and (1 of ($h*) and all of ($s*))
+}
+
+rule DLAgent10 {
+    meta:
+        author = "ditekSHen"
+        description = "Detects known downloader agent"
+        cape_type = "DLAgent10 Downloader Payload"
+    strings:
+        $s1 = "powershell.exe" ascii wide nocase
+        $s2 = ".DownloadFile(" ascii wide nocase
+        $s3 = "_UseShellExecute" ascii wide nocase
+        $s4 = "_CreateNoWindow" ascii wide nocase
+    condition:
+        uint16(0) == 0x5a4d and all of them
 }
