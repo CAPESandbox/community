@@ -23,7 +23,7 @@ class VBoxDetectLibs(Signature):
     authors = ["nex"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1057"]
+    ttp = ["T1057", "B0009"]
 
     filter_apinames = set(["LdrLoadDll"])
 

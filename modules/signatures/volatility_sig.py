@@ -13,7 +13,7 @@ class VolMalfind1(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     minimum = "0.5"
-    ttp = ["T1055"]
+    ttp = ["T1055", "E1055"]
 
     def run(self):
         if ("volatility" in self.results and
@@ -35,7 +35,7 @@ class VolMalfind2(Signature):
     authors = ["Thorsten Sick"]
     minimum = "0.5"
     families = ["ZBot", "Paelvo", "Sinowal"]
-    ttp = ["T1055"]
+    ttp = ["T1055", "E1055"]
 
     def run(self):
         pids = set()
@@ -60,6 +60,7 @@ class VolLdrModules1(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     minimum = "0.5"
+    ttp = ["E1055"]
 
     # http://mnin.blogspot.de/2011/06/examining-stuxnets-footprint-in-memory.html
 
@@ -89,6 +90,7 @@ class VolLdrModules2(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     minimum = "0.5"
+    ttp = ["E1055"]
 
     # http://mnin.blogspot.de/2011/06/examining-stuxnets-footprint-in-memory.html
 
@@ -113,6 +115,7 @@ class VolDevicetree1(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "0.5"
+    ttp = ["F0010.001"]
 
     # http://mnin.blogspot.de/2011/10/zeroaccess-volatility-and-kernel-timers.html
 
@@ -137,7 +140,7 @@ class VolSvcscan1(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "0.5"
-    ttp = ["T1031"]
+    ttp = ["T1031", "F0004"]
 
     def run(self):
         res = False
@@ -161,7 +164,7 @@ class VolSvcscan2(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "0.5"
-    ttp = ["T1031", "T1089"]
+    ttp = ["T1031", "T1089", "F0004"]
 
     def run(self):
         res = False
@@ -185,7 +188,7 @@ class VolSvcscan3(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "0.5"
-    ttp = ["T1031"]
+    ttp = ["T1031", "F0004"]
 
     def run(self):
         res = False
@@ -209,6 +212,7 @@ class VolModscan1(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "0.5"
+    ttp = ["T1055", "E1055"]
 
     def run(self):
         res = False
@@ -230,7 +234,7 @@ class VolHandles1(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     minimum = "0.5"
-    ttp = ["T1055"]
+    ttp = ["T1055", "E1055"]
 
     def run(self):
         threads = set()

@@ -22,7 +22,7 @@ class SunbeltDetectFiles(Signature):
     categories = ["anti-sandbox"]
     authors = ["Kevin Ross"]
     minimum = "0.5"
-    ttp = ["T1083", "T1057"]
+    ttp = ["T1083", "T1057", "B0007"]
 
     def run(self):
         indicators = [

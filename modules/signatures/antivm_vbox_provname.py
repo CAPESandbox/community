@@ -22,6 +22,7 @@ class VBoxDetectProvname(Signature):
     categories = ["anti-vm"]
     authors = ["Optiv"]
     minimum = "1.3"
+    ttp = ["B0009.001"]
     evented = True
 
     def __init__(self, *args, **kwargs):
