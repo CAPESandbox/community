@@ -23,7 +23,7 @@ class CreatesNullValue(Signature):
     authors = ["Optiv"]
     minimum = "1.2"
     evented = True
-    ttp = ["T1054", "T1112"]
+    ttp = ["T1054", "T1112", "F0006", "E1112"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

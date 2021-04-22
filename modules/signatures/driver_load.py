@@ -22,6 +22,7 @@ class DriverLoad(Signature):
     categories = ["stealth"]
     authors = ["Optiv"]
     minimum = "1.2"
+    ttp = ["C0023"]
     evented = True
 
     def __init__(self, *args, **kwargs):

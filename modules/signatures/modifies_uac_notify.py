@@ -11,7 +11,7 @@ class ModifiesUACNotify(Signature):
     categories = ["stealth"]
     authors = ["Kevin Ross"]
     minimum = "1.2"
-    ttp = ["T1088"]
+    ttp = ["T1088", "T1548.002", "E1112"]
 
     def run(self):
         reg_indicators = [

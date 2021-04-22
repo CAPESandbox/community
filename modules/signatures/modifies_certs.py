@@ -11,7 +11,7 @@ class ModifiesCerts(Signature):
     categories = ["browser"]
     authors = ["Kevin Ross"]
     minimum = "1.2"
-    ttp = ["T1112"]
+    ttp = ["T1112", "T1553.004", "E1112"]
 
     filter_analysistypes = set(["file"])
 

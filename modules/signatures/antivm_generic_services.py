@@ -23,7 +23,7 @@ class AntiVMServices(Signature):
     authors = ["nex", "Optiv"]
     minimum = "1.0"
     evented = True
-    ttp = ["T1007"]
+    ttp = ["T1007", "B0009.006"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
