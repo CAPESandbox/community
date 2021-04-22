@@ -466,6 +466,7 @@ rule INDICATOR_EXE_Packed_TriumphLoader {
     meta:
         author = "ditekSHen"
         description = "Detects TriumphLoader"
+        cape_type = "TriumphLoader"
     strings:
         $id1 = "User-Agent: TriumphLoader" ascii wide
         $id2 = "\\loader\\absent-loader-master\\client\\full\\absentclientfull\\absentclientfull\\absent\\json.hpp" wide
