@@ -22,7 +22,7 @@ class VPCDetectMutex(Signature):
     categories = ["anti-vm"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
-    ttp = ["B0009"]
+    mbc = ["B0009"]
 
     def run(self):
         indicators = [

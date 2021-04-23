@@ -23,7 +23,8 @@ class Dropper(Signature):
     categories = ["dropper"]
     authors = ["Optiv"]
     minimum = "1.2"
-    ttp = ["T1129", "B0023"]
+    ttp = ["T1129"]
+    mbc = ["B0023"]
 
     def run(self):
         is_dropper = False

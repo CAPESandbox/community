@@ -22,7 +22,8 @@ class XenDetectKeys(Signature):
     categories = ["anti-vm"]
     authors = ["Brad Spengler"]
     minimum = "0.5"
-    ttp = ["T1057", "T1012", "B0009"]
+    ttp = ["T1057", "T1012"]
+    mbc = ["B0009"]
 
     def run(self):
         indicators = [

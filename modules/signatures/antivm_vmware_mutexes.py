@@ -22,7 +22,7 @@ class VMwareDetectMutexes(Signature):
     categories = ["antivm"]
     authors = ["KillerInstinct"]
     minimum = "0.5"
-    ttp = ["B0009"]
+    mbc = ["B0009"]
 
     def run(self):
         ret = False

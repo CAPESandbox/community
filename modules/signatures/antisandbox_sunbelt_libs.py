@@ -23,7 +23,9 @@ class SunbeltDetectLibs(Signature):
     authors = ["Optiv"]
     minimum = "1.2"
     evented = True
-    ttp = ["T1083", "T1057", "B0007"]
+    ttp = ["T1083", "T1057"]
+    mbc = ["B0007"]
+
     filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])
 
     def on_call(self, call, process):
@@ -32,7 +34,7 @@ class SunbeltDetectLibs(Signature):
                 "dir_watch"
             ]
         dllname = self.get_argument(call, "FileName").lower()
-        
+
         for indicator in indicators:
             if indicator in dllname:
                 return True

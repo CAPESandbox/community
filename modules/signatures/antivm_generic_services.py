@@ -23,7 +23,8 @@ class AntiVMServices(Signature):
     authors = ["nex", "Optiv"]
     minimum = "1.0"
     evented = True
-    ttp = ["T1007", "B0009.006"]
+    ttp = ["T1007"]
+    mbc = ["B0009.006"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -36,7 +37,7 @@ class AntiVMServices(Signature):
         # this API is not currently hooked
         #if call["api"].startswith("EnumServicesStatus"):
         #    return True
-            
+
         if process is not self.lastprocess:
             self.handle = None
             self.lastprocess = process
@@ -48,7 +49,7 @@ class AntiVMServices(Signature):
                     correct = True
                 elif self.get_argument(call,"SubKey").lower() == "system\\currentcontrolset\\services":
                     correct = True
-                
+
                 if correct:
                     self.handle = self.get_argument(call,"Handle")
                 else:
