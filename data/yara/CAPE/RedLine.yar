@@ -40,7 +40,7 @@ rule RedLineDropperEXE {
 
 rule RedLine {
     meta:
-        author = "ditekshen"
+        author = "ditekSHen"
         description = "Detects RedLine infostealer"
         cape_type = "RedLine Payload"
     strings:
@@ -90,10 +90,23 @@ rule RedLine {
         $pat8 = "Opera GX4[0-9]{12}(?:[0-9]{3})?$cookies" wide
         $pat9 = "^9[0-9]{15}$Coinomi" wide
         $pat10 = "wallets^(62[0-9]{14,17})$" wide
-        $pat11 = "^(6334|6767)[0-9]{12}|(6334|6767)[0-9]{14}|(6334|6767)[0-9]{15}$hostpasswordUsername_value" wide
+        $pat11 = "hostpasswordUsername_value" wide
         $pat12 = "credit_cards^389[0-9]{11}$" wide
-        $pat13 = "^(6334|6767)[0-9]{12}|(6334|6767)[0-9]{14}|(6334|6767)[0-9]{15}$NWinordVWinpn.eWinxe*WinhostUsername_value" wide
-        $pat14 = "(KHTML, like Gecko) Chrome/CommandLine" wide
+        $pat13 = "NWinordVWinpn.eWinxe*WinhostUsername_value" wide
+        $pat14 = /(\/|,\s)CommandLine:/ wide
+        // another variant
+        $v2_1 = "ListOfProcesses" fullword ascii
+        $v2_2 = /get_Scan(ned)?(Browsers|ChromeBrowsersPaths|Discord|FTP|GeckoBrowsersPaths|Screen|Steam|Telegram|VPN|Wallets)/ fullword ascii
+        $v2_3 = "GetArguments" fullword ascii
+        $v2_4 = "VerifyUpdate" fullword ascii
+        $v2_5 = "VerifyScanRequest" fullword ascii
+        $v2_6 = "GetUpdates" fullword ascii
+        // yet another variant
+        $v3_1 = "localhost.IUserServiceu" fullword ascii
+        $v3_2 = "ParseNetworkInterfaces" fullword ascii
+        $v3_3 = "ReplyAction0http://tempuri.org/IUserService/GetUsersResponse" fullword ascii
+        $v3_4 = "Action(http://tempuri.org/IUserService/GetUsersT" fullword ascii
+        $v3_5 = "basicCfg" fullword wide
     condition:
-        (uint16(0) == 0x5a4d and (all of ($s*) or 2 of ($x*) or 7 of ($u*) or 7 of ($pat*) or (1 of ($x*) and (5 of ($u*) or 2 of ($pat*))))) or (all of ($x*) and 4 of ($s*))
+        (uint16(0) == 0x5a4d and (all of ($s*) or 2 of ($x*) or 7 of ($u*) or 7 of ($pat*) or (1 of ($x*) and (5 of ($u*) or 2 of ($pat*))) or 5 of ($v2*) or 4 of ($v3*) or (3 of ($v2*) and (2 of ($pat*) or 2 of ($u*))))) or (all of ($x*) and 4 of ($s*))
 }
