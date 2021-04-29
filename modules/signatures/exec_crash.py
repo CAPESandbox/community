@@ -15,22 +15,22 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Crash(Signature):
     name = "exec_crash"
     description = "At least one process apparently crashed during execution"
     severity = 1
     categories = ["execution", "crash"]
-    authors = ["nex"]
+    authors = ["nex", "doomedraven"]
     minimum = "1.0"
     evented = True
 
-    filter_apinames = set(["LdrLoadDll"])
+    filter_apinames = set(["LdrLoadDll", "NtOpenEvent"])
 
     def on_call(self, call, process):
-        if self.check_argument_call(
-            call,
-            pattern=".*faultrep\.dll$",
-            name="FileName",
-            api="LdrLoadDll",
-            regex=True):
-            return True
+        if call["api"] == "NtOpenEvent":
+            if self.check_argument_call(call, ".*SystemErrorPortReady$", name="EventName",  api="NtOpenEvent", regex=True):
+                return True
+        if call["api"] == "LdrLoadDll":
+            if self.check_argument_call(call, pattern=".*faultrep\.dll$", name="FileName", api="LdrLoadDll", regex=True):
+                return True
