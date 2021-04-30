@@ -145,7 +145,7 @@ class ScriptCreatedProcess(Signature):
             cmdline = self.get_argument(call, "CommandLine")
             if cmdline:
                 self.ret = True
-                self.data.append({pname : cmdline})
+                self.data.append({pname.replace(".", "_") : cmdline})
 
     def on_complete(self):
         return self.ret
