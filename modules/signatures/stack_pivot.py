@@ -140,7 +140,7 @@ class StackPivotProcessCreate(Signature):
             pivot = self.get_argument(call, "StackPivoted")
             cmdline = self.get_argument(call, "CommandLine")
             if pivot == "yes":
-                self.data.append({pname : cmdline})
+                self.data.append({pname.replace(".", "_") : cmdline})
 
     def on_complete(self):
         if self.data:
