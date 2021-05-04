@@ -31,6 +31,6 @@ class Crash(Signature):
         if call["api"] == "NtOpenEvent":
             if self.check_argument_call(call, ".*SystemErrorPortReady$", name="EventName",  api="NtOpenEvent", regex=True):
                 return True
-        if call["api"] == "LdrLoadDll":
+        elif call["api"] == "LdrLoadDll":
             if self.check_argument_call(call, pattern=".*faultrep\.dll$", name="FileName", api="LdrLoadDll", regex=True):
                 return True

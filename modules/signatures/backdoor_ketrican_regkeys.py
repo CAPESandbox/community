@@ -36,7 +36,7 @@ class KetricanRegkeys(Signature):
             match = self.check_key(pattern=indicator, regex=True, all=True)
             if match:
                 score += 1
-                self.data.append({"regkey": match})
+                self.data.append({"regkey": list(match)[0]})
 
         if score >= 3:
             return True
