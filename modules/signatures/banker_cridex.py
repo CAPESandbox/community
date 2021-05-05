@@ -20,7 +20,7 @@ class Cridex(Signature):
     description = "Cridex banking trojan"
     severity = 3
     alert = True
-    categories = ["Banking", "Trojan"]
+    categories = ["banker", "Trojan"]
     families = ["Cridex"]
     authors = ["Robby Zeitfuchs", "@robbyFux"]
     minimum = "0.5"

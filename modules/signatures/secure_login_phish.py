@@ -21,10 +21,10 @@ except:
 from lib.cuckoo.common.abstracts import Signature
 
 class Secure_Login_Phish(Signature):
-    name = "secure_login_phish"
-    description = "'{0}' in HTML Title but connection is not HTTPS. Possibly indicative of phishing."
+    name = "secure_login_phishing"
+    description = "'{0}' in HTML Title but connection is not HTTPS. Possibly indicative of phishinging."
     severity = 2
-    categories = ["phish"]
+    categories = ["phishing"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True
@@ -32,7 +32,7 @@ class Secure_Login_Phish(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.lasturl = str()
-        self.phishurls = set()
+        self.phishingurls = set()
 
     filter_apinames = set(["InternetCrackUrlW", "InternetReadFile"])
 
@@ -46,21 +46,21 @@ class Secure_Login_Phish(Signature):
             if buf and not self.lasturl.startswith("https"):
                 if "<title>" in buf:
                     if re.search("<title>\s*Secure\s*Login\s*</t", buf, re.I):
-                        self.phishurls.add(self.lasturl)
+                        self.phishingurls.add(self.lasturl)
                         self.description = self.description.format("Secure Login")
                     elif re.search("<title>Goog[li]e\sDoc.*</t", buf, re.I):
-                        self.phishurls.add(self.lasturl)
+                        self.phishingurls.add(self.lasturl)
                         self.description = self.description.format("Google Doc")
                     elif re.search("<title>\s*Dropbox.*</t", buf, re.I):
-                        self.phishurls.add(self.lasturl)
+                        self.phishingurls.add(self.lasturl)
                         self.description = self.description.format("Dropbox")
                     elif re.search("<title>Goog[li]e\sDrive.*</t", buf, re.I):
-                        self.phishurls.add(self.lasturl)
+                        self.phishingurls.add(self.lasturl)
                         self.description = self.description.format("Google Drive")
 
     def on_complete(self):
-        if self.phishurls:
-            for url in self.phishurls:
+        if self.phishingurls:
+            for url in self.phishingurls:
                 self.data.append({"URL": url})
             return True
 

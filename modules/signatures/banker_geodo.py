@@ -6,9 +6,9 @@ from lib.cuckoo.common.abstracts import Signature
 
 class Geodo(Signature):
     name = "geodo_banking_trojan"
-    description = "Geodo Banking Trojan"
+    description = "Geodo banker Trojan"
     severity = 3
-    categories = ["Banking", "Trojan"]
+    categories = ["banker", "Trojan"]
     families = ["Geodo","Emotet"]
     authors = ["Optiv"]
     minimum = "1.2"

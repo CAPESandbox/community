@@ -19,7 +19,7 @@ class SecurityXploded_Modules(Signature):
     name = "securityxploded_modules"
     description = "Sample executed known SecurityXploded programs"
     severity = 3
-    categories = ["stealer"]
+    categories = ["infostealer"]
     authors = ["KillerInstinct"]
     minimum = "1.0"
     evented = True
