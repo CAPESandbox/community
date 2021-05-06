@@ -22,7 +22,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class Secure_Login_Phish(Signature):
     name = "secure_login_phishing"
-    description = "'{0}' in HTML Title but connection is not HTTPS. Possibly indicative of phishinging."
+    description = "'{0}' in HTML Title but connection is not HTTPS. Possibly indicative of phishing."
     severity = 2
     categories = ["phishing"]
     authors = ["KillerInstinct"]
@@ -57,6 +57,9 @@ class Secure_Login_Phish(Signature):
                     elif re.search("<title>Goog[li]e\sDrive.*</t", buf, re.I):
                         self.phishingurls.add(self.lasturl)
                         self.description = self.description.format("Google Drive")
+                    elif re.search("<title>\s*Outlook.*</t", buf, re.I):
+                        self.phishingurls.add(self.lasturl)
+                        self.description = self.description.format("Microsoft Outlook")
 
     def on_complete(self):
         if self.phishingurls:
