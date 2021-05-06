@@ -17,11 +17,11 @@ rule DllHijacker01 {
         uint16(0) == 0x5a4d and 6 of them
 }
 
-rule HyperPro02 {
+rule HyperBro02 {
     meta:
         author = "ditekSHen"
-        description = "Detects HyperPro IronTiger / LuckyMouse / APT27 malware"
-        cape_type = "HyperPro Payload"
+        description = "Detects HyperBro IronTiger / LuckyMouse / APT27 malware"
+        cape_type = "HyperBro Payload"
     strings:
         $s1 = "\\cmd.exe /A" fullword wide
         $s2 = "C:\\windows\\explorer.exe" fullword wide
@@ -44,11 +44,11 @@ rule HyperPro02 {
         uint16(0) == 0x5a4d and (7 of ($s*) or (2 of ($cnc*) and 2 of ($s*)))
 }
 
-rule HyperPro03 {
+rule HyperBro03 {
     meta:
         author = "ditekSHen"
-        description = "Hunt HyperPro IronTiger / LuckyMouse / APT27 malware"
-        cape_type = "HyperPro Payload"
+        description = "Hunt HyperBro IronTiger / LuckyMouse / APT27 malware"
+        cape_type = "HyperBro Payload"
     strings:
         $h1 = "HControl" ascii wide
         $h2 = "HSleep" ascii wide
