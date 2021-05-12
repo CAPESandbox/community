@@ -17,7 +17,7 @@ rule Fonix {
         $id3 = "XINOF4MUTEX" wide
         $id4 = ":\\Fonix\\cryptoPP\\" ascii
         $id5 = "schtasks /CREATE /SC ONLOGON /TN fonix" ascii
-        $id6 = "~Ransomware\\Fonix - " ascii
+        $id6 = "Ransomware\\Fonix" ascii
     condition:
         uint16(0) == 0x5a4d and (6 of ($s*) or 3 of ($id*) or (1 of ($id*) and 3 of ($s*)))
 }
