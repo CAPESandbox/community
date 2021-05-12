@@ -11,6 +11,8 @@ rule Phorpiex {
        $s5 = "%ls\\%d%d" wide
        $s6 = "bitcoincash:" ascii
        $s7 = "%ls:*:Enabled:%ls" fullword wide
+       $s8 = "%s\\%s\\DriveMgr.exe" fullword wide
+       $s9 = "api.wipmania.com" ascii
     condition:
         uint16(0) == 0x5a4d and 5 of them
 }

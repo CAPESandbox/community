@@ -20,7 +20,7 @@ rule njRat
 
                 $x1 = "netsh firewall delete allowedprogram" wide
                 $x2 = "netsh firewall add allowedprogram" wide
-                $x3 = "cmd.exe /c ping" wide
+                $x3 = { 63 00 6d 00 64 00 2e 00 65 00 78 00 65 00 20 00 2f 00 (63|6b) 00 20 00 70 00 69 00 6e 00 67 }
                 $x4 = "Execute ERROR" wide
                 $x5 = "Download ERROR" wide
                 $x6 = "[kl]" fullword wide

@@ -24,6 +24,14 @@ rule RunningRAT {
         $rev11 = "tekcosesolc" fullword ascii
         $rev12 = "tpokcostes" fullword ascii
         $rev13 = "emantsohteg" fullword ascii
+        // variant
+        $v2_1 = "%%SystemRoot%%\\System32\\svchost.exe -k \"%s\"" fullword ascii
+        $v2_2 = "LoadFromMemory END---" fullword ascii
+        $v2_3 = "hmProxy!= NULL" fullword ascii
+        $v2_4 = "Rundll32 \"%s\",DllUpdate %s" fullword ascii
+        $v2_5 = "ipip.website" fullword ascii
+        $v2_6 = "%d*%sMHz" fullword ascii
+        $v2_7 = "\\Server.ini" fullword ascii
     condition:
-        uint16(0) == 0x5a4d and (all of ($s*) or 5 of ($rev*) or 8 of them)
+        uint16(0) == 0x5a4d and (all of ($s*) or 5 of ($rev*) or 6 of ($v*) or 8 of them)
 }
