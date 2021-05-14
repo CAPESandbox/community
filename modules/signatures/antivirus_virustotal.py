@@ -40,7 +40,7 @@ class KnownVirustotal(Signature):
                         self.weight = positives
                     for result in results["virustotal"]["results"]:
                         if result["sig"]:
-                            data.append({result["vendor"] : result["sig"]})
+                            self.data.append({result["vendor"] : result["sig"]})
                     if self.results["info"]["category"] == "file":
                         self.description = "File" + self.description
                     else:
