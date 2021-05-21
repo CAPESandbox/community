@@ -38,3 +38,55 @@ class StopRansomMutexes(Signature):
                 return True
 
         return False
+
+class StopRansomwareCMD(Signature):
+    name = "stop_ransomware_cmd"
+    description = "STOP ransomware command line behavior detected"
+    severity = 3
+    categories = ["ransomware"]
+    families = ["STOP"]
+    authors = ["ditekshen"]
+    minimum = "1.3"
+    evented = True
+
+    def run(self):
+        indicators = [
+            ".*--(Admin|ForNetRes)\s.*is(Not)?(AutoStart|Task).*"
+        ]
+
+        for indicator in indicators:
+            match = self.check_executed_command(pattern=indicator, regex=True)
+            if match:
+                self.data.append({"command": match})
+                return True
+
+        return False
+
+class StopRansomwareRegistry(Signature):
+    name = "stop_ransomware_registry"
+    description = "STOP ransomware registry artifacts detected"
+    severity = 3
+    categories = ["ransomware"]
+    families = ["STOP"]
+    authors = ["ditekshen"]
+    minimum = "1.3"
+    evented = True
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.match = False
+
+    filter_apinames = set(["RegSetValueExW"])
+
+    def on_call(self, call, process):
+        valuename = self.get_argument(call, "ValueName")
+        if valuename == "SysHelper":
+            buff = self.get_argument(call, "Buffer")
+            if "--AutoStart" in buff:
+                self.match = True
+
+    def on_complete(self):
+        if self.match:
+            return True
+
+        return False

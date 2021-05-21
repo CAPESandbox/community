@@ -75,6 +75,7 @@ class NetworkCnCHTTPSSocialMedia(Signature):
             "wa.me",
             "gist.github.com",
             "raw.githubusercontent.com",
+            "telete.in",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
@@ -155,6 +156,10 @@ class NetworkCnCHTTPSURLShortenerSite(Signature):
             "n9.cl",
             "is.gd",
             "rb.gy",
+            "long.af",
+            "ykm.de",
+            "ito.mx",
+            "me2.do",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
@@ -199,6 +204,7 @@ class NetworkCnCHTTPSTempStorageSite(Signature):
             "api.sendspace.com",
             "www.fileden.com",
             "a.pomf.cat",
+            "dropmb.com",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
@@ -217,7 +223,7 @@ class NetworkCnCHTTPSTempStorageSite(Signature):
 
 class NetworkCnCHTTPSUserAgent(Signature):
     name = "network_cnc_https_useragent"
-    description = "Establishes an encrypted HTTPS connection containing a suspicious User Agent"
+    description = "Establishes an encrypted HTTPS connection containing a suspicious of fake User Agent"
     severity = 3
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
@@ -233,6 +239,11 @@ class NetworkCnCHTTPSUserAgent(Signature):
             "Mozilla/7",
             "AutoHotKey",
             "Moz5",
+            "(iPhone;",
+            "(Android;",
+            "like Mac OS X",
+            "(Macintosh;",
+            "(X11; Linux",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
@@ -241,8 +252,7 @@ class NetworkCnCHTTPSUserAgent(Signature):
         buff = self.get_argument(call, "Buffer")
         if buff:
             for ua in self.useragents:
-                user_agent = "User-Agent: " + ua
-                if user_agent in buff:
+                if ua in buff:
                     self.match = True
                     self.data.append({"http_request": buff})
     
@@ -264,6 +274,60 @@ class NetworkCnCHTTPSTempURLDNS(Signature):
         self.match = False
         self.domains = [
             ".requestbin.net",
+        ]
+
+    filter_apinames = set(["SslEncryptPacket"])
+
+    def on_call(self, call, process):
+        buff = self.get_argument(call, "Buffer")
+        if buff:
+            for domain in self.domains:
+                if domain in buff:
+                    self.match = True
+                    self.data.append({"http_request": buff})
+    
+    def on_complete(self):
+        return self.match
+
+class NetworkCnCHTTPSPayload(Signature):
+    name = "network_cnc_https_payload"
+    description = "Downloads executable over encrypted HTTPS connection"
+    severity = 3
+    categories = ["network", "encryption"]
+    authors = ["ditekshen"]
+    minimum = "1.3"
+    ttp = ["T1032"]
+    evented = True
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.match = False
+        
+    filter_apinames = set(["SslDecryptPacket"])
+
+    def on_call(self, call, process):
+        buff = self.get_argument(call, "Buffer")
+        if buff and "MZ" in buff and "This program cannot be run in" in buff:
+            self.match = True
+
+    def on_complete(self):
+        return self.match
+
+class NetworkCnCHTTPSFreeWebHosting(Signature):
+    name = "network_cnc_https_free_webshoting"
+    description = "Establishes encrypted HTTPS connection to free web hosting service"
+    severity = 3
+    categories = ["network", "encryption"]
+    authors = ["ditekshen"]
+    minimum = "1.3"
+    ttp = ["T1032"]
+    evented = True
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.match = False
+        self.domains = [
+            ".000webhostapp.com",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])

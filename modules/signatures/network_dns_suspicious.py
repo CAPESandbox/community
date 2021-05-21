@@ -399,6 +399,7 @@ class NetworkDNSTempFileService(Signature):
             "api.sendspace.com",
             "www.fileden.com",
             "a.pomf.cat",
+            "dropmb.com",
         ]
 
         for indicator in domain_indicators:
@@ -457,6 +458,10 @@ class NetworkDNSURLShortener(Signature):
             "n9.cl",
             "is.gd",
             "rb.gy",
+            "long.af",
+            "ykm.de",
+            "ito.mx",
+            "me2.do",
         ]
 
         for indicator in domain_indicators:
