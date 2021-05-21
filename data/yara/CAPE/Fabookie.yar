@@ -14,5 +14,5 @@ rule Fabookie {
         $s8 = "facebook.websmails.com" fullword wide
         $s9 = "CUdpClient::Start" fullword ascii
     condition:
-        uint16(0) == 0x5a4d and 6 of them
+        (uint16(0) == 0x5a4d or uint16(0) == 0x0805) and 6 of them
 }
