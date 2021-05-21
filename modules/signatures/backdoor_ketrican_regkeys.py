@@ -33,10 +33,11 @@ class KetricanRegkeys(Signature):
         ]
 
         for indicator in indicators:
-            match = self.check_key(pattern=indicator, regex=True, all=True)
-            if match:
+            matched = self.check_key(pattern=indicator, regex=True, all=True)
+            if matched:
                 score += 1
-                self.data.append({"regkey": list(match)[0]})
+                for match in matched:
+                    self.data.append({"regkey": match})
 
         if score >= 3:
             return True
