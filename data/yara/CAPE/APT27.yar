@@ -50,9 +50,9 @@ rule HyperBro03 {
         description = "Hunt HyperBro IronTiger / LuckyMouse / APT27 malware"
         cape_type = "HyperBro Payload"
     strings:
-        $h1 = "HControl" ascii wide
-        $h2 = "HSleep" ascii wide
-        $h3 = "HTrans" ascii wide
+        //$h1 = "HControl" ascii wide
+        //$h2 = "HSleep" ascii wide
+        //$h3 = "HTrans" ascii wide
         $i1 = "IAgent" ascii wide
         $i2 = "ITcpAgent" ascii wide
         $i3 = "IAgentListener" ascii wide
@@ -74,7 +74,9 @@ rule HyperBro03 {
         $cm6 = "CMServices" ascii wide
         $cm7 = "CMShell" ascii wide
     condition:
-        uint16(0) == 0x5a4d and (all of ($h*) or all of ($i*) or 6 of ($t*) or 6 of ($cm*) or all of ($vc*))
+        // Reduce potential FPs
+        uint16(0) == 0x5a4d and (all of ($i*) or 6 of ($t*) or 6 of ($cm*) or all of ($vc*))
+        //uint16(0) == 0x5a4d and (all of ($h*) or all of ($i*) or 6 of ($t*) or 6 of ($cm*) or all of ($vc*))
 }
 
 rule DllHijacker02 {
