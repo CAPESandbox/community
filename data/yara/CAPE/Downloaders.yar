@@ -194,3 +194,59 @@ rule DLAgent11 {
     condition:
         uint16(0) == 0x5a4d and (all of ($s*) or (($pdb) and 4 of ($s*)))
 }
+
+rule DLAgent12 {
+    meta:
+        author = "ditekSHen"
+        description = "Detects downloader agent"
+        cape_type = "DLAgent12 Downloader Payload"
+    strings:
+        $s1 = "WebClient" fullword ascii
+        $s2 = "DownloadData" fullword ascii
+        $s3 = "packet_server" fullword wide
+    condition:
+        uint16(0) == 0x5a4d and all of them and filesize < 50KB
+}
+
+rule DLInjector01 {
+    meta:
+        author = "ditekSHen"
+        description = "Detects specific downloader injector shellcode"
+        cape_type = "DLInjector01 Payload"
+    strings:
+        $s1 = "process call create \"%s\"" ascii wide
+        $s2 = "\\REGISTRY\\MACHINE\\System\\CurrentControlSet\\Enum\\" ascii wide
+        $s3 = "%systemroot%\\system32\\ntdll.dll" ascii wide
+        $s4 = "qemu-ga.exe" ascii wide
+        $s5 = "prl_tools.exe" ascii wide
+        $s6 = "vboxservice.exe" ascii wide
+        $o1 = { 75 04 74 02 38 6e 8b 34 24 83 c4 04 eb 0a 08 81 }
+        $o2 = { 16 f8 f7 ba f0 3d 87 c7 95 13 b7 64 22 be e1 59 }
+        $o3 = { 8b 0c 24 83 c4 04 eb 05 ea f2 eb ef 05 e8 ad fe }
+        $o4 = { eb 05 1d 51 eb f5 ce e8 80 fd ff ff 77 a1 f4 cd }
+        $o5 = { eb 05 6e 33 eb f5 73 e8 64 f6 ff ff 77 a1 f4 77 }
+        $o6 = { 59 eb 05 fd 98 eb f4 50 e8 d5 f5 ff ff 3b b9 00 }
+        $o7 = "bYkoDA7G" fullword ascii
+    condition:
+        (uint16(0) == 0x5a4d and all of ($o*)) or (all of ($s*))
+}
+
+rule DLInjector02 {
+    meta:
+        author = "ditekSHen"
+        description = "Detects downloader injector"
+        cape_type = "DLInjector02 Payload"
+    strings:
+        $x1 = "In$J$ct0r" fullword wide
+        $x2 = "%InJ%ector%" fullword wide
+        $a1 = "WriteProcessMemory" fullword wide
+        $a2 = "URLDownloadToFileA" fullword ascii
+        $a3 = "Wow64SetThreadContext" fullword wide
+        $a4 = "VirtualAllocEx" fullword wide
+        $s1 = "RunPE" fullword wide
+        $s2 = "SETTINGS" fullword wide
+        $s3 = "net.pipe" fullword wide
+        $s4 = "vsmacros" fullword wide
+    condition:
+        uint16(0) == 0x5a4d and (1 of ($x*) or (all of ($a*) and 3 of ($s*)))
+}
