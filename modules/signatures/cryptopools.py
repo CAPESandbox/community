@@ -2,8 +2,8 @@ from lib.cuckoo.common.abstracts import Signature
 
 class MINERS(Signature):
     name = "cryptopool_domains"
-    description = "Connects to crypto curency mining pool"
-    severity = 10
+    description = "Connects to crypto currency mining pool"
+    severity = 1
     categories = ["miners"]
     authors = ["doomedraven", "bartblaze"]
     minimum = "1.2"
