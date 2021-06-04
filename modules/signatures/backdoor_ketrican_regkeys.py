@@ -17,10 +17,9 @@ from lib.cuckoo.common.abstracts import Signature
 
 class KetricanRegkeys(Signature):
     name = "ketrican_regkeys"
-    description = "Interacts with known Ke3chang Ketrican / Tidepool / BS2005 registry keys"
-    severity = 3
+    description = "Interacts with a unique set of registry keys observed in malware"
+    severity = 2
     categories = ["backdoor"]
-    families = ["Ketrican"]
     authors = ["ditekshen"]
     minimum = "0.5"
 
