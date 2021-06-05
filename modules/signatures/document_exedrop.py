@@ -50,11 +50,11 @@ class DocScriptEXEDrop(Signature):
         if pname.lower() in self.pnames:
             buf = self.get_argument(call, "Buffer")
             handle = self.get_argument(call, "HandleName")
-            if buf.startswith("MZ") or handle.endswith(".exe") or handle.endswith(".dll") or handle.endswith(".sys") or handle.endswith(".msi"):
+            if buf.startswith("MZ") or handle.endswith((".exe", ".dll", ".sys", ".msi")):
                 self.ret = True
                 if handle not in self.dropped:
                     self.dropped.append(handle)
-                    self.data.append({"dropped_executable": "%s dropped file %s" %(pname,handle)})
+                    self.data.append({"dropped_executable": "%s dropped file %s" %(pname, handle)})
   
     def on_complete(self):
         return self.ret
