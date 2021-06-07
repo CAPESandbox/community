@@ -13,6 +13,9 @@ rule Phorpiex {
        $s7 = "%ls:*:Enabled:%ls" fullword wide
        $s8 = "%s\\%s\\DriveMgr.exe" fullword wide
        $s9 = "api.wipmania.com" ascii
+       $v1_1 = "%appdata%" fullword wide
+       $v1_2 = "(iPhone;" ascii
+       $v1_3 = "/tst.php" ascii
     condition:
-        uint16(0) == 0x5a4d and 5 of them
+        uint16(0) == 0x5a4d and (5 of ($s*) or all of ($v1*))
 }
