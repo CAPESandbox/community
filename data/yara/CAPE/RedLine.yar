@@ -107,6 +107,12 @@ rule RedLine {
         $v3_3 = "ReplyAction0http://tempuri.org/IUserService/GetUsersResponse" fullword ascii
         $v3_4 = "Action(http://tempuri.org/IUserService/GetUsersT" fullword ascii
         $v3_5 = "basicCfg" fullword wide
+        // more variants
+        $vx4_1 = "C:\\\\Windows\\\\Microsoft.NET\\\\Framework\\\\v4.0.30319\\\\AddInProcess32.exe" fullword wide
+        $v4_2 = "SystemNetSocketsSendPacketsElement" ascii
+        $v4_3 = "SystemServiceModelDescriptionSoapHelper" ascii
+        $v4_4 = "stringKey" fullword ascii
+        $v4_5 = "BytesToStringConverted" fullword ascii
     condition:
-        (uint16(0) == 0x5a4d and (all of ($s*) or 2 of ($x*) or 7 of ($u*) or 7 of ($pat*) or (1 of ($x*) and (5 of ($u*) or 2 of ($pat*))) or 5 of ($v2*) or 4 of ($v3*) or (3 of ($v2*) and (2 of ($pat*) or 2 of ($u*))))) or (all of ($x*) and 4 of ($s*))
+        (uint16(0) == 0x5a4d and (all of ($s*) or 2 of ($x*) or 7 of ($u*) or 7 of ($pat*) or (1 of ($x*) and (5 of ($u*) or 2 of ($pat*))) or 5 of ($v2*) or 4 of ($v3*) or (3 of ($v2*) and (2 of ($pat*) or 2 of ($u*)) or (1 of ($vx4*) and 3 of ($v4*))))) or (all of ($x*) and 4 of ($s*))
 }
