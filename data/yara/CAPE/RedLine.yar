@@ -40,7 +40,7 @@ rule RedLineDropperEXE {
 
 rule RedLine {
     meta:
-        author = "ditekSHen"
+        author = "ditekshen"
         description = "Detects RedLine infostealer"
         cape_type = "RedLine Payload"
     strings:
@@ -109,10 +109,11 @@ rule RedLine {
         $v3_5 = "basicCfg" fullword wide
         // more variants
         $vx4_1 = "C:\\\\Windows\\\\Microsoft.NET\\\\Framework\\\\v4.0.30319\\\\AddInProcess32.exe" fullword wide
-        $v4_2 = "SystemNetSocketsSendPacketsElement" ascii
-        $v4_3 = "SystemServiceModelDescriptionSoapHelper" ascii
+        $v4_2 = "isWow64" fullword ascii
+        $v4_3 = "base64str" fullword ascii
         $v4_4 = "stringKey" fullword ascii
         $v4_5 = "BytesToStringConverted" fullword ascii
+        $v4_6 = "FromBase64" fullword ascii
     condition:
-        (uint16(0) == 0x5a4d and (all of ($s*) or 2 of ($x*) or 7 of ($u*) or 7 of ($pat*) or (1 of ($x*) and (5 of ($u*) or 2 of ($pat*))) or 5 of ($v2*) or 4 of ($v3*) or (3 of ($v2*) and (2 of ($pat*) or 2 of ($u*)) or (1 of ($vx4*) and 3 of ($v4*))))) or (all of ($x*) and 4 of ($s*))
+        (uint16(0) == 0x5a4d and (all of ($s*) or 2 of ($x*) or 7 of ($u*) or 7 of ($pat*) or (1 of ($x*) and (5 of ($u*) or 2 of ($pat*))) or 5 of ($v2*) or 4 of ($v3*) or (3 of ($v2*) and (2 of ($pat*) or 2 of ($u*)) or (1 of ($vx4*) and all of ($v4*))))) or (all of ($x*) and 4 of ($s*))
 }

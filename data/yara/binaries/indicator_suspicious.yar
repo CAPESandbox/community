@@ -645,3 +645,25 @@ rule INDICATOR_SUSPICOIUS_WindDefender_AntiEmaulation {
     condition:
         uint16(0) == 0x5a4d and all of them
 }
+
+rule INDICATOR_SUSPICOIUS_EXE_ClearMyTracksByProcess {
+    meta:
+        author = "ditekSHen"
+        description = "Detects executables calling ClearMyTracksByProcess"
+    strings:
+        $s1 = "InetCpl.cpl,ClearMyTracksByProcess" ascii wide nocase
+    condition:
+        uint16(0) == 0x5a4d and any of them
+}
+
+rule INDICATOR_SUSPICOIUS_EXE_TelegramChatBot {
+    meta:
+        author = "ditekSHen"
+        description = "Detects executables using Telegram Chat Bot"
+    strings:
+        $s1 = "https://api.telegram.org/bot" ascii wide
+        $s2 = "/sendMessage?chat_id=" fullword ascii
+        $s3 = "Content-Disposition: form-data; name=\"" fullword ascii
+    condition:
+        uint16(0) == 0x5a4d and 2 of them
+}
