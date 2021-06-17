@@ -14,6 +14,13 @@ rule Nefilim {
         $s8 = "Go cmd/compile go1.10" fullword ascii
         $s9 = ".dllprogramdatarecycle.bin" ascii
         $s10 = ".dll.exe.lnk.sys.url" ascii
+        $vx1_1 = "Fa1led to os.OpenFile()" ascii
+        $vx1_2 = "-HELP.txt" ascii
+        $vf1_1 = "main.CTREncrypt" fullword ascii
+        $vf1_2 = "main.FileSearch" fullword ascii
+        $vf1_3 = "main.getdrives" fullword ascii
+        $vf1_4 = "main.RSAEncrypt" fullword ascii
+        $vf1_5 = "main.SaveNote" fullword ascii
     condition:
-        uint16(0) == 0x5a4d and 9 of them
+        uint16(0) == 0x5a4d and (9 of ($s*) or (all of ($vx*) and 2 of ($s*)) or all of ($vf*))
 }
