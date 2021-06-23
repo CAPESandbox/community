@@ -76,6 +76,7 @@ class NetworkCnCHTTPSSocialMedia(Signature):
             "gist.github.com",
             "raw.githubusercontent.com",
             "telete.in",
+            "api.whatsapp.com",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
@@ -119,6 +120,8 @@ class NetworkCnCHTTPSPasteSite(Signature):
             "paste.teknik.io",
             "privnote.com",
             "hushnote.herokuapp.com",
+            "justpaste.it",
+            "stikked.ch",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
@@ -205,6 +208,8 @@ class NetworkCnCHTTPSTempStorageSite(Signature):
             "www.fileden.com",
             "a.pomf.cat",
             "dropmb.com",
+            "transfer.sh",
+            "1fichier.com",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])

@@ -400,6 +400,8 @@ class NetworkDNSTempFileService(Signature):
             "www.fileden.com",
             "a.pomf.cat",
             "dropmb.com",
+            "transfer.sh",
+            "1fichier.com",
         ]
 
         for indicator in domain_indicators:
@@ -432,6 +434,8 @@ class NetworkDNSPasteSite(Signature):
             "paste.teknik.io",
             "privnote.com",
             "hushnote.herokuapp.com",
+            "justpaste.it",
+            "stikked.ch",
         ]
 
         for indicator in domain_indicators:
