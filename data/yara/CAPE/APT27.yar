@@ -44,6 +44,8 @@ rule HyperBro02 {
         uint16(0) == 0x5a4d and (7 of ($s*) or (2 of ($cnc*) and 2 of ($s*)))
 }
 
+/*
+Too many FPs
 rule HyperBro03 {
     meta:
         author = "ditekSHen"
@@ -78,6 +80,7 @@ rule HyperBro03 {
         uint16(0) == 0x5a4d and (all of ($i*) or 6 of ($t*) or 6 of ($cm*) or all of ($vc*))
         //uint16(0) == 0x5a4d and (all of ($h*) or all of ($i*) or 6 of ($t*) or 6 of ($cm*) or all of ($vc*))
 }
+*/
 
 rule DllHijacker02 {
     meta:

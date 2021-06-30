@@ -667,3 +667,58 @@ rule INDICATOR_SUSPICOIUS_EXE_TelegramChatBot {
     condition:
         uint16(0) == 0x5a4d and 2 of them
 }
+
+rule INDICATOR_SUSPICOIUS_EXE_B64_Artifacts {
+    meta:
+        author = "ditekSHen"
+        description = "Detects executables embedding bas64-encoded APIs, command lines, registry keys, etc."
+    strings:
+        $s1 = "U09GVFdBUkVcTWljcm9zb2Z0XFdpbmRvd3NcQ3VycmVudFZlcnNpb25cUnVuXA" ascii wide
+        $s2 = "L2Mgc2NodGFza3MgL2" ascii wide
+        $s3 = "QW1zaVNjYW5CdWZmZXI" ascii wide
+        $s4 = "VmlydHVhbFByb3RlY3Q" ascii wide
+    condition:
+        uint16(0) == 0x5a4d and 2 of them
+}
+
+rule INDICATOR_SUSPICOIUS_EXE_DiscordURL {
+    meta:
+        author = "ditekSHen"
+        description = "Detects executables Discord URL observed in first stage droppers"
+    strings:
+        $s1 = "https://discord.com/api/webhooks/" ascii wide nocase
+        $s2 = "https://cdn.discordapp.com/attachments/" ascii wide nocase
+        $s3 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va" ascii wide
+        $s4 = "aHR0cHM6Ly9jZG4uZGlzY29yZGFwcC5jb20vYXR0YWNobW" ascii wide
+    condition:
+        uint16(0) == 0x5a4d and any of them
+}
+
+rule INDICATOR_SUSPICOIUS_EXE_RegKeyComb_IExecuteCommandCOM {
+    meta:
+        author = "ditekSHen"
+        description = "Detects executables embedding command execution via IExecuteCommand COM object"
+    strings:
+        $r1 = "Classes\\Folder\\shell\\open\\command" ascii wide nocase
+        $k1 = "DelegateExecute" ascii wide
+        $s1 = "/EXEFilename \"{0}" ascii wide
+        $s2 = "/WindowState \"\"" ascii wide
+        $s3 = "/PriorityClass \"\"32\"\" /CommandLine \"" ascii wide
+        $s4 = "/StartDirectory \"" ascii wide
+        $s5 = "/RunAs" ascii wide
+    condition:
+        uint16(0) == 0x5a4d and ((1 of ($r*) and 1 of ($k*)) or (all of ($s*)))
+}
+
+rule INDICATOR_SUSPICOIUS_EXE_WMI_EnumerateVideoDevice {
+    meta:
+        author = "ditekSHen"
+        description = "Detects executables attemping to enumerate video devices using WMI"
+    strings:
+        $q1 = "Select * from Win32_CacheMemory" ascii wide nocase
+        $d1 = "{860BB310-5D01-11d0-BD3B-00A0C911CE86}" ascii wide
+        $d2 = "{62BE5D10-60EB-11d0-BD3B-00A0C911CE86}" ascii wide
+        $d3 = "{55272A00-42CB-11CE-8135-00AA004BB851}" ascii wide
+    condition:
+        uint16(0) == 0x5a4d and (1 of ($q*) and 1 of ($d*))
+}
