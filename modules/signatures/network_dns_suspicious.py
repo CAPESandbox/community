@@ -466,6 +466,7 @@ class NetworkDNSURLShortener(Signature):
             "ykm.de",
             "ito.mx",
             "me2.do",
+            "bit.do",
         ]
 
         for indicator in domain_indicators:

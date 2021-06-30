@@ -163,6 +163,7 @@ class NetworkCnCHTTPSURLShortenerSite(Signature):
             "ykm.de",
             "ito.mx",
             "me2.do",
+            "bit.do",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
@@ -228,7 +229,7 @@ class NetworkCnCHTTPSTempStorageSite(Signature):
 
 class NetworkCnCHTTPSUserAgent(Signature):
     name = "network_cnc_https_useragent"
-    description = "Establishes an encrypted HTTPS connection containing a suspicious of fake User Agent"
+    description = "Establishes an encrypted HTTPS connection containing a suspicious or fake User Agent"
     severity = 3
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
@@ -249,6 +250,8 @@ class NetworkCnCHTTPSUserAgent(Signature):
             "like Mac OS X",
             "(Macintosh;",
             "(X11; Linux",
+            "DiscordBot",
+            "NSISDL",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
@@ -333,6 +336,7 @@ class NetworkCnCHTTPSFreeWebHosting(Signature):
         self.match = False
         self.domains = [
             ".000webhostapp.com",
+            ".repl.co",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
