@@ -15,7 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class PersistenceRDPRegistry(Signature):
+class RevilRegkey(Signature):
     name = "ransomware_revil_regkey"
     description = "Detects a registry key set by REvil/Sodinokibi."
     severity = 3
