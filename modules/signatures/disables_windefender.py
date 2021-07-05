@@ -41,6 +41,7 @@ class DisablesWindowsDefender(Signature):
             "tamperprotection",
             "disableenhancednotification",
             "mpenablepus",
+            "disableroutinelytakingaction"
         ]
 
         for check in keys:
