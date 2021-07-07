@@ -337,6 +337,7 @@ class NetworkCnCHTTPSFreeWebHosting(Signature):
         self.domains = [
             ".000webhostapp.com",
             ".repl.co",
+            ".glitch.me",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])

@@ -41,6 +41,7 @@ class DocScriptEXEDrop(Signature):
             "winword.exe",
             "wordview.exe",
             "wscript.exe",
+            "powershell.exe",
         ]
 
     filter_apinames = set(["NtWriteFile"])
