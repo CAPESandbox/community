@@ -110,7 +110,7 @@ class ReadsSelf(Signature):
             handle = int(self.get_argument(call, "FileHandle"), 16)
             if handle in self.lastres.handles:
                 obj = self.lastres.handles[handle]
-                length = self.get_raw_argument(call, "Length")
+                length = int(self.get_argument(call, "Length"))
                 if (obj.fpos, obj.fpos + length) not in self.lastres.reads:
                     self.lastres.reads.append((obj.fpos, obj.fpos + length))
                 obj.read(length)
@@ -120,7 +120,7 @@ class ReadsSelf(Signature):
             if settype == self.FilePositionInformation:
                 if handle in self.lastres.handles:
                     obj = self.lastres.handles[handle]
-                    obj.set_file_pos(self.get_raw_argument(call, "FileInformation"))
+                    obj.set_file_pos(self.get_argument(call, "FileInformation"))
 
         return None
 

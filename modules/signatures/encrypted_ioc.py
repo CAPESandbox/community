@@ -29,7 +29,7 @@ class EncryptedIOC(Signature):
 
     def on_call(self, call, process):
         if call["api"] == "CryptHashData":
-            self.iocs.append(self.get_raw_argument(call, "Buffer"))
+            self.iocs.append(self.get_argument(call, "Buffer"))
         return None
 
     def on_complete(self):
@@ -69,7 +69,7 @@ class EncryptedIOC(Signature):
                                 ioc += tmp + "."
                             else:
                                 ioc += tmp
-                        
+
                         addit = True
                         for item in whitelist:
                             if item in ioc:
