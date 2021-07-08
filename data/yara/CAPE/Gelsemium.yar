@@ -50,7 +50,7 @@ rule Gelsenicine {
         uint16(0) == 0x5a4d and ((all of ($s*) and (3 of ($ms*) or 4 of ($o*))) or (all of ($ms*) and 2 of ($s*) and 3 of ($o*)))
 }
 
-rule MALWARE_Win_Gelsevirine {
+rule Gelsevirine {
     meta:
         author = "ditekSHen"
         description = "Detects Gelsevirine"
