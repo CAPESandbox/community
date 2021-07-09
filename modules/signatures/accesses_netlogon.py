@@ -18,7 +18,7 @@ from lib.cuckoo.common.abstracts import Signature
 class AccessesMailslot(Signature):
     name = "accesses_mailslot"
     description = "Performs a Mailslot ping, possibly used to get Domain Controller information"
-    severity = 0.5
+    severity = 2
     categories = ["discovery"]
     authors = ["bartblaze"]
     minimum = "1.2"
@@ -41,7 +41,7 @@ class AccessesMailslot(Signature):
 class AccessesNetlogonRegkey(Signature):
     name = "accesses_netlogon_regkey"
     description = "Access the NetLogon registry key, potentially used for discovery or tampering"
-    severity = 0.5
+    severity = 2
     categories = ["discovery"]
     authors = ["bartblaze"]
     minimum = "1.2"

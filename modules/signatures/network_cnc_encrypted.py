@@ -77,6 +77,8 @@ class NetworkCnCHTTPSSocialMedia(Signature):
             "raw.githubusercontent.com",
             "telete.in",
             "api.whatsapp.com",
+            "api.vkontakte.ru",
+            "api.vk.com"
         ]
 
     filter_apinames = set(["SslEncryptPacket"])

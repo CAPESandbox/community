@@ -150,6 +150,7 @@ class StaticPEPDBPath(Signature):
             "inject",
             "keylog",
             "payload",
+            "ransom",
             "shell",
             "spy",
             "trojan",
