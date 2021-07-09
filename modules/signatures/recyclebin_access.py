@@ -37,6 +37,7 @@ class Accesses_RecycleBin(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.filepattern = "^[A-Z]:\\\\\$Recycle.Bin\\\\*"
         self.filematch = False
+        self.filenames = list()
 
     def on_call(self, call, process):
         if call["api"] == "NtCreateFile":
@@ -45,6 +46,7 @@ class Accesses_RecycleBin(Signature):
                 filename = self.get_argument(call, "FileName")
                 if filename and re.match(self.filepattern, filename, re.IGNORECASE):
                     self.filematch = True
+                    self.filenames.append(filename)
 									
         if call["api"] == "NtOpenFile":
             desiredaccess = int(self.get_argument(call, "DesiredAccess"), 16)
@@ -52,14 +54,17 @@ class Accesses_RecycleBin(Signature):
                 filename = self.get_argument(call, "FileName")
                 if filename and re.match(self.filepattern, filename, re.IGNORECASE):
                     self.filematch = True
+                    self.filenames.append(filename)
 					
         if call["api"] == "NtReadFile":
                 filename = self.get_argument(call, "FileName")
                 if filename and re.match(self.filepattern, filename, re.IGNORECASE):
                     self.filematch = True
+                    self.filenames.append(filename)
 								
     def on_complete(self):
-        if self.filematch:
-            return True
+        if self.filematch and self.filenames:
+            for file in self.filenames:
+                self.data.append({"file": file})
 
-        return False
+        return self.filematch
