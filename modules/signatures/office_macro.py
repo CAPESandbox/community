@@ -59,6 +59,7 @@ class Office_Macro(Signature):
                      "tools > macro",
                      "macros must be enabled",
                      "enable macro",
+                     "enable editing",
                     ]
             positives = list()
             for string in self.results["strings"]:
