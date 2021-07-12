@@ -21,6 +21,7 @@ class HTTP_Request(Signature):
         self.host_whitelist = ["acroipm.adobe.com",
                                "acroipm2.adobe.com",
                                "microsoft.com",
+                               "ocsp.digicert.com",
                                "apps.identrust.com"]
 
     filter_apinames = set(["HttpOpenRequestA", "HttpOpenRequestW", "InternetConnectA",
