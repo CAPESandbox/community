@@ -39,3 +39,28 @@ class PersistenceRDPRegistry(Signature):
                 self.data.append({"regkey": match})
 
         return ret
+
+class PersistenceRDPShadowing(Signature):
+    name = "persistence_rdp_shadowing"
+    description = "Writes to the Terminal Server registry set, potentially for RDP shadowing and persistence."
+    severity = 3
+    categories = ["persistence"]
+    authors = ["bartblaze"]
+    minimum = "1.2"
+    evented = True
+    ttp = ["T1021"]
+    reference = ["https://bitsadm.in/blog/spying-on-users-using-rdp-shadowing"]
+
+    def run(self):
+        ret = False
+        reg_indicators = [
+            ".*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows NT\\\\Terminal Services$,
+        ]
+
+        for indicator in reg_indicators:
+            match = self.check_write_key(pattern=indicator, regex=True)
+            if match:
+                ret = True
+                self.data.append({"regkey": match})
+
+        return ret
