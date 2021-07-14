@@ -24,24 +24,32 @@ class DisablesWindowsDefender(Signature):
         ]
 
         cmds = [
+            "disableantispyware",
+            "disableantivirus",
+            "disablearchivescanning",
             "disablebehaviormonitoring",
             "disableblockatfirstseen",
+            "disablecatchupfullscan",
+            "disablecatchupquickscan",
+            "disablecputhrottleonidlescans",
+            "disableemailscanning",
+            "disableenhancednotification",
             "disableintrusionpreventionsystem",
             "disableioavprotection",
+            "disableonaccessprotection",
             "disableprivacymode",
             "disablerealtimemonitoring",
+            "disablerestorepoint",
+            "disableroutinelytakingaction",
+            "disablescanningmappednetworkdrivesforfullscan",
+            "disablescanningnetworkfiles",
+            "disablescanonrealtimeenable",
             "disablescriptscanning",
             "lowthreatdefaultaction",
             "moderatethreatdefaultaction",
-            "severethreatdefaultaction",
-            "disableantispyware",
-            "disableantivirus",
-            "disableonaccessprotection",
-            "disablescanonrealtimeenable",
-            "tamperprotection",
-            "disableenhancednotification",
             "mpenablepus",
-            "disableroutinelytakingaction"
+            "severethreatdefaultaction",
+            "tamperprotection",          
         ]
 
         for check in keys:
