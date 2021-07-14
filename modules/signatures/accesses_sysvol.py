@@ -28,7 +28,7 @@ class AccessesSysvol(Signature):
     def run(self):
         indicators = [
             "C:\\\\Windows\\\\SYSVOL\\\\.*",
-            "\\\\sysvol\.*\\\\policies\\\\.*"
+            "\\\\sysvol\\\\.*\\\\policies\\\\.*"
         ]
 
         for indicator in indicators:
