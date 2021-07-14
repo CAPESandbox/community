@@ -54,7 +54,7 @@ class PersistenceRDPShadowing(Signature):
     def run(self):
         ret = False
         reg_indicators = [
-            ".*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows NT\\\\Terminal Services$,
+            ".*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows NT\\\\Terminal Services$",
         ]
 
         for indicator in reg_indicators:
