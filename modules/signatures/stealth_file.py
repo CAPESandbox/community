@@ -125,6 +125,7 @@ class StealthFile(Signature):
             r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Windows\\History\\History\.IE5\\$',
             r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Windows\\History\\History\.IE5\\MSHist[0-9]+\\$',
             r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Windows\\History\\History\.IE5\\MSHist[0-9]+\\index\.dat$',
+            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Temp\\[^\\]+\.(xls|xlsx|doc|docx|ppt|pttx)',
         ]
         url_whitelist = [
             r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\Recent\\CustomDestinations\\.*\.customDestinations.*\.TMP$',
