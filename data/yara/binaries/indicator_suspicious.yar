@@ -624,7 +624,7 @@ rule INDICATOR_SUSPICIOUS_EXE_SandboxUserNames {
         uint16(0) == 0x5a4d and 10 of them
 }
 
-rule INDICATOR_SUSPICOIUS_B64_Encoded_UserAgent {
+rule INDICATOR_SUSPICIOUS_B64_Encoded_UserAgent {
     meta:
         author = "ditekSHen"
         description = "Detects executables containing base64 encoded User Agent"
@@ -635,7 +635,7 @@ rule INDICATOR_SUSPICOIUS_B64_Encoded_UserAgent {
         uint16(0) == 0x5a4d and any of them
 }
 
-rule INDICATOR_SUSPICOIUS_WindDefender_AntiEmaulation {
+rule INDICATOR_SUSPICIOUS_WindDefender_AntiEmaulation {
     meta:
         author = "ditekSHen"
         description = "Detects executables containing potential Windows Defender anti-emulation checks"
@@ -646,7 +646,7 @@ rule INDICATOR_SUSPICOIUS_WindDefender_AntiEmaulation {
         uint16(0) == 0x5a4d and all of them
 }
 
-rule INDICATOR_SUSPICOIUS_EXE_ClearMyTracksByProcess {
+rule INDICATOR_SUSPICIOUS_EXE_ClearMyTracksByProcess {
     meta:
         author = "ditekSHen"
         description = "Detects executables calling ClearMyTracksByProcess"
@@ -656,7 +656,7 @@ rule INDICATOR_SUSPICOIUS_EXE_ClearMyTracksByProcess {
         uint16(0) == 0x5a4d and any of them
 }
 
-rule INDICATOR_SUSPICOIUS_EXE_TelegramChatBot {
+rule INDICATOR_SUSPICIOUS_EXE_TelegramChatBot {
     meta:
         author = "ditekSHen"
         description = "Detects executables using Telegram Chat Bot"
@@ -668,7 +668,7 @@ rule INDICATOR_SUSPICOIUS_EXE_TelegramChatBot {
         uint16(0) == 0x5a4d and 2 of them
 }
 
-rule INDICATOR_SUSPICOIUS_EXE_B64_Artifacts {
+rule INDICATOR_SUSPICIOUS_EXE_B64_Artifacts {
     meta:
         author = "ditekSHen"
         description = "Detects executables embedding bas64-encoded APIs, command lines, registry keys, etc."
@@ -681,7 +681,7 @@ rule INDICATOR_SUSPICOIUS_EXE_B64_Artifacts {
         uint16(0) == 0x5a4d and 2 of them
 }
 
-rule INDICATOR_SUSPICOIUS_EXE_DiscordURL {
+rule INDICATOR_SUSPICIOUS_EXE_DiscordURL {
     meta:
         author = "ditekSHen"
         description = "Detects executables Discord URL observed in first stage droppers"
@@ -694,7 +694,7 @@ rule INDICATOR_SUSPICOIUS_EXE_DiscordURL {
         uint16(0) == 0x5a4d and any of them
 }
 
-rule INDICATOR_SUSPICOIUS_EXE_RegKeyComb_IExecuteCommandCOM {
+rule INDICATOR_SUSPICIOUS_EXE_RegKeyComb_IExecuteCommandCOM {
     meta:
         author = "ditekSHen"
         description = "Detects executables embedding command execution via IExecuteCommand COM object"
@@ -710,7 +710,7 @@ rule INDICATOR_SUSPICOIUS_EXE_RegKeyComb_IExecuteCommandCOM {
         uint16(0) == 0x5a4d and ((1 of ($r*) and 1 of ($k*)) or (all of ($s*)))
 }
 
-rule INDICATOR_SUSPICOIUS_EXE_WMI_EnumerateVideoDevice {
+rule INDICATOR_SUSPICIOUS_EXE_WMI_EnumerateVideoDevice {
     meta:
         author = "ditekSHen"
         description = "Detects executables attemping to enumerate video devices using WMI"
@@ -723,7 +723,7 @@ rule INDICATOR_SUSPICOIUS_EXE_WMI_EnumerateVideoDevice {
         uint16(0) == 0x5a4d and (1 of ($q*) and 1 of ($d*))
 }
 
-rule INDICATOR_SUSPICOIUS_EXE_Go_GoLazagne {
+rule INDICATOR_SUSPICIOUS_EXE_Go_GoLazagne {
     meta:
         author = "ditekSHen"
         description = "Detects Go executables using GoLazagne"
