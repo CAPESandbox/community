@@ -467,6 +467,8 @@ class NetworkDNSURLShortener(Signature):
             "ito.mx",
             "me2.do",
             "bit.do",
+            "coki.me",
+            "hyp.ae",
         ]
 
         for indicator in domain_indicators:
