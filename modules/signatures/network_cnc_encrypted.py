@@ -166,6 +166,9 @@ class NetworkCnCHTTPSURLShortenerSite(Signature):
             "ito.mx",
             "me2.do",
             "bit.do",
+            "coki.me",
+            "hyp.ae",
+            "s.id",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
