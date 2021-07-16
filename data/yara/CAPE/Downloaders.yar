@@ -212,7 +212,6 @@ rule DLInjector01 {
     meta:
         author = "ditekSHen"
         description = "Detects specific downloader injector shellcode"
-        cape_type = "DLInjector01 Payload"
     strings:
         $s1 = "process call create \"%s\"" ascii wide
         $s2 = "\\REGISTRY\\MACHINE\\System\\CurrentControlSet\\Enum\\" ascii wide
@@ -235,7 +234,6 @@ rule DLInjector02 {
     meta:
         author = "ditekSHen"
         description = "Detects downloader injector"
-        cape_type = "DLInjector02 Payload"
     strings:
         $x1 = "In$J$ct0r" fullword wide
         $x2 = "%InJ%ector%" fullword wide
@@ -271,7 +269,6 @@ rule DLInjector03 {
     meta:
         author = "ditekSHen"
         description = "Detects unknown loader / injector"
-        cape_type = "DLInjector03 Payload"
     strings:
         $x1 = "LOADER ERROR" fullword ascii
         $s1 = "_ZN6curlpp10OptionBaseC2E10CURLoption" fullword ascii
