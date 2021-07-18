@@ -20,7 +20,11 @@ class HTTP_Request(Signature):
         self.urls = list()
         self.host_whitelist = ["acroipm.adobe.com",
                                "acroipm2.adobe.com",
+                               "armmf.adobe.com",
                                "microsoft.com",
+                               "crl.microsoft.com",
+                               "crl4.digicert.com",
+                               "crl3.digicert.com",
                                "ocsp.digicert.com",
                                "apps.identrust.com"]
 
