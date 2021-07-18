@@ -4,6 +4,14 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+domain_passlist = []
+
+try:
+    from data.safelist.domains import domain_passlist
+except ImportError:
+    print("Please update CAPE from main repo")
+
+
 class HTTP_Request(Signature):
     name = "http_request"
     description = "Performs HTTP requests potentially not found in PCAP."
@@ -18,15 +26,6 @@ class HTTP_Request(Signature):
         self.request = dict()
         self.lasthost = str()
         self.urls = list()
-        self.host_whitelist = ["acroipm.adobe.com",
-                               "acroipm2.adobe.com",
-                               "armmf.adobe.com",
-                               "microsoft.com",
-                               "crl.microsoft.com",
-                               "crl4.digicert.com",
-                               "crl3.digicert.com",
-                               "ocsp.digicert.com",
-                               "apps.identrust.com"]
 
     filter_apinames = set(["HttpOpenRequestA", "HttpOpenRequestW", "InternetConnectA",
                            "InternetConnectW", "WinHttpGetProxyForUrl", "InternetOpenUrlW", "InternetOpenUrlA"])
@@ -37,7 +36,7 @@ class HTTP_Request(Signature):
             host = self.get_argument(call, "ServerName")
             port = self.get_argument(call, "ServerPort")
             self.lasthost = host
-            if host in self.host_whitelist:
+            if host in domain_passlist:
                 return None
             if host not in self.request:
                 self.request[host] = dict()
@@ -47,7 +46,7 @@ class HTTP_Request(Signature):
         elif call["api"].startswith("HttpOpenRequest"):
             handle = str(self.get_argument(call, "InternetHandle"))
             # Sanity check
-            if self.lasthost in self.host_whitelist:
+            if self.lasthost in domain_passlist:
                 return None
             if handle == self.request[self.lasthost]["curhandle"]:
                 uri = self.get_argument(call, "Path")
@@ -57,13 +56,13 @@ class HTTP_Request(Signature):
         elif call["api"] == "WinHttpGetProxyForUrl":
             url = self.get_argument(call, "Url")
             if url:
-                for wlhost in self.host_whitelist:
+                for wlhost in domain_passlist:
                     if wlhost not in url:
                         self.urls.append(url)
         elif call["api"].startswith("InternetOpenUrl"):
             url = self.get_argument(call, "URL")
             if url:
-                for wlhost in self.host_whitelist:
+                for wlhost in domain_passlist:
                     if wlhost not in url:
                         self.urls.append(url)
 
