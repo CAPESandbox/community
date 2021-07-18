@@ -82,7 +82,7 @@ class RDPTCPKey(Signature):
     name = "rdptcp_key"
     description = "Writes to the RDP-Tcp registry key related to Remote Desktop."
     severity = 3
-    categories = ["office", "persistence", "evasion", "execution"]
+    categories = ["persistence", "evasion", "execution"]
     authors = ["bartblaze"]
     minimum = "1.3"
     ttp = ["T1137"]

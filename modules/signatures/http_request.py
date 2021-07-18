@@ -23,9 +23,9 @@ class HTTP_Request(Signature):
                                "armmf.adobe.com",
                                "microsoft.com",
                                "crl.microsoft.com",
-                               "ocsp.digicert.com",
                                "crl4.digicert.com",
                                "crl3.digicert.com",
+                               "ocsp.digicert.com",
                                "apps.identrust.com"]
 
     filter_apinames = set(["HttpOpenRequestA", "HttpOpenRequestW", "InternetConnectA",

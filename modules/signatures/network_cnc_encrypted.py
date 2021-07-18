@@ -166,6 +166,9 @@ class NetworkCnCHTTPSURLShortenerSite(Signature):
             "ito.mx",
             "me2.do",
             "bit.do",
+            "coki.me",
+            "hyp.ae",
+            "s.id",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
@@ -496,3 +499,34 @@ class NetworkCnCSMTPSExfil(Signature):
 
         return False
 
+class NetworkCnCHTTPSArchive(Signature):
+    name = "network_cnc_https_archive"
+    description = "Establishes an encrypted HTTPS connection to an internet archiving website"
+    severity = 3
+    categories = ["network", "encryption"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    ttp = ["T1032"]
+    evented = True
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.match = False
+        self.domains = [
+            "archive.org",
+            "archive.is",
+        ]
+
+    filter_apinames = set(["SslEncryptPacket"])
+
+    def on_call(self, call, process):
+        buff = self.get_argument(call, "Buffer")
+        if buff:
+            for domain in self.domains:
+                host_header = "Host: " + domain
+                if host_header in buff:
+                    self.match = True
+                    self.data.append({"http_request": buff})
+    
+    def on_complete(self):
+        return self.match
