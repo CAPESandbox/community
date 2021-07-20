@@ -143,9 +143,9 @@ class FileCredentialStoreAccess(Signature):
 
     def run(self):
         indicators = [
-            "C:\\\\Windows\\\\repair\\\\sam",
-            "C:\\\\Windows\\\\System32\\\\config\\\\RegBack\\\\SAM",
-            "C:\\\\Windows\\\\system32\\\\config\\\\SAM",
+            ".*\\\\Windows\\\\repair\\\\sam",
+            ".*\\\\Windows\\\\System32\\\\config\\\\RegBack\\\\SAM",
+            ".*\\\\Windows\\\\system32\\\\config\\\\SAM",
         ]
 
         for indicator in indicators:
