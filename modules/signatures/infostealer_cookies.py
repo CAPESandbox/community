@@ -40,7 +40,8 @@ class CookiesStealer(Signature):
             ".*\\\\Apple Computer\\\\Safari\\\\Cookies\\\\Cookies.binarycookies$",
             ".*\\\\Microsoft\\\\Windows\\\\Cookies$",
             ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\cookies.sqlite$",
-            ".*\\\\Opera Software\\\\Opera Stable\\\\Cookies$"
+            ".*\\\\Opera Software\\\\Opera Stable\\\\Cookies$",
+            ".*\\\\Brave-Browser\\\\User Data\\\\.*\\\\Cookies$",
         ]
 
         for indicator in indicators:

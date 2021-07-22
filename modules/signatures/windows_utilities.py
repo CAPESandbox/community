@@ -62,6 +62,7 @@ class UsesWindowsUtilities(Signature):
             "mkdir",
             "move ",
             "move.exe",
+            "msdt ",
             "nbtstat",
             "net ",
             "net.exe",

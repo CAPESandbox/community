@@ -156,3 +156,27 @@ class FileCredentialStoreAccess(Signature):
 
         return False
 
+class FileCredentialStoreWrite(Signature):
+    name = "file_credential_store_write"
+    description = "Writes to or from credential storage files"
+    severity = 3
+    categories = ["credential_access", "credential_dumping"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    evented = True
+    ttp = ["T1003"]
+
+    def run(self):
+        indicators = [
+            ".*\\\\Windows\\\\repair\\\\sam",
+            ".*\\\\Windows\\\\System32\\\\config\\\\RegBack\\\\SAM",
+            ".*\\\\Windows\\\\system32\\\\config\\\\SAM",
+        ]
+
+        for indicator in indicators:
+            match = self.check_write_file(pattern=indicator, regex=True)
+            if match:
+                self.data.append({"file": match})
+                return True
+
+        return False
