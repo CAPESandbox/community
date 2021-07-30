@@ -30,10 +30,15 @@ class NetworkFakeUserAgent(Signature):
         self.match = False
         self.fakeuas = [
             "(iPhone;",
+            "(iPad;",
             "(Android;",
             "like Mac OS X",
             "(Macintosh;",
             "(X11; Linux",
+            "Windows NT 5.0;",
+            "IEMobile",
+            "Windows Phone OS",
+            "(BlackBerry;",
         ]
 
     filter_apinames = set(["InternetOpenA", "WinHttpOpen"])
