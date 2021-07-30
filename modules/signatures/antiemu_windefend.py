@@ -41,7 +41,7 @@ class AntiEmuWinDefend(Signature):
         for indicator in indicators:
             match = self.check_file(pattern=indicator, regex=True)
             if match:
-                self.data.append({"file": [match]})
+                self.data.append({"file": match})
                 return True
 
         return False
