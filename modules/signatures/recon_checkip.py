@@ -53,6 +53,7 @@ class CheckIP(Signature):
 			"dnswatch.info",
 			"dpool.sina.com.cn",
 			"e-localizaip.com",
+		        "eth0.me",
 			"extreme-ip-lookup.com",
 			"findmyip.org",
 			"findmyipaddress.com",
