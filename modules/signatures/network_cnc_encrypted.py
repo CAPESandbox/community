@@ -262,7 +262,7 @@ class NetworkCnCHTTPSUserAgent(Signature):
             "InnoDownloadPlugin",
             "IEMobile",
             "Windows Phone OS",
-            "(BlackBerry;";
+            "(BlackBerry;",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
