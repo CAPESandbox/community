@@ -47,7 +47,7 @@ class CookiesStealer(Signature):
         for indicator in indicators:
             match = self.check_file(pattern=indicator, regex=True)
             if match:
-                self.data.append({"cookie": [match]})
+                self.data.append({"cookie": match})
                 return True
 
         return False
