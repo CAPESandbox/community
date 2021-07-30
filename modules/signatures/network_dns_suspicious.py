@@ -436,6 +436,7 @@ class NetworkDNSPasteSite(Signature):
             "hushnote.herokuapp.com",
             "justpaste.it",
             "stikked.ch",
+            "dpaste.com",
         ]
 
         for indicator in domain_indicators:

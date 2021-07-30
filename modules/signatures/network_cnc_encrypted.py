@@ -124,6 +124,7 @@ class NetworkCnCHTTPSPasteSite(Signature):
             "hushnote.herokuapp.com",
             "justpaste.it",
             "stikked.ch",
+            "dpaste.com",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
@@ -251,12 +252,17 @@ class NetworkCnCHTTPSUserAgent(Signature):
             "AutoHotKey",
             "Moz5",
             "(iPhone;",
+            "(iPad;",
             "(Android;",
             "like Mac OS X",
             "(Macintosh;",
             "(X11; Linux",
             "DiscordBot",
             "NSISDL",
+            "InnoDownloadPlugin",
+            "IEMobile",
+            "Windows Phone OS",
+            "(BlackBerry;",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
