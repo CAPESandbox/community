@@ -850,3 +850,20 @@ rule INDICATOR_SUSPICIOUS_EXE_NoneWindowsUA {
     condition:
          uint16(0) == 0x5a4d and 1 of them
 }
+
+rule INDICATOR_SUSPICIOUS_VM_Evasion_MACAddrComb {
+    meta:
+        author = "ditekSHen"
+        description = "Detects executables referencing virtualization MAC addresses"
+    strings:
+        $s1 = "00:03:FF" ascii wide nocase
+        $s2 = "00:05:69" ascii wide nocase
+        $s3 = "00:0C:29" ascii wide nocase
+        $s4 = "00:16:3E" ascii wide nocase
+        $s5 = "00:1C:14" ascii wide nocase
+        $s6 = "00:1C:42" ascii wide nocase
+        $s7 = "00:50:56" ascii wide nocase
+        $s8 = "08:00:27" ascii wide nocase
+    condition:
+         uint16(0) == 0x5a4d and 3 of them
+}

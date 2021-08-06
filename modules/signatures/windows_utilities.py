@@ -778,3 +778,25 @@ class UsesWindowsUtilitiesEsentutl(Signature):
                     self.data.append({"command" : cmdline})
 
         return ret
+
+class UsesPowerShellCopyItem(Signature):
+    name = "uses_powershell_copyitem"
+    description = "Uses PowerShell for copying files"
+    severity = 2
+    categories = ["evasion"]
+    authors = ["ditekshen"]
+    minimum = "1.3"
+    evented = True
+
+    def run(self):
+        indicators = [
+            ".*powershell.*copy-item.*"
+        ]
+
+        for indicator in indicators:
+            match = self.check_executed_command(pattern=indicator, regex=True)
+            if match:
+                self.data.append({"command": match})
+                return True
+
+        return False
