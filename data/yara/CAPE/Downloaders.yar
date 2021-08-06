@@ -316,7 +316,7 @@ rule ShellcodeDLEI {
 rule EXEPWSHDL {
     meta:
         author = "ditekSHen"
-        description = "Detects executable downloaders using PoerShell"
+        description = "Detects executable downloaders using PowerShell"
     strings:
         $x1 = "[Ref].Assembly.GetType(" ascii wide
         $x2 = ".SetValue($null,$true)" ascii wide
