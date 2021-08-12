@@ -470,6 +470,7 @@ class NetworkDNSURLShortener(Signature):
             "bit.do",
             "coki.me",
             "hyp.ae",
+            "iurl.vip",
         ]
 
         for indicator in domain_indicators:

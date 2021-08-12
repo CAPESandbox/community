@@ -170,6 +170,7 @@ class NetworkCnCHTTPSURLShortenerSite(Signature):
             "coki.me",
             "hyp.ae",
             "s.id",
+            "iurl.vip",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
@@ -263,6 +264,8 @@ class NetworkCnCHTTPSUserAgent(Signature):
             "IEMobile",
             "Windows Phone OS",
             "(BlackBerry;",
+            "MSIE 5.5",
+            "by NZXER",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
