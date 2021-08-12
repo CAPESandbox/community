@@ -39,6 +39,7 @@ class NetworkFakeUserAgent(Signature):
             "IEMobile",
             "Windows Phone OS",
             "(BlackBerry;",
+            "by NZXER",
         ]
 
     filter_apinames = set(["InternetOpenA", "WinHttpOpen"])

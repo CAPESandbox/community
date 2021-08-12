@@ -245,8 +245,10 @@ rule INDICATOR_SUSPICIOUS_DisableWinDefender {
         $s9 = "Set-MpPreference -LowThreatDefaultAction 6" ascii wide nocase
         $s10 = "Set-MpPreference -SevereThreatDefaultAction 6" ascii wide nocase
         $pdb = "\\Disable-Windows-Defender\\obj\\Debug\\Disable-Windows-Defender.pdb" ascii
+        $e1 = "Microsoft\\Windows Defender\\Exclusions\\Paths" ascii wide nocase
+        $e2 = "Add-MpPreference -ExclusionPath" ascii wide nocase
     condition:
-        uint16(0) == 0x5a4d and ((1 of ($reg*) and 1 of ($s*)) or ($pdb))
+        uint16(0) == 0x5a4d and ((1 of ($reg*) and 1 of ($s*)) or ($pdb) or all of ($e*))
 }
 
 rule INDICATOR_SUSPICIOUS_USNDeleteJournal {
@@ -728,8 +730,11 @@ rule INDICATOR_SUSPICIOUS_EXE_WMI_EnumerateVideoDevice {
         $d1 = "{860BB310-5D01-11d0-BD3B-00A0C911CE86}" ascii wide
         $d2 = "{62BE5D10-60EB-11d0-BD3B-00A0C911CE86}" ascii wide
         $d3 = "{55272A00-42CB-11CE-8135-00AA004BB851}" ascii wide
+        $d4 = "SYSTEM\\ControlSet001\\Control\\Class\\{4d36e968-e325-11ce-bfc1-08002be10318}\\000" ascii wide nocase
+        $d5 = "HardwareInformation.AdapterString" ascii wide
+        $d6 = "HardwareInformation.qwMemorySize" ascii wide
     condition:
-        uint16(0) == 0x5a4d and (1 of ($q*) and 1 of ($d*))
+        uint16(0) == 0x5a4d and ((1 of ($q*) and 1 of ($d*)) or 3 of ($d*))
 }
 
 rule INDICATOR_SUSPICIOUS_EXE_Go_GoLazagne {
