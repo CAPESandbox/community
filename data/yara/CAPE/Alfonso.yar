@@ -2,7 +2,7 @@ rule Alfonoso {
     meta:
         author = "ditekSHen"
         description = "Detects Alfonoso / Shurk infostealer"
-        cape_type = "Alfonso Infostealer Payload
+        cape_type = "Alfonso Infostealer Payload"
     strings:
         $s1 = "%s\\etilqs_" fullword ascii
         $s2 = "SELECT name, rootpage, sql FROM '%q'.%s" fullword ascii
