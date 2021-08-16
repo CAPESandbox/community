@@ -30,6 +30,7 @@ class PersistenceRDPRegistry(Signature):
         reg_indicators = [
             ".*\\\\Control\\\\Terminal Server\\\\fSingleSessionPerUser$",
             ".*\\\\Control\\\\Terminal Server\\\\fDenyTSConnections$",
+            ".*\\\\Control\\\\Terminal Server\\\\fAllowToGetHelp$",
         ]
 
         for indicator in reg_indicators:
