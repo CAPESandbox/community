@@ -219,6 +219,7 @@ class CheckIP(Signature):
 			"show-my-ip.de",
 			"showip.net",
 			"showipinfo.net",
+			"showips.com/api/geoip/",
 			"showmemyip.com",
 			"showmyip.co.uk",
 			"showmyip.com",
