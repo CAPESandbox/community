@@ -40,8 +40,8 @@ class AccessesSysvol(Signature):
 
         return False
     
-    class AccessesSysvol(Signature):
-    name = "accesses_sysvol"
+    class WritesSysvol(Signature):
+    name = "writes_sysvol"
     description = "Writes files to the SYSVOL folder, possibly to spread laterally"
     severity = 3
     categories = ["credential_access"]
