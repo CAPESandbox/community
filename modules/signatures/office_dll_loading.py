@@ -185,3 +185,28 @@ class OfficeDotNetLoad(Signature):
                         for dllpath in self.dotnetpaths:
                             if re.search(dllpath, dllname.lower(), re.IGNORECASE):
                                 return True
+                            
+class OfficeMSHTMLLoad(Signature):
+    name = "office_mshtml_load"
+    description = "Office loads MSHTML DLL, indicative of ActiveX execution"
+    severity = 2
+    categories = ["office"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    ttp = ["T1204"]
+    evented = True
+
+    filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.officeprocs = ["wordview.exe", "winword.exe", "excel.exe", "powerpnt.exe"]
+        
+    def on_call(self, call, process):
+        processname = process["process_name"]
+        if processname:
+            if processname.lower() in self.officeprocs:
+                dllname = self.get_argument(call, "FileName")
+                if dllname:
+                    if "mshtml.dll" in dllname.lower():
+                        return True
