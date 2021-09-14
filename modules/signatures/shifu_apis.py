@@ -52,7 +52,7 @@ class Shifu_APIs(Signature):
         if call["api"] == "CryptDecodeObjectEx":
             if self.lastcall == "NtQueryValueKey":
                 buf = self.get_argument(call, "Encoded")[0:64]
-                if buf in self.certBuffer:
+                if buf and buf in self.certBuffer:
                     self.countCertificates += 1
 
         self.lastcall = call["api"]
