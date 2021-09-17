@@ -78,7 +78,8 @@ class NetworkCnCHTTPSSocialMedia(Signature):
             "telete.in",
             "api.whatsapp.com",
             "api.vkontakte.ru",
-            "api.vk.com"
+            "api.vk.com",
+            "files.slack.com",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
@@ -125,6 +126,7 @@ class NetworkCnCHTTPSPasteSite(Signature):
             "justpaste.it",
             "stikked.ch",
             "dpaste.com",
+            "pastebin.pl",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
@@ -171,6 +173,10 @@ class NetworkCnCHTTPSURLShortenerSite(Signature):
             "hyp.ae",
             "s.id",
             "iurl.vip",
+            "42url.com",
+            "t.ly",
+            "rebrand.ly",
+            "2no.co",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
@@ -352,6 +358,7 @@ class NetworkCnCHTTPSFreeWebHosting(Signature):
             ".000webhostapp.com",
             ".repl.co",
             ".glitch.me",
+            ".ck.page",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
@@ -429,6 +436,7 @@ class NetworkCnCSMTPSExfil(Signature):
         self.found_masslogger = False
         self.found_firebirdrat = False
         self.found_snake = False
+        self.found_a310logger = False
 
     filter_apinames = set(["SslEncryptPacket"])
 
@@ -458,6 +466,8 @@ class NetworkCnCSMTPSExfil(Signature):
                     self.found_firebirdrat = True
                 if "Snake Keylogger" in buff or "| Snake" in buff:
                     self.found_snake = True
+                if "Passwords:::" in buff or "PW::" in buff or "FILES::" in buff or "SC::" in buff:
+                    self.found_a310logger = True
                 if "Screen Capture" in buff or "Keylog" in buff:
                     self.match = True
 
@@ -501,6 +511,10 @@ class NetworkCnCSMTPSExfil(Signature):
         elif self.found_snake:
             self.description = "{0} {1}".format("Snake Keylogger", self.description)
             self.families = ["SnakeKeylogger"]
+            return True
+        elif self.found_a310logger:
+            self.description = "{0} {1}".format("A310Logger", self.description)
+            self.families = ["A310Logger"]
             return True
         elif self.match:
             self.description = "{0} {1}".format("Generic", self.description)

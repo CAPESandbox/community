@@ -1,18 +1,18 @@
 rule Raccoon {
     meta:
         author = "ditekSHen"
-        description = "Detects Raccoon/Racealer infostealer"
-        cape_type = "Raccoon payload"
+        description = "Raccoon stealer payload"
+        cape_type = "Raccoon Payload"
     strings:
         $s1 = "endptr == token_buffer.data() + token_buffer.size()" fullword wide
         $s2 = "inetcomm server passwords" fullword wide
-        $s3 = "\\json.hpp" wide
-        $s4 = "CredEnumerateW" fullword ascii
-        $s5 = "Microsoft_WinInet_" fullword wide
-        $s6 = "already connected" fullword ascii
-        $s7 = "copy_file" fullword ascii
-        $s8 = "\"; filename=\"" fullword ascii
-        $s9 = "%[^:]://%[^/]%[^" fullword ascii
+        $s3 = "content-disposition: form-data; name=\"file\"; filename=\"data.zip\"" fullword ascii
+        $s4 = "\\json.hpp" wide
+        $s5 = ".?AVfilesystem_error@v1@filesystem@experimental@std@@" fullword ascii
+        $s6 = "CredEnumerateW" fullword ascii
+        $s7 = "Microsoft_WinInet_" fullword wide
+        $r1 = "%[^:]://%[^/]%[^" fullword ascii
+        $r2 = "%99[^:]://%99[^/]%99[^" fullword ascii
     condition:
-        uint16(0) == 0x5a4d and 8 of them
+        uint16(0) == 0x5a4d and (all of ($s*) or (5 of ($s*) and 1 of ($r*)))
 }
