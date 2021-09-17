@@ -437,6 +437,7 @@ class NetworkDNSPasteSite(Signature):
             "justpaste.it",
             "stikked.ch",
             "dpaste.com",
+            "pastebin.pl",
         ]
 
         for indicator in domain_indicators:
@@ -471,6 +472,10 @@ class NetworkDNSURLShortener(Signature):
             "coki.me",
             "hyp.ae",
             "iurl.vip",
+            "42url.com",
+            "t.ly",
+            "rebrand.ly",
+            "2no.co",
         ]
 
         for indicator in domain_indicators:
