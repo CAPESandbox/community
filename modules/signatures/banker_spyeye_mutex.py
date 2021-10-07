@@ -20,7 +20,7 @@ class SpyEyeMutexes(Signature):
     description = "Creates known SpyEye mutexes"
     severity = 3
     categories = ["banker"]
-    families = ["spyeye"]
+    families = ["Spyeye"]
     authors = ["nex"]
     minimum = "0.5"
 

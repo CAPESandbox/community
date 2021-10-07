@@ -26,7 +26,7 @@ class KazyBot_APIs(Signature):
     severity = 3
     weight = 3
     categories = ["rat"]
-    families = ["kazybot"]
+    families = ["Kazybot"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True

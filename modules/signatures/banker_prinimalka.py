@@ -20,7 +20,7 @@ class Prinimalka(Signature):
     description = "Detected Prinimalka banking trojan"
     severity = 3
     categories = ["banker"]
-    families = ["prinimalka"]
+    families = ["Prinimalka"]
     authors = ["nex"]
     minimum = "1.0"
     evented = True

@@ -19,7 +19,7 @@ class FamilyProxyBack(Signature):
     name = "family_proxyback"
     description = "Exhibits behavior characteristic of Proxyback malware"
     severity = 3
-    families = ["proxyback"]
+    families = ["ProxyBack"]
     authors = ["Kevin Ross"]
     references = ["http://researchcenter.paloaltonetworks.com/2015/12/proxyback-malware-turns-user-systems-into-proxies-without-consent/"]
     minimum = "1.2"

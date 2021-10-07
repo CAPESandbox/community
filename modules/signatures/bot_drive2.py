@@ -25,7 +25,7 @@ class Drive2(Signature):
     description = "Recognized to be a Drive2 bot"
     severity = 3
     categories = ["bot", "ddos"]
-    families = ["drive2"]
+    families = ["Drive2"]
     authors = ["jjones", "nex"]
     minimum = "0.5"
 

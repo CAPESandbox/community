@@ -21,7 +21,7 @@ class Ursnif_APIs(Signature):
     severity = 3
     weight = 3
     categories = ["spyware", "keylogger"]
-    families = ["ursnif"]
+    families = ["Ursnif"]
     authors = ["KillerInstinct"]
     minimum = "1.3"
     evented = True

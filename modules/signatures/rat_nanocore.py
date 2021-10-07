@@ -21,7 +21,7 @@ class NanocoreRAT(Signature):
     weight = 3
     severity = 3
     categories = ["rat"]
-    families = ["nanocore"]
+    families = ["NanoCore"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True

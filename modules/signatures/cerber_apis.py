@@ -21,7 +21,7 @@ class Cerber_APIs(Signature):
     weight = 3
     severity = 3
     categories = ["ransomware"]
-    families = ["cerber"]
+    families = ["Cerber"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True

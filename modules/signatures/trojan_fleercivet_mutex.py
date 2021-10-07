@@ -21,7 +21,7 @@ class FleerCivetMutexes(Signature):
     severity = 3
     weight = 5
     categories = ["trojan"]
-    families = ["fleercivet"]
+    families = ["Fleercivet"]
     authors = ["Optiv"]
     minimum = "0.5"
 

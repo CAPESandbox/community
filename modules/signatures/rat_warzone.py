@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class WarzoneRATRegkeys(Signature):
     name = "warzonerat_regkeys"
-    description = "Creates Warzone RAT registry keys"
+    description = "Creates WarzoneRAT registry keys"
     severity = 3
     categories = ["RAT"]
     families = ["WarzoneRAT", "AveMaria"]

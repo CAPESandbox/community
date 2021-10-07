@@ -20,7 +20,7 @@ class FynloskiMutexes(Signature):
     description = "Creates known Fynloski/DarkComet mutexes"
     severity = 3
     categories = ["rat"]
-    families = ["darkcomet", "fynloski"]
+    families = ["Darkcomet", "Fynloski"]
     authors = ["threatlead"]
     references = ["https://malwr.com/analysis/ODVlOWEyNDU3NzBhNDE3OWJkZjE0ZjIxNTdiMzU1YmM/"]
     minimum = "0.5"

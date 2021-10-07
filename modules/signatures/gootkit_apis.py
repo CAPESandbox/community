@@ -21,7 +21,7 @@ class Gootkit_APIs(Signature):
     weight = 3
     severity = 3
     categories = ["trojan"]
-    families = ["gootkit"]
+    families = ["Gootkit"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True

@@ -21,7 +21,7 @@ class Nymaim_APIs(Signature):
     weight = 3
     severity = 3
     categories = ["trojan", "ransomware"]
-    families = ["nymaim"]
+    families = ["Nymaim"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True

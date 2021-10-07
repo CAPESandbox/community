@@ -26,7 +26,7 @@ class Dyre_APIs(Signature):
     weight = 3
     severity = 3
     categories = ["banker", "trojan"]
-    families = ["dyre"]
+    families = ["Dyre"]
     authors = ["Optiv", "KillerInstinct"]
     minimum = "1.3"
     evented = True

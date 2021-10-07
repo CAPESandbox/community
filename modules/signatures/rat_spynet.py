@@ -25,7 +25,7 @@ class SpynetRat(Signature):
     description = "Creates known SpyNet mutexes and/or registry changes."
     severity = 3
     categories = ["rat"]
-    families = ["spynet"]
+    families = ["Spynet"]
     authors = ["threatlead", "nex", "Brad Spengler"]
     references = [
         "https://malwr.com/analysis/ZDQ1NjBhNWIzNTdkNDRhNjhkZTFmZTBkYTU2YjMwNzg/",

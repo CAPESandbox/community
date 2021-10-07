@@ -20,7 +20,7 @@ class ZeusP2P(Signature):
     description = "Zeus P2P (Banking Trojan)"
     severity = 3
     categories = ["banker"]
-    families = ["zeus"]
+    families = ["Zeus"]
     authors = ["Robby Zeitfuchs", "Optiv"]
     minimum = "1.2"
     references = ["https://malwr.com/analysis/NmNhODg5ZWRkYjc0NDY0M2I3YTJhNDRlM2FlOTZiMjA/", 

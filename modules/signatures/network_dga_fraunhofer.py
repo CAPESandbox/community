@@ -46,9 +46,9 @@ class NetworkDGAFraunhofer(Signature):
         # the dga families have produced FPs and will not be able to change weight or malfamily
         # we could consider to already ignore them in create_bloom.py
         self.allowed_families = [
-            "qsnatch",
-            "suppobox",
-            "virut",
+            "Qsnatch",
+            "Suppobox",
+            "Virut",
         ]
 
         try:

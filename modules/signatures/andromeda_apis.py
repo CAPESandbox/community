@@ -21,7 +21,7 @@ class Andromeda_APIs(Signature):
     weight = 3
     severity = 3
     categories = ["trojan"]
-    families = ["andromeda","gamarue"]
+    families = ["Andromeda","Gamarue"]
     authors = ["Optiv"]
     minimum = "1.3"
     evented = True

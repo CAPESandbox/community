@@ -26,7 +26,7 @@ class BetaBot_APIs(Signature):
     severity = 3
     weight = 3
     categories = ["trojan"]
-    families = ["betabot", "neurevt"]
+    families = ["Betabot", "Neurevt"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True

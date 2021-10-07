@@ -19,7 +19,7 @@ class RansomwareRadamant(Signature):
     name = "ransomware_radamant"
     description = "Exhibits behavior characteristic of Radamant ransomware"
     severity = 3
-    families = ["radamant"]
+    families = ["Radamant"]
     categories = ["ransomware"]
     authors = ["Kevin Ross"]
     minimum = "1.2"

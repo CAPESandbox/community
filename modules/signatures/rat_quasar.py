@@ -19,7 +19,7 @@ class QuasarMutexes(Signature):
     description = "Creates known Quasar mutexes"
     severity = 3
     categories = ["rat"]
-    families = ["Quasar"]
+    families = ["QuasarRAT"]
     authors = ["wmetcalf"]
     references = ["6a243d91a8253c474a88a7818c487b5caab65eb7764e2861ee131678a991737a"]
     minimum = "0.5"

@@ -113,7 +113,7 @@ class VolDevicetree1(Signature):
     alert = True
     categories = ["generic"]
     authors = ["Thorsten Sick"]
-    families = ["Zero access"]
+    families = ["ZeroAccess"]
     minimum = "0.5"
     ttp = ["F0010.001"]
 
@@ -138,7 +138,7 @@ class VolSvcscan1(Signature):
     alert = True
     categories = ["generic"]
     authors = ["Thorsten Sick"]
-    families = ["Zero access"]
+    families = ["ZeroAccess"]
     minimum = "0.5"
     ttp = ["T1031", "F0004"]
 
@@ -162,7 +162,7 @@ class VolSvcscan2(Signature):
     alert = True
     categories = ["generic"]
     authors = ["Thorsten Sick"]
-    families = ["Zero access"]
+    families = ["ZeroAccess"]
     minimum = "0.5"
     ttp = ["T1031", "T1089", "F0004"]
 
@@ -186,7 +186,7 @@ class VolSvcscan3(Signature):
     alert = True
     categories = ["generic"]
     authors = ["Thorsten Sick"]
-    families = ["Zero access"]
+    families = ["ZeroAccess"]
     minimum = "0.5"
     ttp = ["T1031", "F0004"]
 
@@ -210,7 +210,7 @@ class VolModscan1(Signature):
     alert = True
     categories = ["generic"]
     authors = ["Thorsten Sick"]
-    families = ["Zero access"]
+    families = ["ZeroAccess"]
     minimum = "0.5"
     ttp = ["T1055", "E1055"]
 

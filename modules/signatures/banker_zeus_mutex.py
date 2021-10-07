@@ -20,7 +20,7 @@ class ZeusMutexes(Signature):
     description = "Creates Zeus (Banking Trojan) mutexes"
     severity = 3
     categories = ["banker"]
-    families = ["zeus"]
+    families = ["Zeus"]
     authors = ["Robby Zeitfuchs", "KillerInstinct"]
     minimum = "1.2"
     references = ["https://malwr.com/analysis/NmNhODg5ZWRkYjc0NDY0M2I3YTJhNDRlM2FlOTZiMjA/#summary_mutexes",

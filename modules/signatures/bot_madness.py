@@ -25,7 +25,7 @@ class Madness(Signature):
     description = "Recognized to be an Madness bot"
     severity = 3
     categories = ["bot", "ddos"]
-    families = ["madness"]
+    families = ["Madness"]
     authors = ["thedude13", "nex"]
     minimum = "0.5"
 

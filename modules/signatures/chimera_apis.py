@@ -22,7 +22,7 @@ class Chimera_APIs(Signature):
     weight = 3
     severity = 3
     categories = ["trojan"]
-    families = ["chimera"]
+    families = ["Chimera"]
     authors = ["Optiv"]
     minimum = "1.3"
     evented = True

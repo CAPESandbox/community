@@ -20,7 +20,7 @@ class DirtJumper(Signature):
     description = "Recognized to be a DirtJumper bot"
     severity = 3
     categories = ["bot", "ddos"]
-    families = ["dirtjumper"]
+    families = ["DirtJumper"]
     authors = ["nex","jjones"]
     minimum = "0.5"
 

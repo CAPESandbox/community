@@ -29,7 +29,7 @@ class Hancitor_APIs(Signature):
     weight = 3
     severity = 3
     categories = ["downloader"]
-    families = ["hancitor", "chanitor", "tordal"]
+    families = ["Hancitor", "Chanitor", "Tordal"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True

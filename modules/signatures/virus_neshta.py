@@ -46,7 +46,7 @@ class NeshtaRegKeys(Signature):
     severity = 3
     weight = 3
     categories = ["virus"]
-    families = ["neshta"]
+    families = ["Neshta"]
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
@@ -78,7 +78,7 @@ class NeshtaFiles(Signature):
     severity = 3
     weight = 3
     categories = ["virus"]
-    families = ["neshta"]
+    families = ["Neshta"]
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True

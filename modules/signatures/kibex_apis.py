@@ -25,7 +25,7 @@ class Kibex_APIs(Signature):
         "http://researchcenter.paloaltonetworks.com/2015/06/keybase-keylogger-malware-family-exposed/"
     ]
     categories = ["spyware", "keylogger"]
-    families = ["kibex", "keybase"]
+    families = ["Kibex", "Keybase"]
     authors = ["KillerInstinct"]
     minimum = "1.3"
     evented = True

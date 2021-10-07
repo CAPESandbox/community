@@ -21,7 +21,7 @@ class Shifu_APIs(Signature):
     severity = 3
     weight = 3
     categories = ["banker", "trojan"]
-    families = ["shifu"]
+    families = ["Shifu"]
     authors = ["KillerInstinct"]
     minimum = "1.3"
     evented = True

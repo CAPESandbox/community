@@ -21,7 +21,7 @@ class Angler_JS(Signature):
     weight = 3
     severity = 3
     categories = ["exploit_kit"]
-    families = ["angler"]
+    families = ["Angler"]
     authors = ["Optiv"]
     minimum = "1.3"
     evented = True

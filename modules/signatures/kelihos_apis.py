@@ -21,7 +21,7 @@ class Kelihos_APIs(Signature):
     weight = 3
     severity = 3
     categories = ["bot"]
-    families = ["kelihos"]
+    families = ["Kelihos"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True

@@ -26,7 +26,7 @@ class RansomwareDMALocker(Signature):
     weight = 3
     severity = 3
     categories = ["ransomware"]
-    families = ["dmalocker"]
+    families = ["DMALocker"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True

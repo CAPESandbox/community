@@ -25,7 +25,7 @@ class Dridex_APIs(Signature):
     weight = 3
     severity = 3
     categories = ["banker", "trojan"]
-    families = ["dridex"]
+    families = ["Dridex"]
     authors = ["KillerInstinct"]
     minimum = "1.3"
     evented = True

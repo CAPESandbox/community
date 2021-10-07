@@ -25,7 +25,7 @@ class AthenaHttp(Signature):
     description = "Recognized to be an Athena HTTP bot"
     severity = 3
     categories = ["bot", "ddos"]
-    families = ["athenahttp"]
+    families = ["AthenaHTTP"]
     authors = ["jjones", "nex"]
     minimum = "0.5"
 

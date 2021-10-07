@@ -21,7 +21,7 @@ class CarberpMutexes(Signature):
     weight = 3
     severity = 3
     categories = ["banker", "trojan", "rootkit"]
-    families = ["carberp"]
+    families = ["Carberp"]
     authors = ["KillerInstinct"]
     minimum = "0.5"
 

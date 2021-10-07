@@ -20,7 +20,7 @@ class PlugxMutexes(Signature):
     description = "Creates known PlugX mutexes"
     severity = 3
     categories = ["rat"]
-    families = ["plugx"]
+    families = ["PlugX"]
     authors = ["threatlead", "nex"]
     references = ["https://malwr.com/analysis/YTZjYmUwMzNlNzkwNGU5YmIxNDQwYTcyYjFkYWI0NWE/"]
     minimum = "0.5"

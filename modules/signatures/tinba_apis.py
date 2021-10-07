@@ -21,7 +21,7 @@ class Tinba_APIs(Signature):
     severity = 3
     weight = 3
     categories = ["trojan", "banker"]
-    families = ["tinba"]
+    families = ["Tinba"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True

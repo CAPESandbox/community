@@ -26,7 +26,7 @@ class CryptoWall_APIs(Signature):
     weight = 3
     severity = 3
     categories = ["ransomware"]
-    families = ["cryptowall"]
+    families = ["CryptoWall"]
     authors = ["KillerInstinct"]
     minimum = "1.3"
     evented = True

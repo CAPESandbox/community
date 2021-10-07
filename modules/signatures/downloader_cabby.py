@@ -20,7 +20,7 @@ class DownloaderCabby(Signature):
     description = "Suspicious downloader (Cabby)"
     severity = 3
     categories = ["downloader"]
-    families = ["downloader"]
+    families = ["Cabby"]
     authors = ["Robby Zeitfuchs"]
     minimum = "0.5"
     references = ["https://malwr.com/analysis/MmM0NDA5NWU5NjVmNDE5OGJmZmQ1MTdiZWVkMmU2ZDE/", 

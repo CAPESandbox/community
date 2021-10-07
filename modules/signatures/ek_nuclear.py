@@ -21,7 +21,7 @@ class Nuclear_JS(Signature):
     weight = 3
     severity = 3
     categories = ["exploit_kit"]
-    families = ["nuclear"]
+    families = ["Nuclear"]
     authors = ["Will Metcalf"]
     minimum = "1.3"
     evented = True

@@ -20,7 +20,7 @@ class XtremeMutexes(Signature):
     description = "Creates known XtremeRAT mutexes"
     severity = 3
     categories = ["rat"]
-    families = ["xtremerat"]
+    families = ["XtremeRAT"]
     authors = ["threatlead", "nex"]
     references = [
         "https://malwr.com/analysis/ZWM4YjI2MzI1MmQ2NDBkMjkwNzI3NzhjNWM5Y2FhY2U/",

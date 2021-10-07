@@ -20,7 +20,7 @@ class PcClientMutexes(Signature):
     description = "Creates known PcClient mutex and/or file changes."
     severity = 3
     categories = ["rat"]
-    families = ["pcclient", "nex"]
+    families = ["PcClient"]
     authors = ["threatlead"]
     references = ["https://malwr.com/analysis/MDIxN2NhMjg4MTg2NDY4MWIyNTE0Zjk5MTY1OGU4YzE/"]
     minimum = "0.5"

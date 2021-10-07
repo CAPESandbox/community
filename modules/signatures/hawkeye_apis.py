@@ -36,7 +36,7 @@ class HawkEye_APIs(Signature):
     severity = 3
     weight = 3
     categories = ["trojan", "keylogger"]
-    families = ["hawkeye"]
+    families = ["HawkEye"]
     authors = ["KillerInstinct"]
     minimum = "1.3"
     evented = True

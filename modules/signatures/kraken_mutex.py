@@ -20,7 +20,7 @@ class KrakenMutexes(Signature):
     description = "Creates known Kraken mutexes"
     severity = 3
     categories = ["bot"]
-    families = ["kraken"]
+    families = ["Kraken"]
     authors = ["wmetcalf"]
     minimum = "0.5"
 

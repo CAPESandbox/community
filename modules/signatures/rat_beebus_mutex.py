@@ -20,7 +20,7 @@ class BeebusMutexes(Signature):
     description = "Creates known Beebus mutexes"
     severity = 3
     categories = ["rat"]
-    families = ["beebus"]
+    families = ["Beebus"]
     authors = ["threatlead", "nex"]
     minimum = "0.5"
     references = [

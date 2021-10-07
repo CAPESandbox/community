@@ -26,7 +26,7 @@ class Kovter_APIs(Signature):
     severity = 3
     weight = 3
     categories = ["clickfraud", "downloader"]
-    families = ["kovter"]
+    families = ["Kovter"]
     authors = ["KillerInstinct"]
     minimum = "1.3"
     evented = True

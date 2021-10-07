@@ -20,7 +20,7 @@ class DarkCometRegkeys(Signature):
     description = "Interacts with known DarkComet registry keys"
     severity = 3
     categories = ["rat"]
-    families = ["darkcomet"]
+    families = ["DarkComet"]
     authors = ["KillerInstinct"]
     minimum = "0.5"
 

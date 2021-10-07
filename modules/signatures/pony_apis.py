@@ -24,7 +24,7 @@ class Pony_APIs(Signature):
     weight = 3
     severity = 3
     categories = ["trojan", "infostealer"]
-    families = ["pony"]
+    families = ["Pony"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True
