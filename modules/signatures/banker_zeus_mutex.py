@@ -48,9 +48,4 @@ class ZeusMutexes(Signature):
                 self.data.append({"mutex": match})
                 return True
 
-        indicator = r"(Local|Global)\\\{[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}\}"
-        matches = self.check_mutex(pattern=indicator, regex=True, all=True)
-        if matches and len(matches) > 10:
-            return True
-
         return False
