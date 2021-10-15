@@ -177,6 +177,8 @@ class NetworkCnCHTTPSURLShortenerSite(Signature):
             "t.ly",
             "rebrand.ly",
             "2no.co",
+            "shorturl.at",
+            "cml.lol",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
@@ -224,6 +226,7 @@ class NetworkCnCHTTPSTempStorageSite(Signature):
             "dropmb.com",
             "transfer.sh",
             "1fichier.com",
+            "gofile.io",
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
@@ -317,6 +320,36 @@ class NetworkCnCHTTPSTempURLDNS(Signature):
     def on_complete(self):
         return self.match
 
+class NetworkCnCHTTPSInteractsh(Signature):
+    name = "network_cnc_https_temp_urldns"
+    description = "Establishes encrypted HTTPS connection to Interactsh"
+    severity = 3
+    categories = ["network", "encryption"]
+    authors = ["ditekshen"]
+    minimum = "1.3"
+    ttp = ["T1032"]
+    evented = True
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.match = False
+        self.domains = [
+            ".interact.sh",
+        ]
+
+    filter_apinames = set(["SslEncryptPacket"])
+
+    def on_call(self, call, process):
+        buff = self.get_argument(call, "Buffer")
+        if buff:
+            for domain in self.domains:
+                if domain in buff:
+                    self.match = True
+                    self.data.append({"http_request": buff})
+
+    def on_complete(self):
+        return self.match
+
 class NetworkCnCHTTPSPayload(Signature):
     name = "network_cnc_https_payload"
     description = "Downloads executable over encrypted HTTPS connection"
@@ -373,6 +406,45 @@ class NetworkCnCHTTPSFreeWebHosting(Signature):
     
     def on_complete(self):
         return self.match
+
+class NetworkCnCHTTPSTelegram(Signature):
+    name = "network_cnc_https_telegram"
+    description = "detected exfiltrating data via Telegram"
+    severity = 3
+    categories = ["network", "encryption"]
+    authors = ["ditekshen"]
+    minimum = "1.3"
+    ttp = ["T1032"]
+    evented = True
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.found_snake = False
+        self.found_matiex = False
+
+    filter_apinames = set(["SslEncryptPacket"])
+
+    def on_call(self, call, process):
+        buff = self.get_argument(call, "Buffer")
+        if buff and "api.telegram.org" in buff:
+            if "Snake" in buff and "Keylogger" in buff:
+                self.found_snake = True
+                self.data.append({"http_request": buff})
+            elif "Matiex" and "Keylogger" in buff:
+                self.found_matiex = True
+                self.data.append({"http_request": buff})
+    
+    def on_complete(self):
+        if self.found_snake:
+            self.description = "{0} {1}".format("Snake Keylogger", self.description)
+            self.families = ["Snake"]
+            return True
+        elif self.found_matiex:
+            self.description = "{0} {1}".format("Matiex Keylogger", self.description)
+            self.families = ["Matiex"]
+            return True
+
+        return False
 
 class NetworkCnCSMTPSGeneric(Signature):
     name = "network_cnc_smtps_generic"
@@ -437,6 +509,8 @@ class NetworkCnCSMTPSExfil(Signature):
         self.found_firebirdrat = False
         self.found_snake = False
         self.found_a310logger = False
+        self.found_matiex = False
+        self.found_neptune = False
 
     filter_apinames = set(["SslEncryptPacket"])
 
@@ -455,7 +529,7 @@ class NetworkCnCSMTPSExfil(Signature):
                 if "Orion Logger" in buff or "Orion" in buff:
                     self.found_orion = True
                 if "Subject: P_" in buff or "Subject: S_" in buff or "Subject: C_" in buff or "Subject: PW_" in buff or "Subject: CO_" in buff or "Subject: SC_" in buff or "Subject: KL_" in buff:
-                    self.found_agentteslat2 == True
+                    self.found_agentteslat2 = True
                 if "AspireLogger" in buff or "Aspire" in buff:
                     self.found_aspire = True
                 if "U3RlYWxlciBMb2dz" in buff or "Execution Alert!" in buff or "Password Monitoring" in buff or "KeyStroke Monitoring" in buff or "Screen Monitoring" in buff or "WebCam Monitoring" in buff or "Clipboard Monitoring" in buff:
@@ -468,6 +542,10 @@ class NetworkCnCSMTPSExfil(Signature):
                     self.found_snake = True
                 if "Passwords:::" in buff or "PW::" in buff or "FILES::" in buff or "SC::" in buff:
                     self.found_a310logger = True
+                if "Matiex Keylogger" in buff:
+                    self.found_matiex = True
+                if "Neptune" in buff:
+                    self.found_neptune = True
                 if "Screen Capture" in buff or "Keylog" in buff:
                     self.match = True
 
@@ -489,8 +567,8 @@ class NetworkCnCSMTPSExfil(Signature):
             self.families = ["AgentTeslaV1"]
             return True
         elif self.found_agentteslat2:
-            self.description = "{0} {1}".format("AgentTeslaV2", self.description)
-            self.families = ["AgentTelaV2"]
+            self.description = "{0} {1}".format("AgentTeslaV3", self.description)
+            self.families = ["AgentTeslaV3"]
             return True
         elif self.found_aspire:
             self.description = "{0} {1}".format("AspireLogger", self.description)
@@ -509,12 +587,20 @@ class NetworkCnCSMTPSExfil(Signature):
             self.families = ["FirebirdRAT"]
             return True
         elif self.found_snake:
-            self.description = "{0} {1}".format("Snake Keylogger", self.description)
-            self.families = ["SnakeKeylogger"]
+            self.description = "{0} {1}".format("Snake", self.description)
+            self.families = ["Snake"]
             return True
         elif self.found_a310logger:
             self.description = "{0} {1}".format("A310Logger", self.description)
             self.families = ["A310Logger"]
+            return True
+        elif self.found_matiex:
+            self.description = "{0} {1}".format("Matiex", self.description)
+            self.families = ["Matiex"]
+            return True
+        elif self.found_neptune:
+            self.description = "{0} {1}".format("Neptune", self.description)
+            self.families = ["Neptune"]
             return True
         elif self.match:
             self.description = "{0} {1}".format("Generic", self.description)

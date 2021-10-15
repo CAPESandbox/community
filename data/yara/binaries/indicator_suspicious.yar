@@ -135,6 +135,12 @@ rule INDICATOR_SUSPICIOUS_EXE_SandboxProductID {
         $id4 = "76487-640-1457236-23837" fullword ascii wide // Anubis Sandbox
         $id5 = "76497-640-6308873-23835" fullword ascii wide // CWSandbox
         $id6 = "76487-640-1464517-23259" fullword ascii wide // ??
+        $id7 = "76487 - 337 - 8429955 - 22614" fullword ascii wide // Anubis Sandbox
+        $id8 = "76487 - 644 - 3177037 - 23510" fullword ascii wide // CW Sandbox
+        $id9 = "55274 - 640 - 2673064 - 23950" fullword ascii wide // Joe Sandbox
+        $id10 = "76487 - 640 - 1457236 - 23837" fullword ascii wide // Anubis Sandbox
+        $id11 = "76497 - 640 - 6308873 - 23835" fullword ascii wide // CWSandbox
+        $id12 = "76487 - 640 - 1464517 - 23259" fullword ascii wide // ??
     condition:
         uint16(0) == 0x5a4d and 2 of them
 }
@@ -942,4 +948,40 @@ rule INDICATOR_SUSPICIOUS_EXE_VaultSchemaGUID {
         $s8 = "3C886FF3-2669-4AA2-A8FB-3F6759A77548" ascii wide
     condition:
          uint16(0) == 0x5a4d and 4 of them
+}
+
+rule INDICATOR_SUSPICIOUS_AntiVM_UNK01 {
+    meta:
+        author = "ditekSHen"
+        description = "Detects memory artifcats referencing specific combination of anti-VM checks"
+    strings:
+        $s1 = "vmci.s" fullword ascii wide
+        $s2 = "vmmemc" fullword ascii wide
+        $s3 = "qemu-ga.exe" fullword ascii wide
+        $s4 = "qga.exe" fullword ascii wide
+        $s5 = "windanr.exe" fullword ascii wide
+        $s6 = "vboxservice.exe" fullword ascii wide
+        $s7 = "vboxtray.exe" fullword ascii wide
+        $s8 = "vmtoolsd.exe" fullword ascii wide
+        $s9 = "prl_tools.exe" fullword ascii wide
+        $s10 = "7869.vmt" fullword ascii wide
+        $s11 = "qemu" fullword ascii wide
+        $s12 = "virtio" fullword ascii wide
+        $s13 = "vmware" fullword ascii wide
+        $s14 = "vbox" fullword ascii wide
+        $s15 = "%systemroot%\\system32\\ntdll.dll" fullword ascii wide
+    condition:
+         uint16(0) == 0x5a4d and all of them
+}
+
+rule INDICATOR_SUSPICIOUS_AntiVM_WMIC {
+    meta:
+        author = "ditekSHen"
+        description = "Detects memory artifcats referencing WMIC commands for anti-VM checks"
+    strings:
+        $s1 = "wmic process where \"name like '%vmwp%'\"" ascii wide nocase
+        $s2 = "wmic process where \"name like '%virtualbox%'\"" ascii wide nocase
+        $s3 = "wmic process where \"name like '%vbox%'\"" ascii wide nocase
+    condition:
+         uint16(0) == 0x5a4d and 2 of them
 }
