@@ -12,3 +12,4 @@ false_positives:
    - rule: "shellcode_peb_parsing"
    - rule: "lsadump"
    - rule: "UPX"
+   - rule: "INDICATOR_EXE_Packed_Dotfuscator"
