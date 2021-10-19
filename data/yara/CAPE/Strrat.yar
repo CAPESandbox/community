@@ -5,9 +5,9 @@ rule Strrat
 		description = "Strrat Rat"
 		cape_type = "Strrat Payload"
 	strings:
-		$string1 = "strigoi" ascii
-		$string2 = "config.txt" ascii
-		$string3 = "server" ascii
+		$string1 = "config.txt" ascii
+		$string2 = "carLambo" ascii
+		$string3 = "META-INF" ascii
 	condition:
 		all of them
 }
