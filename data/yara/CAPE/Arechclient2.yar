@@ -19,6 +19,16 @@ rule Arechclient2 {
         $s13 = "KillBrowsers" fullword ascii
         $s14 = "keybd_event" fullword ascii
         $s15 = "FuckCodeImg" fullword ascii
+        $v1_1 = "grabber@" fullword ascii
+        $v1_2 = "<BrowserProfile>k__" ascii
+        $v1_3 = "<SystemHardwares>k__" ascii
+        $v1_4 = "<geoplugin_request>k__" ascii
+        $v1_5 = "<ScannedWallets>k__" ascii
+        $v1_6 = "<DicrFiles>k__" ascii
+        $v1_7 = "<MessageClientFiles>k__" ascii
+        $v1_8 = /<Scan(Browsers|Wallets|Screen|VPN)>k__BackingField/ fullword ascii
+        $v1_9 = "displayName[AString-ZaString-z\\d]{2String4}\\.[String\\w-]{String6}\\.[\\wString-]{2String7}Local Extension Settingshost" wide
+        $v1_10 = "\\sitemanager.xml MB or SELECT * FROM Cookiesconfig" wide
     condition:
-        uint16(0) == 0x5a4d and 6 of them
+        uint16(0) == 0x5a4d and (6 of ($s*) or 7 of ($v1*) or (6 of ($v1*) and 1 of ($s*)))
 }
