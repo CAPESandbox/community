@@ -163,6 +163,7 @@ class RansomwareFiles(Signature):
             (".*\\\\Readme\.README$", ["PYSA"]),
             (".*\\\\How\sTo\sRestore\sYour\sFiles\.txt$", ["Babuk"]),
             (".*\\\\PHOENIX-HELP\.txt", ["PhoenixCryptoLocker"]),
+            (".*\\\\BlackByte_restoremyfiles.txt", ["BlackByte"]),
         ]
 
         for ioc in file_list:

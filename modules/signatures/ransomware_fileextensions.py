@@ -129,6 +129,7 @@ class RansomwareExtensions(Signature):
             (".*\.pysa$", ["PYSA"]),
             (".*\.__NIST_[A-Z0-9]{4}__$", ["Babuk"]),
             (".*\.phoenix$", ["PhoenixCryptoLocker"]),
+            (".*\.blackbyte$", ["BlackByte"]),
         ]
 
         for indicator in indicators:
