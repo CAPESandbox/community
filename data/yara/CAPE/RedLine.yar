@@ -117,6 +117,16 @@ rule RedLine {
         $v4_7 = "xoredString" fullword ascii
         $v4_8 = "procName" fullword ascii
         $v4_9 = "base64EncodedData" fullword ascii
+        // another variant 2021-10-23
+        $v5_1 = "DownloadAndExecuteUpdate" fullword ascii
+        $v5_2 = "ITaskProcessor" fullword ascii
+        $v5_3 = "CommandLineUpdate" fullword ascii
+        $v5_4 = "DownloadUpdate" fullword ascii
+        $v5_5 = "FileScanning" fullword ascii
+        $v5_6 = "GetLenToPosState" fullword ascii
+        $v5_7 = "RecordHeaderField" fullword ascii
+        $v5_8 = "EndpointConnection" fullword ascii
+        $v5_9 = "BCRYPT_KEY_LENGTHS_STRUCT" fullword ascii
     condition:
-        (uint16(0) == 0x5a4d and (all of ($s*) or 2 of ($x*) or 7 of ($u*) or 7 of ($pat*) or (1 of ($x*) and (5 of ($u*) or 2 of ($pat*))) or 5 of ($v2*) or 4 of ($v3*) or (3 of ($v2*) and (2 of ($pat*) or 2 of ($u*)) or (1 of ($vx4*) and 5 of ($v4*)) or 5 of ($v4*)))) or (all of ($x*) and 4 of ($s*))
+        (uint16(0) == 0x5a4d and (all of ($s*) or 2 of ($x*) or 7 of ($u*) or 7 of ($pat*) or (1 of ($x*) and (5 of ($u*) or 2 of ($pat*))) or 5 of ($v2*) or 4 of ($v3*) or (3 of ($v2*) and (2 of ($pat*) or 2 of ($u*)) or (1 of ($vx4*) and 5 of ($v4*)) or 5 of ($v4*) or 6 of ($v5*)))) or (all of ($x*) and 4 of ($s*))
 }

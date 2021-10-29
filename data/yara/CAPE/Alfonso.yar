@@ -1,7 +1,7 @@
 rule Alfonoso {
     meta:
         author = "ditekSHen"
-        description = "Detects Alfonoso / Shurk infostealer"
+        description = "Detects Alfonoso / Shurk / HunterStealer infostealer"
         cape_type = "Alfonso Infostealer Payload"
     strings:
         $s1 = "%s\\etilqs_" fullword ascii
@@ -24,5 +24,5 @@ rule Alfonoso {
         $f2 = "servers.fav" ascii
         $f3 = "\\USERDATA.DAT" fullword ascii
     condition:
-        uint16(0) == 0x5a4d and (9 of ($s*) or (6 of ($s*) and 2 of ($f*)) or (all of ($f*) and 5 of ($s*)))
+        uint16(0) == 0x5a4d and (8 of ($s*) or (6 of ($s*) and 2 of ($f*)) or (all of ($f*) and 5 of ($s*)))
 }
