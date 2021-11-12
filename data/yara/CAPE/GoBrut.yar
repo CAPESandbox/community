@@ -1,8 +1,8 @@
 rule GoBrut {
     meta:
         author = "ditekSHen"
-        description = "Detects unknown Go multi-bruteforcer bot (dubbed GoBrut) against multiple systems: QNAP, MagOcart, WordPress, Opencart, Bitrix, Postgers, MySQL, Drupal, Joomla, SSH, FTP, Magneto, CPanel"
-        cape_type = "GoBrut Payload"
+        description = "Detects unknown Go multi-bruteforcer bot (StealthWorker / GoBrut) against multiple systems: QNAP, MagOcart, WordPress, Opencart, Bitrix, Postgers, MySQL, Drupal, Joomla, SSH, FTP, Magneto, CPanel"
+        cape_type = "GoBrut StealthWorker Payload"
     strings:
         $x1 = "/src/StealthWorker/Worker" ascii
         $x2 = "/go/src/Cloud_Checker/" ascii
@@ -45,6 +45,13 @@ rule GoBrut {
         $p14 = "%qlog=%s&pwd=%s&wp-submit=Log In&redirect_to=%s/wp-admin/&testcookie=1" ascii
         $p15 = "name=%s&pass=%s&form_build_id=%s&form_id=user_login_form&op=Log" ascii
         $p16 = "username=%s&passwd=%s&option=com_login&task=login&return=%s&%s=1" ascii
+        $v1_1 = "brutC" fullword ascii
+        $v1_2 = "XmlRpc" fullword ascii
+        $v1_3 = "shouldRetry$" ascii
+        $v1_4 = "HttpC|%" ascii
+        $v1_5 = "ftpH%_" ascii
+        $v1_6 = "ssh%po" ascii
+        $v1_7 = "?sevlyar/4-da" ascii
     condition:
-        uint16(0) == 0x5a4d and ((2 of ($x*) and 3 of ($s*)) or all of ($s*) or 6 of ($w*) or 6 of ($p*) or 12 of them)
+        (uint16(0) == 0x5a4d or uint16(0) == 0x457f) and ((2 of ($x*) and 3 of ($s*)) or all of ($s*) or 6 of ($w*) or 6 of ($p*) or 6 of ($v1*) or 12 of them)
 }
