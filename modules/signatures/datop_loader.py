@@ -19,7 +19,7 @@ class DatopLoader(Signature):
     name = "datop_loader"
     description = "Exhibits indicators of DatopLoader, loader often used by Qakbot."
     severity = 3
-    categories = ["stealer"]
+    categories = ["loader"]
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True
