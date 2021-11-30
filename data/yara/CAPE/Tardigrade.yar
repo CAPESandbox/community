@@ -1,3 +1,5 @@
+import "pe"
+
 rule Tardigrade {
     meta:
         author = "ditekSHen"
