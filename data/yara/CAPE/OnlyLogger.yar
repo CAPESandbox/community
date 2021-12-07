@@ -1,8 +1,8 @@
-rule onlyLogger {
+rule OnlyLogger {
     meta:
         author = "ditekSHen"
         description = "Detects onlyLogger loader variants"
-        cape_type = "onlyLogger Loader Payload"
+        cape_type = "OnlyLogger Loader"
     strings:
         $s1 = { 45 6c 65 76 61 74 65 64 00 00 00 00 4e 4f 54 20 65 6c 65 76 61 74 65 64 }
         $s2 = "\" /f & erase \"" ascii
