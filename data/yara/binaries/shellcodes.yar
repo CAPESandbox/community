@@ -308,4 +308,3 @@ rule donut_shellcode_relative {
             uint32(@cspace[i] - 469 + 41) == 0 
         )
 }
-
