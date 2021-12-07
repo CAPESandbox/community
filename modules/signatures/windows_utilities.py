@@ -66,6 +66,7 @@ class UsesWindowsUtilities(Signature):
             "nbtstat",
             "net ",
             "net.exe",
+            "net1.exe",
             "netsh",
             "netstat",
             "nslookup",
