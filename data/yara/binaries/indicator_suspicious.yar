@@ -15,6 +15,8 @@ rule INDICATOR_SUSPICIOUS_GENRansomware {
         $cmd8 = "resize shadowstorage /for=c: /on=c: /maxsize=" ascii wide nocase
         $cmd9 = "shadowcopy where \"ID='%s'\" delete" ascii wide nocase
         $cmd10 = "wmic.exe SHADOWCOPY /nointeractive" ascii wide nocase
+        $cmd11 = "WMIC.exe shadowcopy delete" ascii wide nocase
+        $cmd12 = "Win32_Shadowcopy | ForEach-Object {$_.Delete();}" ascii wide nocase
         $delr = /del \/s \/f \/q(( [A-Za-z]:\\(\*\.|[Bb]ackup))(VHD|bac|bak|wbcat|bkf)?)+/ ascii wide
         $wp1 = "delete catalog -quiet" ascii wide nocase
         $wp2 = "wbadmin delete backup" ascii wide nocase
