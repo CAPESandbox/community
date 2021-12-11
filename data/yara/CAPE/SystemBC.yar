@@ -24,14 +24,14 @@ condition:
 	uint16(0) == 0x5a4d and any of them
 }
 
-rule SystemBC_Config
+rule SystemBC
 {
 meta:
 	description = "Identifies SystemBC RAT, decrypted config."
 	author = "@bartblaze"
 	date = "2021-07"
 	tlp = "White"
-        cape_type = "SystemBC Payload"
+    cape_type = "SystemBC Payload"
 
 strings:
 	$ = "BEGINDATA" ascii wide fullword
