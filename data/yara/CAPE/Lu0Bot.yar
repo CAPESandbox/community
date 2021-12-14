@@ -1,4 +1,5 @@
-rule Lu0Bot {
+rule Lu0Bot 
+{
     meta:
         author = "ditekSHen, @Fmk0, @r0ny123"
         description = "Detects Lu0Bot"
@@ -21,3 +22,4 @@ rule Lu0Bot {
         $s = { be [4] 89 f7 [0-2] 89 f0 81 c7 [4] 81 2e [4] 83 c6 ?? 39 fe 7c ?? bb [4] 53 }
     condition:
         uint16be(0) == 0x4D5A and uint32be(uint32(0x3C)) == 0x50450000 and filesize < 5KB and all of them
+}
