@@ -9,7 +9,7 @@ rule Lu0Bot
         /*
         be 00 20 40 00       mov        esi, 0x402000
         89 f7                mov        edi, esi
-        31 c0                xor        eax, eax
+        31 c0                xor        eax, eax     ; added in recent samples, e.g. 8e343598ba830d20ffc22d2a9c82ad5a
         89 f0                mov        eax, esi
         81 c7 cc 01 00 00    add        edi, 0x1cc
         81 2e 4b 4b 4d 4c    sub        dword ptr [esi], 0x4c4d4b4b
