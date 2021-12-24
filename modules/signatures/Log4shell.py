@@ -33,7 +33,7 @@ class Log4j(Signature):
         httpitems = self.results.get("network", {}).get("http", [])
         for http in httpitems:
             if user_agent.search(http.get("data", "")):
-                self.data.append({"data" : http['data']})
+                self.data.append({"url" : http["uri"], "user-agent" : http.get("user-agent",""), "data" : http['data']})
                 return True
 
         return False
