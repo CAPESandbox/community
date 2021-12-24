@@ -20,6 +20,8 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+user_agent = re.compile("(?i)((%(25){0,}20|\s)*(%(25){0,}24|\$)(%(25){0,}20|\s)*(%(25){0,}7B|{){0,1}(%(25){0,}20|\s)*(%(25){0,}(6A|4A)|J)(%(25){0,}(6E|4E)|N)(%(25){0,}(64|44)|D)(%(25){0,}(69|49)|I)(%(25){0,}20|\s)*(%(25){0,}3A|:)[\w\%]+(%(25){1,}3A|:)(%(25){1,}2F|\/)|\$((::-[A-Z%]}\$){1,}|(ENV|LOWER|UPPER):).+[:}]{2}\/)[^\n]+")
+
 class Log4j(Signature):
     name = "Log4Shell"
     description = "Log4Shell"
@@ -28,15 +30,10 @@ class Log4j(Signature):
     minimum = "0.5"
 
     def run(self):
-        user_agent = re.compile("(?i)((%(25){0,}20|\s)*(%(25){0,}24|\$)(%(25){0,}20|\s)*(%(25){0,}7B|{){0,1}(%(25){0,}20|\s)*(%(25){0,}(6A|4A)|J)(%(25){0,}(6E|4E)|N)(%(25){0,}(64|44)|D)(%(25){0,}(69|49)|I)(%(25){0,}20|\s)*(%(25){0,}3A|:)[\w\%]+(%(25){1,}3A|:)(%(25){1,}2F|\/)|\$((::-[A-Z%]}\$){1,}|(ENV|LOWER|UPPER):).+[:}]{2}\/)[^\n]+")
-
-        if "network" in self.results:
-            httpitems = self.results["network"].get("http")
-            if not httpitems:
-                return False
-            for http in httpitems:
-                if user_agent.search(http.get("user-agent", "")):
-                    self.data.append({"url" : http["uri"], "user-agent" : http.get("user-agent","")})
-                    return True
+        httpitems = self.results.get("network", {}).get("http", [])
+        for http in httpitems:
+            if user_agent.search(http.get("user-agent", "")):
+                self.data.append({"url" : http["uri"], "user-agent" : http.get("user-agent","")})
+                return True
 
         return False
