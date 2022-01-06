@@ -32,7 +32,18 @@ class PDF_Annot_URLs(Signature):
                 if "Annot_URLs" in self.results["static"]["pdf"]:
                     for entry in self.results["static"]["pdf"]["Annot_URLs"]:
                         entrylower = entry.lower()
-                        if entrylower.endswith((".zip", ".exe", ".msi", ".bat", ".scr", ".rar", ".com")):
-                            self.data.append({"URL":entry})
-                            found_URLs = True
+                        if (
+                            entrylower.endswith((".zip", ".exe", ".msi", ".bat", ".scr", ".rar", ".com")) and
+                            ( entrylower.startswith(("mailto:")) != 1 ) # skip mailto: as it can't add attachments
+                           ):
+                            skip=0
+                            # skip triggering on http:// and https:// links that don't have anything after the domain name
+                            # so http://foo.com will be skipped, but http://foo.com/malware.com will not be
+                            if ( entrylower.startswith(("http://")) == 1 ) and ( entrylower.find("/", 8 ) == -1 ):
+                                skip=1
+                            elif ( entrylower.startswith(("https://")) == 1 ) and ( entrylower.find("/", 9 ) == -1 ):
+                                skip=1
+                            if skip == 0:
+                                self.data.append({"URL":entry})
+                                found_URLs = True
         return found_URLs
