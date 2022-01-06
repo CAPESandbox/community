@@ -2,6 +2,20 @@
 # This file is part of CAPE Sandbox - https://capesandbox.com
 # See the file 'docs/LICENSE' for copying permission.
 
+# This calls the specified command, pointing it at the report.json as
+# well as setting $ENV{CAPE_TASK_ID} to the task ID of the run in question.
+#
+# The following set in reporting.conf would enable it and run "/foo/bar.sh".
+#
+# [zexecreport]
+# enabled=yes
+# command=/foo/bar.sh
+#
+# The name of this module should place it after most everything if using
+# it for something other than report.json, but if using it for something
+# else in the reporting folder or the like, you will want to make sure
+# that it's name comes before "zexecreport".
+
 import subprocess
 import logging
 import os
