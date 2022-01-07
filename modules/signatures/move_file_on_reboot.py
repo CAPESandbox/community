@@ -37,11 +37,11 @@ class move_file_on_reboot(Signature):
         if call["api"] == "MoveFileWithProgressTransactedW" or call["api"] == "MoveFileWithProgressTransactedA" and self.get_raw_argument(call, "Flags") == MOVEFILE_DELAY_UNTIL_REBOOT:
             # Filter out noise such as renaming C:\\Users\\Bubba\\AppData\\Local\\Microsoft\\Windows\\Explorer\\iconcache_wide_alternate.db ...
             # C:\\Users\\Bubba\\AppData\\Local\\Microsoft\\Windows\\Explorer\\IconCacheToDelete\\icn30DD.tmp
-            if (
-                ( str( self.get_argument(call, "ExistingFileName") ).find("\\AppData\\Local\\Microsoft\\Windows\\Explorer\\iconcache_") == -1 ) and
-                ( str( self.get_argument(call, "NewFileName") ).find("\\AppData\\Local\\Microsoft\\Windows\\Explorer\\IconCacheToDelete\\") == -1 )
-            ):
-                self.data.append({"File Move on Reboot" : "Old: %s -> New: %s" % (self.get_argument(call, "ExistingFileName"), self.get_argument(call, "NewFileName")) })
+            existingname = self.get_argument(call, "ExistingFileName")
+            newname = self.get_argument(call, "NewFileName")
+            if existingname and newname and not existingname.find("\\AppData\\Local\\Microsoft\\Windows\\Explorer\\iconcache_") and \
+                not newname.find("\\AppData\\Local\\Microsoft\\Windows\\Explorer\\IconCacheToDelete\\"):
+                self.data.append({"File Move on Reboot" : "Old: %s -> New: %s" % (existingname, newname)})
                 self.match = True
 
     def on_complete(self):
