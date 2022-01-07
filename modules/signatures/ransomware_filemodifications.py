@@ -45,6 +45,9 @@ class RansomwareFileModifications(Signature):
             return None
         origfile = self.get_argument(call, "ExistingFileName")
         newfile = self.get_argument(call, "NewFileName")
+        if origfile.find("\\AppData\\Local\\Microsoft\\Windows\\Explorer\\iconcache_") and \
+            newfile.find("\\AppData\\Local\\Microsoft\\Windows\\Explorer\\IconCacheToDelete\\"):
+                return None
         self.movefilecount += 1
         if origfile != newfile and "@" not in newfile:
             origextextract = re.search("^.*(\.[a-zA-Z0-9_\-]{1,}$)", origfile)
