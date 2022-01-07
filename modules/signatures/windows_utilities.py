@@ -111,8 +111,7 @@ class UsesWindowsUtilities(Signature):
             lower = cmdline.lower()
             for utility in utilities:
                 if utility in lower and \
-                    '-' + utility not in lower and \
-                    utility + '=' not in lower:
+                    '-' + utility not in lower:
                         ret = True
                         self.data.append({"command" : cmdline})
 
