@@ -33,8 +33,8 @@ class ClamAV(Signature):
         clam_no_score_re = re.compile(r'^(SaneSecurity\.FoxHole|MiscreantPunch\.(?:Susp|INFO))',re.I)
         clam_ignore = ['PhishTank.Phishing.6117523.UNOFFICIAL']
         self.data = []
-        if self.results["target"]["category"] != "url" and self.results["target"]["category"] != "pcap":
-            if "clamav" in self.results["target"]["file"].keys() and self.results["target"]["file"]["clamav"] and "sha256" in self.results["target"]["file"].keys():
+        if self.results["target"]["category"] not in ("url", "pcap"):
+            if self.results.get("target", {}).get("file", {}).get("clamav") and self.results.get("target", {}).get("file", {}).get("sha256"):
                 for detection in self.results["target"]["file"]["clamav"]:
                     entry = "%s, target" % (detection)
                     if detection in clam_ignore:
@@ -45,41 +45,37 @@ class ClamAV(Signature):
                         entry = "%s, type:%s" % (entry,self.results["target"]["file"].get("type", ""))
                     self.data.append({self.results["target"]["file"]["sha256"]: entry})
 
-        if "suricata" in self.results and self.results["suricata"]:
-            if "files" in self.results["suricata"]:
-                for entry in self.results["suricata"]["files"]:
-                    proto = entry["protocol"]
-                    if "clamav" in entry["file_info"].keys() and entry["file_info"]["clamav"] and "sha256" in entry["file_info"].keys():
-                        for detection in entry["file_info"]["clamav"]:
-                            if detection in clam_ignore:
-                                continue
-                            if not clam_no_score_re.search(detection):
-                                self.weight = 3
-                            lentry = "{}, suricata_extracted_files, src:{}, sp:{}, dst:{}, dp:{}".format(detection,entry.get('srcip',''), entry.get('sp',''),entry.get('dstip',''),entry.get('dp',''))
-                            if "http_user_agent" in entry.keys():
-                                lentry  = "%s, ua:%s" % (lentry, entry['http_user_agent'])
-                            if "http_uri" in entry.keys():
-                                lentry =  "%s, uri:%s" % (lentry,entry['http_uri'])
-                            if "http_referer" in entry.keys():
-                                lentry = "%s, referer:%s" % (lentry,entry['http_referer'])
-                            if entry["file_info"]["type"]:
-                                lentry =  "%s, type:%s" % (lentry,entry["file_info"]["type"])
-                            self.data.append({entry["file_info"]["sha256"]: lentry})
+        for entry in self.results.get("suricata", {}).get("files", []):
+            if entry.get("file_info", {}).get("clamav") and entry.get("file_info", {}).get("sha256"):
+                for detection in entry["file_info"]["clamav"]:
+                    if detection in clam_ignore:
+                        continue
+                    if not clam_no_score_re.search(detection):
+                        self.weight = 3
+                    lentry = "{}, suricata_extracted_files, src:{}, sp:{}, dst:{}, dp:{}".format(detection,entry.get('srcip',''), entry.get('sp',''),entry.get('dstip',''),entry.get('dp',''))
+                    if "http_user_agent" in entry.keys():
+                        lentry  = "%s, ua:%s" % (lentry, entry['http_user_agent'])
+                    if "http_uri" in entry.keys():
+                        lentry =  "%s, uri:%s" % (lentry,entry['http_uri'])
+                    if "http_referer" in entry.keys():
+                        lentry = "%s, referer:%s" % (lentry,entry['http_referer'])
+                    if entry["file_info"]["type"]:
+                        lentry =  "%s, type:%s" % (lentry,entry["file_info"]["type"])
+                    self.data.append({entry["file_info"]["sha256"]: lentry})
                             
-        if "dropped" in self.results:
-            for entry in self.results["dropped"]:
-                if "clamav" in entry.keys() and entry["clamav"] and "sha256" in entry.keys():
-                    for detection in entry["clamav"]:
-                        if detection in clam_ignore:
-                            continue
-                        if not clam_no_score_re.search(detection):
-                            self.weight = 3
-                        lentry = "%s, dropped" % (detection)
-                        if "guest_paths"  in entry.keys():
-                            lentry = "%s, guest_paths:%s" % (lentry,"*".join(entry["guest_paths"]))
-                        if "type" in entry.keys():
-                            lentry = "%s, type:%s" % (lentry,entry["type"])
-                        self.data.append({entry["sha256"]: lentry})
+        for entry in self.results.get("dropped", []):
+            if entry.get("clamav") and entry.get("sha256"):
+                for detection in entry["clamav"]:
+                    if detection in clam_ignore:
+                        continue
+                    if not clam_no_score_re.search(detection):
+                        self.weight = 3
+                    lentry = "%s, dropped" % (detection)
+                    if "guest_paths"  in entry.keys():
+                        lentry = "%s, guest_paths:%s" % (lentry,"*".join(entry["guest_paths"]))
+                    if "type" in entry.keys():
+                        lentry = "%s, type:%s" % (lentry,entry["type"])
+                    self.data.append({entry["sha256"]: lentry})
 
         if len(self.data) > 0:
             return True
