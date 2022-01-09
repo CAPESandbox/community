@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class RatsnifMutexes(Signature):
     name = "ratsnif_mutexes"
     description = "Creates known Ratsnif mutexes"

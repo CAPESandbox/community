@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ClickfraudVolume(Signature):
     name = "clickfraud_volume"
     description = "Attempts to disable browser navigation sounds, indicative of click fraud"

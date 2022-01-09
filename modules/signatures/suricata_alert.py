@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class SuricataAlert(Signature):
     name = "suricata_alert"
     description = "Created network traffic indicative of malicious activity"
@@ -35,7 +36,7 @@ class SuricataAlert(Signature):
             "ET INFO",
             "ETPRO INFO",
             "ET POLICY",
-            "ETPRO POLICY"
+            "ETPRO POLICY",
         ]
 
         if "suricata" in self.results:
@@ -51,7 +52,7 @@ class SuricataAlert(Signature):
                             sigset.add(alert["signature"])
 
         for sig in sigset:
-            self.data.append({"signature" : sig})
+            self.data.append({"signature": sig})
             self.weight += 1
 
         if len(sigset):

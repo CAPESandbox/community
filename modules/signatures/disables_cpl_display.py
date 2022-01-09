@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DisablesCPLDisplay(Signature):
     name = "disables_cpl_disable"
     description = "Disables displaying Control Panel"
@@ -24,7 +25,7 @@ class DisablesCPLDisplay(Signature):
     minimum = "1.3"
     evented = True
 
-    def run(self):    
+    def run(self):
         indicators = [
             "HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\NoDispCPL",
         ]

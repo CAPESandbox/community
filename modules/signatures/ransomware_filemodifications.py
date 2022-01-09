@@ -20,6 +20,7 @@ try:
 except ImportError:
     import re
 
+
 class RansomwareFileModifications(Signature):
     name = "ransomware_file_modifications"
     description = "Exhibits possible ransomware file modification behavior"
@@ -38,16 +39,17 @@ class RansomwareFileModifications(Signature):
         self.appendemailcount = 0
         self.newextensions = []
 
-    filter_apinames = set(["MoveFileWithProgressW","MoveFileWithProgressTransactedW"])
+    filter_apinames = set(["MoveFileWithProgressW", "MoveFileWithProgressTransactedW"])
 
     def on_call(self, call, process):
         if not call["status"]:
             return None
         origfile = self.get_argument(call, "ExistingFileName")
         newfile = self.get_argument(call, "NewFileName")
-        if origfile.find("\\AppData\\Local\\Microsoft\\Windows\\Explorer\\iconcache_") and \
-            newfile.find("\\AppData\\Local\\Microsoft\\Windows\\Explorer\\IconCacheToDelete\\"):
-                return None
+        if origfile.find("\\AppData\\Local\\Microsoft\\Windows\\Explorer\\iconcache_") and newfile.find(
+            "\\AppData\\Local\\Microsoft\\Windows\\Explorer\\IconCacheToDelete\\"
+        ):
+            return None
         self.movefilecount += 1
         if origfile != newfile and "@" not in newfile:
             origextextract = re.search("^.*(\.[a-zA-Z0-9_\-]{1,}$)", origfile)
@@ -72,18 +74,38 @@ class RansomwareFileModifications(Signature):
         deletedfiles = self.results["behavior"]["summary"]["delete_files"]
         deletedcount = 0
         for deletedfile in deletedfiles:
-            if "\\temp\\" not in deletedfile.lower() and "\\temporary internet files\\" not in deletedfile.lower() and "\\cache" not in deletedfile.lower() and not deletedfile.lower().endswith(".tmp"):
+            if (
+                "\\temp\\" not in deletedfile.lower()
+                and "\\temporary internet files\\" not in deletedfile.lower()
+                and "\\cache" not in deletedfile.lower()
+                and not deletedfile.lower().endswith(".tmp")
+            ):
                 deletedcount += 1
         if deletedcount > 100:
-            self.data.append({"mass file_deletion" : "Appears to have deleted %s files indicative of ransomware or wiper malware deleting files to prevent recovery" % (deletedcount)})
+            self.data.append(
+                {
+                    "mass file_deletion": "Appears to have deleted %s files indicative of ransomware or wiper malware deleting files to prevent recovery"
+                    % (deletedcount)
+                }
+            )
             ret = True
 
         if self.movefilecount > 60:
-            self.data.append({"file_modifications" : "Performs %s file moves indicative of a potential file encryption process" % (self.movefilecount)})
+            self.data.append(
+                {
+                    "file_modifications": "Performs %s file moves indicative of a potential file encryption process"
+                    % (self.movefilecount)
+                }
+            )
             ret = True
 
         if self.appendemailcount > 60:
-            self.data.append({"appends_email" : "Appears to have appended an email address onto %s files. This is used by ransomware which requires the user to email the attacker for payment/recovery actions" % (self.appendemailcount)})
+            self.data.append(
+                {
+                    "appends_email": "Appears to have appended an email address onto %s files. This is used by ransomware which requires the user to email the attacker for payment/recovery actions"
+                    % (self.appendemailcount)
+                }
+            )
 
         if "dropped" in self.results:
             droppedunknowncount = 0
@@ -93,7 +115,12 @@ class RansomwareFileModifications(Signature):
                 if mimetype == "data" and ".tmp" not in filename and "CryptnetUrlCache" not in filename:
                     droppedunknowncount += 1
             if droppedunknowncount > 50 and self.results["info"]["package"] != "pdf":
-                self.data.append({"drops_unknown_mimetypes" : "Drops %s unknown file mime types which may be indicative of encrypted files being written back to disk" % (droppedunknowncount)})
+                self.data.append(
+                    {
+                        "drops_unknown_mimetypes": "Drops %s unknown file mime types which may be indicative of encrypted files being written back to disk"
+                        % (droppedunknowncount)
+                    }
+                )
                 ret = True
 
         # Note: Always make sure this check is at bottom so that appended file extensions are underneath behavior alerts
@@ -101,11 +128,13 @@ class RansomwareFileModifications(Signature):
             # This check is to prevent any cases where there is a large number of unique appended extensions resulting in an overly large list
             newcount = len(self.newextensions)
             if newcount > 15:
-                self.data.append({"appends_new_extension" : "Appended %s unique file extensions to multiple modified files" % (newcount)})
+                self.data.append(
+                    {"appends_new_extension": "Appended %s unique file extensions to multiple modified files" % (newcount)}
+                )
             if newcount < 16:
-                self.data.append({"appends_new_extension" : "Appends a new file extension to multiple modified files" })
+                self.data.append({"appends_new_extension": "Appends a new file extension to multiple modified files"})
                 for newextension in self.newextensions:
-                    self.data.append({"new_appended_file_extension" : newextension})
+                    self.data.append({"new_appended_file_extension": newextension})
             ret = True
 
         return ret

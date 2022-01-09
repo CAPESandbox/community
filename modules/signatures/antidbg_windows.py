@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiDBGWindows(Signature):
     name = "antidbg_windows"
     description = "Checks for the presence of known windows from debuggers and forensic tools"
@@ -109,8 +110,7 @@ class AntiDBGWindows(Signature):
             "WinAPIOverride",
             "WinSpy",
             "dnSpy",
-            "ILSpy"
-            
+            "ILSpy",
         ]
 
         for indicator in indicators:

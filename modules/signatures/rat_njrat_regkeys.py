@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class NjratRegkeys(Signature):
     name = "njrat_regkeys"
     description = "Creates known Njrat/Bladabindi RAT registry keys"
@@ -28,8 +29,8 @@ class NjratRegkeys(Signature):
         njrat_keys = False
 
         indicators = [
-                "HKEY_CURRENT_USER\\\\di$",
-                "HKEY_CURRENT_USER\\\\.*\\\\\[kl\]$",
+            "HKEY_CURRENT_USER\\\\di$",
+            "HKEY_CURRENT_USER\\\\.*\\\\\[kl\]$",
         ]
 
         for indicator in indicators:
@@ -38,4 +39,4 @@ class NjratRegkeys(Signature):
                 self.data.append({"Key": match})
                 njrat_keys = True
 
-        return njrat_keys 
+        return njrat_keys

@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ClickfraudCookies(Signature):
     name = "clickfraud_cookies"
     description = "Overrides system cookie policy, indicative of click fraud"

@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DeletesShadowCopies(Signature):
     name = "deletes_shadow_copies"
     description = "Attempts to delete or modify volume shadow copies"
@@ -17,19 +18,27 @@ class DeletesShadowCopies(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
 
-    filter_apinames = set(["CreateProcessInternalW","ShellExecuteExW"])
+    filter_apinames = set(["CreateProcessInternalW", "ShellExecuteExW"])
 
     def on_call(self, call, process):
         if call["api"] == "CreateProcessInternalW":
             cmdline = self.get_argument(call, "CommandLine").lower()
-            if "vssadmin" in cmdline and ("delete" in cmdline and "shadows" in cmdline) or ("resize" in cmdline and "shadowstorage" in cmdline):
+            if (
+                "vssadmin" in cmdline
+                and ("delete" in cmdline and "shadows" in cmdline)
+                or ("resize" in cmdline and "shadowstorage" in cmdline)
+            ):
                 return True
             elif "wmic" in cmdline and "shadowcopy" in cmdline and "delete" in cmdline:
                 return True
         elif call["api"] == "ShellExecuteExW":
             filepath = self.get_argument(call, "FilePath").lower()
             params = self.get_argument(call, "Parameters").lower()
-            if "vssadmin" in filepath and ("delete" in params and "shadows" in params) or ("resize" in params and "shadowstorage" in params):
+            if (
+                "vssadmin" in filepath
+                and ("delete" in params and "shadows" in params)
+                or ("resize" in params and "shadowstorage" in params)
+            ):
                 return True
             elif "wmic" in filepath and "shadowcopy" in params and "delete" in params:
                 return True

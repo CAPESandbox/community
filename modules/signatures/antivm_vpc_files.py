@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class VPCDetectFiles(Signature):
     name = "antivm_vpc_files"
     description = "Detects Virtual PC through the presence of a file"

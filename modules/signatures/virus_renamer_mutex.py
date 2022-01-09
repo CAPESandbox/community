@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class RenamerMutexes(Signature):
     name = "renamer_mutexes"
     description = "Creates known Renamer mutexes"

@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class UsesRemoteDesktopSession(Signature):
     name = "uses_remote_desktop_session"
     description = "Connects to/from or queries a remote desktop session"
@@ -47,9 +48,10 @@ class UsesRemoteDesktopSession(Signature):
             for utility in utilities:
                 if utility in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret
+
 
 class UsesRDPClip(Signature):
     name = "uses_rdp_clip"
@@ -62,10 +64,7 @@ class UsesRDPClip(Signature):
     evented = True
 
     def run(self):
-        utilities = [
-            "rdpclip ",
-            "rdpclip.exe"
-        ]
+        utilities = ["rdpclip ", "rdpclip.exe"]
 
         ret = False
         cmdlines = self.results["behavior"]["summary"]["executed_commands"]
@@ -74,9 +73,10 @@ class UsesRDPClip(Signature):
             for utility in utilities:
                 if utility in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret
+
 
 class RDPTCPKey(Signature):
     name = "rdptcp_key"
@@ -88,9 +88,7 @@ class RDPTCPKey(Signature):
     ttp = ["T1137"]
 
     def run(self):
-        indicators = [
-            ".*\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\Terminal Server\\\\WinStations\\\\RDP-Tcp"
-        ]
+        indicators = [".*\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\Terminal Server\\\\WinStations\\\\RDP-Tcp"]
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class WarzoneRATRegkeys(Signature):
     name = "warzonerat_regkeys"
     description = "Creates WarzoneRAT registry keys"
@@ -37,6 +38,7 @@ class WarzoneRATRegkeys(Signature):
                 return True
 
         return False
+
 
 class WarzoneRATFiles(Signature):
     name = "warzonerat_files"

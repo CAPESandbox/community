@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Virtualcheck_JS(Signature):
     name = "virtualcheck_js"
     description = "Executes obfuscated JavaScript checking for analysis tools or sandbox/VM environment"
@@ -55,9 +56,7 @@ class Virtualcheck_JS(Signature):
             "isNodeJs",
             "isCouchJs",
             "isRhino",
-            "isDebugger"
-            "IE_DEVTOOLBAR_CONSOLE_COMMAND_LINE"
-            "BROWSERTOOLS_CONSOLE_SAFEFUNC"
+            "isDebugger" "IE_DEVTOOLBAR_CONSOLE_COMMAND_LINE" "BROWSERTOOLS_CONSOLE_SAFEFUNC",
         ]
 
         if call["api"] == "JsEval":

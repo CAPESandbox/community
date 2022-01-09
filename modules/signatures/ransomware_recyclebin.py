@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class RansomwareRecyclebin(Signature):
     name = "ransomware_recyclebin"
     description = "Empties the Recycle Bin, indicative of ransomware"

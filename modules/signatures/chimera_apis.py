@@ -16,6 +16,7 @@
 from lib.cuckoo.common.abstracts import Signature
 import struct
 
+
 class Chimera_APIs(Signature):
     name = "chimera_behavior"
     description = "Exhibits behavior characteristic of Chimera ransomware"
@@ -31,22 +32,24 @@ class Chimera_APIs(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.sysvolserial = self.get_environ_entry(self.get_initial_process(), "SystemVolumeSerialNumber")
         if self.sysvolserial:
-            self.sysvolserial = int(self.sysvolserial.replace("-",""), 16)
-            dword1 = (((0x19660d * self.sysvolserial) & 0xffffffff) + 0x3c6ef35f) & 0xffffffff
-            dword2 = (((0x19660d * dword1) & 0xffffffff) + 0x3c6ef35f) & 0xffffffff
-            word2 = dword2 & 0xffff
-            serialnum = (((0x19660d * dword2) & 0xffffffff) + 0x3c6ef35f) & 0xffffffff
-            word3 = serialnum & 0xffff
+            self.sysvolserial = int(self.sysvolserial.replace("-", ""), 16)
+            dword1 = (((0x19660D * self.sysvolserial) & 0xFFFFFFFF) + 0x3C6EF35F) & 0xFFFFFFFF
+            dword2 = (((0x19660D * dword1) & 0xFFFFFFFF) + 0x3C6EF35F) & 0xFFFFFFFF
+            word2 = dword2 & 0xFFFF
+            serialnum = (((0x19660D * dword2) & 0xFFFFFFFF) + 0x3C6EF35F) & 0xFFFFFFFF
+            word3 = serialnum & 0xFFFF
             buf = bytearray(8)
             for i in range(8):
-                serialnum = (((0x19660d * serialnum) & 0xffffffff) + 0x3c6ef35f) & 0xffffffff
-                buf[i] = serialnum & 0xff
+                serialnum = (((0x19660D * serialnum) & 0xFFFFFFFF) + 0x3C6EF35F) & 0xFFFFFFFF
+                buf[i] = serialnum & 0xFF
             word4, dword5, word6 = struct.unpack("<HIH", buf)
-            self.mutexmatch = "{{{0:08X}-{1:04X}-{2:04X}-{3:04X}-{4:08X}{5:04X}}}".format(dword1, word2, word3, word4, dword5, word6)
+            self.mutexmatch = "{{{0:08X}-{1:04X}-{2:04X}-{3:04X}-{4:08X}{5:04X}}}".format(
+                dword1, word2, word3, word4, dword5, word6
+            )
 
     filter_apinames = set(["NtCreateMutant"])
 
     def on_call(self, call, process):
         mutexname = self.get_argument(call, "MutexName")
         if mutexname == self.mutexmatch:
-                return True
+            return True

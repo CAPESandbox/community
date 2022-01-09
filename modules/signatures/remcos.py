@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class RemcosFiles(Signature):
     name = "remcos_files"
     description = "Creates known Remcos directories and/or files"
@@ -63,6 +64,7 @@ class RemcosMutexes(Signature):
                 return True
 
         return False
+
 
 class RemcosRegkeys(Signature):
     name = "remcos_regkeys"

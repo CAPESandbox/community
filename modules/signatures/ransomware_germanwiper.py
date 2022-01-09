@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class GermanWiperMutexes(Signature):
     name = "germanwiper_mutexes"
     description = "Creates known GermanWiper ransomware mutexes"
@@ -26,8 +27,8 @@ class GermanWiperMutexes(Signature):
 
     def run(self):
         indicators = [
-                "cFgxTERNWEVhM2V$",
-                "HSDFSD-HFSD-3241-91E7-ASDGSDGHH$",
+            "cFgxTERNWEVhM2V$",
+            "HSDFSD-HFSD-3241-91E7-ASDGSDGHH$",
         ]
 
         for indicator in indicators:

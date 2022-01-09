@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class SpoofsProcname(Signature):
     name = "spoofs_procname"
     description = "Spoofs its process name and/or associated pathname to appear as a legitimate process"
@@ -32,20 +33,17 @@ class SpoofsProcname(Signature):
         self.spoof_sets = []
 
     def on_call(self, call, process):
-        procname = self.check_argument_call(call,
-                                               api="__anomaly__",
-                                               name="Subcategory",
-                                               pattern="procname")
+        procname = self.check_argument_call(call, api="__anomaly__", name="Subcategory", pattern="procname")
         if procname:
             self.saw_spoof = True
             origname = self.get_argument(call, "OriginalProcessName")
             origpath = self.get_argument(call, "OriginalProcessPath")
             modname = self.get_argument(call, "ModifiedProcessName")
             modpath = self.get_argument(call, "ModifiedProcessPath")
-            newentry = {"original_name" :  origname, "original_path" : origpath, "modified_name" : modname, "modified_path" : modpath}
+            newentry = {"original_name": origname, "original_path": origpath, "modified_name": modname, "modified_path": modpath}
             if newentry not in self.spoof_sets:
                 self.spoof_sets.append(newentry)
-    
+
     def on_complete(self):
         for spoof in self.spoof_sets:
             self.data.append(spoof)

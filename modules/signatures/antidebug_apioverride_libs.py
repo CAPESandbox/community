@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class APIOverrideDetectLibs(Signature):
     name = "antiav_apioverride_libs"
     description = "Detects APIOverride through the presence of a library"

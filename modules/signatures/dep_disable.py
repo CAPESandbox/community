@@ -17,6 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 ProcessExecuteFlags = 34
 
+
 class DEPDisable(Signature):
     name = "dep_disable"
     description = "A process disabled DEP at runtime"
@@ -40,9 +41,9 @@ class DEPDisable(Signature):
         if call["return"] == 0 and infoclass == ProcessExecuteFlags:
             processinfo = self.get_raw_argument(call, "ProcessInformation")
             if processinfo == 0:
-                self.data.append({"process" : process["process_name"] + ":" + str(process["process_id"])})
+                self.data.append({"process": process["process_name"] + ":" + str(process["process_id"])})
 
     def on_complete(self):
-         if self.data:
-             return True
-         return False
+        if self.data:
+            return True
+        return False

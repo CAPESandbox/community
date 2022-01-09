@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class UPXCompressed(Signature):
     name = "packer_upx"
     description = "The executable is compressed using UPX"
@@ -29,9 +30,14 @@ class UPXCompressed(Signature):
             if "sections" in self.results["static"]["pe"]:
                 for section in self.results["static"]["pe"]["sections"]:
                     if section["name"].startswith("UPX"):
-                        descmsg = "name: {0}, entropy: {1}, characteristics: {2}, raw_size: {3}, virtual_size: {4}".format(section["name"],
-                            section["entropy"], section["characteristics"], section["size_of_data"], section["virtual_size"])
-                        self.data.append({"section" : descmsg})
+                        descmsg = "name: {0}, entropy: {1}, characteristics: {2}, raw_size: {3}, virtual_size: {4}".format(
+                            section["name"],
+                            section["entropy"],
+                            section["characteristics"],
+                            section["size_of_data"],
+                            section["virtual_size"],
+                        )
+                        self.data.append({"section": descmsg})
                         return True
 
         return False

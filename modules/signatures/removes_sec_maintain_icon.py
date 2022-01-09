@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class RemovesSecurityAndMaintenanceIcon(Signature):
     name = "removes_security_maintenance_icon"
     description = "Removes Security and Maintenance icon from Start menu, Taskbar and notifications"
@@ -24,7 +25,7 @@ class RemovesSecurityAndMaintenanceIcon(Signature):
     minimum = "1.3"
     evented = True
 
-    def run(self):    
+    def run(self):
         indicators = [
             "HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\HideSCAHealth",
         ]

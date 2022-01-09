@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CmdlineObfuscation(Signature):
     name = "cmdline_obfuscation"
     description = "Appears to use command line obfuscation"
@@ -37,34 +38,41 @@ class CmdlineObfuscation(Signature):
             # using cmd.exe via comspec
             if "%comspec" in cmdline.lower():
                 ret = True
-                self.data.append({"command" : cmdline})
+                self.data.append({"command": cmdline})
 
             # character obfuscation
-            elif "cmd" in cmdline.lower() and (cmdline.count("^") > 3 or cmdline.count("&") > 6 or cmdline.count("+") > 4 or cmdline.count("\"") > 8 or cmdline.count(";") > 6):
+            elif "cmd" in cmdline.lower() and (
+                cmdline.count("^") > 3
+                or cmdline.count("&") > 6
+                or cmdline.count("+") > 4
+                or cmdline.count('"') > 8
+                or cmdline.count(";") > 6
+            ):
                 ret = True
-                self.data.append({"command" : cmdline})
+                self.data.append({"command": cmdline})
 
             # concatenation
-            elif "cmd" in cmdline.lower() and re.search('(%[^%]+%){4}', cmdline):
+            elif "cmd" in cmdline.lower() and re.search("(%[^%]+%){4}", cmdline):
                 ret = True
-                self.data.append({"command" : cmdline})
+                self.data.append({"command": cmdline})
 
             # Set variables obfsucation
             elif "cmd" in cmdline.lower() and cmdline.lower().count("set ") > 2:
                 ret = True
-                self.data.append({"command" : cmdline})
+                self.data.append({"command": cmdline})
 
             # Set call obfuscation
             elif "cmd" in cmdline.lower() and "set " in cmdline.lower() and "call " in cmdline.lower():
                 ret = True
-                self.data.append({"command" : cmdline})
+                self.data.append({"command": cmdline})
 
             # for loop obfuscation
             elif "cmd" in cmdline.lower() and "set " in cmdline.lower() and "for " in cmdline.lower():
                 ret = True
-                self.data.append({"command" : cmdline})
+                self.data.append({"command": cmdline})
 
         return ret
+
 
 class CmdlineSwitches(Signature):
     name = "cmdline_switches"
@@ -80,10 +88,11 @@ class CmdlineSwitches(Signature):
         cmdlines = self.results["behavior"]["summary"]["executed_commands"]
         for cmdline in cmdlines:
             if "cmd" in cmdline.lower() and ("/V" in cmdline or "\V" in cmdline):
-                    ret = True
-                    self.data.append({"command" : cmdline})
+                ret = True
+                self.data.append({"command": cmdline})
 
         return ret
+
 
 class CmdlineTerminate(Signature):
     name = "cmdline_terminate"
@@ -99,10 +108,11 @@ class CmdlineTerminate(Signature):
         cmdlines = self.results["behavior"]["summary"]["executed_commands"]
         for cmdline in cmdlines:
             if "cmd" in cmdline.lower() and ("/C" in cmdline or "\C" in cmdline or "/R" in cmdline or "\R" in cmdline):
-                    ret = True
-                    self.data.append({"command" : cmdline})
+                ret = True
+                self.data.append({"command": cmdline})
 
         return ret
+
 
 class LongCommandline(Signature):
     name = "long_commandline"
@@ -132,9 +142,10 @@ class LongCommandline(Signature):
             for utility in utilities:
                 if utility in lower and len(lower) > 250:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret
+
 
 class CommandLineHTTPLink(Signature):
     name = "cmdline_http_link"
@@ -164,9 +175,10 @@ class CommandLineHTTPLink(Signature):
                 if utility in lower:
                     if "http://" in lower or "https://" in lower:
                         ret = True
-                        self.data.append({"command" : cmdline})
+                        self.data.append({"command": cmdline})
 
         return ret
+
 
 class CommandLineReversedHTTPLink(Signature):
     name = "cmdline_reversed_http_link"
@@ -196,9 +208,10 @@ class CommandLineReversedHTTPLink(Signature):
                 if utility in lower:
                     if "//:ptth" in lower or "//:sptth" in lower:
                         ret = True
-                        self.data.append({"command" : cmdline})
+                        self.data.append({"command": cmdline})
 
         return ret
+
 
 class PowershellRenamedCommandLine(Signature):
     name = "powershell_renamed_commandline"
@@ -214,11 +227,12 @@ class PowershellRenamedCommandLine(Signature):
         cmdlines = self.results["behavior"]["summary"]["executed_commands"]
         for cmdline in cmdlines:
             if "powershell" in cmdline.lower() and not cmdline.lower().startswith("powershell"):
-                if re.findall('=\W+powershell', cmdline.lower()):
+                if re.findall("=\W+powershell", cmdline.lower()):
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret
+
 
 class CommandLineLongString(Signature):
     name = "commandline_long_string"
@@ -247,11 +261,12 @@ class CommandLineLongString(Signature):
                     for string in cmdline.split():
                         if len(string) > 100 and "http://" not in string and "https://" not in string:
                             ret = True
-                            self.data.append({"command" : cmdline})
+                            self.data.append({"command": cmdline})
                             break
 
         return ret
-    
+
+
 class CommandLineForFilesWildCard(Signature):
     name = "commandline_forfiles_wildcard"
     description = "Possible use of forfiles utility with wildcard to potentially launch a utility"
@@ -268,6 +283,6 @@ class CommandLineForFilesWildCard(Signature):
         for cmdline in cmdlines:
             if "forfiles" in cmdline.lower() and "@file" in cmdline.lower() and "*" in cmdline:
                 ret = True
-                self.data.append({"command" : cmdline})
+                self.data.append({"command": cmdline})
 
         return ret

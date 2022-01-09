@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class NanocoreRAT(Signature):
     name = "rat_nanocore"
     description = "Exhibits behavior characteristic of Nanocore RAT"
@@ -37,7 +38,7 @@ class NanocoreRAT(Signature):
         if call["api"] == "CryptHashData":
             buf = self.get_argument(call, "Buffer")
             if buf:
-                tail = "6"*48
+                tail = "6" * 48
                 if buf.endswith(tail):
                     self.cryptcalls += 1
                 if buf.startswith("MZ"):
@@ -45,8 +46,7 @@ class NanocoreRAT(Signature):
 
     def on_complete(self):
         badness = 0
-        guid = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}" \
-               "-[0-9a-fA-F]{12}"
+        guid = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}" "-[0-9a-fA-F]{12}"
         fileiocs = [
             ".*\\\\" + guid + "\\\\run\.dat$",
             ".*\\\\" + guid + "\\\\task\.dat$",

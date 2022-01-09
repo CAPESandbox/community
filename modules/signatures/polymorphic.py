@@ -19,9 +19,11 @@ from lib.cuckoo.common.abstracts import Signature
 
 try:
     import pydeep
+
     HAVE_SSDEEP = True
 except ImportError:
     HAVE_SSDEEP = False
+
 
 class Polymorphic(Signature):
     name = "polymorphic"
@@ -46,7 +48,11 @@ class Polymorphic(Signature):
 
         if self.results.get("dropped", []):
             for drop in self.results["dropped"]:
-                if package == "xls" and len(drop["guest_paths"]) == 1 and drop["guest_paths"][0].endswith("\\Temp\\" + self.results["target"]["file"]["name"]):
+                if (
+                    package == "xls"
+                    and len(drop["guest_paths"]) == 1
+                    and drop["guest_paths"][0].endswith("\\Temp\\" + self.results["target"]["file"]["name"])
+                ):
                     continue
                 if drop["sha1"] == target_sha1:
                     continue
@@ -60,8 +66,8 @@ class Polymorphic(Signature):
                     if percent > 20:
                         found_polymorphic = True
                         for path in drop["guest_paths"]:
-                            self.data.append({"file" : path})
-                        self.data.append({"percent_match" : percent})
+                            self.data.append({"file": path})
+                        self.data.append({"percent_match": percent})
                 except:
                     continue
 

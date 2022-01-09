@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CreatesNullValue(Signature):
     name = "creates_nullvalue"
     description = "Creates a registry key or value with NUL characters to avoid detection with regedit"
@@ -29,6 +30,7 @@ class CreatesNullValue(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.saw_null = False
         self.regkeyvals = set()
+
     filter_apinames = set(["NtSetValueKey", "NtCreateKey"])
 
     def on_call(self, call, process):
@@ -46,5 +48,5 @@ class CreatesNullValue(Signature):
     def on_complete(self):
         if self.saw_null:
             for keyval in self.regkeyvals:
-                self.data.append({"keyval" : keyval})
+                self.data.append({"keyval": keyval})
         return self.saw_null

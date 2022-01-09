@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class NetworkFakeUserAgent(Signature):
     name = "network_fake_useragent"
     description = "Fake User-Agent detected"

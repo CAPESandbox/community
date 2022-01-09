@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DisablesWindowsFileProtection(Signature):
     name = "disables_windows_file_protection"
     description = "Attempts to disable Windows File Protection aka System File Checker."
@@ -39,7 +40,7 @@ class DisablesWindowsFileProtection(Signature):
         for check in keys:
             match = self.check_write_key(pattern=check, regex=True)
             if match:
-                self.data.append({"regkey" : match})
+                self.data.append({"regkey": match})
                 ret = True
 
         return ret

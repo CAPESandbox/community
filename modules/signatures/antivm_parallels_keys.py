@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ParallelsDetectKeys(Signature):
     name = "antivm_parallels_keys"
     description = "Detects Parallels through the presence of a registry key"

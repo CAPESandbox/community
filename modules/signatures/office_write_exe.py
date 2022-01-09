@@ -10,6 +10,7 @@ try:
 except ImportError:
     import re
 
+
 class OfficeWriteEXE(Signature):
     name = "office_write_exe"
     description = "An office file wrote an executable file to disk"
@@ -24,7 +25,7 @@ class OfficeWriteEXE(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.data = []
         self.exere = re.compile(r"\.exe$")
-        self.office_proc_list =["wordview.exe","winword.exe","excel.exe","powerpnt.exe","outlook.exe"]
+        self.office_proc_list = ["wordview.exe", "winword.exe", "excel.exe", "powerpnt.exe", "outlook.exe"]
 
     filter_apinames = set(["NtWriteFile"])
     filter_analysistypes = set(["file"])
@@ -35,7 +36,7 @@ class OfficeWriteEXE(Signature):
             if call["api"] == "NtWriteFile":
                 buff = self.get_raw_argument(call, "Buffer")
                 if buff and len(buff) > 2 and buff[0:1] == "MZ" and "This program" in buff:
-                    self.data.append({"office_dl_write_exe": "%s_NtWriteFile_%s" % (pname,self.get_argument(call, "HandleName"))})
+                    self.data.append({"office_dl_write_exe": "%s_NtWriteFile_%s" % (pname, self.get_argument(call, "HandleName"))})
 
         return None
 

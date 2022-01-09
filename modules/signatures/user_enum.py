@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class UserEnum(Signature):
     name = "user_enum"
     description = "Enumerates user accounts on the system"
@@ -45,7 +46,6 @@ class UserEnum(Signature):
         for proc in self.users:
             if len(self.users[proc]) >= 3:
                 ret = True
-                self.data.append({"Process": "{0} ({1})".format(
-                    self.get_name_from_pid(proc), proc)})
+                self.data.append({"Process": "{0} ({1})".format(self.get_name_from_pid(proc), proc)})
 
         return ret

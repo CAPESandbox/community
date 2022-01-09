@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class UACBypassEventvwr(Signature):
     name = "uac_bypass_eventvwr"
     description = "Uses eventvwr technique to bypass User Access Control (UAC)"
@@ -42,19 +43,20 @@ class UACBypassEventvwr(Signature):
                 data = self.get_argument(call, "Data")
                 if "\classes\mscfile\shell\open\command" in fullname.lower():
                     self.eventvrw = True
-                    self.data.append({"reg_query_name": fullname })
-                    self.data.append({"reg_query_data": data })
+                    self.data.append({"reg_query_name": fullname})
+                    self.data.append({"reg_query_data": data})
 
         if call["api"] == "CreateProcessInternalW":
             pname = process["process_name"]
             if pname.lower() == "eventvwr.exe" and self.eventvrw:
                 cmdline = self.get_argument(call, "CommandLine")
                 if ("mmc " in cmdline.lower() or "mmc.exe" in cmdline.lower()) and "eventvwr.msc" in cmdline.lower():
-                    self.data.append({"cmdline": cmdline })
+                    self.data.append({"cmdline": cmdline})
                     self.ret = True
 
     def on_complete(self):
         return self.ret
+
 
 class UACBypassDelegateExecuteSdclt(Signature):
     name = "uac_bypass_delegateexecute_sdclt"
@@ -79,17 +81,18 @@ class UACBypassDelegateExecuteSdclt(Signature):
         for check in keys:
             match = self.check_write_key(pattern=check, regex=True)
             if match:
-                self.data.append({"regkey" : match})
+                self.data.append({"regkey": match})
                 regkey = True
 
         cmdlines = self.results["behavior"]["summary"]["executed_commands"]
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if regkey and "sdclt" in lower:
-                self.data.append({"cmdline" : cmdline})
+                self.data.append({"cmdline": cmdline})
                 ret = True
 
         return ret
+
 
 class UACBypassCMSTP(Signature):
     name = "uac_bypass_cmstp"
@@ -109,7 +112,7 @@ class UACBypassCMSTP(Signature):
         self.droppedinf = []
         self.ret = False
 
-    filter_apinames = set(["CopyFileExA","CopyFileExW","MoveFileWithProgressW","MoveFileWithProgressTransactedW","NtWriteFile"])
+    filter_apinames = set(["CopyFileExA", "CopyFileExW", "MoveFileWithProgressW", "MoveFileWithProgressTransactedW", "NtWriteFile"])
 
     def on_call(self, call, process):
         # This is a straight catch of the .inf file with content we want being dropped
@@ -118,16 +121,16 @@ class UACBypassCMSTP(Signature):
             if filename.endswith(".inf"):
                 buf = self.get_argument(call, "Buffer")
                 if "runpresetupcommands" in buf.lower():
-                    self.data.append({"dropped .inf file": filename })
+                    self.data.append({"dropped .inf file": filename})
                     self.droppedinf.append(filename)
                     self.inf = True
 
         # This is for a file being moved/renamed into .inf. This is to avoid a possible evasion that could be created by dropped the content in a .txt or something and then renaming the file/moving it into a .inf for use my cmstp. Also in case of copying .inf files into new ones too.
-        if call["api"] in ("CopyFileExA","CopyFileExW","MoveFileWithProgressW","MoveFileWithProgressTransactedW"):
+        if call["api"] in ("CopyFileExA", "CopyFileExW", "MoveFileWithProgressW", "MoveFileWithProgressTransactedW"):
             origfile = self.get_argument(call, "ExistingFileName")
             destfile = self.get_argument(call, "NewFileName")
             if destfile.endswith(".inf"):
-                self.data.append({"dropped .inf file" : "%s was moved to destination file %s" % (origfile,destfile)})
+                self.data.append({"dropped .inf file": "%s was moved to destination file %s" % (origfile, destfile)})
                 self.droppedinf.append(destfile)
                 self.inf = True
 
@@ -138,10 +141,11 @@ class UACBypassCMSTP(Signature):
             if self.inf and "cmstp" in lower and ".inf" in lower:
                 for dropped in self.droppedinf:
                     if dropped.lower() in lower:
-                        self.data.append({"cmdline" : cmdline})
+                        self.data.append({"cmdline": cmdline})
                         self.ret = True
 
         return self.ret
+
 
 class UACBypassFodhelper(Signature):
     name = "uac_bypass_fodhelper"
@@ -156,9 +160,7 @@ class UACBypassFodhelper(Signature):
 
     def run(self):
         ret = False
-        reg_indicators = [
-            "HKEY_CURRENT_USER\\\\Software\\\\Classes\\\\ms-settings\\\\shell \\\\open\\\\command\\\\*."
-        ]
+        reg_indicators = ["HKEY_CURRENT_USER\\\\Software\\\\Classes\\\\ms-settings\\\\shell \\\\open\\\\command\\\\*."]
 
         for indicator in reg_indicators:
             match = self.check_write_key(pattern=indicator, regex=True)
@@ -167,6 +169,7 @@ class UACBypassFodhelper(Signature):
                 self.data.append({"regkey": match})
 
         return ret
+
 
 class UACBypassCMSTPCOM(Signature):
     name = "uac_bypass_cmstpcom"

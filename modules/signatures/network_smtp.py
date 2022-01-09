@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class NetworkSMTP(Signature):
     name = "network_smtp"
     description = "Makes SMTP requests, possibly sending spam or exfiltrating data."

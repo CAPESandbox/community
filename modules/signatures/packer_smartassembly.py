@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class SmartAssemblyPacked(Signature):
     name = "packer_smartassembly"
     description = ".NET file is packed/obfuscated with SmartAssembly"

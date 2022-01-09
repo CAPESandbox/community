@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Excel4MacroUrls(Signature):
     name = "excel4_macro_urls"
     description = "URLs from Excel 4.0 XLM Macro(s)"

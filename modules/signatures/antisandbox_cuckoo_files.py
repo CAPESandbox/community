@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CuckooDetectFiles(Signature):
     name = "antisandbox_cuckoo_files"
     description = "Attempts to detect Cuckoo Sandbox through the presence of a file"

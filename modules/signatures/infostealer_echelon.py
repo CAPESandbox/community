@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class EchelonFiles(Signature):
     name = "echelon_files"
     description = "Echelon infostealer file artifacts detected"

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DeepFreezeMutex(Signature):
     name = "deepfreeze_mutex"
     description = "Checks for a known DeepFreeze Frozen State Mutex"

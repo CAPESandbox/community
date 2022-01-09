@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DisablesUAC(Signature):
     name = "disables_uac"
     description = "Attempts to disable UAC"
@@ -13,6 +14,9 @@ class DisablesUAC(Signature):
     minimum = "1.2"
 
     def run(self):
-        if self.check_write_key(pattern=".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\EnableLUA$", regex=True):
+        if self.check_write_key(
+            pattern=".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\EnableLUA$",
+            regex=True,
+        ):
             return True
         return False

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class BlackNETMutexes(Signature):
     name = "blacknet_mutexes"
     description = "BlackNET RAT mutex detected"

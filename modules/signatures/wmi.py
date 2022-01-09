@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class WMICreateProcess(Signature):
     name = "wmi_create_process"
     description = "Windows Management Instrumentation (WMI) attempted to create a process"
@@ -37,7 +38,7 @@ class WMICreateProcess(Signature):
 
     def on_call(self, call, process):
         pname = process["process_name"]
-        if "wmiprvse" in pname.lower()  or "scrcons" in pname.lower():           
+        if "wmiprvse" in pname.lower() or "scrcons" in pname.lower():
             cmdline = self.get_argument(call, "CommandLine")
             whitelisted = False
             for whitelist in self.whitelist:
@@ -46,11 +47,12 @@ class WMICreateProcess(Signature):
                     break
             if not whitelisted:
                 self.ret = True
-                self.data.append({"cmdline" : cmdline})
+                self.data.append({"cmdline": cmdline})
 
     def on_complete(self):
         return self.ret
-    
+
+
 class WMIScriptProcess(Signature):
     name = "wmi_script_process"
     description = "Windows Management Instrumentation (WMI) attempted to execute a command or scripting utility"
@@ -83,13 +85,14 @@ class WMIScriptProcess(Signature):
         if "wmiprvse" in pname.lower():
             cmdline = self.get_argument(call, "CommandLine")
             for utility in self.utilities:
-                if utility in cmdline.lower():           
+                if utility in cmdline.lower():
                     self.ret = True
-                    self.data.append({"cmdline" : cmdline})
+                    self.data.append({"cmdline": cmdline})
                     break
 
     def on_complete(self):
         return self.ret
+
 
 class ScrconsWMIScriptConsumer(Signature):
     name = "scrcons_wmi_script_consumer"
@@ -101,14 +104,14 @@ class ScrconsWMIScriptConsumer(Signature):
     minimum = "1.3"
     evented = True
     ttp = ["T1047"]
-	
+
     def run(self):
         ret = False
         cmdlines = self.results["behavior"]["summary"]["executed_commands"]
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "scrcons" in lower:
-                self.data.append({"command" : cmdline})
+                self.data.append({"command": cmdline})
                 ret = True
 
         return ret

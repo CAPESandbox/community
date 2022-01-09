@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class KetricanRegkeys(Signature):
     name = "ketrican_regkeys"
     description = "Interacts with a unique set of registry keys observed in malware"

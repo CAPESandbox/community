@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class XenDetectKeys(Signature):
     name = "antivm_xen_keys"
     description = "Detects Xen through the presence of a registry key"

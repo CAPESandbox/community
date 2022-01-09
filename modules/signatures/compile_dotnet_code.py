@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CompilesDotNetCode(Signature):
     name = "dotnet_code_compile"
     description = "Compiles .NET code into an executable and executes it"
@@ -55,14 +56,14 @@ class CompilesDotNetCode(Signature):
                 if cmdline:
                     if "cvtres.exe" in cmdline:
                         self.cvtrescmd = True
-                        self.data.append({"command": cmdline })
-            
+                        self.data.append({"command": cmdline})
+
             if call["api"] == "NtWriteFile":
                 buff = self.get_argument(call, "Buffer")
                 if buff:
                     if buff.startswith("MZ"):
                         self.writemz = True
-    
+
     def on_complete(self):
         match = False
         expscore = 0
@@ -98,6 +99,5 @@ class CompilesDotNetCode(Signature):
                 return True
             elif match:
                 return True
-            
-        return False
 
+        return False

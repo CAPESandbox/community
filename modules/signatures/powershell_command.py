@@ -23,6 +23,7 @@ try:
 except ImportError:
     import re
 
+
 class PowershellCommandSuspicious(Signature):
     name = "powershell_command_suspicious"
     description = "Attempts to execute suspicious powershell command arguments"
@@ -78,15 +79,15 @@ class PowershellCommandSuspicious(Signature):
                 for command in commands:
                     if command in lower:
                         ret = True
-                        self.data.append({"command" : cmdline})
+                        self.data.append({"command": cmdline})
                         break
                 if ("-w" in lower or "/w" in lower) and "hidden" in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
                 # Decode base64 strings for reporting; will adjust this later to add detection matches against decoded content. We don't take into account here when a variable is used i.e. "$encoded = BASE64_CONTENT -enc $encoded" and so evasion from decoding the content is possible. Alternatively we could just try to hunt for base64 content in powershell command lines but this will need to be tested
                 if "-e " in lower or "/e " in lower or "-en " in lower or "/en " in lower or "-enc" in lower or "/enc" in lower:
-                    b64strings = re.findall(r'[-\/][eE][nNcCoOdDeEmMaA]{0,13}\ (\S+)', cmdline)
+                    b64strings = re.findall(r"[-\/][eE][nNcCoOdDeEmMaA]{0,13}\ (\S+)", cmdline)
                     for b64string in b64strings:
                         b64 = True
                         encoded = str(b64string)
@@ -97,11 +98,13 @@ class PowershellCommandSuspicious(Signature):
                         if b64:
                             decoded = base64.b64decode(encoded)
                             if b"\x00" in decoded:
-                                decoded = base64.b64decode(encoded).decode('UTF-16')
-                            self.data.append({"decoded_base64_string" : convert_to_printable(decoded)})
+                                decoded = base64.b64decode(encoded).decode("UTF-16")
+                            self.data.append({"decoded_base64_string": convert_to_printable(decoded)})
 
                 if "frombase64string(" in lower:
-                    b64strings = re.findall(r'[fF][rR][oO][mM][bB][aA][sS][eE]64[sS][tT][rR][iI][nN][gG]\([\"\'](\S+)[\"\']\)', cmdline)
+                    b64strings = re.findall(
+                        r"[fF][rR][oO][mM][bB][aA][sS][eE]64[sS][tT][rR][iI][nN][gG]\([\"\'](\S+)[\"\']\)", cmdline
+                    )
                     for b64string in b64strings:
                         b64 = True
                         encoded = str(b64string)
@@ -112,10 +115,11 @@ class PowershellCommandSuspicious(Signature):
                         if b64:
                             decoded = base64.b64decode(encoded)
                             if b"\x00" in decoded:
-                                decoded = base64.b64decode(encoded).decode('UTF-16')
-                            self.data.append({"decoded_base64_string" : convert_to_printable(decoded)})
+                                decoded = base64.b64decode(encoded).decode("UTF-16")
+                            self.data.append({"decoded_base64_string": convert_to_printable(decoded)})
 
         return ret
+
 
 class PowershellRenamed(Signature):
     name = "powershell_renamed"
@@ -164,41 +168,44 @@ class PowershellRenamed(Signature):
                 for command in commands:
                     if command in lower:
                         ret = True
-                        self.data.append({"command" : cmdline})
+                        self.data.append({"command": cmdline})
                         break
                 if ("-w" in lower or "/w" in lower) and "hidden" in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
                 if ("-ex" in lower or "/ex" in lower) and ("bypass" in lower or "unrestricted" in lower):
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
                 # Decode base64 strings for reporting; will adjust this later to add detection matches against decoded content. We don't take into account here when a variable is used i.e. "$encoded = BASE64_CONTENT -enc $encoded" and so evasion from decoding the content is possible. Alternatively we could just try to hunt for base64 content in powershell command lines but this will need to be tested
                 if "-e " in lower or "/e " in lower or "-en " in lower or "/en " in lower or "-enc" in lower or "/enc" in lower:
-                    b64strings = re.findall(r'[-\/][eE][nNcCoOdDeEmMaA]{0,13}\ (\S+)', cmdline)
+                    b64strings = re.findall(r"[-\/][eE][nNcCoOdDeEmMaA]{0,13}\ (\S+)", cmdline)
                     for b64string in b64strings:
                         encoded = str(b64string)
-                        if re.match('^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$', encoded):
+                        if re.match("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$", encoded):
                             ret = True
-                            self.data.append({"command" : cmdline})
+                            self.data.append({"command": cmdline})
                             decoded = base64.b64decode(encoded)
                             if b"\x00" in decoded:
-                                decoded = base64.b64decode(encoded).decode('UTF-16')
-                            self.data.append({"decoded_base64_string" : convert_to_printable(decoded)})
+                                decoded = base64.b64decode(encoded).decode("UTF-16")
+                            self.data.append({"decoded_base64_string": convert_to_printable(decoded)})
 
                 if "frombase64string(" in lower:
-                    b64strings = re.findall(r'[fF][rR][oO][mM][bB][aA][sS][eE]64[sS][tT][rR][iI][nN][gG]\([\"\'](\S+)[\"\']\)', cmdline)
+                    b64strings = re.findall(
+                        r"[fF][rR][oO][mM][bB][aA][sS][eE]64[sS][tT][rR][iI][nN][gG]\([\"\'](\S+)[\"\']\)", cmdline
+                    )
                     for b64string in b64strings:
                         encoded = str(b64string)
-                        if re.match('^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$', encoded):
+                        if re.match("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$", encoded):
                             ret = True
-                            self.data.append({"command" : cmdline})
+                            self.data.append({"command": cmdline})
                             decoded = base64.b64decode(encoded)
                             if "\x00" in decoded:
-                                decoded = base64.b64decode(encoded).decode('UTF-16')
-                            self.data.append({"decoded_base64_string" : convert_to_printable(decoded)})
+                                decoded = base64.b64decode(encoded).decode("UTF-16")
+                            self.data.append({"decoded_base64_string": convert_to_printable(decoded)})
 
         return ret
+
 
 class PowershellReversed(Signature):
     name = "powershell_reversed"
@@ -254,13 +261,14 @@ class PowershellReversed(Signature):
             for command in commands:
                 if command[::-1] in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
                     break
             if ("-w"[::-1] in lower or "/w"[::-1] in lower) and "hidden"[::-1] in lower:
                 ret = True
-                self.data.append({"command" : cmdline})
+                self.data.append({"command": cmdline})
 
         return ret
+
 
 class PowershellVariableObfuscation(Signature):
     name = "powershell_variable_obfuscation"
@@ -279,11 +287,12 @@ class PowershellVariableObfuscation(Signature):
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "powershell" in lower:
-                if re.search('\$[^env=]*=.*\$[^env=]*=', lower):
+                if re.search("\$[^env=]*=.*\$[^env=]*=", lower):
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret
+
 
 class PowerShellNetworkConnection(Signature):
     name = "powershell_network_connection"
@@ -301,7 +310,17 @@ class PowerShellNetworkConnection(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.data = []
 
-    filter_apinames = set(["InternetCrackUrlW","InternetCrackUrlA","URLDownloadToFileW","HttpOpenRequestW","InternetReadFile", "send", "WSAConnect"])
+    filter_apinames = set(
+        [
+            "InternetCrackUrlW",
+            "InternetCrackUrlA",
+            "URLDownloadToFileW",
+            "HttpOpenRequestW",
+            "InternetReadFile",
+            "send",
+            "WSAConnect",
+        ]
+    )
     filter_analysistypes = set(["file"])
 
     def on_call(self, call, process):
@@ -309,24 +328,24 @@ class PowerShellNetworkConnection(Signature):
         if pname == "powershell.exe":
             if call["api"] == "URLDownloadToFileW":
                 buff = self.get_argument(call, "FileName").lower()
-                self.data.append({"request": buff })
+                self.data.append({"request": buff})
             if call["api"] == "HttpOpenRequestW":
                 buff = self.get_argument(call, "Path").lower()
-                self.data.append({"request": buff })
+                self.data.append({"request": buff})
             if call["api"] == "InternetCrackUrlW":
                 buff = self.get_argument(call, "Url").lower()
-                self.data.append({"request": buff })
+                self.data.append({"request": buff})
             if call["api"] == "InternetCrackUrlA":
                 buff = self.get_argument(call, "Url").lower()
-                self.data.append({"request": buff })
+                self.data.append({"request": buff})
             if call["api"] == "send":
                 buff = self.get_argument(call, "buffer").lower()
-                self.data.append({"request": buff })
+                self.data.append({"request": buff})
             if call["api"] == "WSAConnect":
                 buff = self.get_argument(call, "ip").lower()
                 port = self.get_argument(call, "port").lower()
-                if not buff.startswith(("10.","172.16.","192.168.")):
-                    self.data.append({"request": "%s:%s" % (buff,port)})
+                if not buff.startswith(("10.", "172.16.", "192.168.")):
+                    self.data.append({"request": "%s:%s" % (buff, port)})
         return None
 
     def on_complete(self):
@@ -334,6 +353,7 @@ class PowerShellNetworkConnection(Signature):
             return True
         else:
             return False
+
 
 class PowerShellScriptBlockLogging(Signature):
     name = "powershell_scriptblock_logging"
@@ -351,7 +371,7 @@ class PowerShellScriptBlockLogging(Signature):
         if "curtain" in self.results and self.results["curtain"] is not None:
             for pid, detection in self.results["curtain"].items():
                 if len(detection["behaviors"]) > 0:
-                    joined = ', '.join(detection["behaviors"])
+                    joined = ", ".join(detection["behaviors"])
                     ret = True
                     self.data.append({pid: joined})
 

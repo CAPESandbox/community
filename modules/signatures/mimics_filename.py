@@ -9,10 +9,10 @@ except:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class MimicsExtension(Signature):
     name = "mimics_extension"
-    description = ("Attempts to mimic the file extension of a {1} by having "
-                   "'{0}' in the file name.")
+    description = "Attempts to mimic the file extension of a {1} by having " "'{0}' in the file name."
     severity = 2
     categories = ["stealth"]
     authors = ["KillerInstinct"]
@@ -38,14 +38,12 @@ class MimicsExtension(Signature):
             "pdf": "PDF document",
             "xml": "XML document",
         }
-        pat = ".*[ _\-\.](?P<FakeExtension>{0})\.(?:{1})".format(
-            "|".join(exts.keys()), "|".join(execs))
+        pat = ".*[ _\-\.](?P<FakeExtension>{0})\.(?:{1})".format("|".join(exts.keys()), "|".join(execs))
         if self.results["target"]["category"] == "file":
             check = re.match(pat, self.results["target"]["file"]["name"])
             if check:
                 ext = check.group("FakeExtension")
-                self.description = self.description.format(ext,
-                                                           exts[ext.lower()])
+                self.description = self.description.format(ext, exts[ext.lower()])
                 return True
 
         return False

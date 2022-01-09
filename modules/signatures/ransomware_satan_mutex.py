@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class SatanMutexes(Signature):
     name = "satan_mutexes"
     description = "Creates a known Satan ransomware variant mutex"
@@ -28,16 +29,16 @@ class SatanMutexes(Signature):
 
     def run(self):
         indicators = [
-			"SATANAPP",
-			"SATAN_SCAN_APP",
-			"STA__APP",
-			"DBGERAPP",
-			"DBG_CPP",
-			"lucky$",
-			"run_STT",
-			"SSS_Scan",
-			"SSSS_Scan",
-			"5ss5c_CRYPT"
+            "SATANAPP",
+            "SATAN_SCAN_APP",
+            "STA__APP",
+            "DBGERAPP",
+            "DBG_CPP",
+            "lucky$",
+            "run_STT",
+            "SSS_Scan",
+            "SSSS_Scan",
+            "5ss5c_CRYPT",
         ]
 
         for indicator in indicators:

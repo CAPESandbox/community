@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Nymaim_APIs(Signature):
     name = "nymaim_behavior"
     description = "Exhibits behavior characteristic of Nymaim malware"

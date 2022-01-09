@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Fingerprint(Signature):
     name = "recon_fingerprint"
     description = "Collects information to fingerprint the system"
@@ -39,5 +40,5 @@ class Fingerprint(Signature):
             if match:
                 self.data.append({"regkey": match})
                 return True
- 
+
         return False

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class FonixMutexes(Signature):
     name = "fonix_mutexes"
     description = "Creates a known Fonix ransomware variant mutex"

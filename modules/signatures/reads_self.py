@@ -5,6 +5,7 @@
 import struct
 from lib.cuckoo.common.abstracts import Signature
 
+
 class HandleInfo:
     def __init__(self, handle, filename):
         self.handle = handle
@@ -17,12 +18,12 @@ class HandleInfo:
 
     def __eq__(self, other):
         if isinstance(other, HandleInfo):
-                return self.handle == other.handle
+            return self.handle == other.handle
         else:
-                return False
+            return False
 
     def __ne__(self, other):
-        return (not self.__eq__(other))
+        return not self.__eq__(other)
 
     def __hash__(self):
         return hash(self.__repr__())
@@ -32,6 +33,7 @@ class HandleInfo:
 
     def read(self, len):
         self.fpos = self.fpos + len
+
 
 class ProcResults:
     def __init__(self, process):
@@ -48,9 +50,9 @@ class ProcResults:
         for i, read in enumerate(slist):
             if i == len(slist) - 1:
                 outlist.append((laststart, read[1]))
-            elif read[1] != slist[i+1][0]:
-                    outlist.append((laststart, read[1]))
-                    laststart = slist[i+1][0]
+            elif read[1] != slist[i + 1][0]:
+                outlist.append((laststart, read[1]))
+                laststart = slist[i + 1][0]
         return outlist
 
     def add_handle(self, handle, filename):
@@ -61,6 +63,7 @@ class ProcResults:
         if handle in self.handles:
             self.old_handles.append(self.handles[handle])
             del self.handles[handle]
+
 
 class ReadsSelf(Signature):
     name = "reads_self"
@@ -82,12 +85,11 @@ class ReadsSelf(Signature):
         self.lastres = None
         self.processes = []
         self.is_office = False
-        office_pkgs = ["ppt","doc","xls","eml","js"]
+        office_pkgs = ["ppt", "doc", "xls", "eml", "js"]
         if any(e in self.results["info"]["package"] for e in office_pkgs):
             self.is_office = True
 
-
-    filter_apinames = set(["NtOpenFile","NtCreateFile","NtClose","NtReadFile","NtSetInformationFile"])
+    filter_apinames = set(["NtOpenFile", "NtCreateFile", "NtClose", "NtReadFile", "NtSetInformationFile"])
 
     def on_call(self, call, process):
         if self.is_office:
@@ -132,7 +134,16 @@ class ReadsSelf(Signature):
             performed_read = True
             newreads = res.merge_reads()
             for read in newreads:
-                self.data.append({"self_read" : "process: " + res.process["process_name"] + ", pid: " +
-                    str(res.process["process_id"]) + ", offset: " + "0x{0:08x}".format(read[0]) +
-                    ", length: " + "0x{0:08x}".format(read[1] - read[0])})
+                self.data.append(
+                    {
+                        "self_read": "process: "
+                        + res.process["process_name"]
+                        + ", pid: "
+                        + str(res.process["process_id"])
+                        + ", offset: "
+                        + "0x{0:08x}".format(read[0])
+                        + ", length: "
+                        + "0x{0:08x}".format(read[1] - read[0])
+                    }
+                )
         return performed_read

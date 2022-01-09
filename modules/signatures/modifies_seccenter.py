@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ModifySecurityCenterWarnings(Signature):
     name = "modify_security_center_warnings"
     description = "Attempts to modify or disable Security Center warnings"
@@ -18,7 +19,7 @@ class ModifySecurityCenterWarnings(Signature):
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Security\\ Center\\\\.*",
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Policies\\\\Microsoft\\\\Windows\\ NT\\\\Security\\ Center\\\\.*",
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\explorer\\\\ShellServiceObjects\\\\{FD6905CE-952F-41F1-9A6F-135D9C6622CC}$",
-        ]                                                                                                   
+        ]
         for indicator in indicators:
             if self.check_write_key(pattern=indicator, regex=True):
                 return True

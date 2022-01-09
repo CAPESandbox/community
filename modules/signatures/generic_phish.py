@@ -20,6 +20,7 @@ except:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Generic_Phish(Signature):
     name = "generic_phish"
     description = "Network activity contains generic phishing indicators indicative of a website clone."

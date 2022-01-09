@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ModifiesCerts(Signature):
     name = "modifies_certs"
     description = "Attempts to create or modify system certificates"
@@ -16,7 +17,9 @@ class ModifiesCerts(Signature):
     filter_analysistypes = set(["file"])
 
     def run(self):
-        if self.check_write_key(pattern=".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\SystemCertificates\\\\.*\\\\Certificates\\\\.*", regex=True):
+        if self.check_write_key(
+            pattern=".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\SystemCertificates\\\\.*\\\\Certificates\\\\.*", regex=True
+        ):
             return True
 
         return False

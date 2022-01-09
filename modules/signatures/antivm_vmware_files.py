@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class VMwareDetectFiles(Signature):
     name = "antivm_vmware_files"
     description = "Detects VMware through the presence of a file"

@@ -28,8 +28,10 @@ log = logging.getLogger(__name__)
 
 repconf = Config("reporting")
 
+
 class ZExecReport(Report):
     """Execute the specified command pointed at report.json"""
+
     order = 10001
 
     def run(self, results):
@@ -42,8 +44,21 @@ class ZExecReport(Report):
             path = os.path.join(self.reports_path, "report.json")
             cmd_results = subprocess.run([repconf.zexecreport.command, path], capture_output=True, env={"CAPE_TASK_ID": task_id})
             if cmd_results.returncode != 0:
-                log.error("CAPE_TASK_ID= %s command=%s exit=%s stdout=%s stderror=%s", task_id, str(cmd_results.returncode), repconf.zexecreport.command, cmd_results.stdout.decode(), cmd_results.stderr.decode())
+                log.error(
+                    "CAPE_TASK_ID= %s command=%s exit=%s stdout=%s stderror=%s",
+                    task_id,
+                    str(cmd_results.returncode),
+                    repconf.zexecreport.command,
+                    cmd_results.stdout.decode(),
+                    cmd_results.stderr.decode(),
+                )
             else:
-                log.info("CAPE_TASK_ID= %s command=%s stdout=%s stderror=%s", task_id, repconf.zexecreport.command, cmd_results.stdout.decode(), cmd_results.stderr.decode())
+                log.info(
+                    "CAPE_TASK_ID= %s command=%s stdout=%s stderror=%s",
+                    task_id,
+                    repconf.zexecreport.command,
+                    cmd_results.stdout.decode(),
+                    cmd_results.stderr.decode(),
+                )
         except (UnicodeError, TypeError, IOError) as e:
             raise CuckooReportError(f"Error encountered running the specified command: {e}")

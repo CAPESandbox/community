@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Ruskill(Signature):
     name = "bot_russkill"
     description = "Creates known Ruskill mutexes"

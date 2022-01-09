@@ -20,8 +20,9 @@ except:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 def unbuffered_b64decode(data):
-    data = data.replace("\r", "").replace("\n","")
+    data = data.replace("\r", "").replace("\n", "")
     data += "=" * ((4 - len(data) % 4) % 4)
     try:
         data = data.decode("base64")
@@ -29,6 +30,7 @@ def unbuffered_b64decode(data):
         pass
 
     return data
+
 
 class HawkEye_APIs(Signature):
     name = "hawkeye_behavior"
@@ -41,8 +43,7 @@ class HawkEye_APIs(Signature):
     minimum = "1.3"
     evented = True
 
-    filter_apinames = set(["send", "WSAConnect", "getaddrinfo",
-                           "NtCreateEvent", "NtCreateSection"])
+    filter_apinames = set(["send", "WSAConnect", "getaddrinfo", "NtCreateEvent", "NtCreateSection"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -52,17 +53,17 @@ class HawkEye_APIs(Signature):
         self.nodename = str()
         self.badsocks = set()
         self.keywords = [
-                # SMTP Keywords
-                "AUTH",
-                "MAIL FROM",
-                "RCPT TO",
-                # FTP Keywords
-                "USER"
+            # SMTP Keywords
+            "AUTH",
+            "MAIL FROM",
+            "RCPT TO",
+            # FTP Keywords
+            "USER",
         ]
         self.emailterms = [
-                "hawkeye keylogger",
-                "dear hawkeye customers",
-                "dear invisiblesoft users",
+            "hawkeye keylogger",
+            "dear hawkeye customers",
+            "dear invisiblesoft users",
         ]
         self.guidpat = "([0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{13})\.\d+Event"
         self.evguid = str()
@@ -111,7 +112,6 @@ class HawkEye_APIs(Signature):
                     self.evmatch = True
 
         self.lastcall = call["api"]
-
 
     def on_complete(self):
         if self.check_file(pattern=".*\\\\pid.txt$", regex=True):

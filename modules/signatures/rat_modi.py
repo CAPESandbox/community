@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ModiRATBehavior(Signature):
     name = "modirat_behavior"
     description = "Exhibits behavioral characteristics of MoDiRAT"
@@ -48,7 +49,7 @@ class ModiRATBehavior(Signature):
             match = self.check_write_file(pattern=findicator, regex=True, all=True)
             if match:
                 score += 1
-        
+
         if score >= 4:
             return True
 

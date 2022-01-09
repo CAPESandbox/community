@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AccessesSysvol(Signature):
     name = "accesses_sysvol"
     description = "Accesses or reads files from the SYSVOL folder, possibly to dump passwords"
@@ -23,14 +24,10 @@ class AccessesSysvol(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1552"]	
+    ttp = ["T1552"]
 
     def run(self):
-        indicators = [
-            ".*\\\\Windows\\\\SYSVOL\\\\.*",
-            "\\\\sysvol\\\\.*\\\\policies\\\\.*",
-            "\\\\sysvol\\\\.*\\\\scripts\\\\.*"
-        ]
+        indicators = [".*\\\\Windows\\\\SYSVOL\\\\.*", "\\\\sysvol\\\\.*\\\\policies\\\\.*", "\\\\sysvol\\\\.*\\\\scripts\\\\.*"]
 
         for indicator in indicators:
             match = self.check_file(pattern=indicator, regex=True)
@@ -39,7 +36,8 @@ class AccessesSysvol(Signature):
                 return True
 
         return False
-    
+
+
 class WritesSysvol(Signature):
     name = "writes_sysvol"
     description = "Writes files to the SYSVOL folder, possibly to spread laterally"
@@ -48,14 +46,10 @@ class WritesSysvol(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1552"]	
+    ttp = ["T1552"]
 
     def run(self):
-        indicators = [
-            ".*\\\\Windows\\\\SYSVOL\\\\.*",
-            "\\\\sysvol\\\\.*\\\\policies\\\\.*",
-            "\\\\sysvol\\\\.*\\\\scripts\\\\.*"
-        ]
+        indicators = [".*\\\\Windows\\\\SYSVOL\\\\.*", "\\\\sysvol\\\\.*\\\\policies\\\\.*", "\\\\sysvol\\\\.*\\\\scripts\\\\.*"]
 
         for indicator in indicators:
             match = self.check_write_file(pattern=indicator, regex=True)

@@ -16,6 +16,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class OfficeMacroSuspicious(Signature):
     name = "office_macro_suspicious"
     description = "The office file contains a macro with suspicious strings"
@@ -35,10 +36,11 @@ class OfficeMacroSuspicious(Signature):
                         for string, description in self.results["static"]["office"]["Macro"]["Analysis"]["Suspicious"]:
                             if string not in strings:
                                 strings.append(string)
-                                self.data.append({string : description})
+                                self.data.append({string: description})
                         ret = True
 
         return ret
+
 
 class OfficeMacroIOC(Signature):
     name = "office_macro_ioc"
@@ -56,10 +58,11 @@ class OfficeMacroIOC(Signature):
                 if "Analysis" in self.results["static"]["office"]["Macro"]:
                     if "IOCs" in self.results["static"]["office"]["Macro"]["Analysis"]:
                         for description, indicator in self.results["static"]["office"]["Macro"]["Analysis"]["IOCs"]:
-                            self.data.append({description : indicator})
+                            self.data.append({description: indicator})
                         ret = True
 
         return ret
+
 
 class OfficeMacroAutoExecution(Signature):
     name = "office_macro_autoexecution"
@@ -70,7 +73,6 @@ class OfficeMacroAutoExecution(Signature):
     minimum = "1.3"
     ttp = ["T1064"]
 
-
     def run(self):
         ret = False
         if "static" in self.results and "office" in self.results["static"]:
@@ -78,10 +80,11 @@ class OfficeMacroAutoExecution(Signature):
                 if "Analysis" in self.results["static"]["office"]["Macro"]:
                     if "AutoExec" in self.results["static"]["office"]["Macro"]["Analysis"]:
                         for string, description in self.results["static"]["office"]["Macro"]["Analysis"]["AutoExec"]:
-                            self.data.append({string : description})
+                            self.data.append({string: description})
                         ret = True
 
         return ret
+
 
 class OfficeMacroMaliciousPredition(Signature):
     name = "office_macro_malicious_prediction"
@@ -99,7 +102,7 @@ class OfficeMacroMaliciousPredition(Signature):
                 prediction = self.results["mmbot"]["prediction"]
                 confidence = self.results["mmbot"]["confidence"]
                 if prediction == "malicious":
-                    self.data.append({"mmbot" : "prediction: %s confidence: %s" % (prediction,confidence)})
-                    ret= True
+                    self.data.append({"mmbot": "prediction: %s confidence: %s" % (prediction, confidence)})
+                    ret = True
 
         return ret

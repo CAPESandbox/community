@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class APISpamming(Signature):
     name = "api_spamming"
     description = "Attempts to repeatedly call a single API many times in order to delay analysis time"
@@ -18,7 +19,7 @@ class APISpamming(Signature):
         self.spam = dict()
         self.spam_limit = 10000
         self.processes = dict()
- 
+
     def on_call(self, call, process):
         if call["repeated"] < self.spam_limit:
             return None
@@ -33,12 +34,16 @@ class APISpamming(Signature):
 
     def on_complete(self):
         spam_apis_whitelist = {
-             "c:\\program files (x86)\\internet explorer\\iexplore.exe": ["NtQuerySystemTime", "GetSystemTimeAsFileTime", "GetSystemTime"],
-             "c:\\program files\\internet explorer\\iexplore.exe": ["NtQuerySystemTime", "GetSystemTimeAsFileTime", "GetSystemTime"],
-             "c:\\program files\\microsoft office\\office14\\winword.exe": ["GetLocalTime"],
-             "c:\\program files (x86)\\microsoft office\\office14\\winword.exe": ["GetLocalTime"],
-             "c:\\windows\\system32\\wbem\\wmiprvse.exe": ["GetSystemTimeAsFileTime"],
-             "c:\\windows\\system32\\wscript.exe": ["GetLocalTime", "NtQuerySystemTime"],
+            "c:\\program files (x86)\\internet explorer\\iexplore.exe": [
+                "NtQuerySystemTime",
+                "GetSystemTimeAsFileTime",
+                "GetSystemTime",
+            ],
+            "c:\\program files\\internet explorer\\iexplore.exe": ["NtQuerySystemTime", "GetSystemTimeAsFileTime", "GetSystemTime"],
+            "c:\\program files\\microsoft office\\office14\\winword.exe": ["GetLocalTime"],
+            "c:\\program files (x86)\\microsoft office\\office14\\winword.exe": ["GetLocalTime"],
+            "c:\\windows\\system32\\wbem\\wmiprvse.exe": ["GetSystemTimeAsFileTime"],
+            "c:\\windows\\system32\\wscript.exe": ["GetLocalTime", "NtQuerySystemTime"],
         }
         ret = False
         for pid, apis in self.spam.items():
@@ -48,8 +53,13 @@ class APISpamming(Signature):
                 do_check = True
             for apiname, count in apis.items():
                 if not do_check or apiname not in spam_apis_whitelist[modulepathlower]:
-                    self.data.append({"Spam": "{0} ({1}) called API {2} {3} times".format(
-                            self.processes[pid]["process_name"], self.processes[pid]["process_id"], apiname, count)})
+                    self.data.append(
+                        {
+                            "Spam": "{0} ({1}) called API {2} {3} times".format(
+                                self.processes[pid]["process_name"], self.processes[pid]["process_id"], apiname, count
+                            )
+                        }
+                    )
                     ret = True
 
         return ret

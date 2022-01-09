@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class VMwareDetectDevices(Signature):
     name = "antivm_vmware_devices"
     description = "Detects VMware through the presence of a device"
@@ -25,10 +26,7 @@ class VMwareDetectDevices(Signature):
     mbc = ["B0009"]
 
     def run(self):
-        indicators = [
-            "\\??\\vmci",
-            "\\??\\HGFS"
-        ]
+        indicators = ["\\??\\vmci", "\\??\\HGFS"]
 
         for indicator in indicators:
             if self.check_file(pattern=indicator):

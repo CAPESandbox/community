@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PersistsDotNetDevUtility(Signature):
     name = "persists_dev_util"
     description = "Attempts to bypass application whitelisting by copying and persisting .NET utility"
@@ -66,6 +67,7 @@ class PersistsDotNetDevUtility(Signature):
 
         return False
 
+
 class SpwansDotNetDevUtiliy(Signature):
     name = "spawns_dev_util"
     description = "Attempts to bypass application whitelisting"
@@ -86,7 +88,9 @@ class SpwansDotNetDevUtiliy(Signature):
             re.compile("[A-Za-z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\InstallUtil\.exe", re.IGNORECASE),
             re.compile("[A-Za-z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\mscorsvw\.exe", re.IGNORECASE),
             re.compile("[A-Z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\CasPol\.exe", re.IGNORECASE),
-            re.compile("[A-Z]:\\\\\\\\Windows\\\\\\\\Microsoft\.NET\\\\\\\\Framework\\\\\\\\v.*\\\\\\\\MSBuild\.exe", re.IGNORECASE)
+            re.compile(
+                "[A-Z]:\\\\\\\\Windows\\\\\\\\Microsoft\.NET\\\\\\\\Framework\\\\\\\\v.*\\\\\\\\MSBuild\.exe", re.IGNORECASE
+            ),
         ]
         self.sname = str()
         self.dname = str()
@@ -140,9 +144,13 @@ class SpwansDotNetDevUtiliy(Signature):
     def on_complete(self):
         if len(self.data) > 0:
             if self.executecopy:
-                self.description = "{0} {1}".format(self.description, "by copying and executing .NET utility in a suspended state, potentially for injection")
+                self.description = "{0} {1}".format(
+                    self.description, "by copying and executing .NET utility in a suspended state, potentially for injection"
+                )
             else:
-                self.description = "{0} {1}".format(self.description, "by executing .NET utility in a suspended state, potentially for injection")
+                self.description = "{0} {1}".format(
+                    self.description, "by executing .NET utility in a suspended state, potentially for injection"
+                )
             return True
 
         return False

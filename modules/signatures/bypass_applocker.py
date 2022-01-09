@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class SquiblydooBypass(Signature):
     name = "squiblydoo_bypass"
     description = "Attempts to bypass application controls using the squiblydoo technique"
@@ -25,17 +26,23 @@ class SquiblydooBypass(Signature):
     minimum = "1.3"
     evented = True
     ttp = ["T1086", "T1117"]
-    
+
     def run(self):
         ret = False
         cmdlines = self.results["behavior"]["summary"]["executed_commands"]
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if "regsvr32" in lower and ("/s" in lower or "-s" in lower) and ("/u" in lower or "-u" in lower) and ("scrobj" in lower or "vbscript" in lower or "jscript" in lower):
+            if (
+                "regsvr32" in lower
+                and ("/s" in lower or "-s" in lower)
+                and ("/u" in lower or "-u" in lower)
+                and ("scrobj" in lower or "vbscript" in lower or "jscript" in lower)
+            ):
                 ret = True
-                self.data.append({"command" : cmdline})
+                self.data.append({"command": cmdline})
 
         return ret
+
 
 class RegSrv32SquiblydooDLLLoad(Signature):
     name = "regsvr32_squiblydoo_dll_load"
@@ -56,6 +63,7 @@ class RegSrv32SquiblydooDLLLoad(Signature):
             if filename.lower() in ["scrobj.dll", "jscript.dll", "vbscript.dll"]:
                 return True
 
+
 class SquiblytwoBypass(Signature):
     name = "squiblytwo_bypass"
     description = "Attempts to bypass application controls using the squiblytwo technique"
@@ -74,9 +82,10 @@ class SquiblytwoBypass(Signature):
             lower = cmdline.lower()
             if "wmic" in lower and "process" in lower and "list" in lower and "format:" in lower:
                 ret = True
-                self.data.append({"command" : cmdline})
+                self.data.append({"command": cmdline})
 
         return ret
+
 
 class OdbcconfBypass(Signature):
     name = "odbcconf_bypass"
@@ -96,6 +105,6 @@ class OdbcconfBypass(Signature):
             lower = cmdline.lower()
             if "odbcconf" in lower and "regsvr" in lower:
                 ret = True
-                self.data.append({"command" : cmdline})
+                self.data.append({"command": cmdline})
 
         return ret

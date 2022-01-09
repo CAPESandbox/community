@@ -14,6 +14,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class InjectionRUNPE(Signature):
     name = "injection_runpe"
     description = "Executed a process and injected code into it, probably while unpacking"
@@ -27,7 +28,7 @@ class InjectionRUNPE(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.lastprocess = None
 
-    filter_categories = set(["process","threading"])
+    filter_categories = set(["process", "threading"])
 
     def on_call(self, call, process):
         if process is not self.lastprocess:
@@ -52,9 +53,14 @@ class InjectionRUNPE(Signature):
             if self.get_argument(call, "ProcessHandle") in self.process_handles:
                 self.sequence = 1
         elif call["api"] == "NtGetContextThread" and self.sequence == 0:
-           if self.get_argument(call, "ThreadHandle") in self.thread_handles:
+            if self.get_argument(call, "ThreadHandle") in self.thread_handles:
                 self.sequence = 1
-        elif (call["api"] == "NtWriteVirtualMemory" or call["api"] == "NtWow64WriteVirtualMemory64" or call["api"] == "WriteProcessMemory" or call["api"] == "NtMapViewOfSection") and (self.sequence == 1 or self.sequence == 2):
+        elif (
+            call["api"] == "NtWriteVirtualMemory"
+            or call["api"] == "NtWow64WriteVirtualMemory64"
+            or call["api"] == "WriteProcessMemory"
+            or call["api"] == "NtMapViewOfSection"
+        ) and (self.sequence == 1 or self.sequence == 2):
             if self.get_argument(call, "ProcessHandle") in self.process_handles:
                 self.sequence = self.sequence + 1
         elif (call["api"] == "NtSetContextThread") and (self.sequence == 1 or self.sequence == 2):
@@ -63,14 +69,22 @@ class InjectionRUNPE(Signature):
         elif call["api"] == "NtResumeThread" and (self.sequence == 2 or self.sequence == 3):
             handle = self.get_argument(call, "ThreadHandle")
             if handle in self.thread_handles:
-                desc = "{0}({1}) -> {2}({3})".format(process["process_name"], str(process["process_id"]),
-                                                     self.get_name_from_pid(self.thread_map[handle]), self.thread_map[handle])
+                desc = "{0}({1}) -> {2}({3})".format(
+                    process["process_name"],
+                    str(process["process_id"]),
+                    self.get_name_from_pid(self.thread_map[handle]),
+                    self.thread_map[handle],
+                )
                 self.data.append({"Injection": desc})
                 return True
         elif call["api"] == "NtResumeProcess" and (self.sequence == 2 or self.sequence == 3):
             handle = self.get_argument(call, "ProcessHandle")
             if handle in self.process_handles:
-                desc = "{0}({1}) -> {2}({3})".format(process["process_name"], str(process["process_id"]),
-                                                     self.get_name_from_pid(self.process_map[handle]), self.process_map[handle])
+                desc = "{0}({1}) -> {2}({3})".format(
+                    process["process_name"],
+                    str(process["process_id"]),
+                    self.get_name_from_pid(self.process_map[handle]),
+                    self.process_map[handle],
+                )
                 self.data.append({"Injection": desc})
                 return True

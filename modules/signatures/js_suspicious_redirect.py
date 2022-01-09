@@ -20,6 +20,7 @@ except:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class JS_SuspiciousRedirect(Signature):
     name = "js_suspicious_redirect"
     description = "Executes JavaScript that contains a suspicious redirect"
@@ -37,8 +38,7 @@ class JS_SuspiciousRedirect(Signature):
 
     filter_categories = set(["browser"])
     # backward compat
-    filter_apinames = set(["COleScript_Compile", "COleScript_ParseScriptText",
-                           "CDocument_write", "JsEval"])
+    filter_apinames = set(["COleScript_Compile", "COleScript_ParseScriptText", "CDocument_write", "JsEval"])
 
     def on_call(self, call, process):
         if call["api"] == "CDocument_write":
@@ -53,15 +53,14 @@ class JS_SuspiciousRedirect(Signature):
             check = re.match(self.styleRE, buf)
             if check:
                 style = check.group("styleName")
-                hclass1 = "class=\"{0}\"".format(style)
+                hclass1 = 'class="{0}"'.format(style)
                 hclass2 = "class='{0}'".format(style)
                 if hclass1 in buf or hclass2 in buf:
                     redirect = re.search(self.iframeRE, buf)
                     if redirect:
                         self.ret = True
                         self.severity = 3
-                        self.data.append({"Info": "Javascript generated CSS styling for a div "
-                                                  "containing an iframe redirect."})
+                        self.data.append({"Info": "Javascript generated CSS styling for a div " "containing an iframe redirect."})
                         self.data.append({"Redirect": redirect.group("redir")})
 
     def on_complete(self):

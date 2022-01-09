@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DisablesSystemRestore(Signature):
     name = "disables_system_restore"
     description = "Attempts to disable System Restore"
@@ -17,11 +18,10 @@ class DisablesSystemRestore(Signature):
         keys = [
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\SystemRestore\\\\DisableSR$",
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Policies\\\\Microsoft\\\\Windows\\ NT\\\\SystemRestore\\\\DisableSR$",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Policies\\\\Microsoft\\\\Windows\\ NT\\\\SystemRestore\\\\DisableConfig$"
+            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Policies\\\\Microsoft\\\\Windows\\ NT\\\\SystemRestore\\\\DisableConfig$",
         ]
         for check in keys:
             if self.check_write_key(pattern=check, regex=True):
                 return True
 
         return False
-

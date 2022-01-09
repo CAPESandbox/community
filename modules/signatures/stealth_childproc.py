@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class StealthChildProc(Signature):
     name = "stealth_childproc"
     description = "Forces a created process to be the child of an unrelated process"
@@ -19,7 +20,7 @@ class StealthChildProc(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
 
-    filter_apinames = set(["NtCreateProcess","NtCreateProcessEx","RtlCreateUserProcess","CreateProcessInternalW"])
+    filter_apinames = set(["NtCreateProcess", "NtCreateProcessEx", "RtlCreateUserProcess", "CreateProcessInternalW"])
 
     def on_call(self, call, process):
         parenthandle = self.get_argument(call, "ParentHandle")
@@ -27,7 +28,9 @@ class StealthChildProc(Signature):
         cmdline = self.get_argument(call, "CommandLine")
         if parenthandle and parenthandle != "0xffffffff" and parenthandle != "0xffffffffffffffff":
             self.ret = True
-            self.data.append({"created_process": "Process %s has spoofed parent process with real parent process %s" % (cmdline,pname)})
+            self.data.append(
+                {"created_process": "Process %s has spoofed parent process with real parent process %s" % (cmdline, pname)}
+            )
 
     def on_complete(self):
         return self.ret

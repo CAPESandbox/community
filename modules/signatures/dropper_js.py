@@ -20,12 +20,13 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class EXEDropper_JS(Signature):
     name = "exe_dropper_js"
     description = "Executes obfuscated JavaScript which drops an executable file"
     weight = 3
     severity = 3
-    categories = ["dropper","downloader", "spam"]
+    categories = ["dropper", "downloader", "spam"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -45,6 +46,6 @@ class EXEDropper_JS(Signature):
         else:
             buf = self.get_argument(call, "Script")
 
-        if re.search("(Save|Write)ToFile(\(|\/).*?\.exe\"", buf, re.IGNORECASE|re.DOTALL):
-            self.data.append({"dropper_script" : buf})
+        if re.search('(Save|Write)ToFile(\(|\/).*?\.exe"', buf, re.IGNORECASE | re.DOTALL):
+            self.data.append({"dropper_script": buf})
             return True

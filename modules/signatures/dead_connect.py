@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DeadConnect(Signature):
     name = "dead_connect"
     description = "Attempts to connect to a dead IP:Port ({0} unique times)"
@@ -37,7 +38,6 @@ class DeadConnect(Signature):
             port = self.get_argument(call, "port")
             if ip and port:
                 self.connections.add("{0}:{1}".format(ip, port))
-
 
     def on_complete(self):
         if self.connections:

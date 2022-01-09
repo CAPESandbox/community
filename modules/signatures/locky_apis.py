@@ -23,6 +23,7 @@ from urllib.parse import parse_qs, urlparse
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Locky_APIs(Signature):
     name = "Locky_behavior"
     description = "Exhibits behavior characteristic of Locky ransomware"
@@ -47,9 +48,7 @@ class Locky_APIs(Signature):
         self.keywords = ["id=", "act=", "lang="]
         self.sigchanged = False
 
-    filter_apinames = set(["GetVolumeNameForVolumeMountPointW",
-                           "InternetCrackUrlA", "CryptHashData",
-                           "NtOpenEvent"])
+    filter_apinames = set(["GetVolumeNameForVolumeMountPointW", "InternetCrackUrlA", "CryptHashData", "NtOpenEvent"])
 
     def on_call(self, call, process):
         if self.checkEvent and self.lastapi == "CryptHashData":
@@ -76,15 +75,18 @@ class Locky_APIs(Signature):
                 if buf and all(word in buf for word in self.keywords):
                     # Try/Except handles when this behavior changes in the future
                     try:
-                        args = parse_qs(urlparse("/?" + buf).query,
-                                        keep_blank_values=True)
+                        args = parse_qs(urlparse("/?" + buf).query, keep_blank_values=True)
                     except:
                         self.sigchanged = True
                         self.severity = 1
                         self.description = "Potential Locky ransomware behavioral characteristics observed. (See Note)"
-                        self.data.append({"Note": "Unexpected behavior observed for Locky. Please " \
-                                                  "report this sample to https://github.com/spende" \
-                                                  "rsandbox/community-modified/issues"})
+                        self.data.append(
+                            {
+                                "Note": "Unexpected behavior observed for Locky. Please "
+                                "report this sample to https://github.com/spende"
+                                "rsandbox/community-modified/issues"
+                            }
+                        )
 
                     if args and "id" in args.keys():
                         if args["id"][0] in self.hashes:
@@ -98,8 +100,7 @@ class Locky_APIs(Signature):
                     checkEvent = True
 
                 else:
-                    check = re.findall(r"\s((?:https?://)?\w+(?:\.onion|\.tor2web)[/.](?:\w+\/)?)",
-                                       buf, re.I)
+                    check = re.findall(r"\s((?:https?://)?\w+(?:\.onion|\.tor2web)[/.](?:\w+\/)?)", buf, re.I)
                     if check:
                         for payment in check:
                             self.payment.add(payment)

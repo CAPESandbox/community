@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class RTFEmbeddedContent(Signature):
     name = "rtf_embedded_content"
     description = "The RTF file contains embedded content"
@@ -34,10 +35,16 @@ class RTFEmbeddedContent(Signature):
                         index = block["index"]
                         classname = block["class_name"]
                         size = block["size"]
-                        self.data.append({"embedded content" : "Object %s index %s contains embedded object %s with size %s bytes" % (key,index,classname,size)})
+                        self.data.append(
+                            {
+                                "embedded content": "Object %s index %s contains embedded object %s with size %s bytes"
+                                % (key, index, classname, size)
+                            }
+                        )
                         ret = True
 
         return ret
+
 
 class RTFExploitStatic(Signature):
     name = "rtf_exploit_static"
@@ -58,14 +65,17 @@ class RTFExploitStatic(Signature):
                         index = block["index"]
                         cve = block["CVE"]
                         if cve:
-                            self.data.append({"cve" : "Object %s index %s contains %s" % (key,index,cve)})
+                            self.data.append({"cve": "Object %s index %s contains %s" % (key, index, cve)})
                             ret = True
 
         return ret
 
+
 class RTFEmbeddedOfficeFile(Signature):
     name = "rtf_embedded_office_file"
-    description = "The RTF file contains an embedded  Office file potentially to display as a decoy document during malicious activities"
+    description = (
+        "The RTF file contains an embedded  Office file potentially to display as a decoy document during malicious activities"
+    )
     severity = 2
     confidence = 100
     categories = ["rtf", "static"]
@@ -81,10 +91,13 @@ class RTFEmbeddedOfficeFile(Signature):
                     if "class_name" in block:
                         if "Word.Document." in block["class_name"]:
                             index = block["index"]
-                            self.data.append({"office file" : "Object %s index %s contains an embedded office document" % (key,index)})
+                            self.data.append(
+                                {"office file": "Object %s index %s contains an embedded office document" % (key, index)}
+                            )
                             ret = True
 
         return ret
+
 
 class RTFASLRBypass(Signature):
     name = "rtf_aslr_bypass"
@@ -111,10 +124,13 @@ class RTFASLRBypass(Signature):
                             classname = block["class_name"]
                             index = block["index"]
                             if bypass in classname.lower():
-                                self.data.append({"aslr bypass" : "Object %s index %s contains possible ASLR bypass %s" % (key,index,classname)})
+                                self.data.append(
+                                    {"aslr bypass": "Object %s index %s contains possible ASLR bypass %s" % (key, index, classname)}
+                                )
                                 ret = True
 
         return ret
+
 
 class RTFAnomalyCharacterSet(Signature):
     name = "rtf_anomaly_characterset"
@@ -134,6 +150,7 @@ class RTFAnomalyCharacterSet(Signature):
                 ret = True
 
         return ret
+
 
 class RTFAnomalyVersion(Signature):
     name = "rtf_anomaly_version"

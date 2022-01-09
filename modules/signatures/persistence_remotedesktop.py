@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PersistenceRDPRegistry(Signature):
     name = "persistence_rdp_registry"
     description = "Modifies Terminal Server registry keys for persistence"
@@ -40,6 +41,7 @@ class PersistenceRDPRegistry(Signature):
                 self.data.append({"regkey": match})
 
         return ret
+
 
 class PersistenceRDPShadowing(Signature):
     name = "persistence_rdp_shadowing"

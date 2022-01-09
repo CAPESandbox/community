@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Silverlight_JS(Signature):
     name = "silverlight_js"
     description = "Executes obfuscated JavaScript containing a Silverlight object indicative of an exploit attempt"
@@ -43,5 +44,7 @@ class Silverlight_JS(Signature):
         else:
             buf = self.get_argument(call, "Script")
 
-        if re.search("application\/x\-silverlight.*?\<param name[ \t\n]*=.*?value[ \t\n]*=.*?\<\/object\>.*", buf, re.IGNORECASE|re.DOTALL):
+        if re.search(
+            "application\/x\-silverlight.*?\<param name[ \t\n]*=.*?value[ \t\n]*=.*?\<\/object\>.*", buf, re.IGNORECASE | re.DOTALL
+        ):
             return True

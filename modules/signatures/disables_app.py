@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DisablesAppLaunch(Signature):
     name = "disables_app_launch"
     description = "Modifies system policies to prevent the launching of specific applications or executables"
@@ -14,7 +15,10 @@ class DisablesAppLaunch(Signature):
     ttp = ["T1112", "E1478", "E1112"]
 
     def run(self):
-        if self.check_write_key(pattern=".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\DisallowRun$", regex=True):
+        if self.check_write_key(
+            pattern=".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\DisallowRun$",
+            regex=True,
+        ):
             return True
 
         return False

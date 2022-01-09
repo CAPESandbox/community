@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class BetaBot_APIs(Signature):
     name = "betabot_behavior"
     description = "Exhibits behavior characteristics of BetaBot / Neurevt malware"
@@ -54,7 +55,7 @@ class BetaBot_APIs(Signature):
         # TODO: make this use environ info
         ads_paths = [
             "C:\\\\ProgramData\\\\.*:Zone\.Identifier$",
-            "C:\\\\Program\\ Files\\\\Common\\ Files\\\\Microsoft\\\\.*:Zone\.Identifier$"
+            "C:\\\\Program\\ Files\\\\Common\\ Files\\\\Microsoft\\\\.*:Zone\.Identifier$",
         ]
         for indicator in ads_paths:
             if self.check_delete_file(pattern=indicator, regex=True):

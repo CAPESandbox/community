@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ZeusURL(Signature):
     name = "banker_zeus_url"
     description = "Contacts C&C server HTTP check-in (Banking Trojan)"
@@ -26,9 +27,9 @@ class ZeusURL(Signature):
 
     def run(self):
         indicators = [
-            ".*\/config\.bin",                                  
-            ".*\/gate\.php",                               
-            ".*\/cfg\.bin",                                   
+            ".*\/config\.bin",
+            ".*\/gate\.php",
+            ".*\/cfg\.bin",
         ]
 
         for indicator in indicators:
@@ -36,5 +37,5 @@ class ZeusURL(Signature):
             if match:
                 self.data.append({"url": match})
                 return True
-        
+
         return False

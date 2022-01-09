@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class SunbeltDetectFiles(Signature):
     name = "antisandbox_sunbelt_files"
     description = "Detects Sunbelt Sandbox through the presence of a file"

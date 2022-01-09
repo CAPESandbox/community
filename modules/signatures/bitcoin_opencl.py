@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class BitcoinOpenCL(Signature):
     name = "bitcoin_opencl"
     description = "Installs OpenCL library, probably to mine Bitcoins"

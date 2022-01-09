@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class NetworkBIND(Signature):
     name = "network_bind"
     description = "Starts servers listening on {0}"
@@ -30,7 +31,7 @@ class NetworkBIND(Signature):
         self.bindmap = dict()
         self.listens = []
 
-    filter_apinames = set(["bind","listen"])
+    filter_apinames = set(["bind", "listen"])
 
     def on_call(self, call, process):
         # this isn't entirely accurate since we're not tracking sockets properly

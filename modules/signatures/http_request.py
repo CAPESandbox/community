@@ -27,9 +27,17 @@ class HTTP_Request(Signature):
         self.lasthost = str()
         self.urls = list()
 
-    filter_apinames = set(["HttpOpenRequestA", "HttpOpenRequestW", "InternetConnectA",
-                           "InternetConnectW", "WinHttpGetProxyForUrl", "InternetOpenUrlW", "InternetOpenUrlA"])
-
+    filter_apinames = set(
+        [
+            "HttpOpenRequestA",
+            "HttpOpenRequestW",
+            "InternetConnectA",
+            "InternetConnectW",
+            "WinHttpGetProxyForUrl",
+            "InternetOpenUrlW",
+            "InternetOpenUrlA",
+        ]
+    )
 
     def on_call(self, call, process):
         if call["api"].startswith("InternetConnect"):

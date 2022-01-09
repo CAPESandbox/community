@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AllapleMutexes(Signature):
     name = "allaple_mutexes"
     description = "Creates known Allaple worm mutexes"

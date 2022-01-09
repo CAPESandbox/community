@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CryptoWall_APIs(Signature):
     name = "cryptowall_behavior"
     description = "Exhibits behavior characteristic of Cryptowall ransomware"
@@ -38,11 +39,9 @@ class CryptoWall_APIs(Signature):
         self.campaign = str()
         self.buffers = set()
         self.lastLargeBuf = str()
-        self.compname = self.get_environ_entry(self.get_initial_process(),
-                                               "ComputerName")
+        self.compname = self.get_environ_entry(self.get_initial_process(), "ComputerName")
 
-    filter_apinames = set(["CryptHashData", "RtlDecompressBuffer",
-                           "NtOpenEvent"])
+    filter_apinames = set(["CryptHashData", "RtlDecompressBuffer", "NtOpenEvent"])
 
     def on_call(self, call, process):
         if call["api"] == "CryptHashData":

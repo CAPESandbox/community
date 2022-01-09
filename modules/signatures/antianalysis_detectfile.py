@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiAnalysisDetectFile(Signature):
     name = "antianalysis_detectfile"
     description = "Attempts to identify installed analysis tools by a known file location"
@@ -58,6 +59,6 @@ class AntiAnalysisDetectFile(Signature):
             file_match = self.check_file(pattern=indicator, regex=True, all=True)
             if file_match:
                 for match in file_match:
-                    self.data.append({"file" : match })
+                    self.data.append({"file": match})
                 ret = True
         return ret

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class VMwareDetectMutexes(Signature):
     name = "antivm_vmware_mutexes"
     description = "Attempts to detect VMware using known mutexes"

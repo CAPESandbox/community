@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PoullightFiles(Signature):
     name = "poullight_files"
     description = "Poullight infostealer file artifacts detected"

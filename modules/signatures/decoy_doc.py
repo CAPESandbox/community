@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DecoyDocument(Signature):
     name = "decoy_document"
     description = "A potential decoy document was displayed to the user"
@@ -28,7 +29,15 @@ class DecoyDocument(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.decoys = []
-        self.office_proc_list =["wordview.exe","winword.exe","excel.exe","powerpnt.exe","outlook.exe","acrord32.exe","acrord64.exe"]
+        self.office_proc_list = [
+            "wordview.exe",
+            "winword.exe",
+            "excel.exe",
+            "powerpnt.exe",
+            "outlook.exe",
+            "acrord32.exe",
+            "acrord64.exe",
+        ]
         self.initialpath = None
         initialproc = self.get_initial_process()
         if initialproc:
@@ -45,12 +54,16 @@ class DecoyDocument(Signature):
 
     def on_complete(self):
         if self.results["info"]["package"] in ["exe", "bin", "msi", "dll"]:
-            self.data.append({"disguised_executable" : "The submitted file was an executable indicative of an attempt to get a user to run executable content disguised as a document" })
+            self.data.append(
+                {
+                    "disguised_executable": "The submitted file was an executable indicative of an attempt to get a user to run executable content disguised as a document"
+                }
+            )
             self.confidence = 80
 
         if len(self.decoys) > 0:
             for decoy in self.decoys:
-                self.data.append({"Decoy Document" : "%s" % (decoy)})
+                self.data.append({"Decoy Document": "%s" % (decoy)})
             return True
 
         return False

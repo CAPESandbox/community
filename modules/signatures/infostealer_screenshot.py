@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CapturesScreenshot(Signature):
     name = "captures_screenshot"
     description = "Captures Screenshot"
@@ -30,7 +31,7 @@ class CapturesScreenshot(Signature):
         self.capturesc = False
         self.savesc = False
         self.wrtiesc = False
-        
+
     filter_apinames = set(["LdrGetProcedureAddress", "NtCreateFile"])
 
     def on_call(self, call, process):
@@ -40,16 +41,19 @@ class CapturesScreenshot(Signature):
                 if modulename.lower() == "gdiplus.dll":
                     funcationname = self.get_argument(call, "FunctionName")
                     if funcationname:
-                        if funcationname.lower() == "gdipcreatebitmapfromhbitmap" or funcationname.lower() == "gdipcreatebitmapfromscan0":
+                        if (
+                            funcationname.lower() == "gdipcreatebitmapfromhbitmap"
+                            or funcationname.lower() == "gdipcreatebitmapfromscan0"
+                        ):
                             self.capturesc = True
                         if funcationname.lower() == "gdipsaveimagetofile":
                             self.savesc = True
-        
+
         if self.capturesc and self.savesc:
             if call["api"] == "NtCreateFile":
                 filename = self.get_argument(call, "FileName")
                 if filename:
-                    if filename.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp')):
+                    if filename.lower().endswith((".jpg", ".jpeg", ".png", ".bmp")):
                         self.wrtiesc = True
 
     def on_complete(self):

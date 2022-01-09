@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class LuminosityRAT(Signature):
     name = "rat_luminosity"
     description = "Exhibits behavior characteristic of Luminosity Link RAT"

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class TampersETW(Signature):
     name = "tampers_etw"
     description = "Tampers with ETW"
@@ -30,23 +31,19 @@ class TampersETW(Signature):
             "HKEY_CURRENT_USER\\\\Environment\\\\COMPlus_ETWEnabled",
             "HKEY_LOCAL_MACHINE\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\Session Manager\\\\Environment\\\\COMPlus_ETWEnabled",
         ]
-        
-        cmd_indicators = [
-            ".*set\scomplus_etwenabled.*",
-            ".*env:complus_etwenabled.*",
-            ".*etwenabled.*(value|\/d)\s0.*"
-        ]
+
+        cmd_indicators = [".*set\scomplus_etwenabled.*", ".*env:complus_etwenabled.*", ".*etwenabled.*(value|\/d)\s0.*"]
 
         for rindicator in reg_indicators:
             match = self.check_write_key(pattern=rindicator, regex=True)
             if match:
-                self.data.append({"regkey" : match})
+                self.data.append({"regkey": match})
                 return True
 
         for cindicator in cmd_indicators:
             match = self.check_executed_command(pattern=cindicator, regex=True)
             if match:
-                self.data.append({"cmdline" : match})
+                self.data.append({"cmdline": match})
                 return True
 
         return False

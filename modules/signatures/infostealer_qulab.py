@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class QulabMutexes(Signature):
     name = "qulab_mutexes"
     description = "Creates Qulab/MASAD information stealer mutexes"
@@ -36,6 +37,7 @@ class QulabMutexes(Signature):
                 return True
 
         return False
+
 
 class QulabFiles(Signature):
     name = "qulab_files"
@@ -60,7 +62,7 @@ class QulabFiles(Signature):
             if match:
                 score += 1
                 self.data.append({"file": match})
-        
+
         if score >= 2:
             return True
 

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class SystemInfoDiscoveryCMD(Signature):
     name = "system_info_disovery_cmd"
     description = "Collects system information via command line"
@@ -41,6 +42,7 @@ class SystemInfoDiscoveryCMD(Signature):
 
         return False
 
+
 class SystemUserDisoveryCMD(Signature):
     name = "system_user_disovery_cmd"
     description = "Collects system owner/user information via command line"
@@ -64,6 +66,7 @@ class SystemUserDisoveryCMD(Signature):
                 return True
 
         return False
+
 
 class SystemAccountDisoveryCMD(Signature):
     name = "system_account_disovery_cmd"
@@ -89,6 +92,7 @@ class SystemAccountDisoveryCMD(Signature):
 
         return False
 
+
 class SystemNetworkDiscoveryCMD(Signature):
     name = "system_network_discovery_cmd"
     description = "Collects system network information via command line"
@@ -103,7 +107,7 @@ class SystemNetworkDiscoveryCMD(Signature):
     def on_complete(self):
         indicators = [
             "([A-Za-z]:\\\\Windows\\\\System32\\\\)?route(.exe)?.*",
-            ".*netsh(\")?\swlan\sshow\s(profile|networks).*",
+            '.*netsh(")?\swlan\sshow\s(profile|networks).*',
             "([A-Za-z]:\\\\Windows\\\\System32\\\\)?ipconfig(.exe)?.*",
             "([A-Za-z]:\\\\Windows\\\\System32\\\\)?nltest(.exe)?.*",
             ".*net\sview.*",
@@ -116,6 +120,7 @@ class SystemNetworkDiscoveryCMD(Signature):
                 return True
 
         return False
+
 
 class SystemInfoDiscoveryPWSH(Signature):
     name = "system_info_disovery_pwsh"
@@ -143,6 +148,7 @@ class SystemInfoDiscoveryPWSH(Signature):
 
         return False
 
+
 class SystemNetworkDiscoveryPWSH(Signature):
     name = "system_network_discovery_pwsh"
     description = "Collects system network information via PowerShell"
@@ -166,4 +172,4 @@ class SystemNetworkDiscoveryPWSH(Signature):
                 self.data.append({"command": match})
                 return True
 
-        return False       
+        return False

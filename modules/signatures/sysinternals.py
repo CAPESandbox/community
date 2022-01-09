@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class sysinternals_tools(Signature):
     name = "sysinternals_tools"
     description = "Executed a sysinternals tool"
@@ -27,7 +28,7 @@ class sysinternals_tools(Signature):
 
     def run(self):
         reg_indicators = [
-        ".*\\\\Software\\\\(Wow6432Node\\\\)?Sysinternals\\\\.*",
+            ".*\\\\Software\\\\(Wow6432Node\\\\)?Sysinternals\\\\.*",
         ]
 
         for indicator in reg_indicators:
@@ -36,6 +37,7 @@ class sysinternals_tools(Signature):
                 return True
 
         return False
+
 
 class sysinternals_psexec(Signature):
     name = "sysinternals_psexec"
@@ -49,7 +51,7 @@ class sysinternals_psexec(Signature):
 
     def run(self):
         reg_indicators = [
-        ".*\\\\Software\\\\(Wow6432Node\\\\)?Sysinternals\\\\PsExec\\\\.*",
+            ".*\\\\Software\\\\(Wow6432Node\\\\)?Sysinternals\\\\PsExec\\\\.*",
         ]
 
         for indicator in reg_indicators:

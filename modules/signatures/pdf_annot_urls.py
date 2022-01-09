@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PDF_Annot_URLs(Signature):
     name = "pdf_annot_urls"
     description = "The PDF contains a Link Annotation to a compressed archive or executable file"
@@ -32,16 +33,19 @@ class PDF_Annot_URLs(Signature):
                 if "Annot_URLs" in self.results["static"]["pdf"]:
                     for entry in self.results["static"]["pdf"]["Annot_URLs"]:
                         entrylower = entry.lower()
-                        if entrylower.endswith((".zip", ".exe", ".msi", ".bat", ".scr", ".rar", ".com")) and \
-                            not entrylower.startswith("mailto:"): # skip mailto: as it can't add attachments
-                            skip=False
+                        if entrylower.endswith(
+                            (".zip", ".exe", ".msi", ".bat", ".scr", ".rar", ".com")
+                        ) and not entrylower.startswith(
+                            "mailto:"
+                        ):  # skip mailto: as it can't add attachments
+                            skip = False
                             # skip triggering on http:// and https:// links that don't have anything after the domain name
                             # so http://foo.com will be skipped, but http://foo.com/malware.com will not be
                             if entrylower.startswith("http://") and not entrylower.find("/", 8):
-                                skip=True
+                                skip = True
                             elif entrylower.startswith("https://") and not entrylower.find("/", 9):
-                                skip=True
+                                skip = True
                             if skip:
-                                self.data.append({"URL":entry})
+                                self.data.append({"URL": entry})
                                 found_URLs = True
         return found_URLs

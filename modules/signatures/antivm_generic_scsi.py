@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiVMSCSI(Signature):
     name = "antivm_generic_scsi"
     description = "Detects virtualization software with SCSI Disk Identifier trick"
@@ -48,17 +49,17 @@ class AntiVMSCSI(Signature):
             # Store the handle used to open the key.
             self.handle = ""
             # Check if the registry is HKEY_LOCAL_MACHINE.
-            if self.get_argument(call,"Registry") == indicator_registry:
+            if self.get_argument(call, "Registry") == indicator_registry:
                 args_matched += 1
             # Check if the subkey opened is the correct one.
-            if self.get_argument(call,"SubKey") == indicator_key:
+            if self.get_argument(call, "SubKey") == indicator_key:
                 args_matched += 1
 
             # If both arguments are matched, I consider the key to be successfully opened.
             if args_matched == 2:
                 self.opened = True
                 # Store the generated handle.
-                self.handle = self.get_argument(call,"Handle")
+                self.handle = self.get_argument(call, "Handle")
         # Now I check if the malware verified the value of the key.
         if call["api"].startswith("RegQueryValueEx"):
             # Verify if the key was actually opened.
@@ -67,9 +68,9 @@ class AntiVMSCSI(Signature):
 
             # Verify the arguments.
             args_matched = 0
-            if self.get_argument(call,"Handle") == self.handle:
+            if self.get_argument(call, "Handle") == self.handle:
                 args_matched += 1
-            if self.get_argument(call,"ValueName") == indicator_name:
+            if self.get_argument(call, "ValueName") == indicator_name:
                 args_matched += 1
 
             # Finally, if everything went well, I consider the signature as matched.

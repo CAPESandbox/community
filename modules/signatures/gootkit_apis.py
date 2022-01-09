@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Gootkit_APIs(Signature):
     name = "gootkit_behavior"
     description = "Exhibits behavior characteristic of Gootkit malware"

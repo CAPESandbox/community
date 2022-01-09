@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DisablesAppVirtualiztion(Signature):
     name = "disables_appv_virtualization"
     description = "Disables AppV (process) virtualization"
@@ -24,7 +25,7 @@ class DisablesAppVirtualiztion(Signature):
     minimum = "1.3"
     evented = True
 
-    def run(self):    
+    def run(self):
         indicators = [
             "HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\AppV\\\\Client\\\\Virtualization\\\\EnableDynamicVirtualization",
         ]

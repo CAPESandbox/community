@@ -14,6 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Static_Java(Signature):
     name = "static_java"
     description = "JAR file contains suspicious characteristics"
@@ -35,11 +36,27 @@ class Static_Java(Signature):
 
         functions = (".invoke(", ".getMethod(", "class.forName(", ".getClass(", ".getField(", ".getConstructor(", ".newInstance(")
         permissions = (
-            #string, reversed, hexed, hexed with :, hexed with space
-            "setSecurityManager", "reganaMytiruceStes", "73657453656375726974794d616e61676572", "73:65:74:53:65:63:75:72:69:74:79:4d:61:6e:61:67:65:72", "73 65 74 53 65 63 75 72 69 74 79 4d 61 6e 61 67 65 72",
-            "getSecurityManager", "reganaMytiruceSteg", "67657453656375726974794d616e61676572", "67:65:74:53:65:63:75:72:69:74:79:4d:61:6e:61:67:65:72", "67 65 74 53 65 63 75 72 69 74 79 4d 61 6e 61 67 65 72",
-            "doPrivileged", "degelivirPod", "646f50726976696c65676564", "64:6f:50:72:69:76:69:6c:65:67:65:64", "64 6f 50 72 69 76 69 6c 65 67 65 64",
-            "AllPermission", "noissimrePllA", "416c6c5065726d697373696f6e", "41:6c:6c:50:65:72:6d:69:73:73:69:6f:6e", "41 6c 6c 50 65 72 6d 69 73 73 69 6f 6e",
+            # string, reversed, hexed, hexed with :, hexed with space
+            "setSecurityManager",
+            "reganaMytiruceStes",
+            "73657453656375726974794d616e61676572",
+            "73:65:74:53:65:63:75:72:69:74:79:4d:61:6e:61:67:65:72",
+            "73 65 74 53 65 63 75 72 69 74 79 4d 61 6e 61 67 65 72",
+            "getSecurityManager",
+            "reganaMytiruceSteg",
+            "67657453656375726974794d616e61676572",
+            "67:65:74:53:65:63:75:72:69:74:79:4d:61:6e:61:67:65:72",
+            "67 65 74 53 65 63 75 72 69 74 79 4d 61 6e 61 67 65 72",
+            "doPrivileged",
+            "degelivirPod",
+            "646f50726976696c65676564",
+            "64:6f:50:72:69:76:69:6c:65:67:65:64",
+            "64 6f 50 72 69 76 69 6c 65 67 65 64",
+            "AllPermission",
+            "noissimrePllA",
+            "416c6c5065726d697373696f6e",
+            "41:6c:6c:50:65:72:6d:69:73:73:69:6f:6e",
+            "41 6c 6c 50 65 72 6d 69 73 73 69 6f 6e",
         )
 
         reflection = 0
@@ -48,76 +65,89 @@ class Static_Java(Signature):
         reflection = sum([decompiled.count(functions) for functions in functions])
 
         if reflection > 0:
-            self.data.append({"obfuscation_reflection" : "Contains %s occurrences of potential Java reflection indirect function call obfuscation" % (reflection)})
+            self.data.append(
+                {
+                    "obfuscation_reflection": "Contains %s occurrences of potential Java reflection indirect function call obfuscation"
+                    % (reflection)
+                }
+            )
             self.weight += 1
 
         # Checks for strings in clear, reversed & hex formattings. Hex conversion code from http://stackoverflow.com/questions/12214801/print-a-string-as-hex-bytes)
         for permissions in permissions:
             if permissions in decompiled:
-                self.data.append({"security_permissions" : "Contains %s potentially used to modify the security level" % (permissions)})
+                self.data.append(
+                    {"security_permissions": "Contains %s potentially used to modify the security level" % (permissions)}
+                )
                 self.severity = 3
                 self.weight += 1
 
         if "URL(" in decompiled or "URLEncoder.encode(" in decompiled or "openConnection(" in decompiled:
-            self.data.append({"http" : "Contains ability to make HTTP connections" })
+            self.data.append({"http": "Contains ability to make HTTP connections"})
             self.weight += 1
 
         if ".exec(" in decompiled or ".getRuntime(" in decompiled:
-            self.data.append({"execute" : "Contains ability to run executable code" })
+            self.data.append({"execute": "Contains ability to run executable code"})
             self.severity = 3
             self.weight += 1
 
         if "OutputStream" in decompiled and ".ser" in decompiled:
-            self.data.append({"serialized_object" : "Contains use of a Java serialized object" })
+            self.data.append({"serialized_object": "Contains use of a Java serialized object"})
             self.weight += 1
 
         # Specific Exploit Detections
         # http://stopmalvertising.com/malware-reports/watering-hole-attack-cve-2012-4792-and-cve-2012-0507.html
         if "AtomicReferenceArray" in decompiled:
-            self.data.append({"cve_2012-0507" : "AtomicReferenceArray type confusion exploit code" })
+            self.data.append({"cve_2012-0507": "AtomicReferenceArray type confusion exploit code"})
             exploit += 1
 
         # http://blogs.technet.com/b/mmpc/archive/2012/11/21/an-analysis-of-dorkbot-s-infection-vectors-part-2.aspx
         if "sun.awt.SunToolkit" in decompiled and "getField" in decompiled:
-            self.data.append({"cve_2012-4681" : "com.sun.beans.finder.MethodFinder findMethod exploit code" })
+            self.data.append({"cve_2012-4681": "com.sun.beans.finder.MethodFinder findMethod exploit code"})
             exploit += 1
 
         # http://blogs.technet.com/b/mmpc/archive/2012/11/15/a-technical-analysis-on-new-java-vulnerability-cve-2012-5076.aspx
         if "ManagedObjectManagerFactory" in decompiled and "GenericConstructor" in decompiled:
-            self.data.append({"cve_2012-5076" : "com.sun.org.glassfish.gmbal vulnerable class exploit code" })
+            self.data.append({"cve_2012-5076": "com.sun.org.glassfish.gmbal vulnerable class exploit code"})
             exploit += 1
 
         # http://blogs.technet.com/b/mmpc/archive/2013/01/20/a-technical-analysis-of-a-new-java-vulnerability-cve-2013-0422.aspx
         if "MethodHandles.Lookup" in decompiled:
-            self.data.append({"cve_2013-0422" : "MethodHandles insecure class exploit code" })
+            self.data.append({"cve_2013-0422": "MethodHandles insecure class exploit code"})
             exploit += 1
 
         # https://community.rapid7.com/community/metasploit/blog/2013/02/25/java-abused-in-the-wild-one-more-time
         if "Introspector.elementFromComplex" in decompiled:
-            self.data.append({"cve_2013-0431" : "Introspector.elementFromComplex remote code execution exploit code" })
+            self.data.append({"cve_2013-0431": "Introspector.elementFromComplex remote code execution exploit code"})
             exploit += 1
 
         # https://www.trustwave.com/Resources/SpiderLabs-Blog/Fresh-Coffee-Served-by-CoolEK/
         if "ColorSpace" in decompiled and "BufferedImage" in decompiled:
-            self.data.append({"cve_2013-1493" : "Color conversion memory corruption exploit code" })
+            self.data.append({"cve_2013-1493": "Color conversion memory corruption exploit code"})
             exploit += 1
 
         if "MethodHandle" in decompiled and "findStaticSetter" in decompiled:
-            self.data.append({"cve_2013-2423" : "findStaticSetter type confusion exploit code" })
+            self.data.append({"cve_2013-2423": "findStaticSetter type confusion exploit code"})
             exploit += 1
 
         # http://research.zscaler.com/2014/07/dissecting-cve-2013-2460-java-exploit.html
         if "ProviderFactory" in decompiled and "getDefaultFactory" in decompiled:
-            self.data.append({"cve_2013-2460" : "ProviderSkeleton insecure invoke method exploit code" })
+            self.data.append({"cve_2013-2460": "ProviderSkeleton insecure invoke method exploit code"})
             exploit += 1
 
         # http://malware.dontneedcoffee.com/2013/08/cve-2013-2465-integrating-exploit-kits.html
-        if "DataBufferByte" in decompiled and "BufferedImage" in decompiled and "getNumComponents" in decompiled and "SinglePixelPackedSampleModel" in decompiled or "MultiPixelPackedSampleModel" in decompiled:
-            self.data.append({"cve_2013-2465" : "storeImageArray invalid array indexing exploit code" })
+        if (
+            "DataBufferByte" in decompiled
+            and "BufferedImage" in decompiled
+            and "getNumComponents" in decompiled
+            and "SinglePixelPackedSampleModel" in decompiled
+            or "MultiPixelPackedSampleModel" in decompiled
+        ):
+            self.data.append({"cve_2013-2465": "storeImageArray invalid array indexing exploit code"})
             exploit += 1
 
         if "getNumDataElements" in decompiled and "AlphaCompositeClass" in decompiled:
-            self.data.append({"cve_2013-2471" : "getNumDataElements memory corruption exploit code" })
+            self.data.append({"cve_2013-2471": "getNumDataElements memory corruption exploit code"})
             exploit += 1
 
         if exploit > 0:
@@ -128,7 +158,7 @@ class Static_Java(Signature):
         # Check individual string length for possible obfuscation
         for string in decompiled.split():
             if len(string) > 150:
-                self.data.append({"string_length" : "Contains very large strings indicative of obfuscation" })
+                self.data.append({"string_length": "Contains very large strings indicative of obfuscation"})
                 self.severity = 3
                 self.weight += 1
                 break

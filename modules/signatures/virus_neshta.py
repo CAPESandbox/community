@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class NeshtaMutexes(Signature):
     name = "neshta_mutexes"
     description = "Creates known Neshta virus mutexes"
@@ -40,6 +41,7 @@ class NeshtaMutexes(Signature):
 
         return False
 
+
 class NeshtaRegKeys(Signature):
     name = "neshta_regkeys"
     description = "Creates known Neshta virus registry keys"
@@ -54,8 +56,8 @@ class NeshtaRegKeys(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.match = False
-    
-    filter_apinames = set(["RegSetValueExA","RegSetValueExW"])
+
+    filter_apinames = set(["RegSetValueExA", "RegSetValueExW"])
 
     def on_call(self, call, process):
         if call["api"] == "RegSetValueExA":
@@ -71,6 +73,7 @@ class NeshtaRegKeys(Signature):
             return True
 
         return False
+
 
 class NeshtaFiles(Signature):
     name = "neshta_files"
@@ -99,5 +102,5 @@ class NeshtaFiles(Signature):
     def on_complete(self):
         if self.match:
             return True
-        
+
         return False

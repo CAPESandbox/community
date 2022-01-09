@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class FynloskiMutexes(Signature):
     name = "rat_fynloski_mutexes"
     description = "Creates known Fynloski/DarkComet mutexes"
@@ -26,9 +27,7 @@ class FynloskiMutexes(Signature):
     minimum = "0.5"
 
     def run(self):
-        indicators = [
-            "DC_MUTEX-.*"
-        ]
+        indicators = ["DC_MUTEX-.*"]
 
         for indicator in indicators:
             if self.check_mutex(pattern=indicator, regex=True):

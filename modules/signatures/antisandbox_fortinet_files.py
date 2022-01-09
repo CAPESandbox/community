@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class FortinetDetectFiles(Signature):
     name = "antisandbox_fortinet_files"
     description = "Attempts to detect Fortinet Sandbox through the presence of a file"

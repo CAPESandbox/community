@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class SpicyHotPotBehavior(Signature):
     name = "spicyhotpot_behavior"
     description = "SpicyHotPot browser hijacking rootkit artificats detected"
@@ -27,12 +28,7 @@ class SpicyHotPotBehavior(Signature):
 
     def run(self):
         score = 0
-        indicators = [
-            "DLreport",
-            "Update",
-            "DVLayout",
-            "dumping"
-        ]
+        indicators = ["DLreport", "Update", "DVLayout", "dumping"]
 
         for indicator in indicators:
             match = self.check_mutex(pattern=indicator, regex=False)
@@ -52,12 +48,12 @@ class SpicyHotPotBehavior(Signature):
                 self.data.append({"file": match})
 
         # uncomment after check_created_service is available
-        #indicators = [
+        # indicators = [
         #    "iaLPSS1z",
         #    "LSI_SAS2l",
-        #]
+        # ]
 
-        #for indicator in indicators:
+        # for indicator in indicators:
         #    match = self.check_created_service(pattern=indicator, regex=False)
         #    if match:
         #        score += 1
@@ -65,5 +61,5 @@ class SpicyHotPotBehavior(Signature):
 
         if score > 1:
             return True
-        
+
         return False

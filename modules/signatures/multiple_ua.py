@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Multiple_UA(Signature):
     name = "multiple_useragents"
     description = "Network activity contains more than one unique useragent."
@@ -55,7 +56,7 @@ class Multiple_UA(Signature):
             return False
 
         for item in self.procs:
-            self.data.append({"Process" : item[0]})
-            self.data.append({"User-Agent" : item[1]})
+            self.data.append({"Process": item[0]})
+            self.data.append({"User-Agent": item[1]})
 
         return True

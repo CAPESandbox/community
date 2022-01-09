@@ -1,5 +1,5 @@
 # Copyright (C) 2020 ditekshen
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -14,6 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from lib.cuckoo.common.abstracts import Signature
+
 
 class DecoyImage(Signature):
     name = "decoy_image"
@@ -35,7 +36,7 @@ class DecoyImage(Signature):
             if int(show) == 1:
                 path = self.get_argument(call, "FilePath")
                 if path:
-                    if path.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp', ".tiff")):
+                    if path.lower().endswith((".jpg", ".jpeg", ".png", ".bmp", ".tiff")):
                         self.data.append(path)
 
     def on_complete(self):

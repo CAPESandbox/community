@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CreatesAutorunInf(Signature):
     name = "spreading_autoruninf"
     description = "Creates an autorun.inf file"

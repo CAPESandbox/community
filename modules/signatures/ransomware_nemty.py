@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class NemtyMutexes(Signature):
     name = "nemty_mutexes"
     description = "Creates Nemty ransomware mutexes"
@@ -25,12 +26,7 @@ class NemtyMutexes(Signature):
     minimum = "1.3"
 
     def run(self):
-        indicators = [
-            "^hate$",
-            "^just_a_little_game$",
-            "^da mne pohui chto tebe tam.*",
-            "^Vremya tik-tak.*"
-        ]
+        indicators = ["^hate$", "^just_a_little_game$", "^da mne pohui chto tebe tam.*", "^Vremya tik-tak.*"]
 
         for indicator in indicators:
             match = self.check_mutex(pattern=indicator, regex=True)
@@ -39,6 +35,7 @@ class NemtyMutexes(Signature):
                 return True
 
         return False
+
 
 class NemtyRegkeys(Signature):
     name = "nemty_regkeys"
@@ -61,6 +58,7 @@ class NemtyRegkeys(Signature):
                 return True
 
         return False
+
 
 class NemtyNote(Signature):
     name = "nemty_note"
@@ -87,6 +85,7 @@ class NemtyNote(Signature):
 
     def on_complete(self):
         return self.match
+
 
 class NemtyNetworkActivity(Signature):
     name = "nemty_network_activity"

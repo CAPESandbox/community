@@ -20,17 +20,20 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class GuLoaderAPIs(Signature):
     name = "guloader_apis"
     description = "Exhibits behavior characteristics of GuLoader"
     severity = 3
-    categories = ["downloder","injection", "shellcode"]
+    categories = ["downloder", "injection", "shellcode"]
     families = ["GuLoader", "CloudEye"]
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
 
-    filter_apinames = set(["NtCreateFile", "RegOpenKeyExA", "SetWindowsHookExA", "SetWindowsHookExW", "InternetOpenA", "InternetOpenUrlA"])
+    filter_apinames = set(
+        ["NtCreateFile", "RegOpenKeyExA", "SetWindowsHookExA", "SetWindowsHookExW", "InternetOpenA", "InternetOpenUrlA"]
+    )
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -62,7 +65,7 @@ class GuLoaderAPIs(Signature):
 
         if call["api"] == "InternetOpenA" and self.filematch:
             self.useragent = self.get_argument(call, "Agent")
-        
+
         if call["api"] == "InternetOpenUrlA" and self.useragent == self.uapattern:
             url = self.get_argument(call, "URL")
             if url:

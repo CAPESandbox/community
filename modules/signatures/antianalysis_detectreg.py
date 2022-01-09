@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiAnalysisDetectReg(Signature):
     name = "antianalysis_detectreg"
     description = "Attempts to identify installed analysis tools by registry key"
@@ -32,6 +33,6 @@ class AntiAnalysisDetectReg(Signature):
             reg_match = self.check_key(pattern=indicator, regex=True, all=True)
             if reg_match:
                 for match in reg_match:
-                    self.data.append({"key" : match })
+                    self.data.append({"key": match})
                 found = True
         return found

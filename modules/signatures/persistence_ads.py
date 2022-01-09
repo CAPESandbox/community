@@ -17,8 +17,9 @@ try:
     import re2 as re
 except ImportError:
     import re
-    
+
 from lib.cuckoo.common.abstracts import Signature
+
 
 class ADS(Signature):
     name = "persistence_ads"
@@ -28,7 +29,7 @@ class ADS(Signature):
     authors = ["nex", "Optiv"]
     minimum = "0.5"
     ttp = ["T1096", "T1564.004"]
-    
+
     def run(self):
         result = False
         for file_path in self.results["behavior"]["summary"]["files"]:
@@ -38,9 +39,16 @@ class ADS(Signature):
             if ":" in file_path.split("\\")[-1]:
                 if not file_path.lower().startswith("c:\\dosdevices\\") and not file_path[-1] == ":":
                     # we have a different signature to deal with removal of Zone.Identifier
-                    if not file_path.startswith("\\??\\http://") and not file_path.endswith(":Zone.Identifier") \
-                       and not re.match(r'^[A-Z]?:\\(Users|Documents and Settings)\\[^\\]+\\Favorites\\Links\\Suggested Sites\.url:favicon$', file_path, re.IGNORECASE):
-                        self.data.append({"file" : file_path})
+                    if (
+                        not file_path.startswith("\\??\\http://")
+                        and not file_path.endswith(":Zone.Identifier")
+                        and not re.match(
+                            r"^[A-Z]?:\\(Users|Documents and Settings)\\[^\\]+\\Favorites\\Links\\Suggested Sites\.url:favicon$",
+                            file_path,
+                            re.IGNORECASE,
+                        )
+                    ):
+                        self.data.append({"file": file_path})
                         result = True
 
         return result

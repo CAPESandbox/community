@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ScriptNetworkActvity(Signature):
     name = "script_network_activity"
     description = "A script process initiated network activity"
@@ -30,7 +31,18 @@ class ScriptNetworkActvity(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
 
-    filter_apinames = set(["InternetCrackUrlW","InternetCrackUrlA","URLDownloadToFileW","HttpOpenRequestW","InternetReadFile", "send", "SslEncryptPacket", "WSAConnect"])
+    filter_apinames = set(
+        [
+            "InternetCrackUrlW",
+            "InternetCrackUrlA",
+            "URLDownloadToFileW",
+            "HttpOpenRequestW",
+            "InternetReadFile",
+            "send",
+            "SslEncryptPacket",
+            "WSAConnect",
+        ]
+    )
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()
@@ -38,38 +50,39 @@ class ScriptNetworkActvity(Signature):
             if call["api"] == "URLDownloadToFileW":
                 buff = self.get_argument(call, "FileName").lower()
                 self.ret = True
-                self.data.append({"request": buff })
+                self.data.append({"request": buff})
             if call["api"] == "HttpOpenRequestW":
                 buff = self.get_argument(call, "Path").lower()
                 self.ret = True
-                self.data.append({"request": buff })
+                self.data.append({"request": buff})
             if call["api"] == "InternetCrackUrlW":
                 buff = self.get_argument(call, "Url").lower()
                 self.ret = True
-                self.data.append({"request": buff })
+                self.data.append({"request": buff})
             if call["api"] == "InternetCrackUrlA":
                 buff = self.get_argument(call, "Url").lower()
                 self.ret = True
-                self.data.append({"request": buff })
+                self.data.append({"request": buff})
             if call["api"] == "send":
                 buff = self.get_argument(call, "buffer").lower()
                 if buff.startswith("get") or buff.startswith("post"):
                     self.ret = True
-                    self.data.append({"request": buff })
+                    self.data.append({"request": buff})
             if call["api"] == "SslEncryptPacket":
                 buff = self.get_argument(call, "Buffer").lower()
                 if buff.startswith("get") or buff.startswith("post"):
                     self.ret = True
-                    self.data.append({"request": buff })
+                    self.data.append({"request": buff})
             if call["api"] == "WSAConnect":
                 buff = self.get_argument(call, "ip").lower()
                 port = self.get_argument(call, "port").lower()
-                if not buff.startswith(("10.","172.16.","192.168.")):
+                if not buff.startswith(("10.", "172.16.", "192.168.")):
                     self.ret = True
-                    self.data.append({"request": "%s:%s" % (buff,port)})
+                    self.data.append({"request": "%s:%s" % (buff, port)})
 
     def on_complete(self):
         return self.ret
+
 
 ## MAKE PROCESSES JSCRIPT AND CSCRIPT TOO
 class SuspiciousJSScript(Signature):
@@ -104,7 +117,7 @@ class SuspiciousJSScript(Signature):
                 if javascript:
                     for suspicious in self.suspicious:
                         if suspicious in javascript.lower():
-                            self.data.append({"Process executing suspicious JavaScript" : pname})
+                            self.data.append({"Process executing suspicious JavaScript": pname})
                             self.ret = True
                             break
 
@@ -115,12 +128,13 @@ class SuspiciousJSScript(Signature):
                 if javascript:
                     for suspicious in self.suspicious:
                         if suspicious in javascript.lower():
-                            self.data.append({"Process executing suspicious JavaScript" : pname})
+                            self.data.append({"Process executing suspicious JavaScript": pname})
                             self.ret = True
                             break
 
     def on_complete(self):
         return self.ret
+
 
 class ScriptCreatedProcess(Signature):
     name = "script_created_process"
@@ -145,7 +159,7 @@ class ScriptCreatedProcess(Signature):
             cmdline = self.get_argument(call, "CommandLine")
             if cmdline:
                 self.ret = True
-                self.data.append({pname.replace(".", "_") : cmdline})
+                self.data.append({pname.replace(".", "_"): cmdline})
 
     def on_complete(self):
         return self.ret

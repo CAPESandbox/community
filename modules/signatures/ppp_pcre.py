@@ -17,11 +17,13 @@ try:
     # apt-get install libpcre3-dev
     # build + install https://github.com/awahlig/python-pcre
     import pcre
+
     HAVE_PCRE = True
 except ImportError:
     HAVE_PCRE = False
 
 from lib.cuckoo.common.abstracts import Signature
+
 
 class PunchPlusPlusPCREs(Signature):
     name = "punch_plus_plus_pcres"

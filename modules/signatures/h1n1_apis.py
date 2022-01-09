@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class H1N1_APIs(Signature):
     name = "h1n1_behavior"
     description = "Exhibits behavior characteristic of H1N1 downloader"
@@ -36,8 +37,7 @@ class H1N1_APIs(Signature):
         self.c2s = list()
         self.ret = False
 
-    filter_apinames = set(["NtCreateSection", "NtOpenSection", "NtCreateEvent",
-                           "InternetConnectA", "HttpOpenRequestA"])
+    filter_apinames = set(["NtCreateSection", "NtOpenSection", "NtCreateEvent", "InternetConnectA", "HttpOpenRequestA"])
 
     def on_call(self, call, process):
         if call["api"] == "NtCreateSection":

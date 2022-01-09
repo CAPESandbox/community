@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DeletesSelf(Signature):
     name = "deletes_self"
     description = "Deletes its original binary from disk"
@@ -33,7 +34,9 @@ class DeletesSelf(Signature):
         if initialproc:
             self.initialpath = initialproc["module_path"].lower()
 
-    filter_apinames = set(["NtDeleteFile","DeleteFileA", "DeleteFileW", "MoveFileWithProgressW","MoveFileWithProgressTransactedW"])
+    filter_apinames = set(
+        ["NtDeleteFile", "DeleteFileA", "DeleteFileW", "MoveFileWithProgressW", "MoveFileWithProgressTransactedW"]
+    )
 
     def on_call(self, call, process):
         if not call["status"]:
@@ -47,5 +50,10 @@ class DeletesSelf(Signature):
             filename = self.get_argument(call, "ExistingFileName").lower()
             # here we treat any move from the original binary's location as a deletion, including
             # cases where the original containing directory has been moved
-            if filename == self.initialpath or (len(filename) > 1 and ((filename[-1] == '\\' and self.initialpath.startswith(filename)) or self.initialpath.startswith(filename + "\\"))):
+            if filename == self.initialpath or (
+                len(filename) > 1
+                and (
+                    (filename[-1] == "\\" and self.initialpath.startswith(filename)) or self.initialpath.startswith(filename + "\\")
+                )
+            ):
                 return True

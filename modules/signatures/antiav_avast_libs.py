@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AvastDetectLibs(Signature):
     name = "antiav_avast_libs"
     description = "Detects Avast Antivirus through the presence of a library"

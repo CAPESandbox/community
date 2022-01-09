@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class NetworkExcessiveUDP(Signature):
     name = "network_excessive_udp"
     description = "Creates an excessive number of UDP connection attempts to external IP addresses"
@@ -38,8 +39,12 @@ class NetworkExcessiveUDP(Signature):
                 if uniqueips > 100:
                     return True
                     break
-                if dstip not in ips and dstport not in whitelistports and not dstip.startswith(("127.", "10.", "172.16.", "192.168.")):
+                if (
+                    dstip not in ips
+                    and dstport not in whitelistports
+                    and not dstip.startswith(("127.", "10.", "172.16.", "192.168."))
+                ):
                     ips.append(dstip)
                     uniqueips += 1
-           
+
         return False

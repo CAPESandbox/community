@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ResourceLangID(Signature):
     name = "origin_resource_langid"
     description = "Unconventionial language used in binary resources"
@@ -51,7 +52,7 @@ class ResourceLangID(Signature):
                             if len(splitlang) == 2:
                                 lang = splitlang[1].title()
                             elif len(splitlang) > 2:
-                                lang = splitlang[1].title() + " (" + ' '.join([x.title() for x in splitlang[2:]]) + ")"
+                                lang = splitlang[1].title() + " (" + " ".join([x.title() for x in splitlang[2:]]) + ")"
                             self.description += ": %s" % lang
                             return True
 

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DharmaMutexes(Signature):
     name = "dharma_mutexes"
     description = "Creates a known Dharma/Crysis ransomware variant mutex"
@@ -28,7 +29,7 @@ class DharmaMutexes(Signature):
 
     def run(self):
         indicators = [
-			"syncronize_[A-Z0-9]{6,7}$",
+            "syncronize_[A-Z0-9]{6,7}$",
         ]
 
         for indicator in indicators:

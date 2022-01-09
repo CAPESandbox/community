@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CVE_2016_0189(Signature):
     name = "cve_2016-0189"
     description = "Executes obfuscated JavaScript indicative of CVE 2016-0189 Exploit"
@@ -26,7 +27,6 @@ class CVE_2016_0189(Signature):
     minimum = "1.3"
     evented = True
     references = ["https://www.fireeye.com/blog/threat-research/2016/07/exploit_kits_quickly.html"]
-
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -41,6 +41,6 @@ class CVE_2016_0189(Signature):
         else:
             buf = self.get_argument(call, "Script")
 
-        if "valueOf\": function" in buf and "triggerBug()" in buf and "exploit(" in buf:
-            self.data.append({"cve_2016-0189_poc" : "Proof of concept exploit code used. Seen in Sundown & Neutrino exploit kits"})
+        if 'valueOf": function' in buf and "triggerBug()" in buf and "exploit(" in buf:
+            self.data.append({"cve_2016-0189_poc": "Proof of concept exploit code used. Seen in Sundown & Neutrino exploit kits"})
             return True

@@ -17,6 +17,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AddsAdminUser(Signature):
     name = "adds_admin_user"
     description = "Adds a new user to the Administrators group"
@@ -36,6 +37,7 @@ class AddsAdminUser(Signature):
 
         return False
 
+
 class OverwritesAdminPassword(Signature):
     name = "overwites_admin_password"
     description = "Overwites local Administrator password"
@@ -54,6 +56,7 @@ class OverwritesAdminPassword(Signature):
             return True
 
         return False
+
 
 class AddsUser(Signature):
     name = "adds_user"

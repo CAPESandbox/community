@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class StealthTimeout(Signature):
     name = "stealth_timeout"
     description = "Possible date expiration check, exits too soon after checking local time"
@@ -46,8 +47,7 @@ class StealthTimeout(Signature):
                 self.exitidx = self.curidx
                 if self.systimeidx and self.exitidx and self.systimeidx > (self.exitidx - 10):
                     if process["module_path"].lower() != "c:\\windows\\system32\\attrib.exe":
-                        self.data.append({"process" : process["process_name"] + ", PID " + str(process["process_id"])})
+                        self.data.append({"process": process["process_name"] + ", PID " + str(process["process_id"])})
                         return True
 
         return None
-

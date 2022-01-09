@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntisandboxSboxieMutex(Signature):
     name = "antisandbox_sboxie_mutex"
     description = "Detects Sandboxie using a known mutex"

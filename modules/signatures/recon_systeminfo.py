@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class SystemInfo(Signature):
     name = "recon_systeminfo"
     description = "Collects information on the system (ipconfig, netstat, systeminfo)"
@@ -28,8 +29,5 @@ class SystemInfo(Signature):
 
     def on_call(self, call, process):
         return self.check_argument_call(
-            call, pattern="(^cmd\.exe).*[(systeminfo)|(ipconfig)|(netstat)]",
-            name="CommandLine",
-            category="process",
-            regex=True
+            call, pattern="(^cmd\.exe).*[(systeminfo)|(ipconfig)|(netstat)]", name="CommandLine", category="process", regex=True
         )

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class XtremeMutexes(Signature):
     name = "rat_xtreme_mutexes"
     description = "Creates known XtremeRAT mutexes"
@@ -24,15 +25,12 @@ class XtremeMutexes(Signature):
     authors = ["threatlead", "nex"]
     references = [
         "https://malwr.com/analysis/ZWM4YjI2MzI1MmQ2NDBkMjkwNzI3NzhjNWM5Y2FhY2U/",
-        "https://malwr.com/analysis/MWY5YTAwZWI1NDc3NDJmMTgyNDA4ODc0NTk0MWIzNjM/"
+        "https://malwr.com/analysis/MWY5YTAwZWI1NDc3NDJmMTgyNDA4ODc0NTk0MWIzNjM/",
     ]
     minimum = "0.5"
 
     def run(self):
-        indicators = [
-            "XTREMEUPDATE",
-            "\(\(Mutex\)\).*"
-        ]
+        indicators = ["XTREMEUPDATE", "\(\(Mutex\)\).*"]
 
         for indicator in indicators:
             if self.check_mutex(pattern=indicator, regex=True):

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class InjectionCRT(Signature):
     name = "injection_createremotethread"
     description = "Code injection with CreateRemoteThread in a remote process"
@@ -29,7 +30,7 @@ class InjectionCRT(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.lastprocess = None
 
-    filter_categories = set(["process","threading"])
+    filter_categories = set(["process", "threading"])
 
     def on_call(self, call, process):
         if process is not self.lastprocess:
@@ -59,34 +60,47 @@ class InjectionCRT(Signature):
         elif (call["api"] == "VirtualAllocEx" or call["api"] == "NtAllocateVirtualMemory") and self.sequence == 0:
             if self.get_argument(call, "ProcessHandle") in self.process_handles:
                 self.sequence = 1
-        elif (call["api"] == "NtWriteVirtualMemory" or call["api"] == "NtWow64WriteVirtualMemory64" or call["api"] == "WriteProcessMemory") and self.sequence == 1:
+        elif (
+            call["api"] == "NtWriteVirtualMemory"
+            or call["api"] == "NtWow64WriteVirtualMemory64"
+            or call["api"] == "WriteProcessMemory"
+        ) and self.sequence == 1:
             if self.get_argument(call, "ProcessHandle") in self.process_handles:
                 self.sequence = 2
-        elif (call["api"] == "NtWriteVirtualMemory" or call["api"] == "NtWow64WriteVirtualMemory64"  or call["api"] == "WriteProcessMemory") and self.sequence == 2:
+        elif (
+            call["api"] == "NtWriteVirtualMemory"
+            or call["api"] == "NtWow64WriteVirtualMemory64"
+            or call["api"] == "WriteProcessMemory"
+        ) and self.sequence == 2:
             handle = self.get_argument(call, "ProcessHandle")
             if handle in self.process_handles:
                 addr = int(self.get_argument(call, "BaseAddress"), 16)
                 buf = self.get_argument(call, "Buffer")
-                if addr >= 0x7c900000 and addr < 0x80000000 and buf.startswith("\\xe9"):
+                if addr >= 0x7C900000 and addr < 0x80000000 and buf.startswith("\\xe9"):
                     self.description = "Code injection via WriteProcessMemory-modified NTDLL code in a remote process"
                     procname = self.get_name_from_pid(self.handle_map[handle])
-                    desc = "{0}({1}) -> {2}({3})".format(process["process_name"], str(process["process_id"]),
-                                                         procname, self.handle_map[handle])
+                    desc = "{0}({1}) -> {2}({3})".format(
+                        process["process_name"], str(process["process_id"]), procname, self.handle_map[handle]
+                    )
                     self.data.append({"Injection": desc})
                     return True
         elif (call["api"] == "CreateRemoteThread" or call["api"].startswith("NtCreateThread")) and self.sequence == 2:
             handle = self.get_argument(call, "ProcessHandle")
             if handle in self.process_handles:
                 procname = self.get_name_from_pid(self.handle_map[handle])
-                desc = "{0}({1}) -> {2}({3})".format(process["process_name"], str(process["process_id"]),
-                                                     procname, self.handle_map[handle])
+                desc = "{0}({1}) -> {2}({3})".format(
+                    process["process_name"], str(process["process_id"]), procname, self.handle_map[handle]
+                )
                 self.data.append({"Injection": desc})
                 return True
         elif call["api"].startswith("NtQueueApcThread") and self.sequence == 2:
             if str(self.get_argument(call, "ProcessId")) in self.process_pids:
                 self.description = "Code injection with NtQueueApcThread in a remote process"
-                desc = "{0}({1}) -> {2}({3})".format(self.lastprocess["process_name"], str(self.lastprocess["process_id"]),
-                                                     process["process_name"], str(process["process_id"]))
+                desc = "{0}({1}) -> {2}({3})".format(
+                    self.lastprocess["process_name"],
+                    str(self.lastprocess["process_id"]),
+                    process["process_name"],
+                    str(process["process_id"]),
+                )
                 self.data.append({"Injection": desc})
                 return True
-

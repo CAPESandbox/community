@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PersistenceService(Signature):
     name = "persistence_service"
     description = "Created a service that was not started"
@@ -30,6 +31,6 @@ class PersistenceService(Signature):
         missing = created_services.difference(started_services)
         if missing:
             for service in missing:
-                self.data.append({"service" : service })
+                self.data.append({"service": service})
             found = True
         return found

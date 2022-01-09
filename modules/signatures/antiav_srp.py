@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiAVSRP(Signature):
     name = "antiav_srp"
     description = "Modifies Software Restriction Policies likely to cripple AV"
@@ -14,7 +15,9 @@ class AntiAVSRP(Signature):
     ttp = ["T1089", "F0004.005", "E1478"]
 
     def run(self):
-        match_key = self.check_write_key(".*\\\\Policies\\\\Microsoft\\\\Windows\\\\Safer\\\\CodeIdentifiers\\\\0\\\\Paths\\\\.*", regex=True, all=True)
+        match_key = self.check_write_key(
+            ".*\\\\Policies\\\\Microsoft\\\\Windows\\\\Safer\\\\CodeIdentifiers\\\\0\\\\Paths\\\\.*", regex=True, all=True
+        )
         if match_key:
             for match in match_key:
                 self.data.append({"key": match})

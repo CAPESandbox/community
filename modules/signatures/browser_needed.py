@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class BrowserNeeded(Signature):
     name = "browser_needed"
     description = "Repeatedly searches for a not-found browser, may want to run with startbrowser=1 option"

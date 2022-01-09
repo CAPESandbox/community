@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Kovter_APIs(Signature):
     name = "kovter_behavior"
     description = "Exhibits behavior characteristic of Kovter malware"
@@ -36,8 +37,7 @@ class Kovter_APIs(Signature):
         self.lastapi = str()
         self.chain = False
 
-    filter_apinames = set(["CreateThread", "NtCreateEvent", "NtCreateSection",
-                           "LdrGetProcedureAddress"])
+    filter_apinames = set(["CreateThread", "NtCreateEvent", "NtCreateSection", "LdrGetProcedureAddress"])
 
     def on_call(self, call, process):
         continueChain = False

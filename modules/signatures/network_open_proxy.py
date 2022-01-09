@@ -17,6 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 # List downloaded by DLInjector03
 
+
 class NetworkOpenProxy(Signature):
     name = "network_open_proxy"
     description = "Connects to open proxy IP address"
@@ -163,7 +164,7 @@ class NetworkOpenProxy(Signature):
 
         for indicator in ip_indicators:
             if self.check_ip(pattern=indicator):
-                self.data.append({"ip" : indicator})
+                self.data.append({"ip": indicator})
                 return True
 
         return False

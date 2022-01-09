@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Authenticode(Signature):
     name = "static_authenticode"
     description = "Presents an Authenticode digital signature"
@@ -26,6 +27,7 @@ class Authenticode(Signature):
 
         return found_sig
 
+
 class InvalidAuthenticodeSignature(Signature):
     name = "invalid_authenticode_signature"
     description = "Authenticode signature is invalid"
@@ -42,7 +44,7 @@ class InvalidAuthenticodeSignature(Signature):
             signer = self.results["static"]["pe"]["guest_signers"]
             if not signer.get("aux_valid") and signer.get("aux_error_desc"):
                 error = signer["aux_error_desc"]
-                self.data.append({"authenticode error": "%s" % (error) })
+                self.data.append({"authenticode error": "%s" % (error)})
                 ret = True
 
         return ret

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Shifu_APIs(Signature):
     name = "shifu_behavior"
     description = "Exhibits behavior characteristics of Shifu malware."
@@ -26,8 +27,7 @@ class Shifu_APIs(Signature):
     minimum = "1.3"
     evented = True
 
-    filter_apinames = set(["NtQuerySystemInformation", "CryptHashData",
-                           "NtQueryValueKey", "CryptDecodeObjectEx"])
+    filter_apinames = set(["NtQuerySystemInformation", "CryptHashData", "NtQueryValueKey", "CryptDecodeObjectEx"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

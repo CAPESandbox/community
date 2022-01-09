@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DebugsSelf(Signature):
     name = "debugs_self"
     description = "Debugs itself to thwart analysis"
@@ -30,11 +31,11 @@ class DebugsSelf(Signature):
     filter_apinames = set(["CreateProcessInternalW"])
 
     def on_call(self, call, process):
-       createflags = int(self.get_argument(call, "CreationFlags"), 16)
-       applicationname = self.get_argument(call, "ApplicationName").lower()
-       pid = self.get_argument(call, "ProcessId")
-       if createflags & 1:
-           for proc in self.results["behavior"]["processes"]:
-               if proc["process_id"] == pid and proc["module_path"].lower() == process["module_path"].lower():
-                   # DEBUG_PROCESS on a copy of ourselves
-                   return True
+        createflags = int(self.get_argument(call, "CreationFlags"), 16)
+        applicationname = self.get_argument(call, "ApplicationName").lower()
+        pid = self.get_argument(call, "ProcessId")
+        if createflags & 1:
+            for proc in self.results["behavior"]["processes"]:
+                if proc["process_id"] == pid and proc["module_path"].lower() == process["module_path"].lower():
+                    # DEBUG_PROCESS on a copy of ourselves
+                    return True

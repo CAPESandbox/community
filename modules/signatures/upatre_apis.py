@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Upatre_APIs(Signature):
     name = "upatre_behavior"
     description = "Exhibits behavior characteristic of Upatre downloader"
@@ -52,9 +53,7 @@ class Upatre_APIs(Signature):
                 if first_process["children"]:
                     self.bad_pid = first_process["children"][0]["pid"]
 
-    filter_apinames = set(["DeleteFileA", "GetComputerNameW",
-                           "InternetConnectW", "HttpOpenRequestW",
-                           "CreateProcessInternalW"])
+    filter_apinames = set(["DeleteFileA", "GetComputerNameW", "InternetConnectW", "HttpOpenRequestW", "CreateProcessInternalW"])
 
     def on_call(self, call, process):
         # We only care about top-most parent and first child processes

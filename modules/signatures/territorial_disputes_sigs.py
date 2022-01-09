@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class TerritorialDisputeSIGs(Signature):
     name = "territorial_disputes_sigs"
     description = "Creates an indicator observed in Territorial Disputes report"
@@ -30,12 +31,21 @@ class TerritorialDisputeSIGs(Signature):
             (".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\StrtdCfg$", ["SIG1"]),
             (".*\\\\System\\\\CurrentControlSet\\\\Control\\\\CrashImage$", ["SIG2"]),
             (".*\\\\System\\\\CurrentControlSet\\\\Services\\\\systmmgmt\\\\Paramaters\\\\ServiceDll$", ["SIG5"]),
-            (".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run\\\\ipmontr$", ["SIG6"]),
+            (
+                ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run\\\\ipmontr$",
+                ["SIG6"],
+            ),
             (".*\\\\Software\\\\Microsoft\\\\WinKernel\\\\Explorer\\\\Run\\\\ipmontr$", ["SIG6"]),
-            (".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run\\\\Internet32$", ["SIG7"]),
+            (
+                ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run\\\\Internet32$",
+                ["SIG7"],
+            ),
             (".*\\\\System\\\\CurrentControlSet\\\\Control\\\\timezoneinformation\\\\standard(date|time)bias$", ["SIG10"]),
             (".*\\\\System\\\\(Wow6432Node\\\\)?Microsoft\\\\MSFix$", ["SIG12"]),
-            (".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\WindowsFirewallSecurityServ$", ["SIG14"]),
+            (
+                ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\WindowsFirewallSecurityServ$",
+                ["SIG14"],
+            ),
             (".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\slidebar$", ["SIG14"]),
             (".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\MSDeviceDriver$", ["SIG14"]),
             (".*\\\\Software\\\\Postman$", ["SIG15"]),
@@ -43,10 +53,16 @@ class TerritorialDisputeSIGs(Signature):
             (".*\\\\Software\\\\Sun\\\\.*(AppleTlk|IsoTp)$", ["SIG22"]),
             (".*\\\\System\\\\(Wow6432Node\\\\)?Microsoft\\\\NetWin$", ["SIG23"]),
             (".*\\\\Software\\\\Adobe\\\\Fix$", ["SIG26"]),
-            (".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Streams\\\\Desktop\\\\Default\s(Statusbar|MenuBars|Taskbar|Zone)(\sSign)?", ["SIG31"]),
+            (
+                ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Streams\\\\Desktop\\\\Default\s(Statusbar|MenuBars|Taskbar|Zone)(\sSign)?",
+                ["SIG31"],
+            ),
             (".*\\\\System\\\\CurrentControlSet\\\\Services\\\\Installer\sManagement$", ["SIG34"]),
             (".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\MS\sQAG\\\\U\d{2}$", ["SIG39"]),
-            (".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\ShellServiceObjectDelayLoad(\\\\NetIDS)?$", ["SIG40"]),
+            (
+                ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\ShellServiceObjectDelayLoad(\\\\NetIDS)?$",
+                ["SIG40"],
+            ),
             (".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\sNT\\\\CurrentVersion\\\\winlogo\\\\Userinit$", ["SIG40"]),
             (".*\\\\System\\\\CurrentControlSet\\\\Control\\\\DType\d$", ["SIG43"]),
             (".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\Internet$", ["SIG45"]),

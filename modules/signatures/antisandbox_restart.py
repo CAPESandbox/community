@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiSandboxRestart(Signature):
     name = "antisandbox_restart"
     description = "Attempts to restart the guest VM"
@@ -24,7 +25,17 @@ class AntiSandboxRestart(Signature):
     minimum = "1.3"
     evented = True
 
-    filter_apinames = set(["NtShutdownSystem", "NtSetSystemPowerState", "ExitWindowsEx", "InitiateShutdownW", "InitiateSystemShutdownW", "InitiateSystemShutdownExW", "NtRaiseHardError"])
+    filter_apinames = set(
+        [
+            "NtShutdownSystem",
+            "NtSetSystemPowerState",
+            "ExitWindowsEx",
+            "InitiateShutdownW",
+            "InitiateSystemShutdownW",
+            "InitiateSystemShutdownExW",
+            "NtRaiseHardError",
+        ]
+    )
 
     def on_call(self, call, process):
         if call["api"] == "NtRaiseHardError":

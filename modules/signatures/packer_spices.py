@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class SpicesPacked(Signature):
     name = "packer_spices"
     description = ".NET executable is packed/obfuscated with 9Rays.Net Spices.Net Obfuscator"

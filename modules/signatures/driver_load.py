@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DriverLoad(Signature):
     name = "driver_load"
     description = "Loads a driver"
@@ -33,7 +34,7 @@ class DriverLoad(Signature):
 
     def on_call(self, call, process):
         drivername = self.get_argument(call, "DriverServiceName")
-        self.data.append({"driver service name" : drivername })
+        self.data.append({"driver service name": drivername})
         self.found_driverload = True
 
     def on_complete(self):

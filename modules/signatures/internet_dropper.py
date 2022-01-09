@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Internet_Dropper(Signature):
     name = "internet_dropper"
     description = "Behavior consistent with a dropper attempting to download the next stage."
@@ -31,8 +32,7 @@ class Internet_Dropper(Signature):
         self.uris = set()
 
     # May need to expand this later (eg. InternetSetOption* for handle management)
-    filter_apinames = set(["HttpOpenRequestA", "HttpOpenRequestW", "InternetConnectA",
-                           "InternetConnectW"])
+    filter_apinames = set(["HttpOpenRequestA", "HttpOpenRequestW", "InternetConnectA", "InternetConnectW"])
 
     def on_call(self, call, process):
         if call["api"].startswith("InternetConnect"):
@@ -74,13 +74,16 @@ class Internet_Dropper(Signature):
                     if uri in self.dropper[host]["uris"]:
                         buf["hosts"].append(host)
 
-        if "uri" in buf and "hosts" in buf and buf["uri"].endswith("/rdr/ENU/win/nooem/none/message.zip") and \
-            set(["acroipm.adobe.com", "acroipm2.adobe.com"]) == set(buf["hosts"]):
+        if (
+            "uri" in buf
+            and "hosts" in buf
+            and buf["uri"].endswith("/rdr/ENU/win/nooem/none/message.zip")
+            and set(["acroipm.adobe.com", "acroipm2.adobe.com"]) == set(buf["hosts"])
+        ):
             return False
 
         if "hosts" in buf and len(buf["hosts"]) > 1:
             ret = True
-            self.data.append({"File": "%s was requested from hosts: %s" %
-                                      (buf["uri"], ", ".join(buf["hosts"]))})
+            self.data.append({"File": "%s was requested from hosts: %s" % (buf["uri"], ", ".join(buf["hosts"]))})
 
         return ret

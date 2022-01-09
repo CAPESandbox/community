@@ -1,5 +1,6 @@
 from lib.cuckoo.common.abstracts import Signature
 
+
 class OrcusRAT(Signature):
     name = "OrcusRAT Behavior"
     description = "Detects OrcusRAT Behavior"
@@ -11,9 +12,8 @@ class OrcusRAT(Signature):
     minimum = "1.2"
     evented = True
     samples = {
-    "OrcusRAT":
-        {
-            "1": "2373c4b52ac6133345f309ac75b67bbb", #variant1
+        "OrcusRAT": {
+            "1": "2373c4b52ac6133345f309ac75b67bbb",  # variant1
         }
     }
 
@@ -26,7 +26,7 @@ class OrcusRAT(Signature):
     def on_call(self, call, process):
 
         if call["api"] == "RegOpenKeyExW":
-            node = self.get_argument(call,"FullName")
+            node = self.get_argument(call, "FullName")
             if "HKEY_CURRENT_USER\\SOFTWARE\\Orcus" in node:
                 self.badness_files += 1
 
@@ -37,7 +37,7 @@ class OrcusRAT(Signature):
                 self.badness_files += 1
 
     def on_complete(self):
-        if self.badness_files >=3:
+        if self.badness_files >= 3:
             return True
         else:
             return False

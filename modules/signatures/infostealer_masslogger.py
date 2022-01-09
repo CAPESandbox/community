@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class MassLoggerVersion(Signature):
     name = "masslogger_version"
     description = "MassLogger infostealer version detected"
@@ -52,6 +53,7 @@ class MassLoggerVersion(Signature):
                             self.data.append({"Version": version})
                             return True
 
+
 class MassLoggerArtifacts(Signature):
     name = "masslogger_artifacts"
     description = "MassLogger infostealer artifacts detected"
@@ -68,15 +70,15 @@ class MassLoggerArtifacts(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.artifacts = [
             "[A-Z]:\\\\Windows\\\\assembly\\\\NativeImages_v.*\\\\MassBin.*",
-            "[A-Z]:\\\\Windows\\\\assembly\\\\NativeImages_v.*\\\\MassLoggerBin.*"
+            "[A-Z]:\\\\Windows\\\\assembly\\\\NativeImages_v.*\\\\MassLoggerBin.*",
         ]
-        
+
     def on_call(self, call, process):
         if call["api"] == "FindFirstFileExW":
             filename = self.get_argument(call, "FileName")
             if filename:
                 for artifact in self.artifacts:
-                    if re.match(artifact, filename) :
+                    if re.match(artifact, filename):
                         self.data.append({"Artifact": filename})
                         return True
 
@@ -85,6 +87,7 @@ class MassLoggerArtifacts(Signature):
             if buff and buff.startswith("MassLogger"):
                 self.data.append({"Buffer": buff})
                 return True
+
 
 class MassLoggerFiles(Signature):
     name = "masslogger_files"
@@ -106,7 +109,11 @@ class MassLoggerFiles(Signature):
         score = 0
 
         try:
-            indicators.append(".*\\\\AppData\\\\Local\\\\Temp\\\\[A-F0-9]{10}\\\\" + user.decode("utf-8") + "_.*_[A-F0-9]{10}_\d{2}-\d{2}-\d{4}\s.*.zip")
+            indicators.append(
+                ".*\\\\AppData\\\\Local\\\\Temp\\\\[A-F0-9]{10}\\\\"
+                + user.decode("utf-8")
+                + "_.*_[A-F0-9]{10}_\d{2}-\d{2}-\d{4}\s.*.zip"
+            )
         except Exception as err:
             return False
 
@@ -115,7 +122,7 @@ class MassLoggerFiles(Signature):
             if match:
                 score += 1
                 self.data.append({"file": match})
-        
+
         if score >= 2:
             return True
 

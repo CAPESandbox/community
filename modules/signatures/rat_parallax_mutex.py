@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ParallaxMutexes(Signature):
     name = "parallax_mutexes"
     description = "Creates a known Parallax RAT mutex"
@@ -25,10 +26,7 @@ class ParallaxMutexes(Signature):
     minimum = "0.5"
 
     def run(self):
-        indicators = [
-            "PS-[A-Za-z]{10}$",
-            "PX-[A-Za-z]{10}$"
-        ]
+        indicators = ["PS-[A-Za-z]{10}$", "PX-[A-Za-z]{10}$"]
 
         for indicator in indicators:
             if self.check_mutex(pattern=indicator, regex=True):

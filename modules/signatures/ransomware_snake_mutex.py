@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class SnakeRansomMutexes(Signature):
     name = "snake_ransom_mutexes"
     description = "Creates a known Snake ransomware mutex"
@@ -28,7 +29,7 @@ class SnakeRansomMutexes(Signature):
 
     def run(self):
         indicators = [
-			"EKANS$",
+            "EKANS$",
         ]
 
         for indicator in indicators:

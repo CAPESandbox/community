@@ -20,7 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
-#Detects suspicious behaviour where malware stores or writes data/files to the recycler
+# Detects suspicious behaviour where malware stores or writes data/files to the recycler
 class Accesses_RecycleBin(Signature):
     name = "accesses_recyclebin"
     description = "Manipulates data from or to the Recycle Bin"
@@ -47,7 +47,7 @@ class Accesses_RecycleBin(Signature):
                 if filename and re.match(self.filepattern, filename, re.IGNORECASE):
                     self.filematch = True
                     self.filenames.append(filename)
-									
+
         if call["api"] == "NtOpenFile":
             desiredaccess = int(self.get_argument(call, "DesiredAccess"), 16)
             if desiredaccess and desiredaccess & 0x00020080:
@@ -55,13 +55,13 @@ class Accesses_RecycleBin(Signature):
                 if filename and re.match(self.filepattern, filename, re.IGNORECASE):
                     self.filematch = True
                     self.filenames.append(filename)
-					
+
         if call["api"] == "NtReadFile":
-                filename = self.get_argument(call, "FileName")
-                if filename and re.match(self.filepattern, filename, re.IGNORECASE):
-                    self.filematch = True
-                    self.filenames.append(filename)
-								
+            filename = self.get_argument(call, "FileName")
+            if filename and re.match(self.filepattern, filename, re.IGNORECASE):
+                self.filematch = True
+                self.filenames.append(filename)
+
     def on_complete(self):
         if self.filematch and self.filenames:
             for file in self.filenames:

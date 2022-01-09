@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DisablesWFP(Signature):
     name = "disables_wfp"
     description = "Attempts to disable Windows File Protection"
@@ -37,5 +38,5 @@ class DisablesWFP(Signature):
 
     def on_complete(self):
         if self.saw_disable and self.nextopen:
-            self.data.append({"Likely to allow modification of" : self.nextopen })
+            self.data.append({"Likely to allow modification of": self.nextopen})
         return self.saw_disable

@@ -15,33 +15,29 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Flame(Signature):
     name = "targeted_flame"
     description = "Shows some indicators associated with the Flame malware"
     severity = 3
-    references = ["http://www.crysys.hu/skywiper/skywiper.pdf",
-                  "http://www.securelist.com/en/blog/208193522/The_Flame_Questions_and_Answers",
-                  "http://www.certcc.ir/index.php?name=news&file=article&sid=1894"]
+    references = [
+        "http://www.crysys.hu/skywiper/skywiper.pdf",
+        "http://www.securelist.com/en/blog/208193522/The_Flame_Questions_and_Answers",
+        "http://www.certcc.ir/index.php?name=news&file=article&sid=1894",
+    ]
     categories = ["targeted"]
     families = ["Flame", "Skywiper"]
     authors = ["nex"]
     minimum = "0.5"
 
     def run(self):
-        indicators = [
-            "__fajb.*",
-            "DVAAccessGuard.*",
-            ".*mssecuritymgr.*"
-        ]
+        indicators = ["__fajb.*", "DVAAccessGuard.*", ".*mssecuritymgr.*"]
 
         for indicator in indicators:
             if self.check_mutex(pattern=indicator, regex=True):
                 return True
 
-        indicators = [
-            ".*\\\\Microsoft Shared\\\\MSSecurityMgr\\\\.*",
-            ".*\\\\Ef_trace\.log$"
-        ]
+        indicators = [".*\\\\Microsoft Shared\\\\MSSecurityMgr\\\\.*", ".*\\\\Ef_trace\.log$"]
 
         for indicator in indicators:
             if self.check_file(pattern=indicator, regex=True):

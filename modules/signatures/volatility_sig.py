@@ -16,11 +16,9 @@ class VolMalfind1(Signature):
     ttp = ["T1055", "E1055"]
 
     def run(self):
-        if ("volatility" in self.results and
-            "malfind" in self.results["volatility"]):
+        if "volatility" in self.results and "malfind" in self.results["volatility"]:
             if len(self.results["volatility"]["malfind"]["data"]):
-                self.data.append(
-                    {"data": self.results["volatility"]["malfind"]["data"]})
+                self.data.append({"data": self.results["volatility"]["malfind"]["data"]})
                 return True
 
         return False
@@ -30,7 +28,7 @@ class VolMalfind2(Signature):
     name = "volatility_malfind_2"
     description = "Malfind detects more than 3 injected processes"
     severity = 3
-    alert = False   # Very suspicious, but has detection on clean files
+    alert = False  # Very suspicious, but has detection on clean files
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     minimum = "0.5"
@@ -39,13 +37,11 @@ class VolMalfind2(Signature):
 
     def run(self):
         pids = set()
-        if ("volatility" in self.results and
-            "malfind" in self.results["volatility"]):
+        if "volatility" in self.results and "malfind" in self.results["volatility"]:
             for a in self.results["volatility"]["malfind"]["data"]:
                 pids.add(a["process_id"])
             if len(pids) > 3:
-                self.data.append(
-                    {"data": self.results["volatility"]["malfind"]["data"]})
+                self.data.append({"data": self.results["volatility"]["malfind"]["data"]})
                 return True
 
         return False
@@ -56,7 +52,7 @@ class VolLdrModules1(Signature):
     description = "PEB modified to hide loaded\
              modules. Dll very likely not loaded by LoadLibrary"
     severity = 3
-    alert = False   # Skype seems to do that...
+    alert = False  # Skype seems to do that...
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     minimum = "0.5"
@@ -68,13 +64,14 @@ class VolLdrModules1(Signature):
         exceptions = ["csrss.exe"]
 
         res = False
-        if ("volatility" in self.results and
-            "ldrmodules" in self.results["volatility"]):
+        if "volatility" in self.results and "ldrmodules" in self.results["volatility"]:
             for d in self.results["volatility"]["ldrmodules"]["data"]:
-                if (not d["dll_in_init"] and
-                    not d["dll_in_load"] and
-                    not d["dll_in_mem"] and
-                    not d["process_name"].lower() in exceptions):
+                if (
+                    not d["dll_in_init"]
+                    and not d["dll_in_load"]
+                    and not d["dll_in_mem"]
+                    and not d["process_name"].lower() in exceptions
+                ):
                     self.data.append({"unlinked": d})
                     res = True
 
@@ -96,8 +93,7 @@ class VolLdrModules2(Signature):
 
     def run(self):
         res = False
-        if ("volatility" in self.results and
-            "ldrmodules" in self.results["volatility"]):
+        if "volatility" in self.results and "ldrmodules" in self.results["volatility"]:
             for d in self.results["volatility"]["ldrmodules"]["data"]:
                 if d["process_name"] == "":
                     self.data.append({"unlinked": d})
@@ -121,8 +117,7 @@ class VolDevicetree1(Signature):
 
     def run(self):
         res = False
-        if ("volatility" in self.results and
-            "devicetree" in self.results["volatility"]):
+        if "volatility" in self.results and "devicetree" in self.results["volatility"]:
             for d in self.results["volatility"]["devicetree"]["data"]:
                 if d["driver_name"] == "":
                     self.data.append({"unnamed_driver": d})
@@ -144,11 +139,9 @@ class VolSvcscan1(Signature):
 
     def run(self):
         res = False
-        if ("volatility" in self.results and
-            "svcscan" in self.results["volatility"]):
+        if "volatility" in self.results and "svcscan" in self.results["volatility"]:
             for s in self.results["volatility"]["svcscan"]["data"]:
-                if (s["service_name"] == "SharedAccess" and
-                    s["service_state"] == "SERVICE_STOPPED"):
+                if s["service_name"] == "SharedAccess" and s["service_state"] == "SERVICE_STOPPED":
                     self.data.append({"stopped_service": s})
                     res = True
 
@@ -168,11 +161,9 @@ class VolSvcscan2(Signature):
 
     def run(self):
         res = False
-        if ("volatility" in self.results and
-            "svcscan" in self.results["volatility"]):
+        if "volatility" in self.results and "svcscan" in self.results["volatility"]:
             for s in self.results["volatility"]["svcscan"]["data"]:
-                if (s["service_name"] == "wscsvc" and
-                    s["service_state"] == "SERVICE_STOPPED"):
+                if s["service_name"] == "wscsvc" and s["service_state"] == "SERVICE_STOPPED":
                     self.data.append({"stopped_service": s})
                     res = True
 
@@ -192,11 +183,9 @@ class VolSvcscan3(Signature):
 
     def run(self):
         res = False
-        if ("volatility" in self.results and
-            "svcscan" in self.results["volatility"]):
+        if "volatility" in self.results and "svcscan" in self.results["volatility"]:
             for s in self.results["volatility"]["svcscan"]["data"]:
-                if (s["service_name"] == "ALG" and
-                    s["service_state"] == "SERVICE_STOPPED"):
+                if s["service_name"] == "ALG" and s["service_state"] == "SERVICE_STOPPED":
                     self.data.append({"stopped_service": s})
                     res = True
 
@@ -216,8 +205,7 @@ class VolModscan1(Signature):
 
     def run(self):
         res = False
-        if ("volatility" in self.results and
-            "modscan" in self.results["volatility"]):
+        if "volatility" in self.results and "modscan" in self.results["volatility"]:
             for m in self.results["volatility"]["modscan"]["data"]:
                 if m["kernel_module_name"] == "":
                     self.data.append({"mysterious_kernel_module": m})
@@ -239,8 +227,7 @@ class VolHandles1(Signature):
     def run(self):
         threads = set()
 
-        if ("volatility" in self.results and
-            "handles" in self.results["volatility"]):
+        if "volatility" in self.results and "handles" in self.results["volatility"]:
             for h in self.results["volatility"]["handles"]["data"]:
                 if h["handle_type"] == "Thread":
                     w1, t1, w2, p1 = h["handle_name"].split(" ")

@@ -7,6 +7,7 @@ from datetime import datetime
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PEAnomaly(Signature):
     name = "static_pe_anomaly"
     description = "Anomalous binary characteristics"
@@ -21,32 +22,36 @@ class PEAnomaly(Signature):
         # set the bad date to a year prior to the release date of the OS
         bad_date_map = {
             # version , year, month
-            "4.0" :  (1995, 6),
-            "5.0" : (1999, 2),
-            "5.1" : (2000, 10),
-            "5.2" : (2002, 3),
-            "6.0" : (2005, 11), 
-            "6.1" : (2008, 10),
-            "6.2" : (2011, 9),
-            "6.3" : (2012, 10),
-            "10.0" : (2014, 6),
+            "4.0": (1995, 6),
+            "5.0": (1999, 2),
+            "5.1": (2000, 10),
+            "5.2": (2002, 3),
+            "6.0": (2005, 11),
+            "6.1": (2008, 10),
+            "6.2": (2011, 9),
+            "6.3": (2012, 10),
+            "10.0": (2014, 6),
         }
         found_sig = False
 
         if not "static" in self.results or not "pe" in self.results["static"]:
             return False
 
-        compiletime = datetime.strptime(self.results["static"]["pe"]["timestamp"], '%Y-%m-%d %H:%M:%S')
+        compiletime = datetime.strptime(self.results["static"]["pe"]["timestamp"], "%Y-%m-%d %H:%M:%S")
         osver = self.results["static"]["pe"]["osversion"]
         osmajor = int(osver.split(".")[0], 10)
         if osmajor < 4 and compiletime.year >= 2000:
-            self.data.append({"anomaly" : "Minimum OS version is older than NT4 yet the PE timestamp year is newer than 2000"})
+            self.data.append({"anomaly": "Minimum OS version is older than NT4 yet the PE timestamp year is newer than 2000"})
             self.weight += 1
-                           
+
         # throw out empty timestamps
         if compiletime.year > 1970 and osver in bad_date_map:
-            if compiletime.year < bad_date_map[osver][0] or (compiletime.year == bad_date_map[osver][0] and compiletime.month < bad_date_map[osver][1]):
-                self.data.append({"anomaly" : "Timestamp on binary predates the release date of the OS version it requires by at least a year"})
+            if compiletime.year < bad_date_map[osver][0] or (
+                compiletime.year == bad_date_map[osver][0] and compiletime.month < bad_date_map[osver][1]
+            ):
+                self.data.append(
+                    {"anomaly": "Timestamp on binary predates the release date of the OS version it requires by at least a year"}
+                )
                 self.weight += 1
 
         if "sections" in self.results["static"]["pe"]:
@@ -55,7 +60,7 @@ class PEAnomaly(Signature):
             foundsec = None
             foundcodesec = False
             foundnamedupe = False
-            lowrva = 0xffffffff
+            lowrva = 0xFFFFFFFF
             imagebase = int(self.results["static"]["pe"]["imagebase"], 16)
             eprva = int(self.results["static"]["pe"]["entrypoint"], 16) - imagebase
             seennames = set()
@@ -86,7 +91,7 @@ class PEAnomaly(Signature):
                 self.weight += 1
             if not foundsec and foundcodesec:
                 # we check for code sections to not FP on resource-only DLLs where the EP RVA will be 0
-                self.data.append({"anomaly" : "Entrypoint of binary is located outside of any mapped sections"})
+                self.data.append({"anomaly": "Entrypoint of binary is located outside of any mapped sections"})
                 self.weight += 1
             if foundsec and "IMAGE_SCN_MEM_EXECUTE" not in foundsec["characteristics"]:
                 # Windows essentially turns DEP off in this case, but it was only seen (as far as named packers go) in
@@ -105,21 +110,28 @@ class PEAnomaly(Signature):
 
         if "versioninfo" in self.results["static"]["pe"]:
             for ver in self.results["static"]["pe"]["versioninfo"]:
-                if ver["name"] == "OriginalFilename" and ver["value"].lower().endswith(".dll") and \
-                    "PE32" in self.results["target"]["file"].get("type", "") and "DLL" not in self.results["target"]["file"].get("type", ""):
-                    self.data.append({"anomaly" : "OriginalFilename version info claims file is a DLL but binary is a main executable"})
+                if (
+                    ver["name"] == "OriginalFilename"
+                    and ver["value"].lower().endswith(".dll")
+                    and "PE32" in self.results["target"]["file"].get("type", "")
+                    and "DLL" not in self.results["target"]["file"].get("type", "")
+                ):
+                    self.data.append(
+                        {"anomaly": "OriginalFilename version info claims file is a DLL but binary is a main executable"}
+                    )
                     self.weight += 1
 
         if "reported_checksum" in self.results["static"]["pe"] and "actual_checksum" in self.results["static"]["pe"]:
             reported = int(self.results["static"]["pe"]["reported_checksum"], 16)
             actual = int(self.results["static"]["pe"]["actual_checksum"], 16)
             if reported and reported != actual:
-                self.data.append({"anomaly" : "Actual checksum does not match that reported in PE header"})
+                self.data.append({"anomaly": "Actual checksum does not match that reported in PE header"})
                 self.weight += 1
 
         if self.weight:
             return True
         return False
+
 
 class StaticPEPDBPath(Signature):
     name = "static_pe_pdbpath"
@@ -130,7 +142,9 @@ class StaticPEPDBPath(Signature):
     categories = ["static"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    references = ["https://www.fireeye.com/blog/threat-research/2019/08/definitive-dossier-of-devilish-debug-details-part-one-pdb-paths-malware.html"]
+    references = [
+        "https://www.fireeye.com/blog/threat-research/2019/08/definitive-dossier-of-devilish-debug-details-part-one-pdb-paths-malware.html"
+    ]
 
     def run(self):
         ret = False
@@ -166,14 +180,14 @@ class StaticPEPDBPath(Signature):
             "\\new folder",
             "- copy",
         ]
-        
+
         pdbpath = self.results.get("static", {}).get("pe", {}).get("pdbpath", "")
         if pdbpath:
             for suspiciousname in suspiciousnames:
                 if suspiciousname in pdbpath.lower():
                     if self.severity != 3:
                         self.severity = 3
-                    self.data.append({"anomaly" : "the pdb path contains a suspicious string" })
+                    self.data.append({"anomaly": "the pdb path contains a suspicious string"})
                     self.description = "The PE file contains a suspicious PDB path"
                     break
 
@@ -181,21 +195,26 @@ class StaticPEPDBPath(Signature):
                 if devterm in pdbpath.lower():
                     if self.severity != 2 and self.severity != 3:
                         self.severity = 2
-                    self.data.append({"anomaly" : "the pdb path contains a reference to a development path or term that may suggest a non-enterprise environment development/compilation" })
+                    self.data.append(
+                        {
+                            "anomaly": "the pdb path contains a reference to a development path or term that may suggest a non-enterprise environment development/compilation"
+                        }
+                    )
                     self.description = "The PE file contains a suspicious PDB path"
                     break
 
-            regex = re.compile('[a-zA-Z]:\\\\[\x00-\xFF]{0,500}[^\x00-\x7F]{1,}[\x00-\xFF]{0,500}\.pdb')
+            regex = re.compile("[a-zA-Z]:\\\\[\x00-\xFF]{0,500}[^\x00-\x7F]{1,}[\x00-\xFF]{0,500}\.pdb")
             if re.match(regex, pdbpath):
                 if self.severity != 2 and self.severity != 3:
                     self.severity = 2
-                self.data.append({"anomaly" : "the pdb path contains non-ascii characters" })
+                self.data.append({"anomaly": "the pdb path contains non-ascii characters"})
                 self.description = "The PE file contains a suspicious PDB path"
 
             self.data.append({"pdbpath": pdbpath})
             ret = True
 
         return ret
+
 
 class PECompileTimeStomping(Signature):
     name = "pe_compile_timestomping"
@@ -209,14 +228,14 @@ class PECompileTimeStomping(Signature):
     def run(self):
         rawcompiletime = self.results.get("static", {}).get("pe", {}).get("timestamp", "")
         if rawcompiletime:
-            compiletime = datetime.strptime(rawcompiletime, '%Y-%m-%d %H:%M:%S')
+            compiletime = datetime.strptime(rawcompiletime, "%Y-%m-%d %H:%M:%S")
             currentyear = datetime.now().year
             currentmonth = datetime.now().month
             if compiletime.year > currentyear:
-                self.data.append({"anomaly" : "Compilation timestamp is in the future" })
+                self.data.append({"anomaly": "Compilation timestamp is in the future"})
                 return True
             elif compiletime.year == currentyear and compiletime.month > currentmonth:
-                self.data.append({"anomaly" : "Compilation timestamp is in the future" })
+                self.data.append({"anomaly": "Compilation timestamp is in the future"})
                 return True
-        
+
         return False

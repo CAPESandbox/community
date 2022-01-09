@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class NetworkICMP(Signature):
     name = "network_icmp"
     description = "Generates some ICMP traffic"

@@ -15,9 +15,12 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class MassDataEncryption(Signature):
     name = "mass_data_encryption"
-    description = "Performs a large number of encryption calls using the same key possibly indicative of ransomware file encryption behavior"
+    description = (
+        "Performs a large number of encryption calls using the same key possibly indicative of ransomware file encryption behavior"
+    )
     severity = 3
     confidence = 10
     categories = ["encryption", "ransomware"]
@@ -51,13 +54,13 @@ class MassDataEncryption(Signature):
             if cryptkey not in self.cryptkeys:
                 self.cryptkeys[cryptkey] = 1
             else:
-                self.cryptkeys[cryptkey] +=1
+                self.cryptkeys[cryptkey] += 1
 
     def on_complete(self):
         ret = False
         for key, value in self.cryptkeys.items():
             if value >= 200:
                 ret = True
-                self.data.append({"encryption" : "The crypto key %s was used %s times to encrypt data" % (key,value)})
+                self.data.append({"encryption": "The crypto key %s was used %s times to encrypt data" % (key, value)})
 
         return ret

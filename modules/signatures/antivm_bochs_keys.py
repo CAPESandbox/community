@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class BochsDetectKeys(Signature):
     name = "antivm_xen_keys"
     description = "Detects Bochs through the presence of a registry key"

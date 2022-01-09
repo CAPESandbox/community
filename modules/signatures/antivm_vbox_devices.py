@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class VBoxDetectDevices(Signature):
     name = "antivm_vbox_devices"
     description = "Detects VirtualBox through the presence of a device"

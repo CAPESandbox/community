@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class InstallsWinpcap(Signature):
     name = "sniffer_winpcap"
     description = "Installs WinPCAP"
@@ -24,16 +25,12 @@ class InstallsWinpcap(Signature):
     minimum = "0.5"
 
     def run(self):
-        indicators = [
-            ".*\\\\packet\.dll$",
-            ".*\\\\npf\.sys$",
-            ".*\\\\wpcap\.dll$"
-        ]
+        indicators = [".*\\\\packet\.dll$", ".*\\\\npf\.sys$", ".*\\\\wpcap\.dll$"]
 
         for indicator in indicators:
             file_path = self.check_file(pattern=indicator, regex=True)
             if file_path:
-                self.data.append({"file" : file_path})
+                self.data.append({"file": file_path})
                 return True
 
         return False

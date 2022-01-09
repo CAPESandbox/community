@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DisablesRestoreDefaultState(Signature):
     name = "disables_restore_default_state"
     description = "Disables ability to restore system to default state"
@@ -24,7 +25,7 @@ class DisablesRestoreDefaultState(Signature):
     minimum = "1.3"
     evented = True
 
-    def run(self):    
+    def run(self):
         indicators = [
             "HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\WinRE\\\\DisableSetup",
         ]

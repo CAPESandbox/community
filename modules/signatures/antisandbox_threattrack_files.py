@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ThreatTrackDetectFiles(Signature):
     name = "antisandbox_threattrack_files"
     description = "Attempts to detect ThreatTrack/GFI/CW Sandbox through the presence of a file"

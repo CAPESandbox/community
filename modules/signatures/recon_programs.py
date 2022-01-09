@@ -8,6 +8,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class InstalledApps(Signature):
     name = "recon_programs"
     description = "Collects information about installed applications"
@@ -23,7 +24,7 @@ class InstalledApps(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.programs = set()
         self.check = True
-        office_pkgs = ["ppt","doc","xls","eml","pdf"]
+        office_pkgs = ["ppt", "doc", "xls", "eml", "pdf"]
         if any(e in self.results["info"]["package"] for e in office_pkgs):
             self.check = False
 
@@ -36,8 +37,7 @@ class InstalledApps(Signature):
         if call["api"].startswith("RegQueryValueEx"):
             keyname = self.get_argument(call, "FullName")
             uninstall = "\\microsoft\\windows\\currentversion\\uninstall"
-            if (keyname and uninstall in keyname.lower() and
-                keyname.lower().endswith("displayname")):
+            if keyname and uninstall in keyname.lower() and keyname.lower().endswith("displayname"):
                 app = self.get_argument(call, "Data")
                 if app:
                     # Ignore language/architecture name segments

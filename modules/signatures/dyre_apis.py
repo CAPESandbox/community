@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Dyre_APIs(Signature):
     name = "dyre_behavior"
     description = "Exhibits behavior characteristic of Dyre malware"
@@ -33,17 +34,14 @@ class Dyre_APIs(Signature):
     # Try to parse a process memory dump to extract regex extract C2 nodes.
     extract_c2s = True
 
-
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.cryptoapis = False
         self.networkapis = set()
         self.syncapis = False
-        self.compname = self.get_environ_entry(self.get_initial_process(),
-                                               "ComputerName")
+        self.compname = self.get_environ_entry(self.get_initial_process(), "ComputerName")
 
-    filter_apinames = set(["CryptHashData", "HttpOpenRequestA",
-                           "NtCreateNamedPipeFile"])
+    filter_apinames = set(["CryptHashData", "HttpOpenRequestA", "NtCreateNamedPipeFile"])
 
     def on_call(self, call, process):
         # Legacy, modern Dyre doesn't have hardcoded hashes in

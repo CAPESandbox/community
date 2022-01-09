@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class StealthNetwork(Signature):
     name = "stealth_network"
     description = "Network activity detected but not expressed in API logs"
@@ -16,6 +17,7 @@ class StealthNetwork(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.foundnetwork = False
+
     filter_categories = set(["network"])
 
     def on_call(self, call, process):
@@ -24,7 +26,13 @@ class StealthNetwork(Signature):
     def on_complete(self):
         initialproc = self.get_initial_process()
         if "network" in self.results:
-            if ((("hosts" in self.results["network"]) and len(self.results["network"]["hosts"]) > 0) or
-                (("domains" in self.results["network"]) and len(self.results["network"]["domains"]) > 0)) and initialproc and not self.foundnetwork:
+            if (
+                (
+                    (("hosts" in self.results["network"]) and len(self.results["network"]["hosts"]) > 0)
+                    or (("domains" in self.results["network"]) and len(self.results["network"]["domains"]) > 0)
+                )
+                and initialproc
+                and not self.foundnetwork
+            ):
                 return True
         return False

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DocScriptEXEDrop(Signature):
     name = "document_script_exe_drop"
     description = "A document or script wrote an executable file to disk"
@@ -55,7 +56,7 @@ class DocScriptEXEDrop(Signature):
                 self.ret = True
                 if handle not in self.dropped:
                     self.dropped.append(handle)
-                    self.data.append({"dropped_executable": "%s dropped file %s" %(pname, handle)})
-  
+                    self.data.append({"dropped_executable": "%s dropped file %s" % (pname, handle)})
+
     def on_complete(self):
         return self.ret

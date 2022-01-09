@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Tor(Signature):
     name = "network_tor"
     description = "Installs Tor on the infected machine"
@@ -28,9 +29,7 @@ class Tor(Signature):
     filter_apinames = set(["CreateServiceA", "CreateServiceW"])
 
     def on_call(self, call, process):
-        if self.check_argument_call(call,
-                                    pattern="Tor Win32 Service",
-                                    ignorecase=True):
+        if self.check_argument_call(call, pattern="Tor Win32 Service", ignorecase=True):
             return True
 
     def on_complete(self):
@@ -41,7 +40,7 @@ class Tor(Signature):
             ".*\\\\tor\\\\geoip$",
             ".*\\\\tor\\\\lock$",
             ".*\\\\tor\\\\state$",
-            ".*\\\\tor\\\\torrc$"
+            ".*\\\\tor\\\\torrc$",
         ]
 
         for indicator in indicators:

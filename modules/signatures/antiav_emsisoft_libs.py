@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class EmsisoftDetectLibs(Signature):
     name = "antiav_emsisoft_libs"
     description = "Detects Emsisoft Antivirus through the presence of a library"

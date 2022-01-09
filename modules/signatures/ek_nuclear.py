@@ -1,4 +1,4 @@
-# Copyright (C) 2015 Will Metcalf william.metcalf@gmail.com 
+# Copyright (C) 2015 Will Metcalf william.metcalf@gmail.com
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from lib.cuckoo.common.abstracts import Signature
+
 
 class Nuclear_JS(Signature):
     name = "nuclear_js"

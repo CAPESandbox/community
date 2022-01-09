@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PhorpiexMutexes(Signature):
     name = "phorpiex_mutexes"
     description = "Creates known Phorpiex mutexes"

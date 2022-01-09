@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiSandboxSleep(Signature):
     name = "antisandbox_sleep"
     description = "A process attempted to delay the analysis task."
@@ -36,12 +37,12 @@ class AntiSandboxSleep(Signature):
     def on_complete(self):
         ret = False
         proc_whitelist = [
-                         "dwm.exe",
-                         "adobearm.exe",
-                         "iexplore.exe",
-                         "acrord32.exe",
-                         "splwow64.exe",
-                         ]
+            "dwm.exe",
+            "adobearm.exe",
+            "iexplore.exe",
+            "acrord32.exe",
+            "splwow64.exe",
+        ]
         procs = dict()
         for pname, sleep, skip in self.sleeps:
             if pname.lower() not in proc_whitelist:
@@ -58,8 +59,12 @@ class AntiSandboxSleep(Signature):
                 ret = True
                 actual = str(procs[process]["Actual"] / 1000)
                 attempted = str(procs[process]["Attempted"] / 1000)
-                self.data.append({"Process": "%s tried to sleep %s seconds, actually delayed analysis time by %s seconds"
-                                 % (process, attempted, actual)})
+                self.data.append(
+                    {
+                        "Process": "%s tried to sleep %s seconds, actually delayed analysis time by %s seconds"
+                        % (process, attempted, actual)
+                    }
+                )
             if procs[process]["Attempted"] >= 2100000:
                 self.severity = 3
                 self.description = "A process attempted to delay the analysis task by a long amount of time."

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class TrochilusRATAPIs(Signature):
     name = "trochilusrat_APIs"
     description = "TrochilusRAT behavior detected"
@@ -37,7 +38,7 @@ class TrochilusRATAPIs(Signature):
             if outputstr:
                 if "init servant. server" in outputstr:
                     self.score += 3
-        
+
         if call["api"] == "CreateProcessInternalW":
             cmdline = self.get_argument(call, "CommandLine")
             if cmdline:
@@ -51,7 +52,7 @@ class TrochilusRATAPIs(Signature):
                 self.score += 1
             if fulname and fulname.endswith("XLServant"):
                 self.score += 1
-    
+
     def on_complete(self):
         if self.score >= 3:
             return True

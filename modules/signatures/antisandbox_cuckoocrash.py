@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CuckooCrash(Signature):
     name = "antisandbox_cuckoocrash"
     description = "Crashed cuckoomon during analysis.  Report this error to the Github repo."
@@ -32,16 +33,13 @@ class CuckooCrash(Signature):
         self.messages = []
 
     def on_call(self, call, process):
-        subcategory = self.check_argument_call(call,
-                                               api="__anomaly__",
-                                               name="Subcategory",
-                                               pattern="cuckoocrash")
+        subcategory = self.check_argument_call(call, api="__anomaly__", name="Subcategory", pattern="cuckoocrash")
         if subcategory:
             message = self.get_argument(call, "Message")
             if message not in self.messages:
                 self.messages.append(message)
-                self.data.append({"pid" : process["process_id"]})
-                self.data.append({"message" : message})
+                self.data.append({"pid": process["process_id"]})
+                self.data.append({"message": message})
                 self.found_crash = True
 
     def on_complete(self):

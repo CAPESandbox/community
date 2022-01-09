@@ -64,8 +64,7 @@ class Physical(Machinery):
             self._wait_status(label, self.RUNNING)
 
         else:
-            raise CuckooMachineError("Error occurred while starting: "
-                                     "%s (STATUS=%s)" % (label, status))
+            raise CuckooMachineError("Error occurred while starting: " "%s (STATUS=%s)" % (label, status))
 
     def stop(self, label):
         """Stops a physical machine.
@@ -83,10 +82,7 @@ class Physical(Machinery):
             log.debug("Rebooting machine: %s.", label)
             machine = self._get_machine(label)
 
-            args = [
-                "net", "rpc", "shutdown", "-I", machine.ip,
-                "-U", creds, "-r", "-f", "--timeout=5"
-            ]
+            args = ["net", "rpc", "shutdown", "-I", machine.ip, "-U", creds, "-r", "-f", "--timeout=5"]
             shutdown = subprocess.Popen(args, stdout=subprocess.PIPE)
             output, _ = shutdown.communicate()
 
@@ -128,13 +124,11 @@ class Physical(Machinery):
             status = server.get_status()
         except xmlrpc.client.Fault as e:
             # Contacted Agent, but it threw an error.
-            log.debug("Agent error: %s (%s) (Error: %s).",
-                      machine.id, machine.ip, e)
+            log.debug("Agent error: %s (%s) (Error: %s).", machine.id, machine.ip, e)
             return self.ERROR
         except socket.error as e:
             # Could not contact agent.
-            log.debug("Agent unresponsive: %s (%s) (Error: %s).",
-                      machine.id, machine.ip, e)
+            log.debug("Agent unresponsive: %s (%s) (Error: %s).", machine.id, machine.ip, e)
             return self.STOPPED
         except Exception as e:
             # TODO Handle this better.

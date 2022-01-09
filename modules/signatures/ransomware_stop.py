@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class StopRansomMutexes(Signature):
     name = "stop_ransom_mutexes"
     description = "Creates a known STOP ransomware variant mutex"
@@ -25,12 +26,12 @@ class StopRansomMutexes(Signature):
     minimum = "0.5"
     evented = True
     ttp = ["T1486"]
-	
+
     def run(self):
         indicators = [
-			"{36A698B9-D67C-4E07-BE82-0EC5B14B4DF5}$",
-			"{1D6FC66E-D1F3-422C-8A53-C0BBCF3D900D}$",
-			"{FBB4BCC6-05C7-4ADD-B67B-A98A697323C1}$"
+            "{36A698B9-D67C-4E07-BE82-0EC5B14B4DF5}$",
+            "{1D6FC66E-D1F3-422C-8A53-C0BBCF3D900D}$",
+            "{FBB4BCC6-05C7-4ADD-B67B-A98A697323C1}$",
         ]
 
         for indicator in indicators:
@@ -38,6 +39,7 @@ class StopRansomMutexes(Signature):
                 return True
 
         return False
+
 
 class StopRansomwareCMD(Signature):
     name = "stop_ransomware_cmd"
@@ -50,9 +52,7 @@ class StopRansomwareCMD(Signature):
     evented = True
 
     def run(self):
-        indicators = [
-            ".*--(Admin|ForNetRes)\s.*is(Not)?(AutoStart|Task).*"
-        ]
+        indicators = [".*--(Admin|ForNetRes)\s.*is(Not)?(AutoStart|Task).*"]
 
         for indicator in indicators:
             match = self.check_executed_command(pattern=indicator, regex=True)
@@ -61,6 +61,7 @@ class StopRansomwareCMD(Signature):
                 return True
 
         return False
+
 
 class StopRansomwareRegistry(Signature):
     name = "stop_ransomware_registry"

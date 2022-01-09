@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class WineDetectFunc(Signature):
     name = "antiemu_wine_func"
     description = "Detects the presence of Wine emulator via function name"

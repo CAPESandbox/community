@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class SandboxJoeAnubisDetectFiles(Signature):
     name = "antisandbox_joe_anubis_files"
     description = "Detects Joe or Anubis Sandboxes through the presence of a file"

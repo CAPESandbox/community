@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class HidesRecycleBinIcon(Signature):
     name = "hides_recycle_bin_icon"
     description = "Hides Recycle Bin icon"
@@ -24,7 +25,7 @@ class HidesRecycleBinIcon(Signature):
     minimum = "1.3"
     evented = True
 
-    def run(self):    
+    def run(self):
         indicators = [
             "HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\NonEnum\\\\\{645FF040-5081-101B-9F08-00AA002F954E\}",
         ]

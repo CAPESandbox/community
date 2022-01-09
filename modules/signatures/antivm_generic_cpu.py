@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiVMCPU(Signature):
     name = "antivm_generic_cpu"
     description = "Checks the CPU name from registry, possibly for anti-virtualization"
@@ -26,6 +27,8 @@ class AntiVMCPU(Signature):
     mbc = ["B0009.026", "B0009.005"]
 
     def run(self):
-        if self.check_read_key(pattern=r'.*\\HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\[^\\]+\\ProcessorNameString$', regex=True):
+        if self.check_read_key(
+            pattern=r".*\\HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\[^\\]+\\ProcessorNameString$", regex=True
+        ):
             return True
         return False

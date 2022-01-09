@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class NetworkCountryDistribution(Signature):
     name = "network_country_distribution"
     description = "Communicates with IPs located across a large number of unique countries"
@@ -23,7 +24,7 @@ class NetworkCountryDistribution(Signature):
     categories = ["network", "cnc"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    
+
     filter_analysistypes = set(["file"])
 
     def run(self):
@@ -42,6 +43,7 @@ class NetworkCountryDistribution(Signature):
             return True
         else:
             return False
+
 
 class NetworkMultipleDirectIPConnections(Signature):
     name = "network_multiple_direct_ip_connections"

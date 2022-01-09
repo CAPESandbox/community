@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class QuilClipperNetworkBehavior(Signature):
     name = "quilclipper_behavior"
     description = "QuilClipper infostealer network artifacts detected"
@@ -39,6 +40,7 @@ class QuilClipperNetworkBehavior(Signature):
 
     def on_complete(self):
         return self.match
+
 
 class QuilClipperMutexes(Signature):
     name = "quilclipper_mutexes"

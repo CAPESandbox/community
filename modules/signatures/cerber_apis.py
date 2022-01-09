@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Cerber_APIs(Signature):
     name = "cerber_behavior"
     description = "Exhibits behavior characteristic of Cerber ransomware"

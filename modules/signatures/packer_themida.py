@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ThemidaPacked(Signature):
     name = "packer_themida"
     description = "An executed process used known Themida API calls."
@@ -33,16 +34,16 @@ class ThemidaPacked(Signature):
 
     def on_call(self, call, process):
         indicators = [
-                "OLLYDBG",
-                "GBDYLLO",
-                "pediy06",
-                "FilemonClass",
-                "File Monitor - Sysinternals: www.sysinternals.com",
-                "PROCMON_WINDOW_CLASS",
-                "Process Monitor - Sysinternals: www.sysinternals.com",
-                "RegmonClass",
-                "Registry Monitor - Sysinternals: www.sysinternals.com",
-                "18467-41",
+            "OLLYDBG",
+            "GBDYLLO",
+            "pediy06",
+            "FilemonClass",
+            "File Monitor - Sysinternals: www.sysinternals.com",
+            "PROCMON_WINDOW_CLASS",
+            "Process Monitor - Sysinternals: www.sysinternals.com",
+            "RegmonClass",
+            "Registry Monitor - Sysinternals: www.sysinternals.com",
+            "18467-41",
         ]
         pid = str(process["process_id"])
         pname = process["process_name"]
@@ -75,6 +76,7 @@ class ThemidaPacked(Signature):
 
         return hit
 
+
 class ThemidaPackedSection(Signature):
     name = "packer_themida"
     description = "Executable file is packed/obfuscated with Themida"
@@ -87,7 +89,7 @@ class ThemidaPackedSection(Signature):
     def run(self):
         for section in self.results.get("static", {}).get("pe", {}).get("sections", []):
             if section["name"].lower().startswith(".themida"):
-                self.data.append({"section" : section})
+                self.data.append({"section": section})
                 return True
 
         return False

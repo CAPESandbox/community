@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class GulpixBehavior(Signature):
     name = "gulpix_behavior"
     description = "Gulpix backdoor artificats detected"

@@ -14,45 +14,53 @@ from lib.cuckoo.common.abstracts import Report
 from lib.cuckoo.common.exceptions import CuckooReportError
 import six
 
+
 def sanitize_file(filename):
-    normals = filename.lower().replace('\\', ' ').replace('.', ' ').split(' ')
+    normals = filename.lower().replace("\\", " ").replace(".", " ").split(" ")
     hashed_components = [hashlib.md5(normal).hexdigest()[:8] for normal in normals[-3:]]
-    return ' '.join(hashed_components)
+    return " ".join(hashed_components)
+
 
 def sanitize_reg(keyname):
-    normals = keyname.lower().replace('\\', ' ').split(' ')
+    normals = keyname.lower().replace("\\", " ").split(" ")
     hashed_components = [hashlib.md5(normal).hexdigest()[:8] for normal in normals[-2:]]
-    return ' '.join(hashed_components)
+    return " ".join(hashed_components)
+
 
 def sanitize_cmd(cmd):
-    normals = cmd.lower().replace('"', '').replace('\\', ' ').replace('.', ' ').split(' ')
+    normals = cmd.lower().replace('"', "").replace("\\", " ").replace(".", " ").split(" ")
     hashed_components = [hashlib.md5(normal).hexdigest()[:8] for normal in normals]
-    return ' '.join(hashed_components)
+    return " ".join(hashed_components)
+
 
 def sanitize_generic(value):
     return hashlib.md5(value.lower()).hexdigest()[:8]
 
+
 def sanitize_domain(domain):
-    components = domain.lower().split('.')
+    components = domain.lower().split(".")
     hashed_components = [hashlib.md5(comp).hexdigest()[:8] for comp in components]
-    return ' '.join(hashed_components)
+    return " ".join(hashed_components)
+
 
 def sanitize_ip(ipaddr):
-    components = ipaddr.split('.')
+    components = ipaddr.split(".")
     class_c = components[:3]
-    return hashlib.md5('.'.join(class_c)).hexdigest()[:8] + " " + hashlib.md5(ipaddr).hexdigest()[:8]
+    return hashlib.md5(".".join(class_c)).hexdigest()[:8] + " " + hashlib.md5(ipaddr).hexdigest()[:8]
+
 
 def sanitize_url(url):
     # normalize URL according to CIF specification
     uri = url
     if ":" in url:
-        uri = url[url.index(':')+1:]
+        uri = url[url.index(":") + 1 :]
     uri = uri.strip("/")
-    quoted = urllib.parse.quote(uri.encode('utf8')).lower()
+    quoted = urllib.parse.quote(uri.encode("utf8")).lower()
     return hashlib.md5(quoted).hexdigest()[:8]
 
+
 def mist_convert(results):
-    """ Performs conversion of analysis results to MIST format """
+    """Performs conversion of analysis results to MIST format"""
     lines = []
 
     if results["target"]["category"] == "file":
@@ -132,15 +140,16 @@ def mist_convert(results):
 
     if "dropped" in results:
         for dropped in results["dropped"]:
-            lines.append("file drop|" + "%08x" % (int(dropped["size"]) & 0xfffffc00) + " " + sanitize_generic(dropped["type"]))
+            lines.append("file drop|" + "%08x" % (int(dropped["size"]) & 0xFFFFFC00) + " " + sanitize_generic(dropped["type"]))
 
     if len(lines) <= 4:
         return ""
 
     return "\n".join(lines) + "\n"
 
+
 class Malheur(Report):
-    """ Performs classification on the generated MIST reports """
+    """Performs classification on the generated MIST reports"""
 
     def run(self, results):
         """Runs Malheur processing
@@ -170,9 +179,7 @@ class Malheur(Report):
         path, dirs, files = next(os.walk(reportsdir))
         try:
             cmdline = ["malheur", "-c", cfgpath, "-o", outputfile, "cluster", reportsdir]
-            run = subprocess.Popen(cmdline, stdout=subprocess.PIPE,
-                                   stdin=subprocess.PIPE,
-                                   stderr=subprocess.PIPE)
+            run = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
             out, err = run.communicate()
             for line in err.splitlines():
                 if line.startswith("Warning: Discarding empty feature vector"):

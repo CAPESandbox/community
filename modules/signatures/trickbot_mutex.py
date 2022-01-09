@@ -1,5 +1,6 @@
 from lib.cuckoo.common.abstracts import Signature
 
+
 class TrickBotMutexes(Signature):
     name = "trickbot_mutex"
     description = "Attempts to create a known TrickBot mutex."

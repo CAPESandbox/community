@@ -13,12 +13,14 @@ from lib.cuckoo.common.abstracts import Processing
 from lib.cuckoo.common.exceptions import CuckooProcessingError
 from lib.cuckoo.common.objects import File
 
+
 class CIF(Processing):
     """Queries IP/domain results from CIF server"""
+
     order = 100
 
-    def getbool(self,s):
-        if isinstance(s,bool):
+    def getbool(self, s):
+        if isinstance(s, bool):
             rtn = s
         else:
             try:
@@ -31,9 +33,9 @@ class CIF(Processing):
         # normalize URL according to CIF specification
         uri = url
         if ":" in url:
-            uri = url[url.index(':')+1:]
+            uri = url[url.index(":") + 1 :]
         uri = uri.strip("/")
-        return urllib.parse.quote(uri.encode('utf8')).lower()
+        return urllib.parse.quote(uri.encode("utf8")).lower()
 
     def run(self):
         """Runs CIF processing
@@ -93,12 +95,17 @@ class CIF(Processing):
                     if "PE32" in dropped["type"] or "MS-DOS" in dropped["type"]:
                         resources.append(File(dropped["path"]).get_md5())
 
-        headers = {
-            "User-Agent" : "Mozilla Cuckoo"
-        }
+        headers = {"User-Agent": "Mozilla Cuckoo"}
 
         for res in resources[:per_analysis_limit]:
-            data = {"query": res, "apikey": key, "nolog" : nolog, "confidence" : confidence, "limit" : per_lookup_limit, "fmt" : "json", }
+            data = {
+                "query": res,
+                "apikey": key,
+                "nolog": nolog,
+                "confidence": confidence,
+                "limit": per_lookup_limit,
+                "fmt": "json",
+            }
 
             try:
                 r = requests.get(url, headers=headers, params=data, verify=True, timeout=int(timeout))

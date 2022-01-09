@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class VBoxDetectWindow(Signature):
     name = "antivm_vbox_window"
     description = "Detects VirtualBox through the presence of a window"
@@ -28,12 +29,9 @@ class VBoxDetectWindow(Signature):
     filter_categories = set(["windows"])
 
     def on_call(self, call, process):
-        indicators = [
-            "VBoxTrayToolWndClass",
-            "VBoxTrayToolWnd"
-        ]
+        indicators = ["VBoxTrayToolWndClass", "VBoxTrayToolWnd"]
 
         for indicator in indicators:
             if self.check_argument_call(call, pattern=indicator, ignorecase=True):
-                self.data.append({"window" : indicator})
+                self.data.append({"window": indicator})
                 return True

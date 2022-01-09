@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class QurbDetectLibs(Signature):
     name = "antiav_qurb_libs"
     description = "Detects Qurb Antivirus through the presence of a library"

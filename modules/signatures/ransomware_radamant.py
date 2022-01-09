@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class RansomwareRadamant(Signature):
     name = "ransomware_radamant"
     description = "Exhibits behavior characteristic of Radamant ransomware"
@@ -36,7 +37,10 @@ class RansomwareRadamant(Signature):
                 return True
 
         # Check for creation of Autorun
-        if self.check_write_key(pattern=".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\(svchost|DirectX)$", regex=True) and self.check_write_file(pattern=".*\\\\Windows\\\\dirextx.exe$", regex=True):
+        if self.check_write_key(
+            pattern=".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\(svchost|DirectX)$",
+            regex=True,
+        ) and self.check_write_file(pattern=".*\\\\Windows\\\\dirextx.exe$", regex=True):
             return True
 
         # Check for creation of ransom message file

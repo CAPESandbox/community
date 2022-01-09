@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class VMwareDetectEvent(Signature):
     name = "antivm_vmware_events"
     description = "Detects VMware through Opening/Creating VMware specific events"

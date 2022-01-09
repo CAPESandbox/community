@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class IPC_NamedPipe(Signature):
     name = "ipc_namedpipe"
     description = "A named pipe was used for inter-process communication"
@@ -78,13 +79,13 @@ class IPC_NamedPipe(Signature):
                 if len(self.ipc[ipc]) > 1:
                     ret = True
                     desc = "{0}({1}) Created Named Pipe {2}".format(
-                            self.get_name_from_pid(str(self.created[ipc])),
-                            self.created[ipc], ipc)
+                        self.get_name_from_pid(str(self.created[ipc])), self.created[ipc], ipc
+                    )
                     self.data.append({"Creates": desc})
                     for pid in self.ipc[ipc]:
                         desc = "{0}({1}) {2} data to Named Pipe {3}".format(
-                                self.get_name_from_pid(str(pid)), pid,
-                                "/".join(self.ipc[ipc][pid]), ipc)
+                            self.get_name_from_pid(str(pid)), pid, "/".join(self.ipc[ipc][pid]), ipc
+                        )
                         self.data.append({"Interacts": desc})
 
         return ret

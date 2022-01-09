@@ -20,6 +20,7 @@ try:
 except ImportError:
     import re
 
+
 class RansomwareDMALocker(Signature):
     name = "ransomware_dmalocker"
     description = "Exhibits behavior characteristic of DMALocker ransomware"
@@ -31,7 +32,6 @@ class RansomwareDMALocker(Signature):
     minimum = "1.3"
     evented = True
     ttp = ["T1486"]
-
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

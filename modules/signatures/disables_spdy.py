@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DisablesSPDY(Signature):
     name = "disables_spdy"
     description = "Attempts to disable SPDY support in Firefox to improve web infostealing capability"

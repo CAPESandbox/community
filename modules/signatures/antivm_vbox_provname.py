@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class VBoxDetectProvname(Signature):
     name = "antivm_vbox_provname"
     description = "Detects VirtualBox using WNetGetProviderName trick"

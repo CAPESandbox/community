@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class TorGateway(Signature):
     name = "network_torgateway"
     description = "Connects to Tor Hidden Services through a Tor gateway"
@@ -51,20 +52,18 @@ class TorGateway(Signature):
             ".*\.vivavtpaymaster\.com$",
             ".*\.fraspartypay\.com$",
         ]
-        ip_indicators = [
-            "195.85.254.203"
-        ]
+        ip_indicators = ["195.85.254.203"]
         found_torgateway = False
         for indicator in domain_indicators:
             domains = self.check_domain(pattern=indicator, regex=True, all=True)
             if domains:
                 for domain in domains:
-                    self.data.append({"domain" : domain})
+                    self.data.append({"domain": domain})
                     found_torgateway = True
         for indicator in ip_indicators:
             ip = self.check_ip(pattern=indicator)
             if ip:
-                self.data.append({"ip" : ip})
+                self.data.append({"ip": ip})
                 found_torgateway = True
 
         return found_torgateway

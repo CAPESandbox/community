@@ -17,6 +17,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class UrsnifBehavior(Signature):
     name = "ursnif_behavior"
     description = "Ursnif Trojan behavior detected"
@@ -38,16 +39,15 @@ class UrsnifBehavior(Signature):
             "Client64",
         ]
         registry_indicators = []
-        file_indicators = [
-            ".*\\\\mailslot\\\\[a-z]?(sl)[a-z0-9]{1,}$",
-            ".*\\\\AppData\\\\Roaming\\\\Microsoft\\\\.*\\\\.*.dll$"
-        ]
+        file_indicators = [".*\\\\mailslot\\\\[a-z]?(sl)[a-z0-9]{1,}$", ".*\\\\AppData\\\\Roaming\\\\Microsoft\\\\.*\\\\.*.dll$"]
         mutex_indicators = "^Local\\\\\{[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}\}$"
 
         for rkey in regkeys:
             registry_indicators.append(regpath + "\\\\" + guid + "\\\\" + rkey + "$")
 
-        registry_indicators.append(".*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet Settings\\\\EnableSPDY3_0$")
+        registry_indicators.append(
+            ".*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet Settings\\\\EnableSPDY3_0$"
+        )
 
         for rindicator in registry_indicators:
             match = self.check_write_key(pattern=rindicator, regex=True)

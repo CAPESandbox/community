@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class NetworkCnCHTTPSGeneric(Signature):
     name = "network_cnc_https_generic"
     description = "Establishes an encrypted HTTPS connection"
@@ -52,6 +53,7 @@ class NetworkCnCHTTPSGeneric(Signature):
 
     def on_complete(self):
         return self.match
+
 
 class NetworkCnCHTTPSSocialMedia(Signature):
     name = "network_cnc_https_socialmedia"
@@ -92,9 +94,10 @@ class NetworkCnCHTTPSSocialMedia(Signature):
                 if host_header in buff:
                     self.match = True
                     self.data.append({"http_request": buff})
-    
+
     def on_complete(self):
         return self.match
+
 
 class NetworkCnCHTTPSPasteSite(Signature):
     name = "network_cnc_https_pastesite"
@@ -139,9 +142,10 @@ class NetworkCnCHTTPSPasteSite(Signature):
                 if host_header in buff:
                     self.match = True
                     self.data.append({"http_request": buff})
-    
+
     def on_complete(self):
         return self.match
+
 
 class NetworkCnCHTTPSURLShortenerSite(Signature):
     name = "network_cnc_https_urlshortener"
@@ -191,9 +195,10 @@ class NetworkCnCHTTPSURLShortenerSite(Signature):
                 if host_header in buff:
                     self.match = True
                     self.data.append({"http_request": buff})
-    
+
     def on_complete(self):
         return self.match
+
 
 class NetworkCnCHTTPSTempStorageSite(Signature):
     name = "network_cnc_https_tempstorage"
@@ -239,9 +244,10 @@ class NetworkCnCHTTPSTempStorageSite(Signature):
                 if host_header in buff:
                     self.match = True
                     self.data.append({"http_request": buff})
-    
+
     def on_complete(self):
         return self.match
+
 
 class NetworkCnCHTTPSUserAgent(Signature):
     name = "network_cnc_https_useragent"
@@ -278,7 +284,7 @@ class NetworkCnCHTTPSUserAgent(Signature):
         ]
 
     filter_apinames = set(["SslEncryptPacket"])
-    
+
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
         if buff:
@@ -286,9 +292,10 @@ class NetworkCnCHTTPSUserAgent(Signature):
                 if ua in buff:
                     self.match = True
                     self.data.append({"http_request": buff})
-    
+
     def on_complete(self):
         return self.match
+
 
 class NetworkCnCHTTPSTempURLDNS(Signature):
     name = "network_cnc_https_temp_urldns"
@@ -316,9 +323,10 @@ class NetworkCnCHTTPSTempURLDNS(Signature):
                 if domain in buff:
                     self.match = True
                     self.data.append({"http_request": buff})
-    
+
     def on_complete(self):
         return self.match
+
 
 class NetworkCnCHTTPSInteractsh(Signature):
     name = "network_cnc_https_temp_urldns"
@@ -350,6 +358,7 @@ class NetworkCnCHTTPSInteractsh(Signature):
     def on_complete(self):
         return self.match
 
+
 class NetworkCnCHTTPSPayload(Signature):
     name = "network_cnc_https_payload"
     description = "Downloads executable over encrypted HTTPS connection"
@@ -363,7 +372,7 @@ class NetworkCnCHTTPSPayload(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.match = False
-        
+
     filter_apinames = set(["SslDecryptPacket"])
 
     def on_call(self, call, process):
@@ -373,6 +382,7 @@ class NetworkCnCHTTPSPayload(Signature):
 
     def on_complete(self):
         return self.match
+
 
 class NetworkCnCHTTPSFreeWebHosting(Signature):
     name = "network_cnc_https_free_webshoting"
@@ -403,9 +413,10 @@ class NetworkCnCHTTPSFreeWebHosting(Signature):
                 if domain in buff:
                     self.match = True
                     self.data.append({"http_request": buff})
-    
+
     def on_complete(self):
         return self.match
+
 
 class NetworkCnCHTTPSTelegram(Signature):
     name = "network_cnc_https_telegram"
@@ -433,7 +444,7 @@ class NetworkCnCHTTPSTelegram(Signature):
             elif "Matiex" and "Keylogger" in buff:
                 self.found_matiex = True
                 self.data.append({"http_request": buff})
-    
+
     def on_complete(self):
         if self.found_snake:
             self.description = "{0} {1}".format("Snake Keylogger", self.description)
@@ -445,6 +456,7 @@ class NetworkCnCHTTPSTelegram(Signature):
             return True
 
         return False
+
 
 class NetworkCnCSMTPSGeneric(Signature):
     name = "network_cnc_smtps_generic"
@@ -485,6 +497,7 @@ class NetworkCnCSMTPSGeneric(Signature):
     def on_complete(self):
         return self.match
 
+
 class NetworkCnCSMTPSExfil(Signature):
     name = "network_cnc_smtps_exfil"
     description = "keylogger detected exfiltrating data via encrypted SMTPS connection"
@@ -520,7 +533,12 @@ class NetworkCnCSMTPSExfil(Signature):
             if "From: " in buff or "To: " in buff:
                 self.data.append({"smtp_header": buff})
             if "Subject: " in buff:
-                if "SGF3a0V5ZSBLZXlsb" in buff or "SGF3a0V5ZSBSZ" in buff or "HawkEye Keylogger" in buff or "HawkEye Reborn" in buff:
+                if (
+                    "SGF3a0V5ZSBLZXlsb" in buff
+                    or "SGF3a0V5ZSBSZ" in buff
+                    or "HawkEye Keylogger" in buff
+                    or "HawkEye Reborn" in buff
+                ):
                     self.found_hawkeye = True
                 if " Recovered " in buff:
                     self.found_agentteslat1 = True
@@ -528,11 +546,27 @@ class NetworkCnCSMTPSExfil(Signature):
                     self.found_phoenix = True
                 if "Orion Logger" in buff or "Orion" in buff:
                     self.found_orion = True
-                if "Subject: P_" in buff or "Subject: S_" in buff or "Subject: C_" in buff or "Subject: PW_" in buff or "Subject: CO_" in buff or "Subject: SC_" in buff or "Subject: KL_" in buff:
+                if (
+                    "Subject: P_" in buff
+                    or "Subject: S_" in buff
+                    or "Subject: C_" in buff
+                    or "Subject: PW_" in buff
+                    or "Subject: CO_" in buff
+                    or "Subject: SC_" in buff
+                    or "Subject: KL_" in buff
+                ):
                     self.found_agentteslat2 = True
                 if "AspireLogger" in buff or "Aspire" in buff:
                     self.found_aspire = True
-                if "U3RlYWxlciBMb2dz" in buff or "Execution Alert!" in buff or "Password Monitoring" in buff or "KeyStroke Monitoring" in buff or "Screen Monitoring" in buff or "WebCam Monitoring" in buff or "Clipboard Monitoring" in buff:
+                if (
+                    "U3RlYWxlciBMb2dz" in buff
+                    or "Execution Alert!" in buff
+                    or "Password Monitoring" in buff
+                    or "KeyStroke Monitoring" in buff
+                    or "Screen Monitoring" in buff
+                    or "WebCam Monitoring" in buff
+                    or "Clipboard Monitoring" in buff
+                ):
                     self.found_m00nd3v = True
                 if "MassLogger |" in buff:
                     self.found_masslogger = True
@@ -608,6 +642,7 @@ class NetworkCnCSMTPSExfil(Signature):
 
         return False
 
+
 class NetworkCnCHTTPSArchive(Signature):
     name = "network_cnc_https_archive"
     description = "Establishes an encrypted HTTPS connection to an internet archiving website"
@@ -636,6 +671,6 @@ class NetworkCnCHTTPSArchive(Signature):
                 if host_header in buff:
                     self.match = True
                     self.data.append({"http_request": buff})
-    
+
     def on_complete(self):
         return self.match

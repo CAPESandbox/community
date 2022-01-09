@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class BrowserStealer(Signature):
     name = "infostealer_browser"
     description = "Steals private information from local Internet browsers"
@@ -30,7 +31,7 @@ class BrowserStealer(Signature):
     minimum = "1.2"
     evented = True
     ttp = ["T1081", "T1003", "T1005", "T1555.003", "T1552.001"]
-    
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.filematches = set()
@@ -86,5 +87,5 @@ class BrowserStealer(Signature):
 
     def on_complete(self):
         for file in self.filematches:
-            self.data.append({"file" : file })
+            self.data.append({"file": file})
         return self.saw_stealer

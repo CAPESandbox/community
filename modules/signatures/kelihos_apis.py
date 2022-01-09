@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Kelihos_APIs(Signature):
     name = "kelihos_behavior"
     description = "Exhibits behavior characteristic of Kelihos malware"
@@ -33,8 +34,7 @@ class Kelihos_APIs(Signature):
         self.socket_tracker = dict()
         self.bad_pid = 0
 
-    filter_apinames = set(["RegSetValueExA", "connect", "ioctlsocket", "socket",
-                           "setsockopt", "WSASocketA", "closesocket"])
+    filter_apinames = set(["RegSetValueExA", "connect", "ioctlsocket", "socket", "setsockopt", "WSASocketA", "closesocket"])
 
     def on_call(self, call, process):
         if call["api"] == "RegSetValueExA":
@@ -47,10 +47,7 @@ class Kelihos_APIs(Signature):
         if self.bad_pid and process["process_id"] == self.bad_pid:
             if call["api"] in ["socket", "WSASocketA"] and call["return"]:
                 created_socket = self.get_argument(call, "socket")
-                self.socket_tracker[created_socket] = {
-                    "has_cmd": False,
-                    "sets_opt": False
-                }
+                self.socket_tracker[created_socket] = {"has_cmd": False, "sets_opt": False}
 
             elif call["api"] == "ioctlsocket":
                 requested_socket = self.get_argument(call, "socket")

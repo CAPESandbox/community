@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class LimeRATMutexes(Signature):
     name = "limerat_mutexes"
     description = "Creates known LimeRAT RAT mutexes"
@@ -37,6 +38,7 @@ class LimeRATMutexes(Signature):
                 return True
 
         return False
+
 
 class LimeRATRegkeys(Signature):
     name = "limerat_regkeys"
@@ -61,4 +63,4 @@ class LimeRATRegkeys(Signature):
                 self.data.append({"regkey": match})
                 return True
 
-        return False 
+        return False

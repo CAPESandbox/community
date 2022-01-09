@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiCuckoo(Signature):
     name = "antisandbox_cuckoo"
     description = "Employs AntiCuckoo detection techniques"
@@ -31,9 +32,6 @@ class AntiCuckoo(Signature):
         Signature.__init__(self, *args, **kwargs)
 
     def on_call(self, call, process):
-        subcategory = self.check_argument_call(call,
-                                               api="__anomaly__",
-                                               name="Subcategory",
-                                               pattern="anticuckoo")
+        subcategory = self.check_argument_call(call, api="__anomaly__", name="Subcategory", pattern="anticuckoo")
         if subcategory:
             return True

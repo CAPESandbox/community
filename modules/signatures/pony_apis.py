@@ -18,6 +18,7 @@ import string
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Pony_APIs(Signature):
     name = "pony_behavior"
     description = "Exhibits behavior characteristic of Pony malware"
@@ -70,13 +71,11 @@ class Pony_APIs(Signature):
                         with open(dump_path, "rb") as dump_file:
                             cData = dump_file.read()
                         # Get the aPLib header + data
-                        buf = re.findall(r"aPLib .*PWDFILE", cData,
-                                         re.DOTALL|re.MULTILINE)
+                        buf = re.findall(r"aPLib .*PWDFILE", cData, re.DOTALL | re.MULTILINE)
                         # Strip out the header
                         if buf and len(buf[0]) > 200:
                             data = buf[0][200:]
-                            output = re.findall("(https?:\/\/.+?(?:\.php|\.exe))",
-                                                data)
+                            output = re.findall("(https?:\/\/.+?(?:\.php|\.exe))", data)
                             if output:
                                 for ioc in output:
                                     if all(z in string.printable for z in ioc):

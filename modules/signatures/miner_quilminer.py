@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class QuilMinerNetworkBehavior(Signature):
     name = "quilclipper_behavior"
     description = "QuilMiner network artifacts detected"

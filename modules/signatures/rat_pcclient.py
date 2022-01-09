@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PcClientMutexes(Signature):
     name = "rat_pcclient"
     description = "Creates known PcClient mutex and/or file changes."
@@ -24,13 +25,13 @@ class PcClientMutexes(Signature):
     authors = ["threatlead"]
     references = ["https://malwr.com/analysis/MDIxN2NhMjg4MTg2NDY4MWIyNTE0Zjk5MTY1OGU4YzE/"]
     minimum = "0.5"
-    
+
     def run(self):
         indicators = [
             "BKLANG.*",
             "VSLANG.*",
         ]
-        
+
         for indicator in indicators:
             if self.check_mutex(pattern=indicator, regex=True):
                 return True

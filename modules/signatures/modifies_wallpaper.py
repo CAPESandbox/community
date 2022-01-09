@@ -15,12 +15,13 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ModifiesDesktopWallpaper(Signature):
     name = "modifies_desktop_wallpaper"
     description = "Attempts to modify desktop wallpaper"
     severity = 3
     categories = ["ransomware"]
-    authors = ["Kevin Ross","Brad Spengler"]
+    authors = ["Kevin Ross", "Brad Spengler"]
     minimum = "1.3"
     evented = True
 

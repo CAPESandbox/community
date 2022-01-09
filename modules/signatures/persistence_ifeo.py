@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PersistenceIFEO(Signature):
     name = "persistence_ifeo"
     description = "Modifies Image File Execution Options, indicative of process injection or persistence"

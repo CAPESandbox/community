@@ -21,6 +21,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AndromutMutexes(Signature):
     name = "andromut_mutexes"
     description = "Creates known Andromut mutexes"
@@ -32,8 +33,7 @@ class AndromutMutexes(Signature):
 
     def run(self):
         indicators = [
-            "mutshell"
-            "mutshellmy",
+            "mutshell" "mutshellmy",
             "mutshellmy\d+",
         ]
 

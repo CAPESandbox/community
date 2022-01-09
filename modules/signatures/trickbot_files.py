@@ -1,5 +1,6 @@
 from lib.cuckoo.common.abstracts import Signature
 
+
 class TrickBotTaskDelete(Signature):
     name = "TrickBotTaskDelete"
     description = "Exhibits behavior characteristic of TrickBot banker trojan"
@@ -17,11 +18,13 @@ class TrickBotTaskDelete(Signature):
     filter_apinames = set(["DeleteFileW"])
 
     def on_call(self, call, process):
-        if call["api"] == ("DeleteFileW") and (self.get_argument(call, "FileName").endswith("TrickBot.job")
-                                               or self.get_argument(call, "FileName").endswith("TrickBot") or
-                                               self.get_argument(call, "FileName").endswith("Drivers update.job")
-                                               or self.get_argument(call, "FileName").endswith("Tasks\\Bot.job")):
-            self.data.append({"file" : self.get_argument(call, "FileName") })
+        if call["api"] == ("DeleteFileW") and (
+            self.get_argument(call, "FileName").endswith("TrickBot.job")
+            or self.get_argument(call, "FileName").endswith("TrickBot")
+            or self.get_argument(call, "FileName").endswith("Drivers update.job")
+            or self.get_argument(call, "FileName").endswith("Tasks\\Bot.job")
+        ):
+            self.data.append({"file": self.get_argument(call, "FileName")})
             return True
 
         return None

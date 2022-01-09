@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class MasqueradesProcessName(Signature):
     name = "masquerade_process_name"
     description = "Attempts to masquerade or mimic a legitimate process or file name"
@@ -61,4 +62,4 @@ class MasqueradesProcessName(Signature):
                 self.data.append({"file": wfilematch})
                 return True
 
-        return False 
+        return False

@@ -20,6 +20,7 @@ try:
 except ImportError:
     import re
 
+
 class RansomwareMessage(Signature):
     name = "ransomware_message"
     description = "Writes a potential ransom message to disk"
@@ -43,8 +44,7 @@ class RansomwareMessage(Signature):
             "restore the files",
             "restore the data",
             "recover files",
-            "recover data"
-            "recover the files",
+            "recover data" "recover the files",
             "recover the data",
             "has been locked",
             "pay fine",
@@ -121,18 +121,19 @@ class RansomwareMessage(Signature):
             "personal identifier",
             "personal identification code",
             "get back my",
-            "get back your"
+            "get back your",
         ]
         self.patterns = "|".join(self.indicators)
 
     filter_apinames = set(["NtWriteFile"])
 
-
     def on_call(self, call, process):
         if call["api"] == "NtWriteFile":
             buff = self.get_raw_argument(call, "Buffer").lower()
             filepath = self.get_raw_argument(call, "HandleName")
-            if (filepath.lower() == "\\??\\physicaldrive0" or filepath.lower().startswith("\\device\\harddisk")) and len(buff) >= 128:
+            if (filepath.lower() == "\\??\\physicaldrive0" or filepath.lower().startswith("\\device\\harddisk")) and len(
+                buff
+            ) >= 128:
                 if len(set(re.findall(self.patterns, buff))) > 1:
                     if filepath not in self.ransomfile:
                         self.ransomfile.append(filepath)
@@ -155,6 +156,7 @@ class RansomwareMessage(Signature):
 
         return False
 
+
 class RansomwareMessageMultipleLocations(Signature):
     name = "ransomware_message_multiple_locations"
     description = "Drops the same text/html/hta file across a large number of filesystem locations commonly seen in ransomware"
@@ -170,7 +172,11 @@ class RansomwareMessageMultipleLocations(Signature):
     def run(self):
         ret = False
         for dropped in self.results.get("dropped", []) or []:
-            if dropped is not None and "ASCII text" in dropped["type"] or any(name.endswith((".txt", ".html", ".hta")) for name in dropped.get("name") or []):
+            if (
+                dropped is not None
+                and "ASCII text" in dropped["type"]
+                or any(name.endswith((".txt", ".html", ".hta")) for name in dropped.get("name") or [])
+            ):
                 if dropped.get("guest_paths", "") is not None and len(dropped.get("guest_paths", "")) > 50:
                     ret = True
                     self.data.append({"filename": dropped["name"][0]})

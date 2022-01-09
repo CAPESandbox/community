@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ArmadilloMutex(Signature):
     name = "packer_armadillo_mutex"
     description = "Detected Armadillo packer using a known mutex"
@@ -25,9 +26,7 @@ class ArmadilloMutex(Signature):
     ttp = ["T1045"]
 
     def run(self):
-        indicators = [
-            ".*:SIMULATEEXPIRED"
-        ]
+        indicators = [".*:SIMULATEEXPIRED"]
 
         ret = False
         for indicator in indicators:

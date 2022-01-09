@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PoisonIvyMutexes(Signature):
     name = "rat_poisonivy_mutexes"
     description = "Creates known Poison Ivy mutexes"
@@ -14,13 +15,7 @@ class PoisonIvyMutexes(Signature):
     minimum = "1.2"
 
     def run(self):
-        indicators = [
-            ")!VoqA.I4",
-            "K^DJA^#FE",
-            "KEIVH^#$S",
-            "%1Sjfhtd8",
-            "2SF#@R@#!"
-        ]
+        indicators = [")!VoqA.I4", "K^DJA^#FE", "KEIVH^#$S", "%1Sjfhtd8", "2SF#@R@#!"]
 
         for indicator in indicators:
             if self.check_mutex(pattern=indicator):

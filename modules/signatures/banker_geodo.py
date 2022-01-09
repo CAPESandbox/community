@@ -4,20 +4,31 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Geodo(Signature):
     name = "geodo_banking_trojan"
     description = "Geodo banker Trojan"
     severity = 3
     categories = ["banker", "Trojan"]
-    families = ["Geodo","Emotet"]
+    families = ["Geodo", "Emotet"]
     authors = ["Optiv"]
     minimum = "1.2"
 
     def run(self):
-        match_file = self.check_file(pattern=".*\\\\Application\\ Data\\\\Microsoft\\\\[a-z]{3}(api32|audio|bios|boot|cap32|common|config|crypt|edit32|error|mgr32|serial|setup|share|sock|system|update|video|windows)\.exe$", regex=True, all=True)
+        match_file = self.check_file(
+            pattern=".*\\\\Application\\ Data\\\\Microsoft\\\\[a-z]{3}(api32|audio|bios|boot|cap32|common|config|crypt|edit32|error|mgr32|serial|setup|share|sock|system|update|video|windows)\.exe$",
+            regex=True,
+            all=True,
+        )
         match_batch_file = self.check_file(pattern=".*\\\\Application\\ Data\\\\\d{1,10}\.bat$", regex=True, all=True)
-        match_runkey = self.check_key(pattern=".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\[a-z]{3}(api32|audio|bios|boot|cap32|common|config|crypt|edit32|error|mgr32|serial|setup|share|sock|system|update|video|windows)\.exe$", regex=True, all=True)
-        match_otherkey = self.check_key(pattern=".*\\\\Microsoft\\\\Office\\\\Common\\\\(?P<hex>[A-F0-9]+)\\\\(?P=hex)(CS|PS|SS|RS)", regex=True, all=True)
+        match_runkey = self.check_key(
+            pattern=".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\[a-z]{3}(api32|audio|bios|boot|cap32|common|config|crypt|edit32|error|mgr32|serial|setup|share|sock|system|update|video|windows)\.exe$",
+            regex=True,
+            all=True,
+        )
+        match_otherkey = self.check_key(
+            pattern=".*\\\\Microsoft\\\\Office\\\\Common\\\\(?P<hex>[A-F0-9]+)\\\\(?P=hex)(CS|PS|SS|RS)", regex=True, all=True
+        )
         match_mutex = self.check_mutex(pattern="^[A-F0-9]{1,8}(I|M|RM)$", regex=True, all=True)
         if match_file:
             for match in match_file:
@@ -36,6 +47,6 @@ class Geodo(Signature):
                 self.data.append({"mutex": match})
 
         if match_file and match_batch_file and match_mutex and match_runkey and match_otherkey:
-                return True
+            return True
 
         return False

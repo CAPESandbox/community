@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class StackPivot(Signature):
     name = "stack_pivot"
     description = "Stack pivoting was detected when using a critical API"
@@ -43,7 +44,18 @@ class StackPivot(Signature):
             "winword.exe",
         ]
 
-    filter_apinames = set(["NtAllocateVirtualMemory", "NtProtectVirtualMemory", "VirtualProtectEx", "NtWriteVirtualMemory", "NtWow64WriteVirtualMemory64", "WriteProcessMemory", "NtMapViewOfSection", "URLDownloadToFileW"])
+    filter_apinames = set(
+        [
+            "NtAllocateVirtualMemory",
+            "NtProtectVirtualMemory",
+            "VirtualProtectEx",
+            "NtWriteVirtualMemory",
+            "NtWow64WriteVirtualMemory64",
+            "WriteProcessMemory",
+            "NtMapViewOfSection",
+            "URLDownloadToFileW",
+        ]
+    )
 
     def on_call(self, call, process):
         if process["process_name"].lower() in self.processes:
@@ -55,12 +67,13 @@ class StackPivot(Signature):
 
     def on_complete(self):
         for proc in self.procs:
-            self.data.append({"process" : proc})
+            self.data.append({"process": proc})
 
         if self.data:
             return True
         else:
             return False
+
 
 class StackPivotFileCreated(Signature):
     name = "stack_pivot_file_created"
@@ -97,13 +110,14 @@ class StackPivotFileCreated(Signature):
             pivot = self.get_argument(call, "StackPivoted")
             filename = self.get_argument(call, "FileName")
             if pivot == "yes":
-                self.data.append({pname : filename})
+                self.data.append({pname: filename})
 
     def on_complete(self):
         if self.data:
             return True
         else:
             return False
+
 
 class StackPivotProcessCreate(Signature):
     name = "stack_pivot_process_create"
@@ -140,7 +154,7 @@ class StackPivotProcessCreate(Signature):
             pivot = self.get_argument(call, "StackPivoted")
             cmdline = self.get_argument(call, "CommandLine")
             if pivot == "yes":
-                self.data.append({pname.replace(".", "_") : cmdline})
+                self.data.append({pname.replace(".", "_"): cmdline})
 
     def on_complete(self):
         if self.data:

@@ -17,6 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 ProcessBreakOnTermination = 29
 
+
 class CriticalProcess(Signature):
     name = "critical_process"
     description = "A process was set to shut the system down when terminated"
@@ -39,9 +40,9 @@ class CriticalProcess(Signature):
         if call["return"] == 0 and infoclass == ProcessBreakOnTermination:
             processinfo = self.get_raw_argument(call, "ProcessInformation")
             if processinfo == 1:
-                self.data.append({"process" : process["process_name"] + ":" + str(process["process_id"])})
+                self.data.append({"process": process["process_name"] + ":" + str(process["process_id"])})
 
     def on_complete(self):
-         if self.data:
-             return True
-         return False
+        if self.data:
+            return True
+        return False

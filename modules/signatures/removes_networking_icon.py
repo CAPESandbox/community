@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class RemovesNetworkingIcon(Signature):
     name = "removes_networking_icon"
     description = "Removes Networking icon from Start menu, Taskbar and notifications"
@@ -24,7 +25,7 @@ class RemovesNetworkingIcon(Signature):
     minimum = "1.3"
     evented = True
 
-    def run(self):    
+    def run(self):
         indicators = [
             "HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\HideSCANetwork",
         ]

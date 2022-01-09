@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DotNetCLRUsageLogKnob(Signature):
     name = "dotnet_clr_usagelog_regkeys"
     description = "Modifies .NET CLR Usage Log output settings"
@@ -25,7 +26,7 @@ class DotNetCLRUsageLogKnob(Signature):
     evented = True
     reference = ["https://bohops.com/2021/03/16/investigating-net-clr-usage-log-tampering-techniques-for-edr-evasion/"]
 
-    def run(self):    
+    def run(self):
         indicators = [
             "(HKEY_CURRENT_USER|HKEY_LOCAL_MACHINE)\\\\SOFTWARE\\\\\.NETFramework\\\\NGenAssemblyUsageLog",
         ]

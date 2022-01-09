@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PYSAMutexes(Signature):
     name = "pysa_mutexes"
     description = "Creates known PYSA/Mespinoza ransomware mutexes"
