@@ -1,16 +1,16 @@
 # coding=utf-8
-from __future__ import absolute_import
-from __future__ import print_function
-import os
-import dpkt
-import struct
-import socket
+from __future__ import absolute_import, print_function
 import hashlib
 import logging
+import os
+import socket
+import struct
 from base64 import b64encode
+
+import dpkt
+import six
 from lib.cuckoo.common.abstracts import Report
 from lib.cuckoo.common.constants import CUCKOO_ROOT
-import six
 
 try:
     import Crypto.Util.asn1 as asn1

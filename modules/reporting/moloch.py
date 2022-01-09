@@ -3,18 +3,20 @@
 # See the file 'docs/LICENSE' for copying permission.
 
 from __future__ import absolute_import
-import os
-import logging
-import subprocess
+import base64
+import copy
 import json
-import sys
-import urllib.request, urllib.error, urllib.parse
-import urllib.request, urllib.parse, urllib.error
-import time
+import logging
+import os
 import socket
 import struct
-import copy
-import base64
+import subprocess
+import sys
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
+
 from six.moves import map
 
 try:
@@ -22,8 +24,8 @@ try:
 except ImportError:
     import re
 
-from lib.cuckoo.common.constants import CUCKOO_ROOT
 from lib.cuckoo.common.abstracts import Report
+from lib.cuckoo.common.constants import CUCKOO_ROOT
 
 log = logging.getLogger(__name__)
 

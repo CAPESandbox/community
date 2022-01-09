@@ -3,15 +3,14 @@
 # See the file 'docs/LICENSE' for copying permission.
 
 from __future__ import absolute_import
-import socket
 import logging
-import xmlrpc.client
+import socket
 import subprocess
+import xmlrpc.client
 
 from lib.cuckoo.common.abstracts import Machinery
 from lib.cuckoo.common.constants import CUCKOO_GUEST_PORT
-from lib.cuckoo.common.exceptions import CuckooCriticalError
-from lib.cuckoo.common.exceptions import CuckooMachineError
+from lib.cuckoo.common.exceptions import CuckooCriticalError, CuckooMachineError
 from lib.cuckoo.common.utils import TimeoutServer
 
 log = logging.getLogger(__name__)

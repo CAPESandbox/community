@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 # Detects suspicious behaviour where malware stores or writes data/files to the recycler
 class Accesses_RecycleBin(Signature):
     name = "accesses_recyclebin"

@@ -13,8 +13,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from lib.cuckoo.common.abstracts import Signature
 import struct
+
+from lib.cuckoo.common.abstracts import Signature
 
 
 class Chimera_APIs(Signature):

@@ -3,14 +3,14 @@
 # See the file 'docs/LICENSE' for copying permission.
 
 from __future__ import absolute_import
-import subprocess
-import xml.etree.ElementTree as ET
-import libvirt
 import logging
 import os
+import subprocess
+import xml.etree.ElementTree as ET
 
+import libvirt
 from lib.cuckoo.common.abstracts import LibVirtMachinery
-from lib.cuckoo.common.exceptions import CuckooMachineError, CuckooCriticalError
+from lib.cuckoo.common.exceptions import CuckooCriticalError, CuckooMachineError
 
 log = logging.getLogger(__name__)
 

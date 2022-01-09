@@ -7,8 +7,9 @@ try:
 except ImportError:
     import re
 
-from lib.cuckoo.common.abstracts import Signature
 import struct
+
+from lib.cuckoo.common.abstracts import Signature
 
 
 class StealthFile(Signature):

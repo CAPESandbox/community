@@ -2,16 +2,17 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
-import os.path
-import time
 import logging
+import os.path
 import subprocess
+import time
 from threading import Thread
-from lib.core.config import Config
+
 from lib.common.abstracts import Auxiliary
+from lib.common.constants import ROOT
 from lib.common.exceptions import CuckooPackageError
 from lib.common.results import upload_to_host
-from lib.common.constants import ROOT
+from lib.core.config import Config
 
 
 class Procmon(Auxiliary, Thread):

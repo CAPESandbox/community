@@ -16,9 +16,9 @@
 # else in the reporting folder or the like, you will want to make sure
 # that it's name comes before "zexecreport".
 
-import subprocess
 import logging
 import os
+import subprocess
 
 from lib.cuckoo.common.abstracts import Report
 from lib.cuckoo.common.config import Config

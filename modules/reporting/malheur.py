@@ -3,16 +3,18 @@
 # See the file 'docs/LICENSE' for copying permission.
 
 from __future__ import absolute_import
-import os
-import subprocess
 import hashlib
-import urllib.request, urllib.parse, urllib.error
+import os
 import random
+import subprocess
+import urllib.error
+import urllib.parse
+import urllib.request
 
-from lib.cuckoo.common.constants import CUCKOO_ROOT
-from lib.cuckoo.common.abstracts import Report
-from lib.cuckoo.common.exceptions import CuckooReportError
 import six
+from lib.cuckoo.common.abstracts import Report
+from lib.cuckoo.common.constants import CUCKOO_ROOT
+from lib.cuckoo.common.exceptions import CuckooReportError
 
 
 def sanitize_file(filename):

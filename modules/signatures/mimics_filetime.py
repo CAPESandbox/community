@@ -8,6 +8,7 @@ except ImportError:
     import re
 
 import struct
+
 from lib.cuckoo.common.abstracts import Signature
 
 

@@ -3,12 +3,14 @@
 # See the file 'docs/LICENSE' for copying permission.
 
 from __future__ import absolute_import
-import os
-import json
-import requests
 import hashlib
-import urllib.request, urllib.parse, urllib.error
+import json
+import os
+import urllib.error
+import urllib.parse
+import urllib.request
 
+import requests
 from lib.cuckoo.common.abstracts import Processing
 from lib.cuckoo.common.exceptions import CuckooProcessingError
 from lib.cuckoo.common.objects import File

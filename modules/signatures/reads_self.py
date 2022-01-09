@@ -3,6 +3,7 @@
 # See the file 'docs/LICENSE' for copying permission.
 
 import struct
+
 from lib.cuckoo.common.abstracts import Signature
 
 

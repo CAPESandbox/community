@@ -1,9 +1,10 @@
 from __future__ import absolute_import
 import logging
 import os
-import time
-import threading
 import subprocess
+import threading
+import time
+
 from lib.common.abstracts import Auxiliary
 from lib.common.results import upload_to_host
 from lib.core.config import Config

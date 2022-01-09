@@ -18,8 +18,8 @@ try:
 except:
     import re
 
-from datetime import date
-from datetime import datetime
+from datetime import date, datetime
+
 from lib.cuckoo.common.abstracts import Signature
 
 

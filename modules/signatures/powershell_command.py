@@ -13,10 +13,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from lib.cuckoo.common.abstracts import Signature
-from lib.cuckoo.common.utils import convert_to_printable
 import base64
 import binascii
+
+from lib.cuckoo.common.abstracts import Signature
+from lib.cuckoo.common.utils import convert_to_printable
 
 try:
     import re2 as re

@@ -1,14 +1,11 @@
 from __future__ import absolute_import
-
 import logging
 import time
-import boto3
 
+import boto3
 from lib.cuckoo.common.abstracts import Machinery
 from lib.cuckoo.common.config import Config
-from lib.cuckoo.common.exceptions import CuckooCriticalError
-from lib.cuckoo.common.exceptions import CuckooMachineError
-
+from lib.cuckoo.common.exceptions import CuckooCriticalError, CuckooMachineError
 from sqlalchemy.exc import SQLAlchemyError
 
 logging.getLogger("boto3").setLevel(logging.CRITICAL)
