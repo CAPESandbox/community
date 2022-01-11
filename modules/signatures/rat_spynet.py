@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class SpynetRat(Signature):
     name = "rat_spynet"
     description = "Creates known SpyNet mutexes and/or registry changes."
@@ -31,7 +32,7 @@ class SpynetRat(Signature):
         "https://malwr.com/analysis/ZDQ1NjBhNWIzNTdkNDRhNjhkZTFmZTBkYTU2YjMwNzg/",
         "https://malwr.com/analysis/MjkxYmE2YzczNzcwNGJiZjljNDcwMzA2ZDkyNDU2Y2M/",
         "https://malwr.com/analysis/N2E3NWRiNDMyYjIwNGE0NTk3Y2E5NWMzN2UwZTVjMzI/",
-        "https://malwr.com/analysis/N2Q2NWY0Y2MzOTM0NDEzNmE1MTdhOThiNTQxMzhiNzk/"   
+        "https://malwr.com/analysis/N2Q2NWY0Y2MzOTM0NDEzNmE1MTdhOThiNTQxMzhiNzk/",
     ]
     minimum = "1.2"
 
@@ -42,7 +43,7 @@ class SpynetRat(Signature):
             ".*Spy-Net.*",
             ".*X_PASSWORDLIST_X.*",
             ".*X_BLOCKMOUSE_X.*",
-            #".*PERSIST", # Causes false positive detection on XtremeRAT samples.
+            # ".*PERSIST", # Causes false positive detection on XtremeRAT samples.
             ".*_SAIR",
         ]
 
@@ -66,5 +67,5 @@ class SpynetRat(Signature):
                         break
                 if is_good:
                     return True
-        
+
         return False

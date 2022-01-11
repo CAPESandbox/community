@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CreatesLargeKey(Signature):
     name = "creates_largekey"
     description = "Creates or sets a registry key to a long series of bytes, possibly to store a binary or malware config"
@@ -30,6 +31,7 @@ class CreatesLargeKey(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.saw_large = False
         self.regkeyvals = set()
+
     filter_apinames = set(["NtSetValueKey", "RegSetValueExA", "RegSetValueExW"])
 
     def on_call(self, call, process):
@@ -43,5 +45,5 @@ class CreatesLargeKey(Signature):
     def on_complete(self):
         if self.saw_large:
             for keyval in self.regkeyvals:
-                self.data.append({"regkeyval" : keyval})
+                self.data.append({"regkeyval": keyval})
         return self.saw_large

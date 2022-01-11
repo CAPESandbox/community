@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class OfficeSuspiciousProcesses(Signature):
     name = "office_suspicious_processes"
     description = "Office document spawned a series of suspicious child processes"
@@ -42,17 +43,17 @@ class OfficeSuspiciousProcesses(Signature):
                 for proc in self.suspiciousprocs:
                     if proc in cmdline:
                         self.mastertrigger = True
-        
+
         if processname in self.suspiciousprocs:
-             cmdline = self.get_argument(call, "CommandLine")
-             if cmdline:
-                 for proc in self.suspiciousprocs:
+            cmdline = self.get_argument(call, "CommandLine")
+            if cmdline:
+                for proc in self.suspiciousprocs:
                     if proc in cmdline:
                         self.secondarytrigger = True
-    
+
     def on_complete(self):
         if self.results["info"]["package"] in ["doc", "xls", "ppt"]:
             if self.mastertrigger and self.secondarytrigger:
                 return True
-            
+
         return False

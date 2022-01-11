@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiVMServices(Signature):
     name = "antivm_generic_services"
     description = "Enumerates services, possibly for anti-virtualization"
@@ -30,12 +31,12 @@ class AntiVMServices(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.lastprocess = None
 
-    #filter_apinames = set(["EnumServicesStatus", "EnumServicesStatusEx", "RegOpenKeyExA", "RegEnumKeyExA", "RegOpenKeyExW", "RegEnumKeyExW"])
+    # filter_apinames = set(["EnumServicesStatus", "EnumServicesStatusEx", "RegOpenKeyExA", "RegEnumKeyExA", "RegOpenKeyExW", "RegEnumKeyExW"])
     filter_apinames = set(["RegOpenKeyExA", "RegEnumKeyExA", "RegOpenKeyExW", "RegEnumKeyExW"])
 
     def on_call(self, call, process):
         # this API is not currently hooked
-        #if call["api"].startswith("EnumServicesStatus"):
+        # if call["api"].startswith("EnumServicesStatus"):
         #    return True
 
         if process is not self.lastprocess:
@@ -45,16 +46,16 @@ class AntiVMServices(Signature):
         if not self.handle:
             if call["api"].startswith("RegOpenKeyEx"):
                 correct = False
-                if self.get_argument(call,"SubKey").lower() == "system\\controlset001\\services":
+                if self.get_argument(call, "SubKey").lower() == "system\\controlset001\\services":
                     correct = True
-                elif self.get_argument(call,"SubKey").lower() == "system\\currentcontrolset\\services":
+                elif self.get_argument(call, "SubKey").lower() == "system\\currentcontrolset\\services":
                     correct = True
 
                 if correct:
-                    self.handle = self.get_argument(call,"Handle")
+                    self.handle = self.get_argument(call, "Handle")
                 else:
                     self.handle = None
         else:
             if call["api"].startswith("RegEnumKeyEx"):
-                if self.get_argument(call,"Handle") == self.handle:
+                if self.get_argument(call, "Handle") == self.handle:
                     return True

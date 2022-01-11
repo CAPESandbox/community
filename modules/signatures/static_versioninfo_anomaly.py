@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class VersionInfoAnomaly(Signature):
     name = "static_versioninfo_anomaly"
     description = "Unusual version info supplied for binary"
@@ -21,7 +22,7 @@ class VersionInfoAnomaly(Signature):
         msincopyright = None
         msincompanyname = None
         mstransposed = False
-    
+
         # Microsoft Corporation sorted
         mscorpsorted = " CMacfiinoooooprrrstt"
 
@@ -32,7 +33,7 @@ class VersionInfoAnomaly(Signature):
                 else:
                     msincopyright = False
             elif info["name"] == "CompanyName":
-                if ''.join(sorted(info["value"])) == mscorpsorted and info["value"] != "Microsoft Corporation":
+                if "".join(sorted(info["value"])) == mscorpsorted and info["value"] != "Microsoft Corporation":
                     mstransposed = True
 
                 if "microsoft" in info["value"].lower():
@@ -41,10 +42,10 @@ class VersionInfoAnomaly(Signature):
                     msincompanyname = False
 
         if msincopyright == True and msincompanyname == False:
-            self.data.append({"anomaly" : "Microsoft mentioned in LegalCopyright, but not in CompanyName field"})
+            self.data.append({"anomaly": "Microsoft mentioned in LegalCopyright, but not in CompanyName field"})
             found_sig = True
         if mstransposed == True:
-            self.data.append({"anomaly" : "CompanyName is a transposed form of \"Microsoft Corporation\"."})
+            self.data.append({"anomaly": 'CompanyName is a transposed form of "Microsoft Corporation".'})
             self.families = ["Bedep"]
             found_sig = True
 

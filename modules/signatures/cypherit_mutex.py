@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CypherITMutexes(Signature):
     name = "cypherit_mutexes"
     description = "Creates known CypherIT/Frenchy Shellcode mutexes"

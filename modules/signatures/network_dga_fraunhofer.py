@@ -21,6 +21,7 @@ from lib.cuckoo.common.fraunhofer_helper import get_dga_lookup_dict
 
 try:
     from flor import BloomFilter
+
     HAS_FLOR = True
 except ImportError:
     HAS_FLOR = False

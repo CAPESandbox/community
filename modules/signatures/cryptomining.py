@@ -17,6 +17,7 @@ import re
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CryptominingStratumCommand(Signature):
     name = "cyrptomining_stratum_command"
     description = "A cryptomining command was executed"
@@ -26,21 +27,24 @@ class CryptominingStratumCommand(Signature):
     authors = ["Kevin Ross", "Cuckoo Technologies"]
     minimum = "1.3"
     evented = True
-    references = ["blog.talosintelligence.com/2018/01/malicious-xmr-mining.html", "www.fireeye.com/blog/threat-research/2018/07/cryptocurrencies-cyber-crime-growth-of-miners.html"]
+    references = [
+        "blog.talosintelligence.com/2018/01/malicious-xmr-mining.html",
+        "www.fireeye.com/blog/threat-research/2018/07/cryptocurrencies-cyber-crime-growth-of-miners.html",
+    ]
     ttp = ["T1496"]
 
     def run(self):
-        xmr_address_re = '-u[ ]*4[0-9AB][123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{93}'
+        xmr_address_re = "-u[ ]*4[0-9AB][123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{93}"
         xmr_strings = ["stratum+tcp://", "xmrig", "xmr-stak", "supportxmr.com:", "dwarfpool.com:", "minergate", "xmr.", "monero."]
 
         ret = False
         for cmdline in self.results["behavior"]["summary"]["executed_commands"]:
             if re.search(xmr_address_re, cmdline):
-                self.data.append({"command" : cmdline })
+                self.data.append({"command": cmdline})
                 ret = True
             for xmr_string in xmr_strings:
                 if xmr_string in cmdline.lower():
-                    self.data.append({"command" : cmdline })
+                    self.data.append({"command": cmdline})
                     ret = True
 
         return ret

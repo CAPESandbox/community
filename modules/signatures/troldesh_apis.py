@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Troldesh_APIs(Signature):
     name = "troldesh_behavior"
     description = "Exhibits behavior characteristic of Troldesh ransomware"

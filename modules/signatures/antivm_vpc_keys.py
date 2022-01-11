@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class VPCDetectKeys(Signature):
     name = "antivm_vpc_keys"
     description = "Detects Virtual PC through the presence of a registry key"

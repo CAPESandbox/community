@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ProcessInterest(Signature):
     name = "process_interest"
     description = "Expresses interest in specific running processes"
@@ -44,12 +45,11 @@ class ProcessInterest(Signature):
             if self.lastprocessname:
                 self.interested_processes.add(self.lastprocessname)
 
-
     def on_complete(self):
         if self.lastprocessname:
             self.interested_processes.add(self.lastprocessname)
         if len(self.interested_processes):
             for proc in self.interested_processes:
-                self.data.append({"process" : proc})
+                self.data.append({"process": proc})
             return True
         return False

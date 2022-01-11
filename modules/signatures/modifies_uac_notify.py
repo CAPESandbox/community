@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ModifiesUACNotify(Signature):
     name = "modify_uac_prompt"
     description = "Attempts to modify UAC prompt behavior"

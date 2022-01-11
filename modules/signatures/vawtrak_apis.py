@@ -20,6 +20,7 @@ except:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Vawtrak_APIs(Signature):
     name = "vawtrak_behavior"
     description = "Exhibits behavior characteristics of Vawtrak / Neverquest malware."
@@ -31,8 +32,7 @@ class Vawtrak_APIs(Signature):
     minimum = "1.3"
     evented = True
 
-    filter_apinames = set(["NtOpenProcess", "NtCreateEvent", "NtOpenEvent",
-                           "NtCreateMutant", "RegSetValueExA", "CreateThread"])
+    filter_apinames = set(["NtOpenProcess", "NtCreateEvent", "NtOpenEvent", "NtCreateMutant", "RegSetValueExA", "CreateThread"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

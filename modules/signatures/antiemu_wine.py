@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class WineDetectReg(Signature):
     name = "antiemu_wine_reg"
     description = "Detects the presence of Wine emulator via registry key"

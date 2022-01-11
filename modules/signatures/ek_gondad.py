@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Gondad_JS(Signature):
     name = "gondad_js"
     description = "Executes obfuscated JavaScript indicative of Gondad Exploit Kit"

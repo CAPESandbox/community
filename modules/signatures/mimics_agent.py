@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class MimicsAgent(Signature):
     name = "mimics_agent"
     description = "Mimics the system's user agent string for its own requests"
@@ -17,7 +18,7 @@ class MimicsAgent(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.useragent = None
 
-    filter_apinames = set(["ObtainUserAgentString","InternetOpenA","InternetOpenW"])
+    filter_apinames = set(["ObtainUserAgentString", "InternetOpenA", "InternetOpenW"])
     filter_analysistypes = set(["file"])
 
     def on_call(self, call, process):

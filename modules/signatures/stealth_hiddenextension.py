@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class StealthHiddenExtension(Signature):
     name = "stealth_hidden_extension"
     description = "Attempts to modify Explorer settings to prevent file extensions from being displayed"
@@ -25,6 +26,10 @@ class StealthHiddenExtension(Signature):
     ttp = ["T1158", "T1054"]
 
     def run(self):
-        if self.check_write_key(pattern=".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Advanced\\\\HideFileExt$", regex=True, all=True):
-                return True
+        if self.check_write_key(
+            pattern=".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Advanced\\\\HideFileExt$",
+            regex=True,
+            all=True,
+        ):
+            return True
         return False

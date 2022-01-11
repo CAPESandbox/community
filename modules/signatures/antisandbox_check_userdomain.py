@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiSandboxCheckUserdomain(Signature):
     name = "antisandbox_check_userdomain"
     description = "Checks userdomain environment variable using VBE environ function"

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class LodaRATFileBehavior(Signature):
     name = "lodarat_file_behavior"
     description = "LodaRAT file modification behavior detected"

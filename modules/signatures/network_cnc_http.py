@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class NetworkCnCHTTP(Signature):
     name = "network_cnc_http"
     description = "HTTP traffic contains suspicious features which may be indicative of malware related traffic"
@@ -38,7 +39,7 @@ class NetworkCnCHTTP(Signature):
             "^http://.*\.microsoft\.com/.*",
             "^http://.*\.windowsupdate\.com/.*",
             "http://.*\.adobe\.com/.*",
-            ]
+        ]
 
         # HTTP request Features. Done like this due to for loop appending data each time instead of once so we wait to end of checks to add summary of anomalies
         post_noreferer = False
@@ -56,7 +57,7 @@ class NetworkCnCHTTP(Signature):
                 is_whitelisted = False
                 for white in whitelist:
                     if re.match(white, req["uri"], re.IGNORECASE):
-                        is_whitelisted = True                              
+                        is_whitelisted = True
 
                 # Check HTTP features
                 request = req["uri"]
@@ -86,28 +87,28 @@ class NetworkCnCHTTP(Signature):
                         suspectrequest.append(request)
 
         if post_noreferer:
-            self.data.append({"post_no_referer" : "HTTP traffic contains a POST request with no referer header" })
+            self.data.append({"post_no_referer": "HTTP traffic contains a POST request with no referer header"})
             self.weight += 1
 
         if post_nouseragent:
-            self.data.append({"post_no_useragent" : "HTTP traffic contains a POST request with no user-agent header" })
+            self.data.append({"post_no_useragent": "HTTP traffic contains a POST request with no user-agent header"})
             self.weight += 1
 
         if get_nouseragent:
-            self.data.append({"get_no_useragent" : "HTTP traffic contains a GET request with no user-agent header" })
+            self.data.append({"get_no_useragent": "HTTP traffic contains a GET request with no user-agent header"})
             self.weight += 1
 
         if version1:
-            self.data.append({"http_version_old" : "HTTP traffic uses version 1.0" })
+            self.data.append({"http_version_old": "HTTP traffic uses version 1.0"})
             self.weight += 1
 
         if iphost:
-            self.data.append({"ip_hostname" : "HTTP connection was made to an IP address rather than domain name" })
+            self.data.append({"ip_hostname": "HTTP connection was made to an IP address rather than domain name"})
             self.weight += 1
 
         if self.weight and len(suspectrequest) > 0:
             for request in suspectrequest:
-                self.data.append({"suspicious_request" : request})
+                self.data.append({"suspicious_request": request})
 
         if self.weight:
             return True

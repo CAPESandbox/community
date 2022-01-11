@@ -20,6 +20,7 @@ try:
 except ImportError:
     import re
 
+
 class BrowserAddon(Signature):
     name = "browser_addon"
     description = "Installs a browser addon or extension"
@@ -30,13 +31,13 @@ class BrowserAddon(Signature):
 
     def run(self):
         reg_indicators = [
-        ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\Toolbar\\\\.*",
-        ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Mozilla\\\\Firefox\\\\Extensions\\\\.*",
-        ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?MozillaPlugins\\\\.*",
-        ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Google\\\\Chrome\\\\Extensions\\\\.*",
+            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\Toolbar\\\\.*",
+            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Mozilla\\\\Firefox\\\\Extensions\\\\.*",
+            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?MozillaPlugins\\\\.*",
+            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Google\\\\Chrome\\\\Extensions\\\\.*",
         ]
         whitelist = [
-        ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\Toolbar\\\\Locked$",
+            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\Toolbar\\\\Locked$",
         ]
         found = False
         for indicator in reg_indicators:
@@ -49,6 +50,6 @@ class BrowserAddon(Signature):
                             addit = False
                             break
                     if addit:
-                        self.data.append({"key" : match })
+                        self.data.append({"key": match})
                         found = True
         return found

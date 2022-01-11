@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class TitanPacked(Signature):
     name = "packer_titan"
     description = "Executable file is packed/obfuscated with Titan"
@@ -27,7 +28,7 @@ class TitanPacked(Signature):
     def run(self):
         for section in self.results.get("static", {}).get("pe", {}).get("sections", []):
             if section["name"].lower().startswith(".titan"):
-                self.data.append({"section" : section})
+                self.data.append({"section": section})
                 return True
 
         return False

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ZeusP2P(Signature):
     name = "banker_zeus_p2p"
     description = "Zeus P2P (Banking Trojan)"
@@ -23,13 +24,15 @@ class ZeusP2P(Signature):
     families = ["Zeus"]
     authors = ["Robby Zeitfuchs", "Optiv"]
     minimum = "1.2"
-    references = ["https://malwr.com/analysis/NmNhODg5ZWRkYjc0NDY0M2I3YTJhNDRlM2FlOTZiMjA/", 
-                  "https://malwr.com/analysis/MmMwNDJlMTI0MTNkNGFjNmE0OGY3Y2I5MjhiMGI1NzI/",
-                  "https://malwr.com/analysis/MzY5ZTM2NzZhMzI3NDY2YjgzMjJiODFkODZkYzIwYmQ/",
-                  "https://www.virustotal.com/de/file/301fcadf53e6a6167e559c84d6426960af8626d12b2e25aa41de6dce511d0568/analysis/#behavioural-info",
-                  "https://www.virustotal.com/de/file/d3cf49a7ac726ee27eae9d29dee648e34cb3e8fd9d494e1b347209677d62cdf9/analysis/#behavioural-info",
-                  "https://www.virustotal.com/de/file/d3cf49a7ac726ee27eae9d29dee648e34cb3e8fd9d494e1b347209677d62cdf9/analysis/#behavioural-info",
-                  "https://www.virustotal.com/de/file/301fcadf53e6a6167e559c84d6426960af8626d12b2e25aa41de6dce511d0568/analysis/#behavioural-info"]
+    references = [
+        "https://malwr.com/analysis/NmNhODg5ZWRkYjc0NDY0M2I3YTJhNDRlM2FlOTZiMjA/",
+        "https://malwr.com/analysis/MmMwNDJlMTI0MTNkNGFjNmE0OGY3Y2I5MjhiMGI1NzI/",
+        "https://malwr.com/analysis/MzY5ZTM2NzZhMzI3NDY2YjgzMjJiODFkODZkYzIwYmQ/",
+        "https://www.virustotal.com/de/file/301fcadf53e6a6167e559c84d6426960af8626d12b2e25aa41de6dce511d0568/analysis/#behavioural-info",
+        "https://www.virustotal.com/de/file/d3cf49a7ac726ee27eae9d29dee648e34cb3e8fd9d494e1b347209677d62cdf9/analysis/#behavioural-info",
+        "https://www.virustotal.com/de/file/d3cf49a7ac726ee27eae9d29dee648e34cb3e8fd9d494e1b347209677d62cdf9/analysis/#behavioural-info",
+        "https://www.virustotal.com/de/file/301fcadf53e6a6167e559c84d6426960af8626d12b2e25aa41de6dce511d0568/analysis/#behavioural-info",
+    ]
 
     def run(self):
         # Check zeus synchronization-mutex.
@@ -38,7 +41,7 @@ class ZeusP2P(Signature):
         if mutexes:
             count += len(mutexes)
 
-        # Check if there are at least 5 mutexes opened matching the pattern?   
+        # Check if there are at least 5 mutexes opened matching the pattern?
         if count < 5:
             return False
 
@@ -47,10 +50,10 @@ class ZeusP2P(Signature):
         # IP is really valid.
         count = 0
         if "network" in self.results:
-            for udp in self.results.get("network", {}).get("udp",[]):
+            for udp in self.results.get("network", {}).get("udp", []):
                 if udp["dport"] > 1024:
                     count += 1
-            
+
         if count < 4:
             return False
 

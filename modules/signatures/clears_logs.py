@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ClearsLogs(Signature):
     name = "clears_logs"
     description = "Clears Windows events or logs"
@@ -40,14 +41,14 @@ class ClearsLogs(Signature):
         cmdlines = self.results["behavior"]["summary"]["executed_commands"]
         for cmdline in cmdlines:
             if "wevtutil" in cmdline.lower() and "cl" in cmdline.lower():
-                self.data.append({"command" : cmdline})
+                self.data.append({"command": cmdline})
                 ret = True
 
         for indicator in file_indicators:
             match_file = self.check_delete_file(pattern=indicator, regex=True, all=True)
             if match_file:
                 for match in match_file:
-                    self.data.append({"file" : match})
-                ret = True        
+                    self.data.append({"file": match})
+                ret = True
 
         return ret

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ArkeiFiles(Signature):
     name = "arkei_files"
     description = "Creates Arkei infostealer directories and/or files"

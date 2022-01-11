@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AzorultMutexes(Signature):
     name = "azorult_mutexes"
     description = "Creates Azorult infostealer mutexes"

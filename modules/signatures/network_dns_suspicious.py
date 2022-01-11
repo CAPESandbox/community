@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class NetworkDNSTunnelingRequest(Signature):
     name = "network_dns_tunneling_request"
     description = "Generates suspicious DNS queries indicative of DNS tunneling"
@@ -73,6 +74,7 @@ class NetworkDNSTunnelingRequest(Signature):
 
         return False
 
+
 class NetworkDNSIDN(Signature):
     name = "network_dns_idn"
     description = "Generates a DNS query to IDN/Punycode domain"
@@ -96,6 +98,7 @@ class NetworkDNSIDN(Signature):
 
     def on_complete(self):
         return self.match
+
 
 class NetworkDNSSuspiciousQueryType(Signature):
     name = "network_dns_suspicious_querytype"
@@ -123,6 +126,7 @@ class NetworkDNSSuspiciousQueryType(Signature):
     def on_complete(self):
         return self.match
 
+
 class NetworkDNSBlockChain(Signature):
     name = "network_dns_blockchain"
     description = "Generates DNS query to Blockchain domain or TLD"
@@ -149,6 +153,7 @@ class NetworkDNSBlockChain(Signature):
                 return True
 
         return False
+
 
 class NetworkDNSOpenNIC(Signature):
     name = "network_dns_opennic"
@@ -189,6 +194,7 @@ class NetworkDNSOpenNIC(Signature):
                 return True
 
         return False
+
 
 class NetworkDOHTLS(Signature):
     name = "network_dns_doh_tls"
@@ -299,8 +305,7 @@ class NetworkDOHTLS(Signature):
             "104.236.178.232",
             "108.61.201.119",
             "114.115.240.175",
-            "115.159.154.226"
-            "116.203.35.255",
+            "115.159.154.226" "116.203.35.255",
             "116.203.70.156",
             "118.24.208.197",
             "118.89.110.78",
@@ -337,18 +342,19 @@ class NetworkDOHTLS(Signature):
         ]
 
         found_matches = False
-        
+
         for indicator in domain_indicators:
             if self.check_domain(pattern=indicator):
-                self.data.append({"domain" : indicator})
+                self.data.append({"domain": indicator})
                 found_matches = True
 
         for indicator in ip_indicators:
             if self.check_ip(pattern=indicator):
-                self.data.append({"ip" : indicator})
+                self.data.append({"ip": indicator})
                 found_matches = True
 
         return found_matches
+
 
 class NetworkDNSReverseProxy(Signature):
     name = "network_dns_reverse_proxy"
@@ -371,6 +377,7 @@ class NetworkDNSReverseProxy(Signature):
                 return True
 
         return False
+
 
 class NetworkDNSTempFileService(Signature):
     name = "network_dns_temp_file_storage"
@@ -411,6 +418,7 @@ class NetworkDNSTempFileService(Signature):
 
         return False
 
+
 class NetworkDNSPasteSite(Signature):
     name = "network_dns_paste_site"
     description = "DNS query to a paste site or service detected"
@@ -446,6 +454,7 @@ class NetworkDNSPasteSite(Signature):
                 return True
 
         return False
+
 
 class NetworkDNSURLShortener(Signature):
     name = "network_dns_url_shortener"
@@ -484,6 +493,7 @@ class NetworkDNSURLShortener(Signature):
                 return True
 
         return False
+
 
 class NetworkDNSTempURLDNS(Signature):
     name = "network_dns_temp_urldns"

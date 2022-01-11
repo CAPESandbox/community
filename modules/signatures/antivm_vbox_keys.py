@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class VBoxDetectKeys(Signature):
     name = "antivm_vbox_keys"
     description = "Detects VirtualBox through the presence of a registry key"

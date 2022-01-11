@@ -19,6 +19,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Dridex_APIs(Signature):
     name = "dridex_behavior"
     description = "Exhibits behavior characteristic of Dridex malware"
@@ -46,9 +47,19 @@ class Dridex_APIs(Signature):
         self.post_check = False
         self.ret = False
 
-    filter_apinames = set(["RegQueryValueExA", "CryptHashData", "connect", "send", "recv",
-                           "RtlDecompressBuffer", "InternetConnectW", "HttpOpenRequestW",
-                           "InternetCrackUrlA"])
+    filter_apinames = set(
+        [
+            "RegQueryValueExA",
+            "CryptHashData",
+            "connect",
+            "send",
+            "recv",
+            "RtlDecompressBuffer",
+            "InternetConnectW",
+            "HttpOpenRequestW",
+            "InternetCrackUrlA",
+        ]
+    )
 
     def on_call(self, call, process):
         if call["api"] == "RegQueryValueExA":
@@ -134,7 +145,6 @@ class Dridex_APIs(Signature):
                         self.ret = True
 
         return None
-
 
     def on_complete(self):
         if self.compname and (self.username or self.is_xp) and self.crypted:

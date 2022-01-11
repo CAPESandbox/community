@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class MedusaLockerMutexes(Signature):
     name = "medusalocker_mutexes"
     description = "Creates known MedusaLocker ransomware mutexes"
@@ -38,6 +39,7 @@ class MedusaLockerMutexes(Signature):
                 return True
 
         return False
+
 
 class MedusaLockerRegkeys(Signature):
     name = "medusalocker_regkeys"

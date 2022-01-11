@@ -1,7 +1,8 @@
 import json
+
 import requests
 
-names  = list()
+names = list()
 malpedia_url = "https://raw.githubusercontent.com/MISP/misp-galaxy/main/clusters/malpedia.json"
 
 r = requests.get(malpedia_url)

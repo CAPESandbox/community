@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiSandboxSboxieObjects(Signature):
     name = "antisandbox_sboxie_objects"
     description = "The sample enumerated a known Sandboxie device object."

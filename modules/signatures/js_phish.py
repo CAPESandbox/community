@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class JS_Phish(Signature):
     name = "js_phish"
     description = "Executes JavaScript with known {0} related phishing lures."
@@ -35,8 +36,8 @@ class JS_Phish(Signature):
             ("your browser has been infected", "Malware/Infection"),
             ("your paypal id or password was entered incorrectly", "PayPal"),
             ("your customer number is made up of your date of birth", "NatWest"),
-            ("alert(\"Invalid Card Number\")", "Banking"),
-            ("alert(\"Invalid Card Verification Number\")", "Banking"),
+            ('alert("Invalid Card Number")', "Banking"),
+            ('alert("Invalid Card Verification Number")', "Banking"),
         ]
         self.lurehits = set()
         self.totalhits = 0

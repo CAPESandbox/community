@@ -3,7 +3,9 @@
 # See the file 'docs/LICENSE' for copying permission.
 
 from __future__ import absolute_import
+
 from lib.cuckoo.common.abstracts import Feed
+
 
 class AbuseCH_SSL(Feed):
     # Results dict key value / exception handling / logging name

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PersistenceBootexecute(Signature):
     name = "persistence_bootexecute"
     description = "Installs a native executable to run on early Windows boot"
@@ -38,13 +39,16 @@ class PersistenceBootexecute(Signature):
             self.registry_writes[fullname] = self.get_argument(call, "Buffer")
 
     def on_complete(self):
-        match_key = self.check_write_key(pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\Session\\ Manager\\\\(BootExecute|SetupExecute|Execute|S0InitialCommand)$", regex=True, all=True)
+        match_key = self.check_write_key(
+            pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\Session\\ Manager\\\\(BootExecute|SetupExecute|Execute|S0InitialCommand)$",
+            regex=True,
+            all=True,
+        )
         if match_key:
             self.found_bootexecute = True
             for match in match_key:
                 data = self.registry_writes.get(match, "unknown")
-                self.data.append({"key" : match})
-                self.data.append({"data" : data})
-
+                self.data.append({"key": match})
+                self.data.append({"data": data})
 
         return self.found_bootexecute

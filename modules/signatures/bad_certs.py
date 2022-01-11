@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class BadCerts(Signature):
     name = "bad_certs"
     description = "The executable used a known stolen/malicious Authenticode signature"

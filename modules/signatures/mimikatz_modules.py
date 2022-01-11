@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class MimikatzModules(Signature):
     name = "mimikatz_modules"
     description = "Executed a potential Mimikatz module"
@@ -30,8 +31,16 @@ class MimikatzModules(Signature):
         cmdlines = self.results["behavior"]["summary"]["executed_commands"]
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if "CRYPTO::" in lower or "KERBEROS::" in lower or "LSADUMP::" in lower or "MISC::" in lower or "PRIVILEGE::" in lower or "SEKURLSA::" in lower or "TOKEN::" in lower:
+            if (
+                "CRYPTO::" in lower
+                or "KERBEROS::" in lower
+                or "LSADUMP::" in lower
+                or "MISC::" in lower
+                or "PRIVILEGE::" in lower
+                or "SEKURLSA::" in lower
+                or "TOKEN::" in lower
+            ):
                 ret = True
-                self.data.append({"module" : cmdline})
+                self.data.append({"module": cmdline})
 
         return ret

@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class OfficeAddinLoading(Signature):
     name = "office_addinloading"
     description = "Creates add-in (DLL) that automatically loads when launching Word or Excel."
@@ -32,10 +33,10 @@ class OfficeAddinLoading(Signature):
 
     def run(self):
         indicators = [
-        ".*\\AppData\\Roaming\\Microsoft\\Word\\startup\\*.wll",
-        ".*\\AppData\\Roaming\\Microsoft\\Excel\\XLSTART\\*.xll",
-        ".*\\AppData\\Roaming\\Microsoft\\AddIns\\*.xlam",
-        ".*\\AppData\\Roaming\\Microsoft\\AddIns\\*.xla"
+            ".*\\AppData\\Roaming\\Microsoft\\Word\\startup\\*.wll",
+            ".*\\AppData\\Roaming\\Microsoft\\Excel\\XLSTART\\*.xll",
+            ".*\\AppData\\Roaming\\Microsoft\\AddIns\\*.xlam",
+            ".*\\AppData\\Roaming\\Microsoft\\AddIns\\*.xla",
         ]
 
         for indicator in indicators:
@@ -45,6 +46,7 @@ class OfficeAddinLoading(Signature):
                 return True
 
         return False
+
 
 class OfficePerfKey(Signature):
     name = "office_perfkey"
@@ -56,9 +58,7 @@ class OfficePerfKey(Signature):
     ttp = ["T1137"]
 
     def run(self):
-        indicators = [
-            "HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Office test\\\\Special\\\\Perf$"
-        ]
+        indicators = ["HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Office test\\\\Special\\\\Perf$"]
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)
@@ -68,7 +68,9 @@ class OfficePerfKey(Signature):
 
         return False
 
+
 from lib.cuckoo.common.abstracts import Signature
+
 
 class OfficeVBLLoad(Signature):
     name = "office_vb_load"
@@ -87,7 +89,7 @@ class OfficeVBLLoad(Signature):
         self.officeprocs = ["winword.exe", "excel.exe", "powerpnt.exe"]
         self.vbdlls = ["vbe7intl.dll", "vbe7.dll", "vbeui.dll"]
         self.score = int()
-        
+
     def on_call(self, call, process):
         processname = process["process_name"]
         if processname:
@@ -99,6 +101,7 @@ class OfficeVBLLoad(Signature):
                             self.score += 1
                             if self.score >= 2:
                                 return True
+
 
 class OfficeWMILoad(Signature):
     name = "office_wmi_load"
@@ -115,7 +118,7 @@ class OfficeWMILoad(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.officeprocs = ["winword.exe", "excel.exe", "powerpnt.exe"]
-        
+
     def on_call(self, call, process):
         processname = process["process_name"]
         if processname:
@@ -124,6 +127,7 @@ class OfficeWMILoad(Signature):
                 if dllname:
                     if "wbemdisp.dll" in dllname.lower():
                         return True
+
 
 class OfficeCOMLoad(Signature):
     name = "office_com_load"
@@ -141,7 +145,7 @@ class OfficeCOMLoad(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.officeprocs = ["winword.exe", "excel.exe", "powerpnt.exe"]
         self.comdlls = ["combase.dll", "coml2.dll", "comsvcs.dll"]
-        
+
     def on_call(self, call, process):
         score = int()
         processname = process["process_name"]
@@ -152,6 +156,7 @@ class OfficeCOMLoad(Signature):
                     for dll in self.comdlls:
                         if dll in dllname.lower():
                             return True
+
 
 class OfficeDotNetLoad(Signature):
     name = "office_dotnet_load"
@@ -172,7 +177,7 @@ class OfficeDotNetLoad(Signature):
             "[A-Z]:\\\\Windows\\\\assembly\\\\.*",
             "[A-Z]:\\\\Windows\\\\Microsoft.NET\\\\assembly\\\\GAC_MSIL.*",
         ]
-        
+
     def on_call(self, call, process):
         processname = process["process_name"]
         if processname:
@@ -185,7 +190,8 @@ class OfficeDotNetLoad(Signature):
                         for dllpath in self.dotnetpaths:
                             if re.search(dllpath, dllname.lower(), re.IGNORECASE):
                                 return True
-                            
+
+
 class OfficeMSHTMLLoad(Signature):
     name = "office_mshtml_load"
     description = "Office loads MSHTML DLL, indicative of ActiveX execution"
@@ -201,7 +207,7 @@ class OfficeMSHTMLLoad(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.officeprocs = ["wordview.exe", "winword.exe", "excel.exe", "powerpnt.exe"]
-        
+
     def on_call(self, call, process):
         processname = process["process_name"]
         if processname:

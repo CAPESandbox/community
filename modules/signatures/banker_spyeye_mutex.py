@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class SpyEyeMutexes(Signature):
     name = "banker_spyeye_mutexes"
     description = "Creates known SpyEye mutexes"
@@ -25,13 +26,7 @@ class SpyEyeMutexes(Signature):
     minimum = "0.5"
 
     def run(self):
-        indicators = [
-            "zXeRY3a_PtW.*",
-            "SPYNET",
-            "__CLEANSWEEP__",
-            "__CLEANSWEEP_UNINSTALL__",
-            "__CLEANSWEEP_RELOADCFG__"
-        ]
+        indicators = ["zXeRY3a_PtW.*", "SPYNET", "__CLEANSWEEP__", "__CLEANSWEEP_UNINSTALL__", "__CLEANSWEEP_RELOADCFG__"]
 
         for indicator in indicators:
             if self.check_mutex(pattern=indicator, regex=True):

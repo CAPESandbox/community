@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Tinba_APIs(Signature):
     name = "tinba_behavior"
     description = "Exhibits behavior characteristics of Tinba malware"
@@ -35,10 +36,7 @@ class Tinba_APIs(Signature):
     def on_call(self, call, process):
         # Collect unhook events to compare against browser injection
         # hooked APIs in on_complete
-        unhook = self.check_argument_call(call,
-                                          api="__anomaly__",
-                                          name="Subcategory",
-                                          pattern="unhook")
+        unhook = self.check_argument_call(call, api="__anomaly__", name="Subcategory", pattern="unhook")
         if unhook:
             deld = self.get_argument(call, "UnhookType")
             if deld == "removal":
@@ -58,16 +56,32 @@ class Tinba_APIs(Signature):
             r"^[A-Z]:\\Documents\ and\ Settings\\[^\\]+\\Application\ Data\\[0-9A-F]{8}\\web\.dat$",
         ]
         unhook_list = [
-            "URLDownloadToFileW", "ObtainUserAgentString",
-            "CoInternetSetFeatureEnabled", "InternetGetConnectedState",
-            "InternetOpenA", "InternetOpenW", "InternetConnectA",
-            "InternetConnectW", "InternetOpenUrlA", "InternetOpenUrlW",
-            "HttpOpenRequestA", "HttpOpenRequestW", "HttpSendRequestA",
-            "HttpSendRequestW", "HttpSendRequestExA", "HttpSendRequestExW",
-            "HttpAddRequestHeadersA", "HttpAddRequestHeadersW",
-            "HttpEndRequestA", "HttpEndRequestW", "InternetReadFile",
-            "InternetWriteFile", "InternetCloseHandle", "InternetCrackUrlA",
-            "InternetCrackUrlW", "InternetSetOptionA"
+            "URLDownloadToFileW",
+            "ObtainUserAgentString",
+            "CoInternetSetFeatureEnabled",
+            "InternetGetConnectedState",
+            "InternetOpenA",
+            "InternetOpenW",
+            "InternetConnectA",
+            "InternetConnectW",
+            "InternetOpenUrlA",
+            "InternetOpenUrlW",
+            "HttpOpenRequestA",
+            "HttpOpenRequestW",
+            "HttpSendRequestA",
+            "HttpSendRequestW",
+            "HttpSendRequestExA",
+            "HttpSendRequestExW",
+            "HttpAddRequestHeadersA",
+            "HttpAddRequestHeadersW",
+            "HttpEndRequestA",
+            "HttpEndRequestW",
+            "InternetReadFile",
+            "InternetWriteFile",
+            "InternetCloseHandle",
+            "InternetCrackUrlA",
+            "InternetCrackUrlW",
+            "InternetSetOptionA",
         ]
 
         autorun = ""

@@ -1,5 +1,6 @@
 ﻿from lib.cuckoo.common.abstracts import Signature
 
+
 class RansomwareExtensions(Signature):
     name = "ransomware_extensions"
     description = "Appends known ransomware file extensions to files that have been encrypted"
@@ -67,7 +68,7 @@ class RansomwareExtensions(Signature):
             (".*\.lock93$", ["Lock93"]),
             (".*\.Alcatraz$", ["Alcatraz-Locker"]),
             (".*\.dCrypt$", ["DummyLocker"]),
-            #(".*\.enc$", ["encryptJJS"]),
+            # (".*\.enc$", ["encryptJJS"]),
             (".*\.rnsmwr$", ["Gremit"]),
             (".*\.da_vinci_code$", ["Troldesh"]),
             (".*\.magic_software_syndicate$", ["Troldesh"]),
@@ -138,9 +139,7 @@ class RansomwareExtensions(Signature):
                 if indicator[1]:
                     self.families = indicator[1]
                     self.description = (
-                        "Appends a known %s ransomware file extension to "
-                        "files that have been encrypted" %
-                        "/".join(indicator[1])
+                        "Appends a known %s ransomware file extension to " "files that have been encrypted" % "/".join(indicator[1])
                     )
                 return True
 

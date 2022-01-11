@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class VMwareDetectLibs(Signature):
     name = "antivm_vmware_libs"
     description = "Detects VMware through the presence of a library"
@@ -33,8 +34,5 @@ class VMwareDetectLibs(Signature):
         ]
 
         for indicator in indicators:
-            if self.check_argument_call(call,
-                                        pattern=indicator,
-                                        name="FileName",
-                                        ignorecase=True):
+            if self.check_argument_call(call, pattern=indicator, name="FileName", ignorecase=True):
                 return True

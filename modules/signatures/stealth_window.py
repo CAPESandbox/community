@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Hidden_Window(Signature):
     name = "stealth_window"
     description = "A process created a hidden window"
@@ -40,8 +41,7 @@ class Hidden_Window(Signature):
             clbuf = self.get_argument(call, "CommandLine").lower()
             cfbuf = int(self.get_argument(call, "CreationFlags"), 16)
             # Handle Powershell CommandLine Arguments
-            if "powershell" in clbuf and (re.search("-win[ ]+hidden", clbuf) or
-                                          re.search("-windowstyle[ ]+hidden", clbuf)):
+            if "powershell" in clbuf and (re.search("-win[ ]+hidden", clbuf) or re.search("-windowstyle[ ]+hidden", clbuf)):
                 proc = process["process_name"]
                 spawn = self.get_argument(call, "ApplicationName")
                 if not spawn:
@@ -49,7 +49,7 @@ class Hidden_Window(Signature):
                 self.hidden.append((proc, spawn))
                 self.data.append({"Process": proc + " -> " + spawn})
             # Handle CREATE_NO_WINDOW flag, ignored for CREATE_NEW_CONSOLE and DETACHED_PROCESS
-            elif cfbuf & 0x08000000 and  not (cfbuf & 0x10 or cfbuf & 0x8):
+            elif cfbuf & 0x08000000 and not (cfbuf & 0x10 or cfbuf & 0x8):
                 proc = process["process_name"]
                 spawn = self.get_argument(call, "ApplicationName")
                 if not spawn:

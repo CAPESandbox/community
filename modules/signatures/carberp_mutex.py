@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CarberpMutexes(Signature):
     name = "carberp_mutex"
     description = "Attempts to create a known Carberp/Rovnix mutex."

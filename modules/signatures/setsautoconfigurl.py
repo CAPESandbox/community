@@ -20,6 +20,7 @@ except:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class SetsAutoconfigURL(Signature):
     name = "sets_autoconfig_url"
     description = "Sets an Autoconfig URL, likely to hijack browser settings."
@@ -33,10 +34,8 @@ class SetsAutoconfigURL(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.pathbuf = str()
         self.keybuf = str()
-        self.configpath = (r"^[A-Za-z]:\\.*\\Mozilla\\Firefox\\Profiles\\.*\\"
-                            "prefs\.js")
-        self.configkey = (r"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\"
-                          r"CurrentVersion\\Internet Settings\\AutoConfigURL")
+        self.configpath = r"^[A-Za-z]:\\.*\\Mozilla\\Firefox\\Profiles\\.*\\" "prefs\.js"
+        self.configkey = r"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\" r"CurrentVersion\\Internet Settings\\AutoConfigURL"
 
         self.procwhitelist = [
             "acrobat.exe",
@@ -65,7 +64,7 @@ class SetsAutoconfigURL(Signature):
                 buf = self.get_argument(call, "Buffer")
                 if "user_pref" in buf and "network.proxy.autoconfig_url" in buf:
                     tmp = buf.split("(")[1].split(")")[0].split(",")[1]
-                    self.pathbuf = tmp.strip().replace("\"","").replace("'","")
+                    self.pathbuf = tmp.strip().replace('"', "").replace("'", "")
 
     def on_complete(self):
         ret = False

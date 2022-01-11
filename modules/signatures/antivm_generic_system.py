@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiVMSystem(Signature):
     name = "antivm_generic_system"
     description = "Checks the system manufacturer, likely for anti-virtualization"
@@ -25,7 +26,10 @@ class AntiVMSystem(Signature):
     ttp = ["T1057", "T1012"]
 
     def run(self):
-        if self.check_read_key(pattern= ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\SystemInformation\\\\SystemManufacturer$", regex=True):
+        if self.check_read_key(
+            pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\SystemInformation\\\\SystemManufacturer$",
+            regex=True,
+        ):
             return True
 
         return False

@@ -2,8 +2,10 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
-from lib.cuckoo.common.abstracts import Signature
 import struct
+
+from lib.cuckoo.common.abstracts import Signature
+
 
 class Bootkit(Signature):
     name = "bootkit"
@@ -24,7 +26,18 @@ class Bootkit(Signature):
         self.handles = dict()
         self.saw_stealth = False
 
-    filter_apinames = set(["NtCreateFile", "NtDuplicateObject", "NtOpenFile", "NtClose", "NtSetInformationFile", "NtWriteFile", "DeviceIoControl", "NtDeviceIoControlFile"])
+    filter_apinames = set(
+        [
+            "NtCreateFile",
+            "NtDuplicateObject",
+            "NtOpenFile",
+            "NtClose",
+            "NtSetInformationFile",
+            "NtWriteFile",
+            "DeviceIoControl",
+            "NtDeviceIoControlFile",
+        ]
+    )
 
     def on_call(self, call, process):
         if process is not self.lastprocess:
@@ -46,7 +59,11 @@ class Bootkit(Signature):
             handle = int(self.get_argument(call, "FileHandle"), 16)
             access = int(self.get_argument(call, "DesiredAccess"), 16)
             # FILE_WRITE_ACCESS or GENERIC_WRITE
-            if filename and (filename.lower() == "\\??\\physicaldrive0" or filename.lower().startswith("\\device\\harddisk")) and access & 0x40000002:
+            if (
+                filename
+                and (filename.lower() == "\\??\\physicaldrive0" or filename.lower().startswith("\\device\\harddisk"))
+                and access & 0x40000002
+            ):
                 if handle not in self.handles:
                     self.handles[handle] = filename
         elif call["api"] == "DeviceIoControl" or call["api"] == "NtDeviceIoControlFile":
@@ -54,17 +71,18 @@ class Bootkit(Signature):
             if call["api"] == "DeviceIoControl":
                 handle = int(self.get_argument(call, "DeviceHandle"), 16)
             else:
-                handle = int(self.get_argument(call, "FileHandle"), 16) 
+                handle = int(self.get_argument(call, "FileHandle"), 16)
             # IOCTL_SCSI_PASS_THROUGH_DIRECT
-            if handle in self.handles and ioctl == 0x4d014:
+            if handle in self.handles and ioctl == 0x4D014:
                 return True
         elif call["api"] == "NtWriteFile":
             handle = int(self.get_argument(call, "FileHandle"), 16)
             if handle in self.handles:
                 return True
-        
+
         return None
-    
+
+
 class DirectHDDAccess(Signature):
     name = "direct_hdd_access"
     description = "Attempted to write to a harddisk volume"
@@ -79,10 +97,11 @@ class DirectHDDAccess(Signature):
         ret = False
         match = self.check_write_file(pattern="^\\\\Device\\\\HarddiskVolume.*", regex=True)
         if match:
-            self.data.append({"file" : match})
+            self.data.append({"file": match})
             ret = True
 
         return ret
+
 
 class AccessesPrimaryPartition(Signature):
     name = "accesses_primary_patition"
@@ -98,10 +117,11 @@ class AccessesPrimaryPartition(Signature):
         ret = False
         match = self.check_write_file(pattern="^\\\\Device\\\\HarddiskVolume0\\\\DR0$", regex=True)
         if match:
-            self.data.append({"file" : match})
+            self.data.append({"file": match})
             ret = True
 
         return ret
+
 
 class PhysicalDriveAccess(Signature):
     name = "physical_drive_access"
@@ -117,10 +137,11 @@ class PhysicalDriveAccess(Signature):
         ret = False
         match = self.check_write_file(pattern="^\\\\\?\?\\\\PhysicalDrive.*", regex=True)
         if match:
-            self.data.append({"physical drive access" : match})
+            self.data.append({"physical drive access": match})
             ret = True
 
         return ret
+
 
 class SuspiciousIoctlSCSIPassthough(Signature):
     name = "suspicious_ioctl_scsipassthough"
@@ -146,8 +167,13 @@ class SuspiciousIoctlSCSIPassthough(Signature):
             pname = process["process_name"]
             if pname not in self.pnames:
                 self.pnames.append(pname)
-                self.data.append({"suspicious_deviceiocontrol_ioctl_use": "%s is using the IOCTL_SCSI_PASS_THROUGH or IOCTL_SCSI_PASS_THROUGH_DIRECT control codes to make modifications" %(pname)})
+                self.data.append(
+                    {
+                        "suspicious_deviceiocontrol_ioctl_use": "%s is using the IOCTL_SCSI_PASS_THROUGH or IOCTL_SCSI_PASS_THROUGH_DIRECT control codes to make modifications"
+                        % (pname)
+                    }
+                )
                 self.ret = True
- 
+
     def on_complete(self):
         return self.ret

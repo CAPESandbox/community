@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class VenomRAT(Signature):
     name = "venomrat_mutexes"
     description = "Creates VenomRAT mutexes"

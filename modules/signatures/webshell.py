@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class WebShellProcesses(Signature):
     name = "web_shell_processes"
     description = "Creates or executes process commonly used for running web applications, used by web shells"
@@ -28,12 +29,12 @@ class WebShellProcesses(Signature):
 
     def run(self):
         utilities = [
-          "w3wp.exe",
-          "httpd.exe",
-          "jbosssvc.exe",
-          "nginx.exe",
-          "php-cgi.exe",
-          "tomcat.exe",
+            "w3wp.exe",
+            "httpd.exe",
+            "jbosssvc.exe",
+            "nginx.exe",
+            "php-cgi.exe",
+            "tomcat.exe",
         ]
 
         ret = False
@@ -43,9 +44,10 @@ class WebShellProcesses(Signature):
             for utility in utilities:
                 if utility in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret
+
 
 class WebShellFiles(Signature):
     name = "web_shell_files"
@@ -55,12 +57,9 @@ class WebShellFiles(Signature):
     authors = ["bartblaze"]
     minimum = "0.5"
     ttp = ["T1505"]
-	
+
     def run(self):
-        indicators = [
-            ".*\\\\inetpub\\\\wwwroot\\\\.*",
-            ".*\\\\System32\\\\inetsrv\\\\.*"
-        ]
+        indicators = [".*\\\\inetpub\\\\wwwroot\\\\.*", ".*\\\\System32\\\\inetsrv\\\\.*"]
 
         for indicator in indicators:
             match = self.check_write_file(pattern=indicator, regex=True)
@@ -70,6 +69,7 @@ class WebShellFiles(Signature):
 
         return False
 
+
 class OWAWebShellFiles(Signature):
     name = "owa_web_shell_files"
     description = "Writes to the Exchange OWA folder, typically seen in Outlook Web Access web shells"
@@ -78,7 +78,7 @@ class OWAWebShellFiles(Signature):
     authors = ["bartblaze"]
     minimum = "0.5"
     ttp = ["T1505"]
-	
+
     def run(self):
         indicators = [
             "C:\\\\Program Files\\\\Microsoft\\\\Exchange Server\\\\V[0-9]{2}\\\\FrontEnd\\\\HttpProxy\\\\owa\\\\.*",
@@ -90,4 +90,4 @@ class OWAWebShellFiles(Signature):
                 self.data.append({"file": match})
                 return True
 
-        return False		
+        return False

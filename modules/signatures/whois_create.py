@@ -18,9 +18,10 @@ try:
 except:
     import re
 
-from datetime import date
-from datetime import datetime
+from datetime import date, datetime
+
 from lib.cuckoo.common.abstracts import Signature
+
 
 class WHOIS_Create(Signature):
     name = "whois_create"
@@ -57,7 +58,7 @@ class WHOIS_Create(Signature):
 
             if not earliest:
                 return False
-                
+
             earliest = earliest.date()
 
             # Some oddities observed, try/except to find a valid time
@@ -77,7 +78,5 @@ class WHOIS_Create(Signature):
                     grammar = "days"
                     if daycount == 1:
                         grammar = "day"
-                    self.description = ("The target URL domain was created very"
-                                        " recently. ({0} {1} ago)".format(
-                                        daycount, grammar))
+                    self.description = "The target URL domain was created very" " recently. ({0} {1} ago)".format(daycount, grammar)
         return ret

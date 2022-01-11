@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DeletesSystemStateBackup(Signature):
     name = "deletes_system_state_backup"
     description = "Attempts to delete system state backup"
@@ -28,15 +29,23 @@ class DeletesSystemStateBackup(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
 
-    filter_apinames = set(["CreateProcessInternalW","ShellExecuteExW"])
+    filter_apinames = set(["CreateProcessInternalW", "ShellExecuteExW"])
 
     def on_call(self, call, process):
         if call["api"] == "CreateProcessInternalW":
             cmdline = self.get_argument(call, "CommandLine").lower()
-            if "wbadmin" in cmdline and ("delete" in cmdline and "systemstatebackup" in cmdline) or ("delete" in cmdline and "catalog" in cmdline):
+            if (
+                "wbadmin" in cmdline
+                and ("delete" in cmdline and "systemstatebackup" in cmdline)
+                or ("delete" in cmdline and "catalog" in cmdline)
+            ):
                 return True
         elif call["api"] == "ShellExecuteExW":
             filepath = self.get_argument(call, "FilePath").lower()
             params = self.get_argument(call, "Parameters").lower()
-            if "wbadmin" in filepath and ("delete" in params and "systemstatebackup" in params) or ("delete" in params and "catalog" in params):
+            if (
+                "wbadmin" in filepath
+                and ("delete" in params and "systemstatebackup" in params)
+                or ("delete" in params and "catalog" in params)
+            ):
                 return True

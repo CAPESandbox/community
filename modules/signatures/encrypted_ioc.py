@@ -9,6 +9,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class EncryptedIOC(Signature):
     name = "encrypted_ioc"
     description = "At least one IP Address, Domain, or File Name was found in a crypto call"
@@ -34,7 +35,7 @@ class EncryptedIOC(Signature):
 
     def on_complete(self):
         matches = [
-            r'(https?:\/\/)?([\da-z\.-]+)\.([0-9a-z\.]{2,6})(:\d{1,5})?([\/\w\.-]*)\/?',
+            r"(https?:\/\/)?([\da-z\.-]+)\.([0-9a-z\.]{2,6})(:\d{1,5})?([\/\w\.-]*)\/?",
         ]
         whitelist = [
             "http://crl.microsoft.com",
@@ -47,10 +48,10 @@ class EncryptedIOC(Signature):
             "v1.0.3705",
             "v1.1.4322",
             "v2.0.50727",
-            "v4.0.30319"
+            "v4.0.30319",
         ]
         dedup = list()
-        extracted_data= False
+        extracted_data = False
         for potential_ioc in self.iocs:
             for entry in matches:
                 all_matches = re.findall(entry, potential_ioc)
@@ -60,7 +61,7 @@ class EncryptedIOC(Signature):
                         idx = 0
                         for tmp in buf:
                             idx += 1
-                            if tmp == '':
+                            if tmp == "":
                                 pass
                             # Account for match groups and the second
                             # (or third depending on match) period as a

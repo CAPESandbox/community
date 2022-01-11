@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class RemovesZoneIdADS(Signature):
     name = "removes_zoneid_ads"
     description = "Attempts to remove evidence of file being downloaded from the Internet"
@@ -18,11 +19,11 @@ class RemovesZoneIdADS(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
 
-    filter_apinames = set(["DeleteFileA","DeleteFileW"])
+    filter_apinames = set(["DeleteFileA", "DeleteFileW"])
 
     def on_call(self, call, process):
         if call["api"].startswith("DeleteFile") and self.get_argument(call, "FileName").endswith(":Zone.Identifier"):
-            self.data.append({"file" : self.get_argument(call, "FileName") })
+            self.data.append({"file": self.get_argument(call, "FileName")})
             return True
 
         return None

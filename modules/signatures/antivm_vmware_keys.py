@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class VMwareDetectKeys(Signature):
     name = "antivm_vmware_keys"
     description = "Detects VMware through the presence of a registry key"

@@ -14,6 +14,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class QuasarMutexes(Signature):
     name = "rat_quasar_mutexes"
     description = "Creates known Quasar mutexes"
@@ -30,10 +31,7 @@ class QuasarMutexes(Signature):
         ]
 
         for indicator in indicators:
-            if self.check_mutex(pattern=indicator,regex=True):
+            if self.check_mutex(pattern=indicator, regex=True):
                 return True
 
         return False
-
-
-

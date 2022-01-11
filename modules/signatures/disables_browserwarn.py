@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DisablesBrowserWarn(Signature):
     name = "disables_browser_warn"
     description = "Attempts to disable browser security warnings"
@@ -24,11 +25,11 @@ class DisablesBrowserWarn(Signature):
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\Main\\\\NoProtectedModeBanner$",
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\Main\\\\IE9RunOncePerInstallCompleted$",
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\Main\\\\IE9TourShown$",
-            ]
+        ]
         found_match = False
         for indicator in indicators:
             key_match = self.check_write_key(pattern=indicator, regex=True)
             if key_match:
-                self.data.append({"key" : key_match})
+                self.data.append({"key": key_match})
                 found_match = True
         return found_match

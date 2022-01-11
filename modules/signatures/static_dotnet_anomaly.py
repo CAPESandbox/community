@@ -15,11 +15,12 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 def decode_b64(data):
-    '''Automatically handle buffering when decoding base64
+    """Automatically handle buffering when decoding base64
     @param data: base64 encoded string
     @return: string or None
-    '''
+    """
     data = data.strip().rstrip().replace(" ", "")
     datalen = len(data) % 4
     # Invalid Base64 data, try removing a byte
@@ -38,6 +39,7 @@ def decode_b64(data):
         pass
 
     return decoded
+
 
 class DotNetAnomaly(Signature):
     name = "static_dotnet_anomaly"
@@ -68,13 +70,11 @@ class DotNetAnomaly(Signature):
             for attr in self.results["static"]["dotnet"]["customattrs"]:
                 valLength = len(attr["value"])
                 if valLength > 512:
-                    self.data.append({"large_attribute": "Attribute \"{0}\" is abnormally large.".format(
-                        attr["name"])})
+                    self.data.append({"large_attribute": 'Attribute "{0}" is abnormally large.'.format(attr["name"])})
                     self.weight += 1
                     buf = decode_b64(attr["value"])
                     if buf and (buf.startswith("MZ") or "!This program cannot be run in" in buf):
-                        self.data.append({"encoded_pe": "Attribute \"{0}\" has a base64 encoded PE.".format(
-                            attr["name"])})
+                        self.data.append({"encoded_pe": 'Attribute "{0}" has a base64 encoded PE.'.format(attr["name"])})
                         self.weight += 1
                         self.severity = 3
 

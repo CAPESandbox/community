@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AthenaHttp(Signature):
     name = "bot_athenahttp"
     description = "Recognized to be an Athena HTTP bot"
@@ -30,11 +31,7 @@ class AthenaHttp(Signature):
     minimum = "0.5"
 
     def run(self):
-        indicators = [
-            "UPDATE__",
-            "MAIN_.*",
-            "BACKUP_.*"
-        ]
+        indicators = ["UPDATE__", "MAIN_.*", "BACKUP_.*"]
 
         count = 0
         for indicator in indicators:
@@ -52,7 +49,7 @@ class AthenaHttp(Signature):
                 return False
             for http in httpitems:
                 if http["method"] == "POST" and athena_http_re.search(http["body"]):
-                    self.data.append({"url" : http["uri"], "data" : http["body"]})
+                    self.data.append({"url": http["uri"], "data": http["body"]})
                     return True
 
         return False

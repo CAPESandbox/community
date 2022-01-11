@@ -15,9 +15,12 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ModifiesAttachmentManager(Signature):
     name = "modifies_attachment_manager"
-    description = "Attempts to modify the Microsoft attachment manager possibly to bypass security checks on mail and Internet saved files"
+    description = (
+        "Attempts to modify the Microsoft attachment manager possibly to bypass security checks on mail and Internet saved files"
+    )
     severity = 3
     categories = ["antiav", "bypass"]
     authors = ["Kevin Ross"]
@@ -26,7 +29,7 @@ class ModifiesAttachmentManager(Signature):
 
     def run(self):
         reg_indicators = [
-        ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Attachments\\\\SaveZoneInformation$",
+            ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Attachments\\\\SaveZoneInformation$",
         ]
 
         for indicator in reg_indicators:

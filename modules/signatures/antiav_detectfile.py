@@ -9,6 +9,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiAVDetectFile(Signature):
     name = "antiav_detectfile"
     description = "Attempts to identify installed AV products by installation directory"
@@ -79,6 +80,6 @@ class AntiAVDetectFile(Signature):
             file_match = self.check_file(pattern=indicator, regex=True, all=True)
             if file_match:
                 for match in file_match:
-                    self.data.append({"file" : match })
+                    self.data.append({"file": match})
                 found = True
         return found

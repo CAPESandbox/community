@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class BullguardDetectLibs(Signature):
     name = "antiav_nthookengine_libs"
     description = "Detects NtHookEngine through the presence of a library"

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Procmem_Yara(Signature):
     name = "procmem_yara"
     description = "Yara rule detections observed from a process memory dump/dropped files/CAPE"
@@ -27,12 +28,17 @@ class Procmem_Yara(Signature):
         # Define Yara rule names here and categorize appropriately
         suspicious = []
         malicious = [
-            "dyrecfgserverlist", "dyrecfginjectslist", "dyrecfgredirectlist",
-            "dridexcfgbotid", "dridexcfgnodelist", "dridexcfgkeylog",
-            "kazybot_rat", "darkcometconfig",
+            "dyrecfgserverlist",
+            "dyrecfginjectslist",
+            "dyrecfgredirectlist",
+            "dridexcfgbotid",
+            "dridexcfgnodelist",
+            "dridexcfgkeylog",
+            "kazybot_rat",
+            "darkcometconfig",
         ]
 
-        for keyword in ("procdump" ,"procmemory", "extracted", "dropped"):
+        for keyword in ("procdump", "procmemory", "extracted", "dropped"):
             if keyword in self.results and self.results[keyword] is not None:
                 for process in self.results.get(keyword, []):
                     pid = process.get("pid", 0)

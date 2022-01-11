@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Dropper(Signature):
     name = "dropper"
     description = "Drops a binary and executes it"

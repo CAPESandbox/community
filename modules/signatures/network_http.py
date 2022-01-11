@@ -20,13 +20,14 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class NetworkHTTP(Signature):
     name = "network_http"
     description = "Performs some HTTP requests"
     severity = 2
     confidence = 30
     categories = ["http"]
-    authors = ["nex","Optiv"]
+    authors = ["nex", "Optiv"]
     minimum = "0.5"
 
     filter_analysistypes = set(["file"])
@@ -38,7 +39,7 @@ class NetworkHTTP(Signature):
             "^http://www\.microsoft\.com/.*\.crl$",
             "^http://ctldl\.windowsupdate\.com/.*",
             "^http://go\.microsoft\.com/.*",
-            ]
+        ]
         if "file" in self.results["target"]:
             if "PDF" in self.results["target"]["file"].get("type", "") or self.results["info"]["package"] == "pdf":
                 whitelist.append("^http://.*\.adobe\.com/.*")
@@ -53,7 +54,7 @@ class NetworkHTTP(Signature):
                     urls.append(req["uri"])
 
         for url in urls:
-            self.data.append({"url" : url})
+            self.data.append({"url": url})
 
         if urls:
             return True

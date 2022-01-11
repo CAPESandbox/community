@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class StealthHideNotifications(Signature):
     name = "stealth_hide_notifications"
     description = "Attempts to modify user notification settings"
@@ -15,8 +16,8 @@ class StealthHideNotifications(Signature):
 
     def run(self):
         reg_indicators = [
-        ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\HideSCAHealth$",
-        ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Advanced\\\\TaskbarNoNotification$",
+            ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\HideSCAHealth$",
+            ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Advanced\\\\TaskbarNoNotification$",
         ]
 
         for indicator in reg_indicators:

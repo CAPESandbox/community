@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class LsassCredentialDumping(Signature):
     name = "lsass_credential_dumping"
     description = "Requests access to read memory contents of lsass.exe potentially indicative of credential dumping"
@@ -24,7 +25,10 @@ class LsassCredentialDumping(Signature):
     minimum = "1.3"
     evented = True
     ttp = ["T1003"]
-    references = ["cyberwardog.blogspot.co.uk/2017/03/chronicles-of-threat-hunter-hunting-for_22.html", "cyberwardog.blogspot.co.uk/2017/04/chronicles-of-threat-hunter-hunting-for.html"]
+    references = [
+        "cyberwardog.blogspot.co.uk/2017/03/chronicles-of-threat-hunter-hunting-for_22.html",
+        "cyberwardog.blogspot.co.uk/2017/04/chronicles-of-threat-hunter-hunting-for.html",
+    ]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -42,10 +46,15 @@ class LsassCredentialDumping(Signature):
                 self.lsasspid.append(self.get_argument(call, "ProcessId"))
 
         if call["api"] == "NtOpenProcess":
-            if self.get_argument(call, "ProcessIdentifier") in self.lsasspid and self.get_argument(call, "DesiredAccess") in ["0x00001010", "0x00001038"]:
+            if self.get_argument(call, "ProcessIdentifier") in self.lsasspid and self.get_argument(call, "DesiredAccess") in [
+                "0x00001010",
+                "0x00001038",
+            ]:
                 pname = process["process_name"].lower()
                 if pname not in self.readaccessprocs:
-                    self.data.append({"lsass read access": "The process %s requested read access to the lsass.exe process" % (pname)})
+                    self.data.append(
+                        {"lsass read access": "The process %s requested read access to the lsass.exe process" % (pname)}
+                    )
                     self.lsasshandle.append(self.get_argument(call, "ProcessHandle"))
                     self.readaccessprocs.append(pname)
                     self.ret = True
@@ -55,12 +64,15 @@ class LsassCredentialDumping(Signature):
                 pname = process["process_name"].lower()
                 if pname not in self.creddumpprocs:
                     self.description = "Locates and dumps memory from the lsass.exe process indicative of credential dumping"
-                    self.data.append({"lsass credential dumping": "The process %s is reading memory from the lsass.exe process" % (pname)})
+                    self.data.append(
+                        {"lsass credential dumping": "The process %s is reading memory from the lsass.exe process" % (pname)}
+                    )
                     self.creddumpprocs.append(pname)
                     self.ret = True
 
     def on_complete(self):
         return self.ret
+
 
 class RegistryCredentialDumping(Signature):
     name = "registry_credential_dumping"
@@ -79,9 +91,10 @@ class RegistryCredentialDumping(Signature):
             lower = cmdline.lower()
             if "reg" in lower and "save" in lower and ("hklm\\system" in lower or "hklm\\sam" in lower):
                 ret = True
-                self.data.append({"command" : cmdline})
+                self.data.append({"command": cmdline})
 
         return ret
+
 
 class RegistryCredentialStoreAccess(Signature):
     name = "registry_credential_store_access"
@@ -96,8 +109,8 @@ class RegistryCredentialStoreAccess(Signature):
     def run(self):
         ret = False
         reg_indicators = [
-                "HKEY_LOCAL_MACHINE\\\\SAM$",
-                "HKEY_LOCAL_MACHINE\\\\SYSTEM$",
+            "HKEY_LOCAL_MACHINE\\\\SAM$",
+            "HKEY_LOCAL_MACHINE\\\\SYSTEM$",
         ]
 
         for indicator in reg_indicators:
@@ -107,6 +120,7 @@ class RegistryCredentialStoreAccess(Signature):
                 ret = True
 
         return ret
+
 
 class RegistryLSASecretsAccess(Signature):
     name = "registry_lsa_secrets_access"
@@ -130,6 +144,7 @@ class RegistryLSASecretsAccess(Signature):
                 return True
 
         return False
+
 
 class FileCredentialStoreAccess(Signature):
     name = "file_credential_store_access"
@@ -155,6 +170,7 @@ class FileCredentialStoreAccess(Signature):
                 return True
 
         return False
+
 
 class FileCredentialStoreWrite(Signature):
     name = "file_credential_store_write"

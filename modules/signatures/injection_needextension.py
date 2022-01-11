@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class InjectionExtension(Signature):
     name = "injection_needextension"
     description = "Attempted to execute a copy of itself but requires an .exe extension to work"
@@ -27,8 +28,8 @@ class InjectionExtension(Signature):
                 apiarg2 = self.get_argument(call, "CommandLine")
                 if apiarg1.endswith(procname) or apiarg2.endswith(procname):
                     createdpid = str(self.get_argument(call, "ProcessId"))
-                    desc = "{0}({1}) -> {2}({3})".format(process["process_name"],
-                        process["process_id"], self.get_name_from_pid(createdpid),
-                        createdpid)
+                    desc = "{0}({1}) -> {2}({3})".format(
+                        process["process_name"], process["process_id"], self.get_name_from_pid(createdpid), createdpid
+                    )
                     self.data.append({"Injection": desc})
                     return True

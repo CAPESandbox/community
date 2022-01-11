@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiVMDiskReg(Signature):
     name = "antivm_generic_diskreg"
     description = "Checks the presence of disk drives in the registry, possibly for anti-virtualization"
@@ -29,7 +30,7 @@ class AntiVMDiskReg(Signature):
         indicators = [
             ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\IDE$",
             ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Services\\\\Disk\\\\Enum\\\\.*",
-            ]
+        ]
         for indicator in indicators:
             if self.check_key(pattern=indicator, regex=True):
                 return True

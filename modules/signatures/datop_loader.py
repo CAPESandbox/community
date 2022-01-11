@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DatopLoader(Signature):
     name = "datop_loader"
     description = "Exhibits indicators of DatopLoader, loader often used by Qakbot."
@@ -26,9 +27,7 @@ class DatopLoader(Signature):
     evented = True
 
     def run(self):
-        indicators = [
-            "[A-Z]:\\\\Datop\\\\.*"
-        ]
+        indicators = ["[A-Z]:\\\\Datop\\\\.*"]
 
         for indicator in indicators:
             match = self.check_write_file(pattern=indicator, regex=True)

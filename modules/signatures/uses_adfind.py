@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ADFind(Signature):
     name = "uses_adfind"
     description = "Queries the Active Directory using AdFind"
@@ -30,7 +31,7 @@ class ADFind(Signature):
     def run(self):
         utilities = [
             "adfind ",
-			"adfind.exe",
+            "adfind.exe",
         ]
 
         ret = False
@@ -40,6 +41,6 @@ class ADFind(Signature):
             for utility in utilities:
                 if utility in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret

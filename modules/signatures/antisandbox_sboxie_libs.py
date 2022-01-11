@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class SandboxieDetectLibs(Signature):
     name = "antisandbox_sboxie_libs"
     description = "Detects Sandboxie through the presence of a library"

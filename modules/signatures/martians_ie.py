@@ -20,8 +20,8 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
-ie_paths_re = re.compile(r"^c:\\program files(?:\s\(x86\))?\\internet explorer\\iexplore.exe$",re.I)
-#run through re.escape()
+ie_paths_re = re.compile(r"^c:\\program files(?:\s\(x86\))?\\internet explorer\\iexplore.exe$", re.I)
+# run through re.escape()
 white_list_re = [
     "^C\\:\\\\Program Files(?:\s\\(x86\\))?\\\\Adobe\\\\Reader\\ \\d+\\.\\d+\\\\Reader\\\\AcroRd32\\.exe$",
     "^C\\:\\\\Program Files(?:\s\\(x86\\))?\\\\Java\\\\jre\\d+\\\\bin\\\\j(?:avaw?|p2launcher)\\.exe$",
@@ -33,13 +33,14 @@ white_list_re = [
     "^C\\:\\\\Windows\\\\syswow64\\\\drwtsn32\\.exe$",
     "^C\\:\\\\Windows\\\\system32\\\\dwwin\\.exe$",
     "^C\\:\\\\Windows\\\\system32\\\\WerFault\\.exe$",
-    "^C\\:\\\\Windows\\\\syswow64\\\\WerFault\\.exe$"
+    "^C\\:\\\\Windows\\\\syswow64\\\\WerFault\\.exe$",
 ]
-#means we can be evaded but also means we can have relatively tight paths between 32-bit and 64-bit
+# means we can be evaded but also means we can have relatively tight paths between 32-bit and 64-bit
 white_list_re_compiled = []
 for entry in white_list_re:
-    white_list_re_compiled.append(re.compile(entry,re.I))
+    white_list_re_compiled.append(re.compile(entry, re.I))
 white_list_re_compiled.append(ie_paths_re)
+
 
 class MartiansIE(Signature):
     name = "ie_martian_children"
@@ -58,18 +59,18 @@ class MartiansIE(Signature):
             self.go_deeper(e, result)
         return result
 
-    def find_martians(self,ptree,pwlist):
-       result = []
-       if ptree["children"]:
-           children = self.go_deeper(ptree)
-           for child in children:
-               match_found = False
-               for entry in pwlist:
-                   if entry.match(child):
-                       match_found = True
-               if not match_found:
-                   result.append(child)
-       return result
+    def find_martians(self, ptree, pwlist):
+        result = []
+        if ptree["children"]:
+            children = self.go_deeper(ptree)
+            for child in children:
+                match_found = False
+                for entry in pwlist:
+                    if entry.match(child):
+                        match_found = True
+                if not match_found:
+                    result.append(child)
+        return result
 
     def run(self):
         if self.results["target"]["category"] == "file":
@@ -85,5 +86,5 @@ class MartiansIE(Signature):
                 if len(self.martians) > 0:
                     for martian in self.martians:
                         self.data.append({"ie_martian": martian})
-                    return True 
+                    return True
         return False

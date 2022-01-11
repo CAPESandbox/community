@@ -25,6 +25,15 @@ rule Hive {
         $v1_4 = "D*struct { F uintptr; data *[]uint8; seed *uint8; fnc *main.decFunc }" ascii
         $v1_5 = "golang.org/x/sys/windows.getSystemWindowsDirectory" ascii
         $v1_6 = "path/filepath.WalkDir" ascii
+        $v2_1 = "taskkill /f /im" ascii
+        $v2_2 = "schtasks /delete /tn" ascii
+        $v2_3 = "encfile.txt" ascii
+        $v2_4 = "README.html" ascii
+        $v2_5 = "total encrypt %v/%v" ascii
+        $v2_6 = "<b>ITSSHOWKEY</b>" ascii
+        $v2_7 = "Recovery your files." ascii
+        $v2_8 = "yaml:\"send_host\"" ascii  // send_host: "45.76.99.222:80"
+        $v2_9 = "yaml:\"ignore_dir\"" ascii
     condition:
-        uint16(0) == 0x5a4d and (all of ($url*) or all of ($s*) or 4 of ($x*) or 5 of ($v1*))
+        uint16(0) == 0x5a4d and (all of ($url*) or all of ($s*) or 4 of ($x*) or 5 of ($v1*) or 5 of ($v2*) or (4 of ($v2*) and #v2_1 > 10))
 }

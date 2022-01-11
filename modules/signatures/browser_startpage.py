@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class browser_startpage(Signature):
     name = "browser_startpage"
     description = "Attempts to modify Internet Explorer's start page"
@@ -24,7 +25,9 @@ class browser_startpage(Signature):
     minimum = "1.2"
 
     def run(self):
-        if self.check_write_key(pattern=".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\Main\\\\Start\\ Page$", regex=True):
+        if self.check_write_key(
+            pattern=".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\Main\\\\Start\\ Page$", regex=True
+        ):
             return True
 
         return False

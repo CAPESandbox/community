@@ -15,21 +15,20 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class FamilyProxyBack(Signature):
     name = "family_proxyback"
     description = "Exhibits behavior characteristic of Proxyback malware"
     severity = 3
     families = ["ProxyBack"]
     authors = ["Kevin Ross"]
-    references = ["http://researchcenter.paloaltonetworks.com/2015/12/proxyback-malware-turns-user-systems-into-proxies-without-consent/"]
+    references = [
+        "http://researchcenter.paloaltonetworks.com/2015/12/proxyback-malware-turns-user-systems-into-proxies-without-consent/"
+    ]
     minimum = "1.2"
 
     def run(self):
-        mutexes = [
-            "PB_MAIN_MUTEX_GL_.*",
-            "PB_SN_MUTEX_GL_.*",
-            "PB_SCH_MUTEX_GL_.*"
-        ]
+        mutexes = ["PB_MAIN_MUTEX_GL_.*", "PB_SN_MUTEX_GL_.*", "PB_SCH_MUTEX_GL_.*"]
 
         for mutexes in mutexes:
             if self.check_mutex(pattern=mutexes, regex=True):

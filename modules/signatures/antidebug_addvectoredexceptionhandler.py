@@ -16,6 +16,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class antidebug_addvectoredexceptionhandler(Signature):
     name = "antidebug_addvectoredexceptionhandler"
     description = "AddVectoredExceptionHandler detected (possible anti-debug)"
@@ -32,5 +33,4 @@ class antidebug_addvectoredexceptionhandler(Signature):
 
     def on_call(self, call, process):
         if call["api"] == "AddVectoredExceptionHandler":
-           return True
-
+            return True

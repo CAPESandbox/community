@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CreatesExe(Signature):
     name = "creates_exe"
     description = "Creates a Windows executable on the filesystem"
@@ -20,8 +21,7 @@ class CreatesExe(Signature):
     enabled = False
 
     def run(self):
-        match = self.check_file(pattern=".*\\.exe$",
-                                regex=True)
+        match = self.check_file(pattern=".*\\.exe$", regex=True)
         if match:
             self.data.append({"file": match})
             return True

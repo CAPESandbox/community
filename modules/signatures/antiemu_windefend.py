@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiEmuWinDefend(Signature):
     name = "antiemu_windefend"
     description = "Detects the presence of Windows Defender AV emulator via files"
@@ -28,7 +29,9 @@ class AntiEmuWinDefend(Signature):
     authors = ["bartblaze"]
     minimum = "0.5"
     ttp = ["T1497"]
-    reference = ["https://i.blackhat.com/us-18/Thu-August-9/us-18-Bulazel-Windows-Offender-Reverse-Engineering-Windows-Defenders-Antivirus-Emulator.pdf"]
+    reference = [
+        "https://i.blackhat.com/us-18/Thu-August-9/us-18-Bulazel-Windows-Offender-Reverse-Engineering-Windows-Defenders-Antivirus-Emulator.pdf"
+    ]
 
     def run(self):
         indicators = [

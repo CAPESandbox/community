@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class RansomwareFiles(Signature):
     name = "ransomware_files"
     description = "Creates a known ransomware decryption instruction / key file."
@@ -44,7 +45,7 @@ class RansomwareFiles(Signature):
             (".*\\\\howto_restore_files.*\.(txt|html)$", ["TeslaCrypt", "AlphaCrypt"]),
             (".*\\\\+-xxx-HELP-xxx-+.*\.(png|txt|html)$", ["TeslaCrypt", "AlphaCrypt"]),
             (".*\\\\HELP_RECOVER_instructions\+.*\.(txt|html)$", ["TeslaCrypt", "AlphaCrypt"]),
-            #(".*\\\\YOUR_FILES_ARE_ENCRYPTED\.HTML$", ["Chimera"]),
+            # (".*\\\\YOUR_FILES_ARE_ENCRYPTED\.HTML$", ["Chimera"]),
             (".*\\\\_?how_recover.*\.(txt|html)$", ["TeslaCrypt", "AlphaCrypt"]),
             (".*\\\\cl_data.*\.bak$", ["WinPlock"]),
             (".*\\\\READ\ ME\ FOR\ DECRYPT\.txt$", ["Fakben"]),
@@ -115,8 +116,8 @@ class RansomwareFiles(Signature):
             (".*\\\\_Help_Important\.html$", ["Robbinhood"]),
             (".*\\\\_Decryption_ReadMe\.html$", ["Robbinhood"]),
             (".*\\\\RyukReadMe\.txt$", ["Ryuk"]),
-            ("C:\\[a-z0-9]{6,9}-HOW-TO-DECRYPT\.txt$", ["Sodinokibi","REvil"]),
-            ("C:\\[a-z0-9]{6,9}-readme\.txt$", ["Sodinokibi","REvil"]),
+            ("C:\\[a-z0-9]{6,9}-HOW-TO-DECRYPT\.txt$", ["Sodinokibi", "REvil"]),
+            ("C:\\[a-z0-9]{6,9}-readme\.txt$", ["Sodinokibi", "REvil"]),
             (".*\\\\#NEWRAR_README#\.TXT$", ["VSSDestroy"]),
             (".*\\\\#DECRYPT_MY_FILES#\.txt$", ["Aurora", "Zorro", "Dragon"]),
             (".*\\\\@\ READ\ ME\ TO\ RECOVER\ FILES\ @\.txt", ["Eris"]),
@@ -170,9 +171,9 @@ class RansomwareFiles(Signature):
             if self.check_write_file(pattern=ioc[0], regex=True):
                 if ioc[1] != "":
                     self.families = ioc[1]
-                    self.description = ("Creates a known {0} ransomware "
-                                        "decryption instruction / key file."
-                                        "".format("/".join(ioc[1])))
+                    self.description = (
+                        "Creates a known {0} ransomware " "decryption instruction / key file." "".format("/".join(ioc[1]))
+                    )
                 return True
 
         return False

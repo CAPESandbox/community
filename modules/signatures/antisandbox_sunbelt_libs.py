@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class SunbeltDetectLibs(Signature):
     name = "antisandbox_sunbelt_libs"
     description = "Detects SunBelt Sandbox through the presence of a library"
@@ -29,10 +30,7 @@ class SunbeltDetectLibs(Signature):
     filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])
 
     def on_call(self, call, process):
-        indicators = [
-                "api_log",
-                "dir_watch"
-            ]
+        indicators = ["api_log", "dir_watch"]
         dllname = self.get_argument(call, "FileName").lower()
 
         for indicator in indicators:

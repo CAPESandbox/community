@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class BedsProtectorPacked(Signature):
     name = "packer_bedsprotector"
     description = ".NET executable is packed/obfuscated with ConfuserExMod BedsProtector"

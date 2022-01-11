@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AhnlabDetectLibs(Signature):
     name = "antiav_ahnlab_libs"
     description = "Detects AhnLab Antivirus through the presence of a library"
@@ -29,5 +30,10 @@ class AhnlabDetectLibs(Signature):
 
     def on_call(self, call, process):
         dllname = self.get_argument(call, "FileName")
-        if "AhnTrust" in dllname.lower() or "AhnI18N2" in dllname.lower() or "AhnACtrl" in dllname.lower() or "AhnI2" in dllname.lower():
+        if (
+            "AhnTrust" in dllname.lower()
+            or "AhnI18N2" in dllname.lower()
+            or "AhnACtrl" in dllname.lower()
+            or "AhnI2" in dllname.lower()
+        ):
             return True

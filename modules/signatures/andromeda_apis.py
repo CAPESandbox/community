@@ -15,13 +15,14 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Andromeda_APIs(Signature):
     name = "andromeda_behavior"
     description = "Exhibits behavior characteristic of Andromeda/Gamarue malware"
     weight = 3
     severity = 3
     categories = ["trojan"]
-    families = ["Andromeda","Gamarue"]
+    families = ["Andromeda", "Gamarue"]
     authors = ["Optiv"]
     minimum = "1.3"
     evented = True
@@ -30,7 +31,7 @@ class Andromeda_APIs(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.sysvolserial = self.get_environ_entry(self.get_initial_process(), "SystemVolumeSerialNumber")
         if self.sysvolserial:
-            self.sysvolserial = int(self.sysvolserial.replace("-",""), 16)
+            self.sysvolserial = int(self.sysvolserial.replace("-", ""), 16)
 
     filter_apinames = set(["NtOpenEvent"])
 
@@ -38,7 +39,7 @@ class Andromeda_APIs(Signature):
         eventname = self.get_argument(call, "EventName")
         try:
             eventname_int = int(eventname)
-            if self.sysvolserial and eventname_int == self.sysvolserial ^ 0x696e6a63: # 'injc'
+            if self.sysvolserial and eventname_int == self.sysvolserial ^ 0x696E6A63:  # 'injc'
                 return True
         except:
             pass

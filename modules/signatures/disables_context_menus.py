@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DisablesContextMenus(Signature):
     name = "disables_context_menus"
     description = "Disables host Context Menu in Taskbar and Start"
@@ -24,7 +25,7 @@ class DisablesContextMenus(Signature):
     minimum = "1.3"
     evented = True
 
-    def run(self):    
+    def run(self):
         indicators = [
             "HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoTrayContextMenu",
             "HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\DisableContextMenusInStart",

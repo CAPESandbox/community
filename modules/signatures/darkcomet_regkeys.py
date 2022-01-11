@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DarkCometRegkeys(Signature):
     name = "darkcomet_regkeys"
     description = "Interacts with known DarkComet registry keys"
@@ -27,10 +28,10 @@ class DarkCometRegkeys(Signature):
     def run(self):
         dc_keys = False
         indicators = [
-                ".*\\\\Software\\\\DC3_FEXEC$",
-                ".*\\\\Software\\\\DC3_FEXEC\\\\.*",
-                ".*\\\\Software\\\\DC2_USERS$",
-            ]
+            ".*\\\\Software\\\\DC3_FEXEC$",
+            ".*\\\\Software\\\\DC3_FEXEC\\\\.*",
+            ".*\\\\Software\\\\DC2_USERS$",
+        ]
         for indicator in indicators:
             match = self.check_key(pattern=indicator, regex=True)
             if match:

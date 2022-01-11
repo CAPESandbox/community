@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DisablesVBATrustAccess(Signature):
     name = "disables_vba_trust_access"
     description = "Attempts to disable Microsoft Office VBA trust access, allowing to execute macros without notification."
@@ -38,11 +39,11 @@ class DisablesVBATrustAccess(Signature):
         for check in keys:
             match = self.check_write_key(pattern=check, regex=True)
             if match:
-                self.data.append({"regkey" : match})
+                self.data.append({"regkey": match})
                 ret = True
 
         return ret
-		
+
 
 class ChangesTrustCenter_settings(Signature):
     name = "changes_trust_center_settings"
@@ -62,7 +63,7 @@ class ChangesTrustCenter_settings(Signature):
         for check in keys:
             match = self.check_write_key(pattern=check, regex=True)
             if match:
-                self.data.append({"regkey" : match})
+                self.data.append({"regkey": match})
                 ret = True
 
         return ret

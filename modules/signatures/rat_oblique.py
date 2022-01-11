@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ObliquekRATMutexes(Signature):
     name = "obliquerat_mutexes"
     description = "Creates ObliqueRAT RAT mutexes"
@@ -36,6 +37,7 @@ class ObliquekRATMutexes(Signature):
                 return True
 
         return False
+
 
 class ObliquekRATFiles(Signature):
     name = "obliquerat_files"
@@ -60,6 +62,7 @@ class ObliquekRATFiles(Signature):
                 return True
 
         return False
+
 
 class ObliquekRATNetworkActivity(Signature):
     name = "obliquerat_network_activity"
@@ -86,7 +89,7 @@ class ObliquekRATNetworkActivity(Signature):
                 if buff:
                     sysinfo = self.hostname + ">" + self.username + ">" + "Windows"
                     if buff.startswith(sysinfo) and "oblique" in buff:
-                        self.data.append({"data": buff })
+                        self.data.append({"data": buff})
                         self.match = True
 
     def on_complete(self):

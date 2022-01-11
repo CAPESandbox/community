@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class TorHiddenService(Signature):
     name = "network_tor_service"
     description = "Creates a Tor Hidden Service on the machine"
@@ -25,10 +26,7 @@ class TorHiddenService(Signature):
     ttp = ["T1188"]
 
     def run(self):
-        indicators = [
-            ".*\\\\tor\\\\hidden_service\\\\private_key$",
-            ".*\\\\tor\\\\hidden_service\\\\hostname$"
-        ]
+        indicators = [".*\\\\tor\\\\hidden_service\\\\private_key$", ".*\\\\tor\\\\hidden_service\\\\hostname$"]
 
         for indicator in indicators:
             if self.check_file(pattern=indicator, regex=True):

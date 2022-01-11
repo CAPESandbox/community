@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DisablesSmartScreen(Signature):
     name = "disables_smartscreen"
     description = "Modifies or disables Windows SmartScreen"
@@ -39,7 +40,7 @@ class DisablesSmartScreen(Signature):
                 self.data.append({"regkey": match})
                 re_match = True
 
-        cmdpat = ".*\"SmartScreenEnabled\".*\"Off\".*"
+        cmdpat = '.*"SmartScreenEnabled".*"Off".*'
         match = self.check_executed_command(pattern=cmdpat, regex=True)
         if match:
             self.data.append({"command": match})

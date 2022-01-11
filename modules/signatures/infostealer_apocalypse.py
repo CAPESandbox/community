@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ApocalypseStealerFileBehavior(Signature):
     name = "apocalypse_stealer_file_behavior"
     description = "Apocalypse infostealer file modification behavior detected"
@@ -38,8 +39,8 @@ class ApocalypseStealerFileBehavior(Signature):
             if match:
                 score += 1
                 self.data.append({"file": match})
-        
-        if score >=3:
+
+        if score >= 3:
             return True
 
         return False

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiSandboxSuspend(Signature):
     name = "antisandbox_suspend"
     description = "Tries to suspend Cuckoo threads to prevent logging of malicious activity"

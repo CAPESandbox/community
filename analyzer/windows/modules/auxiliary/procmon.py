@@ -2,16 +2,17 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
-import os.path
-import time
 import logging
+import os.path
 import subprocess
+import time
 from threading import Thread
-from lib.core.config import Config
+
 from lib.common.abstracts import Auxiliary
+from lib.common.constants import ROOT
 from lib.common.exceptions import CuckooPackageError
 from lib.common.results import upload_to_host
-from lib.common.constants import ROOT
+from lib.core.config import Config
 
 
 class Procmon(Auxiliary, Thread):
@@ -45,13 +46,18 @@ class Procmon(Auxiliary, Thread):
             )
 
         # Start process monitor in the background.
-        subprocess.Popen([
-            self.procmon_exe,
-            "/AcceptEula",
-            "/Quiet",
-            "/Minimized",
-            "/BackingFile", self.procmon_pml,
-        ], startupinfo=self.startupinfo, shell=True)
+        subprocess.Popen(
+            [
+                self.procmon_exe,
+                "/AcceptEula",
+                "/Quiet",
+                "/Minimized",
+                "/BackingFile",
+                self.procmon_pml,
+            ],
+            startupinfo=self.startupinfo,
+            shell=True,
+        )
 
         # Try to avoid race conditions by waiting until at least something
         # has been written to the log file.
@@ -66,13 +72,20 @@ class Procmon(Auxiliary, Thread):
             subprocess.call([self.procmon_exe, "/Terminate"], startupinfo=self.startupinfo, shell=True)
 
             # Convert the process monitor log into a readable XML file.
-            subprocess.call([
-                self.procmon_exe,
-                "/OpenLog", self.procmon_pml+".PML",
-                "/LoadConfig", self.procmon_pmc,
-                "/SaveAs", self.procmon_xml,
-                "/SaveApplyFilter",
-            ], startupinfo=self.startupinfo, shell=True)
+            subprocess.call(
+                [
+                    self.procmon_exe,
+                    "/OpenLog",
+                    self.procmon_pml + ".PML",
+                    "/LoadConfig",
+                    self.procmon_pmc,
+                    "/SaveAs",
+                    self.procmon_xml,
+                    "/SaveApplyFilter",
+                ],
+                startupinfo=self.startupinfo,
+                shell=True,
+            )
             # Upload the XML file to the host.
             upload_to_host(self.procmon_xml, "procmon.xml")
 

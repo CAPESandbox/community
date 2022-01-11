@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PersistenceRegistryScript(Signature):
     name = "persistence_registry_script"
     description = "Stores JavaScript or a script command in the registry, likely for fileless persistence"
@@ -23,7 +24,7 @@ class PersistenceRegistryScript(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     ttp = ["T1112"]
-    
+
     evented = True
 
     def __init__(self, *args, **kwargs):
@@ -50,8 +51,8 @@ class PersistenceRegistryScript(Signature):
     def on_complete(self):
         ret = False
         for key, value in self.registry_writes.items():
-            self.data.append({"key" : key})
-            self.data.append({"data" : value})
+            self.data.append({"key": key})
+            self.data.append({"data": value})
             ret = True
 
         return ret

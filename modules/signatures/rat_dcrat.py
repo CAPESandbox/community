@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DCRatFiles(Signature):
     name = "dcrat_files"
     description = "Creates DCRat RAT directories and/or files"
@@ -43,6 +44,7 @@ class DCRatFiles(Signature):
 
         return False
 
+
 class DCRatMutex(Signature):
     name = "dcrat_mutexes"
     description = "Creates DCRat RAT mutexes"
@@ -65,8 +67,9 @@ class DCRatMutex(Signature):
 
         return False
 
+
 def unbuffered_b64decode(data):
-    data = data.replace("\r", "").replace("\n","")
+    data = data.replace("\r", "").replace("\n", "")
     data += "=" * ((4 - len(data) % 4) % 4)
     try:
         data = data.decode("base64")
@@ -74,6 +77,7 @@ def unbuffered_b64decode(data):
         pass
 
     return data
+
 
 class DCRatAPIs(Signature):
     name = "dcrat_behavior"
@@ -92,19 +96,14 @@ class DCRatAPIs(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.score = 0
         self.nodename = str()
-        self.pat = re.compile('^(s_comm|m_comm|command|w_list|m_list)[a-f0-9]{40}$')
+        self.pat = re.compile("^(s_comm|m_comm|command|w_list|m_list)[a-f0-9]{40}$")
         self.dkeywords = [
             "token_uid",
             "data_name",
             "data_extension",
             "password",
         ]
-        self.bkeywords = [
-            "MX:DCR_MUTEX-",
-            "MHost:",
-            "BHost:",
-            ", TAG:"
-        ]
+        self.bkeywords = ["MX:DCR_MUTEX-", "MHost:", "BHost:", ", TAG:"]
 
     def on_call(self, call, process):
         if call["api"] == "GetAddrInfoW":
@@ -130,7 +129,7 @@ class DCRatAPIs(Signature):
                     for word in self.bkeywords:
                         if word in decoded:
                             self.score += 2
-    
+
     def on_complete(self):
         if self.score >= 5:
             return True

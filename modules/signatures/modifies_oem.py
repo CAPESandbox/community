@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ModifiesOEMInformation(Signature):
     name = "modifies_oem_information"
     description = "Modifies host OEM information"
@@ -24,7 +25,7 @@ class ModifiesOEMInformation(Signature):
     minimum = "1.3"
     evented = True
 
-    def run(self):    
+    def run(self):
         indicators = [
             "HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\OEMInformation\\\\Manufacturer",
             "HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\OEMInformation\\\\SupportHours",

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CopiesSelf(Signature):
     name = "copies_self"
     description = "Creates a copy of itself"
@@ -26,7 +27,9 @@ class CopiesSelf(Signature):
     def run(self):
         if self.results["target"]["category"] != "file":
             return False
-        if "PE32" not in self.results["target"]["file"].get("type", "") and "MS-DOS executable" not in self.results["target"]["file"].get("type", ""):
+        if "PE32" not in self.results["target"]["file"].get("type", "") and "MS-DOS executable" not in self.results["target"][
+            "file"
+        ].get("type", ""):
             return False
         created_copy = False
         # get the path of the initial monitored executable

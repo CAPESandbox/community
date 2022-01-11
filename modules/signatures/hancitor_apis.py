@@ -23,6 +23,7 @@ from lib.cuckoo.common.abstracts import Signature
 struct_pat = re.compile(r"\\x11\"3D\d{2}\.\d{2}(?:[A-Za-z]|\\x00)(?:\\x00){2}(?:\d{4}|(?:\\x00){4})(?:\\x00){12}http")
 url_pat = re.compile(r"(https?://[^\|]+)(?:\||\\x00)")
 
+
 class Hancitor_APIs(Signature):
     name = "hancitor_behavior"
     description = "Exhibits behavior characteristic of Hancitor downloader"

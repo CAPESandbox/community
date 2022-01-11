@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Office_Macro(Signature):
     name = "office_macro"
     description = "The office file contains a macro"
@@ -54,13 +55,14 @@ class Office_Macro(Signature):
 
         # Check for known lures
         if ret and "strings" in self.results:
-            lures = ["bank account",
-                     "enable content",
-                     "tools > macro",
-                     "macros must be enabled",
-                     "enable macro",
-                     "enable editing",
-                    ]
+            lures = [
+                "bank account",
+                "enable content",
+                "tools > macro",
+                "macros must be enabled",
+                "enable macro",
+                "enable editing",
+            ]
             positives = list()
             for string in self.results["strings"]:
                 for lure in lures:

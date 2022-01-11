@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PreventsSafeboot(Signature):
     name = "prevents_safeboot"
     description = "Attempts to block SafeBoot use by removing registry keys"
@@ -13,6 +14,8 @@ class PreventsSafeboot(Signature):
     minimum = "1.2"
 
     def run(self):
-        if self.check_delete_key(pattern=".*\\\\System\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\SafeBoot\\\\.*", regex=True):
+        if self.check_delete_key(
+            pattern=".*\\\\System\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\SafeBoot\\\\.*", regex=True
+        ):
             return True
         return False

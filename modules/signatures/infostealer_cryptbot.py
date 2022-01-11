@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CryptBotFiles(Signature):
     name = "cryptbot_files"
     description = "CryptBot file artifacts detected"
@@ -41,11 +42,12 @@ class CryptBotFiles(Signature):
             if match:
                 score += 1
                 self.data.append({"file": match})
-        
+
         if score >= 4:
             return True
 
         return False
+
 
 class CryptBotNetwork(Signature):
     name = "cryptbot_network"

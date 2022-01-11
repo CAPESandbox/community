@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Madness(Signature):
     name = "bot_madness"
     description = "Recognized to be an Madness bot"
@@ -30,15 +31,17 @@ class Madness(Signature):
     minimum = "0.5"
 
     def run(self):
-        madness_re = re.compile("\?uid\x3d[0-9]{8}&ver\x3d[0-9].[0-9]{2}&mk\x3d[0-9a-f]{6}&os\x3d[A-Za-z0-9]+&rs\x3d[a-z]+&c\x3d[0-1]&rq\x3d[0-1]")
-        
+        madness_re = re.compile(
+            "\?uid\x3d[0-9]{8}&ver\x3d[0-9].[0-9]{2}&mk\x3d[0-9a-f]{6}&os\x3d[A-Za-z0-9]+&rs\x3d[a-z]+&c\x3d[0-1]&rq\x3d[0-1]"
+        )
+
         if "network" in self.results:
             httpitems = self.results["network"].get("http")
             if not httpitems:
                 return False
             for http in httpitems:
                 if http["method"] == "GET" and madness_re.search(http["uri"]):
-                    self.data.append({"url" : http["uri"], "data" : http["uri"]})
+                    self.data.append({"url": http["uri"], "data": http["uri"]})
                     return True
 
         return False

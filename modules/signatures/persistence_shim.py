@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PersistenceShimDatabase(Signature):
     name = "persistence_shim_database"
     description = "Registers an application compatibility shim database for persistence"
@@ -26,7 +27,7 @@ class PersistenceShimDatabase(Signature):
     evented = True
     references = [
         "https://www.fireeye.com/blog/threat-research/2017/05/fin7-shim-databases-persistence.html",
-        "https://countercept.com/blog/hunting-for-application-shim-databases/"
+        "https://countercept.com/blog/hunting-for-application-shim-databases/",
     ]
     ttp = ["T1138"]
 

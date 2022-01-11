@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class HookMouse(Signature):
     name = "antisandbox_mouse_hook"
     description = "Installs an hook procedure to monitor for mouse events"
@@ -25,7 +26,6 @@ class HookMouse(Signature):
     evented = True
 
     filter_apinames = set(["SetWindowsHookExA", "SetWindowsHookExW"])
-
 
     def on_call(self, call, process):
         if int(self.get_argument(call, "HookIdentifier")) in [7, 14]:

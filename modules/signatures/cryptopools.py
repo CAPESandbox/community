@@ -1,5 +1,6 @@
 from lib.cuckoo.common.abstracts import Signature
 
+
 class MINERS(Signature):
     name = "cryptopool_domains"
     description = "Connects to crypto currency mining pool"

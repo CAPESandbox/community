@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class SecurityXploded_Modules(Signature):
     name = "securityxploded_modules"
     description = "Sample executed known SecurityXploded programs"
@@ -44,7 +45,7 @@ class SecurityXploded_Modules(Signature):
             for indicator in self.indicators:
                 if indicator[0].lower() in data.lower():
                     saved_to = self.get_argument(call, "HandleName")
-                    addit = { indicator[1]: saved_to }
+                    addit = {indicator[1]: saved_to}
                     if addit not in self.data:
                         self.data.append(addit)
 

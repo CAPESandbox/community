@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class QihooDetectLibs(Signature):
     name = "antiav_360_libs"
     description = "Detects Qihoo 360 Antivirus through the presence of a library"
@@ -29,5 +30,10 @@ class QihooDetectLibs(Signature):
 
     def on_call(self, call, process):
         dllname = self.get_argument(call, "FileName")
-        if "360net" in dllname.lower() or "360safemonpro" in dllname.lower() or "360base" in dllname.lower() or "360base64" in dllname.lower():
+        if (
+            "360net" in dllname.lower()
+            or "360safemonpro" in dllname.lower()
+            or "360base" in dllname.lower()
+            or "360base64" in dllname.lower()
+        ):
             return True

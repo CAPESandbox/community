@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DEPBypass(Signature):
     name = "dep_bypass"
     description = "DEP was bypassed by marking part of the heap executable"
@@ -28,7 +29,13 @@ class DEPBypass(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.ignore_it = True
         self.procs = set()
-        if self.results["target"]["category"] != "file" or self.results["info"]["package"] not in ["exe", "rar", "zip", "dll", "regsvr"]:
+        if self.results["target"]["category"] != "file" or self.results["info"]["package"] not in [
+            "exe",
+            "rar",
+            "zip",
+            "dll",
+            "regsvr",
+        ]:
             self.ignore_it = False
 
     filter_apinames = set(["NtProtectVirtualMemory", "VirtualProtectEx"])
@@ -62,7 +69,7 @@ class DEPBypass(Signature):
 
     def on_complete(self):
         for proc in self.procs:
-            self.data.append({"process" : proc})
+            self.data.append({"process": proc})
 
         if self.procs:
             return True

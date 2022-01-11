@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class KazyBot_APIs(Signature):
     name = "kazybot_behavior"
     description = "Exhibits behavior characteristics of KazyBot RAT"

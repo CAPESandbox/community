@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiDBGDevices(Signature):
     name = "antidbg_devices"
     description = "Checks for the presence of known devices from debuggers and forensic tools"
@@ -35,7 +36,7 @@ class AntiDBGDevices(Signature):
             ".*REGSYS$",
             ".*FILEM$",
             ".*TRW$",
-            ".*ICEXT$"
+            ".*ICEXT$",
         ]
 
         detected = False

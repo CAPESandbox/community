@@ -20,6 +20,7 @@ except:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Secure_Login_Phish(Signature):
     name = "secure_login_phishing"
     description = "'{0}' in HTML Title but connection is not HTTPS. Possibly indicative of phishing."

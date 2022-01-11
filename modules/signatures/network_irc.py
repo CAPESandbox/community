@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class NetworkIRC(Signature):
     name = "network_irc"
     description = "Connects to an IRC server, possibly part of a botnet"

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PlugxMutexes(Signature):
     name = "rat_plugx_mutexes"
     description = "Creates known PlugX mutexes"

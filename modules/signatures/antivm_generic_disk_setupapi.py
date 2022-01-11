@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class SetupAPIDiskInformation(Signature):
     name = "antivm_generic_disk_setupapi"
     description = "Queries information on disks for anti-virtualization via Device Information APIs"
@@ -27,7 +28,7 @@ class SetupAPIDiskInformation(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
 
-    filter_apinames = set(["SetupDiGetClassDevsA","SetupDiGetClassDevsW"])
+    filter_apinames = set(["SetupDiGetClassDevsA", "SetupDiGetClassDevsW"])
 
     def on_call(self, call, process):
         known = self.get_argument(call, "Known")

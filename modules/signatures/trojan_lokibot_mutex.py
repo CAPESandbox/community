@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class LokibotMutexes(Signature):
     name = "lokibot_mutexes"
     description = "Creates Lokibot mutexes"

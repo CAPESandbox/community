@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CodeLux_APIs(Signature):
     name = "codelux_behavior"
     description = "Exhibits behavior characteristic of CodeLux Keylogger"

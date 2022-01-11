@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DiskInformation(Signature):
     name = "antivm_generic_disk"
     description = "Queries information on disks, possibly for anti-virtualization"
@@ -29,15 +30,17 @@ class DiskInformation(Signature):
         self.lastprocess = 0
         self.handles = dict()
 
-    filter_apinames = set(["NtCreateFile", "NtOpenFile", "NtClose", "DeviceIoControl", "NtDuplicateObject", "NtDeviceIoControlFile"])
+    filter_apinames = set(
+        ["NtCreateFile", "NtOpenFile", "NtClose", "DeviceIoControl", "NtDuplicateObject", "NtDeviceIoControlFile"]
+    )
 
     def on_call(self, call, process):
         ioctls = [
-            0x2d1400, # IOCTL_STORAGE_QUERY_PROPERTY
+            0x2D1400,  # IOCTL_STORAGE_QUERY_PROPERTY
             0x70000,  # IOCTL_DISK_GET_DRIVE_GEOMETRY
-            0x700a0,  # IOCTL_DISK_GET_DRIVE_GEOMETRY_EX
-            0x4d008,  # IOCTL_SCSI_MINIPORT
-            0x7405c,  # IOCTL_DISK_GET_LENGTH_INFO
+            0x700A0,  # IOCTL_DISK_GET_DRIVE_GEOMETRY_EX
+            0x4D008,  # IOCTL_SCSI_MINIPORT
+            0x7405C,  # IOCTL_DISK_GET_LENGTH_INFO
         ]
 
         if process is not self.lastprocess:
@@ -57,7 +60,11 @@ class DiskInformation(Signature):
         elif (call["api"] == "NtCreateFile" or call["api"] == "NtOpenFile") and call["status"]:
             filename = self.get_argument(call, "FileName")
             handle = int(self.get_argument(call, "FileHandle"), 16)
-            if filename and (filename.lower() == "\\??\\physicaldrive0" or filename.lower().startswith("\\device\\harddisk") or "scsi0" in filename.lower()):
+            if filename and (
+                filename.lower() == "\\??\\physicaldrive0"
+                or filename.lower().startswith("\\device\\harddisk")
+                or "scsi0" in filename.lower()
+            ):
                 if handle not in self.handles:
                     self.handles[handle] = filename
         elif call["api"] == "DeviceIoControl" or call["api"] == "NtDeviceIoControlFile":
@@ -65,6 +72,6 @@ class DiskInformation(Signature):
             if call["api"] == "DeviceIoControl":
                 handle = int(self.get_argument(call, "DeviceHandle"), 16)
             else:
-                handle = int(self.get_argument(call, "FileHandle"), 16) 
+                handle = int(self.get_argument(call, "FileHandle"), 16)
             if handle in self.handles and ioctl in ioctls:
                 return True

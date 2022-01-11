@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class RemovesPinnedPrograms(Signature):
     name = "removes_pinned_programs"
     description = "Removes Start menu and Taskbar pinned programs"
@@ -24,7 +25,7 @@ class RemovesPinnedPrograms(Signature):
     minimum = "1.3"
     evented = True
 
-    def run(self):    
+    def run(self):
         indicators = [
             "HKEY_CURRENT_USER\\\\Software\\\\Policies\\\\Microsoft\\\\Windows\\\\Explorer\\\\TaskbarNoPinnedList",
             "HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoStartMenuPinnedList",

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Ursnif_APIs(Signature):
     name = "ursnif_behavior"
     description = "Exhibits behavior characteristics of Ursnif spyware"
@@ -51,9 +52,9 @@ class Ursnif_APIs(Signature):
                     _, arg1, arg2 = command.split()
                 else:
                     if command.replace(" ", "").startswith("cmd/c") and arg1 and arg2:
-                        buf = command.split("\"")
-                        arg1 = arg1.replace("\"", "")
-                        arg2 = arg2.replace("\"", "")
+                        buf = command.split('"')
+                        arg1 = arg1.replace('"', "")
+                        arg2 = arg2.replace('"', "")
                         if arg2 in buf:
                             if arg1 in buf:
                                 badness += 8

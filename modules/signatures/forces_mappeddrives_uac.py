@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class MappedDrivesUAC(Signature):
     name = "mapped_drives_uac"
     description = "Attempts to ensure mapped drives are available from an elevated prompt or process with UAC enabled"

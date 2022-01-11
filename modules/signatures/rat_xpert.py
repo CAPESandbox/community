@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class XpertRATMutexes(Signature):
     name = "xpertrat_mutexes"
     description = "XpertRAT RAT mutexes detected"
@@ -42,6 +43,7 @@ class XpertRATMutexes(Signature):
                 return True
 
         return False
+
 
 class XpertRATFiles(Signature):
     name = "xpertrat_files"
@@ -77,4 +79,3 @@ class XpertRATFiles(Signature):
             return True
 
         return False
-    

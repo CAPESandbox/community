@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Alphacrypt_APIs(Signature):
     name = "alphacrypt_behavior"
     description = "Exhibits behavior characteristic of Alphacrypt/Teslacrypt ransomware"
@@ -38,8 +39,7 @@ class Alphacrypt_APIs(Signature):
         self.c2s = set()
         self.uristruct = False
         self.urivars = ["sub", "addr", "size", "version", "os", "id", "inst_id"]
-        self.pat = r"(?:https?:\/\/)?(?:[\da-z\.-]+)\.(?:[0-9a-z\.]{2,6})" \
-                   r"(?:\d{1,5})?(?:[\/\w\.-]*)\/?"
+        self.pat = r"(?:https?:\/\/)?(?:[\da-z\.-]+)\.(?:[0-9a-z\.]{2,6})" r"(?:\d{1,5})?(?:[\/\w\.-]*)\/?"
 
     filter_apinames = set(["CryptDecrypt"])
 
@@ -57,7 +57,6 @@ class Alphacrypt_APIs(Signature):
                     buf = buf.lower()
                     if all(s in buf for s in self.urivars):
                         self.uristruct = True
-
 
     def on_complete(self):
         ret = False

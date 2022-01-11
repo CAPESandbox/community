@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class FleerCivetMutexes(Signature):
     name = "fleercivet_mutex"
     description = "Creates known FleerCivet mutexes"
@@ -26,9 +27,7 @@ class FleerCivetMutexes(Signature):
     minimum = "0.5"
 
     def run(self):
-        indicators = [
-            "_HSJ909NJJNJ90203_"
-        ]
+        indicators = ["_HSJ909NJJNJ90203_"]
 
         for indicator in indicators:
             if self.check_mutex(pattern=indicator):

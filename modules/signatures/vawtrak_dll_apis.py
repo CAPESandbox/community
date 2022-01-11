@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Vawtrak_APIs(Signature):
     name = "vawtrak_behavior"
     description = "Exhibits behavior characteristics of Vawtrak / Neverquest malware."
@@ -26,8 +27,17 @@ class Vawtrak_APIs(Signature):
     minimum = "1.3"
     evented = True
 
-    filter_apinames = set(["CreateToolhelp32Snapshot", "Process32FirstW", "Process32NextW",
-                           "NtOpenProcess", "NtCreateEvent", "NtOpenEvent", "RegSetValueExA"])
+    filter_apinames = set(
+        [
+            "CreateToolhelp32Snapshot",
+            "Process32FirstW",
+            "Process32NextW",
+            "NtOpenProcess",
+            "NtCreateEvent",
+            "NtOpenEvent",
+            "RegSetValueExA",
+        ]
+    )
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -70,7 +80,9 @@ class Vawtrak_APIs(Signature):
         elif call["api"] == "NtCreateEvent":
             # Increase process injection event counter
             if curproc == "regsvr32.exe":
-                if (self.nextlastcall == "Process32FirstW" or self.nextlastcall == "Process32NextW") and self.lastcall == "NtOpenProcess":
+                if (
+                    self.nextlastcall == "Process32FirstW" or self.nextlastcall == "Process32NextW"
+                ) and self.lastcall == "NtOpenProcess":
                     self.stepctr += 1
             # Add event to process event monitor
             modpath = process["module_path"].lower()
@@ -87,7 +99,6 @@ class Vawtrak_APIs(Signature):
 
         self.nextlastcall = self.lastcall
         self.lastcall = call["api"]
-
 
     def on_complete(self):
         malscore = 0

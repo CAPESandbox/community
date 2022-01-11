@@ -2,8 +2,10 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
-from lib.cuckoo.common.abstracts import Signature
 import struct
+
+from lib.cuckoo.common.abstracts import Signature
+
 
 class Virus(Signature):
     name = "virus"
@@ -25,7 +27,19 @@ class Virus(Signature):
         self.invalidated_files = set()
         self.saw_virus = False
 
-    filter_apinames = set(["NtCreateFile", "NtDuplicateObject", "NtOpenFile", "NtClose", "NtWriteFile", "CopyFileA", "CopyFileW", "CopyFileExA", "CopyFileExW"])
+    filter_apinames = set(
+        [
+            "NtCreateFile",
+            "NtDuplicateObject",
+            "NtOpenFile",
+            "NtClose",
+            "NtWriteFile",
+            "CopyFileA",
+            "CopyFileW",
+            "CopyFileExA",
+            "CopyFileExW",
+        ]
+    )
 
     def on_call(self, call, process):
         if process is not self.lastprocess:
@@ -78,10 +92,10 @@ class Virus(Signature):
                         key = self.readcopyfiles[key]
                 self.infected_files.add(key)
                 self.saw_virus = True
-        
+
         return None
 
     def on_complete(self):
         for infected in self.infected_files:
-            self.data.append({"file" : infected})
+            self.data.append({"file": infected})
         return self.saw_virus

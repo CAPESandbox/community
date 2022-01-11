@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PowerpoolMutexes(Signature):
     name = "powerpool_mutexes"
     description = "Creates known PowerPool mutexes"

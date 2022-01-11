@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class OkrumMutexes(Signature):
     name = "okrum_mutexes"
     description = "Creates known Ke3chang Okrum mutexes"

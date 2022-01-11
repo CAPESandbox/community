@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Modifies_HostFile(Signature):
     name = "modifies_hostfile"
     description = "The sample wrote data to the system hosts file."

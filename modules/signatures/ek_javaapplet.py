@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Java_JS(Signature):
     name = "java_js"
     description = "Executes obfuscated JavaScript containing a Java appplet indicative of an exploit attempt"
@@ -43,5 +44,5 @@ class Java_JS(Signature):
         else:
             buf = self.get_argument(call, "Script")
 
-        if re.search("\<applet.*?archive[ \t\n]*?=", buf, re.IGNORECASE|re.DOTALL):
+        if re.search("\<applet.*?archive[ \t\n]*?=", buf, re.IGNORECASE | re.DOTALL):
             return True

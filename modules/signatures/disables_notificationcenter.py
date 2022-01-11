@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DisablesNotificationCenter(Signature):
     name = "disables_notificationcenter"
     description = "Disables Windows Notification Center"

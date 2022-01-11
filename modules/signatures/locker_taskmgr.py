@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DisableTaskMgr(Signature):
     name = "locker_taskmgr"
     description = "Disables Windows' Task Manager"
@@ -25,7 +26,10 @@ class DisableTaskMgr(Signature):
     ttp = ["T1112"]
 
     def run(self):
-        if self.check_write_key(pattern=".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\DisableTaskMgr$", regex=True):
+        if self.check_write_key(
+            pattern=".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\DisableTaskMgr$",
+            regex=True,
+        ):
             return True
 
         return False

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CRATMutexes(Signature):
     name = "crat_mutexes"
     description = "CRAT RAT mutex detected"

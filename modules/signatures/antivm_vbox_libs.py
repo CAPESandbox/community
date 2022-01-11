@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class VBoxDetectLibs(Signature):
     name = "antivm_vbox_libs"
     description = "Detects VirtualBox through the presence of a library"
@@ -39,12 +40,9 @@ class VBoxDetectLibs(Signature):
             "VBoxOGLerrorspu.dll",
             "VBoxOGLfeedbackspu.dll",
             "VBoxOGLpackspu.dll",
-            "VBoxOGLpassthroughspu.dll"
+            "VBoxOGLpassthroughspu.dll",
         ]
 
         for indicator in indicators:
-            if self.check_argument_call(call,
-                                        pattern=indicator,
-                                        name="FileName",
-                                        ignorecase=True):
+            if self.check_argument_call(call, pattern=indicator, name="FileName", ignorecase=True):
                 return True

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PurpleWaveMutexes(Signature):
     name = "purplewave_mutexes"
     description = "PurpleWave infostealer mutexes detected"
@@ -37,6 +38,7 @@ class PurpleWaveMutexes(Signature):
                 return True
 
         return False
+
 
 class PurpleWaveNetworkAcivity(Signature):
     name = "purplewave_network_activity"
@@ -62,7 +64,7 @@ class PurpleWaveNetworkAcivity(Signature):
             useragent = self.get_argument(call, "Agent")
             if useragent and useragent == "app":
                 self.uamatch = True
-        
+
         if call["api"] == "HttpAddRequestHeadersA":
             headers = self.get_argument(call, "Headers")
             if headers and "boundary=boundaryaswell" in headers:

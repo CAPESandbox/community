@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class FTPStealer(Signature):
     name = "infostealer_ftp"
     description = "Harvests credentials from local FTP client softwares"
@@ -63,19 +64,19 @@ class FTPStealer(Signature):
             ".*\\\\Software\\\\(Wow6432Node\\\\)?MAS-Soft\\\\FTPInfo\\\\.*",
             ".*\\\\Software\\\\(Wow6432Node\\\\)?SoftX\.org\\\\FTPClient\\\\.*",
             ".*\\\\Software\\\\(Wow6432Node\\\\)?NCH\\ Software\\\\CoreFTP\\\\.*",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?BulletProof Software\\\\BulletProof FTP Client.*"
+            ".*\\\\Software\\\\(Wow6432Node\\\\)?BulletProof Software\\\\BulletProof FTP Client.*",
         ]
         found_stealer = False
         for indicator in file_indicators:
             file_match = self.check_file(pattern=indicator, regex=True, all=True)
             if file_match:
                 for match in file_match:
-                    self.data.append({"file" : match })
+                    self.data.append({"file": match})
                 found_stealer = True
         for indicator in registry_indicators:
             key_match = self.check_key(pattern=indicator, regex=True, all=True)
             if key_match:
                 for match in key_match:
-                    self.data.append({"key" : match })
+                    self.data.append({"key": match})
                 found_stealer = True
         return found_stealer

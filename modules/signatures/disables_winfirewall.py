@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DisablesWindowsFirewall(Signature):
     name = "disables_winfirewall"
     description = "Disables Windows firewall"

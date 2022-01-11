@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#--------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 # Name:        tridupdate.py
 # Purpose:     TrID's definitions package updater
 #
@@ -10,21 +10,20 @@
 # Created:     20/05/2012
 # Copyright:   (c) Mark 2012-
 # Licence:     public domain
-#--------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 
-from __future__ import print_function
-
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
+import argparse
+import hashlib
 import os
 import sys
-import hashlib
-import argparse
-from urllib.request import urlopen
-import zipfile
 import tempfile
+import zipfile
+from urllib.request import urlopen
 
 PROGRAM_VER = "1.10"
+
 
 def errexit(mess, errlev=1):
     """Display an error and exit."""
@@ -34,7 +33,7 @@ def errexit(mess, errlev=1):
 
 def chunked(file, chunk_size):
     """Helper function to read files in chunks."""
-    return iter(lambda: file.read(chunk_size), b'')
+    return iter(lambda: file.read(chunk_size), b"")
 
 
 def MD5digest(filename=None, data=None):
@@ -42,7 +41,7 @@ def MD5digest(filename=None, data=None):
     h = hashlib.md5()
     if filename:
         f = open(filename, "rb")
-        for data in chunked(f, 1024*1024):
+        for data in chunked(f, 1024 * 1024):
             h.update(data)
         f.close()
     elif data:
@@ -54,11 +53,11 @@ def trdget(url_defs):
     """Download & unzip a new TrID defs package"""
     f = tempfile.TemporaryFile()
     u = urlopen(url_defs)
-    for data in chunked(u, 1024*8):
+    for data in chunked(u, 1024 * 8):
         f.write(data)
-        print("\r%dKB" % (f.tell() / 1024), end=' ')
+        print("\r%dKB" % (f.tell() / 1024), end=" ")
         sys.stdout.flush()
-    print("\r", end=' ')
+    print("\r", end=" ")
     z = zipfile.ZipFile(f)
     trd = z.read("triddefs.trd")
     z.close()
@@ -69,12 +68,10 @@ def trdget(url_defs):
 def get_cmdline():
     """Evaluate command line parameters, usage & help."""
     parser = argparse.ArgumentParser(
-             description="TrID's definitions updater",
-             formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-             prefix_chars='-/+')
-    parser.add_argument("filename", action="store", nargs='?',
-                        help = "TRD package filename.", default="triddefs.trd")
-    parser.add_argument('--version', action='version', version="TrIDUpdate v%s - (C) 2012 M.Pontello" % PROGRAM_VER)
+        description="TrID's definitions updater", formatter_class=argparse.ArgumentDefaultsHelpFormatter, prefix_chars="-/+"
+    )
+    parser.add_argument("filename", action="store", nargs="?", help="TRD package filename.", default="triddefs.trd")
+    parser.add_argument("--version", action="version", version="TrIDUpdate v%s - (C) 2012 M.Pontello" % PROGRAM_VER)
     res = parser.parse_args()
     return res
 
@@ -116,5 +113,5 @@ def main():
         errexit("Digest don't match. Retry!")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

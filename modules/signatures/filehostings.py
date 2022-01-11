@@ -1,5 +1,6 @@
-import os
 import logging
+import os
+
 from lib.cuckoo.common.abstracts import Signature
 
 log = logging.getLogger(__name__)

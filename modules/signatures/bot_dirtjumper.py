@@ -15,13 +15,14 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DirtJumper(Signature):
     name = "bot_dirtjumper"
     description = "Recognized to be a DirtJumper bot"
     severity = 3
     categories = ["bot", "ddos"]
     families = ["DirtJumper"]
-    authors = ["nex","jjones"]
+    authors = ["nex", "jjones"]
     minimum = "0.5"
 
     def run(self):
@@ -30,8 +31,12 @@ class DirtJumper(Signature):
             if not httpitems:
                 return False
             for http in httpitems:
-                if http["method"] == "POST" and http["body"].startswith("k=") and http.get("user-agent", "") == "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US)":
-                    self.data.append({"url" : http["uri"], "data" : http["body"]})
+                if (
+                    http["method"] == "POST"
+                    and http["body"].startswith("k=")
+                    and http.get("user-agent", "") == "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US)"
+                ):
+                    self.data.append({"url": http["uri"], "data": http["body"]})
                     return True
 
         return False

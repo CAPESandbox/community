@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Angler_JS(Signature):
     name = "angler_js"
     description = "Executes obfuscated JavaScript indicative of Angler Exploit Kit"
@@ -43,9 +44,17 @@ class Angler_JS(Signature):
             return True
         if "Kaspersky.IeVir' + " in buf:
             return True
-        if "+'%u0000')" in buf and "Math.floor(Math.random() * (6 -3) +3);" in buf and "{return 'Accept: ' +'*' +'/' +'*' +'" in buf:
+        if (
+            "+'%u0000')" in buf
+            and "Math.floor(Math.random() * (6 -3) +3);" in buf
+            and "{return 'Accept: ' +'*' +'/' +'*' +'" in buf
+        ):
             return True
-        if "2830293d2668364336343734364526" in buf.lower() and "2831293d2668364336343245364326" in buf.lower() and "2832293d2668373236393536373426" in buf.lower():
+        if (
+            "2830293d2668364336343734364526" in buf.lower()
+            and "2831293d2668364336343245364326" in buf.lower()
+            and "2832293d2668373236393536373426" in buf.lower()
+        ):
             return True
         if "value='\" +url" in buf.lower() and "<param name='play' value='true'>\" + \"<param name='flashvars'" in buf.lower():
             return True

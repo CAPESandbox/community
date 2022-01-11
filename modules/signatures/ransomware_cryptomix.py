@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CryptoMixMutexes(Signature):
     name = "cryptomix_mutexes"
     description = "Creates known CryptoMix ransomware mutexes"
@@ -26,9 +27,9 @@ class CryptoMixMutexes(Signature):
 
     def run(self):
         indicators = [
-                "CLOP#666",
-                "MoneyP#666",
-                "HappyLife\^_-",
+            "CLOP#666",
+            "MoneyP#666",
+            "HappyLife\^_-",
         ]
 
         for indicator in indicators:

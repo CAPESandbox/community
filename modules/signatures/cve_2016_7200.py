@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CVE_2016_7200(Signature):
     name = "cve_2016_7200"
     description = "Executes obfuscated JavaScript Indicative of CVE 2016-7200 Microsoft Edge Exploit"

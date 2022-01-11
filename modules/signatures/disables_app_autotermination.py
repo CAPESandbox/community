@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DisablesAutomaticAppTermination(Signature):
     name = "disables_auto_app_termination"
     description = "Disables automatic termination of applications that block or cancel shutdown"
@@ -24,7 +25,7 @@ class DisablesAutomaticAppTermination(Signature):
     minimum = "1.3"
     evented = True
 
-    def run(self):    
+    def run(self):
         indicators = [
             "HKEY_LOCAL_MACHINE\\\\Software\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\AllowBlockingAppsAtShutdown",
         ]

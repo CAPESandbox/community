@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AccessesMailslot(Signature):
     name = "accesses_mailslot"
     description = "Performs a Mailslot ping, possibly used to get Domain Controller information"
@@ -38,6 +39,7 @@ class AccessesMailslot(Signature):
 
         return False
 
+
 class AccessesNetlogonRegkey(Signature):
     name = "accesses_netlogon_regkey"
     description = "Access the NetLogon registry key, potentially used for discovery or tampering"
@@ -49,9 +51,7 @@ class AccessesNetlogonRegkey(Signature):
     references = ["https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nrpc/ff8f970f-3e37-40f7-bd4b-af7336e4792f"]
 
     def run(self):
-        indicators = [
-            "HKEY_LOCAL_MACHINE\\\\SYSTEM\\\\CurrentControlSet\\\\Services\\\\Netlogon\\\\.*"
-        ]
+        indicators = ["HKEY_LOCAL_MACHINE\\\\SYSTEM\\\\CurrentControlSet\\\\Services\\\\Netlogon\\\\.*"]
 
         for indicator in indicators:
             match = self.check_key(pattern=indicator, regex=True)
@@ -59,4 +59,4 @@ class AccessesNetlogonRegkey(Signature):
                 self.data.append({"regkey": match})
                 return True
 
-        return False 
+        return False

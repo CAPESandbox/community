@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class InjectionRWX(Signature):
     name = "injection_rwx"
     description = "Creates RWX memory"
@@ -22,7 +23,7 @@ class InjectionRWX(Signature):
         if self.results["info"]["package"] not in ["exe", "rar", "zip", "dll", "regsvr"]:
             self.dont_check = True
 
-    filter_apinames = set(["NtAllocateVirtualMemory","NtProtectVirtualMemory","VirtualProtectEx"])
+    filter_apinames = set(["NtAllocateVirtualMemory", "NtProtectVirtualMemory", "VirtualProtectEx"])
     filter_analysistypes = set(["file"])
 
     def on_call(self, call, process):

@@ -20,14 +20,19 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class LSATampering(Signature):
     name = "lsa_tampering"
-    description = "Tampers with the Local Security Authority registry keys, potentially to allow for persistence or execution of tools."
+    description = (
+        "Tampers with the Local Security Authority registry keys, potentially to allow for persistence or execution of tools."
+    )
     severity = 2
     categories = ["persistence", "execution"]
     authors = ["bartblaze"]
     minimum = "1.2"
-    references = ["https://docs.microsoft.com/en-us/windows-server/security/credentials-protection-and-management/configuring-additional-lsa-protection"]
+    references = [
+        "https://docs.microsoft.com/en-us/windows-server/security/credentials-protection-and-management/configuring-additional-lsa-protection"
+    ]
 
     def run(self):
         ret = False
@@ -39,8 +44,7 @@ class LSATampering(Signature):
         for check in keys:
             match = self.check_write_key(pattern=check, regex=True)
             if match:
-                self.data.append({"regkey" : match})
+                self.data.append({"regkey": match})
                 ret = True
 
         return ret
-		

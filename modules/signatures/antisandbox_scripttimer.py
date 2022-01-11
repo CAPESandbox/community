@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiSandboxScriptTimer(Signature):
     name = "antisandbox_script_timer"
     description = "Detected script timer window indicative of sleep style evasion"

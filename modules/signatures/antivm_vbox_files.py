@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class VBoxDetectFiles(Signature):
     name = "antivm_vbox_files"
     description = "Detects VirtualBox through the presence of a file"
@@ -47,13 +48,13 @@ class VBoxDetectFiles(Signature):
             ".*\\\\VBoxMouse\.[a-zA-Z]{3}$",
             ".*\\\\VBoxVideo\.[a-zA-Z]{3}$",
             ".*\\\\VirtualBox\\ Guest\\ Additions\\\\.+\\.(exe|dll)$",
-            ".*\\\\drivers\\\\vboxdrv\\.sys$"
+            ".*\\\\drivers\\\\vboxdrv\\.sys$",
         ]
         found = False
         for indicator in file_indicators:
             file_match = self.check_file(pattern=indicator, regex=True, all=True)
             if file_match:
                 for match in file_match:
-                    self.data.append({"file" : match })
+                    self.data.append({"file": match})
                 found = True
         return found

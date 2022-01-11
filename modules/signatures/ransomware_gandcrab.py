@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class GandCrabMutexes(Signature):
     name = "gandcrab_mutexes"
     description = "Creates known GandCrab ransomware mutexes"
@@ -27,8 +28,8 @@ class GandCrabMutexes(Signature):
 
     def run(self):
         indicators = [
-                "AversSucksForever$",
-                "\\\\Sessions\\\\1\\\\BaseNamedObjects\\\\AversSucksForever$",
+            "AversSucksForever$",
+            "\\\\Sessions\\\\1\\\\BaseNamedObjects\\\\AversSucksForever$",
         ]
 
         for indicator in indicators:

@@ -31,9 +31,10 @@ class UsesWindowsUtilitiesScheduler(Signature):
             for utility in utilities:
                 if utility in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret
+
 
 class UsesWindowsUtilities(Signature):
     name = "uses_windows_utilities"
@@ -52,8 +53,7 @@ class UsesWindowsUtilities(Signature):
             "copy",
             "dir ",
             "dir.exe",
-            "echo"
-            "erase",
+            "echo" "erase",
             "fsutil",
             "getmac",
             "ipconfig",
@@ -71,8 +71,7 @@ class UsesWindowsUtilities(Signature):
             "netstat",
             "nslookup",
             "ping",
-            "powercfg"
-            "qprocess",
+            "powercfg" "qprocess",
             "query ",
             "query.exe",
             "quser",
@@ -110,11 +109,12 @@ class UsesWindowsUtilities(Signature):
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for utility in utilities:
-                if utility in lower:
+                if utility in lower and "-" + utility not in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret
+
 
 class SuspiciousCommandTools(Signature):
     name = "suspicious_command_tools"
@@ -186,9 +186,10 @@ class SuspiciousCommandTools(Signature):
             for utility in utilities:
                 if utility in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret
+
 
 class ScriptToolExecuted(Signature):
     name = "script_tool_executed"
@@ -214,9 +215,10 @@ class ScriptToolExecuted(Signature):
             for utility in utilities:
                 if utility in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret
+
 
 class SuspiciousPingUse(Signature):
     name = "suspicious_ping_use"
@@ -236,9 +238,10 @@ class SuspiciousPingUse(Signature):
             lower = cmdline.lower()
             if "ping" in lower and ("-n" in lower or "/n" in lower):
                 ret = True
-                self.data.append({"command" : cmdline})
+                self.data.append({"command": cmdline})
 
         return ret
+
 
 class WMICCommandSuspicious(Signature):
     name = "wmic_command_suspicious"
@@ -288,6 +291,7 @@ class WMICCommandSuspicious(Signature):
 
         return ret
 
+
 class AltersWindowsUtility(Signature):
     name = "alters_windows_utility"
     description = "Attempts to move, copy or rename a command line or scripting utility likely for evasion"
@@ -322,9 +326,9 @@ class AltersWindowsUtility(Signature):
             "wevutil.exe",
             "wmic.exe",
             "wscript.exe",
-            ]
+        ]
 
-    filter_apinames = set(["CopyFileExA","CopyFileExW","MoveFileWithProgressW","MoveFileWithProgressTransactedW"])
+    filter_apinames = set(["CopyFileExA", "CopyFileExW", "MoveFileWithProgressW", "MoveFileWithProgressTransactedW"])
 
     def on_call(self, call, process):
         self.ret = False
@@ -334,10 +338,11 @@ class AltersWindowsUtility(Signature):
             lower = origfile.lower()
             if lower.endswith(utility):
                 self.ret = True
-                self.data.append({"utility" : "source file %s destination file %s" % (origfile,destfile)})
+                self.data.append({"utility": "source file %s destination file %s" % (origfile, destfile)})
 
     def on_complete(self):
         return self.ret
+
 
 class SuspiciousCertutilUse(Signature):
     name = "suspicious_certutil_use"
@@ -359,9 +364,10 @@ class SuspiciousCertutilUse(Signature):
             lower = cmdline.lower()
             if "certutil" in lower and ("urlcache" in lower or "encode" in lower or "decode" in lower or "addstore" in lower):
                 ret = True
-                self.data.append({"command" : cmdline})
+                self.data.append({"command": cmdline})
 
         return ret
+
 
 class OverwritesAccessibilityUtility(Signature):
     name = "overwrites_accessibility_utility"
@@ -385,9 +391,9 @@ class OverwritesAccessibilityUtility(Signature):
             "osk.exe",
             "sethc.exe",
             "utilman.exe",
-            ]
+        ]
 
-    filter_apinames = set(["CopyFileExA","CopyFileExW","MoveFileWithProgressW","MoveFileWithProgressTransactedW"])
+    filter_apinames = set(["CopyFileExA", "CopyFileExW", "MoveFileWithProgressW", "MoveFileWithProgressTransactedW"])
 
     def on_call(self, call, process):
         self.ret = False
@@ -397,10 +403,11 @@ class OverwritesAccessibilityUtility(Signature):
             lower = destfile.lower()
             if lower.endswith(utility):
                 self.ret = True
-                self.data.append({"utility" : "source file %s destination file %s" % (origfile,destfile)})
+                self.data.append({"utility": "source file %s destination file %s" % (origfile, destfile)})
 
     def on_complete(self):
         return self.ret
+
 
 class DotNETCSCBuild(Signature):
     name = "dotnet_csc_build"
@@ -411,7 +418,9 @@ class DotNETCSCBuild(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    references = ["https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/command-line-building-with-csc-exe"]
+    references = [
+        "https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/command-line-building-with-csc-exe"
+    ]
     ttp = ["T1500"]
 
     def run(self):
@@ -421,9 +430,10 @@ class DotNETCSCBuild(Signature):
             lower = cmdline.lower()
             if "csc " in lower or "csc.exe" in lower:
                 ret = True
-                self.data.append({"command" : cmdline})
+                self.data.append({"command": cmdline})
 
         return ret
+
 
 class UsesWindowsUtilitiesCipher(Signature):
     name = "uses_windows_utilities_cipher"
@@ -449,9 +459,10 @@ class UsesWindowsUtilitiesCipher(Signature):
             for utility in utilities:
                 if utility in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret
+
 
 class UsesWindowsUtilitiesClickOnce(Signature):
     name = "uses_windows_utilities_clickonce"
@@ -479,9 +490,10 @@ class UsesWindowsUtilitiesClickOnce(Signature):
             for utility in utilities:
                 if utility in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret
+
 
 class UsesWindowsUtilitiesMode(Signature):
     name = "uses_windows_utilities_mode"
@@ -508,9 +520,10 @@ class UsesWindowsUtilitiesMode(Signature):
             for utility in utilities:
                 if utility in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret
+
 
 class UsesWindowsUtilitiesNltest(Signature):
     name = "uses_windows_utilities_nltest"
@@ -536,7 +549,7 @@ class UsesWindowsUtilitiesNltest(Signature):
             for utility in utilities:
                 if utility in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret
 
@@ -565,9 +578,10 @@ class UsesWindowsUtilitiesNTDSutil(Signature):
             for utility in utilities:
                 if utility in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret
+
 
 class UsesWindowsUtilitiesCSVDELDFIDE(Signature):
     name = "uses_windows_utilities_csvde_ldifde"
@@ -595,9 +609,10 @@ class UsesWindowsUtilitiesCSVDELDFIDE(Signature):
             for utility in utilities:
                 if utility in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret
+
 
 class UsesWindowsUtilitiesDSQuery(Signature):
     name = "uses_windows_utilities_dsquery"
@@ -623,9 +638,10 @@ class UsesWindowsUtilitiesDSQuery(Signature):
             for utility in utilities:
                 if utility in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret
+
 
 class UsesWindowsUtilitiesAppCmd(Signature):
     name = "uses_windows_utilities_appcmd"
@@ -651,9 +667,10 @@ class UsesWindowsUtilitiesAppCmd(Signature):
             for utility in utilities:
                 if utility in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret
+
 
 class SuspiciousMpCmdRunUse(Signature):
     name = "suspicious_mpcmdrun_use"
@@ -678,6 +695,7 @@ class SuspiciousMpCmdRunUse(Signature):
 
         return False
 
+
 class MultipleExplorerInstances(Signature):
     name = "multiple_explorer_instances"
     description = "Spawns another instance of explorer"
@@ -700,6 +718,7 @@ class MultipleExplorerInstances(Signature):
                 return True
 
         return False
+
 
 class UsesWindowsUtilitiesFinger(Signature):
     name = "uses_windows_utilities_finger"
@@ -724,10 +743,11 @@ class UsesWindowsUtilitiesFinger(Signature):
             for utility in utilities:
                 if utility in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret
-    
+
+
 class UsesWindowsUtilitiesXcopy(Signature):
     name = "uses_windows_utilities_xcopy"
     description = "Uses XCOPY for copying files"
@@ -750,9 +770,10 @@ class UsesWindowsUtilitiesXcopy(Signature):
             for utility in utilities:
                 if utility in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret
+
 
 class UsesWindowsUtilitiesEsentutl(Signature):
     name = "uses_windows_utilities_esentutl"
@@ -776,9 +797,10 @@ class UsesWindowsUtilitiesEsentutl(Signature):
             for utility in utilities:
                 if utility in lower:
                     ret = True
-                    self.data.append({"command" : cmdline})
+                    self.data.append({"command": cmdline})
 
         return ret
+
 
 class UsesPowerShellCopyItem(Signature):
     name = "uses_powershell_copyitem"
@@ -790,9 +812,7 @@ class UsesPowerShellCopyItem(Signature):
     evented = True
 
     def run(self):
-        indicators = [
-            ".*powershell.*copy-item.*"
-        ]
+        indicators = [".*powershell.*copy-item.*"]
 
         for indicator in indicators:
             match = self.check_executed_command(pattern=indicator, regex=True)

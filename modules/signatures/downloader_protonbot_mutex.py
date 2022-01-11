@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ProtonBotMutexes(Signature):
     name = "protonbot_mutexes"
     description = "Creates known rotonBot loader mutexes"

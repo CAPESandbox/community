@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class VPCDetectMutex(Signature):
     name = "antivm_vpc_mutex"
     description = "Detects Virtual PC using a known mutex"
@@ -25,9 +26,7 @@ class VPCDetectMutex(Signature):
     mbc = ["B0009"]
 
     def run(self):
-        indicators = [
-            "MicrosoftVirtualPC7UserServiceMakeSureWe'reTheOnlyOneMutex"
-        ]
+        indicators = ["MicrosoftVirtualPC7UserServiceMakeSureWe'reTheOnlyOneMutex"]
 
         for indicator in indicators:
             if self.check_mutex(pattern=indicator, regex=True):

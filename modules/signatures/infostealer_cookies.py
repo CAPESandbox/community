@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CookiesStealer(Signature):
     name = "infostealer_cookies"
     description = "Harvests cookies for information gathering"

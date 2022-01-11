@@ -16,6 +16,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class anomalous_deletefile(Signature):
     name = "anomalous_deletefile"
     description = "Anomalous file deletion behavior detected (10+)"
@@ -35,10 +36,8 @@ class anomalous_deletefile(Signature):
     def on_call(self, call, process):
         if call["api"] == "NtDeleteFile" or call["api"] == "DeleteFileA" or call["api"] == "DeleteFileW":
             self.loadctr += 1
-            self.data.append({"DeletedFile": "%s" % (self.get_argument(call, "FileName")) })
+            self.data.append({"DeletedFile": "%s" % (self.get_argument(call, "FileName"))})
 
     def on_complete(self):
         if self.loadctr > 10:
             return True
-
-

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ConfuserPacked(Signature):
     name = "packer_confuser"
     description = ".NET file is packed/obfuscated with Confuser"

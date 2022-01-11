@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DisablesMappedDrivesAutodisconnect(Signature):
     name = "disables_mappeddrives_autodisconnect"
     description = "Attempts to disable or change the mapped dirves autodisconnect feature via command line"
@@ -27,7 +28,7 @@ class DisablesMappedDrivesAutodisconnect(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
 
-    filter_apinames = set(["CreateProcessInternalW","ShellExecuteExW"])
+    filter_apinames = set(["CreateProcessInternalW", "ShellExecuteExW"])
 
     def on_call(self, call, process):
         if call["api"] == "CreateProcessInternalW":
@@ -38,4 +39,4 @@ class DisablesMappedDrivesAutodisconnect(Signature):
             filepath = self.get_argument(call, "FilePath").lower()
             params = self.get_argument(call, "Parameters").lower()
             if "config server" in params and "/autodisconnect:" in params and "net" in filepath:
-                return True 
+                return True

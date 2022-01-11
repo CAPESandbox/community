@@ -29,19 +29,21 @@ class StealingClipboardData(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.detected = False
 
-    filter_apinames = set([
-        # "AddClipboardFormatListener",
-        # "CloseClipboard",
-        # "EmptyClipboard",
-        # "GetClipboardData",
-        # "GetClipboardOwner",
-        # "IsClipboardFormatAvailable",
-        # "OpenClipboard",
-        "SetClipboardData",
-    ])
+    filter_apinames = set(
+        [
+            # "AddClipboardFormatListener",
+            # "CloseClipboard",
+            # "EmptyClipboard",
+            # "GetClipboardData",
+            # "GetClipboardOwner",
+            # "IsClipboardFormatAvailable",
+            # "OpenClipboard",
+            "SetClipboardData",
+        ]
+    )
 
     def on_call(self, call, process):
-            self.detected = True
+        self.detected = True
 
     def on_complete(self):
         return self.detected

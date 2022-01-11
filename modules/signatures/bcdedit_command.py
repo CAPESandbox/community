@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class BCDEditCommand(Signature):
     name = "bcdedit_command"
     description = "Modifies boot configuration settings"
@@ -33,7 +34,7 @@ class BCDEditCommand(Signature):
         self.ignorefailures = False
         self.testsigning = False
 
-    filter_apinames = set(["CreateProcessInternalW","ShellExecuteExW"])
+    filter_apinames = set(["CreateProcessInternalW", "ShellExecuteExW"])
 
     def on_call(self, call, process):
         if call["api"] == "CreateProcessInternalW":
@@ -60,17 +61,18 @@ class BCDEditCommand(Signature):
             self.weight += 1
 
         if self.systemrepair:
-            self.data.append({"disables_system_recovery" : "Modifies the boot configuration to disable startup recovery"})
+            self.data.append({"disables_system_recovery": "Modifies the boot configuration to disable startup recovery"})
             self.severity = 3
             self.weight += 1
 
-
         if self.ignorefailures:
-            self.data.append({"ignorefailures" : "Modifies the boot configuration to disable Windows error recovery"})
+            self.data.append({"ignorefailures": "Modifies the boot configuration to disable Windows error recovery"})
             self.weight += 1
 
         if self.testsigning:
-            self.data.append({"driver_testsigning" : "Modifies the boot configuration to cause patchguard to ignore unsigned drivers"})
+            self.data.append(
+                {"driver_testsigning": "Modifies the boot configuration to cause patchguard to ignore unsigned drivers"}
+            )
             self.weight += 1
 
         if self.weight:

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ArmadilloRegKey(Signature):
     name = "packer_armadillo_regkey"
     description = "Detected Armadillo packer using a known registry key"
@@ -25,9 +26,7 @@ class ArmadilloRegKey(Signature):
     ttp = ["T1045"]
 
     def run(self):
-        indicators = [
-            ".*\\\\The\\ Silicon\\ Realms\\ Toolworks\\\\Armadillo$"
-        ]
+        indicators = [".*\\\\The\\ Silicon\\ Realms\\ Toolworks\\\\Armadillo$"]
 
         for indicator in indicators:
             match = self.check_key(pattern=indicator, regex=True)

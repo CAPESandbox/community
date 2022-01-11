@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Cridex(Signature):
     name = "banker_cridex"
     description = "Cridex banking trojan"
@@ -24,15 +25,16 @@ class Cridex(Signature):
     families = ["Cridex"]
     authors = ["Robby Zeitfuchs", "@robbyFux"]
     minimum = "0.5"
-    references = ["http://stopmalvertising.com/rootkits/analysis-of-cridex.html",
-                  "http://sempersecurus.blogspot.de/2012/08/cridex-analysis-using-volatility.html",
-                  "http://labs.m86security.com/2012/03/the-cridex-trojan-targets-137-financial-organizations-in-one-go/",
-                  "https://malwr.com/analysis/NDU2ZWJjZTIwYmRiNGVmNWI3MDUyMGExMGQ0MmVhYTY/",
-                  "https://malwr.com/analysis/MTA5YmU4NmIwMjg5NDAxYjlhYzZiZGIwYjZkOTFkOWY/"]
+    references = [
+        "http://stopmalvertising.com/rootkits/analysis-of-cridex.html",
+        "http://sempersecurus.blogspot.de/2012/08/cridex-analysis-using-volatility.html",
+        "http://labs.m86security.com/2012/03/the-cridex-trojan-targets-137-financial-organizations-in-one-go/",
+        "https://malwr.com/analysis/NDU2ZWJjZTIwYmRiNGVmNWI3MDUyMGExMGQ0MmVhYTY/",
+        "https://malwr.com/analysis/MTA5YmU4NmIwMjg5NDAxYjlhYzZiZGIwYjZkOTFkOWY/",
+    ]
 
     def run(self):
-        indicators = [".*Local.QM.*",
-                      ".*Local.XM.*"]
+        indicators = [".*Local.QM.*", ".*Local.XM.*"]
 
         match_file = self.check_file(pattern=".*\\\KB[0-9]{8}\.exe", regex=True)
         match_batch_file = self.check_file(pattern=".*\\\\Temp\\\\\S{4}\.tmp\.bat", regex=True)

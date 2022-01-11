@@ -2,8 +2,10 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
-from lib.cuckoo.common.abstracts import Signature
 import re
+
+from lib.cuckoo.common.abstracts import Signature
+
 
 class DisablesWindowsDefender(Signature):
     name = "disables_windows_defender"
@@ -49,25 +51,28 @@ class DisablesWindowsDefender(Signature):
             "moderatethreatdefaultaction",
             "mpenablepus",
             "severethreatdefaultaction",
-            "tamperprotection",          
+            "tamperprotection",
         ]
 
         for check in keys:
             match = self.check_write_key(pattern=check, regex=True)
             if match:
-                self.data.append({"regkey" : match})
+                self.data.append({"regkey": match})
                 ret = True
 
         cmdlines = self.results["behavior"]["summary"]["executed_commands"]
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for cmd in cmds:
-                if cmd in lower or ("sc" in lower and ("stop" in lower or "delete" in lower or "disabled" in lower) and "windefend" in lower):
-                    self.data.append({"cmdline" : cmdline})
+                if cmd in lower or (
+                    "sc" in lower and ("stop" in lower or "delete" in lower or "disabled" in lower) and "windefend" in lower
+                ):
+                    self.data.append({"cmdline": cmdline})
                     ret = True
                     break
 
         return ret
+
 
 class WindowsDefenderPowerShell(Signature):
     name = "windows_defender_powershell"
@@ -84,13 +89,14 @@ class WindowsDefenderPowerShell(Signature):
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "set-mppreference" in lower:
-                self.data.append({"cmdline" : cmdline})
+                self.data.append({"cmdline": cmdline})
                 ret = True
             if "add-mppreference" in lower and "exclusionpath" in lower:
-                self.data.append({"cmdline" : cmdline})
+                self.data.append({"cmdline": cmdline})
                 ret = True
 
         return ret
+
 
 class RemovesWindowsDefenderContextMenu(Signature):
     name = "removes_windows_defender_contextmenu"
@@ -107,7 +113,7 @@ class RemovesWindowsDefenderContextMenu(Signature):
             "HKEY_CLASSES_ROOT\\\\Directory\\\\shellex\\\\ContextMenuHandlers\\\\EPP$",
             "HKEY_CLASSES_ROOT\\\\Drive\\\\shellex\\\\ContextMenuHandlers\\\\EPP$",
         ]
-        pat = re.compile('.*\\\\shellex\\\\contextmenuhandlers\\\\epp')
+        pat = re.compile(".*\\\\shellex\\\\contextmenuhandlers\\\\epp")
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)
@@ -118,10 +124,11 @@ class RemovesWindowsDefenderContextMenu(Signature):
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if re.search(pat, lower):
-                self.data.append({"cmdline" : cmdline})
+                self.data.append({"cmdline": cmdline})
                 return True
 
         return False
+
 
 class DisablesWindowsDefenderLogging(Signature):
     name = "disables_windows_defender_logging"
@@ -136,7 +143,7 @@ class DisablesWindowsDefenderLogging(Signature):
         indicators = [
             ".*\\\\System\\\\CurrentControlSet\\\\Control\\\\WMI\\\\Autologger\\\\Defender(Api|Audit)Logger",
         ]
-        pat = re.compile('.*\\\\system\\\\currentcontrolset\\\\control\\\\wmi\\\\autologger\\\\defender(api|audit)logger')
+        pat = re.compile(".*\\\\system\\\\currentcontrolset\\\\control\\\\wmi\\\\autologger\\\\defender(api|audit)logger")
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)
@@ -147,7 +154,7 @@ class DisablesWindowsDefenderLogging(Signature):
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if re.search(pat, lower):
-                self.data.append({"cmdline" : cmdline})
+                self.data.append({"cmdline": cmdline})
                 return True
 
         return False

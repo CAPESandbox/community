@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DeadLink(Signature):
     name = "dead_link"
     description = "Attempts to execute a binary from a dead or sinkholed URL"
@@ -45,7 +46,7 @@ class DeadLink(Signature):
                         break
             if deadnames:
                 for deadname in deadnames:
-                    self.data.append({"dead_binary" : deadname})
+                    self.data.append({"dead_binary": deadname})
                 return True
 
         return False

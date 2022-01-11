@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Recon_Beacon(Signature):
     name = "recon_beacon"
     description = "A process sent information about the computer to a remote location."

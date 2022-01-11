@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Prinimalka(Signature):
     name = "banker_prinimalka"
     description = "Detected Prinimalka banking trojan"
@@ -25,7 +26,7 @@ class Prinimalka(Signature):
     minimum = "1.0"
     evented = True
 
-    filter_apinames = set(["RegSetValueExA","RegSetValueExW"])
+    filter_apinames = set(["RegSetValueExA", "RegSetValueExW"])
 
     def on_call(self, call, process):
         if self.get_argument(call, "ValueName").endswith("_opt_server1"):

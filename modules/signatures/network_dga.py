@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class NetworkDGA(Signature):
     name = "network_dga"
     description = "Likely use of Domain Generation Algorithm (DGA)"
@@ -33,7 +34,7 @@ class NetworkDGA(Signature):
                     for dns in self.results["network"]["dns"]:
                         for ans in dns["answers"]:
                             if ans["type"] == "NXDOMAIN":
-                                if dns["request"].count('.') == 1:
+                                if dns["request"].count(".") == 1:
                                     num_cnt = sum(c.isdigit() for c in dns["request"])
                                     # whitelist domains with potentially the year in the name
                                     if num_cnt > 1 and "20" not in dns["request"]:

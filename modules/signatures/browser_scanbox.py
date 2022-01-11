@@ -1,4 +1,4 @@
-﻿# Copyright (C) 2015 Will Metcalf william.metcalf@gmail.com 
+﻿# Copyright (C) 2015 Will Metcalf william.metcalf@gmail.com
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from lib.cuckoo.common.abstracts import Signature
+
 
 class BrowserScanbox(Signature):
     name = "browser_scanbox"
@@ -37,7 +38,11 @@ class BrowserScanbox(Signature):
             buf = self.get_argument(call, "Javascript")
         else:
             buf = self.get_argument(call, "Script")
-            if 'softwarelist.push(' in buf.lower() and 'indexof("-2147023083")' in buf.lower():
+            if "softwarelist.push(" in buf.lower() and 'indexof("-2147023083")' in buf.lower():
                 return True
-            elif 'var logger' in buf.lower() and 'document.onkeypress = keypress;' in buf.lower() and 'setinterval(sendchar,' in buf.lower():
+            elif (
+                "var logger" in buf.lower()
+                and "document.onkeypress = keypress;" in buf.lower()
+                and "setinterval(sendchar," in buf.lower()
+            ):
                 return True

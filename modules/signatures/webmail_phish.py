@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Webmail_Phish(Signature):
     name = "webmail_phish"
     description = "Network activity contains known webmail credential phishing indicators."
@@ -28,11 +29,11 @@ class Webmail_Phish(Signature):
         Signature.__init__(self, *args, **kwargs)
         # Lower case for now, may tighten later
         self.indicators = [
-           "validateformyahoo()",
-           "validateformhotmail()",
-           "validateformgmail()",
-           "validateformaol()",
-           "validateformother()",
+            "validateformyahoo()",
+            "validateformhotmail()",
+            "validateformgmail()",
+            "validateformaol()",
+            "validateformother()",
         ]
         self.hits = set()
 

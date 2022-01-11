@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DriverFilterManager(Signature):
     name = "driver_filtermanager"
     description = "Attempts to make use of the Filter Manager"

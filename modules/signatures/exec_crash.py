@@ -29,7 +29,7 @@ class Crash(Signature):
 
     def on_call(self, call, process):
         if call["api"] == "NtOpenEvent":
-            if self.check_argument_call(call, ".*SystemErrorPortReady$", name="EventName",  api="NtOpenEvent", regex=True):
+            if self.check_argument_call(call, ".*SystemErrorPortReady$", name="EventName", api="NtOpenEvent", regex=True):
                 return True
         elif call["api"] == "LdrLoadDll":
             if self.check_argument_call(call, pattern=".*faultrep\.dll$", name="FileName", api="LdrLoadDll", regex=True):

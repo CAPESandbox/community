@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class BullguardDetectLibs(Signature):
     name = "antiav_bullgaurd_libs"
     description = "Detects BullGuard Antivirus through the presence of a library"

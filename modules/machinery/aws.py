@@ -1,19 +1,17 @@
 from __future__ import absolute_import
-
 import logging
 import time
-import boto3
 
+import boto3
 from lib.cuckoo.common.abstracts import Machinery
 from lib.cuckoo.common.config import Config
-from lib.cuckoo.common.exceptions import CuckooCriticalError
-from lib.cuckoo.common.exceptions import CuckooMachineError
-
+from lib.cuckoo.common.exceptions import CuckooCriticalError, CuckooMachineError
 from sqlalchemy.exc import SQLAlchemyError
 
 logging.getLogger("boto3").setLevel(logging.CRITICAL)
 logging.getLogger("botocore").setLevel(logging.CRITICAL)
 log = logging.getLogger(__name__)
+
 
 class AWS(Machinery):
     """Virtualization layer for AWS."""
@@ -41,12 +39,16 @@ class AWS(Machinery):
         self.dynamic_machines_count = 0
         log.info("connecting to AWS:{}".format(self.options.aws.region_name))
         self.ec2_resource = boto3.resource(
-            "ec2", region_name=self.options.aws.region_name, aws_access_key_id=self.options.aws.aws_access_key_id,
-            aws_secret_access_key=self.options.aws.aws_secret_access_key)
+            "ec2",
+            region_name=self.options.aws.region_name,
+            aws_access_key_id=self.options.aws.aws_access_key_id,
+            aws_secret_access_key=self.options.aws.aws_secret_access_key,
+        )
 
         # Iterate over all instances with tag that has a key of AUTOSCALE_CUCKOO
-        for instance in self.ec2_resource.instances.filter(Filters=[{"Name": "instance-state-name",
-                                                                     "Values": ["running", "stopped", "stopping"]}]):
+        for instance in self.ec2_resource.instances.filter(
+            Filters=[{"Name": "instance-state-name", "Values": ["running", "stopped", "stopping"]}]
+        ):
             if self._is_autoscaled(instance):
                 log.info("Terminating autoscaled instance %s" % instance.id)
                 instance.terminate()
@@ -84,6 +86,7 @@ class AWS(Machinery):
         session = self.db.Session()
         try:
             from lib.cuckoo.core.database import Machine
+
             machine = session.query(Machine).filter_by(label=label).first()
             if machine:
                 session.delete(machine)
@@ -104,10 +107,10 @@ class AWS(Machinery):
         autoscale_options = self.options.get("autoscale")
         # If configured, use specific network interface for this
         # machine, else use the default value.
-        interface = autoscale_options["interface"] if autoscale_options.get("interface") else machinery_options.get(
-            "interface")
-        resultserver_ip = autoscale_options["resultserver_ip"] if autoscale_options.get("resultserver_ip") else Config(
-            "cuckoo:resultserver:ip")
+        interface = autoscale_options["interface"] if autoscale_options.get("interface") else machinery_options.get("interface")
+        resultserver_ip = (
+            autoscale_options["resultserver_ip"] if autoscale_options.get("resultserver_ip") else Config("cuckoo:resultserver:ip")
+        )
         if autoscale_options.get("resultserver_port"):
             resultserver_port = autoscale_options["resultserver_port"]
         else:
@@ -115,6 +118,7 @@ class AWS(Machinery):
             # get it from the ResultServer singleton. Also avoid import
             # recursion issues by importing ResultServer here.
             from lib.cuckoo.core.resultserver import ResultServer
+
             resultserver_port = ResultServer().port
 
         log.info("All machines are busy, allocating new machine")
@@ -122,8 +126,7 @@ class AWS(Machinery):
         self.dynamic_machines_count += 1
         new_machine_name = "cuckoo_autoscale_%03d" % self.dynamic_machines_sequence
         instance = self._create_instance(
-            tags=[{"Key": "Name", "Value": new_machine_name},
-                  {"Key": self.AUTOSCALE_CUCKOO, "Value": "True"}]
+            tags=[{"Key": "Name", "Value": new_machine_name}, {"Key": self.AUTOSCALE_CUCKOO, "Value": "True"}]
         )
         if instance is None:
             return False
@@ -142,7 +145,7 @@ class AWS(Machinery):
             interface=interface,
             snapshot=None,
             resultserver_ip=resultserver_ip,
-            resultserver_port=resultserver_port
+            resultserver_port=resultserver_port,
         )
         return True
 
@@ -187,8 +190,9 @@ class AWS(Machinery):
         """
         :return: A list of all instance ids under the AWS account
         """
-        instances = self.ec2_resource.instances.filter(Filters=[{"Name": "instance-state-name",
-                                                                 "Values": ["running", "stopped", "stopping"]}])
+        instances = self.ec2_resource.instances.filter(
+            Filters=[{"Name": "instance-state-name", "Values": ["running", "stopped", "stopping"]}]
+        )
         return [instance.id for instance in instances]
 
     """override Machinery method"""
@@ -248,9 +252,7 @@ class AWS(Machinery):
         status = self._status(label)
 
         if status == AWS.POWEROFF:
-            raise CuckooMachineError(
-                "Trying to stop an already stopped VM: %s" % label
-            )
+            raise CuckooMachineError("Trying to stop an already stopped VM: %s" % label)
 
         if self._is_autoscaled(self.ec2_machines[label]):
             self.ec2_machines[label].terminate()
@@ -281,20 +283,22 @@ class AWS(Machinery):
 
         autoscale_options = self.options.get("autoscale")
         response = self.ec2_resource.create_instances(
-            BlockDeviceMappings=[
-                {"DeviceName": "/dev/sda1", "Ebs": {"DeleteOnTermination": True, "VolumeType": "gp2"}}],
+            BlockDeviceMappings=[{"DeviceName": "/dev/sda1", "Ebs": {"DeleteOnTermination": True, "VolumeType": "gp2"}}],
             ImageId=autoscale_options["image_id"],
             InstanceType=autoscale_options["instance_type"],
             MaxCount=1,
             MinCount=1,
-            NetworkInterfaces=[{
-                "DeviceIndex": 0,
-                "SubnetId": autoscale_options["subnet_id"],
-                "Groups": autoscale_options["security_groups"],
-            }],
-            TagSpecifications=[{"ResourceType": "instance", "Tags": tags}])
+            NetworkInterfaces=[
+                {
+                    "DeviceIndex": 0,
+                    "SubnetId": autoscale_options["subnet_id"],
+                    "Groups": autoscale_options["security_groups"],
+                }
+            ],
+            TagSpecifications=[{"ResourceType": "instance", "Tags": tags}],
+        )
         new_instance = response[0]
-        new_instance.modify_attribute(SourceDestCheck={'Value': False})
+        new_instance.modify_attribute(SourceDestCheck={"Value": False})
         log.debug("Created %s\n%s", new_instance.id, repr(response))
         return new_instance
 
@@ -322,64 +326,53 @@ class AWS(Machinery):
         instance = self.ec2_machines[label]
         state = self._status(label)
         if state != AWS.POWEROFF:
-            raise CuckooMachineError(
-                 "Instance '%s' state '%s' is not poweroff" % (label, state)
-            )
+            raise CuckooMachineError("Instance '%s' state '%s' is not poweroff" % (label, state))
         volumes = list(instance.volumes.all())
         if len(volumes) != 1:
-            raise CuckooMachineError(
-                "Instance '%s' has wrong number of volumes %d" % (label, len(volumes))
-            )
+            raise CuckooMachineError("Instance '%s' has wrong number of volumes %d" % (label, len(volumes)))
         old_volume = volumes[0]
 
         log.debug("Detaching %s", old_volume.id)
         resp = instance.detach_volume(VolumeId=old_volume.id, Force=True)
-        log.debug('response: {}'.format(resp))
+        log.debug("response: {}".format(resp))
         while True:
             old_volume.reload()
-            if old_volume.state != 'in-use':
+            if old_volume.state != "in-use":
                 break
             time.sleep(1)
 
         log.debug("Old volume %s in state %s", old_volume.id, old_volume.state)
-        if old_volume.state != 'available':
-            raise CuckooMachineError(
-                "Old volume turned into state %s instead of 'available'" % old_volume.state
-            )
-        log.debug('Deleting old volume')
+        if old_volume.state != "available":
+            raise CuckooMachineError("Old volume turned into state %s instead of 'available'" % old_volume.state)
+        log.debug("Deleting old volume")
         volume_type = old_volume.volume_type
         old_volume.delete()
 
         log.debug("Creating new volume")
         new_volume = self.ec2_resource.create_volume(
-            SnapshotId=snap_id,
-            AvailabilityZone=instance.placement['AvailabilityZone'],
-            VolumeType=volume_type)
+            SnapshotId=snap_id, AvailabilityZone=instance.placement["AvailabilityZone"], VolumeType=volume_type
+        )
         log.debug("Created new volume %s", new_volume.id)
         while True:
             new_volume.reload()
-            if new_volume.state != 'creating':
+            if new_volume.state != "creating":
                 break
             time.sleep(1)
         log.debug("new volume %s in state %s", new_volume.id, new_volume.state)
-        if new_volume.state != 'available':
+        if new_volume.state != "available":
             state = new_volume.state
             new_volume.delete()
-            raise CuckooMachineError(
-                "New volume turned into state %s instead of 'available'" % state
-            )
+            raise CuckooMachineError("New volume turned into state %s instead of 'available'" % state)
 
-        log.debug('Attaching new volume')
+        log.debug("Attaching new volume")
         resp = instance.attach_volume(VolumeId=new_volume.id, Device="/dev/sda1")
-        log.debug('response {}'.format(resp))
+        log.debug("response {}".format(resp))
         while True:
             new_volume.reload()
-            if new_volume.state != 'available':
+            if new_volume.state != "available":
                 break
             time.sleep(1)
         log.debug("new volume %s in state %s", new_volume.id, new_volume.state)
-        if new_volume.state != 'in-use':
+        if new_volume.state != "in-use":
             new_volume.delete()
-            raise CuckooMachineError(
-                 "New volume turned into state %s instead of 'in-use'" % old_volume.state
-            )
+            raise CuckooMachineError("New volume turned into state %s instead of 'in-use'" % old_volume.state)

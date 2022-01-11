@@ -7,8 +7,10 @@ try:
 except ImportError:
     import re
 
-from lib.cuckoo.common.abstracts import Signature
 import struct
+
+from lib.cuckoo.common.abstracts import Signature
+
 
 class StealthFile(Signature):
     name = "stealth_file"
@@ -28,7 +30,7 @@ class StealthFile(Signature):
         self.lastprocess = 0
         self.stealth_files = []
         self.is_office = False
-        office_pkgs = ["ppt","doc","xls","eml"]
+        office_pkgs = ["ppt", "doc", "xls", "eml"]
         if any(e in self.results["info"]["package"] for e in office_pkgs):
             self.is_office = True
 
@@ -48,13 +50,13 @@ class StealthFile(Signature):
                 if srchandle in self.handles:
                     self.handles[tgthandle] = self.handles[srchandle]
         elif (call["api"] == "NtOpenFile" or call["api"] == "NtCreateFile") and call["status"]:
-                handle = int(self.get_argument(call, "FileHandle"), 16)
-                filename = self.get_argument(call, "FileName")
-                if handle not in self.handles:
-                        self.handles[handle] = filename
+            handle = int(self.get_argument(call, "FileHandle"), 16)
+            filename = self.get_argument(call, "FileName")
+            if handle not in self.handles:
+                self.handles[handle] = filename
         elif call["api"] == "NtClose":
-                handle = int(self.get_argument(call, "Handle"), 16)
-                self.handles.pop(handle, None)
+            handle = int(self.get_argument(call, "Handle"), 16)
+            self.handles.pop(handle, None)
         if call["api"] == "NtCreateFile" and call["status"]:
             disp = int(self.get_argument(call, "CreateDisposition"), 10)
             attrib = int(self.get_argument(call, "FileAttributes"), 16)
@@ -78,7 +80,7 @@ class StealthFile(Signature):
                     if handle in self.handles:
                         if self.handles[handle] not in self.stealth_files:
                             self.stealth_files.append(self.handles[handle])
-                    #else:
+                    # else:
                     #    if "UNKNOWN" not in self.stealth_files:
                     #        self.stealth_files.append("UNKNOWN")
 
@@ -86,49 +88,49 @@ class StealthFile(Signature):
 
     def on_complete(self):
         whitelists = [
-            r'^[A-Z]?:\\Documents and Settings\\[^\\]+\\Local Settings\\Temporary Internet Files$',
-            r'^[A-Z]?:\\Documents and Settings\\[^\\]+\\Local Settings\\History$',
-            r'^[A-Z]?:\\Documents and Settings\\[^\\]+\\Local Settings\\Temporary Internet Files\\Content\.IE5\\?$',
-            r'^[A-Z]?:\\Documents and Settings\\[^\\]+\\Local Settings\\History\\History\.IE5\\?$',
-            r'^[A-Z]?:\\Documents and Settings\\[^\\]+\\Local Settings\\History\\History\.IE5\\MSHist[0-9]+\\$',
-            r'^[A-Z]?:\\Documents and Settings\\[^\\]+\\Local Settings\\History\\History\.IE5\\MSHist[0-9]+\\index\.dat$',
-            r'^[A-Z]?:\\Documents and Settings\\[^\\]+\\Application Data\\Microsoft\\CryptnetUrlCache\\Content\\[A-F0-9]{32}$',
-            r'^[A-Z]?:\\Documents and Settings\\[^\\]+\\Application Data\\Microsoft\\CryptnetUrlCache\\Metadata\\[A-F0-9]{32}$',
-            r'^[A-Z]?:\\Documents and Settings\\[^\\]+\\Cookies\\$',
-            r'^[A-Z]?:\\Documents and Settings\\[^\\]+\\PrivacIE\\$',
-            r'^[A-Z]?:\\Documents and Settings\\[^\\]+\\PrivacIE\\index\.dat$',
-            r'^[A-Z]?:\\Documents and Settings\\[^\\]+\\Local Settings\\Application Data\\Microsoft\\Feeds\\.*',
-            r'^[A-Z]?:\\Documents and Settings\\[^\\]+\\Local Settings\\Application Data\\Microsoft\\Internet Explorer\\DOMStore\\$',
-            r'^[A-Z]?:\\Documents and Settings\\[^\\]+\\Local Settings\\Application Data\\Microsoft\\Feeds Cache\\$',
-            r'^[A-Z]?:\\Documents and Settings\\[^\\]+\\Local Settings\\Application Data\\Microsoft\\Feeds Cache\\index\.dat$',
-            r'^[A-Z]?:\\Documents and Settings\\[^\\]+\\IETldCache\\$',
-            r'^[A-Z]?:\\Documents and Settings\\[^\\]+\\IETldCache\\index\.dat$',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Windows\\Temporary Internet Files\\Content\.IE5\\$',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\Cookies\\$',
-            r'^[A-Z]?:\\Users\\[^\\]+\\Favorites\\Links\\.*',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Windows\\Temporary Internet Files\\Virtualized$',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Feeds\\.*',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Feeds Cache\\$',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Feeds Cache\\index\.dat$',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\IETldCache\\$',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\IETldCache\\index\.dat$',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\IECompatUACache\\Low$',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\IECompatCache\\$',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\IECompatCache\\Low$',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\IECompatCache\\index.dat$',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\PrivacIE\\$',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\PrivacIE\\Low$',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\PrivacIE\\index\.dat$',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\IEDownloadHistory\\$',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Internet Explorer\\DOMStore\\$',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Internet Explorer\\DOMStore\\.*',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Windows\\History\\History\.IE5\\$',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Windows\\History\\History\.IE5\\MSHist[0-9]+\\$',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Windows\\History\\History\.IE5\\MSHist[0-9]+\\index\.dat$',
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Temp\\[^\\]+\.(xls|xlsx|doc|docx|ppt|pttx)',
+            r"^[A-Z]?:\\Documents and Settings\\[^\\]+\\Local Settings\\Temporary Internet Files$",
+            r"^[A-Z]?:\\Documents and Settings\\[^\\]+\\Local Settings\\History$",
+            r"^[A-Z]?:\\Documents and Settings\\[^\\]+\\Local Settings\\Temporary Internet Files\\Content\.IE5\\?$",
+            r"^[A-Z]?:\\Documents and Settings\\[^\\]+\\Local Settings\\History\\History\.IE5\\?$",
+            r"^[A-Z]?:\\Documents and Settings\\[^\\]+\\Local Settings\\History\\History\.IE5\\MSHist[0-9]+\\$",
+            r"^[A-Z]?:\\Documents and Settings\\[^\\]+\\Local Settings\\History\\History\.IE5\\MSHist[0-9]+\\index\.dat$",
+            r"^[A-Z]?:\\Documents and Settings\\[^\\]+\\Application Data\\Microsoft\\CryptnetUrlCache\\Content\\[A-F0-9]{32}$",
+            r"^[A-Z]?:\\Documents and Settings\\[^\\]+\\Application Data\\Microsoft\\CryptnetUrlCache\\Metadata\\[A-F0-9]{32}$",
+            r"^[A-Z]?:\\Documents and Settings\\[^\\]+\\Cookies\\$",
+            r"^[A-Z]?:\\Documents and Settings\\[^\\]+\\PrivacIE\\$",
+            r"^[A-Z]?:\\Documents and Settings\\[^\\]+\\PrivacIE\\index\.dat$",
+            r"^[A-Z]?:\\Documents and Settings\\[^\\]+\\Local Settings\\Application Data\\Microsoft\\Feeds\\.*",
+            r"^[A-Z]?:\\Documents and Settings\\[^\\]+\\Local Settings\\Application Data\\Microsoft\\Internet Explorer\\DOMStore\\$",
+            r"^[A-Z]?:\\Documents and Settings\\[^\\]+\\Local Settings\\Application Data\\Microsoft\\Feeds Cache\\$",
+            r"^[A-Z]?:\\Documents and Settings\\[^\\]+\\Local Settings\\Application Data\\Microsoft\\Feeds Cache\\index\.dat$",
+            r"^[A-Z]?:\\Documents and Settings\\[^\\]+\\IETldCache\\$",
+            r"^[A-Z]?:\\Documents and Settings\\[^\\]+\\IETldCache\\index\.dat$",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Windows\\Temporary Internet Files\\Content\.IE5\\$",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\Cookies\\$",
+            r"^[A-Z]?:\\Users\\[^\\]+\\Favorites\\Links\\.*",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Windows\\Temporary Internet Files\\Virtualized$",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Feeds\\.*",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Feeds Cache\\$",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Feeds Cache\\index\.dat$",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\IETldCache\\$",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\IETldCache\\index\.dat$",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\IECompatUACache\\Low$",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\IECompatCache\\$",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\IECompatCache\\Low$",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\IECompatCache\\index.dat$",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\PrivacIE\\$",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\PrivacIE\\Low$",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\PrivacIE\\index\.dat$",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\IEDownloadHistory\\$",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Internet Explorer\\DOMStore\\$",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Internet Explorer\\DOMStore\\.*",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Windows\\History\\History\.IE5\\$",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Windows\\History\\History\.IE5\\MSHist[0-9]+\\$",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Windows\\History\\History\.IE5\\MSHist[0-9]+\\index\.dat$",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Temp\\[^\\]+\.(xls|xlsx|doc|docx|ppt|pttx)",
         ]
         url_whitelist = [
-            r'^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\Recent\\CustomDestinations\\.*\.customDestinations.*\.TMP$',
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\Recent\\CustomDestinations\\.*\.customDestinations.*\.TMP$",
         ]
         saw_stealth = False
         target_name = None
@@ -152,7 +154,6 @@ class StealthFile(Signature):
 
             if addit:
                 saw_stealth = True
-                self.data.append({"file" : hfile})
+                self.data.append({"file": hfile})
 
         return saw_stealth
-

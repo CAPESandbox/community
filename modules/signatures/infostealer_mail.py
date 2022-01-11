@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class EmailStealer(Signature):
     name = "infostealer_mail"
     description = "Harvests information related to installed mail clients"
@@ -14,7 +15,7 @@ class EmailStealer(Signature):
     ttp = ["T1081", "T1003", "T1005"]
 
     def run(self):
-        office_pkgs = ["ppt","doc","xls","eml"]
+        office_pkgs = ["ppt", "doc", "xls", "eml"]
         if any(e in self.results["info"]["package"] for e in office_pkgs):
             return False
 
@@ -40,18 +41,18 @@ class EmailStealer(Signature):
         ]
         if self.results["target"]["category"] == "file":
             registry_indicators.append(".*\\\\Software\\\\(Wow6432Node\\\\)?Clients\\\\Mail.*")
-            
+
         found_stealer = False
         for indicator in file_indicators:
             file_match = self.check_file(pattern=indicator, regex=True, all=True)
             if file_match:
                 for match in file_match:
-                    self.data.append({"file" : match })
+                    self.data.append({"file": match})
                 found_stealer = True
         for indicator in registry_indicators:
             key_match = self.check_key(pattern=indicator, regex=True, all=True)
             if key_match:
                 for match in key_match:
-                    self.data.append({"key" : match })
+                    self.data.append({"key": match})
                 found_stealer = True
         return found_stealer

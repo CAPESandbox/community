@@ -9,6 +9,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiAVServiceStop(Signature):
     name = "antiav_servicestop"
     description = "Attempts to stop active services"
@@ -46,5 +47,5 @@ class AntiAVServiceStop(Signature):
         if self.stoppedservices:
             ret = True
             for service in self.stoppedservices:
-                self.data.append({"servicename" : service })
+                self.data.append({"servicename": service})
         return ret

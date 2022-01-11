@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class BitcoinWallet(Signature):
     name = "infostealer_bitcoin"
     description = "Attempts to access Bitcoin/ALTCoin wallets"
@@ -58,7 +59,7 @@ class BitcoinWallet(Signature):
             file_matches = self.check_file(pattern=indicator, regex=True, all=True)
             if file_matches:
                 for match in file_matches:
-                    self.data.append({"file" : match})
+                    self.data.append({"file": match})
                     found_match = True
                 self.weight += len(file_matches)
 

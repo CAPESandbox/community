@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ProcessNeeded(Signature):
     name = "process_needed"
     description = "Repeatedly searches for a not-found process, may want to run with startbrowser=1 option"

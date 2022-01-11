@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class IMStealer(Signature):
     name = "infostealer_im"
     description = "Harvests information related to installed instant messenger clients"
@@ -27,7 +28,7 @@ class IMStealer(Signature):
             ".*\\\\Skype\\\\.*\\\\config\.xml$",
             ".*\\\\Tencent\\ Files\\\\.*\\\\QQ\\\\Registry\.db$",
             ".*\\\\Trillian\\\\users\\\\global\\\\accounts\.ini$",
-            ".*\\\\Xfire\\\\XfireUser\.ini$"
+            ".*\\\\Xfire\\\\XfireUser\.ini$",
         ]
         registry_indicators = [
             ".*\\\\Software\\\\(Wow6432Node\\\\)?America\\ Online\\\\AIM6\\\\Passwords.*",
@@ -39,19 +40,19 @@ class IMStealer(Signature):
             ".*\\\\Software\\\\(Wow6432Node\\\\)?IMVU\\\\.*",
             ".*\\\\Software\\\\(Wow6432Node\\\\)?Nimbuzz\\\\PCClient\\\\Application\\\\.*",
             ".*\\\\Software\\\\(Wow6432Node\\\\)?Paltalk.*",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Yahoo\\\\Pager\\\\.*"
+            ".*\\\\Software\\\\(Wow6432Node\\\\)?Yahoo\\\\Pager\\\\.*",
         ]
         found_stealer = False
         for indicator in file_indicators:
             file_match = self.check_file(pattern=indicator, regex=True, all=True)
             if file_match:
                 for match in file_match:
-                    self.data.append({"file" : match })
+                    self.data.append({"file": match})
                 found_stealer = True
         for indicator in registry_indicators:
             key_match = self.check_key(pattern=indicator, regex=True, all=True)
             if key_match:
                 for match in key_match:
-                    self.data.append({"key" : match })
+                    self.data.append({"key": match})
                 found_stealer = True
         return found_stealer

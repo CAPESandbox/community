@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiVMBios(Signature):
     name = "antivm_generic_bios"
     description = "Checks the version of Bios, possibly for anti-virtualization"
@@ -26,6 +27,8 @@ class AntiVMBios(Signature):
     mbc = ["B0009.024", "B0009.005"]
 
     def run(self):
-        if self.check_read_key(pattern=".*\\\\HARDWARE\\\\DESCRIPTION\\\\System\\\\(SystemBiosVersion|VideoBiosVersion)$", regex=True):
+        if self.check_read_key(
+            pattern=".*\\\\HARDWARE\\\\DESCRIPTION\\\\System\\\\(SystemBiosVersion|VideoBiosVersion)$", regex=True
+        ):
             return True
         return False

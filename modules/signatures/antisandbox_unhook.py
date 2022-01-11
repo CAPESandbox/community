@@ -15,13 +15,14 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Unhook(Signature):
     name = "antisandbox_unhook"
     description = "Tries to unhook or modify Windows functions monitored by Cuckoo"
     severity = 3
     confidence = 60
     categories = ["anti-sandbox"]
-    authors = ["nex","Optiv"]
+    authors = ["nex", "Optiv"]
     minimum = "1.2"
     evented = True
     ttp = ["T1089"]
@@ -37,10 +38,7 @@ class Unhook(Signature):
             self.is_url_analysis = True
 
     def on_call(self, call, process):
-        subcategory = self.check_argument_call(call,
-                                               api="__anomaly__",
-                                               name="Subcategory",
-                                               pattern="unhook")
+        subcategory = self.check_argument_call(call, api="__anomaly__", name="Subcategory", pattern="unhook")
         if subcategory:
             self.saw_unhook = True
             funcname = self.get_argument(call, "FunctionName")
@@ -61,17 +59,15 @@ class Unhook(Signature):
                     addit = False
                 # exempt IE behavior
                 if self.is_url_analysis:
-                    allowed = [
-                    ]
+                    allowed = []
                     for name in allowed:
                         if funcname == name:
                             addit = False
                             break
 
-                office_pkgs = ["ppt","doc","xls","eml"]
+                office_pkgs = ["ppt", "doc", "xls", "eml"]
                 if any(e in self.results["info"]["package"] for e in office_pkgs):
-                    allowed = [
-                    ]
+                    allowed = []
                     for name in allowed:
                         if funcname == name:
                             addit = False
@@ -79,7 +75,7 @@ class Unhook(Signature):
 
                 if addit:
                     self.unhook_info.add("function_name: " + funcname + ", type: " + self.get_argument(call, "UnhookType"))
-    
+
     def on_complete(self):
         if len(self.unhook_info) > 5:
             weight = len(self.unhook_info)
@@ -89,5 +85,5 @@ class Unhook(Signature):
             self.saw_unhook = False
 
         for info in self.unhook_info:
-            self.data.append({"unhook" : info })
+            self.data.append({"unhook": info})
         return self.saw_unhook

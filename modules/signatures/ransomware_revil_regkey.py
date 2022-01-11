@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class RevilRegkey(Signature):
     name = "ransomware_revil_regkey"
     description = "Detects a registry key set by REvil/Sodinokibi."
@@ -27,9 +28,7 @@ class RevilRegkey(Signature):
 
     def run(self):
         ret = False
-        reg_indicators = [
-            "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\BlackLivesMatter"
-        ]
+        reg_indicators = ["HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\BlackLivesMatter"]
 
         for indicator in reg_indicators:
             match = self.check_write_key(pattern=indicator)

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class BitdefenderDetectLibs(Signature):
     name = "antiav_bitdefender_libs"
     description = "Detects Bitdefender Antivirus through the presence of a library"

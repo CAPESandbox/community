@@ -4,6 +4,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class InfostealerBrowserPassword(Signature):
     name = "infostealer_browser_password"
     description = "A process attempted to collect browser passwords"
@@ -53,7 +54,6 @@ class InfostealerBrowserPassword(Signature):
             if len(self.pidTrack[pid]) == 4:
                 if pid in self.readsSqlite:
                     ret = True
-                    self.data.append({"Process": "{0} ({1})".format(
-                        self.get_name_from_pid(str(pid)), pid)})
+                    self.data.append({"Process": "{0} ({1})".format(self.get_name_from_pid(str(pid)), pid)})
 
         return ret

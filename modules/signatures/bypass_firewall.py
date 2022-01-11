@@ -17,6 +17,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class BypassFirewall(Signature):
     name = "bypass_firewall"
     description = "Operates on local firewall's policies and settings"
@@ -27,5 +28,7 @@ class BypassFirewall(Signature):
     ttp = ["T1031", "E1478", "F0004"]
 
     def run(self):
-        return self.check_key(pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Services\\\\SharedAccess\\\\Parameters\\\\FirewallPolicy\\\\.*",
-                              regex=True)
+        return self.check_key(
+            pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Services\\\\SharedAccess\\\\Parameters\\\\FirewallPolicy\\\\.*",
+            regex=True,
+        )

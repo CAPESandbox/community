@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class KaraganyEventObjects(Signature):
     name = "karagany_system_event_objects"
     description = "Creates system event objects associated with Karagany/xFrost RAT"
@@ -50,6 +51,7 @@ class KaraganyEventObjects(Signature):
 
     def on_complete(self):
         return self.match
+
 
 class KaraganyFiles(Signature):
     name = "karagany_files"

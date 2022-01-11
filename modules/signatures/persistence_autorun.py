@@ -30,8 +30,7 @@ class Autorun_scheduler(Signature):
     description = "Installs itself for autorun at Windows startup"
     severity = 3
     categories = ["persistence"]
-    authors = ["Michael Boman", "nex",
-               "securitykitten", "Optiv", "KillerInstinct"]
+    authors = ["Michael Boman", "nex", "securitykitten", "Optiv", "KillerInstinct"]
     minimum = "1.3"
     ttp = ["T1053"]
 
@@ -42,8 +41,7 @@ class Autorun_scheduler(Signature):
         self.registry_writes = dict()
         self.found_autorun = False
 
-    filter_apinames = set(["RegSetValueExA", "RegSetValueExW",
-                           "NtSetValueKey", "CreateServiceA", "CreateServiceW"])
+    filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey", "CreateServiceA", "CreateServiceW"])
 
     def on_call(self, call, process):
         if call["api"].startswith("CreateService") and call["status"]:
@@ -64,12 +62,11 @@ class Autorun_scheduler(Signature):
         ]
         whitelists = [
             ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\{CAFEEFAC-0017-0000-FFFF-ABCDEFFEDCBA}\\\\InprocServer32\\\\.*",
-            #".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\[^\\\\]*\\\\InprocServer32\\\\ThreadingModel$",
+            # ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\[^\\\\]*\\\\InprocServer32\\\\ThreadingModel$",
         ]
 
         for indicator in indicators:
-            match_key = self.check_write_key(
-                pattern=indicator, regex=True, all=True)
+            match_key = self.check_write_key(pattern=indicator, regex=True, all=True)
             if match_key:
                 for match in match_key:
                     in_whitelist = False
@@ -85,9 +82,7 @@ class Autorun_scheduler(Signature):
                             self.data.append({"data": data})
                             self.found_autorun = True
 
-        indicators = [
-            ".*\\\\WINDOWS\\\\Tasks\\\\.*"
-        ]
+        indicators = [".*\\\\WINDOWS\\\\Tasks\\\\.*"]
 
         for indicator in indicators:
             if "dropped" in self.results and len(self.results.get("dropped", [])):
@@ -96,8 +91,7 @@ class Autorun_scheduler(Signature):
                         if re.match(indicator, path, re.IGNORECASE):
                             self.data.append({"file": path})
                             self.found_autorun = True
-            match_file = self.check_write_file(
-                pattern=indicator, regex=True, all=True)
+            match_file = self.check_write_file(pattern=indicator, regex=True, all=True)
             if match_file:
                 for match in match_file:
                     self.data.append({"file": match})
@@ -117,8 +111,7 @@ class Autorun(Signature):
     description = "Installs itself for autorun at Windows startup"
     severity = 3
     categories = ["persistence"]
-    authors = ["Michael Boman", "nex",
-               "securitykitten", "Optiv", "KillerInstinct"]
+    authors = ["Michael Boman", "nex", "securitykitten", "Optiv", "KillerInstinct"]
     minimum = "1.3"
     ttp = ["T1060"]
 
@@ -129,8 +122,7 @@ class Autorun(Signature):
         self.registry_writes = dict()
         self.found_autorun = False
 
-    filter_apinames = set(["RegSetValueExA", "RegSetValueExW",
-                           "NtSetValueKey", "CreateServiceA", "CreateServiceW"])
+    filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey", "CreateServiceA", "CreateServiceW"])
 
     def on_call(self, call, process):
         if call["api"].startswith("CreateService") and call["status"]:
@@ -165,19 +157,18 @@ class Autorun(Signature):
             ".*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Windows\\\\load$",
             ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\ShellServiceObjectDelayLoad\\\\.*",
             ".*\\\\System\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\Session\\ Manager\\\\AppCertDlls\\\\.*",
-            #".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\[^\\\\]*\\\\InprocServer32\\\\.*",
+            # ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\[^\\\\]*\\\\InprocServer32\\\\.*",
             ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\[^\\\\]*\\\\LocalServer32\\\\.*",
             ".*\\\\Microsoft\\\\Command\\ Processor\\\\AutoRun$",
             ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User\ Shell\ Folders\\\\Startup$",
         ]
         whitelists = [
             ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\{CAFEEFAC-0017-0000-FFFF-ABCDEFFEDCBA}\\\\InprocServer32\\\\.*",
-            #".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\[^\\\\]*\\\\InprocServer32\\\\ThreadingModel$",
+            # ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\[^\\\\]*\\\\InprocServer32\\\\ThreadingModel$",
         ]
 
         for indicator in indicators:
-            match_key = self.check_write_key(
-                pattern=indicator, regex=True, all=True)
+            match_key = self.check_write_key(pattern=indicator, regex=True, all=True)
             if match_key:
                 for match in match_key:
                     in_whitelist = False
@@ -206,14 +197,14 @@ class Autorun(Signature):
                         if re.match(indicator, path, re.IGNORECASE):
                             self.data.append({"file": path})
                             self.found_autorun = True
-            match_file = self.check_write_file(
-                pattern=indicator, regex=True, all=True)
+            match_file = self.check_write_file(pattern=indicator, regex=True, all=True)
             if match_file:
                 for match in match_file:
                     self.data.append({"file": match})
                 self.found_autorun = True
 
         return self.found_autorun
+
 
 class PersistenceSafeBoot(Signature):
     name = "persistence_safeboot"
@@ -233,7 +224,7 @@ class PersistenceSafeBoot(Signature):
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)
             if match:
-                self.data.append({"regkey" : match})
+                self.data.append({"regkey": match})
                 return True
 
-        return False 
+        return False

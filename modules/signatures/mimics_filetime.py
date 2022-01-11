@@ -8,7 +8,9 @@ except ImportError:
     import re
 
 import struct
+
 from lib.cuckoo.common.abstracts import Signature
+
 
 class HandleInfo:
     def __init__(self, handle, filename):
@@ -24,12 +26,12 @@ class HandleInfo:
 
     def __eq__(self, other):
         if isinstance(other, HandleInfo):
-                return self.handle == other.handle
+            return self.handle == other.handle
         else:
-                return False
+            return False
 
     def __ne__(self, other):
-        return (not self.__eq__(other))
+        return not self.__eq__(other)
 
     def __hash__(self):
         return hash(self.__repr__())
@@ -46,13 +48,16 @@ class HandleInfo:
             self.changetime = cht
 
     def check_file_times(self, other):
-        if ((self.createtime != 0 and self.createtime == other.createtime) or
-            (self.lastwritetime != 0 and self.lastwritetime == other.lastwritetime) or
-            (self.changetime != 0 and self.changetime == other.changetime)):
-                file = other.filename.lower()
-                if re.match(r'^[A-Z]?:\\Windows\\.*', file, re.IGNORECASE) or "\\system32\\" in file or "\\syswow64\\" in file:
-                        return other.filename
+        if (
+            (self.createtime != 0 and self.createtime == other.createtime)
+            or (self.lastwritetime != 0 and self.lastwritetime == other.lastwritetime)
+            or (self.changetime != 0 and self.changetime == other.changetime)
+        ):
+            file = other.filename.lower()
+            if re.match(r"^[A-Z]?:\\Windows\\.*", file, re.IGNORECASE) or "\\system32\\" in file or "\\syswow64\\" in file:
+                return other.filename
         return None
+
 
 class MimicsFiletime(Signature):
     name = "mimics_filetime"
@@ -73,7 +78,7 @@ class MimicsFiletime(Signature):
         self.saw_mimic = False
         self.mimics = set()
 
-    filter_apinames = set(["NtOpenFile","NtCreateFile","NtClose","NtQueryInformationFile","NtSetInformationFile"])
+    filter_apinames = set(["NtOpenFile", "NtCreateFile", "NtClose", "NtQueryInformationFile", "NtSetInformationFile"])
 
     def on_call(self, call, process):
         if process is not self.lastprocess:
@@ -92,7 +97,7 @@ class MimicsFiletime(Signature):
                 self.old_handles.append(self.handles[handle])
                 del self.handles[handle]
             except:
-                        pass
+                pass
         elif call["api"] == "NtQueryInformationFile":
             handle = int(self.get_argument(call, "FileHandle"), 16)
             querytype = int(self.get_argument(call, "FileInformationClass"), 10)
@@ -132,6 +137,6 @@ class MimicsFiletime(Signature):
     def on_complete(self):
         if self.saw_mimic:
             for mimic in self.mimics:
-                self.data.append({"mimic_source" : mimic[0], "mimic_dest" : mimic[1]})
+                self.data.append({"mimic_source": mimic[0], "mimic_dest": mimic[1]})
             return True
         return False

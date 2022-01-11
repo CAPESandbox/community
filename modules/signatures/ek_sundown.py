@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class Sundown_JS(Signature):
     name = "sundown_js"
     description = "Executes obfuscated JavaScript indicative of Sundown/Nebula Exploit Kit"
@@ -30,8 +31,8 @@ class Sundown_JS(Signature):
         Signature.__init__(self, *args, **kwargs)
 
         self.payloadRC4keys = [
-            ("key=\\\"gexywoaxor\\\"", "Uses the key gexywoaxor associated with the Sundown exploit kit"),
-            ("key=\\\"galiut\\\"", "Uses the key galiut associated with the Nebula exploit kit"),
+            ('key=\\"gexywoaxor\\"', "Uses the key gexywoaxor associated with the Sundown exploit kit"),
+            ('key=\\"galiut\\"', "Uses the key galiut associated with the Nebula exploit kit"),
         ]
 
     filter_categories = set(["browser"])
@@ -44,8 +45,8 @@ class Sundown_JS(Signature):
         else:
             buf = self.get_argument(call, "Script").lower()
 
-        if "ie=emulateie" in buf and "vbscript" in buf and "key=\\\"" in buf and "url=\\\"http" in buf:
+        if "ie=emulateie" in buf and "vbscript" in buf and 'key=\\"' in buf and 'url=\\"http' in buf:
             for key in self.payloadRC4keys:
                 if key[0] in buf:
-                    self.data.append({"Known RC4 Payload Key" : "%s" % (key[1])})
+                    self.data.append({"Known RC4 Payload Key": "%s" % (key[1])})
             return True

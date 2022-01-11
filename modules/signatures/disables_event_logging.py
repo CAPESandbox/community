@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DisablesEventLogging(Signature):
     name = "disables_event_logging"
     description = "Disables Event Logging"
@@ -33,7 +34,7 @@ class DisablesEventLogging(Signature):
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)
             if match:
-                self.data.append({"regkey" : match})
+                self.data.append({"regkey": match})
                 return True
 
         return False

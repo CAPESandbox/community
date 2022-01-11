@@ -20,6 +20,7 @@ except:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class NetworkAnomaly(Signature):
     name = "network_anomaly"
     description = "Network anomalies occured during the analysis."
@@ -33,12 +34,9 @@ class NetworkAnomaly(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.ipWhitelist = set(["127.0.0.1"])
         self.ipBuffer = list()
-        self.ipRex = (r"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.)"
-                       "{3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$")
+        self.ipRex = r"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.)" "{3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
 
-    filter_apinames = set(["getaddrinfo", "InternetConnectA",
-                           "InternetConnectW", "connect",
-                           "WSAConnect", "GetAddrInfoW"])
+    filter_apinames = set(["getaddrinfo", "InternetConnectA", "InternetConnectW", "connect", "WSAConnect", "GetAddrInfoW"])
 
     def on_call(self, call, process):
         if call["api"] == "getaddrinfo" or call["api"] == "GetAddrInfoW":
@@ -64,8 +62,7 @@ class NetworkAnomaly(Signature):
         # Parse for getaddrinfo with no subsequent connections
         for ip in self.ipBuffer:
             if ip not in self.ipWhitelist:
-                self.data.append({"Anomaly": "'%s' getaddrinfo with no actual "
-                                             "connection to the IP." % ip })
+                self.data.append({"Anomaly": "'%s' getaddrinfo with no actual " "connection to the IP." % ip})
                 ret = True
 
         return ret

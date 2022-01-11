@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DisablesStartMenuSearch(Signature):
     name = "disables_startmenu_search"
     description = "Disables host Start Menu search"
@@ -24,7 +25,7 @@ class DisablesStartMenuSearch(Signature):
     minimum = "1.3"
     evented = True
 
-    def run(self):    
+    def run(self):
         indicators = [
             "HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoSearchFilesInStartMenu",
             "HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoSearchProgramsInStartMenu",

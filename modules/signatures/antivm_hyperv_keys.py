@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class HyperVDetectKeys(Signature):
     name = "antivm_hyperv_keys"
     description = "Detects Hyper-V through the presence of a registry key"

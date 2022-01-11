@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AspireCryptPacked(Signature):
     name = "packer_aspirecrypt"
     description = ".NET executable is packed/obfuscated with AspireCrypt"

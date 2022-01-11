@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ExplorerHTTP(Signature):
     name = "explorer_http"
     description = "Explorer.exe process established HTTP connections"
