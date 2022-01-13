@@ -48,6 +48,7 @@ class NetworkQuestionableHost(Signature):
                 'noserver.dnsbl.sorbs.net',
                 'zen.spamhaus.org',
              ]
+        checked={}
         if "network" in self.results and "hosts" in self.results["network"]:
             for host in self.results["network"]["hosts"]:
                 ip = host["ip"]
