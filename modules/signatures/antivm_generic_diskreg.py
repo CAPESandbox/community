@@ -30,6 +30,7 @@ class AntiVMDiskReg(Signature):
         indicators = [
             ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\IDE$",
             ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Services\\\\Disk\\\\Enum\\\\.*",
+            ".*\\\\HARDWARE\\\\DEVICEMAP\\\\Scsi\\\\Scsi\ Port\ 0\\\\Scsi\ Bus\ 0\\\\Target\ Id\ 0\\\\Logical\ Unit\ Id\ 0$",
         ]
         for indicator in indicators:
             if self.check_key(pattern=indicator, regex=True):
