@@ -54,7 +54,7 @@ class NetworkQuestionableHost(Signature):
     def run(self):
 
         checked = {}
-        for key, value in [("hosts", "ip"), ("tcp", "dst"), ("udp", "dst"), ("icmp", "dst"), ("icmp", "dst")]:
+        for key, value in [("hosts", "ip"), ("tcp", "dst"), ("udp", "dst"), ("icmp", "dst"), ("icmp", "src")]:
             for host in self.results.get("network", {}).get(key, []):
                 ip = host[value]
                 checked[ip] = ""
