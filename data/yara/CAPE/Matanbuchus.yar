@@ -1,9 +1,9 @@
 rule Matanbuchus 
 {
     meta:
-        description = "Detects Matanbuchus payload"
+        description = "Detects Matanbuchus loader"
         author = "Rony (@r0ny_123)"
-        cape_type = "Matanbuchus payload"
+        cape_type = "Matanbuchus loader"
         cretaion_date = "2021-12-09"
         revision = "0"
         reference = "https://www.capesandbox.com/analysis/212747"
