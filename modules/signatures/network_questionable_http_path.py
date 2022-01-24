@@ -42,6 +42,8 @@ common_types=[
             ".tar",
             ".tgz",
             ".tbz",
+            ".7z",
+            ".rar",
             ]
 
 class NetworkQuestionableHttpPath(Signature):
