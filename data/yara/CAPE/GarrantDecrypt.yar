@@ -6,7 +6,7 @@ rule GarrantDecrypt {
     strings:
         $x1 = "%appdata%\\_uninstalling_.png" fullword wide
         $x2 = "C:\\Windows\\sysnative\\vssadmin.exe" fullword wide
-        $x3 = /(ICQ|Skype) (@supersuso|@Whitehorsedecryption|@likeahorse|@Konwarszawski|@zipzipulya|Whitehorsedecryption|LIKEAHORSE DECRYPTION|Zip Zipulya)/ ascii
+        $x3 = /(ICQ|Skype) (@nuncatarde|@supersuso|@Whitehorsedecryption|@likeahorse|@Konwarszawski|@zipzipulya|Whitehorsedecryption|LIKEAHORSE DECRYPTION|Zip Zipulya)/ ascii
         $s1 = "your unique ID" ascii
         $s2 = "Google market ICQ" ascii
         $s3 = "If you want to restore them, install ICQ" ascii
