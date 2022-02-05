@@ -31,6 +31,7 @@ class Log4j(Signature):
     severity = 3
     authors = ["Busra Yenidogan"]
     minimum = "0.5"
+    enabled = False
 
     def run(self):
         httpitems = self.results.get("network", {}).get("http", [])
