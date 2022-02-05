@@ -55,7 +55,7 @@ class NetworkQuestionableHttpPath(Signature):
     categories = ["network"]
     authors = ["Zane C. Bowers-Hadley"]
     minimum = "1.3"
-    enabled = False
+    enabled = True
 
     filter_analysistypes = set(["file"])
 
@@ -84,7 +84,7 @@ class NetworkQuestionableHttpsPath(Signature):
     categories = ["network"]
     authors = ["Zane C. Bowers-Hadley"]
     minimum = "1.3"
-    enabled = False
+    enabled = True
 
     filter_analysistypes = set(["file"])
 
