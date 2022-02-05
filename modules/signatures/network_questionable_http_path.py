@@ -23,28 +23,29 @@
 from lib.cuckoo.common.abstracts import Signature
 
 # common dir names to check for the usage of
-common_dirs=[
-            "/wp-content/",
-            "/template/",
-            "/tmp/",
-            "/temp/",
-            "/data/",
-             ]
+common_dirs = (
+    "/wp-content/",
+    "/template/",
+    "/tmp/",
+    "/temp/",
+    "/data/",
+)
 # executable or archive files to checked for being pulled down
-common_types=[
-            ".zip",
-            ".exe",
-            ".com",
-            ".bz2",
-            ".gz",
-            ".bz",
-            ".ace",
-            ".tar",
-            ".tgz",
-            ".tbz",
-            ".7z",
-            ".rar",
-            ]
+common_extension = (
+    ".zip",
+    ".exe",
+    ".com",
+    ".bz2",
+    ".gz",
+    ".bz",
+    ".ace",
+    ".tar",
+    ".tgz",
+    ".tbz",
+    ".7z",
+    ".rar",
+)
+
 
 class NetworkQuestionableHttpPath(Signature):
     name = "network_questionable_http_path"
@@ -54,24 +55,26 @@ class NetworkQuestionableHttpPath(Signature):
     categories = ["network"]
     authors = ["Zane C. Bowers-Hadley"]
     minimum = "1.3"
+    enabled = False
 
     filter_analysistypes = set(["file"])
 
+    def find_dir_n_type(self, uri):
+        if any([uri.find(common_dir) for common_dir in common_dirs]) and any(
+            [uri.endswith(common_ext) for common_ext in common_extension]
+        ):
+            return True
+        return False
+
     def run(self):
-        if "network" in self.results and "http" in self.results["network"]:
-            for host in self.results["network"]["http"]:
-                path = host["path"]
-                lc_path = path.lower()
-                for common_dir in common_dirs:
-                    found_location = lc_path.find(common_dir)
-                    if found_location != -1:
-                        for common_type in common_types:
-                            if lc_path.find(common_type, found_location) != -1:
-                                self.data.append({'uri' : host["uri"]})
+        for host in self.results.get("network", {}).get("http", []) or []:
+            if self.find_dir_n_type(host["path"].lower()):
+                self.data.append({"uri": host["uri"]})
         if self.data:
             return True
         else:
             return False
+
 
 class NetworkQuestionableHttpsPath(Signature):
     name = "network_questionable_https_path"
@@ -81,20 +84,14 @@ class NetworkQuestionableHttpsPath(Signature):
     categories = ["network"]
     authors = ["Zane C. Bowers-Hadley"]
     minimum = "1.3"
+    enabled = False
 
     filter_analysistypes = set(["file"])
 
     def run(self):
-        if "network" in self.results and "https" in self.results["network"]:
-            for host in self.results["network"]["https"]:
-                path = host["path"]
-                lc_path = path.lower()
-                for common_dir in common_dirs:
-                    found_location = lc_path.find(common_dir)
-                    if found_location != -1:
-                        for common_type in common_types:
-                            if lc_path.find(common_type, found_location) != -1:
-                                self.data.append({'uri' : host["uri"]})
+        for host in self.results.get("network", {}).get("https", []) or []:
+            if self.find_dir_n_type(host["path"].lower()):
+                self.data.append({"uri": host["uri"]})
         if self.data:
             return True
         else:
