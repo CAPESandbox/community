@@ -31,7 +31,7 @@ common_dirs = (
     "/data/",
 )
 # executable or archive files to checked for being pulled down
-common_extension = (
+common_extensions = (
     ".zip",
     ".exe",
     ".com",
@@ -60,9 +60,7 @@ class NetworkQuestionableHttpPath(Signature):
     filter_analysistypes = set(["file"])
 
     def find_dir_n_type(self, uri):
-        if any([uri.find(common_dir) for common_dir in common_dirs]) and any(
-            [uri.endswith(common_ext) for common_ext in common_extension]
-        ):
+        if any([uri.find(common_dir) for common_dir in common_dirs]) and uri.endswith(common_extensions):
             return True
         return False
 
