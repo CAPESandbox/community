@@ -46,6 +46,6 @@ class antidebug_outputdebugstring(Signature):
             if not self.set_err or not self.output:
                 self.set_err = self.output = False
 
-        def on_complete(self):
-            if self.set_err and self.output:
-                return True
+    def on_complete(self):
+        if self.set_err and self.output:
+            return True
