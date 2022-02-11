@@ -34,7 +34,6 @@ class RansomwareMessage(Signature):
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.ransomfile = []
         self.indicators = [
             "your files",
             "your data",
@@ -122,63 +121,16 @@ class RansomwareMessage(Signature):
             "personal identification code",
             "get back my",
             "get back your",
+            "your network",
         ]
         self.patterns = "|".join(self.indicators)
 
     filter_apinames = set(["NtWriteFile"])
-
     def on_call(self, call, process):
-        if call["api"] == "NtWriteFile":
-            buff = self.get_raw_argument(call, "Buffer").lower()
-            filepath = self.get_raw_argument(call, "HandleName")
-            if (filepath.lower() == "\\??\\physicaldrive0" or filepath.lower().startswith("\\device\\harddisk")) and len(
-                buff
-            ) >= 128:
-                if len(set(re.findall(self.patterns, buff))) > 1:
-                    if filepath not in self.ransomfile:
-                        self.ransomfile.append(filepath)
-
-    def on_complete(self):
-        for dropped in self.results.get("dropped", []) or []:
-            mimetype = dropped["type"]
-            if "ASCII text" in mimetype:
-                filenames = dropped["name"]
-                data = dropped.get("data", "")
-                if len(data) >= 128:
-                    if len(set(re.findall(self.patterns, data))) > 1:
-                        if filenames[0] not in self.ransomfile:
-                            self.ransomfile.append(filenames[0])
-
-        if len(self.ransomfile) > 0:
-            for filename in self.ransomfile:
-                self.data.append({"ransom_file": "%s" % (filename)})
-            return True
-
-        return False
-
-
-class RansomwareMessageMultipleLocations(Signature):
-    name = "ransomware_message_multiple_locations"
-    description = "Drops the same text/html/hta file across a large number of filesystem locations commonly seen in ransomware"
-    severity = 3
-    confidence = 50
-    categories = ["ransomware"]
-    authors = ["Kevin Ross"]
-    minimum = "1.3"
-    evented = True
-    match = True
-    ttp = ["T1486"]
-
-    def run(self):
-        ret = False
-        for dropped in self.results.get("dropped", []) or []:
-            if (
-                dropped is not None
-                and "ASCII text" in dropped["type"]
-                or any(name.endswith((".txt", ".html", ".hta")) for name in dropped.get("name") or [])
-            ):
-                if dropped.get("guest_paths", "") is not None and len(dropped.get("guest_paths", "")) > 50:
-                    ret = True
-                    self.data.append({"filename": dropped["name"][0]})
-
-        return ret
+        buff = self.get_raw_argument(call, "Buffer").lower()
+        filepath = self.get_raw_argument(call, "HandleName")
+        if (filepath.lower() == "\\??\\physicaldrive0" or filepath.lower().startswith("\\device\\harddisk") or filepath.lower().endswith(".txt")) and len(buff) >= 128:
+            if len(set(re.findall(self.patterns, buff))) > 1:
+                self.data.append({"ransom_note": "%s" %(filepath)})
+                self.data.append({"begining_of_ransom_message": "%s" %(buff)})
+                return True
