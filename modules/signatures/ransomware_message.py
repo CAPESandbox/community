@@ -126,11 +126,16 @@ class RansomwareMessage(Signature):
         self.patterns = "|".join(self.indicators)
 
     filter_apinames = set(["NtWriteFile"])
+
     def on_call(self, call, process):
         buff = self.get_raw_argument(call, "Buffer").lower()
         filepath = self.get_raw_argument(call, "HandleName")
-        if (filepath.lower() == "\\??\\physicaldrive0" or filepath.lower().startswith("\\device\\harddisk") or filepath.lower().endswith(".txt")) and len(buff) >= 128:
+        if (
+            filepath.lower() == "\\??\\physicaldrive0"
+            or filepath.lower().startswith("\\device\\harddisk")
+            or filepath.lower().endswith(".txt")
+        ) and len(buff) >= 128:
             if len(set(re.findall(self.patterns, buff))) > 1:
-                self.data.append({"ransom_note": "%s" %(filepath)})
-                self.data.append({"begining_of_ransom_message": "%s" %(buff)})
+                self.data.append({"ransom_note": "%s" % (filepath)})
+                self.data.append({"begining_of_ransom_message": "%s" % (buff)})
                 return True
