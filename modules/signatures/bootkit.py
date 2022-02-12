@@ -177,3 +177,31 @@ class SuspiciousIoctlSCSIPassthough(Signature):
 
     def on_complete(self):
         return self.ret
+
+class PotentialOverWriteMBR(Signature):
+    name = "potential_overwrite_mbr"
+    description = "Wrote 512 bytes to physical drive potentially indicative of overwriting the Master Boot Record (MBR)"
+    severity = 3
+    categories = ["bootkit"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttp = ["T1067"]
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
+        
+    filter_apinames = set(["NtWriteFile"])
+
+
+    def on_call(self, call, process):
+        if call["api"] == "NtWriteFile":
+            filepath = self.get_raw_argument(call, "HandleName")
+            writelength = self.get_raw_argument(call, "Length")
+            if (filepath.lower() == "\\??\\physicaldrive0" or filepath.lower().startswith("\\device\\harddisk")) and writelength == 512:
+                self.data.append({"modified_drive": "%s" % (filepath)})
+                self.ret = True
+                
+    def on_complete(self):
+        return self.ret
