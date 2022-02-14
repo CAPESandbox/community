@@ -37,15 +37,14 @@ class CAPEExtractedContent(Signature):
     
         ret = False
         for cape in self.results.get("CAPE", {}).get("payloads", []) or []:
-            targetproc = cape.get("target_process", "") or cape.get("cape_type", "")
-            if targetproc:
-                if targetproc.lower() in browsertargets:
-                    targetpid = cape.get("target_pid", "") or cape.get("cape_type", "")
-                    targetpath = cape.get("target_path", "") or cape.get("cape_type", "")
-                    injectingproc = cape.get("process_path", "") or cape.get("cape_type", "")
-                    injectingpid = cape.get("pid", "") or cape.get("cape_type", "")
-                    if targetpid and targetpath and injectingproc and injectingpid:
-                        self.data.append({"browser_inject": "%s pid %s injected into %s with path %s and pid %s" %(injectingproc,injectingpid,targetproc,targetpath,targetpid)})
-                        ret = True
+            targetproc = cape.get("target_process") or cape.get("cape_type")
+            if targetproc and targetproc.lower() in browsertargets:
+                targetpid = cape.get("target_pid") or cape.get("cape_type")
+                targetpath = cape.get("target_path") or cape.get("cape_type")
+                injectingproc = cape.get("process_path") or cape.get("cape_type")
+                injectingpid = cape.get("pid") or cape.get("cape_type")
+                if targetpid and targetpath and injectingproc and injectingpid:
+                    self.data.append({"browser_inject": "%s pid %s injected into %s with path %s and pid %s" %(injectingproc,injectingpid,targetproc,targetpath,targetpid)})
+                    ret = True
 
         return ret
