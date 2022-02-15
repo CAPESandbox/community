@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class FirefoxDisablesProcessPerTab(Signature):
     name = "firefox_disables_process_tab"
     description = "Disables Firefox creating a new process per tab, possbily for browser injection"
@@ -36,26 +37,27 @@ class FirefoxDisablesProcessPerTab(Signature):
         if "browser.tabs.remote.autostart" in buf.lower():
             handlename = self.get_argument(call, "HandleName")
             self.data.append({"handlename": handlename})
-            self.data.append({"written_content": buf})            
+            self.data.append({"written_content": buf})
             return True
-            
+
+
 class IEDisablesProcessPerTab(Signature):
-   name = "ie_disables_process_tab"
-   description = "Disables Interner Explorer creating a new process per tab, possibly for browser injection"
-   severity = 3
-   categories = ["banker"]
-   authors = ["Kevin Ross"]
-   minimum = "1.3"
-   evented = True
-   ttp = ["T1185"]
-   references = [" https://www.kryptoslogic.com/blog/2022/01/deep-dive-into-trickbots-web-injection/"]
-    
-   def run(self):
-       indicators = [
-           ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet Explorer\\\\Main\\\\TabProcGrowth$",
-       ]
-       for indicator in indicators:
-           match = self.check_write_key(pattern=indicator, regex=True)
-           if match:
-               self.data.append({"regkey": match})
-               return True
+    name = "ie_disables_process_tab"
+    description = "Disables Interner Explorer creating a new process per tab, possibly for browser injection"
+    severity = 3
+    categories = ["banker"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttp = ["T1185"]
+    references = [" https://www.kryptoslogic.com/blog/2022/01/deep-dive-into-trickbots-web-injection/"]
+
+    def run(self):
+        indicators = [
+            ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet Explorer\\\\Main\\\\TabProcGrowth$",
+        ]
+        for indicator in indicators:
+            match = self.check_write_key(pattern=indicator, regex=True)
+            if match:
+                self.data.append({"regkey": match})
+                return True

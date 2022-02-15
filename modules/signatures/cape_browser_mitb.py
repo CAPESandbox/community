@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CAPEExtractedContent(Signature):
     name = "cape_extracted_content"
     description = "CAPE detected injection into a browser process, likely for Man-In-Browser (MITB) infostealing"
@@ -32,9 +33,9 @@ class CAPEExtractedContent(Signature):
             "iexplore.exe",
             "microsoftedge.exe",
             "microsoftedgecp.exe",
-            "runtimebroker.exe", # https://www.sentinelone.com/labs/how-trickbot-malware-hooking-engine-targets-windows-10-browsers/
+            "runtimebroker.exe",  # https://www.sentinelone.com/labs/how-trickbot-malware-hooking-engine-targets-windows-10-browsers/
         ]
-    
+
         ret = False
         for cape in self.results.get("CAPE", {}).get("payloads", []) or []:
             targetproc = cape.get("target_process") or cape.get("cape_type")
@@ -44,7 +45,12 @@ class CAPEExtractedContent(Signature):
                 injectingproc = cape.get("process_path") or cape.get("cape_type")
                 injectingpid = cape.get("pid") or cape.get("cape_type")
                 if targetpid and targetpath and injectingproc and injectingpid:
-                    self.data.append({"browser_inject": "%s pid %s injected into %s with path %s and pid %s" %(injectingproc,injectingpid,targetproc,targetpath,targetpid)})
+                    self.data.append(
+                        {
+                            "browser_inject": "%s pid %s injected into %s with path %s and pid %s"
+                            % (injectingproc, injectingpid, targetproc, targetpath, targetpid)
+                        }
+                    )
                     ret = True
 
         return ret
