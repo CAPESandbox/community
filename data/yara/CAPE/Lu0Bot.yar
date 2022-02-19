@@ -12,10 +12,8 @@ rule Lu0Bot
         83 c6 04             add        esi, 4
         39 fe                cmp        esi, edi
         7c f3                jl         0x40110e
-        bb 00 00 00 00       mov        ebx, 0
-        53                   push       ebx
         */
-        $s = { 81 c7 [4] 81 2e [4] 83 c6 ?? 39 fe 7c ?? bb [4] 53 }
+        $s = { 81 c7 [4] 81 2e [4] 83 c6 ?? 39 fe 7c }
     condition:
         uint16be(0) == 0x4D5A and uint32be(uint32(0x3C)) == 0x50450000 and filesize < 5KB and all of them
 }
