@@ -33,24 +33,25 @@ class WiperZeroedBytes(Signature):
     ttp = ["T1561"]
 
     def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)      
+        Signature.__init__(self, *args, **kwargs)
         self.wipecount = 0
         self.lastfile = ""
 
     filter_apinames = set(["NtWriteFile"])
+
     def on_call(self, call, process):
         filepath = self.get_raw_argument(call, "HandleName")
         if filepath != self.lastfile:
             buff = self.get_raw_argument(call, "Buffer").lower()
-            regex = re.compile('^[\\x00\.]+$')
+            regex = re.compile("^[\\x00\.]+$")
             if len(buff) > 30 and regex.match(buff):
                 self.lastfile = filepath
                 self.wipecount += 1
 
     def on_complete(self):
-        ret = False             
+        ret = False
         if self.wipecount > 10:
-            self.data.append({"number of files wiped": "%s" %(self.wipecount)})                     
+            self.data.append({"number of files wiped": "%s" % (self.wipecount)})
             ret = True
-                
+
         return ret
