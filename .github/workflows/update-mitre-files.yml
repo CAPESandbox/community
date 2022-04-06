@@ -22,7 +22,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Update mitre files
-      run: python .github\update_mitre.py
+      run: python .github/update_mitre.py
     - name: Commit changes if any
       run: |
         git config user.name "GitHub Actions"
