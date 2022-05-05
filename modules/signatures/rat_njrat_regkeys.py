@@ -21,7 +21,7 @@ class NjratRegkeys(Signature):
     description = "Creates known Njrat/Bladabindi RAT registry keys"
     severity = 3
     categories = ["rat"]
-    families = ["Njrat", "Bladabindi"]
+    families = ["njRat", "Bladabindi"]
     authors = ["ditekshen"]
     minimum = "0.5"
 
