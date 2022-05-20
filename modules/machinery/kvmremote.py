@@ -33,18 +33,18 @@ class KVMRemote(LibVirtMachinery):
         dsn = self.options.get(label).get("dsn", None)
 
         if not dsn:
-            raise CuckooMachineError("You must provide a proper " "connection string for " + label)
+            raise CuckooMachineError(f"You must provide a proper connection string for {label}")
 
         try:
             return libvirt.open(dsn)
-        except libvirt.libvirtError:
-            raise CuckooMachineError("Cannot connect to libvirt")
+        except libvirt.libvirtError as e:
+            raise CuckooMachineError("Cannot connect to libvirt") from e
 
     def _initialize(self, module_name):
         """Read configuration.
         @param module_name: module name.
         """
-        super(KVMRemote, self)._initialize(module_name)
+        super()._initialize(module_name)
 
         hypervs_labels = self.options.get("kvmremote")["hypervisors"]
         hypervs_labels = ("".join(hypervs_labels.split())).split(",")
@@ -54,7 +54,7 @@ class KVMRemote(LibVirtMachinery):
 
             if machine_cfg.hypervisor:
                 if machine_cfg.hypervisor not in hypervs_labels:
-                    raise CuckooCriticalError("Unknown hypervisor %s for %s" % (machine_cfg.hypervisor, machine.label))
+                    raise CuckooCriticalError(f"Unknown hypervisor {machine_cfg.hypervisor} for {machine.label}")
 
                 hyperv_cfg = self.options.get(machine_cfg.hypervisor)
 
@@ -78,7 +78,7 @@ class KVMRemote(LibVirtMachinery):
         return elem.attrib["dev"]
 
     def start(self, label):
-        super(KVMRemote, self).start(label)
+        super().start(label)
         if not self.db.view_machine_by_label(label).interface:
             self.db.set_machine_interface(label, self._get_interface(label))
 
@@ -91,19 +91,12 @@ class KVMRemote(LibVirtMachinery):
         try:
             # create the memory dump file ourselves first so it doesn't end up root/root 0600
             # it'll still be owned by root, so we can't delete it, but at least we can read it
-            fd = open(path, "w")
-            fd.close()
-            try:
-                from subprocess import DEVNULL  # py3k
-            except ImportError:
-                DEVNULL = open(os.devnull, "wb")
+            with open(path, "w"):
+                pass
 
             # this triggers local dump
-
             # self.vms[label].coreDump(path, flags=libvirt.VIR_DUMP_MEMORY_ONLY)
 
-            machine_label = None
-            hypverv_cfg = None
             # use first
             for machine in self.machines():
                 machine_cfg = self.options.get(machine.label)
@@ -112,23 +105,17 @@ class KVMRemote(LibVirtMachinery):
 
             remote_host = hyperv_cfg["remote_host"]
 
-            log.info("Dumping volatile memory remotely @ %s (%s)" % (remote_host, label))
+            log.info("Dumping volatile memory remotely @ %s (%s)", remote_host, label)
+            subprocess.run(("ssh", remote_host, "virsh", "dump", "--memory-only", label, f"/data/memory/{label}.memory.dump"), stderr=subprocess.DEVNULL)
 
-            remote_output = subprocess.check_output(
-                ["ssh", remote_host, "virsh", "dump", "--memory-only", label, "/data/memory/%s.memory.dump" % (label)],
-                stderr=DEVNULL,
-            )
             log.debug("Copying memory from remote host")
-            remote_output = subprocess.check_output(
-                ["scp", "-q", remote_host + ":/data/memory/%s.memory.dump" % label, path], stderr=DEVNULL
-            )
+            subprocess.run(("scp", "-q", f"{remote_host}:/data/memory/{label}.memory.dump", path), stderr=subprocess.DEVNULL)
+
             log.debug("Removing memory from remote host")
-            remote_output = subprocess.check_output(
-                ["ssh", remote_host, "rm", "-f", "/data/memory/%s.memory.dump" % (label)], stderr=DEVNULL
-            )
+            subprocess.run(["ssh", remote_host, "rm", "-f", f"/data/memory/{label}.memory.dump"], stderr=subprocess.DEVNULL)
 
             if not os.path.isfile(path):
-                raise CuckooMachineError("Error dumping memory virtual machine " "{0}: {1}".format(label, "file not found"))
+                raise CuckooMachineError(f"Error dumping memory virtual machine {label}: file not found")
 
         except libvirt.libvirtError as e:
-            raise CuckooMachineError("Error dumping memory virtual machine " "{0}: {1}".format(label, e))
+            raise CuckooMachineError(f"Error dumping memory virtual machine {label}: {e}") from e
