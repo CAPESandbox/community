@@ -106,7 +106,10 @@ class KVMRemote(LibVirtMachinery):
             remote_host = hyperv_cfg["remote_host"]
 
             log.info("Dumping volatile memory remotely @ %s (%s)", remote_host, label)
-            subprocess.run(("ssh", remote_host, "virsh", "dump", "--memory-only", label, f"/data/memory/{label}.memory.dump"), stderr=subprocess.DEVNULL)
+            subprocess.run(
+                ("ssh", remote_host, "virsh", "dump", "--memory-only", label, f"/data/memory/{label}.memory.dump"),
+                stderr=subprocess.DEVNULL,
+            )
 
             log.debug("Copying memory from remote host")
             subprocess.run(("scp", "-q", f"{remote_host}:/data/memory/{label}.memory.dump", path), stderr=subprocess.DEVNULL)
