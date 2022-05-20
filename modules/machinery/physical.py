@@ -6,8 +6,8 @@ from __future__ import absolute_import
 import logging
 import socket
 import subprocess
-from typing import Literal
 import xmlrpc.client
+from typing import Literal
 
 from lib.cuckoo.common.abstracts import Machinery
 from lib.cuckoo.common.constants import CUCKOO_GUEST_PORT
