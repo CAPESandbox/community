@@ -1,11 +1,12 @@
 from __future__ import absolute_import
 import logging
 import time
+from typing import Literal
 
 import boto3
 from lib.cuckoo.common.abstracts import Machinery
 from lib.cuckoo.common.config import Config
-from lib.cuckoo.common.exceptions import CuckooCriticalError, CuckooMachineError
+from lib.cuckoo.common.exceptions import CuckooMachineError
 from sqlalchemy.exc import SQLAlchemyError
 
 logging.getLogger("boto3").setLevel(logging.CRITICAL)
@@ -37,7 +38,7 @@ class AWS(Machinery):
         self.ec2_machines = {}
         self.dynamic_machines_sequence = 0
         self.dynamic_machines_count = 0
-        log.info("connecting to AWS:{}".format(self.options.aws.region_name))
+        log.info("connecting to AWS: %s", self.options.aws.region_name)
         self.ec2_resource = boto3.resource(
             "ec2",
             region_name=self.options.aws.region_name,
@@ -50,7 +51,7 @@ class AWS(Machinery):
             Filters=[{"Name": "instance-state-name", "Values": ["running", "stopped", "stopping"]}]
         ):
             if self._is_autoscaled(instance):
-                log.info("Terminating autoscaled instance %s" % instance.id)
+                log.info("Terminating autoscaled instance %s", instance.id)
                 instance.terminate()
 
         instance_ids = self._list()
@@ -64,7 +65,7 @@ class AWS(Machinery):
 
         self._start_or_create_machines()
 
-    def _start_next_machines(self, num_of_machines_to_start):
+    def _start_next_machines(self, num_of_machines_to_start: int):
         """
         pull from DB the next machines in queue and starts them
         the whole idea is to prepare x machines on, so once a task will arrive - the machine will be ready with windows
@@ -74,11 +75,11 @@ class AWS(Machinery):
         for machine in self.db.get_available_machines():
             if num_of_machines_to_start <= 0:
                 break
-            if self._status(machine.label) in [AWS.POWEROFF, AWS.STOPPING]:
+            if self._status(machine.label) in {AWS.POWEROFF, AWS.STOPPING}:
                 self.ec2_machines[machine.label].start()  # not using self.start() to avoid _wait_ method
                 num_of_machines_to_start -= 1
 
-    def _delete_machine_form_db(self, label):
+    def _delete_machine_form_db(self, label: str):
         """
         cuckoo's DB class does not implement machine deletion, so we made one here
         :param label: the machine label
@@ -92,13 +93,12 @@ class AWS(Machinery):
                 session.delete(machine)
                 session.commit()
         except SQLAlchemyError as e:
-            log.debug("Database error removing machine: {0}".format(e))
+            log.debug("Database error removing machine: %s", e)
             session.rollback()
-            return
         finally:
             session.close()
 
-    def _allocate_new_machine(self):
+    def _allocate_new_machine(self) -> bool:
         """
         allocating/creating new EC2 instance(autoscale option)
         """
@@ -107,10 +107,8 @@ class AWS(Machinery):
         autoscale_options = self.options.get("autoscale")
         # If configured, use specific network interface for this
         # machine, else use the default value.
-        interface = autoscale_options["interface"] if autoscale_options.get("interface") else machinery_options.get("interface")
-        resultserver_ip = (
-            autoscale_options["resultserver_ip"] if autoscale_options.get("resultserver_ip") else Config("cuckoo:resultserver:ip")
-        )
+        interface = autoscale_options.get("interface") or machinery_options.get("interface")
+        resultserver_ip = autoscale_options.get("resultserver_ip") or Config("cuckoo:resultserver:ip")
         if autoscale_options.get("resultserver_port"):
             resultserver_port = autoscale_options["resultserver_port"]
         else:
@@ -124,7 +122,7 @@ class AWS(Machinery):
         log.info("All machines are busy, allocating new machine")
         self.dynamic_machines_sequence += 1
         self.dynamic_machines_count += 1
-        new_machine_name = "cuckoo_autoscale_%03d" % self.dynamic_machines_sequence
+        new_machine_name = f"cuckoo_autoscale_{self.dynamic_machines_sequence:03d}"
         instance = self._create_instance(
             tags=[{"Key": "Name", "Value": new_machine_name}, {"Key": self.AUTOSCALE_CUCKOO, "Value": "True"}]
         )
@@ -155,7 +153,7 @@ class AWS(Machinery):
         """
         override Machinery method to utilize the auto scale option
         """
-        base_class_return_value = super(AWS, self).acquire(machine_id, platform, tags)
+        base_class_return_value = super().acquire(machine_id, platform, tags)
         self._start_or_create_machines()  # prepare another machine
         return base_class_return_value
 
@@ -175,10 +173,10 @@ class AWS(Machinery):
         dynamic_machines_limit = autoscale_options["dynamic_machines_limit"]
 
         self._start_next_machines(num_of_machines_to_start=min(current_available_machines, running_machines_gap))
-        #  if no sufficient machines left  -> launch a new machines
+        # if no sufficient machines left, launch a new machine
         while autoscale_options["autoscale"] and current_available_machines < running_machines_gap:
             if self.dynamic_machines_count >= dynamic_machines_limit:
-                log.debug("Reached dynamic machines limit - %d machines" % dynamic_machines_limit)
+                log.debug("Reached dynamic machines limit - %d machines", dynamic_machines_limit)
                 break
             if not self._allocate_new_machine():
                 break
@@ -186,7 +184,7 @@ class AWS(Machinery):
 
     """override Machinery method"""
 
-    def _list(self):
+    def _list(self) -> list:
         """
         :return: A list of all instance ids under the AWS account
         """
@@ -197,7 +195,7 @@ class AWS(Machinery):
 
     """override Machinery method"""
 
-    def _status(self, label):
+    def _status(self, label) -> Literal:
         """
         Gets current status of a vm.
         @param label: virtual machine label.
@@ -206,22 +204,17 @@ class AWS(Machinery):
         try:
             self.ec2_machines[label].reload()
             state = self.ec2_machines[label].state["Name"]
-            if state == "running":
-                status = AWS.RUNNING
-            elif state == "stopped":
-                status = AWS.POWEROFF
-            elif state == "pending":
-                status = AWS.PENDING
-            elif state == "stopping":
-                status = AWS.STOPPING
-            elif state in ["shutting-down", "terminated"]:
-                status = AWS.ERROR
-            else:
-                status = AWS.ERROR
-            log.info("instance state: {}".format(status))
+            states = {
+                "running": AWS.RUNNING,
+                "stopped": AWS.POWEROFF,
+                "pending": AWS.PENDING,
+                "stopping": AWS.STOPPING,
+            }
+            status = states.get(state, AWS.ERROR)
+            log.info("instance state: %s", status)
             return status
         except Exception as e:
-            log.exception("can't retrieve the status: {}".format(e))
+            log.exception("can't retrieve the status: %s", e)
             return AWS.ERROR
 
     """override Machinery method"""
@@ -232,7 +225,7 @@ class AWS(Machinery):
         @param label: virtual machine label.
         @raise CuckooMachineError: if unable to start.
         """
-        log.debug("Starting vm {}".format(label))
+        log.debug("Starting vm %s", label)
 
         if not self._is_autoscaled(self.ec2_machines[label]):
             self.ec2_machines[label].start()
@@ -247,12 +240,12 @@ class AWS(Machinery):
         @param label: virtual machine label.
         @raise CuckooMachineError: if unable to stop.
         """
-        log.debug("Stopping vm %s" % label)
+        log.debug("Stopping vm %s", label)
 
         status = self._status(label)
 
         if status == AWS.POWEROFF:
-            raise CuckooMachineError("Trying to stop an already stopped VM: %s" % label)
+            raise CuckooMachineError(f"Trying to stop an already stopped VM: {label}")
 
         if self._is_autoscaled(self.ec2_machines[label]):
             self.ec2_machines[label].terminate()
@@ -271,7 +264,7 @@ class AWS(Machinery):
         Release a machine.
         @param label: machine label.
         """
-        super(AWS, self).release(label)
+        super().release(label)
         self._start_or_create_machines()
 
     def _create_instance(self, tags):
@@ -302,7 +295,7 @@ class AWS(Machinery):
         log.debug("Created %s\n%s", new_instance.id, repr(response))
         return new_instance
 
-    def _is_autoscaled(self, instance):
+    def _is_autoscaled(self, instance) -> bool:
         """
         checks if the instance has a tag that indicates that it was created as a result of autoscaling
         :param instance: instance object
@@ -320,21 +313,21 @@ class AWS(Machinery):
         This method detaches and deletes the current volume, then creates a new one and attaches it.
         :param label: machine label
         """
-        log.info("restoring machine: {}".format(label))
+        log.info("restoring machine: %s", label)
         vm_info = self.db.view_machine_by_label(label)
         snap_id = vm_info.snapshot
         instance = self.ec2_machines[label]
         state = self._status(label)
         if state != AWS.POWEROFF:
-            raise CuckooMachineError("Instance '%s' state '%s' is not poweroff" % (label, state))
+            raise CuckooMachineError(f"Instance '{label}' state '{state}' is not poweroff")
         volumes = list(instance.volumes.all())
         if len(volumes) != 1:
-            raise CuckooMachineError("Instance '%s' has wrong number of volumes %d" % (label, len(volumes)))
+            raise CuckooMachineError(f"Instance '{label}' has wrong number of volumes {len(volumes)}")
         old_volume = volumes[0]
 
         log.debug("Detaching %s", old_volume.id)
         resp = instance.detach_volume(VolumeId=old_volume.id, Force=True)
-        log.debug("response: {}".format(resp))
+        log.debug("response: %s", resp)
         while True:
             old_volume.reload()
             if old_volume.state != "in-use":
@@ -343,7 +336,7 @@ class AWS(Machinery):
 
         log.debug("Old volume %s in state %s", old_volume.id, old_volume.state)
         if old_volume.state != "available":
-            raise CuckooMachineError("Old volume turned into state %s instead of 'available'" % old_volume.state)
+            raise CuckooMachineError(f"Old volume turned into state {old_volume.state} instead of 'available'")
         log.debug("Deleting old volume")
         volume_type = old_volume.volume_type
         old_volume.delete()
@@ -362,11 +355,11 @@ class AWS(Machinery):
         if new_volume.state != "available":
             state = new_volume.state
             new_volume.delete()
-            raise CuckooMachineError("New volume turned into state %s instead of 'available'" % state)
+            raise CuckooMachineError(f"New volume turned into state {state} instead of 'available'")
 
         log.debug("Attaching new volume")
         resp = instance.attach_volume(VolumeId=new_volume.id, Device="/dev/sda1")
-        log.debug("response {}".format(resp))
+        log.debug("response %s", resp)
         while True:
             new_volume.reload()
             if new_volume.state != "available":
@@ -375,4 +368,4 @@ class AWS(Machinery):
         log.debug("new volume %s in state %s", new_volume.id, new_volume.state)
         if new_volume.state != "in-use":
             new_volume.delete()
-            raise CuckooMachineError("New volume turned into state %s instead of 'in-use'" % old_volume.state)
+            raise CuckooMachineError(f"New volume turned into state {old_volume.state} instead of 'in-use'")
