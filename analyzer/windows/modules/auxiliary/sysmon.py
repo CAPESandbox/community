@@ -16,7 +16,9 @@ __version__ = "1.0.1"
 
 
 class Sysmon(threading.Thread, Auxiliary):
-    def __init__(self, options={}, analyzer=None):
+    def __init__(self, options=None, analyzer=None):
+        if options is None:
+            options = {}
         threading.Thread.__init__(self)
         Auxiliary.__init__(self, options, analyzer)
         self.config = Config(cfg="analysis.conf")
@@ -28,16 +30,16 @@ class Sysmon(threading.Thread, Auxiliary):
     def clear_log(self):
         try:
             subprocess.call(
-                ["C:\\Windows\\System32\\wevtutil.exe", "clear-log", "microsoft-windows-sysmon/operational"],
+                ("C:\\Windows\\System32\\wevtutil.exe", "clear-log", "microsoft-windows-sysmon/operational"),
                 startupinfo=self.startupinfo,
             )
         except Exception as e:
-            log.error("Error clearing Sysmon events - %s" % e)
+            log.error("Error clearing Sysmon events - %s", e)
 
     def collect_logs(self):
         try:
             subprocess.call(
-                [
+                (
                     "C:\\Windows\\System32\\wevtutil.exe",
                     "query-events",
                     "microsoft-windows-sysmon/operational",
@@ -45,29 +47,28 @@ class Sysmon(threading.Thread, Auxiliary):
                     "/e:root",
                     "/format:xml",
                     "/uni:true",
-                ],
+                ),
                 startupinfo=self.startupinfo,
                 stdout=open("C:\\sysmon.xml", "w"),
             )
         except Exception as e:
-            log.error("Could not create sysmon log file - %s" % e)
+            log.error("Could not create sysmon log file - %s", e)
 
         # Give it some time to create the file
         # time.sleep(5)
 
         if os.path.exists("C:\\sysmon.xml"):
-            now = time.time()
-            upload_to_host("C:\\sysmon.xml", f"sysmon/{now}.sysmon.xml", False)
+            upload_to_host("C:\\sysmon.xml", f"sysmon/{time.time()}.sysmon.xml", False)
         else:
             log.error("Sysmon log file not found in guest machine")
 
-    def run(self):
+    def run(self) -> bool:
         if self.enabled:
             self.clear_log()
             return True
         return False
 
-    def stop(self):
+    def stop(self) -> bool:
         if self.enabled:
             self.collect_logs()
             return True
