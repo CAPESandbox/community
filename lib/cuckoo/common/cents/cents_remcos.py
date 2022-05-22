@@ -1,26 +1,27 @@
 import logging
 from ipaddress import ip_address
+from typing import List, Tuple
 
 from Crypto.Cipher import ARC4
 
 log = logging.getLogger(__name__)
 
 
-def _chunk_stuff(stuff, group_size=20):
+def _chunk_stuff(stuff, group_size: int = 20):
     # really just need to chunk out the ip into groups of....20?
     # https://stackoverflow.com/questions/312443/how-do-you-split-a-list-into-evenly-sized-chunks
     for i in range(0, len(stuff), group_size):
         yield ",".join(stuff[i : i + group_size])
 
 
-def _build_rc4_rule(passphrase):
+def _build_rc4_rule(passphrase) -> Tuple[str, str]:
     hex_plain_text = "5b4461746153746172745d00000000"
 
     cipher = ARC4.new(passphrase)
     value = bytes.fromhex(hex_plain_text)
     enc_value = cipher.encrypt(value)
 
-    # conver the encrypted form if the plain text to a hex string
+    # convert the encrypted form of the plaintext into a hex string
     enc_hex_value = enc_value.hex()
 
     first_value = ""
@@ -37,15 +38,14 @@ def _build_rc4_rule(passphrase):
     return first_value.rstrip(), second_value.rstrip()
 
 
-def _parse_mwcp(remcos_config):
+def _parse_mwcp(remcos_config: dict) -> List[dict]:
     remcos_config_list = []
-    control = remcos_config.get("control", [])
-    for c in control:
+    for c in remcos_config.get("control", []):
         if c and c.startswith("tcp://"):
             # maxsplit here incase the passphrase includes :
             tmp = c.replace("tcp://", "").split(":", 2)
             if tmp:
-                # if we don't have a password, just add a blank one,
+                # if we don't have a password, just add a blank one
                 if len(tmp) == 2:
                     remcos_config_list.append(
                         {"Version": remcos_config.get("version", ""), "C2": tmp[0], "Port": tmp[1], "Password": ""}
@@ -61,26 +61,23 @@ def _parse_mwcp(remcos_config):
     return remcos_config_list
 
 
-def _parse_ratdecoders(remcos_config):
-    domains = remcos_config.get("domains", [])
+def _parse_ratdecoders(remcos_config: dict) -> List[dict]:
     remcos_config_list = []
-    for domain in domains:
-        # why is this a list of lists
-        for nested_domain in domain:
-            remcos_config_list.append(
+    for domain in remcos_config.get("domains", {}):
+        remcos_config_list.extend(
+            {
                 # notice the typo here including the colon after c2:
                 # https://github.com/kevthehermit/RATDecoders/blob/master/malwareconfig/decoders/remcos.py#L56
-                {
-                    "C2": nested_domain.get("c2:", ""),
-                    "Port": nested_domain.get("port", ""),
-                    "Password": nested_domain.get("password", ""),
-                }
-            )
-
+                "C2": nested_domain.get("c2:", ""),
+                "Port": nested_domain.get("port", ""),
+                "Password": nested_domain.get("password", ""),
+            }
+            for nested_domain in domain
+        )
     return remcos_config_list
 
 
-def cents_remcos(config_dict, sid_counter, md5, date, task_link):
+def cents_remcos(config_dict: dict, sid_counter: int, md5: int, date: str, task_link: str) -> List[str]:
     """Creates Suricata rules from extracted Remcos malware configuration.
 
     :param config_dict: Dictionary with the extracted Remcos configuration.
@@ -103,16 +100,17 @@ def cents_remcos(config_dict, sid_counter, md5, date, task_link):
     if not config_dict or not sid_counter or not md5 or not date or not task_link:
         return []
 
-    next_sid = sid_counter
-    # build out an array to store the parsed configs
-    remcos_config_list = []
-
     # lowercase the key names in the configs for constancy
-    remcos_config = dict((k.lower(), v) for k, v in config_dict.items())
+    remcos_config = {k.lower(): v for k, v in config_dict.items()}
 
     if not remcos_config:
         return []
 
+    next_sid = sid_counter
+    # build out an array to store the parsed configs
+    remcos_config_set = set()
+
+    # TODO: Refactor (MWCP has been shifted to pure python)
     # there are two remcos parsers that could be at work here
     # 1) RATDecoders - https://github.com/kevthehermit/RATDecoders/blob/master/malwareconfig/decoders/remcos.py
     #    which is an optional configuration that can be enabled in the processing.conf file
@@ -123,20 +121,18 @@ def cents_remcos(config_dict, sid_counter, md5, date, task_link):
         log.debug("[CENTS - Remcos] Parsing DC3-MWCP based config")
         parsed_remcos_config = _parse_mwcp(remcos_config)
         for _config in parsed_remcos_config:
-            if _config not in remcos_config_list:
-                remcos_config_list.append(_config)
+            remcos_config_set.add(_config)
 
     if "domains" in remcos_config and "control" not in remcos_config:
         # we have a RATDecoders config
         log.debug("[CENTS - Remcos] Parsing RATDecoders based config")
         parsed_remcos_config = _parse_ratdecoders(remcos_config)
         for _config in parsed_remcos_config:
-            if _config not in remcos_config_list:
-                remcos_config_list.append(_config)
+            remcos_config_set.add(_config)
 
     # if we don't have a parsed config, drop out
     log.debug("[CENTS - Remcos] Done Parsing Config")
-    if not remcos_config_list:
+    if not remcos_config_set:
         log.debug("[CENTS - Remcos] No parsed configs found")
         return []
 
@@ -144,7 +140,7 @@ def cents_remcos(config_dict, sid_counter, md5, date, task_link):
     rule_list = []
     ip_list = set()
     domain_list = set()
-    for c2_server in list(map(lambda x: x.get("C2"), remcos_config_list)):
+    for c2_server in list(map(lambda x: x.get("C2"), remcos_config_set)):
         try:
             c2_ip = ip_address(c2_server)
         except ValueError:
@@ -180,7 +176,7 @@ def cents_remcos(config_dict, sid_counter, md5, date, task_link):
         next_sid += 1
 
     log.debug("[CENTS - Remcos] Building Password based rules")
-    for parsed_config in remcos_config_list:
+    for parsed_config in remcos_config_set:
         # if we have a password, we should create a rule for the RC4 encrypted stuff
         if parsed_config.get("Password", ""):
             first, second = _build_rc4_rule(parsed_config.get("Password"))

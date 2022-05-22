@@ -34,7 +34,7 @@ class ZExecReport(Report):
 
     order = 10001
 
-    def run(self, results):
+    def run(self, results: dict):
         """Writes report.
         @param results: CAPE results dict.
         @raise CuckooReportError: if fails to write report.
@@ -42,12 +42,12 @@ class ZExecReport(Report):
         try:
             task_id = str(results["info"]["id"])
             path = os.path.join(self.reports_path, "report.json")
-            cmd_results = subprocess.run([repconf.zexecreport.command, path], capture_output=True, env={"CAPE_TASK_ID": task_id})
+            cmd_results = subprocess.run((repconf.zexecreport.command, path), capture_output=True, env={"CAPE_TASK_ID": task_id})
             if cmd_results.returncode != 0:
                 log.error(
                     "CAPE_TASK_ID= %s command=%s exit=%s stdout=%s stderror=%s",
                     task_id,
-                    str(cmd_results.returncode),
+                    cmd_results.returncode,
                     repconf.zexecreport.command,
                     cmd_results.stdout.decode(),
                     cmd_results.stderr.decode(),
@@ -61,4 +61,4 @@ class ZExecReport(Report):
                     cmd_results.stderr.decode(),
                 )
         except (UnicodeError, TypeError, IOError) as e:
-            raise CuckooReportError(f"Error encountered running the specified command: {e}")
+            raise CuckooReportError(f"Error encountered running the specified command: {e}") from e

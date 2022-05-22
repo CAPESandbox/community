@@ -1,10 +1,11 @@
 import logging
+from typing import List
 from urllib.parse import urlparse
 
 log = logging.getLogger(__name__)
 
 
-def cents_squirrelwaffle(config_dict, sid_counter, md5, date, task_link):
+def cents_squirrelwaffle(config_dict: dict, sid_counter: int, md5: int, date: str, task_link: str) -> List[str]:
     """Creates Suricata rules from extracted SquirrelWaffle malware configuration.
 
     :param config_dict: Dictionary with the extracted SquirrelWaffle configuration.
@@ -31,13 +32,12 @@ def cents_squirrelwaffle(config_dict, sid_counter, md5, date, task_link):
     rule_list = []
     url_list_main = config_dict.get("URLs", [])
     for urls in url_list_main:
-        # why is this a list of lists
         for nested_url in urls:
             # urlparse expects the url to be introduced with a // https://docs.python.org/3/library/urllib.parse.html
             # Following the syntax specifications in RFC 1808, urlparse recognizes a netloc only if it is properly
             # introduced by ‘//’. Otherwise the input is presumed to be a relative URL and thus to start with a path
             # component.
-            if not nested_url.lower().startswith("http://") and not nested_url.lower().startswith("https://"):
+            if not nested_url.lower().startswith(("http://", "https://")):
                 nested_url = f"http://{nested_url}"
             c2 = urlparse(nested_url)
             # we'll make two rules, dns and http

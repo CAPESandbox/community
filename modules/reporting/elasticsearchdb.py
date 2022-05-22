@@ -3,19 +3,18 @@
 # See the file 'docs/LICENSE' for copying permission.
 
 from __future__ import absolute_import
-import datetime
 import logging
 import os
 
 from lib.cuckoo.common.abstracts import Report
-from lib.cuckoo.common.exceptions import CuckooDependencyError, CuckooReportError
+from lib.cuckoo.common.exceptions import CuckooDependencyError
 from lib.cuckoo.common.objects import File
 
 try:
     from elasticsearch import Elasticsearch
 
     HAVE_ELASTICSEARCH = True
-except ImportError as e:
+except ImportError:
     HAVE_ELASTICSEARCH = False
 
 logging.getLogger("elasticsearch").setLevel(logging.WARNING)
@@ -40,7 +39,7 @@ class ElasticsearchDB(Report):
             timeout=60,
         )
 
-    def run(self, results):
+    def run(self, results: dict):
         """Writes report.
         @param results: analysis results dictionary.
         @raise CuckooReportError: if fails to connect or write to Elasticsearch.
@@ -63,18 +62,18 @@ class ElasticsearchDB(Report):
         self.index_name = "{0}-{1}".format(index_prefix, idxdate)
 
         if not search_only:
-            if not "network" in report:
+            if "network" not in report:
                 report["network"] = {}
 
             # Store API calls in chunks for pagination in Django
-            if "behavior" in report and "processes" in report["behavior"]:
+            if "processes" in report.get("behavior", {}):
                 new_processes = []
                 for process in report["behavior"]["processes"]:
                     new_process = dict(process)
                     chunk = []
                     chunks_ids = []
                     # Loop on each process call.
-                    for index, call in enumerate(process["calls"]):
+                    for call in process["calls"]:
                         # If the chunk size is 100 or if the loop is completed then
                         # store the chunk in Elastcisearch.
                         if len(chunk) == 100:
@@ -112,37 +111,32 @@ class ElasticsearchDB(Report):
                     shot_path = os.path.join(self.analysis_path, "shots", shot_file)
                     screenshot = File(shot_path)
                     if screenshot.valid():
-                        # Strip the extension as it's added later
-                        # in the Django view
+                        # Strip the extension as it's added later in the Django view
                         report["shots"].append(shot_file.replace(".jpg", ""))
 
             # Other info we want Quick access to from the web UI
-            if (
-                "virustotal" in results
-                and results["virustotal"]
-                and "positives" in results["virustotal"]
-                and "total" in results["virustotal"]
-            ):
-                report["virustotal_summary"] = "%s/%s" % (results["virustotal"]["positives"], results["virustotal"]["total"])
+            if "positives" in results.get("virustotal", {}) and "total" in results.get("virustotal", {}):
+                report["virustotal_summary"] = f'{results["virustotal"]["positives"]}/{results["virustotal"]["total"]}'
 
-            if "suricata" in results and results["suricata"]:
-                if "tls" in results["suricata"] and len(results["suricata"]["tls"]) > 0:
+            if results.get("suricata", {}):
+                if len(results["suricata"].get("tls", [])) > 0:
                     report["suri_tls_cnt"] = len(results["suricata"]["tls"])
-                if results["suricata"] and "alerts" in results["suricata"] and len(results["suricata"]["alerts"]) > 0:
+                if len(results["suricata"].get("alerts", [])) > 0:
                     report["suri_alert_cnt"] = len(results["suricata"]["alerts"])
-                if "files" in results["suricata"] and len(results["suricata"]["files"]) > 0:
+                if len(results["suricata"].get("files", [])) > 0:
                     report["suri_file_cnt"] = len(results["suricata"]["files"])
-                if "http" in results["suricata"] and len(results["suricata"]["http"]) > 0:
+                if len(results["suricata"].get("http", [])) > 0:
                     report["suri_http_cnt"] = len(results["suricata"]["http"])
         else:
-            report = {}
-            report["task_id"] = results["info"]["id"]
-            report["info"] = results.get("info")
-            report["target"] = results.get("target")
-            report["summary"] = results.get("behavior", {}).get("summary")
-            report["network"] = results.get("network")
-            report["virustotal"] = results.get("virustotal")
-            report["virustotal_summary"] = "%s/%s" % (results["virustotal"]["positives"], results["virustotal"]["total"])
+            report = {
+                "task_id": results["info"]["id"],
+                "info": results.get("info"),
+                "target": results.get("target"),
+                "summary": results.get("behavior", {}).get("summary"),
+                "network": results.get("network"),
+                "virustotal": results.get("virustotal"),
+                "virustotal_summary": f'{results["virustotal"]["positives"]}/{results["virustotal"]["total"]}',
+            }
 
         # Store the report and retrieve its object id.
         self.es.index(index=self.index_name, doc_type="analysis", id=results["info"]["id"], body=report)
