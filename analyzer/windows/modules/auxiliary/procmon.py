@@ -33,7 +33,7 @@ class Procmon(Auxiliary, Thread):
         self.procmon_pml = os.path.join(bin_path, "procmon")
         self.procmon_xml = os.path.join(bin_path, "procmon.xml")
 
-    def run(self):
+    def run(self) -> bool:
         if not self.enabled:
             return False
 
@@ -47,14 +47,14 @@ class Procmon(Auxiliary, Thread):
 
         # Start process monitor in the background.
         subprocess.Popen(
-            [
+            (
                 self.procmon_exe,
                 "/AcceptEula",
                 "/Quiet",
                 "/Minimized",
                 "/BackingFile",
                 self.procmon_pml,
-            ],
+            ),
             startupinfo=self.startupinfo,
             shell=True,
         )
@@ -66,26 +66,27 @@ class Procmon(Auxiliary, Thread):
 
         return True
 
-    def stop(self):
+    def stop(self) -> bool:
         try:
             # Terminate process monitor.
-            subprocess.call([self.procmon_exe, "/Terminate"], startupinfo=self.startupinfo, shell=True)
+            subprocess.call((self.procmon_exe, "/Terminate"), startupinfo=self.startupinfo, shell=True)
 
             # Convert the process monitor log into a readable XML file.
             subprocess.call(
-                [
+                (
                     self.procmon_exe,
                     "/OpenLog",
-                    self.procmon_pml + ".PML",
+                    f"{self.procmon_pml}.PML",
                     "/LoadConfig",
                     self.procmon_pmc,
                     "/SaveAs",
                     self.procmon_xml,
                     "/SaveApplyFilter",
-                ],
+                ),
                 startupinfo=self.startupinfo,
                 shell=True,
             )
+
             # Upload the XML file to the host.
             upload_to_host(self.procmon_xml, "procmon.xml")
 
