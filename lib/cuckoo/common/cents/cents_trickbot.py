@@ -1,10 +1,10 @@
 import logging
+from typing import List
 
 log = logging.getLogger(__name__)
 
 
-def convert_needed_to_hex(input):
-    # there has to be a better way to do this....
+def convert_needed_to_hex(input) -> str:
     result = ""
     for i, char in enumerate(input):
         if 0 <= ord(char) <= 127:
@@ -19,27 +19,22 @@ def convert_needed_to_hex(input):
                 result += f"|{hex(ord(char)).replace('0x', '', 1)}"
 
             # if the next one isn't also going to need hex encoded, then close it.
-            if i > 0 and ord(input[i + 1]) <= 127:
-                result += "|"
-            else:
-                result += " "
+            result += "|" if i > 0 and ord(input[i + 1]) <= 127 else " "
     return result
 
 
-def build_serv_dicts(servs):
-    result = []
-    # why is this an array of arrays? idk....
+def build_serv_dicts(servs) -> set:
+    result = set()
     for item in servs:
         for s in item:
             serv, port = s.split(":", 1)
             tmp_dict = {"server": serv, "port": port}
-            if tmp_dict not in result:
-                result.append(tmp_dict)
+            result.add(tmp_dict)
 
     return result
 
 
-def cents_trickbot(config_dict, suricata_dict, sid_counter, md5, date, task_link):
+def cents_trickbot(config_dict: dict, suricata_dict: dict, sid_counter: int, md5: int, date: str, task_link: str) -> List[str]:
     """Creates Suricata rules from extracted TrickBot malware configuration.
 
     :param config_dict: Dictionary with the extracted TrickBot configuration.
@@ -70,7 +65,7 @@ def cents_trickbot(config_dict, suricata_dict, sid_counter, md5, date, task_link
     # create a list of dicts which contain the server and port
     gtag = config_dict.get("gtag", "")
     ver = config_dict.get("ver", "")
-    trickbot_c2_certs = []
+    trickbot_c2_certs = set()
     log.debug("[CENTS - TrickBot] Looking for certs from %d c2 servers", len(servs))
     for s in servs:
         # see if the server and port are also in the tls certs
@@ -80,8 +75,7 @@ def cents_trickbot(config_dict, suricata_dict, sid_counter, md5, date, task_link
         log.debug("[CENTS - TrickBot] Found %d certs for %s", len(matching_tls), s)
         for tls in matching_tls:
             _tmp_obj = {"subject": tls.get("subject", None), "issuerdn": tls.get("issuerdn")}
-            if _tmp_obj not in trickbot_c2_certs:
-                trickbot_c2_certs.append(_tmp_obj)
+            trickbot_c2_certs.add(_tmp_obj)
 
     log.debug("[CENTS - TrickBot] Building %d rules based on c2 certs", len(trickbot_c2_certs))
     for c2_cert in trickbot_c2_certs:

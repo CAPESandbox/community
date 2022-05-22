@@ -21,21 +21,17 @@ class CIF(Processing):
 
     order = 100
 
-    def getbool(self, s):
+    def getbool(self, s) -> bool:
         if isinstance(s, bool):
-            rtn = s
+            return s
+        elif isinstance(s, str):
+            return s.lower() in {"yes", "true", "1"}
         else:
-            try:
-                rtn = s.lower() in ("yes", "true", "1")
-            except:
-                rtn = False
-        return rtn
+            return False
 
-    def normalize_url(self, url):
+    def normalize_url(self, url: str) -> str:
         # normalize URL according to CIF specification
-        uri = url
-        if ":" in url:
-            uri = url[url.index(":") + 1 :]
+        uri = url.partition(":")[-1] if ":" in url else url
         uri = uri.strip("/")
         return urllib.parse.quote(uri.encode("utf8")).lower()
 
@@ -47,9 +43,9 @@ class CIF(Processing):
         cif = []
         resources = []
 
-        key = self.options.get("key", None)
+        key = self.options.get("key")
         timeout = self.options.get("timeout", 60)
-        url = self.options.get("url", None)
+        url = self.options.get("url")
         confidence = self.options.get("confidence", 85)
         nolog = self.getbool(self.options.get("nolog", True))
         per_lookup_limit = self.options.get("per_lookup_limit", 20)
@@ -62,28 +58,26 @@ class CIF(Processing):
             raise CuckooProcessingError("CIF API key not configured, skip")
 
         # add IOC from submission
-        if self.task["category"] in ("file", "static"):
+        if self.task["category"] in {"file", "static"}:
             if not os.path.exists(self.file_path):
-                raise CuckooProcessingError("File {0} not found, skipping it".format(self.file_path))
+                raise CuckooProcessingError(f"File {self.file_path} not found, skipping it")
 
             resources.append(File(self.file_path).get_md5())
         elif self.task["category"] == "url":
             query = self.normalize_url(self.task["target"])
             resources.append(hashlib.sha1(query).hexdigest())
         else:
-            # Not supported type, exit.
+            # Not supported type, exiting
             return cif
 
         # add IOCs from previous network processing
         if "network" in self.results:
             hosts = self.results["network"].get("hosts")
             if hosts:
-                for host in hosts:
-                    resources.append(host["ip"])
+                resources.extend(host["ip"] for host in hosts)
             domains = self.results["network"].get("domains")
             if domains:
-                for domain in domains:
-                    resources.append(domain["domain"])
+                resources.extend(domain["domain"] for domain in domains)
             httpreqs = self.results["network"].get("http")
             if httpreqs:
                 for req in httpreqs:
@@ -92,10 +86,11 @@ class CIF(Processing):
 
         # add IOCs from dropped files
         if "dropped" in self.results:
-            for dropped in self.results["dropped"]:
-                if os.path.isfile(dropped["path"]):
-                    if "PE32" in dropped["type"] or "MS-DOS" in dropped["type"]:
-                        resources.append(File(dropped["path"]).get_md5())
+            resources.extend(
+                File(dropped["path"]).get_md5()
+                for dropped in self.results["dropped"]
+                if os.path.isfile(dropped["path"]) and ("PE32" in dropped["type"] or "MS-DOS" in dropped["type"])
+            )
 
         headers = {"User-Agent": "Mozilla Cuckoo"}
 
@@ -113,13 +108,13 @@ class CIF(Processing):
                 r = requests.get(url, headers=headers, params=data, verify=True, timeout=int(timeout))
                 response_data = r.content
             except requests.exceptions.RequestException as e:
-                raise CuckooProcessingError("Unable to complete connection to CIF server: {0}".format(e))
+                raise CuckooProcessingError(f"Unable to complete connection to CIF server: {e}") from e
 
             try:
                 resplines = [i.strip() for i in response_data.splitlines()]
                 ciftmp = [json.loads(i) for i in resplines]
                 cif.extend(ciftmp)
             except ValueError as e:
-                raise CuckooProcessingError("Unable to convert response to JSON: {0}".format(e))
+                raise CuckooProcessingError(f"Unable to convert response to JSON: {e}") from e
 
         return cif

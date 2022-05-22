@@ -14,7 +14,7 @@ class AbuseCH_SSL(Feed):
     enabled = False
 
     def __init__(self):
-        Feed.__init__(self)
+        super().__init__(self)
         # Location of the feed to be fetched
         self.downloadurl = "https://sslbl.abuse.ch/downloads/ssl_extended.csv"
         # Used in creating the file path on disk
@@ -25,16 +25,13 @@ class AbuseCH_SSL(Feed):
     def modify(self):
         newdata = ""
         seen = set()
-        data = self.downloaddata
-        for line in data.splitlines():
+        for line in self.downloaddata.splitlines():
             item = line.split(",")
             # Ignore comments
-            if len(item) != 6:
-                pass
-            else:
+            if len(item) == 6:
                 # Ignore header column and deduplicate data
                 if "SSL" not in item[4] and item[4] not in seen:
-                    newdata += ",".join(item[4:6]) + "\n"
+                    newdata += f"{','.join(item[4:6])}\n"
                 seen.add(item[4])
         # When we modify download data, we must save this to the self.data
         # variable instead of self.downloaddata.
