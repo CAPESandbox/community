@@ -139,16 +139,17 @@ class Moloch(Report):
                 for alert in results["suricata"]["alerts"]:
                     proto = alert["protocol"]
                     if proto:
-                        tmpdict = {}
                         if proto in {"UDP", "TCP", "6", "17"}:
-                            tmpdict["srcip"] = alert["srcip"]
-                            tmpdict["srcport"] = alert["srcport"]
-                            tmpdict["dstip"] = alert["dstip"]
-                            tmpdict["dstport"] = alert["dstport"]
+                            tmpdict = {
+                                "srcip": alert["srcip"],
+                                "srcport": alert["srcport"],
+                                "dstip": alert["dstip"],
+                                "dstport": alert["dstport"],
+                            }
                             if proto in {"UDP", "17"}:
                                 tmpdict["cproto"] = "udp"
                                 tmpdict["nproto"] = 17
-                            elif proto in {"TCP", "6"}:
+                            else:
                                 tmpdict["cproto"] = "tcp"
                                 tmpdict["nproto"] = 6
                             tmpdict[
@@ -162,31 +163,23 @@ class Moloch(Report):
                                 + tmpdict["dstport"]
                             )
                         elif proto in {"ICMP", "1"}:
-                            tmpdict["srcip"] = alert["srcip"]
-                            tmpdict["dstip"] = alert["dstip"]
-                            tmpdict["cproto"] = "icmp"
-                            tmpdict["nproto"] = 1
-                            tmpdict[
-                                "expression"
-                            ] = f'ip=={tmpdict["srcip"]} && ip=={tmpdict["dstip"]} && tags=="{self.CUCKOO_INSTANCE_TAG}:{self.task_id}" && ip.protocol=={tmpdict["cproto"]}'
-                            tmpdict["hash"] = (
-                                tmpdict["nproto"]
-                                + struct.unpack("!L", socket.inet_aton(tmpdict["srcip"]))[0]
-                                + struct.unpack("!L", socket.inet_aton(tmpdict["dstip"]))[0]
+                            tmpdict = {
+                                "srcip": alert["srcip"],
+                                "dstip": alert["dstip"],
+                                "cproto": "icmp",
+                                "nproto": 1,
+                                "expression": f'ip=={alert["srcip"]} && ip=={alert["dstip"]} && tags=="{self.CUCKOO_INSTANCE_TAG}:{self.task_id}" && ip.protocol==icmp',
+                                "hash": 1
+                                + struct.unpack("!L", socket.inet_aton(alert["srcip"]))[0]
+                                + struct.unpack("!L", socket.inet_aton(alert["dstip"]))[0],
+                            }
+                        if alert["sid"] not in self.alerthash.get(tmpdict["hash"], {}).get("sids", []):
+                            self.alerthash.setdefault(tmpdict["hash"], copy.deepcopy(tmpdict)).setdefault("sids", []).append(
+                                f"suri_sid:{alert['sid']}"
                             )
-
-                        if tmpdict["hash"] in self.alerthash:
-                            if alert["sid"] not in self.alerthash[tmpdict["hash"]]["sids"]:
-                                self.alerthash[tmpdict["hash"]]["sids"].append(f"suri_sid:{alert['sid']}")
-                                self.alerthash[tmpdict["hash"]]["msgs"].append(
-                                    "suri_msg:{}".format(re.sub(r"[\W]", "_", alert["signature"]))
-                                )
-                        else:
-                            self.alerthash[tmpdict["hash"]] = copy.deepcopy(tmpdict)
-                            self.alerthash[tmpdict["hash"]]["sids"] = [f"suri_sid:{alert['sid']}"]
-                            self.alerthash[tmpdict["hash"]]["msgs"] = [
+                            self.alerthash[tmpdict["hash"]].setdefault("msgs", []).append(
                                 "suri_msg:{}".format(re.sub(r"[\W]", "_", alert["signature"]))
-                            ]
+                            )
                 for entry in self.alerthash:
                     tags = ",".join(map(str, self.alerthash[entry]["sids"] + self.alerthash[entry]["msgs"]))
                     if tags:
