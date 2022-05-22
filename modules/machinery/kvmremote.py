@@ -9,7 +9,6 @@ import subprocess
 import xml.etree.ElementTree as ET
 
 import libvirt
-
 from lib.cuckoo.common.abstracts import LibVirtMachinery
 from lib.cuckoo.common.exceptions import CuckooCriticalError, CuckooMachineError
 
