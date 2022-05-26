@@ -2,7 +2,7 @@ rule VanillaRAT {
     meta:
         author = "ditekSHen"
         description = "Detects VanillaRAT"
-        cape_type = "VanillaRAT Patload"
+        cape_type = "VanillaRAT Payload"
     strings:
         $stub = "VanillaStub." ascii wide
         $s1 = "Client.Send: " wide
