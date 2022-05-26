@@ -2,8 +2,8 @@ rule BackOffPOS
 {
     meta:
         author = "enzo"
-        description = "BackOffPos Payload"
-        cape_type = "BackOffPos Payload"
+        description = "BackOffPOS Payload"
+        cape_type = "BackOffPOS Payload"
     strings:
         $str1 = "oprat=2&uid=%I64u&uinfo=%s&win=%d.%d&vers=%s"
         $str2 = "&logs="
