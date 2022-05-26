@@ -2,7 +2,7 @@ rule Owowa {
     meta:
         author = "ditekSHen"
         description = "Detects Owowa"
-        cape_type = "Owowa Pyaload"
+        cape_type = "Owowa Payload"
     strings:
         $u1 = "jFuLIXpzRdateYHoVwMlfc" fullword ascii wide
         $u2 = "Fb8v91c6tHiKsWzrulCeqO" fullword ascii wide
