@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class UsesMSProtocol(Signature):
     name = "uses_ms_protocol"
     description = "Uses a Microsoft default handler or protocol."
@@ -113,7 +114,7 @@ class UsesMSProtocol(Signature):
             "ms-wpdrmv",
             "ms-xbet-survey",
             "ms-xbl-3d8b930f",
-            "ms-xgpueject"
+            "ms-xgpueject",
         ]
 
         ret = False
