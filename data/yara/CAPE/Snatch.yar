@@ -2,7 +2,7 @@ rule Snatch {
     meta:
         author = "ditekSHen"
         description = "Detects Snatch / GoRansome / MauriGo ransomware"
-        cape_type = "Snatch Ransomware Payload"
+        cape_type = "Snatch Payload"
     strings:
         $s1 = "main.encryptFile" ascii
         $s2 = "main.encryptFileExt" ascii

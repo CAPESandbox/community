@@ -2,7 +2,7 @@ rule Lorenz {
     meta:
         author = "ditekSHen"
         description = "Detects Lorenz ransomware"
-        cape_type = "Lorenz Ransomware Payload"
+        cape_type = "Lorenz Payload"
     strings:
         $x1 = "143.198.117.43" fullword ascii
         $x2 = "157.90.147.28" fullword ascii

@@ -1,7 +1,7 @@
 rule Buran {
     meta:
         author = "ditekshen"
-        description = "Buran ransomware payload"
+        description = "Buran Payload"
         cape_type = "Buran payload"
     strings:
         // Variant 1

@@ -2,7 +2,7 @@ rule GarrantDecrypt {
     meta:
         author = "ditekSHen"
         description = "Detects GarrantDecrypt ransomware"
-        cape_type = "GarrantDecrypt Ransomware Payload"
+        cape_type = "GarrantDecrypt Payload"
     strings:
         $x1 = "%appdata%\\_uninstalling_.png" fullword wide
         $x2 = "C:\\Windows\\sysnative\\vssadmin.exe" fullword wide

@@ -2,7 +2,7 @@ rule Thanos {
     meta:
         author = "ditekSHen"
         description = "Detects Thanos / Prometheus / Spook ransomware"
-        cape_type = "Thanos Ransomware Payload"
+        cape_type = "Thanos Payload"
     strings:
         $f1 = "<WorkerCrypter2>b__" ascii
         $f2 = "<Encrypt2>b__" ascii

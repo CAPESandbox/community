@@ -2,7 +2,7 @@ rule Maktub {
     meta:
         author = "ditekSHen"
         description = "Detects Maktub ransomware"
-        cape_type = "Maktub Ransomware Payload"
+        cape_type = "Maktub Payload"
     strings:
         $s1 = "Content-Disposition: attachment; filename=" ascii
         $s2 = "Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0" fullword ascii

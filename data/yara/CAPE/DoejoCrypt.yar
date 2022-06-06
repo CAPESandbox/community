@@ -2,7 +2,7 @@ rule DoejoCrypt {
     meta:
         author = "ditekSHen"
         description = "Detects DoejoCrypt / DearCry ransomware"
-        cape_type = "DoejoCrypt Ransomware Payload"
+        cape_type = "DoejoCrypt Payload"
     strings:
         $s1 = "DEARCRY!" fullword ascii
         $s2 = ".CRYPT" fullword ascii

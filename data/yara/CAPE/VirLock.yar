@@ -2,7 +2,7 @@ rule VirLock {
     meta:
         author = "ditekSHen"
         description = "Detects VirLock ransomware"
-        cape_type = "VirLock Ransomware Payload"
+        cape_type = "VirLock Payload"
     strings:
         $x1 = "BThere are two ways to pay a fine:" fullword wide
         $x2 = "^Es gibt zwei M" fullword wide

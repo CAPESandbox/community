@@ -2,7 +2,7 @@ rule Nermer {
     meta:
         author = "ditekSHen"
         description = "Detects Nermer ransomware"
-        cape_type = "Nermer Ransomware Payload"
+        cape_type = "Nermer Payload"
     strings:
         $x1 = "gPROTECT_INFO.TXT" fullword wide
         $x2 = ".nermer" fullword wide

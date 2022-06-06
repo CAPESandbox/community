@@ -4,7 +4,7 @@ rule Quantum {
     meta:
         author = "ditekSHen"
         description = "Detects Quantum locker / ransomware"
-        cape_type = "Quantum Ransomware Payload"
+        cape_type = "Quantum Payload"
     strings:
         $x1 = "\\t<title>Quantum</title>" ascii wide
         $x2 = "Quantum Locker.<br><br>" ascii wide

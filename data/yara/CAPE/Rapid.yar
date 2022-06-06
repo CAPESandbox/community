@@ -2,7 +2,7 @@ rule Rapid {
     meta:
         author = "ditekSHen"
         description = "Detects Rapid ransomware"
-        cape_type = "Rapid Ransomware Payload"
+        cape_type = "Rapid Payload"
     strings:
         $s1 = "encblklen" fullword ascii
         $s2 = ".rapid" fullword ascii

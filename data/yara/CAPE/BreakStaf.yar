@@ -2,7 +2,7 @@ rule BreakStaf {
     meta:
         author = "ditekSHen"
         description = "Detects BreakStaf ransomware"
-        cape_type = "BreakStaf Ransomware Payload"
+        cape_type = "BreakStaf Payload"
     strings:
         $s1 = "C:\\Program files" wide
         $s2 = "C:\\Program files (x86)" wide

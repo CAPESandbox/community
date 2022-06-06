@@ -2,7 +2,7 @@ rule Chaos {
     meta:
         author = "ditekSHen"
         description = "Detects Chaos ransomware"
-        cape_type = "Chaos Ransomware Payload"
+        cape_type = "Chaos Payload"
     strings:
         $s1 = "<EncyptedKey>" fullword wide
         $s2 = "<EncryptedKey>" fullword wide

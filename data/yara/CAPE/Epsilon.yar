@@ -2,7 +2,7 @@ rule Epsilon {
     meta:
         author = "ditekSHen"
         description = "Detects Epsilon ransomware"
-        cape_type = "Epsilon Ransomware Payload"
+        cape_type = "Epsilon Payload"
     strings:
         $s1 = ".Speak \"" wide
         $s2 = "chkUpdateRegistry" fullword wide

@@ -2,7 +2,7 @@ rule MB150 {
     meta:
         author = "ditekSHen"
         description = "Detects MB150 Go ransomware"
-        cape_type = "MB150 Ransomware Payload"
+        cape_type = "MB150 Payload"
     strings:
         $x1 = /main\.evade_(clicks_count|cpu_count|disk_size|foreground_window|hostname|mac|printer|screen_size|system_memory|time_acceleration|tmp|utc)/ fullword ascii
         $x2 = /main\.sandbox_(hostname|mac_addresses)/ fullword ascii

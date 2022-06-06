@@ -2,7 +2,7 @@ rule BlackMatter {
     meta:
         author = "ditekSHen"
         description = "Detects BlackMatter ransomware"
-        cape_type = "BlackMatter Ransomware Payload"
+        cape_type = "BlackMatter Payload"
     strings:
         $s1 = "C:\\Windows\\System32\\*.drv" fullword wide
         $s2 = "NYbr-Vk@" fullword ascii

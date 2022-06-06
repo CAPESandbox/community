@@ -2,7 +2,7 @@ rule InfinityLock {
     meta:
         author = "ditekSHen"
         description = "Detects InfinityLock ransomware"
-        cape_type = "InfinityLock Ransomeware Payload"
+        cape_type = "InfinityLock Payload"
     strings:
         $s1 = "_Encrypted$" fullword ascii
         $s2 = "PublicKeyToken=" fullword ascii nocase

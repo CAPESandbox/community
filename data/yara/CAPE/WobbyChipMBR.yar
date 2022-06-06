@@ -2,7 +2,7 @@ rule WobbyChipMBR {
     meta:
         author = "ditekSHen"
         description = "Detects WobbyChipMBR / Covid-21 ransomware"
-        cape_type = "WobbyChipMBR Ransomware Payload"
+        cape_type = "WobbyChipMBR Payload"
     strings:
         $x1 = "You became a Victim of the Covid-21 Ransomware" ascii wide
         $x2 = "Reinstalling Windows has been blocked" ascii wide

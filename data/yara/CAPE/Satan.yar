@@ -2,7 +2,7 @@ rule Satan {
     meta:
         author = "ditekSHen"
         description = "Detects Satan ransomware"
-        cape_type = "Satan Ransomware Payload"
+        cape_type = "Satan Payload"
     strings:
         $s1 = "S:(ML;;NRNWNX;;;LW)" fullword wide
         $s2 = "recycle.bin" fullword wide

@@ -2,7 +2,7 @@ rule Alkhal {
     meta:
         author = "ditekSHen"
         description = "Detects Alkhal ransomware"
-        cape_type = "Alkhal Ransomware Payload"
+        cape_type = "Alkhal Payload"
     strings:
         $s1 = "ReadMe.txt" fullword wide
         $s2 = "Recovery.bmp" fullword wide

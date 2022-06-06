@@ -2,7 +2,7 @@ rule Zeoticus {
     meta:
         author = "ditekSHen"
         description = "Detects Zeoticus ransomware"
-        cape_type = "Zeoticus Ransomware Payload"
+        cape_type = "Zeoticus Payload"
     strings:
         $s1 = "Dear %s" fullword wide
         $s2 = "\\??\\UNC\\%s\\%s\\" wide

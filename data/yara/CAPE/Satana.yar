@@ -2,7 +2,7 @@ rule Satana {
     meta:
         author = "ditekSHen"
         description = "Detects Satana ransomware"
-        cape_type = "Satana Ransomware Payload"
+        cape_type = "Satana Payload"
     strings:
         $bf1 = "Try Decrypt: uc_size = %d, c_size = %d" ascii
         $bf2 = "dwMailSelector = %d  dwBtcSelector = %d" ascii

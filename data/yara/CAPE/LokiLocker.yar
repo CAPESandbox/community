@@ -2,7 +2,7 @@ rule LokiLocker {
     meta:
         author = "ditekSHen"
         description = "Detects LokiLocker ransomware"
-        cape_type = "LokiLocker Ransomware Payload"
+        cape_type = "LokiLocker Payload"
     strings:
         $x1 = "SOFTWARE\\Loki" fullword wide
         $x2 = "Cpriv.Loki" fullword wide

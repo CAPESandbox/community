@@ -2,7 +2,7 @@ rule DecryptMyFiles {
     meta:
         author = "ditekSHen"
         description = "Detects DecryptMyFiles ransomware"
-        cape_type = "DecryptMyFiles Randomware Payload"
+        cape_type = "DecryptMyFiles Payload"
     strings:
         $s1 = "FILES ENCRYPTED" wide
         $s2 = "pexplorer.exe" fullword wide

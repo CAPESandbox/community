@@ -2,7 +2,7 @@ rule Cuba {
     meta:
         author = "ditekSHen"
         description = "Detects Cuba ransomware"
-        cape_type = "Cuba Ransomware Payload"
+        cape_type = "Cuba Payload"
     strings:
         $s1 = ".cuba" fullword wide
         $s2 = "\\\\%d.%d.%d.%d" fullword wide

@@ -2,7 +2,7 @@ rule TeslaRevenge {
     meta:
         author = "ditekSHen"
         description = "Detects TeslaRevenge ransomware"
-        cape_type = "TeslaRevenge Ransomware Payload"
+        cape_type = "TeslaRevenge Payload"
     strings:
         $s1 = "autospreadifnoav=" ascii wide
         $s2 = "autospread=" ascii wide

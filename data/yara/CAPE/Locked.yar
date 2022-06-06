@@ -2,7 +2,7 @@ rule Locked {
     meta:
         author = "ditekSHen"
         description = "Detects Locked ransomware"
-        cape_type = "Locked Ransomware Payload"
+        cape_type = "Locked Payload"
     strings:
         $x1 = "http://xxxx.onion/xxxx-xxxx-xxxx-xxxx" ascii
         $x2 = "http://pigetrzlperjreyr3fbytm27bljaq4eungv3gdq2tohnoyfrqu4bx5qd.onion" ascii

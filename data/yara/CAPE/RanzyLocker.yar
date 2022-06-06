@@ -2,7 +2,7 @@ rule RanzyLocker {
     meta:
         author = "ditekSHen"
         description = "Detects RanzyLocker ransomware"
-        cape_type = "RanzyLocker Ransomware Payload"
+        cape_type = "RanzyLocker Payload"
     strings:
         $hr1 = "776261646D696E2044454C4554452053595354454D53544154454241434B5550" ascii
         $hr2 = "776D69632E65786520534841444F57434F5059202F6E6F696E746572616374697665" ascii

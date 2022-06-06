@@ -2,7 +2,7 @@ rule LegionLocker {
      meta:
         author = "ditekSHen"
         description = "Detects LegionLocker ransomware"
-        cape_type = "LegionLocker Ransomware Payload"
+        cape_type = "LegionLocker Payload"
     strings:
         $m1 = "+Do not run task manager, powershell, cmd etc." ascii wide
         $m2 = "3 hours your files will be deleted." ascii wide

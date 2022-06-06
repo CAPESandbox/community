@@ -2,7 +2,7 @@ rule SunCrypt {
     meta:
         author = "ditekSHen"
         description = "Detects SunCrypt ransomware"
-        cape_type = "SunCrypt Ransomware Payload"
+        cape_type = "SunCrypt Payload"
     strings:
         $s1 = "-noshares" fullword wide
         $s2 = "-nomutex" fullword wide

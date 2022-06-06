@@ -2,7 +2,7 @@ rule BlackByteGo {
     meta:
         author = "ditekSHen"
         description = "Detects BlackByte ransomware Go variants"
-        cape_type = "BlackByteGo Ransomware Payload"
+        cape_type = "BlackByteGo Payload"
     strings:
         $x1 = "BlackByteGO/_cgo_gotypes.go" fullword ascii
         //$x2 = "_cgo_dummy_export" fullword ascii

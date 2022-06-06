@@ -2,7 +2,7 @@ rule DeathRansom {
     meta:
         author = "ditekSHen"
         description = "Detects known DeathRansom ransomware"
-        cape_type = "DeathRansom Ransomware Payload"
+        cape_type = "DeathRansom Payload"
     strings:
         $s1 = "%s %f %c" fullword ascii
         $pdb1 = ":\\wud.pdb" ascii

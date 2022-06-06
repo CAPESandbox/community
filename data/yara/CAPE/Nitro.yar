@@ -2,7 +2,7 @@ rule Nitro {
     meta:
         author = "ditekSHen"
         description = "Detects Nitro Ransomware"
-        cape_type = "Nitro Ransomware Payload"
+        cape_type = "Nitro Payload"
     strings:
         $x1 = ".givemenitro" wide
         $x2 = "Nitro Ransomware" ascii wide

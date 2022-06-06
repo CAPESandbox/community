@@ -2,7 +2,7 @@ rule Vovalex {
     meta:
         author = "ditekSHen"
         description = "Detects Vovalex ransomware"
-        cape_type = "Vovalex Ransomware Payload"
+        cape_type = "Vovalex Payload"
     strings:
         $s1 = "README.VOVALEX.txt" fullword ascii
         $s2 = "\\src\\phobos\\std\\" ascii

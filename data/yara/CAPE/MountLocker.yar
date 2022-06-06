@@ -2,7 +2,7 @@ rule MountLocker {
     meta:
         author = "ditekSHen"
         description = "Detects MountLocker ransomware"
-        cape_type = "MountLocker Ransomware Payload"
+        cape_type = "MountLocker Payload"
     strings:
         $s1 = "] locker.dir.check > " ascii wide
         $s2 = "] locekr.kill." ascii wide

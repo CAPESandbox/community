@@ -2,7 +2,7 @@ rule Koxic {
     meta:
         author = "ditekSHen"
         description = "Detects Koxic ransomware"
-        cape_type = "Koxic Ransomware Payload"
+        cape_type = "Koxic Payload"
     strings:
         $c1 = " INFO: >> %TEMP%\\" ascii wide
         $c2 = "cmd /c \"wmic" ascii wide

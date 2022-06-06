@@ -2,7 +2,7 @@ rule Hive {
     meta:
         author = "ditekSHen"
         description = "Detects Hive ransomware"
-        cape_type = "Hive Ransomware Payload"
+        cape_type = "Hive Payload"
     strings:
         $url1 = "http://hivecust" ascii
         $url2 = "http://hiveleakdb" ascii

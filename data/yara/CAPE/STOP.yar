@@ -2,7 +2,7 @@ rule STOP {
     meta:
         author = "ditekSHen"
         description = "Detects STOP ransomware"
-        cape_type = "STOP Ransomware Payload"
+        cape_type = "STOP Payload"
     strings:
         $x1 = "C:\\SystemID\\PersonalID.txt" fullword wide
         $x2 = "/deny *S-1-1-0:(OI)(CI)(DE,DC)" wide

@@ -1,7 +1,7 @@
 rule Avaddon {
     meta:
       author = "ditekshen"
-      description = "Avaddon ransomware payload"
+      description = "Avaddon Payload"
       cape_type = "Avaddon payload"
     strings:
       $s1 = "\\IMAGEM~1.%d\\VISUA~1\\BIN\\%s.exe" ascii

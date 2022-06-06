@@ -2,7 +2,7 @@ rule Khonsari {
     meta:
         author = "ditekSHen"
         description = "Detects Khonsari ransomware"
-        cape_type = "Khonsari Ransomware Payload"
+        cape_type = "Khonsari Payload"
     strings:
         $x1 = ".khonsari" fullword wide nocase
         $s1 = "Encrypt" fullword ascii

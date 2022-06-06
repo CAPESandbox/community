@@ -2,7 +2,7 @@ rule LockDown {
     meta:
         author = "ditekSHen"
         description = "Detects Lockdown / cantopen ransomware"
-        cape_type = "LockDown Ransomware Payload"
+        cape_type = "LockDown Payload"
     strings:
         $s1 = "BgIAAACkAABSU0E" wide
         $s2 = ".cantopen" fullword wide

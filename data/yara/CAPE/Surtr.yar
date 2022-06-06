@@ -2,7 +2,7 @@ rule Surtr {
     meta:
         author = "ditekSHen"
         description = "Detects Surtr ransomware"
-        cape_type = "Surtr Ransomware Payload"
+        cape_type = "Surtr Payload"
     strings:
         $s1 = "<title>SurtrRansomware</title>" ascii
         $s2 = "<HTA:APPLICATION ID=\"SurtrRansomware\"" ascii

@@ -2,7 +2,7 @@ rule Spyro {
     meta:
         author = "ditekSHen"
         description = "Detects Spyro / VoidCrypt / Limbozar ransomware"
-        cape_type = "Spyro / VoidCrypt / Limbozar Ransomware Payload"
+        cape_type = "Spyro Payload"
     strings:
         $s1 = "Decrypt-info.txt" ascii wide
         $s2 = "AbolHidden" ascii wide

@@ -2,7 +2,7 @@ rule TimeTime {
     meta:
         author = "ditekSHen"
         description = "Detects TimeTime ransomware"
-        cape_type = "TimeTime Ransomware Payload"
+        cape_type = "TimeTime Payload"
     strings:
         $s1 = "@_DECRYPTOR_@" ascii wide
         $s2 = "@__RECOVER_YOUR_FILES__@" wide

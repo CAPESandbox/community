@@ -2,7 +2,7 @@ rule Kitty {
     meta:
         author = "ditekSHen"
         description = "Detects Kitty ransomware"
-        cape_type = "Kitty Ransomware Payload"
+        cape_type = "Kitty Payload"
     strings:
         $s1 = "Kitty" wide
         $s2 = "-path" fullword wide

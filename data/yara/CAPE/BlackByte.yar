@@ -2,7 +2,7 @@ rule BlackByte {
     meta:
         author = "ditekSHen"
         description = "Detect / Hunt BlackByte ransomware"
-        cape_type = "BlackByte Ransomware Payload"
+        cape_type = "BlackByte Payload"
     strings:
         $s1 = "WalkDirAndEncrypt" ascii wide nocase
         $s2 = "FileEncrypt" ascii wide nocase

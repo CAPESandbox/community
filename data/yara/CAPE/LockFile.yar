@@ -2,7 +2,7 @@ rule LockFile {
     meta:
         author = "ditekSHen"
         description = "Detects LockFile ransomware"
-        cape_type = "LockFile Ransomware Payload"
+        cape_type = "LockFile Payload"
     strings:
         $x1 = "LOCKFILE" fullword ascii
         $x2 = "25a01bb859125507013a2fe9737d3c33" fullword ascii

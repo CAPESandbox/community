@@ -2,7 +2,7 @@ rule Diavol {
     meta:
         author = "ditekSHen"
         description = "Detects Diavol ransomware"
-        cape_type = "Diavol Ransomware Payload"
+        cape_type = "Diavol Payload"
     strings:
         $s1 = "README_FOR_DECRYPT.txt" ascii wide nocase
         $s2 = ".lock64" fullword ascii wide

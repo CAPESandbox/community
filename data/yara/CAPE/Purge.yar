@@ -2,7 +2,7 @@ rule Purge {
     meta:
         author = "ditekSHen"
         description = "Detects Purge ransomware"
-        cape_type = "Purge Ransomware Payload"
+        cape_type = "Purge Payload"
     strings:
         $n1 = "imagesave/imagesize.php" ascii
         $n2 = "imageinfo.html" ascii

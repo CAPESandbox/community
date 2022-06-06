@@ -2,7 +2,7 @@ rule MedusaLocker {
     meta:
         author = "ditekshen"
         description = "Detects MedusaLocker ransomware"
-        cape_type = "MedusaLocker Ransomware Payload"
+        cape_type = "MedusaLocker Payload"
     strings:
         $x1 = "\\MedusaLockerInfo\\MedusaLockerProject\\MedusaLocker\\Release\\MedusaLocker.pdb" ascii
         $x2 = "SOFTWARE\\Medusa" wide

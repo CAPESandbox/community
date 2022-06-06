@@ -2,7 +2,7 @@ rule HDLocker {
     meta:
         author = "ditekSHen"
         description = "Detects HDLocker ransomware"
-        cape_type = "HDLocker Ransomware Payload"
+        cape_type = "HDLocker Payload"
     strings:
         $s1 = "HDLocker_" fullword ascii
         $s2 = ".log" fullword ascii

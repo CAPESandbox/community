@@ -2,7 +2,7 @@ rule UnlockYourFiles {
     meta:
         author = "ditekSHen"
         description = "Detects UnlockYourFiles ransomware"
-        cape_type = "UnlockYourFiles Ransomware Payload"
+        cape_type = "UnlockYourFiles Payload"
     strings:
         $s1 = "filesx0" wide
         $s2 = "_auto_file" wide

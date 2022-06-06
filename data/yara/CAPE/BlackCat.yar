@@ -2,7 +2,7 @@ rule BlackCat {
     meta:
         author = "ditekSHen"
         description = "Detects BlackCat ransomware"
-        cape_type = "BlackCat Ransomware Payload"
+        cape_type = "BlackCat Payload"
     strings:
         $x1 = "{\"config_id\":\"\",\"public_key\":\"MIIBIjANBgkqhkiG9w0BAQEFAAO" ascii
         $x2 = "C:\\Users\\Public\\All Usersdeploy_note_and_image_for_all_users=" fullword ascii

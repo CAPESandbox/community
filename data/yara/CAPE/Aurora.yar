@@ -1,7 +1,7 @@
 rule Aurora {
     meta:
         author = "ditekshen"
-        description = "Aurora ransomware payload"
+        description = "Aurora Payload"
         cape_type = "Aurora payload"
     strings:
         $s1 = "Software\\Microsoft\\Windows\\CurrentVersion\\Run" fullword ascii wide

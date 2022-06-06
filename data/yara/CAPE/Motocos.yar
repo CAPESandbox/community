@@ -2,7 +2,7 @@ rule Motocos {
     meta:
         author = "ditekSHen"
         description = "Detects Motocos ransomware"
-        cape_type = "Motocos Ransomware Payload"
+        cape_type = "Motocos Payload"
     strings:
         $s1 = "Block Investigation Tools" wide
         $s2 = "powershell.exe,taskmgr.exe,procexp.exe,procmon.exe" wide

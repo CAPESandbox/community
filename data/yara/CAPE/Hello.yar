@@ -2,7 +2,7 @@ rule Hello {
     meta:
         author = "ditekSHen"
         description = "Hunt for Hello / WickrMe ransomware"
-        cape_type = "Hello Ransomware Payload"
+        cape_type = "Hello Payload"
     strings:
         $s1 = "DeleteBackupFiles" ascii wide
         $s2 = "GetEncryptFiles" ascii wide
