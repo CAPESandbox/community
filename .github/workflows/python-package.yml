@@ -35,7 +35,7 @@ jobs:
       - name: Format with black
         run: black .
       - name: Format imports with isort
-        uses: isort .
+        run: isort .
       - name: Commit changes if any
         run: |
           git config user.name "GitHub Actions"
