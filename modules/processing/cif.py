@@ -10,7 +10,6 @@ import urllib.parse
 import urllib.request
 
 import requests
-
 from lib.cuckoo.common.abstracts import Processing
 from lib.cuckoo.common.exceptions import CuckooProcessingError
 from lib.cuckoo.common.objects import File

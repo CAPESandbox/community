@@ -3,11 +3,10 @@ import time
 from typing import Literal
 
 import boto3
-from sqlalchemy.exc import SQLAlchemyError
-
 from lib.cuckoo.common.abstracts import Machinery
 from lib.cuckoo.common.config import Config
 from lib.cuckoo.common.exceptions import CuckooMachineError
+from sqlalchemy.exc import SQLAlchemyError
 
 logging.getLogger("boto3").setLevel(logging.CRITICAL)
 logging.getLogger("botocore").setLevel(logging.CRITICAL)
