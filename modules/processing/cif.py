@@ -2,7 +2,6 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
-from __future__ import absolute_import
 import hashlib
 import json
 import os
@@ -11,6 +10,7 @@ import urllib.parse
 import urllib.request
 
 import requests
+
 from lib.cuckoo.common.abstracts import Processing
 from lib.cuckoo.common.exceptions import CuckooProcessingError
 from lib.cuckoo.common.objects import File
