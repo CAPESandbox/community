@@ -2,13 +2,13 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
-from __future__ import absolute_import
 import logging
 import os
 import subprocess
 import xml.etree.ElementTree as ET
 
 import libvirt
+
 from lib.cuckoo.common.abstracts import LibVirtMachinery
 from lib.cuckoo.common.exceptions import CuckooCriticalError, CuckooMachineError
 

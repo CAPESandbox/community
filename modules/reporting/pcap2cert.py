@@ -1,4 +1,3 @@
-from __future__ import absolute_import, print_function
 import hashlib
 import logging
 import os
@@ -9,6 +8,7 @@ from io import BufferedReader
 from typing import Dict
 
 import dpkt
+
 from lib.cuckoo.common.abstracts import Report
 from lib.cuckoo.common.constants import CUCKOO_ROOT
 

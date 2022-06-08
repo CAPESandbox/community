@@ -14,6 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import dns.resolver
+
 from lib.cuckoo.common.abstracts import Signature
 
 RBLs = (
