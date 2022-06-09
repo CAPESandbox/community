@@ -8,14 +8,14 @@ meta:
 	tlp = "White"
   	cape_type = "KeyBase Payload"
 
-strings:	
+strings:
 	$s1 = " End:]" ascii wide
 	$s2 = "Keystrokes typed:" ascii wide
 	$s3 = "Machine Time:" ascii wide
 	$s4 = "Text:" ascii wide
 	$s5 = "Time:" ascii wide
 	$s6 = "Window title:" ascii wide
-	
+
 	$x1 = "&application=" ascii wide
 	$x2 = "&clipboardtext=" ascii wide
 	$x3 = "&keystrokestyped=" ascii wide

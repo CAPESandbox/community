@@ -28,7 +28,7 @@ rule Egregor {
     condition:
         (uint16(0) == 0x5a4d and pe.is_dll() and ((all of ($s*) and 1 of ($p*)) or
                 (
-                    2 of them and filesize < 1000KB and 
+                    2 of them and filesize < 1000KB and
                     for any i in (0 .. pe.number_of_sections) : (
                         (
                             pe.sections[i].name == ".00cfg"

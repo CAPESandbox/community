@@ -1,9 +1,9 @@
-/* Copyright (C) 2016 Will Metcalf william.metcalf@gmail.com 
+/* Copyright (C) 2016 Will Metcalf william.metcalf@gmail.com
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -156,7 +156,7 @@ rule AdGholas_mem_antisec
   condition:
        any of ($vid*) and 20 of ($antisec*)
 }
-    
+
 rule AdGholas_mem_antisec_M2
 {
   meta:
@@ -166,7 +166,7 @@ rule AdGholas_mem_antisec_M2
       $s2 = "loadXML" nocase ascii wide fullword
       $s3 = "parseError.errorCode" nocase ascii wide
       $s4 = /res\x3a\x2f\x2f[\x27\x22]\x2b/ nocase ascii wide
-      $s5 = /\x251e3\x21\s*\x3d\x3d\s*[a-zA-Z]+\x3f1\x3a0/ nocase ascii wide 
+      $s5 = /\x251e3\x21\s*\x3d\x3d\s*[a-zA-Z]+\x3f1\x3a0/ nocase ascii wide
   condition:
       all of ($s*)
 }
@@ -176,7 +176,7 @@ rule AdGholas_mem_MIME_M2
   meta:
       malfamily = "AdGholas"
   strings:
-      $s1 = "halog" nocase ascii wide fullword 
+      $s1 = "halog" nocase ascii wide fullword
       $s2 = "pcap" nocase ascii wide fullword
       $s3 = "saz" nocase ascii wide fullword
       $s4 = "chls" nocase ascii wide fullword

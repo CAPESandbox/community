@@ -1,9 +1,9 @@
-/* Copyright (C) 2016 Will Metcalf william.metcalf@gmail.com 
+/* Copyright (C) 2016 Will Metcalf william.metcalf@gmail.com
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,4 +29,3 @@ rule CVE_2016_3298_Mem
   condition:
        $res1 and #res2 > 3 or all of ($mf*) or $mhres
 }
-

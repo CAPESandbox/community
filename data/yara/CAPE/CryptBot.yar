@@ -23,7 +23,7 @@ rule CryptBot {
         $f5 = "*pass*.txt" fullword wide
         $f6 = "*bitcoin*.txt" fullword wide
         $p1 = "%USERPROFILE%\\Desktop\\*.txt" fullword wide
-        $p2 = "%USERPROFILE%\\Desktop\\secret.txt" fullword wide 
+        $p2 = "%USERPROFILE%\\Desktop\\secret.txt" fullword wide
         $p3 = "%USERPROFILE%\\Desktop\\report.doc" fullword wide
         $v2_1 = "%02d.%02d.%4d [%02d:%02d:%02d] UTC: %s%02d:%02d %wS" fullword wide
         $v2_2 = "UserName [ComputerName]:" fullword wide

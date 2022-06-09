@@ -4,7 +4,7 @@ rule Xorist {
         description = "Xorist ransomware payload"
         cape_type = "Xorist Payload"
     strings:
-        $x1 = { 00 4d 00 41 00 47 00 45 00 0b 00 50 00 55 00 
+        $x1 = { 00 4d 00 41 00 47 00 45 00 0b 00 50 00 55 00
                 53 00 53 00 59 00 4c 00 49 00 43 00 4b 00 45
                 00 52 00 }
         $x2 = { 30 70 33 6e 53 4f 75 72 63 33 20 58 30 72 31 35

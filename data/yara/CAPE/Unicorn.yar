@@ -16,7 +16,7 @@ rule Unicorn {
         $s2 = { 72 00 75 00 6e 00 64 00 6c 00 6c 00 33 00 32 00
                2e 00 65 00 78 00 65 00 00 00 00 00 25 00 73 00
                20 00 22 00 25 00 73 00 22 00 2c 00 25 00 68 00
-               73 } 
+               73 }
         $s3 = "%*[^]]%c%n" fullword ascii
         $s4 = "file://%s%s%s" fullword ascii
         $s5 = "%s://%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s" fullword ascii

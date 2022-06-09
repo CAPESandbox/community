@@ -6,7 +6,7 @@ meta:
 	date = "2020-03"
 	tlp = "White"
 
-strings:	
+strings:
 	$ = "Enigma anti-emulators plugin - GetProcAddress" ascii wide
 	$ = "Enigma anti-debugger plugin - CheckRemoteDebuggerPresent" ascii wide
 	$ = "Enigma anti-debugger plugin - IsDebuggerPresent" ascii wide

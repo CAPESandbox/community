@@ -28,7 +28,7 @@ rule Formbook {
         $sequence_0 = { 03c8 0f31 2bc1 8945fc }
             // n = 4, score = 6000
             //   03c8                 | add                 ecx, eax
-            //   0f31                 | rdtsc               
+            //   0f31                 | rdtsc
             //   2bc1                 | sub                 eax, ecx
             //   8945fc               | mov                 dword ptr [ebp - 4], eax
 
@@ -56,7 +56,7 @@ rule Formbook {
         $sequence_4 = { 5d c3 8d507c 80fa07 }
             // n = 4, score = 6000
             //   5d                   | pop                 ebp
-            //   c3                   | ret                 
+            //   c3                   | ret
             //   8d507c               | lea                 edx, dword ptr [eax + 0x7c]
             //   80fa07               | cmp                 dl, 7
 

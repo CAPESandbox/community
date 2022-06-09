@@ -1,4 +1,4 @@
-rule Lu0Bot 
+rule Lu0Bot
 {
     meta:
         author = "ditekSHen, @Fmk0, @r0ny123"

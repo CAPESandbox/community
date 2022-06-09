@@ -17,7 +17,7 @@ rule HawkEye
         $string5 = "<!-- do not script -->" wide
         $string6 = "\\pidloc.txt" wide
         $string7 = "BSPLIT" wide
-        
+
 
 	condition:
 		$key and $salt and all of ($string*)

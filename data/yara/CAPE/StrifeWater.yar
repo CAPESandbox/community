@@ -8,7 +8,7 @@ rule StrifeWater {
         $s2 = "coname:" fullword ascii
         $s3 = "*elev:" fullword ascii
         $s4 = "*uname:" fullword ascii
-        $s5 = "--BoundrySign" ascii  
+        $s5 = "--BoundrySign" ascii
         $s6 = "000000c:\\users\\public\\libraries\\tmp.bi" ascii
         $s7 = "9c4arSBr32g6IOni" fullword ascii
         $pdb = "\\win8\\Desktop\\ishdar_win8\\" ascii

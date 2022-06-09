@@ -10,7 +10,7 @@ rule SpyGate
 	strings:
 		$split = "abccba"
 		$a1 = "abccbaSpyGateRATabccba" //$a = Version 0.2.6
-		$a2 = "StubX.pdb" 
+		$a2 = "StubX.pdb"
 		$a3 = "abccbaDanabccb"
 		$b1 = "monikerString" nocase //$b = Version 2.0
 		$b2 = "virustotal1"

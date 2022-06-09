@@ -11,7 +11,7 @@ rule FirebirdRAT {
         $s1 = "REPLACETHESEKEYSTROKES" fullword wide
         $s2 = "_ENABLE_PROFILING" fullword wide
         $s3 = ": KeylogSubject" wide
-        $s4 = "Firebird.CommandHandler" fullword wide        
+        $s4 = "Firebird.CommandHandler" fullword wide
         $s5 = "webcamenabled" fullword ascii
         $s6 = "screenlogs" fullword ascii
         $s7 = "encryptedconnection" fullword ascii

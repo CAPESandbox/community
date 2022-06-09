@@ -47,7 +47,7 @@ rule INDICATOR_SUSPICIOUS_IMG_Embedded_Archive {
         author = "@ditekSHen"
     strings:
         $sevenzip1 = { 37 7a bc af 27 1c 00 04 } // 7ZIP, regardless of password-protection
-        $sevenzip2 = { 37 e4 53 96 c9 db d6 07 } // 7ZIP zisofs compression format    
+        $sevenzip2 = { 37 e4 53 96 c9 db d6 07 } // 7ZIP zisofs compression format
         $zipwopass = { 50 4b 03 04 14 00 00 00 } // None password-protected PKZIP
         $zipwipass = { 50 4b 03 04 33 00 01 00 } // Password-protected PKZIP
         $zippkfile = { 50 4b 03 04 0a 00 02 00 } // PKZIP
@@ -56,7 +56,7 @@ rule INDICATOR_SUSPICIOUS_IMG_Embedded_Archive {
         $rarheade3 = { 52 61 72 21 1a 07 00 cf } // RAR
         $mscabinet = { 4d 53 46 54 02 00 01 00 } // Microsoft cabinet file
         $zlockproe = { 50 4b 03 04 14 00 01 00 } // ZLock Pro encrypted ZIP
-        $winzip    = { 57 69 6E 5A 69 70 }       // WinZip compressed archive 
+        $winzip    = { 57 69 6E 5A 69 70 }       // WinZip compressed archive
         $pklite    = { 50 4B 4C 49 54 45 }       // PKLITE compressed ZIP archive
         $pksfx     = { 50 4B 53 70 58 }          // PKSFX self-extracting executable compressed file
     condition:
@@ -153,20 +153,20 @@ rule INDICATOR_SUSPICIOUS_EXE_SandboxHookingDLL {
         author = "ditekSHen"
     strings:
         $dll1 = "sbiedll.dll" nocase fullword ascii wide
-        // $dll2 = "dbghelp.dll" nocase fullword ascii wide  
-        $dll3 = "api_log.dll" nocase fullword ascii wide  
-        $dll4 = "pstorec.dll" nocase fullword ascii wide  
+        // $dll2 = "dbghelp.dll" nocase fullword ascii wide
+        $dll3 = "api_log.dll" nocase fullword ascii wide
+        $dll4 = "pstorec.dll" nocase fullword ascii wide
         $dll5 = "dir_watch.dll" nocase fullword ascii wide
-        $dll6 = "vmcheck.dll" nocase fullword ascii wide  
-        $dll7 = "wpespy.dll" nocase fullword ascii wide   
-        $dll8 = "SxIn.dll" nocase fullword ascii wide     
-        $dll9 = "Sf2.dll" nocase fullword ascii wide     
-        $dll10 = "deploy.dll" nocase fullword ascii wide   
-        $dll11 = "avcuf32.dll" nocase fullword ascii wide  
-        $dll12 = "BgAgent.dll" nocase fullword ascii wide  
-        $dll13 = "guard32.dll" nocase fullword ascii wide  
-        $dll14 = "wl_hook.dll" nocase fullword ascii wide  
-        $dll15 = "QOEHook.dll" nocase fullword ascii wide  
+        $dll6 = "vmcheck.dll" nocase fullword ascii wide
+        $dll7 = "wpespy.dll" nocase fullword ascii wide
+        $dll8 = "SxIn.dll" nocase fullword ascii wide
+        $dll9 = "Sf2.dll" nocase fullword ascii wide
+        $dll10 = "deploy.dll" nocase fullword ascii wide
+        $dll11 = "avcuf32.dll" nocase fullword ascii wide
+        $dll12 = "BgAgent.dll" nocase fullword ascii wide
+        $dll13 = "guard32.dll" nocase fullword ascii wide
+        $dll14 = "wl_hook.dll" nocase fullword ascii wide
+        $dll15 = "QOEHook.dll" nocase fullword ascii wide
         $dll16 = "a2hooks32.dll" nocase fullword ascii wide
         $dll17 = "tracer.dll" nocase fullword ascii wide
         $dll18 = "APIOverride.dll" nocase fullword ascii wide
@@ -298,7 +298,7 @@ rule INDICATOR_SUSPICIOUS_PE_ResourceTuner {
     strings:
         $s1 = "Modified by an unpaid evaluation copy of Resource Tuner 2 (www.heaventools.com)" fullword wide
     condition:
-        uint16(0) == 0x5a4d and all of them 
+        uint16(0) == 0x5a4d and all of them
 }
 
 rule INDICATOR_SUSPICIOUS_ASEP_REG_Reverse {
@@ -1011,8 +1011,8 @@ rule INDICATOR_SUSPICIOUS_EnableNetworkDiscovery {
         author = "ditekSHen"
         description = "Detects binaries manipulating Windows firewall to enable permissive network discovery"
     strings:
-        $s1 = "netsh advfirewall firewall set rule group=\"Network Discovery\" new enable=Yes" ascii wide nocase 
-        $s2 = "netsh advfirewall firewall set rule group=\"File and Printer Sharing\" new enable=Yes" ascii wide nocase 
+        $s1 = "netsh advfirewall firewall set rule group=\"Network Discovery\" new enable=Yes" ascii wide nocase
+        $s2 = "netsh advfirewall firewall set rule group=\"File and Printer Sharing\" new enable=Yes" ascii wide nocase
     condition:
          uint16(0) == 0x5a4d and all of them
 }

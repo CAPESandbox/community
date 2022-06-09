@@ -27,5 +27,5 @@ rule Avalon {
       $p1 = "^(?!:\\/\\/)([a-zA-Z0-9-_]+\\.)*[a-zA-Z0-9][a-zA-Z0-9-_]+\\.[a-zA-Z]{2,11}?$" wide
       $p2 = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$" wide
    condition:
-      uint16(0) == 0x5a4d and 8 of them 
+      uint16(0) == 0x5a4d and 8 of them
 }

@@ -9,7 +9,7 @@ rule GoldenAxe {
         $s3 = "cmd.exe" ascii
         $s4 = "Speak.Speak" ascii
         $s5 = "CLNTSRVRnull" ascii
-        $s6 = "-----END" ascii        
+        $s6 = "-----END" ascii
         $s7 = "-----BEGIN" ascii
         $s8 = ".EncryptFile" ascii
         $g1 = "GoldenAxe/Utils." ascii

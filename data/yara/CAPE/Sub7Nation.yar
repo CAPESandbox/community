@@ -12,7 +12,7 @@ rule Sub7Nation
 		$b = "*A01*"
 		$c = "*A02*"
 		$d = "*A03*"
-		$e = "*A04*"	
+		$e = "*A04*"
 		$f = "*A05*"
 		$g = "*A06*"
 		$h = "#@#@#"
@@ -22,7 +22,7 @@ rule Sub7Nation
 		$verSpecific3 = "a2b7c3d7e4"
 		$verSpecific4 = "cmd.dll"
 
-		
+
 	condition:
 		all of them
 }

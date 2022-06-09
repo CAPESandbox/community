@@ -1,4 +1,4 @@
-rule Matanbuchus 
+rule Matanbuchus
 {
     meta:
         description = "Detects Matanbuchus loader"

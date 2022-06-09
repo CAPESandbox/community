@@ -6,7 +6,7 @@ rule SmallNet
 		maltype = "Remote Access Trojan"
 		filetype = "exe"
         cape_type = "SmallNet Payload"
-		
+
 	strings:
 		$split1 = "!!<3SAFIA<3!!"
 		$split2 = "!!ElMattadorDz!!"

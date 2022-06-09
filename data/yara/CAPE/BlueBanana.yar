@@ -15,7 +15,7 @@ rule BlueBanana
 		$c = "a/a/a/b/q.class"
 		$d = "a/a/a/b/v.class"
 
-		
+
 	condition:
 		all of them
 }

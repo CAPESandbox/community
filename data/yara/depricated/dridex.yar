@@ -45,4 +45,3 @@ rule DridexCfgKeylog
     condition:
         $buf
 }
-

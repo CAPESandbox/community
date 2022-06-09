@@ -2,7 +2,7 @@ rule Karkoff {
     meta:
         author = "ditekSHen"
         description = "Detects Karkoff"
-        cape_type = "Karkoff Payload" 
+        cape_type = "Karkoff Payload"
     strings:
         $x1 = "C:\\Windows\\Temp\\MSEx_log.txt" fullword wide
         $x2 = "CMD.exe" fullword wide

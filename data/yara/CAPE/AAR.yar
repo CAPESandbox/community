@@ -6,7 +6,7 @@ rule AAR
 		maltype = "Remote Access Trojan"
 		filetype = "exe"
         cape_type = "AAR Payload"
-        
+
 	strings:
 		$a = "Hashtable"
 		$b = "get_IsDisposed"

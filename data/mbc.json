@@ -1006,5 +1006,5 @@
     "B0040.002": {
         "long": "Malware may store information in an image.",
         "short": "Steganography"
-    },
+    }
 }

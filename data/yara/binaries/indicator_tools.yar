@@ -136,7 +136,7 @@ rule INDICATOR_TOOL_PWS_Mimikatz {
         $s3 = "mimikatz.exe" ascii
         $s4 = "\\mimidrv.pdb" ascii
         $s5 = "mimikatz" ascii
-        $s6 = { 6d 00 69 00 6d 00 69 00 6b 00 61 00 74 00 7a }  // m|00|i|00|m|00|i|00|k|00|a|00|t|00|z     
+        $s6 = { 6d 00 69 00 6d 00 69 00 6b 00 61 00 74 00 7a }  // m|00|i|00|m|00|i|00|k|00|a|00|t|00|z
         $s7 = { 5c 00 6d 00 69 00 6d 00 69 00 64 00 72 00 76 }  // \|00|m|00|i|00|m|00i|00|d|00|r|00|v
         $s8 = { 6d 00 69 00 6d 00 69 00 64 00 72 00 76 }        // m|00|i|00|m|00i|00|d|00|r|00|v
         $s9 = "Lecture KIWI_MSV1_0_" ascii
@@ -356,13 +356,13 @@ rule INDICATOR_TOOL_EXP_ApacheStrusts {
         author = "ditekSHen"
     strings:
         // CVE-2017-5638
-        $x1 = "apache.struts2.ServletActionContext@getResponse" ascii 
+        $x1 = "apache.struts2.ServletActionContext@getResponse" ascii
         $e1 = ".getWriter()" ascii
         $e2 = ".getOutputStream()" ascii
         $e3 = ".getInputStream()" ascii
 
         // CVE-2018-11776
-        $x2 = "#_memberAccess" ascii                                   
+        $x2 = "#_memberAccess" ascii
         $s1 = "ognl.OgnlContext" ascii
         $s2 = "ognl.ClassResolver" ascii
         $s3 = "ognl.TypeConverter" ascii

@@ -5,8 +5,8 @@ meta:
 	author = "@bartblaze"
 	date = "2020-12"
 	tlp = "White"
-  
-strings:	
+
+strings:
 	$s1 = "window.moveTo -" ascii wide nocase
 	$s2 = "window.resizeTo 0" ascii wide nocase
 
@@ -15,7 +15,7 @@ strings:
 
 condition:
 	(
-	all of ($s*) or 
+	all of ($s*) or
 	all of ($x*)
 	) and
 	filesize <50KB

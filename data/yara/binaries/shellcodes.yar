@@ -230,37 +230,37 @@ rule donut_shellcode_fixed {
         author = "Telsy CTI team"
         date = "18/11/2021"
     condition:
-        // shellcode starts with a call 
-        uint8(0) == 0xe8 and 
-        uint32(1) == uint32(5) and 
+        // shellcode starts with a call
+        uint8(0) == 0xe8 and
+        uint32(1) == uint32(5) and
         // xor generator key and xor xor initial key cannot be null it is 32 bytes
         uint32(9) != 0 and
-        uint32(13) != 0 and 
+        uint32(13) != 0 and
         uint32(17) != 0 and
         uint32(21) != 0 and
         uint32(25) != 0 and
-        uint32(29) != 0 and 
+        uint32(29) != 0 and
         uint32(33) != 0 and
         uint32(37) != 0 and
-        // after the two keys null uint32 
+        // after the two keys null uint32
         uint32(41) == 0 and
         // config space
         uint32(469) == 0 and
-        uint32(473) == 0 and 
+        uint32(473) == 0 and
         uint32(477) == 0 and
-        uint32(481) == 0 and 
+        uint32(481) == 0 and
         uint32(485) == 0 and
-        uint32(489) == 0 and 
+        uint32(489) == 0 and
         uint32(493) == 0 and
-        uint32(497) == 0 and 
+        uint32(497) == 0 and
         uint32(501) == 0 and
         uint32(505) == 0 and
-        uint32(509) == 0 and 
-        uint32(513) == 0 and 
-        uint32(517) == 0 and 
+        uint32(509) == 0 and
+        uint32(513) == 0 and
+        uint32(517) == 0 and
         uint32(521) == 0 and
-        uint32(525) == 0 and 
-        uint32(529) == 0 and 
+        uint32(525) == 0 and
+        uint32(529) == 0 and
         uint32(533) == 0 and
         uint32(537) == 0 and
         uint32(541) == 0 and
@@ -274,7 +274,7 @@ rule donut_shellcode_fixed {
         // entropy choosen at config -> [1-3]
         (uint32(569) == 1 or uint32(569) == 2 or uint32(569) == 3) and
         uint32(571) == 0 and
-        uint32(575) == 0 
+        uint32(575) == 0
 }
 
 rule donut_shellcode_relative {
@@ -290,21 +290,21 @@ rule donut_shellcode_relative {
         00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 (01|02) 00 00 00 (01|02|03) 00
         00 00 00 00 00 00 00 00 00 00 }
     condition:
-        for 1 i in (1 .. #cspace) : 
+        for 1 i in (1 .. #cspace) :
         (
             // call near opcode
             uint8(@cspace[i] - 469 ) == 232 and
             uint32(@cspace[i] - 469 + 1) == uint32(@cspace[i] - 469 + 5) and
             // xor generator key and xor xor initial key cannot be null it is 32 bytes
             uint32(@cspace[i] - 469 + 9) != 0 and
-            uint32(@cspace[i] - 469 + 13) != 0 and 
+            uint32(@cspace[i] - 469 + 13) != 0 and
             uint32(@cspace[i] - 469 + 17) != 0 and
             uint32(@cspace[i] - 469 + 21) != 0 and
             uint32(@cspace[i] - 469 + 25) != 0 and
-            uint32(@cspace[i] - 469 + 29) != 0 and 
+            uint32(@cspace[i] - 469 + 29) != 0 and
             uint32(@cspace[i] - 469 + 33) != 0 and
             uint32(@cspace[i] - 469 + 37) != 0 and
-            // after the two keys null uint32 
-            uint32(@cspace[i] - 469 + 41) == 0 
+            // after the two keys null uint32
+            uint32(@cspace[i] - 469 + 41) == 0
         )
 }

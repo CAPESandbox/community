@@ -20,5 +20,5 @@ rule SunShuttle {
         $s14 = "main.wget_file" fullword ascii
         $s15 = "main.write_file" fullword ascii
     condition:
-        uint16(0) == 0x5a4d and 5 of them      
+        uint16(0) == 0x5a4d and 5 of them
 }

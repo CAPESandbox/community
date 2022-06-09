@@ -29,7 +29,7 @@ rule RansomExxNIX {
         $c5 = "enum_files.c" fullword ascii
         $c6 = "readme.c" fullword ascii
         $c7 = "ctr_drbg.c" fullword ascii
-        
+
         $s1 = "regenerate_pre_data" fullword ascii
         $s2 = "g_RansomHeader" fullword ascii
         $s3 = "CryptOneBlock" fullword ascii

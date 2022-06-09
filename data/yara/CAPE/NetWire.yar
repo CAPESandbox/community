@@ -6,7 +6,7 @@ rule NetWire
 		maltype = "Remote Access Trojan"
 		filetype = "exe"
         cape_type = "NetWire Payload"
-		
+
     strings:
 
         $exe1 = "%.2d-%.2d-%.4d"

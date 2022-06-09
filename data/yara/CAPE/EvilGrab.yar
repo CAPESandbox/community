@@ -11,9 +11,9 @@ rule EvilGrab
 
     condition:
         //check for MZ Signature at offset 0
-        uint16(0) == 0x5A4D 
+        uint16(0) == 0x5A4D
 
-        and 
+        and
 
         $configure1 or $configure2 or $configure3
 }
