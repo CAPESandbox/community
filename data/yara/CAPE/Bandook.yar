@@ -7,7 +7,7 @@ rule Bandook
 		maltype = "Remote Access Trojan"
 		filetype = "exe"
         cape_type = "Bandook Payload"
-        
+
     strings:
     		$a = "aaaaaa1|"
             $b = "aaaaaa2|"
@@ -19,9 +19,9 @@ rule Bandook
 			$h = "givemecache"
 			$i = "%s\\system32\\drivers\\blogs\\*"
 			$j = "bndk13me"
-			
 
-        
+
+
     condition:
     		all of them
 }

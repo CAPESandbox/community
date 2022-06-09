@@ -14,10 +14,10 @@ rule Renamer {
         $s5 = "hold.inf" fullword wide
         $s6 = "Dropped" ascii
     condition:
-        uint16(0) == 0x5a4d and all of ($s*) or 
+        uint16(0) == 0x5a4d and all of ($s*) or
         (
             4 of ($s*) and
-            for any directory in pe.data_directories : 
+            for any directory in pe.data_directories :
             (
                 directory.virtual_address != 0 and
                 directory.size == 0

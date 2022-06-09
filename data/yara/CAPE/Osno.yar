@@ -15,7 +15,7 @@ rule Osno {
         $s9 = "antiVM" fullword ascii
         $s10 = "downloadurl" fullword ascii
         $s11 = "set_sPassword" fullword ascii
-        
+
         $txt0 = "{0} {1} .txt" fullword wide
         $txt1 = "\\ScanningNetworks.txt" fullword wide
         $txt2 = "\\SteamApps.txt" fullword wide

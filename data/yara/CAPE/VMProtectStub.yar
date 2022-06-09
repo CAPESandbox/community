@@ -6,7 +6,7 @@ meta:
 	date = "2020-05"
 	tlp = "White"
 
-strings:	
+strings:
 $ = ".?AV?$VirtualAllocationManager@VRealAllocationStrategy@@@@" ascii wide
 $ = ".?AVEncryptedFastDllStream@@" ascii wide
 $ = ".?AVGetBlock_CC@HardwareID@@" ascii wide

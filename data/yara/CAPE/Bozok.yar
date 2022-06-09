@@ -13,7 +13,7 @@ rule Bozok
 		$c = "SendCamList" nocase
 		$d = "untPlugin" nocase
 		$e = "gethostbyname" nocase
-	
+
 	condition:
 		all of them
 }

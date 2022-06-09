@@ -18,7 +18,7 @@ rule Adzok
 		$a6 = "inic$ShutdownHook.class"
 		$a7 = "Uninstall.jarPK"
 		$a8 = "resources/icono.pngPK"
-        
+
 	condition:
     		7 of ($a*)
 }

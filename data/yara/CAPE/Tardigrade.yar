@@ -18,13 +18,13 @@ rule Tardigrade {
         $s6 = /cmd\.exe \/c (echo|set)/ ascii
         $s7 = ">\"%s\"&exit" ascii
     condition:
-        uint16(0) == 0x5a4d and pe.is_dll() and (1 of ($x*) or 6 of ($s*)) and 
+        uint16(0) == 0x5a4d and pe.is_dll() and (1 of ($x*) or 6 of ($s*)) and
         (
-            pe.exports("DllGetClassObject") and 
-            pe.exports("DllMain") and 
-            pe.exports("DllRegisterServer") and 
-            pe.exports("DllUnregisterServer") and 
-            pe.exports("InitHelperDll") and 
+            pe.exports("DllGetClassObject") and
+            pe.exports("DllMain") and
+            pe.exports("DllRegisterServer") and
+            pe.exports("DllUnregisterServer") and
+            pe.exports("InitHelperDll") and
             pe.exports("StartW")
         )
 }

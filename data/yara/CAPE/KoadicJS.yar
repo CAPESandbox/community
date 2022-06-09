@@ -14,7 +14,7 @@ rule KoadicJS {
         $ht1 = "<hta:application" ascii
         $ht2 = "caption=\"no\"" ascii
         $ht3 = "showInTaskBar=\"no\"" ascii
-        $ht4 = "windowState=\"minimize\"" ascii 
+        $ht4 = "windowState=\"minimize\"" ascii
         $ht5 = "navigable=\"no\"" ascii
         $ht6 = "scroll=\"no\"" ascii
     condition:

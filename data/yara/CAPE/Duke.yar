@@ -55,7 +55,7 @@ rule PolyglotDuke {
     condition:
         uint16(0) == 0x5a4d and (all of ($s*)) or
          (
-                 2 of them and 
+                 2 of them and
                  pe.exports("InitSvc")
         )
 }

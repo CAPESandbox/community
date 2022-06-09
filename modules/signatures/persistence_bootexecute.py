@@ -1,4 +1,4 @@
-﻿# Copyright (C) 2016 Brad Spengler
+# Copyright (C) 2016 Brad Spengler
 #
 # This program is free Software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

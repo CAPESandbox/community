@@ -27,9 +27,9 @@ rule RedLineDropperEXE {
         $s6 = "Vasuko)Yugenizugilobo toxocivoriye yexozoyohuzeb" wide
         $s7 = "Yikezevavuzus gucajanesan#Rolapucededoxu xewulep fuwehofiwifi" wide
     condition:
-        uint16(0) == 0x5a4d and (pe.exports("_fgeek@8") and 2 of them) or 
+        uint16(0) == 0x5a4d and (pe.exports("_fgeek@8") and 2 of them) or
         (
-            2 of them and 
+            2 of them and
             for any i in (0 .. pe.number_of_sections) : (
                 (
                     pe.sections[i].name == ".rig"

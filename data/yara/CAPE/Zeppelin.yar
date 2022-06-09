@@ -6,7 +6,7 @@ meta:
 	date = "2019-11"
 	tlp = "White"
 	cape_type = "Zeppelin Payload"
-	
+
 strings:
 	$s1 = "TUnlockAndEncryptU" ascii wide
 	$s2 = "TDrivesAndShares" ascii wide
@@ -19,7 +19,7 @@ strings:
 	$s9 = "TKeyObj" ascii wide
 
 	$x = "TZeppelinU" ascii wide
-	
+
 condition:
 	2 of ($s*) or $x
 }

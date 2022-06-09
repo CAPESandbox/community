@@ -1,4 +1,4 @@
-﻿from lib.cuckoo.common.abstracts import Signature
+from lib.cuckoo.common.abstracts import Signature
 
 
 class RansomwareExtensions(Signature):

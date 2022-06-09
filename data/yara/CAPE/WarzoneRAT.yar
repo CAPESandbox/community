@@ -22,7 +22,7 @@ rule WarzoneRAT {
         $d1 = "softokn3.dll" fullword wide
         $d2 = "nss3.dll" fullword wide
         $d3 = "logins.json" wide
-        $d4 = "Asend.db" fullword wide       
+        $d4 = "Asend.db" fullword wide
     condition:
         (uint16(0) == 0x5a4d and (4 of ($s2*) and 2 of ($d*)) or (all of ($s1*))) or ((4 of ($s1*) and 2 of ($d*)) or (all of ($s1*)))
 }

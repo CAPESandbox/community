@@ -6,7 +6,7 @@ meta:
 	date = "2020-09"
 	tlp = "White"
 	cape_type = "CryLock payload"
-	
+
 strings:
 	$ = "///END ENCRYPT ONLY EXTENATIONS" ascii wide
 	$ = "///END UNENCRYPT EXTENATIONS" ascii wide

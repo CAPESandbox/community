@@ -4,7 +4,7 @@ rule T5000
         author = "Seth Hardy"
         description = "T5000 Payload"
         cape_type = "T5000 Payload"
-        
+
     strings:
         $ = "_tmpR.vbs"
         $ = "_tmpg.vbs"
@@ -20,7 +20,7 @@ rule T5000
         $ = "l:\\MyProject\\Vc 7.1\\T5000\\T5000Ver1.28\\Target\\4 CaptureDLL.pdb"
         $ = "f:\\Project\\T5000\\Src\\Target\\4 CaptureDLL.pdb"
         $ = "E:\\VS2010\\xPlat2\\Release\\InstRes32.pdb"
-        
+
     condition:
        any of them
 }

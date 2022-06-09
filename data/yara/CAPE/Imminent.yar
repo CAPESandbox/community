@@ -5,7 +5,7 @@ rule Imminent
         description = "Imminent Payload"
         cape_type = "Imminent Payload"
     strings:
-        $string1 = "Imminent-Monitor" 
+        $string1 = "Imminent-Monitor"
         $string2 = "abuse@imminentmethods.net"
         $string3 = "SevenZipHelper"
         $string4 = "get_EntryPoint"

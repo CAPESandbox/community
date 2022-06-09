@@ -23,10 +23,10 @@ rule Gulpix {
     condition:
         uint16(0) == 0x5a4d and (all of ($x*) or 6 of ($s*) or (2 of ($x*) and 4 of ($s*)) or
              (
-                 2 of them and 
-                 pe.exports("daemon") and 
-                 pe.exports("run") and 
-                 pe.exports("session") and 
+                 2 of them and
+                 pe.exports("daemon") and
+                 pe.exports("run") and
+                 pe.exports("session") and
                  pe.exports("work")
             )
         )

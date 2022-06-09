@@ -120,7 +120,7 @@ rule INDICATOR_EXE_Packed_Titan {
     strings:
         $s1 = { 00 00 ?? 2e 74 69 74 61 6e 00 00 }
     condition:
-        uint16(0) == 0x5a4d and all of them or 
+        uint16(0) == 0x5a4d and all of them or
         for any i in (0 .. pe.number_of_sections) : (
             (
                 pe.sections[i].name == ".titan"
@@ -265,16 +265,16 @@ rule INDICATOR_EXE_DotNET_Encrypted {
 
          // 08 00 00 00 00 00 1e 01 00 01 00 54 02 16 WrapNonExceptionThrows 01
         $bytes1 = { 08 01 00 08 00 00 00 00 00 1e 01 00 01 00 54 02
-                    16 57 72 61 70 4e 6f 6e 45 78 63 65 70 74 69 6f 
+                    16 57 72 61 70 4e 6f 6e 45 78 63 65 70 74 69 6f
                     6e 54 68 72 6f 77 73 01 }
         // 00 00 BSJB...v2.0.50727 00 00 00 00 05 00
         // 00 00 BSJB...v4.0.30319 00 00 00 00 05 00
-        $bytes2 = { 00 00 42 53 4a 42 01 00 01 00 00 00 00 00 0c 00 
+        $bytes2 = { 00 00 42 53 4a 42 01 00 01 00 00 00 00 00 0c 00
                     00 00 76 3? 2e 3? 2e ?? ?? ?? ?? ?? 00 00 00 00
                     05 00 }
         // #Strings...#US...#GUID...#Blob
-        $bytes3 = { 00 00 23 53 74 72 69 6e 67 73 00 00 00 00 [5] 00 
-                    00 00 23 55 53 00 [5] 00 00 00 23 47 55 49 44 00 
+        $bytes3 = { 00 00 23 53 74 72 69 6e 67 73 00 00 00 00 [5] 00
+                    00 00 23 55 53 00 [5] 00 00 00 23 47 55 49 44 00
                     00 00 [6] 00 00 23 42 6c 6f 62 00 00 00 }
         // .GetString.set_WorkingDirectory.WaitForExit.Close.Thread.System.Threading.Sleep.ToInt32.get_MainModule.ProcessModule.get_FileName.Split.
         $bytes4 = { 00 47 65 74 53 74 72 69 6e 67 00 73 65 74 5f 57

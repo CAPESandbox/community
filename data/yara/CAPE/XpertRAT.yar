@@ -9,7 +9,7 @@ rule XpertRAT {
         $v3 = "+Xpert+3." wide
         $v4 = "keylog.tmp" fullword wide
         $v5 = "\\TempReg.reg" fullword wide
-        
+
         $s1 = "ClsKeylogger" fullword ascii nocase
         $s2 = "clsCamShot" fullword ascii nocase
         $s3 = "ClsShellCommand" fullword ascii nocase

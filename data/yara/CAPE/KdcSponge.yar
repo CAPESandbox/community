@@ -20,12 +20,12 @@ rule KdcSponge {
         uint16(0) == 0x5a4d and (
             (1 of ($x*) and 2 of them) or (all of ($kdc*) and (1 of ($x*) or all of ($r*) or 2 of ($s*))) or (8 of them) or
             (
-                pe.exports("MainFun") and 
-                pe.exports("NetApiBufferFree") and 
-                pe.exports("BeaEngineRevision") and 
-                pe.exports("BeaEngineVersion") and 
-                pe.exports("Disasm") and 
-                pe.exports("DllRegisterServer") and 
+                pe.exports("MainFun") and
+                pe.exports("NetApiBufferFree") and
+                pe.exports("BeaEngineRevision") and
+                pe.exports("BeaEngineVersion") and
+                pe.exports("Disasm") and
+                pe.exports("DllRegisterServer") and
                 pe.exports("DsGetDcName") and
                 2 of them
             )

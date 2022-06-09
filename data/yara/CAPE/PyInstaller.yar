@@ -7,7 +7,7 @@ meta:
 	author = "@bartblaze"
 	date = "2020-01"
 	tlp = "White"
-	
+
 strings:
 	$ = "pyi-windows-manifest-filename" ascii wide
 	$ = "pyi-runtime-tmpdir" ascii wide

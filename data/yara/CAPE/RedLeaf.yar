@@ -9,4 +9,3 @@ rule RedLeaf
     condition:
         $crypto
 }
-

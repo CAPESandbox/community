@@ -10,7 +10,7 @@ meta:
 strings:
 	$s1 = "KPortScan 3.0" ascii wide
 	$s2 = "KPortScan3.exe" ascii wide
-	
+
 	$x1 = "Count of goods:" ascii wide
 	$x2 = "Current range:" ascii wide
 	$x3 = "IP ranges list is clear" ascii wide
