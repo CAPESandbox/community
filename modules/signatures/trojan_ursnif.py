@@ -23,7 +23,7 @@ class UrsnifBehavior(Signature):
     description = "Ursnif Trojan behavior detected"
     severity = 3
     categories = ["Trojan"]
-    family = ["Ursnif"]
+    families = ["Ursnif"]
     authors = ["ditekshen"]
     minimum = "2.0"
     ttp = ["S0386"]
