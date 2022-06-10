@@ -24,7 +24,7 @@ class DotNetCLRUsageLogKnob(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    reference = ["https://bohops.com/2021/03/16/investigating-net-clr-usage-log-tampering-techniques-for-edr-evasion/"]
+    references = ["https://bohops.com/2021/03/16/investigating-net-clr-usage-log-tampering-techniques-for-edr-evasion/"]
 
     def run(self):
         indicators = [

@@ -29,7 +29,7 @@ class AntiEmuWinDefend(Signature):
     authors = ["bartblaze"]
     minimum = "0.5"
     ttp = ["T1497"]
-    reference = [
+    references = [
         "https://i.blackhat.com/us-18/Thu-August-9/us-18-Bulazel-Windows-Offender-Reverse-Engineering-Windows-Defenders-Antivirus-Emulator.pdf"
     ]
 

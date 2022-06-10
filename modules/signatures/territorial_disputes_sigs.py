@@ -24,7 +24,7 @@ class TerritorialDisputeSIGs(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    reference = ["https://www.crysys.hu/publications/files/tedi/ukatemicrysys_territorialdispute.pdf"]
+    references = ["https://www.crysys.hu/publications/files/tedi/ukatemicrysys_territorialdispute.pdf"]
 
     def run(self):
         registry_indicators = [
