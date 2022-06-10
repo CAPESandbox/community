@@ -24,7 +24,7 @@ class CAPEExtractedContent(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1185"]
+    ttp = ["T1185"]
 
     def run(self):
         browsertargets = [
