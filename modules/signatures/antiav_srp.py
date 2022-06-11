@@ -12,7 +12,7 @@ class AntiAVSRP(Signature):
     categories = ["anti-av"]
     authors = ["Optiv"]
     minimum = "1.2"
-    ttp = ["T1089", "F0004.005", "E1478"]
+    ttps = ["T1089", "F0004.005", "E1478"]
 
     def run(self):
         match_key = self.check_write_key(

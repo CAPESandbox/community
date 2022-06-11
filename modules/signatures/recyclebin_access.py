@@ -29,7 +29,7 @@ class Accesses_RecycleBin(Signature):
     categories = ["evasion", "execution", "collection"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    ttp = ["T1074"]
+    ttps = ["T1074"]
     evented = True
 
     filter_apinames = set(["NtCreateFile", "NtOpenFile", "NtReadFile"])

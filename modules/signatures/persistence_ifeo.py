@@ -23,7 +23,7 @@ class PersistenceIFEO(Signature):
     categories = ["persistence", "injection", "evasion", "escalation"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttp = ["T1183"]
+    ttps = ["T1183"]
     evented = True
 
     def run(self):
@@ -47,7 +47,7 @@ class PersistenceSilentProcessExit(Signature):
     categories = ["persistence", "injection", "evasion", "escalation"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttp = ["T1183"]
+    ttps = ["T1183"]
     evented = True
 
     def run(self):

@@ -23,7 +23,7 @@ class ExplorerHTTP(Signature):
     categories = ["masquerading", "evasion", "execution", "injection"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttp = ["T1055", "T1036"]
+    ttps = ["T1055", "T1036"]
     evented = True
 
     filter_apinames = set(["WinHttpConnect", "WinHttpOpenRequest"])

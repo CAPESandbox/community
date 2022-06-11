@@ -12,7 +12,7 @@ class DisablesSystemRestore(Signature):
     categories = ["ransomware"]
     authors = ["Kevin Ross"]
     minimum = "1.2"
-    ttp = ["T1112"]
+    ttps = ["T1112"]
 
     def run(self):
         keys = [

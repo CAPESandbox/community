@@ -23,7 +23,7 @@ class VMwareDetectKeys(Signature):
     categories = ["anti-vm"]
     authors = ["Optiv"]
     minimum = "1.2"
-    ttp = ["T1057", "T1012"]
+    ttps = ["T1057", "T1012"]
     mbc = ["B0009.005"]
 
     def run(self):

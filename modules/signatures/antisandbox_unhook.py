@@ -25,7 +25,7 @@ class Unhook(Signature):
     authors = ["nex", "Optiv"]
     minimum = "1.2"
     evented = True
-    ttp = ["T1089"]
+    ttps = ["T1089"]
 
     filter_categories = set(["__notification__"])
 

@@ -23,7 +23,7 @@ class PackerEntropy(Signature):
     categories = ["packer"]
     authors = ["Robby Zeitfuchs", "nex", "Optiv"]
     minimum = "1.3"
-    ttp = ["T1045", "F0001"]
+    ttps = ["T1045", "F0001"]
 
     references = [
         "http://www.forensickb.com/2013/03/file-entropy-explained.html",

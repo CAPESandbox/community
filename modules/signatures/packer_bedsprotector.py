@@ -23,7 +23,7 @@ class BedsProtectorPacked(Signature):
     categories = ["packer"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttp = ["T1045"]
+    ttps = ["T1045"]
 
     def run(self):
         if not "static" in self.results or not "dotnet" in self.results["static"]:

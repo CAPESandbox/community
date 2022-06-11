@@ -12,7 +12,7 @@ class AntiAVDetectReg(Signature):
     categories = ["anti-av"]
     authors = ["Optiv"]
     minimum = "1.2"
-    ttp = ["T1063", "T1012"]
+    ttps = ["T1063", "T1012"]
 
     def run(self):
         reg_indicators = [

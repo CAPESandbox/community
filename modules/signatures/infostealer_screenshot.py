@@ -23,7 +23,7 @@ class CapturesScreenshot(Signature):
     categories = ["infostealer", "RAT"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttp = ["T1113"]
+    ttps = ["T1113"]
     evented = True
 
     def __init__(self, *args, **kwargs):

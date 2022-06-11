@@ -26,7 +26,7 @@ class UACBypassEventvwr(Signature):
     minimum = "1.3"
     evented = True
     references = ["https://enigma0x3.net/2016/08/15/fileless-uac-bypass-using-eventvwr-exe-and-registry-hijacking/"]
-    ttp = ["T1088"]
+    ttps = ["T1088"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -68,7 +68,7 @@ class UACBypassDelegateExecuteSdclt(Signature):
     minimum = "1.3"
     evented = True
     references = ["http://blog.sevagas.com/?Yet-another-sdclt-UAC-bypass"]
-    ttp = ["T1088"]
+    ttps = ["T1088"]
 
     def run(self):
         regkey = False
@@ -104,7 +104,7 @@ class UACBypassCMSTP(Signature):
     minimum = "1.3"
     evented = True
     references = ["https://oddvar.moe/2017/08/15/research-on-cmstp-exe/"]
-    ttp = ["T1088"]
+    ttps = ["T1088"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -156,7 +156,7 @@ class UACBypassFodhelper(Signature):
     minimum = "1.2"
     reference = ["https://winscripting.blog/2017/05/12/first-entry-welcome-and-uac-bypass/"]
     evented = True
-    ttp = ["T1548"]
+    ttps = ["T1548"]
 
     def run(self):
         ret = False
@@ -178,7 +178,7 @@ class UACBypassCMSTPCOM(Signature):
     categories = ["uac_bypass"]
     authors = ["ditekshen"]
     minimum = "2.0"
-    ttp = ["T1218"]
+    ttps = ["T1218"]
 
     def run(self):
         # CMSTPLUA, CMLUAUTIL, Connection Manager LUA Host Object

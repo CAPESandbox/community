@@ -23,7 +23,7 @@ class DeletesSelf(Signature):
     categories = ["persistence"]
     authors = ["Optiv"]
     minimum = "1.2"
-    ttp = ["F0007"]
+    ttps = ["F0007"]
     evented = True
 
     def __init__(self, *args, **kwargs):

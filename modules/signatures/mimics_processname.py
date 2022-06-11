@@ -23,7 +23,7 @@ class MasqueradesProcessName(Signature):
     categories = ["masquerading", "evasion", "execution"]
     authors = ["ditekshen"]
     minimum = "0.5"
-    ttp = ["T1036"]
+    ttps = ["T1036"]
     evented = True
 
     def run(self):

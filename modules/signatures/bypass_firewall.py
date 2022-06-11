@@ -25,7 +25,7 @@ class BypassFirewall(Signature):
     categories = ["bypass"]
     authors = ["Anderson Tamborim", "nex"]
     minimum = "0.5"
-    ttp = ["T1031", "E1478", "F0004"]
+    ttps = ["T1031", "E1478", "F0004"]
 
     def run(self):
         return self.check_key(

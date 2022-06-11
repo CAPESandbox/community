@@ -25,7 +25,7 @@ class ScriptNetworkActvity(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.2"
     evented = True
-    ttp = ["T1064"]
+    ttps = ["T1064"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -94,7 +94,7 @@ class SuspiciousJSScript(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1064"]
+    ttps = ["T1064"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -145,7 +145,7 @@ class ScriptCreatedProcess(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1064"]
+    ttps = ["T1064"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

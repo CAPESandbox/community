@@ -23,7 +23,7 @@ class TorHiddenService(Signature):
     categories = ["network", "anonimity", "tor"]
     authors = ["nex"]
     minimum = "0.5"
-    ttp = ["T1188"]
+    ttps = ["T1188"]
 
     def run(self):
         indicators = [".*\\\\tor\\\\hidden_service\\\\private_key$", ".*\\\\tor\\\\hidden_service\\\\hostname$"]

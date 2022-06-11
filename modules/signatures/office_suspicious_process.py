@@ -24,7 +24,7 @@ class OfficeSuspiciousProcesses(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttp = ["1127", "T1500"]
+    ttps = ["1127", "T1500"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

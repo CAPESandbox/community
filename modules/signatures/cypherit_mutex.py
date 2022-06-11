@@ -24,7 +24,7 @@ class CypherITMutexes(Signature):
     families = ["AgentTesla", "HawkEye", "Nanocore", "Formbook", "Remcos", "Njrat", "Azorult", "Fareit", "Lokibot", "Predator"]
     authors = ["ditekshen"]
     minimum = "0.5"
-    ttp = ["T1045"]
+    ttps = ["T1045"]
 
     def run(self):
         indicators = [

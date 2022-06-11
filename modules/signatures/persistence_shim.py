@@ -29,7 +29,7 @@ class PersistenceShimDatabase(Signature):
         "https://www.fireeye.com/blog/threat-research/2017/05/fin7-shim-databases-persistence.html",
         "https://countercept.com/blog/hunting-for-application-shim-databases/",
     ]
-    ttp = ["T1138"]
+    ttps = ["T1138"]
 
     def run(self):
         ret = False

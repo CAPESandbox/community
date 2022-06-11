@@ -24,7 +24,7 @@ class FirefoxDisablesProcessPerTab(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1185"]
+    ttps = ["T1185"]
     references = [" https://www.kryptoslogic.com/blog/2022/01/deep-dive-into-trickbots-web-injection/"]
 
     def __init__(self, *args, **kwargs):
@@ -49,7 +49,7 @@ class IEDisablesProcessPerTab(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1185"]
+    ttps = ["T1185"]
     references = [" https://www.kryptoslogic.com/blog/2022/01/deep-dive-into-trickbots-web-injection/"]
 
     def run(self):

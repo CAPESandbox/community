@@ -30,7 +30,7 @@ class WiperZeroedBytes(Signature):
     minimum = "1.3"
     evented = True
     match = True
-    ttp = ["T1561"]
+    ttps = ["T1561"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

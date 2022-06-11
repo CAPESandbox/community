@@ -23,7 +23,7 @@ class EmumeratesRunningProcesses(Signature):
     categories = ["process_discovery"]
     authors = ["Kevin Ross"]
     minimum = "0.5"
-    ttp = ["T1057"]
+    ttps = ["T1057"]
     evented = True
 
     def __init__(self, *args, **kwargs):
@@ -52,7 +52,7 @@ class CreateToolhelp32SnapshotProcessModuleEnumeration(Signature):
     categories = ["process_discovery"]
     authors = ["Kevin Ross"]
     minimum = "0.5"
-    ttp = ["T1057"]
+    ttps = ["T1057"]
     evented = True
 
     def __init__(self, *args, **kwargs):
@@ -87,7 +87,7 @@ class CmdlineProcessDiscovery(Signature):
     categories = ["process_discovery"]
     authors = ["Kevin Ross"]
     minimum = "0.5"
-    ttp = ["T1057"]
+    ttps = ["T1057"]
     evented = True
 
     def run(self):

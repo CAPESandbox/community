@@ -28,7 +28,7 @@ class ADS(Signature):
     categories = ["persistence", "ads"]
     authors = ["nex", "Optiv"]
     minimum = "0.5"
-    ttp = ["T1096", "T1564.004"]
+    ttps = ["T1096", "T1564.004"]
 
     def run(self):
         result = False

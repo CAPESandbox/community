@@ -23,7 +23,7 @@ class NsPacked(Signature):
     categories = ["packer"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    ttp = ["T1045"]
+    ttps = ["T1045"]
 
     def run(self):
         for section in self.results.get("static", {}).get("pe", {}).get("sections", []):
