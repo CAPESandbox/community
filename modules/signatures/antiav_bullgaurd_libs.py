@@ -24,7 +24,7 @@ class BullguardDetectLibs(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1063"]
+    ttps = ["T1063"]
 
     filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])
 

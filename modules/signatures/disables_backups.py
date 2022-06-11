@@ -24,7 +24,7 @@ class DisablesBackups(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1490"]
+    ttps = ["T1490"]
 
     def run(self):
         indicators = [

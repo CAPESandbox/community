@@ -30,7 +30,7 @@ class BrowserStealer(Signature):
     authors = ["nex", "Optiv"]
     minimum = "1.2"
     evented = True
-    ttp = ["T1081", "T1003", "T1005", "T1555.003", "T1552.001"]
+    ttps = ["T1081", "T1003", "T1005", "T1555.003", "T1552.001"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

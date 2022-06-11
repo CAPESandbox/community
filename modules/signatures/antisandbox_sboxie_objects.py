@@ -24,7 +24,7 @@ class AntiSandboxSboxieObjects(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.0"
     evented = True
-    ttp = ["T1063"]
+    ttps = ["T1063"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

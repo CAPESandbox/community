@@ -26,7 +26,7 @@ class UrsnifBehavior(Signature):
     family = ["Ursnif"]
     authors = ["ditekshen"]
     minimum = "2.0"
-    ttp = ["S0386"]
+    ttps = ["S0386"]
     evented = True
 
     def run(self):

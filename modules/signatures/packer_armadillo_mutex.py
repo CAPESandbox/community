@@ -23,7 +23,7 @@ class ArmadilloMutex(Signature):
     categories = ["packer"]
     authors = ["KillerInstinct"]
     minimum = "0.5"
-    ttp = ["T1045"]
+    ttps = ["T1045"]
 
     def run(self):
         indicators = [".*:SIMULATEEXPIRED"]

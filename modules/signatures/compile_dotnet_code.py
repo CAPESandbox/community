@@ -29,7 +29,7 @@ class CompilesDotNetCode(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1500"]
+    ttps = ["T1500"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

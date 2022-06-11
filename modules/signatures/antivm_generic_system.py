@@ -23,7 +23,7 @@ class AntiVMSystem(Signature):
     categories = ["anti-vm"]
     authors = ["Optiv"]
     minimum = "1.2"
-    ttp = ["T1057", "T1012"]
+    ttps = ["T1057", "T1012"]
 
     def run(self):
         if self.check_read_key(

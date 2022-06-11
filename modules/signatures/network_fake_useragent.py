@@ -23,7 +23,7 @@ class NetworkFakeUserAgent(Signature):
     categories = ["network", "evasion"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttp = ["T1032"]
+    ttps = ["T1032"]
     evented = True
 
     def __init__(self, *args, **kwargs):

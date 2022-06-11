@@ -24,7 +24,7 @@ class OfficeMacroSuspicious(Signature):
     categories = ["office"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    ttp = ["T1064"]
+    ttps = ["T1064"]
 
     def run(self):
         ret = False
@@ -49,7 +49,7 @@ class OfficeMacroIOC(Signature):
     categories = ["office"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    ttp = ["T1064"]
+    ttps = ["T1064"]
 
     def run(self):
         ret = False
@@ -71,7 +71,7 @@ class OfficeMacroAutoExecution(Signature):
     categories = ["office"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    ttp = ["T1064"]
+    ttps = ["T1064"]
 
     def run(self):
         ret = False
@@ -93,7 +93,7 @@ class OfficeMacroMaliciousPredition(Signature):
     categories = ["office", "macro"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    ttp = ["T1064"]
+    ttps = ["T1064"]
 
     def run(self):
         ret = False

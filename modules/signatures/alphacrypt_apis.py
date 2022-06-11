@@ -31,7 +31,7 @@ class Alphacrypt_APIs(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True
-    ttp = ["T1486"]
+    ttps = ["T1486"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

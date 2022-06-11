@@ -23,7 +23,7 @@ class PackerUnknownPESectionName(Signature):
     categories = ["packer"]
     authors = ["Cuckoo Technologies", "Kevin Ross"]
     minimum = "1.3"
-    ttp = ["T1045"]
+    ttps = ["T1045"]
 
     def run(self):
         ret = False

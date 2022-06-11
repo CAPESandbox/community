@@ -12,7 +12,7 @@ class DisablesBrowserWarn(Signature):
     categories = ["generic", "banker", "clickfraud"]
     authors = ["Optiv", "Kevin Ross"]
     minimum = "1.2"
-    ttp = ["T1089"]
+    ttps = ["T1089"]
 
     def run(self):
         indicators = [

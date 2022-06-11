@@ -24,7 +24,7 @@ class DisablesEventLogging(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1562"]
+    ttps = ["T1562"]
 
     def run(self):
         indicators = [

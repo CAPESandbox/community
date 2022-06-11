@@ -29,7 +29,7 @@ class OfficeAddinLoading(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1137"]
+    ttps = ["T1137"]
 
     def run(self):
         indicators = [
@@ -55,7 +55,7 @@ class OfficePerfKey(Signature):
     categories = ["office", "persistence", "evasion", "execution"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    ttp = ["T1137"]
+    ttps = ["T1137"]
 
     def run(self):
         indicators = ["HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Office test\\\\Special\\\\Perf$"]
@@ -79,7 +79,7 @@ class OfficeVBLLoad(Signature):
     categories = ["office", "macros"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttp = ["T1137", "T1204"]
+    ttps = ["T1137", "T1204"]
     evented = True
 
     filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])
@@ -110,7 +110,7 @@ class OfficeWMILoad(Signature):
     categories = ["office", "macros"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttp = ["T1137", "T1204"]
+    ttps = ["T1137", "T1204"]
     evented = True
 
     filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])
@@ -136,7 +136,7 @@ class OfficeCOMLoad(Signature):
     categories = ["office", "macros"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttp = ["T1137", "T1204"]
+    ttps = ["T1137", "T1204"]
     evented = True
 
     filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])
@@ -165,7 +165,7 @@ class OfficeDotNetLoad(Signature):
     categories = ["office", "macros"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttp = ["T1137", "T1204"]
+    ttps = ["T1137", "T1204"]
     evented = True
 
     filter_apinames = set(["LdrLoadDll"])
@@ -199,7 +199,7 @@ class OfficeMSHTMLLoad(Signature):
     categories = ["office"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    ttp = ["T1204"]
+    ttps = ["T1204"]
     evented = True
 
     filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])

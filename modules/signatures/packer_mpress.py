@@ -23,7 +23,7 @@ class MPressPacked(Signature):
     categories = ["packer"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttp = ["T1045"]
+    ttps = ["T1045"]
 
     def run(self):
         for section in self.results.get("static", {}).get("pe", {}).get("sections", []):

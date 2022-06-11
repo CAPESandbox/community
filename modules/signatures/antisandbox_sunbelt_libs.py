@@ -24,7 +24,7 @@ class SunbeltDetectLibs(Signature):
     authors = ["Optiv"]
     minimum = "1.2"
     evented = True
-    ttp = ["T1083", "T1057"]
+    ttps = ["T1083", "T1057"]
     mbc = ["B0007"]
 
     filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])

@@ -24,7 +24,7 @@ class LsassCredentialDumping(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1003"]
+    ttps = ["T1003"]
     references = [
         "cyberwardog.blogspot.co.uk/2017/03/chronicles-of-threat-hunter-hunting-for_22.html",
         "cyberwardog.blogspot.co.uk/2017/04/chronicles-of-threat-hunter-hunting-for.html",
@@ -82,7 +82,7 @@ class RegistryCredentialDumping(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1003"]
+    ttps = ["T1003"]
 
     def run(self):
         ret = False
@@ -104,7 +104,7 @@ class RegistryCredentialStoreAccess(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1003"]
+    ttps = ["T1003"]
 
     def run(self):
         ret = False
@@ -130,7 +130,7 @@ class RegistryLSASecretsAccess(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1003"]
+    ttps = ["T1003"]
 
     def run(self):
         indicators = [
@@ -154,7 +154,7 @@ class FileCredentialStoreAccess(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1003"]
+    ttps = ["T1003"]
 
     def run(self):
         indicators = [
@@ -180,7 +180,7 @@ class FileCredentialStoreWrite(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1003"]
+    ttps = ["T1003"]
 
     def run(self):
         indicators = [

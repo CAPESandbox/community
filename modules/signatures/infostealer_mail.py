@@ -12,7 +12,7 @@ class EmailStealer(Signature):
     categories = ["infostealer"]
     authors = ["Optiv"]
     minimum = "1.2"
-    ttp = ["T1081", "T1003", "T1005"]
+    ttps = ["T1081", "T1003", "T1005"]
 
     def run(self):
         office_pkgs = ["ppt", "doc", "xls", "eml"]

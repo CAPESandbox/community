@@ -24,7 +24,7 @@ class SystemInfoDiscoveryCMD(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1082"]
+    ttps = ["T1082"]
     evented = True
 
     def on_complete(self):
@@ -51,7 +51,7 @@ class SystemUserDisoveryCMD(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1033"]
+    ttps = ["T1033"]
     evented = True
 
     def on_complete(self):
@@ -76,7 +76,7 @@ class SystemAccountDisoveryCMD(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1087"]
+    ttps = ["T1087"]
     evented = True
 
     def on_complete(self):
@@ -101,7 +101,7 @@ class SystemNetworkDiscoveryCMD(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1016", "S0103", "S0359"]
+    ttps = ["T1016", "S0103", "S0359"]
     evented = True
 
     def on_complete(self):
@@ -130,7 +130,7 @@ class SystemInfoDiscoveryPWSH(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1082"]
+    ttps = ["T1082"]
     evented = True
 
     def on_complete(self):
@@ -157,7 +157,7 @@ class SystemNetworkDiscoveryPWSH(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1016"]
+    ttps = ["T1016"]
     evented = True
 
     def on_complete(self):

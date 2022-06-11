@@ -14,7 +14,7 @@ class Authenticode(Signature):
     categories = ["static"]
     authors = ["Optiv"]
     minimum = "1.3"
-    ttp = ["T1116"]
+    ttps = ["T1116"]
 
     def run(self):
         found_sig = False
@@ -36,7 +36,7 @@ class InvalidAuthenticodeSignature(Signature):
     categories = ["static"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    ttp = ["T1116"]
+    ttps = ["T1116"]
 
     def run(self):
         ret = False

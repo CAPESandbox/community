@@ -23,7 +23,7 @@ class Multiple_UA(Signature):
     categories = ["network"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
-    ttp = ["T1071"]
+    ttps = ["T1071"]
 
     evented = True
 

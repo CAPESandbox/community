@@ -24,7 +24,7 @@ class AccessesSysvol(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1552"]
+    ttps = ["T1552"]
 
     def run(self):
         indicators = [".*\\\\Windows\\\\SYSVOL\\\\.*", "\\\\sysvol\\\\.*\\\\policies\\\\.*", "\\\\sysvol\\\\.*\\\\scripts\\\\.*"]
@@ -46,7 +46,7 @@ class WritesSysvol(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1552"]
+    ttps = ["T1552"]
 
     def run(self):
         indicators = [".*\\\\Windows\\\\SYSVOL\\\\.*", "\\\\sysvol\\\\.*\\\\policies\\\\.*", "\\\\sysvol\\\\.*\\\\scripts\\\\.*"]

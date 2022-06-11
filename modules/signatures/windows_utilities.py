@@ -13,7 +13,7 @@ class UsesWindowsUtilitiesScheduler(Signature):
     categories = ["commands", "lateral"]
     authors = ["Cuckoo Technologies", "Kevin Ross"]
     minimum = "1.3"
-    ttp = ["T1053"]
+    ttps = ["T1053"]
 
     evented = True
 
@@ -354,7 +354,7 @@ class SuspiciousCertutilUse(Signature):
     minimum = "1.3"
     evented = True
     references = ["https://www.sentinelone.com/blog/malware-living-off-land-with-certutil/"]
-    ttp = ["T1140", "T1130", "T1105"]
+    ttps = ["T1140", "T1130", "T1105"]
 
     def run(self):
 
@@ -378,7 +378,7 @@ class OverwritesAccessibilityUtility(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1015"]
+    ttps = ["T1015"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -421,7 +421,7 @@ class DotNETCSCBuild(Signature):
     references = [
         "https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/command-line-building-with-csc-exe"
     ]
-    ttp = ["T1500"]
+    ttps = ["T1500"]
 
     def run(self):
         ret = False
@@ -442,7 +442,7 @@ class UsesWindowsUtilitiesCipher(Signature):
     categories = ["commands", "impact"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    ttp = ["T1485"]
+    ttps = ["T1485"]
 
     evented = True
 
@@ -472,7 +472,7 @@ class UsesWindowsUtilitiesClickOnce(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     references = ["http://blog.redxorblue.com/2020/07/one-click-to-compromise-fun-with.html"]
-    ttp = ["T1218"]
+    ttps = ["T1218"]
 
     evented = True
 
@@ -533,7 +533,7 @@ class UsesWindowsUtilitiesNltest(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     references = ["https://ss64.com/nt/nltest.html"]
-    ttp = ["T1016", "T1482"]
+    ttps = ["T1016", "T1482"]
     evented = True
 
     def run(self):
@@ -562,7 +562,7 @@ class UsesWindowsUtilitiesNTDSutil(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     references = ["https://ss64.com/nt/ntdsutil.html"]
-    ttp = ["T1003"]
+    ttps = ["T1003"]
     evented = True
 
     def run(self):
@@ -591,7 +591,7 @@ class UsesWindowsUtilitiesCSVDELDFIDE(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     references = ["https://ss64.com/nt/csvde.html"]
-    ttp = ["T1087"]
+    ttps = ["T1087"]
     evented = True
 
     def run(self):
@@ -622,7 +622,7 @@ class UsesWindowsUtilitiesDSQuery(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     references = ["https://ss64.com/nt/dsquery.html"]
-    ttp = ["T1069", "T1482", "T1087"]
+    ttps = ["T1069", "T1482", "T1087"]
     evented = True
 
     def run(self):
@@ -651,7 +651,7 @@ class UsesWindowsUtilitiesAppCmd(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     references = ["https://docs.microsoft.com/en-us/iis/get-started/getting-started-with-iis/getting-started-with-appcmdexe"]
-    ttp = ["T1202"]
+    ttps = ["T1202"]
     evented = True
 
     def run(self):
@@ -680,7 +680,7 @@ class SuspiciousMpCmdRunUse(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1105"]
+    ttps = ["T1105"]
 
     def run(self):
         indicators = [
@@ -727,7 +727,7 @@ class UsesWindowsUtilitiesFinger(Signature):
     categories = ["evasion"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    ttp = ["T1202"]
+    ttps = ["T1202"]
     evented = True
 
     def run(self):

@@ -23,7 +23,7 @@ class EnablesWDigest(Signature):
     categories = ["persistence", "credential_access", "credential_dumping"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    ttp = ["T1112", "T1003"]
+    ttps = ["T1112", "T1003"]
 
     def run(self):
         ret = False

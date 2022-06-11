@@ -28,7 +28,7 @@ class CookiesStealer(Signature):
     categories = ["infostealer"]
     authors = ["bartblaze"]
     minimum = "0.5"
-    ttp = ["T1539"]
+    ttps = ["T1539"]
 
     def run(self):
         indicators = [

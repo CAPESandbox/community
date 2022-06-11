@@ -28,7 +28,7 @@ class UsesRemoteDesktopSession(Signature):
     categories = ["access"]
     authors = ["bartblaze"]
     minimum = "1.2"
-    ttp = ["T1021"]
+    ttps = ["T1021"]
     evented = True
 
     def run(self):
@@ -60,7 +60,7 @@ class UsesRDPClip(Signature):
     categories = ["access"]
     authors = ["bartblaze"]
     minimum = "1.2"
-    ttp = ["T1021"]
+    ttps = ["T1021"]
     evented = True
 
     def run(self):
@@ -85,7 +85,7 @@ class RDPTCPKey(Signature):
     categories = ["persistence", "evasion", "execution"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    ttp = ["T1137"]
+    ttps = ["T1137"]
 
     def run(self):
         indicators = [".*\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\Terminal Server\\\\WinStations\\\\RDP-Tcp"]

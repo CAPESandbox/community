@@ -25,7 +25,7 @@ class WMICreateProcess(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1047"]
+    ttps = ["T1047"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -62,7 +62,7 @@ class WMIScriptProcess(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1047"]
+    ttps = ["T1047"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -103,7 +103,7 @@ class ScrconsWMIScriptConsumer(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1047"]
+    ttps = ["T1047"]
 
     def run(self):
         ret = False

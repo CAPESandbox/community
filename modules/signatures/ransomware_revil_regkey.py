@@ -24,7 +24,7 @@ class RevilRegkey(Signature):
     authors = ["bartblaze"]
     minimum = "1.2"
     evented = True
-    ttp = ["T1486"]
+    ttps = ["T1486"]
 
     def run(self):
         ret = False

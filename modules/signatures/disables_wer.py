@@ -12,7 +12,7 @@ class DisablesWER(Signature):
     categories = ["stealth"]
     authors = ["Kevin Ross"]
     minimum = "1.2"
-    ttp = ["T1054", "T1112", "F0006", "F0004", "E1112"]
+    ttps = ["T1054", "T1112", "F0006", "F0004", "E1112"]
 
     def run(self):
         if self.check_write_key(

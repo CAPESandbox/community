@@ -32,7 +32,7 @@ class Autorun_scheduler(Signature):
     categories = ["persistence"]
     authors = ["Michael Boman", "nex", "securitykitten", "Optiv", "KillerInstinct"]
     minimum = "1.3"
-    ttp = ["T1053"]
+    ttps = ["T1053"]
 
     evented = True
 
@@ -113,7 +113,7 @@ class Autorun(Signature):
     categories = ["persistence"]
     authors = ["Michael Boman", "nex", "securitykitten", "Optiv", "KillerInstinct"]
     minimum = "1.3"
-    ttp = ["T1060"]
+    ttps = ["T1060"]
 
     evented = True
 
@@ -214,7 +214,7 @@ class PersistenceSafeBoot(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1060"]
+    ttps = ["T1060"]
 
     def run(self):
         indicators = [

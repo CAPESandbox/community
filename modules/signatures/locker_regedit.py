@@ -23,7 +23,7 @@ class DisableRegedit(Signature):
     categories = ["locker"]
     authors = ["Thomas Birn", "nex", "Optiv"]
     minimum = "1.2"
-    ttp = ["T1112"]
+    ttps = ["T1112"]
 
     def run(self):
         if self.check_write_key(
