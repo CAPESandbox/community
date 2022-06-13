@@ -78,7 +78,7 @@ class Autorun_scheduler(Signature):
                     if not in_whitelist:
                         data = self.registry_writes.get(match, "unknown")
                         if data.lower() != "c:\\program files\\java\\jre7\\bin\jp2iexp.dll":
-                            self.data.append({"key": match})
+                            self.data.append({"regkey": match})
                             self.data.append({"data": data})
                             self.found_autorun = True
 
@@ -180,7 +180,7 @@ class Autorun(Signature):
                     if not in_whitelist:
                         data = self.registry_writes.get(match, "unknown")
                         if data.lower() != "c:\\program files\\java\\jre7\\bin\\jp2iexp.dll":
-                            self.data.append({"key": match})
+                            self.data.append({"regkey": match})
                             self.data.append({"data": data})
                             self.found_autorun = True
 

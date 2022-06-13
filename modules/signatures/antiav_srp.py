@@ -20,6 +20,6 @@ class AntiAVSRP(Signature):
         )
         if match_key:
             for match in match_key:
-                self.data.append({"key": match})
+                self.data.append({"regkey": match})
             return True
         return False

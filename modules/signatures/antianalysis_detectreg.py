@@ -33,6 +33,6 @@ class AntiAnalysisDetectReg(Signature):
             reg_match = self.check_key(pattern=indicator, regex=True, all=True)
             if reg_match:
                 for match in reg_match:
-                    self.data.append({"key": match})
+                    self.data.append({"regkey": match})
                 found = True
         return found

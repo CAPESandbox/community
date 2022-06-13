@@ -237,7 +237,8 @@ class VolHandles1(Signature):
                         threads.add("%d -> %d/%d" % (h["process_id"], p1, t1))
 
         if len(threads) > 5:
-            self.data.append({"injections": list(threads)})
+            for thread in threads:
+                self.data.append({"injection": thread})
             return True
 
         return False

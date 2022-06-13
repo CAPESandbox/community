@@ -54,6 +54,6 @@ class InfostealerBrowserPassword(Signature):
             if len(self.pidTrack[pid]) == 4:
                 if pid in self.readsSqlite:
                     ret = True
-                    self.data.append({"Process": "{0} ({1})".format(self.get_name_from_pid(str(pid)), pid)})
+                    self.data.append({"process": "{0} ({1})".format(self.get_name_from_pid(str(pid)), pid)})
 
         return ret

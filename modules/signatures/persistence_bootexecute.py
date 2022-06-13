@@ -48,7 +48,7 @@ class PersistenceBootexecute(Signature):
             self.found_bootexecute = True
             for match in match_key:
                 data = self.registry_writes.get(match, "unknown")
-                self.data.append({"key": match})
+                self.data.append({"regkey": match})
                 self.data.append({"data": data})
 
         return self.found_bootexecute

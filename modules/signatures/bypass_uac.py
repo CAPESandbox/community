@@ -51,7 +51,7 @@ class UACBypassEventvwr(Signature):
             if pname.lower() == "eventvwr.exe" and self.eventvrw:
                 cmdline = self.get_argument(call, "CommandLine")
                 if ("mmc " in cmdline.lower() or "mmc.exe" in cmdline.lower()) and "eventvwr.msc" in cmdline.lower():
-                    self.data.append({"cmdline": cmdline})
+                    self.data.append({"command": cmdline})
                     self.ret = True
 
     def on_complete(self):
@@ -88,7 +88,7 @@ class UACBypassDelegateExecuteSdclt(Signature):
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if regkey and "sdclt" in lower:
-                self.data.append({"cmdline": cmdline})
+                self.data.append({"command": cmdline})
                 ret = True
 
         return ret
@@ -141,7 +141,7 @@ class UACBypassCMSTP(Signature):
             if self.inf and "cmstp" in lower and ".inf" in lower:
                 for dropped in self.droppedinf:
                     if dropped.lower() in lower:
-                        self.data.append({"cmdline": cmdline})
+                        self.data.append({"command": cmdline})
                         self.ret = True
 
         return self.ret

@@ -37,7 +37,7 @@ class injection_themeinitapihook(Signature):
         if call["api"] == "ThemeInitApiHook":
             self.loadctr += 1
             self.data.append(
-                {"Injection": "%s/%s" % (self.get_argument(call, "ModuleName"), self.get_argument(call, "FunctionName"))}
+                {"injection": "%s/%s" % (self.get_argument(call, "ModuleName"), self.get_argument(call, "FunctionName"))}
             )
 
     def on_complete(self):

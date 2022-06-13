@@ -36,7 +36,7 @@ class AntiSandboxSuspend(Signature):
         alert = self.get_argument(call, "Alert")
         if alert:
             proc = "{0} ({1})".format(process["process_name"], str(process["process_id"]))
-            buf = {"Process": proc}
+            buf = {"process": proc}
             if buf not in self.data:
                 self.data.append(buf)
 

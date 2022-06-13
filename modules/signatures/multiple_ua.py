@@ -56,7 +56,7 @@ class Multiple_UA(Signature):
             return False
 
         for item in self.procs:
-            self.data.append({"Process": item[0]})
-            self.data.append({"User-Agent": item[1]})
+            self.data.append({"process": item[0]})
+            self.data.append({"user-agent": item[1]})
 
         return True

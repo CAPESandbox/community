@@ -56,10 +56,10 @@ class PersistsDotNetDevUtility(Signature):
         if call["api"] == "RegSetValueExA" or call["api"] == "RegSetValueExW":
             buff = self.get_argument(call, "Buffer")
             if buff and buff.lower() and self.dname.lower() and self.dname.lower() in buff.lower():
-                self.data.append({"Copy": self.sname.lower() + " > " + self.dname.lower()})
+                self.data.append({"copy": self.sname.lower() + " > " + self.dname.lower()})
                 fname = self.get_argument(call, "FullName")
                 if fname:
-                    self.data.append({"Regkey": fname})
+                    self.data.append({"regkey": fname})
 
     def on_complete(self):
         if len(self.data) > 0:
@@ -119,18 +119,18 @@ class SpwansDotNetDevUtiliy(Signature):
                             if appname:
                                 if re.search(tool, appname):
                                     procname = process["process_name"]
-                                    self.data.append({"Process": procname + " > " + appname})
+                                    self.data.append({"process": procname + " > " + appname})
                         elif self.dname and self.dname.lower() in cmdline:
                             self.executecopy = True
                             procname = process["process_name"]
-                            self.data.append({"Copy": self.sname.lower() + " > " + self.dname.lower()})
-                            self.data.append({"Process": procname + " > " + self.dname.lower()})
+                            self.data.append({"copy": self.sname.lower() + " > " + self.dname.lower()})
+                            self.data.append({"process": procname + " > " + self.dname.lower()})
                         elif re.search(tool, cmdline):
                             procname = process["process_name"]
                             spawnapp = self.get_argument(call, "ApplicationName")
                             if not spawnapp:
                                 spawnapp = cmdline
-                            self.data.append({"Process": procname + " > " + spawnapp})
+                            self.data.append({"process": procname + " > " + spawnapp})
             # Handle cases were CommandLine is null
             elif appname:
                 flags = int(self.get_argument(call, "CreationFlags"), 16)
@@ -139,7 +139,7 @@ class SpwansDotNetDevUtiliy(Signature):
                     for tool in self.devtools:
                         if re.search(tool, appname):
                             procname = process["process_name"]
-                            self.data.append({"Process": procname + " > " + appname})
+                            self.data.append({"process": procname + " > " + appname})
 
     def on_complete(self):
         if len(self.data) > 0:

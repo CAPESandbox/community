@@ -50,6 +50,6 @@ class BrowserAddon(Signature):
                             addit = False
                             break
                     if addit:
-                        self.data.append({"key": match})
+                        self.data.append({"regkey": match})
                         found = True
         return found

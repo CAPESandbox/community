@@ -59,6 +59,6 @@ class PersistenceShimDatabase(Signature):
             lower = cmdline.lower()
             if "sdbinst" in lower:
                 ret = True
-                self.data.append({"cmdline": cmdline})
+                self.data.append({"command": cmdline})
 
         return ret

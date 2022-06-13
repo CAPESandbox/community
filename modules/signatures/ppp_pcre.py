@@ -72,7 +72,7 @@ class PunchPlusPlusPCREs(Signature):
                     for regex in pcres:
                         if pcre.match(regex[0], req["uri"]):
                             ret = True
-                            add = {"URL": req["uri"]}
+                            add = {"url": req["uri"]}
                             if add not in self.data:
                                 self.data.append(add)
                             self.data.append({"Desc": regex[1]})

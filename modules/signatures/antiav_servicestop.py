@@ -47,5 +47,5 @@ class AntiAVServiceStop(Signature):
         if self.stoppedservices:
             ret = True
             for service in self.stoppedservices:
-                self.data.append({"servicename": service})
+                self.data.append({"service": service})
         return ret

@@ -67,7 +67,7 @@ class NetworkQuestionableHttpPath(Signature):
     def run(self):
         for host in self.results.get("network", {}).get("http", []) or []:
             if self.find_dir_n_type(host["path"].lower()):
-                self.data.append({"uri": host["uri"]})
+                self.data.append({"url": host["uri"]})
         if self.data:
             return True
         else:
@@ -89,7 +89,7 @@ class NetworkQuestionableHttpsPath(Signature):
     def run(self):
         for host in self.results.get("network", {}).get("https", []) or []:
             if self.find_dir_n_type(host["path"].lower()):
-                self.data.append({"uri": host["uri"]})
+                self.data.append({"url": host["uri"]})
         if self.data:
             return True
         else:

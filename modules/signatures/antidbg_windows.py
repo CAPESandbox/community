@@ -128,6 +128,6 @@ class AntiDBGWindows(Signature):
         if self.ret:
             for proc in self.ret.keys():
                 for value in self.ret[proc]:
-                    self.data.append({"Window": value})
+                    self.data.append({"window": value})
             return True
         return False

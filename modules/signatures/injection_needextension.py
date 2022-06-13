@@ -31,5 +31,5 @@ class InjectionExtension(Signature):
                     desc = "{0}({1}) -> {2}({3})".format(
                         process["process_name"], process["process_id"], self.get_name_from_pid(createdpid), createdpid
                     )
-                    self.data.append({"Injection": desc})
+                    self.data.append({"injection": desc})
                     return True
