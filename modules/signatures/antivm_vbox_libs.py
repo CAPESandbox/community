@@ -25,7 +25,7 @@ class VBoxDetectLibs(Signature):
     minimum = "1.3"
     evented = True
     ttps = ["T1057"]
-    mbc = ["B0009"]
+    mbcs = ["B0009"]
 
     filter_apinames = set(["LdrLoadDll"])
 

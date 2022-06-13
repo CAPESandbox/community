@@ -23,7 +23,7 @@ class VMwareDetectEvent(Signature):
     categories = ["anti-vm"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
-    mbc = ["B0009"]
+    mbcs = ["B0009"]
     evented = True
 
     def __init__(self, *args, **kwargs):

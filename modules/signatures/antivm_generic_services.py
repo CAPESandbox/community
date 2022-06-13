@@ -25,14 +25,15 @@ class AntiVMServices(Signature):
     minimum = "1.0"
     evented = True
     ttps = ["T1007"]
-    mbc = ["B0009.006"]
+    mbcs = ["B0009.006"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.lastprocess = None
 
     # filter_apinames = set(["EnumServicesStatus", "EnumServicesStatusEx", "RegOpenKeyExA", "RegEnumKeyExA", "RegOpenKeyExW", "RegEnumKeyExW"])
-    filter_apinames = set(["RegOpenKeyExA", "RegEnumKeyExA", "RegOpenKeyExW", "RegEnumKeyExW"])
+    filter_apinames = set(
+        ["RegOpenKeyExA", "RegEnumKeyExA", "RegOpenKeyExW", "RegEnumKeyExW"])
 
     def on_call(self, call, process):
         # this API is not currently hooked

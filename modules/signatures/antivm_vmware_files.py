@@ -24,7 +24,7 @@ class VMwareDetectFiles(Signature):
     authors = ["Optiv"]
     minimum = "1.2"
     ttps = ["T1083", "T1057"]
-    mbc = ["B0009"]
+    mbcs = ["B0009"]
 
     def run(self):
         indicators = [

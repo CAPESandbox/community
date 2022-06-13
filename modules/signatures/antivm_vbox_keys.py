@@ -24,7 +24,7 @@ class VBoxDetectKeys(Signature):
     authors = ["nex", "Brad Spengler"]
     minimum = "0.5"
     ttps = ["T1057", "T1012"]
-    mbc = ["B0009"]
+    mbcs = ["B0009"]
 
     def run(self):
         indicators = [

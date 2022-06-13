@@ -24,7 +24,7 @@ class SunbeltDetectFiles(Signature):
     authors = ["Kevin Ross"]
     minimum = "0.5"
     ttps = ["T1083", "T1057"]
-    mbc = ["B0007"]
+    mbcs = ["B0007"]
 
     def run(self):
         indicators = [

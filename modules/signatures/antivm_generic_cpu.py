@@ -24,7 +24,7 @@ class AntiVMCPU(Signature):
     authors = ["Optiv"]
     minimum = "1.2"
     ttps = ["T1057", "T1012"]
-    mbc = ["B0009.026", "B0009.005"]
+    mbcs = ["B0009.026", "B0009.005"]
 
     def run(self):
         if self.check_read_key(

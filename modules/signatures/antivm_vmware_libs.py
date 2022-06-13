@@ -23,7 +23,7 @@ class VMwareDetectLibs(Signature):
     categories = ["anti-vm"]
     authors = ["Optiv"]
     minimum = "1.3"
-    mbc = ["B0009"]
+    mbcs = ["B0009"]
     evented = True
 
     filter_apinames = set(["LdrLoadDll"])

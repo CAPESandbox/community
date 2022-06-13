@@ -23,7 +23,7 @@ class VBoxDetectWindow(Signature):
     categories = ["anti-vm"]
     authors = ["nex"]
     minimum = "1.3"
-    mbc = ["B0009.009"]
+    mbcs = ["B0009.009"]
     evented = True
 
     filter_categories = set(["windows"])
