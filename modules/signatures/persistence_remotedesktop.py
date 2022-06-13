@@ -51,7 +51,7 @@ class PersistenceRDPShadowing(Signature):
     authors = ["bartblaze"]
     minimum = "1.2"
     evented = True
-    ttp = ["T1021"]
+    ttps = ["T1021"]
     references = ["https://bitsadm.in/blog/spying-on-users-using-rdp-shadowing"]
 
     def run(self):
