@@ -32,8 +32,7 @@ class StealthFile(Signature):
         if any(e in self.results["info"]["package"] for e in office_pkgs):
             self.is_office = True
 
-    filter_apinames = set(["NtCreateFile", "NtDuplicateObject",
-                          "NtOpenFile", "NtClose", "NtSetInformationFile"])
+    filter_apinames = set(["NtCreateFile", "NtDuplicateObject", "NtOpenFile", "NtClose", "NtSetInformationFile"])
     filter_analysistypes = set(["file"])
 
     def on_call(self, call, process):
@@ -74,8 +73,7 @@ class StealthFile(Signature):
             if settype == BasicFileInformation:
                 attrib = 0
                 try:
-                    crt, lat, lwt, cht, attrib = struct.unpack_from(
-                        "QQQQI", self.get_raw_argument(call, "FileInformation"))
+                    crt, lat, lwt, cht, attrib = struct.unpack_from("QQQQI", self.get_raw_argument(call, "FileInformation"))
                 except:
                     pass
                 if attrib & 4 or attrib & 2:
@@ -150,8 +148,7 @@ class StealthFile(Signature):
                     addit = False
 
             if self.is_office and target_name and not hfile.endswith("\\"):
-                fname = hfile.split(
-                    "\\")[-1][2:].replace("(", "_").replace(")", "_")
+                fname = hfile.split("\\")[-1][2:].replace("(", "_").replace(")", "_")
                 if fname == target_name or fname in target_name:
                     addit = False
 

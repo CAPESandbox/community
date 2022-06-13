@@ -76,8 +76,7 @@ class MimicsFiletime(Signature):
         self.saw_mimic = False
         self.mimics = set()
 
-    filter_apinames = set(["NtOpenFile", "NtCreateFile", "NtClose",
-                          "NtQueryInformationFile", "NtSetInformationFile"])
+    filter_apinames = set(["NtOpenFile", "NtCreateFile", "NtClose", "NtQueryInformationFile", "NtSetInformationFile"])
 
     def on_call(self, call, process):
         BasicFileInformation = 4
@@ -101,13 +100,11 @@ class MimicsFiletime(Signature):
                 pass
         elif call["api"] == "NtQueryInformationFile":
             handle = int(self.get_argument(call, "FileHandle"), 16)
-            querytype = int(self.get_argument(
-                call, "FileInformationClass"), 10)
+            querytype = int(self.get_argument(call, "FileInformationClass"), 10)
             if querytype == BasicFileInformation:
                 try:
                     obj = self.handles[handle]
-                    obj.set_file_times(
-                        self.get_raw_argument(call, "FileInformation"))
+                    obj.set_file_times(self.get_raw_argument(call, "FileInformation"))
                 except:
                     pass
         elif call["api"] == "NtSetInformationFile":
@@ -117,8 +114,7 @@ class MimicsFiletime(Signature):
                 return None
             try:
                 obj = self.handles[handle]
-                obj.set_file_times(
-                    self.get_raw_argument(call, "FileInformation"))
+                obj.set_file_times(self.get_raw_argument(call, "FileInformation"))
             except:
                 return None
             for val in self.handles.itervalues():
@@ -141,7 +137,6 @@ class MimicsFiletime(Signature):
     def on_complete(self):
         if self.saw_mimic:
             for mimic in self.mimics:
-                self.data.append(
-                    {"mimic_source": mimic[0], "mimic_dest": mimic[1]})
+                self.data.append({"mimic_source": mimic[0], "mimic_dest": mimic[1]})
             return True
         return False

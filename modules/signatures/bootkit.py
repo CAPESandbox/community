@@ -91,8 +91,7 @@ class DirectHDDAccess(Signature):
 
     def run(self):
         ret = False
-        match = self.check_write_file(
-            pattern="^\\\\Device\\\\HarddiskVolume.*", regex=True)
+        match = self.check_write_file(pattern="^\\\\Device\\\\HarddiskVolume.*", regex=True)
         if match:
             self.data.append({"file": match})
             ret = True
@@ -112,8 +111,7 @@ class AccessesPrimaryPartition(Signature):
 
     def run(self):
         ret = False
-        match = self.check_write_file(
-            pattern="^\\\\Device\\\\HarddiskVolume0\\\\DR0$", regex=True)
+        match = self.check_write_file(pattern="^\\\\Device\\\\HarddiskVolume0\\\\DR0$", regex=True)
         if match:
             self.data.append({"file": match})
             ret = True
@@ -133,8 +131,7 @@ class PhysicalDriveAccess(Signature):
 
     def run(self):
         ret = False
-        match = self.check_write_file(
-            pattern="^\\\\\?\?\\\\PhysicalDrive.*", regex=True)
+        match = self.check_write_file(pattern="^\\\\\?\?\\\\PhysicalDrive.*", regex=True)
         if match:
             self.data.append({"physical drive access": match})
             ret = True
@@ -199,8 +196,7 @@ class PotentialOverWriteMBR(Signature):
             filepath = self.get_raw_argument(call, "HandleName")
             writelength = self.get_raw_argument(call, "Length")
             if (
-                filepath.lower() == "\\??\\physicaldrive0" or filepath.lower(
-                ).startswith("\\device\\harddisk")
+                filepath.lower() == "\\??\\physicaldrive0" or filepath.lower().startswith("\\device\\harddisk")
             ) and writelength == 512:
                 self.data.append({"modified_drive": "%s" % (filepath)})
                 self.ret = True
