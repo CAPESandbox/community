@@ -22,8 +22,6 @@ class StealthFile(Signature):
     minimum = "1.2"
     evented = True
 
-    BasicFileInformation = 4
-
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.handles = dict()
@@ -34,10 +32,13 @@ class StealthFile(Signature):
         if any(e in self.results["info"]["package"] for e in office_pkgs):
             self.is_office = True
 
-    filter_apinames = set(["NtCreateFile", "NtDuplicateObject", "NtOpenFile", "NtClose", "NtSetInformationFile"])
+    filter_apinames = set(["NtCreateFile", "NtDuplicateObject",
+                          "NtOpenFile", "NtClose", "NtSetInformationFile"])
     filter_analysistypes = set(["file"])
 
     def on_call(self, call, process):
+        BasicFileInformation = 4
+
         if process is not self.lastprocess:
             self.handles = dict()
             self.lastprocess = process
@@ -70,10 +71,11 @@ class StealthFile(Signature):
         elif call["api"] == "NtSetInformationFile":
             handle = int(self.get_argument(call, "FileHandle"), 16)
             settype = int(self.get_argument(call, "FileInformationClass"), 10)
-            if settype == self.BasicFileInformation:
+            if settype == BasicFileInformation:
                 attrib = 0
                 try:
-                    crt, lat, lwt, cht, attrib = struct.unpack_from("QQQQI", self.get_raw_argument(call, "FileInformation"))
+                    crt, lat, lwt, cht, attrib = struct.unpack_from(
+                        "QQQQI", self.get_raw_argument(call, "FileInformation"))
                 except:
                     pass
                 if attrib & 4 or attrib & 2:
@@ -148,7 +150,8 @@ class StealthFile(Signature):
                     addit = False
 
             if self.is_office and target_name and not hfile.endswith("\\"):
-                fname = hfile.split("\\")[-1][2:].replace("(", "_").replace(")", "_")
+                fname = hfile.split(
+                    "\\")[-1][2:].replace("(", "_").replace(")", "_")
                 if fname == target_name or fname in target_name:
                     addit = False
 
