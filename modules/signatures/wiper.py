@@ -29,7 +29,6 @@ class WiperZeroedBytes(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    match = True
     ttps = ["T1561"]
 
     def __init__(self, *args, **kwargs):

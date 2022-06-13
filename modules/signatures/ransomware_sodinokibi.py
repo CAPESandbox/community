@@ -19,11 +19,10 @@ class sodinokibi(Signature):
     minimum = "1.2"
     evented = True
     ttps = ["T1486"]
-    samples = {
-        "Sodinokibi": {
-            "1": "03eb9b0e4e842cbe3726872ed46e241f5b79e18a09e1655341a403ac3e5136a6",  # variant1
-        }
-    }
+
+    # Sample List
+    # Sodinokibi:
+    # 1. 03eb9b0e4e842cbe3726872ed46e241f5b79e18a09e1655341a403ac3e5136a6 (variant1)
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

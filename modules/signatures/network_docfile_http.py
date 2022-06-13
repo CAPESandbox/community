@@ -25,7 +25,6 @@ class NetworkDocumentHTTP(Signature):
     authors = ["Kevin Ross", "Will Metcalf"]
     minimum = "1.2"
     evented = True
-    match = True
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

@@ -87,11 +87,10 @@ class raccoon(Signature):
     authors = ["@NaxoneZ"]
     minimum = "1.2"
     evented = True
-    samples = {
-        "Raccoon": {
-            "1": "726aa7c9d286afab16c956639ffe01a47ce556bc893f46d487b3148608a019d7",  # variant1
-        }
-    }
+
+    # Sample List
+    # Raccoon:
+    # 1. 726aa7c9d286afab16c956639ffe01a47ce556bc893f46d487b3148608a019d7 (variant1)
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

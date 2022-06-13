@@ -29,7 +29,6 @@ class RansomwareMessage(Signature):
     authors = ["Kevin Ross", "bartblaze"]
     minimum = "1.3"
     evented = True
-    match = True
     ttps = ["T1486"]
 
     def __init__(self, *args, **kwargs):

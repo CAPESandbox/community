@@ -78,7 +78,6 @@ class ReadsSelf(Signature):
 
     filter_analysistypes = set(["file"])
 
-    FilePositionInformation = 14
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -93,6 +92,8 @@ class ReadsSelf(Signature):
     filter_apinames = set(["NtOpenFile", "NtCreateFile", "NtClose", "NtReadFile", "NtSetInformationFile"])
 
     def on_call(self, call, process):
+        FilePositionInformation = 14
+
         if self.is_office:
             return False
 
@@ -120,7 +121,7 @@ class ReadsSelf(Signature):
         elif call["api"] == "NtSetInformationFile" and call["status"]:
             handle = int(self.get_argument(call, "FileHandle"), 16)
             settype = int(self.get_argument(call, "FileInformationClass"), 10)
-            if settype == self.FilePositionInformation:
+            if settype == FilePositionInformation:
                 if handle in self.lastres.handles:
                     obj = self.lastres.handles[handle]
                     obj.set_file_pos(self.get_argument(call, "FileInformation"))

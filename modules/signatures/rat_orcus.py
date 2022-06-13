@@ -11,11 +11,10 @@ class OrcusRAT(Signature):
     authors = ["@NaxoneZ"]
     minimum = "1.2"
     evented = True
-    samples = {
-        "OrcusRAT": {
-            "1": "2373c4b52ac6133345f309ac75b67bbb",  # variant1
-        }
-    }
+
+    # Sample List
+    # OrcusRAT:
+    #  1. 2373c4b52ac6133345f309ac75b67bbb (variant1)
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
