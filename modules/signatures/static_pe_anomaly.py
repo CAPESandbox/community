@@ -223,7 +223,7 @@ class PECompileTimeStomping(Signature):
     categories = ["generic"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttp = ["T1099"]
+    ttps = ["T1099"]
 
     def run(self):
         rawcompiletime = self.results.get("static", {}).get("pe", {}).get("timestamp", "")

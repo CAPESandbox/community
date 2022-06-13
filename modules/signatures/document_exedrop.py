@@ -23,7 +23,7 @@ class DocScriptEXEDrop(Signature):
     categories = ["dropper", "downloader"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    ttp = ["T1059"]
+    ttps = ["T1059"]
     evented = True
 
     def __init__(self, *args, **kwargs):

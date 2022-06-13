@@ -23,7 +23,7 @@ class AspireCryptPacked(Signature):
     categories = ["packer"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttp = ["T1045"]
+    ttps = ["T1045"]
 
     def run(self):
         for attr in self.results.get("static", {}).get("dotnet", {}).get("customattrs", []):

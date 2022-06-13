@@ -23,7 +23,7 @@ class AntiDBGDevices(Signature):
     categories = ["anti-debug"]
     authors = ["nex"]
     minimum = "0.5"
-    ttp = ["T1083", "T1057"]
+    ttps = ["T1083", "T1057"]
 
     def run(self):
         indicators = [

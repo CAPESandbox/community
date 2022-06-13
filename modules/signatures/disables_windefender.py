@@ -14,7 +14,7 @@ class DisablesWindowsDefender(Signature):
     categories = ["antiav"]
     authors = ["Brad Spengler", "Kevin Ross", "ditekshen"]
     minimum = "1.2"
-    ttp = ["T1089"]
+    ttps = ["T1089"]
 
     def run(self):
         ret = False
@@ -81,7 +81,7 @@ class WindowsDefenderPowerShell(Signature):
     categories = ["antiav"]
     authors = ["Kevin Ross"]
     minimum = "1.2"
-    ttp = ["T1089"]
+    ttps = ["T1089"]
 
     def run(self):
         ret = False
@@ -105,7 +105,7 @@ class RemovesWindowsDefenderContextMenu(Signature):
     categories = ["antiav"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttp = ["T1089"]
+    ttps = ["T1089"]
 
     def run(self):
         indicators = [
@@ -137,7 +137,7 @@ class DisablesWindowsDefenderLogging(Signature):
     categories = ["antiav"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttp = ["T1089"]
+    ttps = ["T1089"]
 
     def run(self):
         indicators = [

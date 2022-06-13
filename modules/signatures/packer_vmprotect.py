@@ -23,7 +23,7 @@ class VMPPacked(Signature):
     categories = ["packer"]
     authors = ["Jeremy Hedges"]
     minimum = "1.3"
-    ttp = ["T1045"]
+    ttps = ["T1045"]
 
     def run(self):
         if "static" in self.results and "pe" in self.results["static"]:

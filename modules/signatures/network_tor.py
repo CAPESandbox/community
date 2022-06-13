@@ -24,7 +24,7 @@ class Tor(Signature):
     authors = ["nex"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1188"]
+    ttps = ["T1188"]
 
     filter_apinames = set(["CreateServiceA", "CreateServiceW"])
 

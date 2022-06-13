@@ -24,7 +24,7 @@ class RansomwareRadamant(Signature):
     categories = ["ransomware"]
     authors = ["Kevin Ross"]
     minimum = "1.2"
-    ttp = ["T1486"]
+    ttps = ["T1486"]
 
     def run(self):
         mutexes = [

@@ -24,12 +24,12 @@ class OfficeSuspiciousProcesses(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttp = ["1127", "T1500"]
+    ttps = ["1127", "T1500"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.officeprocs = ["winword", "excel.exe", "powerpnt.exe"]
-        self.suspiciousprocs = ["msbuild.exe", "cmd.exe", "wscript.exe", "cscript.exe", "powershell.exe", "csc.exe"]
+        self.suspiciousprocs = ["msbuild.exe", "cmd.exe", "wscript.exe", "cscript.exe", "powershell.exe", "csc.exe", "msdt.exe"]
         self.mastertrigger = False
         self.secondarytrigger = False
 

@@ -17,7 +17,7 @@ class AntiAVDetectFile(Signature):
     categories = ["anti-av"]
     authors = ["Optiv"]
     minimum = "1.2"
-    ttp = ["T1063"]
+    ttps = ["T1063"]
 
     def run(self):
         file_indicators = [

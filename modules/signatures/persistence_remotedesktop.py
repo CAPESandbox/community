@@ -24,7 +24,7 @@ class PersistenceRDPRegistry(Signature):
     authors = ["bartblaze"]
     minimum = "1.2"
     evented = True
-    ttp = ["T1021"]
+    ttps = ["T1021"]
 
     def run(self):
         ret = False

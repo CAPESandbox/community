@@ -23,7 +23,7 @@ class TampersPowerShellLogging(Signature):
     categories = ["evasion", "tampering"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttp = ["T1054", "T1562"]
+    ttps = ["T1054", "T1562"]
 
     def run(self):
         indicators = [

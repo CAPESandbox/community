@@ -23,7 +23,7 @@ class WebShellProcesses(Signature):
     categories = ["commands", "evasion"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    ttp = ["T1505"]
+    ttps = ["T1505"]
 
     evented = True
 
@@ -56,7 +56,7 @@ class WebShellFiles(Signature):
     categories = ["Webshell"]
     authors = ["bartblaze"]
     minimum = "0.5"
-    ttp = ["T1505"]
+    ttps = ["T1505"]
 
     def run(self):
         indicators = [".*\\\\inetpub\\\\wwwroot\\\\.*", ".*\\\\System32\\\\inetsrv\\\\.*"]
@@ -77,7 +77,7 @@ class OWAWebShellFiles(Signature):
     categories = ["Webshell"]
     authors = ["bartblaze"]
     minimum = "0.5"
-    ttp = ["T1505"]
+    ttps = ["T1505"]
 
     def run(self):
         indicators = [

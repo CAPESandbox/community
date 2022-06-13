@@ -23,7 +23,7 @@ class DisablesSmartScreen(Signature):
     categories = ["generic"]
     authors = ["ditekshen"]
     minimum = "0.5"
-    ttp = ["T1089"]
+    ttps = ["T1089"]
 
     def run(self):
         re_match = False

@@ -14,7 +14,7 @@ class Bootkit(Signature):
     categories = ["rootkit"]
     authors = ["Optiv"]
     minimum = "1.2"
-    ttp = ["T1067"]
+    ttps = ["T1067"]
 
     evented = True
 
@@ -91,7 +91,7 @@ class DirectHDDAccess(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1014", "T1067"]
+    ttps = ["T1014", "T1067"]
 
     def run(self):
         ret = False
@@ -111,7 +111,7 @@ class AccessesPrimaryPartition(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1014", "T1067"]
+    ttps = ["T1014", "T1067"]
 
     def run(self):
         ret = False
@@ -131,7 +131,7 @@ class PhysicalDriveAccess(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1014", "T1067"]
+    ttps = ["T1014", "T1067"]
 
     def run(self):
         ret = False
@@ -151,7 +151,7 @@ class SuspiciousIoctlSCSIPassthough(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1067"]
+    ttps = ["T1067"]
     references = ["http://www.ioctls.net/"]
 
     def __init__(self, *args, **kwargs):
@@ -187,7 +187,7 @@ class PotentialOverWriteMBR(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1067"]
+    ttps = ["T1067"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

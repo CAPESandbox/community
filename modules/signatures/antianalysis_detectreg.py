@@ -12,7 +12,7 @@ class AntiAnalysisDetectReg(Signature):
     categories = ["anti-analysis"]
     authors = ["Optiv"]
     minimum = "1.2"
-    ttp = ["T1063"]
+    ttps = ["T1063"]
 
     def run(self):
         reg_indicators = [

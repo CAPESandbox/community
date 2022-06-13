@@ -28,7 +28,7 @@ class NetworkDNSTunnelingRequest(Signature):
     categories = ["network", "dns"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttp = ["T1048", "T1071", "T1094", "T1320"]
+    ttps = ["T1048", "T1071", "T1094", "T1320"]
     evented = True
 
     def __init__(self, *args, **kwargs):
@@ -107,7 +107,7 @@ class NetworkDNSSuspiciousQueryType(Signature):
     categories = ["network", "dns"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttp = ["T1048", "T1071", "T1094", "T1320"]
+    ttps = ["T1048", "T1071", "T1094", "T1320"]
     evented = True
 
     def __init__(self, *args, **kwargs):

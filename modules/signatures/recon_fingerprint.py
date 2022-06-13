@@ -24,7 +24,7 @@ class Fingerprint(Signature):
     categories = ["recon"]
     authors = ["nex", "Optiv"]
     minimum = "1.2"
-    ttp = ["T1082"]
+    ttps = ["T1082"]
 
     def run(self):
         indicators = [

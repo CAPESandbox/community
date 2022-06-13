@@ -29,7 +29,7 @@ class PersistsDotNetDevUtility(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1118", "T1127"]
+    ttps = ["T1118", "T1127"]
     evented = True
 
     def __init__(self, *args, **kwargs):
@@ -76,7 +76,7 @@ class SpwansDotNetDevUtiliy(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1118", "T1127"]
+    ttps = ["T1118", "T1127"]
     evented = True
 
     def __init__(self, *args, **kwargs):

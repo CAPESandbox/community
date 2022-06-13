@@ -23,7 +23,7 @@ class StealthHiddenExtension(Signature):
     categories = ["stealth"]
     authors = ["Kevin Ross"]
     minimum = "1.2"
-    ttp = ["T1158", "T1054"]
+    ttps = ["T1158", "T1054"]
 
     def run(self):
         if self.check_write_key(

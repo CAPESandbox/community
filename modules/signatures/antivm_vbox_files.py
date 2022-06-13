@@ -23,7 +23,7 @@ class VBoxDetectFiles(Signature):
     categories = ["anti-vm"]
     authors = ["nex"]
     minimum = "0.5"
-    ttp = ["T1083", "T1057"]
+    ttps = ["T1083", "T1057"]
     mbc = ["B0009.001"]
 
     def run(self):

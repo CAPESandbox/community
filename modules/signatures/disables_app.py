@@ -12,7 +12,7 @@ class DisablesAppLaunch(Signature):
     categories = ["stealth"]
     authors = ["Kevin Ross"]
     minimum = "1.2"
-    ttp = ["T1112", "E1478", "E1112"]
+    ttps = ["T1112", "E1478", "E1112"]
 
     def run(self):
         if self.check_write_key(

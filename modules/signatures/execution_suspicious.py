@@ -24,7 +24,7 @@ class ProcessCreationSuspiciousLocation(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttp = ["T1106"]
+    ttps = ["T1106"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

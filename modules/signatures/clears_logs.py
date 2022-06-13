@@ -24,7 +24,7 @@ class ClearsLogs(Signature):
     categories = ["stealth"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    ttp = ["T1070.001"]
+    ttps = ["T1070.001"]
     evented = True
 
     def run(self):
