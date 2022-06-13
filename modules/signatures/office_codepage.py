@@ -23,7 +23,7 @@ class Office_Code_Page(Signature):
     categories = ["office", "static"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    reference = ["https://msdn.microsoft.com/en-us/library/windows/desktop/dd317756%28v=vs.85%29.aspx"]
+    references = ["https://msdn.microsoft.com/en-us/library/windows/desktop/dd317756%28v=vs.85%29.aspx"]
 
     codepages = [
         {"language": "Arabic (ASMO 708)", "code": "708"},

@@ -24,7 +24,7 @@ class UsesMSProtocol(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True
-    reference = "https://blog.syss.com/posts/abusing-ms-office-protos/"
+    references = "https://blog.syss.com/posts/abusing-ms-office-protos/"
 
     def run(self):
         utilities = [
