@@ -29,7 +29,7 @@ class OfficeSuspiciousProcesses(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.officeprocs = ["winword", "excel.exe", "powerpnt.exe"]
-        self.suspiciousprocs = ["msbuild.exe", "cmd.exe", "wscript.exe", "cscript.exe", "powershell.exe", "csc.exe"]
+        self.suspiciousprocs = ["msbuild.exe", "cmd.exe", "wscript.exe", "cscript.exe", "powershell.exe", "csc.exe", "msdt.exe"]
         self.mastertrigger = False
         self.secondarytrigger = False
 
