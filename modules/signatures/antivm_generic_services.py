@@ -32,8 +32,7 @@ class AntiVMServices(Signature):
         self.lastprocess = None
 
     # filter_apinames = set(["EnumServicesStatus", "EnumServicesStatusEx", "RegOpenKeyExA", "RegEnumKeyExA", "RegOpenKeyExW", "RegEnumKeyExW"])
-    filter_apinames = set(
-        ["RegOpenKeyExA", "RegEnumKeyExA", "RegOpenKeyExW", "RegEnumKeyExW"])
+    filter_apinames = set(["RegOpenKeyExA", "RegEnumKeyExA", "RegOpenKeyExW", "RegEnumKeyExW"])
 
     def on_call(self, call, process):
         # this API is not currently hooked
