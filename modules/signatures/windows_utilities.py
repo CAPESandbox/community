@@ -10,7 +10,7 @@ class UsesWindowsUtilitiesScheduler(Signature):
     description = "Uses Windows utilities for basic functionality"
     severity = 2
     confidence = 80
-    categories = ["commands", "lateral"]
+    categories = ["command", "lateral"]
     authors = ["Cuckoo Technologies", "Kevin Ross"]
     minimum = "1.3"
     ttps = ["T1053"]
@@ -41,7 +41,7 @@ class UsesWindowsUtilities(Signature):
     description = "Uses Windows utilities for basic functionality"
     severity = 2
     confidence = 80
-    categories = ["commands", "lateral"]
+    categories = ["command", "lateral"]
     authors = ["Cuckoo Technologies", "Kevin Ross"]
     minimum = "1.3"
 
@@ -121,7 +121,7 @@ class SuspiciousCommandTools(Signature):
     description = "Uses suspicious command line tools or Windows utilities"
     severity = 3
     confidence = 80
-    categories = ["commands", "lateral"]
+    categories = ["command", "lateral"]
     authors = ["Cuckoo Technologies", "Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -196,7 +196,7 @@ class ScriptToolExecuted(Signature):
     description = "A scripting utility was executed"
     severity = 2
     confidence = 80
-    categories = ["commands"]
+    categories = ["command"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -225,7 +225,7 @@ class SuspiciousPingUse(Signature):
     description = "A ping command was executed with the -n argument possibly to delay analysis"
     severity = 2
     confidence = 100
-    categories = ["commands"]
+    categories = ["command"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -248,7 +248,7 @@ class WMICCommandSuspicious(Signature):
     description = "Suspicious wmic.exe use was detected"
     severity = 3
     confidence = 80
-    categories = ["commands", "wmi"]
+    categories = ["command", "wmi"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -297,7 +297,7 @@ class AltersWindowsUtility(Signature):
     description = "Attempts to move, copy or rename a command line or scripting utility likely for evasion"
     severity = 3
     confidence = 100
-    categories = ["commands", "stealth", "evasion"]
+    categories = ["command", "stealth", "evasion"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -349,7 +349,7 @@ class SuspiciousCertutilUse(Signature):
     description = "Suspicious use of certutil was detected"
     severity = 3
     confidence = 100
-    categories = ["commands"]
+    categories = ["command"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -414,7 +414,7 @@ class DotNETCSCBuild(Signature):
     description = "Uses csc.exe C# compiler to build and execute code"
     severity = 3
     confidence = 20
-    categories = ["commands"]
+    categories = ["command"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -439,7 +439,7 @@ class UsesWindowsUtilitiesCipher(Signature):
     name = "uses_windows_utilities_cipher"
     description = "Uses cipher.exe to wipe the free space, as seen in some ransomware"
     severity = 3
-    categories = ["commands", "impact"]
+    categories = ["command", "impact"]
     authors = ["bartblaze"]
     minimum = "1.3"
     ttps = ["T1485"]
@@ -468,7 +468,7 @@ class UsesWindowsUtilitiesClickOnce(Signature):
     name = "uses_windows_utilities_clickonce"
     description = "Uses ClickOnce Deployment Manifests for download or installation"
     severity = 1
-    categories = ["commands", "evasion"]
+    categories = ["command", "evasion"]
     authors = ["bartblaze"]
     minimum = "1.3"
     references = ["http://blog.redxorblue.com/2020/07/one-click-to-compromise-fun-with.html"]
@@ -499,7 +499,7 @@ class UsesWindowsUtilitiesMode(Signature):
     name = "uses_windows_utilities_mode"
     description = "Uses MODE to configure a system device or change the code page"
     severity = 1
-    categories = ["commands"]
+    categories = ["command"]
     authors = ["bartblaze"]
     minimum = "1.3"
     references = ["https://www.robvanderwoude.com/mode.php"]
@@ -676,7 +676,7 @@ class SuspiciousMpCmdRunUse(Signature):
     name = "suspicious_mpcmdrun_use"
     description = "Suspicious use of MpCmdRun was detected"
     severity = 3
-    categories = ["commands"]
+    categories = ["command"]
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
@@ -700,7 +700,7 @@ class MultipleExplorerInstances(Signature):
     name = "multiple_explorer_instances"
     description = "Spawns another instance of explorer"
     severity = 2
-    categories = ["commands", "evasion"]
+    categories = ["command", "evasion"]
     authors = ["bartblaze"]
     minimum = "1.3"
     references = ["https://twitter.com/CyberRaiju/status/1273597319322058752"]

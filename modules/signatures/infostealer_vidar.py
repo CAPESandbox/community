@@ -38,7 +38,7 @@ class vidar(Signature):
     description = "Detects Vidar Behavior"
     weight = 3
     severity = 3
-    categories = ["Infostealer"]
+    categories = ["infostealer"]
     families = ["Vidar"]
     authors = ["@NaxoneZ"]
     minimum = "1.2"

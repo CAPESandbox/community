@@ -20,7 +20,7 @@ class AntisandboxSboxieMutex(Signature):
     name = "antisandbox_sboxie_mutex"
     description = "Detects Sandboxie using a known mutex"
     severity = 3
-    categories = ["antisandbox"]
+    categories = ["anti-sandbox"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
     ttps = ["T1063"]

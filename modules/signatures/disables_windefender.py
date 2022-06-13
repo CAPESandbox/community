@@ -11,7 +11,7 @@ class DisablesWindowsDefender(Signature):
     name = "disables_windows_defender"
     description = "Attempts to disable Windows Defender"
     severity = 3
-    categories = ["antiav"]
+    categories = ["anti-av"]
     authors = ["Brad Spengler", "Kevin Ross", "ditekshen"]
     minimum = "1.2"
     ttps = ["T1089"]
@@ -78,7 +78,7 @@ class WindowsDefenderPowerShell(Signature):
     name = "windows_defender_powershell"
     description = "Attempts to modify Windows Defender using PowerShell"
     severity = 3
-    categories = ["antiav"]
+    categories = ["anti-av"]
     authors = ["Kevin Ross"]
     minimum = "1.2"
     ttps = ["T1089"]
@@ -102,7 +102,7 @@ class RemovesWindowsDefenderContextMenu(Signature):
     name = "removes_windows_defender_contextmenu"
     description = "Attempts to remove Windows Defender from context menu"
     severity = 3
-    categories = ["antiav"]
+    categories = ["anti-av"]
     authors = ["ditekshen"]
     minimum = "1.3"
     ttps = ["T1089"]
@@ -134,7 +134,7 @@ class DisablesWindowsDefenderLogging(Signature):
     name = "disables_windows_defender_logging"
     description = "Attempts to disable Windows Defender logging"
     severity = 3
-    categories = ["antiav"]
+    categories = ["anti-av"]
     authors = ["ditekshen"]
     minimum = "1.3"
     ttps = ["T1089"]

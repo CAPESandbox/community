@@ -20,7 +20,7 @@ class LimeRATMutexes(Signature):
     name = "limerat_mutexes"
     description = "Creates known LimeRAT RAT mutexes"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["LimeRAT"]
     authors = ["ditekshen"]
     minimum = "0.5"
@@ -44,7 +44,7 @@ class LimeRATRegkeys(Signature):
     name = "limerat_regkeys"
     description = "Creates known LimeRAT RAT registry keys"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["LimeRAT"]
     authors = ["ditekshen"]
     minimum = "0.5"

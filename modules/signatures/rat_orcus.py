@@ -6,7 +6,7 @@ class OrcusRAT(Signature):
     description = "Detects OrcusRAT Behavior"
     weight = 3
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["OrcusRAT"]
     authors = ["@NaxoneZ"]
     minimum = "1.2"

@@ -21,7 +21,7 @@ class Excel4MacroUrls(Signature):
     description = "URLs from Excel 4.0 XLM Macro(s)"
     weight = 3
     severity = 3
-    categories = ["macros", "office"]
+    categories = ["macro", "office"]
     authors = ["doomedraven"]
     minimum = "2.0"
     evented = False

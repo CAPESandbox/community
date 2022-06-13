@@ -76,7 +76,7 @@ class OfficeVBLLoad(Signature):
     name = "office_vb_load"
     description = "Office loads VB DLLs, indicative of Office Macros"
     severity = 2
-    categories = ["office", "macros"]
+    categories = ["office", "macro"]
     authors = ["ditekshen"]
     minimum = "1.3"
     ttps = ["T1137", "T1204"]
@@ -107,7 +107,7 @@ class OfficeWMILoad(Signature):
     name = "office_wmi_load"
     description = "Office loads WMI DLLs, indicative of Office Macros executing WMI commands"
     severity = 2
-    categories = ["office", "macros"]
+    categories = ["office", "macro"]
     authors = ["ditekshen"]
     minimum = "1.3"
     ttps = ["T1137", "T1204"]
@@ -133,7 +133,7 @@ class OfficeCOMLoad(Signature):
     name = "office_com_load"
     description = "Office loads COM DLLs, indicative of Office Macros spawning CMD process for execution"
     severity = 2
-    categories = ["office", "macros"]
+    categories = ["office", "macro"]
     authors = ["ditekshen"]
     minimum = "1.3"
     ttps = ["T1137", "T1204"]
@@ -162,7 +162,7 @@ class OfficeDotNetLoad(Signature):
     name = "office_dotnet_load"
     description = "Office loads .NET assembly or DLL, indicative of suspicious Office Macros activities"
     severity = 2
-    categories = ["office", "macros"]
+    categories = ["office", "macro"]
     authors = ["ditekshen"]
     minimum = "1.3"
     ttps = ["T1137", "T1204"]

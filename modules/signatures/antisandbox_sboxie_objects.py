@@ -20,7 +20,7 @@ class AntiSandboxSboxieObjects(Signature):
     name = "antisandbox_sboxie_objects"
     description = "The sample enumerated a known Sandboxie device object."
     severity = 3
-    categories = ["antisandbox"]
+    categories = ["anti-sandbox"]
     authors = ["KillerInstinct"]
     minimum = "1.0"
     evented = True

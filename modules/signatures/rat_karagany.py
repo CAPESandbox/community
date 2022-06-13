@@ -25,7 +25,7 @@ class KaraganyEventObjects(Signature):
     name = "karagany_system_event_objects"
     description = "Creates system event objects associated with Karagany/xFrost RAT"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["Karagany", "xFrost"]
     authors = ["ditekshen"]
     minimum = "0.5"
@@ -58,7 +58,7 @@ class KaraganyFiles(Signature):
     name = "karagany_files"
     description = "Creates files/directories associated with Karagany/xFrost RAT"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["Karagany", "xFrost"]
     authors = ["ditekshen"]
     minimum = "0.5"

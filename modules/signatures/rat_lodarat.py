@@ -20,7 +20,7 @@ class LodaRATFileBehavior(Signature):
     name = "lodarat_file_behavior"
     description = "LodaRAT file modification behavior detected"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["LodaRAT"]
     authors = ["ditekshen"]
     minimum = "2.0"

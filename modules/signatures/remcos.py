@@ -20,7 +20,7 @@ class RemcosFiles(Signature):
     name = "remcos_files"
     description = "Creates known Remcos directories and/or files"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["Remcos"]
     authors = ["ditekshen"]
     minimum = "0.5"
@@ -44,7 +44,7 @@ class RemcosMutexes(Signature):
     name = "remcos_mutexes"
     description = "Creates known Remcos mutexes"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["Remcos"]
     authors = ["ditekshen"]
     minimum = "0.5"
@@ -70,7 +70,7 @@ class RemcosRegkeys(Signature):
     name = "remcos_regkeys"
     description = "Creates known Remcos registry keys"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["Remcos"]
     authors = ["ditekshen"]
     minimum = "0.5"

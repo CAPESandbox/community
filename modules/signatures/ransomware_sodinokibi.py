@@ -13,7 +13,7 @@ class sodinokibi(Signature):
     description = "Detects Agent Sodinokibi Behavior"
     weight = 3
     severity = 3
-    categories = ["Ransomware"]
+    categories = ["ransomware"]
     families = ["Sodinokibi"]
     authors = ["@NaxoneZ"]
     minimum = "1.2"

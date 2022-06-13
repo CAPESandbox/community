@@ -20,7 +20,7 @@ class ArkeiFiles(Signature):
     name = "arkei_files"
     description = "Creates Arkei infostealer directories and/or files"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["Arkei"]
     authors = ["ditekshen"]
     minimum = "1.3"

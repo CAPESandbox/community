@@ -20,7 +20,7 @@ class ObliquekRATMutexes(Signature):
     name = "obliquerat_mutexes"
     description = "Creates ObliqueRAT RAT mutexes"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["ObliqueRAT"]
     authors = ["ditekshen"]
     minimum = "1.3"
@@ -43,7 +43,7 @@ class ObliquekRATFiles(Signature):
     name = "obliquerat_files"
     description = "Creates ObliqueRAT RAT directories and/or files"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["ObliqueRAT"]
     authors = ["ditekshen"]
     minimum = "1.3"
@@ -68,7 +68,7 @@ class ObliquekRATNetworkActivity(Signature):
     name = "obliquerat_network_activity"
     description = "Establishes ObliqueRAT RAT network activity"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["ObliqueRAT"]
     authors = ["ditekshen"]
     minimum = "1.3"
