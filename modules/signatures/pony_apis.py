@@ -82,13 +82,13 @@ class Pony_APIs(Signature):
                                     if all(z in string.printable for z in ioc):
                                         for item in self.whitelist:
                                             if item not in ioc:
-                                                tmp = {"C2": ioc}
+                                                tmp = {"c2": ioc}
                                                 if tmp not in self.data:
                                                     self.data.append(tmp)
 
             if self.urls:
                 for url in self.urls:
-                    insert = {"C2": url}
+                    insert = {"c2": url}
                     if insert not in self.data:
                         self.data.append(insert)
             return True

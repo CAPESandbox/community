@@ -85,7 +85,7 @@ class Kelihos_APIs(Signature):
             self.data.append({"ConfigLocation": self.config_key})
             if self.peer_connect:
                 for peer in self.peer_connect:
-                    self.data.append({"C2": peer})
+                    self.data.append({"c2": peer})
 
             return True
 

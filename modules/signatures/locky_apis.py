@@ -121,7 +121,7 @@ class Locky_APIs(Signature):
             ret = True
             if self.c2s:
                 for c2 in self.c2s:
-                    self.data.append({"C2": c2})
+                    self.data.append({"c2": c2})
 
             if carve_mem:
                 if "procmemory" in self.results and self.results["procmemory"]:
@@ -137,7 +137,7 @@ class Locky_APIs(Signature):
                         buf = re.search(r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3},[\d.,]+)\x00", cData)
                         if buf:
                             for c2 in buf.group(1).split(","):
-                                tmp = {"C2": c2}
+                                tmp = {"c2": c2}
                                 if tmp not in self.data:
                                     self.data.append(tmp)
 

@@ -21,7 +21,7 @@ class NetworkExcessiveUDP(Signature):
     description = "Creates an excessive number of UDP connection attempts to external IP addresses"
     severity = 2
     confidence = 30
-    categories = ["udp", "cnc", "p2p", "recon"]
+    categories = ["udp", "c2", "p2p", "recon"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
 

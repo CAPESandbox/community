@@ -75,7 +75,7 @@ class Alphacrypt_APIs(Signature):
         if ret:
             if self.c2s:
                 for c2 in self.c2s:
-                    self.data.append({"C2": c2})
+                    self.data.append({"c2": c2})
             return True
 
         return False

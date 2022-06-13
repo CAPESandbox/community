@@ -87,7 +87,7 @@ class CryptoWall_APIs(Signature):
                                 c2s.append(c2)
                 if c2s:
                     for c2 in c2s:
-                        tmp = {"C2": c2}
+                        tmp = {"c2": c2}
                         if tmp not in self.data:
                             self.data.append(tmp)
 
