@@ -29,6 +29,7 @@ class KaraganyEventObjects(Signature):
     families = ["Karagany", "xFrost"]
     authors = ["ditekshen"]
     minimum = "0.5"
+    evented = True
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
