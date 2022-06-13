@@ -9,7 +9,7 @@ class MINERS(Signature):
     authors = ["doomedraven", "bartblaze"]
     minimum = "1.2"
     ttps = ["T1496"]
-    
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
 
