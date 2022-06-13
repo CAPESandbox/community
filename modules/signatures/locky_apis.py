@@ -34,7 +34,6 @@ class Locky_APIs(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True
-    carve_mem = True
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -112,6 +111,8 @@ class Locky_APIs(Signature):
                     self.c2s.add(url)
 
     def on_complete(self):
+        carve_mem = True
+
         if self.sigchanged:
             return True
 
@@ -122,7 +123,7 @@ class Locky_APIs(Signature):
                 for c2 in self.c2s:
                     self.data.append({"C2": c2})
 
-            if self.carve_mem:
+            if carve_mem:
                 if "procmemory" in self.results and self.results["procmemory"]:
                     dump_path = str()
                     for process in self.results["procmemory"]:

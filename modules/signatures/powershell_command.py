@@ -304,7 +304,6 @@ class PowerShellNetworkConnection(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.2"
     evented = True
-    match = True
     ttps = ["T1086", "T1064"]
 
     def __init__(self, *args, **kwargs):

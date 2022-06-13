@@ -31,8 +31,6 @@ class Dyre_APIs(Signature):
     authors = ["Optiv", "KillerInstinct"]
     minimum = "1.3"
     evented = True
-    # Try to parse a process memory dump to extract regex extract C2 nodes.
-    extract_c2s = True
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -79,6 +77,9 @@ class Dyre_APIs(Signature):
         ret = False
         networkret = False
         campaign = set()
+        # Try to parse a process memory dump to extract regex extract C2 nodes.
+        extract_c2s = True
+
         mutexs = [
             "^(Global|Local)\\\\pen3j3832h$",
             "^(Global|Local)\\\\u1nyj3rt20",
@@ -118,7 +119,7 @@ class Dyre_APIs(Signature):
                 for camp in campaign:
                     self.data.append({"Campaign": camp})
 
-            if self.extract_c2s:
+            if extract_c2s:
                 dump_pid = 0
                 for proc in self.results["behavior"]["processtree"]:
                     for child in proc["children"]:

@@ -25,32 +25,32 @@ class malicious_dynamic_function_loading(Signature):
     authors = ["redsand"]
     minimum = "1.3"
     evented = True
-    malicious_functions = [
-        "LookupAccountNameLocalW",
-        "LookupAccountNameLocalA",
-        "LookupAccountSidW",
-        "LookupAccountSidA",
-        "LookupAccountSidLocalW",
-        "LookupAccountSidLocalA",
-        "CoTaskMemAlloc",
-        "CoTaskMemFree",
-        "LookupAccountNameW",
-        "LookupAccountNameA",
-        "NetLocalGroupGetMembers",
-        "SamConnect",
-        "SamLookupNamesInDomain",
-        "OpenProcessToken",
-        "SetThreadToken",
-        "DuplicateTokenEx",
-        "AdjustTokenPrivileges",
-        "OpenThreadToken",
-    ]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.dll_loaded = False
         self.loadctr = 0
         self.list = []
+        self.malicious_functions = [
+            "LookupAccountNameLocalW",
+            "LookupAccountNameLocalA",
+            "LookupAccountSidW",
+            "LookupAccountSidA",
+            "LookupAccountSidLocalW",
+            "LookupAccountSidLocalA",
+            "CoTaskMemAlloc",
+            "CoTaskMemFree",
+            "LookupAccountNameW",
+            "LookupAccountNameA",
+            "NetLocalGroupGetMembers",
+            "SamConnect",
+            "SamLookupNamesInDomain",
+            "OpenProcessToken",
+            "SetThreadToken",
+            "DuplicateTokenEx",
+            "AdjustTokenPrivileges",
+            "OpenThreadToken",
+        ]
 
     filter_apinames = set(["LdrGetProcedureAddress", "LdrLoadDll"])
 
