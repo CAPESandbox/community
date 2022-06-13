@@ -21,7 +21,7 @@ class ApocalypseStealerFileBehavior(Signature):
     description = "Apocalypse infostealer file modification behavior detected"
     severity = 3
     categories = ["infostealer"]
-    family = ["Apocalypse"]
+    families = ["Apocalypse"]
     authors = ["ditekshen"]
     minimum = "2.0"
     evented = True
