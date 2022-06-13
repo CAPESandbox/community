@@ -25,7 +25,7 @@ class Dropper(Signature):
     authors = ["Optiv"]
     minimum = "1.2"
     ttps = ["T1129"]
-    mbc = ["B0023"]
+    mbcs = ["B0023"]
 
     def run(self):
         is_dropper = False

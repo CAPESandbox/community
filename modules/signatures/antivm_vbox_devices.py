@@ -24,7 +24,7 @@ class VBoxDetectDevices(Signature):
     authors = ["nex"]
     minimum = "1.2"
     ttps = ["T1057", "T1012"]
-    mbc = ["B0009"]
+    mbcs = ["B0009"]
 
     def run(self):
         indicators = [

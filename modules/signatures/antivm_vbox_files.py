@@ -24,7 +24,7 @@ class VBoxDetectFiles(Signature):
     authors = ["nex"]
     minimum = "0.5"
     ttps = ["T1083", "T1057"]
-    mbc = ["B0009.001"]
+    mbcs = ["B0009.001"]
 
     def run(self):
         file_indicators = [
@@ -52,7 +52,8 @@ class VBoxDetectFiles(Signature):
         ]
         found = False
         for indicator in file_indicators:
-            file_match = self.check_file(pattern=indicator, regex=True, all=True)
+            file_match = self.check_file(
+                pattern=indicator, regex=True, all=True)
             if file_match:
                 for match in file_match:
                     self.data.append({"file": match})

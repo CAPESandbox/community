@@ -23,7 +23,7 @@ class VPCDetectFiles(Signature):
     categories = ["anti-vm"]
     authors = ["Optiv"]
     minimum = "1.2"
-    mbc = ["B0009"]
+    mbcs = ["B0009"]
 
     def run(self):
         indicators = [

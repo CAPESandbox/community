@@ -23,10 +23,11 @@ class VPCDetectMutex(Signature):
     categories = ["anti-vm"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
-    mbc = ["B0009"]
+    mbcs = ["B0009"]
 
     def run(self):
-        indicators = ["MicrosoftVirtualPC7UserServiceMakeSureWe'reTheOnlyOneMutex"]
+        indicators = [
+            "MicrosoftVirtualPC7UserServiceMakeSureWe'reTheOnlyOneMutex"]
 
         for indicator in indicators:
             if self.check_mutex(pattern=indicator, regex=True):
