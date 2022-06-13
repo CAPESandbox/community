@@ -51,7 +51,7 @@ class PersistenceRegistryScript(Signature):
     def on_complete(self):
         ret = False
         for key, value in self.registry_writes.items():
-            self.data.append({"key": key})
+            self.data.append({"regkey": key})
             self.data.append({"data": value})
             ret = True
 

@@ -65,7 +65,7 @@ class Secure_Login_Phish(Signature):
     def on_complete(self):
         if self.phishingurls:
             for url in self.phishingurls:
-                self.data.append({"URL": url})
+                self.data.append({"url": url})
             return True
 
         return False

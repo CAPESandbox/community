@@ -89,5 +89,5 @@ class InjectionExplorer(Signature):
             self.sequence = 5
         elif self.sequence == 5 and call["api"].startswith("SendNotifyMessage"):
             desc = "{0}({1}) -> {2}({3})".format(self.parent[0], self.parent[1], self.injected[0], self.injected[1])
-            self.data.append({"Injection": desc})
+            self.data.append({"injection": desc})
             return True

@@ -53,6 +53,6 @@ class EmailStealer(Signature):
             key_match = self.check_key(pattern=indicator, regex=True, all=True)
             if key_match:
                 for match in key_match:
-                    self.data.append({"key": match})
+                    self.data.append({"regkey": match})
                 found_stealer = True
         return found_stealer

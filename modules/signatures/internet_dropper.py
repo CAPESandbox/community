@@ -68,7 +68,7 @@ class Internet_Dropper(Signature):
                 matched_uris.append(uri)
         if matched_uris:
             for item in matched_uris:
-                buf = {"uri": item, "hosts": list()}
+                buf = {"url": item, "hosts": list()}
                 # Parse dropper again to grab info for self.data
                 for host in self.dropper.keys():
                     if uri in self.dropper[host]["uris"]:

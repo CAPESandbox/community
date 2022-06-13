@@ -47,7 +47,7 @@ class WMICreateProcess(Signature):
                     break
             if not whitelisted:
                 self.ret = True
-                self.data.append({"cmdline": cmdline})
+                self.data.append({"command": cmdline})
 
     def on_complete(self):
         return self.ret
@@ -87,7 +87,7 @@ class WMIScriptProcess(Signature):
             for utility in self.utilities:
                 if utility in cmdline.lower():
                     self.ret = True
-                    self.data.append({"cmdline": cmdline})
+                    self.data.append({"command": cmdline})
                     break
 
     def on_complete(self):

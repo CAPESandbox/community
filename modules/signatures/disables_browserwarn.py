@@ -30,6 +30,6 @@ class DisablesBrowserWarn(Signature):
         for indicator in indicators:
             key_match = self.check_write_key(pattern=indicator, regex=True)
             if key_match:
-                self.data.append({"key": key_match})
+                self.data.append({"regkey": key_match})
                 found_match = True
         return found_match

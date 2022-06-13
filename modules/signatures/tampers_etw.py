@@ -43,7 +43,7 @@ class TampersETW(Signature):
         for cindicator in cmd_indicators:
             match = self.check_executed_command(pattern=cindicator, regex=True)
             if match:
-                self.data.append({"cmdline": match})
+                self.data.append({"command": match})
                 return True
 
         return False

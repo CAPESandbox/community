@@ -117,7 +117,7 @@ class SuspiciousJSScript(Signature):
                 if javascript:
                     for suspicious in self.suspicious:
                         if suspicious in javascript.lower():
-                            self.data.append({"Process executing suspicious JavaScript": pname})
+                            self.data.append({"process": pname})
                             self.ret = True
                             break
 
@@ -128,7 +128,7 @@ class SuspiciousJSScript(Signature):
                 if javascript:
                     for suspicious in self.suspicious:
                         if suspicious in javascript.lower():
-                            self.data.append({"Process executing suspicious JavaScript": pname})
+                            self.data.append({"process": pname})
                             self.ret = True
                             break
 

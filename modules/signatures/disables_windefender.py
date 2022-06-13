@@ -67,7 +67,7 @@ class DisablesWindowsDefender(Signature):
                 if cmd in lower or (
                     "sc" in lower and ("stop" in lower or "delete" in lower or "disabled" in lower) and "windefend" in lower
                 ):
-                    self.data.append({"cmdline": cmdline})
+                    self.data.append({"command": cmdline})
                     ret = True
                     break
 
@@ -89,10 +89,10 @@ class WindowsDefenderPowerShell(Signature):
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "set-mppreference" in lower:
-                self.data.append({"cmdline": cmdline})
+                self.data.append({"command": cmdline})
                 ret = True
             if "add-mppreference" in lower and "exclusionpath" in lower:
-                self.data.append({"cmdline": cmdline})
+                self.data.append({"command": cmdline})
                 ret = True
 
         return ret
@@ -124,7 +124,7 @@ class RemovesWindowsDefenderContextMenu(Signature):
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if re.search(pat, lower):
-                self.data.append({"cmdline": cmdline})
+                self.data.append({"command": cmdline})
                 return True
 
         return False
@@ -154,7 +154,7 @@ class DisablesWindowsDefenderLogging(Signature):
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if re.search(pat, lower):
-                self.data.append({"cmdline": cmdline})
+                self.data.append({"command": cmdline})
                 return True
 
         return False

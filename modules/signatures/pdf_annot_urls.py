@@ -46,6 +46,6 @@ class PDF_Annot_URLs(Signature):
                             elif entrylower.startswith("https://") and not entrylower.find("/", 9):
                                 skip = True
                             if skip:
-                                self.data.append({"URL": entry})
+                                self.data.append({"url": entry})
                                 found_URLs = True
         return found_URLs
