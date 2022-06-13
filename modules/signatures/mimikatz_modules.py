@@ -20,7 +20,7 @@ class MimikatzModules(Signature):
     name = "mimikatz_modules"
     description = "Executed a potential Mimikatz module"
     severity = 3
-    categories = ["lateral_movement", "credential_dumping"]
+    categories = ["lateral", "credential_dumping"]
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True

@@ -20,7 +20,7 @@ class XpertRATMutexes(Signature):
     name = "xpertrat_mutexes"
     description = "XpertRAT RAT mutexes detected"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["XpertRAT"]
     authors = ["ditekshen"]
     minimum = "1.3"
@@ -49,7 +49,7 @@ class XpertRATFiles(Signature):
     name = "xpertrat_files"
     description = "XpertRAT RAT files detected"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["XpertRAT"]
     authors = ["ditekshen"]
     minimum = "1.3"

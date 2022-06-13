@@ -20,7 +20,7 @@ class TerritorialDisputeSIGs(Signature):
     name = "territorial_disputes_sigs"
     description = "Creates an indicator observed in Territorial Disputes report"
     severity = 1
-    categories = ["general"]
+    categories = ["generic"]
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True

@@ -20,7 +20,7 @@ class VenomRAT(Signature):
     name = "venomrat_mutexes"
     description = "Creates VenomRAT mutexes"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["VenomRAT"]
     authors = ["ditekshen"]
     minimum = "1.3"

@@ -20,7 +20,7 @@ class CapturesScreenshot(Signature):
     name = "captures_screenshot"
     description = "Captures Screenshot"
     severity = 3
-    categories = ["infostealer", "RAT"]
+    categories = ["infostealer", "rat"]
     authors = ["ditekshen"]
     minimum = "1.3"
     ttps = ["T1113"]

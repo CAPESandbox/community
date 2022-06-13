@@ -20,7 +20,7 @@ class ParallaxMutexes(Signature):
     name = "parallax_mutexes"
     description = "Creates a known Parallax RAT mutex"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["Parallax"]
     authors = ["bartblaze"]
     minimum = "0.5"

@@ -11,7 +11,7 @@ class netwire(Signature):
     description = "Detects NetWire Behavior"
     weight = 3
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["NetWire"]
     authors = ["@NaxoneZ"]
     minimum = "1.2"

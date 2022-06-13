@@ -20,7 +20,7 @@ class BlackNETMutexes(Signature):
     name = "blacknet_mutexes"
     description = "BlackNET RAT mutex detected"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["BlackNET"]
     authors = ["ditekshen"]
     minimum = "1.3"

@@ -25,7 +25,7 @@ class BlackRATMutexes(Signature):
     name = "blackrat_mutexes"
     description = "Creates BlackRemote/BlackRAT RAT mutexes"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["BlackRAT", "BlackRemote"]
     authors = ["ditekshen"]
     minimum = "1.3"
@@ -48,7 +48,7 @@ class BlackRATRegistryKeys(Signature):
     name = "blackrat_registry_keys"
     description = "Creates or accesses BlackRemote/BlackRAT RAT registry keys"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["BlackRAT", "BlackRemote"]
     authors = ["ditekshen"]
     minimum = "1.3"
@@ -91,7 +91,7 @@ class BlackRATNetworkActivity(Signature):
     name = "blackrat_network_activity"
     description = "Establishes BlackRemote/BlackRAT RAT network activity"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["BlackRAT", "BlackRemote"]
     authors = ["ditekshen"]
     minimum = "1.3"
@@ -118,7 +118,7 @@ class BlackRATAPIs(Signature):
     name = "blackrat_apis"
     description = "Exhibits behavior characteristics of BlackRemote/BlackRAT RAT"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["BlackRAT", "BlackRemote"]
     authors = ["ditekshen"]
     minimum = "1.3"

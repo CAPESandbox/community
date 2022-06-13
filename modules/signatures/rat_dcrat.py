@@ -25,7 +25,7 @@ class DCRatFiles(Signature):
     name = "dcrat_files"
     description = "Creates DCRat RAT directories and/or files"
     severity = 3
-    categories = ["infostealer", "keylogger", "RAT"]
+    categories = ["infostealer", "keylogger", "rat"]
     families = ["DCRat"]
     authors = ["ditekshen"]
     minimum = "1.3"
@@ -49,7 +49,7 @@ class DCRatMutex(Signature):
     name = "dcrat_mutexes"
     description = "Creates DCRat RAT mutexes"
     severity = 3
-    categories = ["infostealer", "keylogger", "RAT"]
+    categories = ["infostealer", "keylogger", "rat"]
     families = ["DCRat"]
     authors = ["ditekshen"]
     minimum = "1.3"
@@ -84,7 +84,7 @@ class DCRatAPIs(Signature):
     description = "Exhibits behavior characteristics of DCRat RAT"
     severity = 3
     weight = 3
-    categories = ["infostealer", "keylogger", "RAT"]
+    categories = ["infostealer", "keylogger", "rat"]
     families = ["DCRat"]
     authors = ["ditekshen"]
     minimum = "1.3"

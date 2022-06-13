@@ -20,7 +20,7 @@ class QuilMinerNetworkBehavior(Signature):
     name = "quilclipper_behavior"
     description = "QuilMiner network artifacts detected"
     severity = 3
-    categories = ["miner"]
+    categories = ["cryptomining"]
     families = ["QuilMiner"]
     authors = ["ditekshen"]
     minimum = "1.3"

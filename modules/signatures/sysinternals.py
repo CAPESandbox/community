@@ -20,7 +20,7 @@ class sysinternals_tools(Signature):
     name = "sysinternals_tools"
     description = "Executed a sysinternals tool"
     severity = 2
-    categories = ["commands"]
+    categories = ["command"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -43,7 +43,7 @@ class sysinternals_psexec(Signature):
     name = "sysinternals_psexec"
     description = "PSExec was executed"
     severity = 3
-    categories = ["commands", "lateral"]
+    categories = ["command", "lateral"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True

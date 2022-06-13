@@ -20,7 +20,7 @@ class TrochilusRATAPIs(Signature):
     name = "trochilusrat_APIs"
     description = "TrochilusRAT behavior detected"
     severity = 3
-    categories = ["RAT"]
+    categories = ["rat"]
     families = ["TrochilusRAT"]
     authors = ["ditekshen"]
     minimum = "1.3"

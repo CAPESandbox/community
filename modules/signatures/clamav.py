@@ -26,7 +26,7 @@ class ClamAV(Signature):
     description = "Clamav Hits in Target/Dropped/SuriExtracted"
     severity = 3
     weight = 0
-    categories = ["clamav"]
+    categories = ["antivirus"]
     authors = ["Will Metcalf"]
     minimum = "1.2"
 

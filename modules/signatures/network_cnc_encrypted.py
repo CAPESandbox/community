@@ -502,7 +502,7 @@ class NetworkCnCSMTPSExfil(Signature):
     name = "network_cnc_smtps_exfil"
     description = "keylogger detected exfiltrating data via encrypted SMTPS connection"
     severity = 3
-    categories = ["network", "encryption", "exfiltration", "infostealer", "RAT"]
+    categories = ["network", "encryption", "exfiltration", "infostealer", "rat"]
     authors = ["ditekshen"]
     minimum = "1.3"
     ttps = ["T1020", "T1032", "T1041"]

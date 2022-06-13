@@ -20,7 +20,7 @@ class WebShellProcesses(Signature):
     name = "web_shell_processes"
     description = "Creates or executes process commonly used for running web applications, used by web shells"
     severity = 2
-    categories = ["commands", "evasion"]
+    categories = ["command", "evasion"]
     authors = ["bartblaze"]
     minimum = "1.3"
     ttps = ["T1505"]
@@ -53,7 +53,7 @@ class WebShellFiles(Signature):
     name = "web_shell_files"
     description = "Writes to the inetpub or inetsrv default path, typically seen in web shells"
     severity = 2
-    categories = ["Webshell"]
+    categories = ["webshell"]
     authors = ["bartblaze"]
     minimum = "0.5"
     ttps = ["T1505"]
@@ -74,7 +74,7 @@ class OWAWebShellFiles(Signature):
     name = "owa_web_shell_files"
     description = "Writes to the Exchange OWA folder, typically seen in Outlook Web Access web shells"
     severity = 2
-    categories = ["Webshell"]
+    categories = ["webshell"]
     authors = ["bartblaze"]
     minimum = "0.5"
     ttps = ["T1505"]

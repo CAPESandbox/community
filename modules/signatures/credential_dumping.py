@@ -20,7 +20,7 @@ class LsassCredentialDumping(Signature):
     name = "lsass_credential_dumping"
     description = "Requests access to read memory contents of lsass.exe potentially indicative of credential dumping"
     severity = 3
-    categories = ["persistence", "lateral_movement", "credential_dumping"]
+    categories = ["persistence", "lateral", "credential_dumping"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -78,7 +78,7 @@ class RegistryCredentialDumping(Signature):
     name = "registry_credential_dumping"
     description = "Dumps credentials from the registry using the Windows reg utility"
     severity = 3
-    categories = ["persistence", "lateral_movement", "credential_dumping"]
+    categories = ["persistence", "lateral", "credential_dumping"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -100,7 +100,7 @@ class RegistryCredentialStoreAccess(Signature):
     name = "registry_credential_store_access"
     description = "Accessed credential storage registry keys"
     severity = 3
-    categories = ["persistence", "lateral_movement", "credential_dumping"]
+    categories = ["persistence", "lateral", "credential_dumping"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True

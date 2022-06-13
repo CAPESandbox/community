@@ -21,7 +21,7 @@ class AntiVMDirectoryObjects(Signature):
     description = "The sample enumerated directory objects, possibly probing for Virtual Machine objects."
     severity = 2
     confidence = 80
-    categories = ["antivm"]
+    categories = ["anti-vm"]
     authors = ["KillerInstinct"]
     minimum = "1.3"
     evented = True

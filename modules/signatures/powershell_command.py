@@ -30,7 +30,7 @@ class PowershellCommandSuspicious(Signature):
     description = "Attempts to execute suspicious powershell command arguments"
     severity = 3
     confidence = 70
-    categories = ["commands"]
+    categories = ["command"]
     authors = ["Kevin Ross", "Optiv"]
     minimum = "1.3"
     evented = True
@@ -127,7 +127,7 @@ class PowershellRenamed(Signature):
     description = "Powershell arguments were seen on a command line but powershell.exe was not called. Likely indictive of renamed/obfuscated powershell.exe or defining arguments in variables for later use"
     severity = 3
     confidence = 70
-    categories = ["commands"]
+    categories = ["command"]
     authors = ["Kevin Ross", "Optiv"]
     minimum = "1.3"
     evented = True
@@ -213,7 +213,7 @@ class PowershellReversed(Signature):
     description = "Possible reversed powershell command arguments detected"
     severity = 3
     confidence = 70
-    categories = ["commands"]
+    categories = ["command"]
     authors = ["Kevin Ross", "Optiv"]
     minimum = "1.3"
     evented = True
@@ -276,7 +276,7 @@ class PowershellVariableObfuscation(Signature):
     description = "A powershell command using multiple variables was executed possibly indicative of obfuscation"
     severity = 3
     confidence = 50
-    categories = ["commands", "obuscation"]
+    categories = ["command", "obuscation"]
     authors = ["Kevin Ross", "Optiv"]
     minimum = "1.3"
     evented = True

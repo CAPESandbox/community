@@ -25,7 +25,7 @@ class CmdlineObfuscation(Signature):
     name = "cmdline_obfuscation"
     description = "Appears to use command line obfuscation"
     severity = 3
-    categories = ["commands"]
+    categories = ["command"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -78,7 +78,7 @@ class CmdlineSwitches(Signature):
     name = "cmdline_switches"
     description = "Executed a command line with /V argument which modifies variable behaviour and whitespace allowing for increased obfuscation options"
     severity = 2
-    categories = ["commands"]
+    categories = ["command"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -98,7 +98,7 @@ class CmdlineTerminate(Signature):
     name = "cmdline_terminate"
     description = "Executed a command line with /C or /R argument to terminate command shell on completion which can be used to hide execution"
     severity = 1
-    categories = ["commands"]
+    categories = ["command"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -119,7 +119,7 @@ class LongCommandline(Signature):
     description = "Executed a very long command line or script command which may be indicative of chained commands or obfuscation"
     severity = 2
     confidence = 50
-    categories = ["commands"]
+    categories = ["command"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -151,7 +151,7 @@ class CommandLineHTTPLink(Signature):
     name = "cmdline_http_link"
     description = "A HTTP/S link was seen in a script or command line"
     severity = 2
-    categories = ["commands"]
+    categories = ["command"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -184,7 +184,7 @@ class CommandLineReversedHTTPLink(Signature):
     name = "cmdline_reversed_http_link"
     description = "A reversed HTTP/S link was seen in a script or command line"
     severity = 3
-    categories = ["commands"]
+    categories = ["command"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -217,7 +217,7 @@ class PowershellRenamedCommandLine(Signature):
     name = "powershell_renamed_commandline"
     description = "PowerShell has likely been renamed in a command line"
     severity = 3
-    categories = ["commands"]
+    categories = ["command"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -238,7 +238,7 @@ class CommandLineLongString(Signature):
     name = "commandline_long_string"
     description = "A script or command line contains a long continuous string indicative of obfuscation"
     severity = 3
-    categories = ["commands"]
+    categories = ["command"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -271,7 +271,7 @@ class CommandLineForFilesWildCard(Signature):
     name = "commandline_forfiles_wildcard"
     description = "Possible use of forfiles utility with wildcard to potentially launch a utility"
     severity = 3
-    categories = ["commands"]
+    categories = ["command"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True

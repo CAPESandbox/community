@@ -9,7 +9,7 @@ class Geodo(Signature):
     name = "geodo_banking_trojan"
     description = "Geodo banker Trojan"
     severity = 3
-    categories = ["banker", "Trojan"]
+    categories = ["banker", "trojan"]
     families = ["Geodo", "Emotet"]
     authors = ["Optiv"]
     minimum = "1.2"

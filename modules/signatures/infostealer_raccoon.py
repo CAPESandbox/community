@@ -82,7 +82,7 @@ class raccoon(Signature):
     description = "Detects Raccoon Behavior"
     weight = 3
     severity = 3
-    categories = ["Infostealer"]
+    categories = ["infostealer"]
     families = ["Raccoon"]
     authors = ["@NaxoneZ"]
     minimum = "1.2"

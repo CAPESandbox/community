@@ -22,7 +22,7 @@ class ModifiesAttachmentManager(Signature):
         "Attempts to modify the Microsoft attachment manager possibly to bypass security checks on mail and Internet saved files"
     )
     severity = 3
-    categories = ["antiav", "bypass"]
+    categories = ["anti-av", "bypass"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     references = ["https://support.microsoft.com/en-us/help/883260/information-about-the-attachment-manager-in-microsoft-windows"]
