@@ -148,6 +148,6 @@ class Dyre_APIs(Signature):
                                 if ip.startswith(item):
                                     addit = False
                             if addit:
-                                self.data.append({"C2": ip})
+                                self.data.append({"c2": ip})
 
         return ret

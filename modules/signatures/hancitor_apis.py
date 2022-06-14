@@ -90,7 +90,7 @@ class Hancitor_APIs(Signature):
         ret = self.found
         if self.c2s:
             for url in self.c2s:
-                c2 = {"C2": url}
+                c2 = {"c2": url}
                 if url not in self.data:
                     self.data.append(c2)
 

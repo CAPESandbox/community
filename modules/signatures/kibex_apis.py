@@ -84,7 +84,7 @@ class Kibex_APIs(Signature):
 
         if bad_score >= 10:
             for c2 in self.c2s:
-                self.data.append({"C2": c2})
+                self.data.append({"c2": c2})
 
             return True
 

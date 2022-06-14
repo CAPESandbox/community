@@ -20,7 +20,7 @@ class BitcoinOpenCL(Signature):
     name = "bitcoin_opencl"
     description = "Installs OpenCL library, probably to mine Bitcoins"
     severity = 2
-    categories = ["bitcoin"]
+    categories = ["cryptomining"]
     authors = ["nex"]
     minimum = "0.5"
 

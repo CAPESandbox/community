@@ -21,7 +21,7 @@ class NetworkCountryDistribution(Signature):
     description = "Communicates with IPs located across a large number of unique countries"
     severity = 1
     confidence = 30
-    categories = ["network", "cnc"]
+    categories = ["network", "c2"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
 
@@ -50,7 +50,7 @@ class NetworkMultipleDirectIPConnections(Signature):
     description = "Multiple direct IP connections"
     severity = 2
     confidence = 30
-    categories = ["network", "cnc"]
+    categories = ["network", "c2"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
 

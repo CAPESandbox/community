@@ -80,7 +80,7 @@ class Vawtrak_APIs(Signature):
             for ioc in uri_indicators:
                 match = self.check_url(pattern=ioc, regex=True)
                 if match:
-                    buf = {"C2": match}
+                    buf = {"c2": match}
                     if buf not in self.data:
                         self.data.append(buf)
 

@@ -43,7 +43,7 @@ class NetworkQuestionableHost(Signature):
     description = "Communicates with a host in a RBL"
     severity = 4
     confidence = 80
-    categories = ["network", "cnc"]
+    categories = ["network", "c2"]
     authors = ["Zane C. Bowers-Hadley"]
     minimum = "1.3"
     enabled = False

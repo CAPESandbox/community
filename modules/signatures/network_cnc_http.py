@@ -27,7 +27,7 @@ class NetworkCnCHTTP(Signature):
     severity = 2
     confidence = 30
     weight = 0
-    categories = ["http", "cnc"]
+    categories = ["http", "c2"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
 
