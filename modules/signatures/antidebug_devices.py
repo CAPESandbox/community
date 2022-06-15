@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 
 class AntiDBGDevices(Signature):
-    name = "antidbg_devices"
+    name = "antidebug_devices"
     description = "Checks for the presence of known devices from debuggers and forensic tools"
     severity = 3
     categories = ["anti-debug"]

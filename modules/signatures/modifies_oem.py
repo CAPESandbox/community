@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 
 class ModifiesOEMInformation(Signature):
-    name = "modifies_oem_information"
+    name = "modify_oem_information"
     description = "Modifies host OEM information"
     severity = 2
     categories = ["ransomware"]

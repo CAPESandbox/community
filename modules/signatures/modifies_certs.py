@@ -6,7 +6,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 
 class ModifiesCerts(Signature):
-    name = "modifies_certs"
+    name = "modify_certs"
     description = "Attempts to create or modify system certificates"
     severity = 3
     categories = ["browser"]

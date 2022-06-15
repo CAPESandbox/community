@@ -235,7 +235,7 @@ class PowershellRenamedCommandLine(Signature):
 
 
 class CommandLineLongString(Signature):
-    name = "commandline_long_string"
+    name = "cmdline_long_string"
     description = "A script or command line contains a long continuous string indicative of obfuscation"
     severity = 3
     categories = ["command"]
@@ -268,7 +268,7 @@ class CommandLineLongString(Signature):
 
 
 class CommandLineForFilesWildCard(Signature):
-    name = "commandline_forfiles_wildcard"
+    name = "cmdline_forfiles_wildcard"
     description = "Possible use of forfiles utility with wildcard to potentially launch a utility"
     severity = 3
     categories = ["command"]
