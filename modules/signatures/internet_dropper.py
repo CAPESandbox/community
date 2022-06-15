@@ -82,7 +82,7 @@ class Internet_Dropper(Signature):
         ):
             return False
 
-        if "hosts" in buf and len(buf["hosts"]) > 1:
+        if "hosts" in buf and len(buf["hosts"]) > 1 and "uri" in buf:
             ret = True
             self.data.append({"File": "%s was requested from hosts: %s" % (buf["uri"], ", ".join(buf["hosts"]))})
 
