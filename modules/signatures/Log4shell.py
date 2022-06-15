@@ -26,7 +26,7 @@ user_agent = re.compile(
 
 
 class Log4j(Signature):
-    name = "Log4Shell"
+    name = "log4shell"
     description = "Log4Shell"
     severity = 3
     authors = ["Busra Yenidogan"]

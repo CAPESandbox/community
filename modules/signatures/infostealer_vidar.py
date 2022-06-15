@@ -34,7 +34,7 @@ header = (
 
 
 class vidar(Signature):
-    name = "Vidar Behavior"
+    name = "vidar_behavior"
     description = "Detects Vidar Behavior"
     weight = 3
     severity = 3

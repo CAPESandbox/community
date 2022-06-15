@@ -9,7 +9,7 @@ reg = (
 
 
 class sodinokibi(Signature):
-    name = "Sodinokibi Behavior"
+    name = "sodinokibi_behavior"
     description = "Detects Agent Sodinokibi Behavior"
     weight = 3
     severity = 3

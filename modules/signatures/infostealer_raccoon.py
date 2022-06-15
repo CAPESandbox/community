@@ -78,7 +78,7 @@ infoWrited = (
 
 
 class raccoon(Signature):
-    name = "Raccoon Behavior"
+    name = "raccoon_behavior"
     description = "Detects Raccoon Behavior"
     weight = 3
     severity = 3

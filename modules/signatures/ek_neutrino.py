@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 
 class Neutrino_JS(Signature):
-    name = "Neutrino_js"
+    name = "neutrino_js"
     description = "Executes obfuscated JavaScript indicative of Neutrino Exploit Kit"
     weight = 3
     severity = 3

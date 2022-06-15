@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 
 class TrochilusRATAPIs(Signature):
-    name = "trochilusrat_APIs"
+    name = "trochilusrat_apis"
     description = "TrochilusRAT behavior detected"
     severity = 3
     categories = ["rat"]

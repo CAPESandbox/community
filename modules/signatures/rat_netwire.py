@@ -7,7 +7,7 @@ matches = (
 
 
 class netwire(Signature):
-    name = "NewtWire Behavior"
+    name = "netwire_behavior"
     description = "Detects NetWire Behavior"
     weight = 3
     severity = 3
@@ -25,7 +25,7 @@ class netwire(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.badness_reg = 0
 
-        filter_apinames = set(["RegSetValueExA"])
+    filter_apinames = set(["RegSetValueExA"])
 
     def on_call(self, call, process):
         if call["api"] == "RegSetValueExA":
