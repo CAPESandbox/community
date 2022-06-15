@@ -2,7 +2,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 
 class OrcusRAT(Signature):
-    name = "OrcusRAT Behavior"
+    name = "orcusrat_behavior"
     description = "Detects OrcusRAT Behavior"
     weight = 3
     severity = 3

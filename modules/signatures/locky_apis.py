@@ -25,7 +25,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 
 class Locky_APIs(Signature):
-    name = "Locky_behavior"
+    name = "locky_behavior"
     description = "Exhibits behavior characteristic of Locky ransomware"
     weight = 3
     severity = 3

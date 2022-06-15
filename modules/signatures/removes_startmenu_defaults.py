@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 
 class RemovesStartMenuDefaults(Signature):
-    name = "Removes_startmenu_defaults"
+    name = "removes_startmenu_defaults"
     description = "Removes default programs, folders and network connections from Start menu"
     severity = 2
     categories = ["ransomware"]
