@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 
 class ModifiesAttachmentManager(Signature):
-    name = "modifies_attachment_manager"
+    name = "modify_attachment_manager"
     description = (
         "Attempts to modify the Microsoft attachment manager possibly to bypass security checks on mail and Internet saved files"
     )

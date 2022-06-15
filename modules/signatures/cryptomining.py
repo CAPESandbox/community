@@ -19,7 +19,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 
 class CryptominingStratumCommand(Signature):
-    name = "cyrptomining_stratum_command"
+    name = "cryptomining_stratum_command"
     description = "A cryptomining command was executed"
     severity = 3
     confidence = 90

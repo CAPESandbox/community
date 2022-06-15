@@ -22,7 +22,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 
 class ClamAV(Signature):
-    name = "clamav"
+    name = "antivirus_clamav"
     description = "Clamav Hits in Target/Dropped/SuriExtracted"
     severity = 3
     weight = 0

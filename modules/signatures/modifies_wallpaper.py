@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 
 class ModifiesDesktopWallpaper(Signature):
-    name = "modifies_desktop_wallpaper"
+    name = "modify_desktop_wallpaper"
     description = "Attempts to modify desktop wallpaper"
     severity = 3
     categories = ["ransomware"]
