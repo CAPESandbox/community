@@ -29,9 +29,6 @@ class SetupAPIDiskInformation(Signature):
     ttps += ["U1332"]  # Unprotect
     mbcs = ["OB0001", "B0009", "OB0007", "E1082"]
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_apinames = set(["SetupDiGetClassDevsA", "SetupDiGetClassDevsW"])
 
     def on_call(self, call, process):

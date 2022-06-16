@@ -15,9 +15,6 @@ class InjectionExtension(Signature):
     evented = True
     mbcs = ["OC0001", "C0045"]  # micro-behaviour
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_apinames = set(["CreateProcessInternalW"])
 
     def on_call(self, call, process):

@@ -31,9 +31,6 @@ class CVE_2016_0189(Signature):
     mbcs = ["OB0008", "B0033", "E1203", "OB0009"]
     references = ["https://www.fireeye.com/blog/threat-research/2016/07/exploit_kits_quickly.html"]
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_categories = set(["browser"])
     # backward compat
     filter_apinames = set(["JsEval", "COleScript_Compile", "COleScript_ParseScriptText"])

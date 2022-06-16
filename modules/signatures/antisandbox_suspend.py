@@ -32,9 +32,6 @@ class AntiSandboxSuspend(Signature):
 
     filter_apinames = set(["NtSuspendThread"])
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     def on_call(self, call, process):
         alert = self.get_argument(call, "Alert")
         if alert:

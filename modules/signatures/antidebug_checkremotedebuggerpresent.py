@@ -30,9 +30,6 @@ class antidebug_checkremotedebuggerpresent(Signature):
     ttps = ["T1106"]  # MITRE v6,7,8
     mbcs = ["OB0001", "B0001"]
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_apinames = set(["CheckRemoteDebuggerPresent", "NtQueryInformationProcess"])
 
     def on_call(self, call, process):

@@ -18,9 +18,6 @@ class RemovesZoneIdADS(Signature):
     ttps += ["T1564", "T1564.004"]  # MITRE v7,8
     mbcs = ["OC0001", "C0047"]  # micro-behaviour
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_apinames = set(["DeleteFileA", "DeleteFileW"])
 
     def on_call(self, call, process):

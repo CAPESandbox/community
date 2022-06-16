@@ -26,9 +26,6 @@ class DebugsSelf(Signature):
     evented = True
     mbcs = ["OB0001", "B0002", "B0002.024"]
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_apinames = set(["CreateProcessInternalW"])
 
     def on_call(self, call, process):

@@ -31,9 +31,6 @@ class Gondad_JS(Signature):
     ttps += ["T1059.007"]  # MITRE v7,8
     mbcs = ["OB0008", "E1059", "E1203", "OB0009", "E1190"]
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_categories = set(["browser"])
     filter_apinames = set(["CDocument_write"])
 

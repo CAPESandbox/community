@@ -30,9 +30,6 @@ class DEPDisable(Signature):
     ttps += ["T1562", "T1562.001"]  # MITRE v7,8
     mbcs = ["OB0006"]
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_apinames = set(["NtSetInformationProcess"])
 
     def on_call(self, call, process):

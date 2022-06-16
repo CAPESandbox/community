@@ -18,9 +18,6 @@ class HeapSpray_JS(Signature):
     mbcs = ["OB0009", "E1059"]
     mbcs += ["OC0002", "C0006"]  # micro-behaviour
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_categories = set(["browser"])
     # backward compat
     filter_apinames = set(["JsEval", "COleScript_Compile", "COleScript_ParseScriptText"])

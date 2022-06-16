@@ -33,7 +33,6 @@ class Sundown_JS(Signature):
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-
         self.payloadRC4keys = [
             ('key=\\"gexywoaxor\\"', "Uses the key gexywoaxor associated with the Sundown exploit kit"),
             ('key=\\"galiut\\"', "Uses the key galiut associated with the Nebula exploit kit"),

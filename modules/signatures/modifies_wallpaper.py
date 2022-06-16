@@ -30,9 +30,6 @@ class ModifiesDesktopWallpaper(Signature):
 
     filter_apinames = set(["SystemParametersInfoA", "SystemParametersInfoW"])
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     def on_call(self, call, process):
         action = int(self.get_argument(call, "Action"), 16)
         if action == 0x14:

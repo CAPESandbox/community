@@ -34,9 +34,6 @@ class RansomwareDMALocker(Signature):
     ttps = ["T1486"]  # MITRE v6,7,8
     mbcs = ["OB0008", "E1486"]
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_apinames = set(["RegSetValueExA"])
 
     def on_call(self, call, process):

@@ -32,9 +32,6 @@ class antidebug_ntcreatethreadex(Signature):
     mbcs = ["OB0001", "B0002"]
     mbcs += ["OC0003", "C0038"]  # micro-behaviour
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_apinames = set(["NtCreateThreadEx"])
 
     def on_call(self, call, process):

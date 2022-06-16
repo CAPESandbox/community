@@ -30,9 +30,6 @@ class antidebug_gettickcount(Signature):
     ttps += ["U0125"]  # Unprotect
     mbcs = ["OB0001", "B0001", "B0001.032"]
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_apinames = set(["GetTickCount"])
 
     def on_call(self, call, process):

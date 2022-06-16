@@ -11,9 +11,6 @@ class MINERS(Signature):
     ttps = ["T1496"]  # MITRE v6,7,8
     mbcs = ["OB0008", "B0018"]
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     def run(self):
         pool_domains = [
             "MoneroOcean.stream",

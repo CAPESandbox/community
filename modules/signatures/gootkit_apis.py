@@ -27,9 +27,6 @@ class Gootkit_APIs(Signature):
     minimum = "1.2"
     evented = True
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_apinames = set(["RegSetValueExW"])
 
     def on_call(self, call, process):

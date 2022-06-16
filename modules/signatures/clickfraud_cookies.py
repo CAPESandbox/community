@@ -15,9 +15,6 @@ class ClickfraudCookies(Signature):
     evented = True
     mbcs = ["E1472"]
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_apinames = set(["InternetSetOptionA"])
 
     def on_call(self, call, process):

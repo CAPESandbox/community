@@ -31,9 +31,6 @@ class ExplorerHTTP(Signature):
 
     filter_apinames = set(["WinHttpConnect", "WinHttpOpenRequest"])
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     def on_call(self, call, process):
         processname = process["process_name"].lower()
         if processname == "explorer.exe":

@@ -29,9 +29,6 @@ class antidebug_setunhandledexceptionfilter(Signature):
     ttps += ["U0108"]  # Unprotect
     mbcs = ["OB0001", "B0001", "B0001.030"]
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_apinames = set(["SetUnhandledExceptionFilter"])
 
     def on_call(self, call, process):

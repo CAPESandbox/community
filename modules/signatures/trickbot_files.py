@@ -17,9 +17,6 @@ class TrickBotTaskDelete(Signature):
     mbcs = ["OB0006", "F0007"]
     mbcs += ["OC00001", "C0047"]  # micro-behaviour
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_apinames = set(["DeleteFileW"])
 
     def on_call(self, call, process):

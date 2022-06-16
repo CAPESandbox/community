@@ -31,9 +31,6 @@ class CVE_2016_7200(Signature):
     mbcs = ["OB0008", "B0033", "E1203", "OB0009"]
     references = ["http://malware.dontneedcoffee.com/2017/01/CVE-2016-7200-7201.html"]
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_categories = set(["browser"])
     # backward compat
     filter_apinames = set(["JsEval", "COleScript_Compile", "COleScript_ParseScriptText"])

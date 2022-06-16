@@ -32,9 +32,6 @@ class CVE2015_2419_JS(Signature):
         "blog.checkpoint.com/2016/02/10/too-much-freedom-is-dangerous-understanding-ie-11-cve-2015-2419-exploitation/",
     ]
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_categories = set(["browser"])
     # backward compat
     filter_apinames = set(["JsEval", "COleScript_Compile", "COleScript_ParseScriptText"])

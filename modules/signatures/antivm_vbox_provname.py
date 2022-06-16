@@ -29,9 +29,6 @@ class VBoxDetectProvname(Signature):
     ttps += ["U1332"]  # Unprotect
     mbcs = ["OB0001", "B0009", "B0009.001"]
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_apinames = set(["WNetGetProviderNameW"])
 
     def on_call(self, call, process):

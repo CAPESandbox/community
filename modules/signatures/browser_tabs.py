@@ -27,9 +27,6 @@ class FirefoxDisablesProcessPerTab(Signature):
     ttps = ["T1185"]
     references = [" https://www.kryptoslogic.com/blog/2022/01/deep-dive-into-trickbots-web-injection/"]
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_apinames = set(["NtWriteFile"])
 
     def on_call(self, call, process):

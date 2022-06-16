@@ -16,9 +16,6 @@ class DeletesShadowCopies(Signature):
     ttps = ["T1490"]  # MITRE v6,7,8
     mbcs = ["OB0008", "F0014", "F0014.001"]
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_apinames = set(["CreateProcessInternalW", "ShellExecuteExW"])
 
     def on_call(self, call, process):

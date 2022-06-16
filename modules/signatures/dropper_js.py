@@ -36,9 +36,6 @@ class EXEDropper_JS(Signature):
 
     filter_analysistypes = set(["file"])
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_categories = set(["browser"])
     # backward compat
     filter_apinames = set(["JsEval"])

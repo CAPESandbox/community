@@ -27,9 +27,6 @@ class Excel4MacroUrls(Signature):
     evented = False
     ttps = ["T1137", "T1137.001"]  # MITRE v6,7,8
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     def run(self):
         ret = False
         for line in self.results.get("static", {}).get("office", {}).get("XLMMacroDeobfuscator", []) or []:

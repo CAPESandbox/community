@@ -30,9 +30,6 @@ class AntiSandboxSboxieObjects(Signature):
     ttps += ["U0513"]  # Unprotect
     mbcs = ["OB0001", "B0007", "B0009"]
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_apinames = set(["NtOpenDirectoryObject"])
 
     def on_call(self, call, process):

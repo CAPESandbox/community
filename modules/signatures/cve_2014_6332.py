@@ -29,9 +29,6 @@ class CVE_2014_6332(Signature):
     ttps = ["T1203"]  # MITRE v6,7,8
     mbcs = ["OB0009", "E1203"]
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_categories = set(["browser"])
     # backward compat
     filter_apinames = set(["JsEval", "COleScript_Compile", "COleScript_ParseScriptText"])

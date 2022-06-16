@@ -30,9 +30,6 @@ class BrowserScanbox(Signature):
     ttps += ["T1592", "T1592.002", "T1592.004"]  # MITRE v8
     mbcs = ["OB0003", "OB0007", "E1056", "E1082", "F0002"]
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_categories = set(["browser"])
     # backward compat
     filter_apinames = set(["JsEval", "COleScript_Compile", "COleScript_ParseScriptText"])
