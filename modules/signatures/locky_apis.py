@@ -35,6 +35,8 @@ class Locky_APIs(Signature):
     minimum = "1.2"
     evented = True
 
+    filter_apinames = set(["GetVolumeNameForVolumeMountPointW", "InternetCrackUrlA", "CryptHashData", "NtOpenEvent"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.checkEvent = False
@@ -46,8 +48,6 @@ class Locky_APIs(Signature):
         self.payment = set()
         self.keywords = ["id=", "act=", "lang="]
         self.sigchanged = False
-
-    filter_apinames = set(["GetVolumeNameForVolumeMountPointW", "InternetCrackUrlA", "CryptHashData", "NtOpenEvent"])
 
     def on_call(self, call, process):
         if self.checkEvent and self.lastapi == "CryptHashData":

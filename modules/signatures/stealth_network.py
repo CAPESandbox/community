@@ -14,11 +14,11 @@ class StealthNetwork(Signature):
     minimum = "1.2"
     evented = True
 
+    filter_categories = set(["network"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.foundnetwork = False
-
-    filter_categories = set(["network"])
 
     def on_call(self, call, process):
         self.foundnetwork = True

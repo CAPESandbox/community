@@ -26,12 +26,12 @@ class Multiple_UA(Signature):
     evented = True
     ttps = ["T1071"]  # MITRE v6,7,8
 
+    filter_apinames = set(["InternetOpenA", "InternetOpenW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.useragents = list()
         self.procs = list()
-
-    filter_apinames = set(["InternetOpenA", "InternetOpenW"])
 
     def on_call(self, call, process):
         # Dict whitelist with process name as key, and useragents as values

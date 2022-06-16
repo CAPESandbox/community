@@ -35,6 +35,8 @@ class CryptoWall_APIs(Signature):
     mbcs = ["OB0008", "E1486"]
     mbcs += ["OC0005", "C0027"]  # micro-behaviour
 
+    filter_apinames = set(["CryptHashData", "RtlDecompressBuffer", "NtOpenEvent"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.cryptInfo = False
@@ -42,8 +44,6 @@ class CryptoWall_APIs(Signature):
         self.buffers = set()
         self.lastLargeBuf = str()
         self.compname = self.get_environ_entry(self.get_initial_process(), "ComputerName")
-
-    filter_apinames = set(["CryptHashData", "RtlDecompressBuffer", "NtOpenEvent"])
 
     def on_call(self, call, process):
         if call["api"] == "CryptHashData":

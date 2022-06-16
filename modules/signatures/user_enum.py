@@ -26,11 +26,11 @@ class UserEnum(Signature):
     evented = True
     ttps = ["T1033"]  # MITRE v6,7,8
 
+    filter_apinames = set(["NetUserGetInfo"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.users = dict()
-
-    filter_apinames = set(["NetUserGetInfo"])
 
     def on_call(self, call, process):
         if call["status"]:

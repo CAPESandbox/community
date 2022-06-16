@@ -26,13 +26,13 @@ class IPC_NamedPipe(Signature):
     evented = True
     mbcs = ["OC0006", "C0003", "C0003.001"]  # micro-behaviour
 
+    filter_apinames = set(["NtCreateNamedPipeFile", "NtReadFile", "NtWriteFile"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.created = dict()
         self.ipc = dict()
         self.pipeNames = set()
-
-    filter_apinames = set(["NtCreateNamedPipeFile", "NtReadFile", "NtWriteFile"])
 
     def on_call(self, call, process):
         # We only need to process "good" returns.

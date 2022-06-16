@@ -27,12 +27,12 @@ class ProcessNeeded(Signature):
     ttps = ["T1057"]  # MITRE v6,7,8
     mbcs = ["OB0007"]
 
+    filter_apinames = set(["Process32NextW", "NtOpenProcess"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.searches = 0
         self.did_openprocess = 0
-
-    filter_apinames = set(["Process32NextW", "NtOpenProcess"])
 
     def on_call(self, call, process):
         if call["api"] == "Process32NextW":

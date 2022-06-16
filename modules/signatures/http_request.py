@@ -23,12 +23,6 @@ class HTTP_Request(Signature):
     ttps += ["T1071.001"]  # MITRE v7,8
     mbcs = ["OC0006", "C0002"]  # micro-behaviour
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.request = dict()
-        self.lasthost = str()
-        self.urls = set()
-
     filter_apinames = set(
         [
             "HttpOpenRequestA",
@@ -40,6 +34,12 @@ class HTTP_Request(Signature):
             "InternetOpenUrlA",
         ]
     )
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.request = dict()
+        self.lasthost = str()
+        self.urls = set()
 
     def on_call(self, call, process):
         if call["api"].startswith("InternetConnect"):

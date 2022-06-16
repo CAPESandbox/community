@@ -16,11 +16,11 @@ class StealthChildProc(Signature):
     evented = True
     references = ["https://www.countercept.com/blog/detecting-parent-pid-spoofing/"]
 
+    filter_apinames = set(["NtCreateProcess", "NtCreateProcessEx", "RtlCreateUserProcess", "CreateProcessInternalW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
-
-    filter_apinames = set(["NtCreateProcess", "NtCreateProcessEx", "RtlCreateUserProcess", "CreateProcessInternalW"])
 
     def on_call(self, call, process):
         parenthandle = self.get_argument(call, "ParentHandle")

@@ -34,15 +34,15 @@ class CompilesDotNetCode(Signature):
     ttps += ["T1027.004"]  # MITRE v7,8
     mbcs = ["OB0002", "E1027"]
 
+    filter_apinames = set(["CreateProcessInternalA", "CreateProcessInternalW", "NtWriteFile"])
+    filter_analysistypes = set(["file"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.data = []
         self.csccmd = False
         self.cvtrescmd = False
         self.writemz = False
-
-    filter_apinames = set(["CreateProcessInternalA", "CreateProcessInternalW", "NtWriteFile"])
-    filter_analysistypes = set(["file"])
 
     def on_call(self, call, process):
         if call["api"] == "CreateProcessInternalA" or call["api"] == "CreateProcessInternalW":

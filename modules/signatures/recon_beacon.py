@@ -30,11 +30,11 @@ class Recon_Beacon(Signature):
     mbcs = ["OB0004", "B0030", "OB0007", "E1082"]
     mbcs += ["OC0006", "C0002"]  # micro-behaviour
 
+    filter_apinames = set(["HttpSendRequestA", "HttpOpenRequestA"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.proclogs = dict()
-
-    filter_apinames = set(["HttpSendRequestA", "HttpOpenRequestA"])
 
     def on_call(self, call, process):
         if call["api"] == "HttpSendRequestA":

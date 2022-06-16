@@ -71,6 +71,8 @@ class MimicsFiletime(Signature):
     ttps += ["T1036", "T1070"]  # MITRE v6,7,8
     ttps += ["T1070.006"]  # MITRE v7,8
 
+    filter_apinames = set(["NtOpenFile", "NtCreateFile", "NtClose", "NtQueryInformationFile", "NtSetInformationFile"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.lastprocess = 0
@@ -78,8 +80,6 @@ class MimicsFiletime(Signature):
         self.old_handles = []
         self.saw_mimic = False
         self.mimics = set()
-
-    filter_apinames = set(["NtOpenFile", "NtCreateFile", "NtClose", "NtQueryInformationFile", "NtSetInformationFile"])
 
     def on_call(self, call, process):
         BasicFileInformation = 4

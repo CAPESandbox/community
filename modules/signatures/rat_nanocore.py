@@ -29,12 +29,12 @@ class NanocoreRAT(Signature):
     ttps = ["T1219"]  # MITRE v6,7,8
     mbcs = ["B0022"]
 
+    filter_apinames = set(["CryptHashData"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.cryptcalls = 0
         self.cryptmz = 0
-
-    filter_apinames = set(["CryptHashData"])
 
     def on_call(self, call, process):
         if call["api"] == "CryptHashData":

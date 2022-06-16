@@ -30,13 +30,13 @@ class NetworkAnomaly(Signature):
     minimum = "1.2"
     evented = True
 
+    filter_apinames = set(["getaddrinfo", "InternetConnectA", "InternetConnectW", "connect", "WSAConnect", "GetAddrInfoW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ipWhitelist = set(["127.0.0.1"])
         self.ipBuffer = list()
         self.ipRex = r"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.)" "{3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
-
-    filter_apinames = set(["getaddrinfo", "InternetConnectA", "InternetConnectW", "connect", "WSAConnect", "GetAddrInfoW"])
 
     def on_call(self, call, process):
         if call["api"] == "getaddrinfo" or call["api"] == "GetAddrInfoW":

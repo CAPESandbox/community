@@ -48,13 +48,13 @@ class vidar(Signature):
     # Vidar
     # 1. 726aa7c9d286afab16c956639ffe01a47ce556bc893f46d487b3148608a019d7 (variant1)
 
+    filter_apinames = set(["NtCreateFile", "HttpOpenRequestA", "HttpAddRequestHeadersA"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.badness_urls = 0
         self.badness_files = 0
         self.badness_headers = 0
-
-    filter_apinames = set(["NtCreateFile", "HttpOpenRequestA", "HttpAddRequestHeadersA"])
 
     def on_call(self, call, process):
 

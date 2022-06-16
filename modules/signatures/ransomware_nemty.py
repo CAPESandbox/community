@@ -77,11 +77,11 @@ class NemtyNote(Signature):
     ttps = ["T1486"]  # MITRE v6,7,8
     mbcs = ["OC0001", "C0016"]  # micro-behaviour
 
+    filter_apinames = set(["NtWriteFile"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.match = False
-
-    filter_apinames = set(["NtWriteFile"])
 
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
@@ -107,6 +107,8 @@ class NemtyNetworkActivity(Signature):
     mbcs = ["OB0004", "B0030"]
     mbcs += ["OC0006", "C0005"]  # micro-behaviour
 
+    filter_apinames = set(["InternetOpenA", "InternetOpenUrlA"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.match_agent = False
@@ -119,8 +121,6 @@ class NemtyNetworkActivity(Signature):
             "api.ipify.org",
             "api.db-ip.com",
         ]
-
-    filter_apinames = set(["InternetOpenA", "InternetOpenUrlA"])
 
     def on_call(self, call, process):
         if call["api"] == "InternetOpenA":

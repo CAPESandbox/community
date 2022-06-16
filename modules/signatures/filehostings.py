@@ -19,11 +19,11 @@ class Modiloader_APIs(Signature):
     ttps += ["T1071.001"]  # MITRE v7,8
     mbcs = ["OC0006", "C0002"]  # micro-behaviour
 
+    filter_apinames = set(["InternetOpenUrlA", "WinHttpOpenRequest"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.urls = list()
-
-    filter_apinames = set(["InternetOpenUrlA", "WinHttpOpenRequest"])
 
     def on_call(self, call, process):
         url = False

@@ -29,12 +29,12 @@ class CreatesLargeKey(Signature):
     mbcs = ["OB0006", "E1112", "OB0012"]
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
+    filter_apinames = set(["NtSetValueKey", "RegSetValueExA", "RegSetValueExW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.saw_large = False
         self.regkeyvals = set()
-
-    filter_apinames = set(["NtSetValueKey", "RegSetValueExA", "RegSetValueExW"])
 
     def on_call(self, call, process):
         vallen = self.get_argument(call, "BufferLength")

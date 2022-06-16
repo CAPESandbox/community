@@ -29,11 +29,11 @@ class DriverLoad(Signature):
     mbcs = ["OB0012", "F0010"]
     mbcs += ["OC0007", "C0023"]  # micro-behaviour
 
+    filter_apinames = set(["NtLoadDriver"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.found_driverload = False
-
-    filter_apinames = set(["NtLoadDriver"])
 
     def on_call(self, call, process):
         drivername = self.get_argument(call, "DriverServiceName")

@@ -34,12 +34,12 @@ class Kibex_APIs(Signature):
         "http://researchcenter.paloaltonetworks.com/2015/06/keybase-keylogger-malware-family-exposed/",
     ]
 
+    filter_apinames = set(["SetWindowsHookExA", "WinHttpGetProxyForUrl"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.keylog_inits = 0
         self.c2s = set()
-
-    filter_apinames = set(["SetWindowsHookExA", "WinHttpGetProxyForUrl"])
 
     def on_call(self, call, process):
         if call["api"] == "SetWindowsHookExA":

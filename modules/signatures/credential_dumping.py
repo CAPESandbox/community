@@ -32,6 +32,8 @@ class LsassCredentialDumping(Signature):
         "cyberwardog.blogspot.co.uk/2017/04/chronicles-of-threat-hunter-hunting-for.html",
     ]
 
+    filter_apinames = set(["NtOpenProcess", "Process32NextW", "ReadProcessMemory"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.lsasspid = []
@@ -39,8 +41,6 @@ class LsassCredentialDumping(Signature):
         self.readaccessprocs = []
         self.creddumpprocs = []
         self.ret = False
-
-    filter_apinames = set(["NtOpenProcess", "Process32NextW", "ReadProcessMemory"])
 
     def on_call(self, call, process):
         if call["api"] == "Process32NextW":

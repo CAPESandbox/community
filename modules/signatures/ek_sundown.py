@@ -31,16 +31,16 @@ class Sundown_JS(Signature):
     ttps += ["T1059.007"]  # MITRE v7,8
     mbcs = ["OB0008", "E1190", "OB0009", "E1059"]
 
+    filter_categories = set(["browser"])
+    # backward compat
+    filter_apinames = set(["JsEval", "COleScript_Compile", "COleScript_ParseScriptText"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.payloadRC4keys = [
             ('key=\\"gexywoaxor\\"', "Uses the key gexywoaxor associated with the Sundown exploit kit"),
             ('key=\\"galiut\\"', "Uses the key galiut associated with the Nebula exploit kit"),
         ]
-
-    filter_categories = set(["browser"])
-    # backward compat
-    filter_apinames = set(["JsEval", "COleScript_Compile", "COleScript_ParseScriptText"])
 
     def on_call(self, call, process):
         if call["api"] == "JsEval":

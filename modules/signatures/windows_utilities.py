@@ -316,6 +316,8 @@ class AltersWindowsUtility(Signature):
     ttps = ["T1036"]  # MITRE v6,7,8
     ttps += ["T1036.003"]  # MITRE v7,8
 
+    filter_apinames = set(["CopyFileExA", "CopyFileExW", "MoveFileWithProgressW", "MoveFileWithProgressTransactedW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
@@ -341,8 +343,6 @@ class AltersWindowsUtility(Signature):
             "wmic.exe",
             "wscript.exe",
         ]
-
-    filter_apinames = set(["CopyFileExA", "CopyFileExW", "MoveFileWithProgressW", "MoveFileWithProgressTransactedW"])
 
     def on_call(self, call, process):
         self.ret = False
@@ -397,6 +397,8 @@ class OverwritesAccessibilityUtility(Signature):
     ttps = ["T1015"]  # MITRE v6
     ttps += ["T1546", "T1546.008"]  # MITRE v7,8
 
+    filter_apinames = set(["CopyFileExA", "CopyFileExW", "MoveFileWithProgressW", "MoveFileWithProgressTransactedW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
@@ -409,8 +411,6 @@ class OverwritesAccessibilityUtility(Signature):
             "sethc.exe",
             "utilman.exe",
         ]
-
-    filter_apinames = set(["CopyFileExA", "CopyFileExW", "MoveFileWithProgressW", "MoveFileWithProgressTransactedW"])
 
     def on_call(self, call, process):
         self.ret = False

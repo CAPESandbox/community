@@ -37,12 +37,12 @@ class Autorun_scheduler(Signature):
     ttps += ["T1053.005"]  # MITRE v7,8
     mbcs = ["OB0012", "E1112"]
 
+    filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey", "CreateServiceA", "CreateServiceW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.registry_writes = dict()
         self.found_autorun = False
-
-    filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey", "CreateServiceA", "CreateServiceW"])
 
     def on_call(self, call, process):
         if call["api"].startswith("CreateService") and call["status"]:
@@ -120,12 +120,12 @@ class Autorun(Signature):
     ttps += ["T1547", "T1547.001"]  # MITRE v7,8
     mbcs = ["OB0012", "E1112", "F0012"]
 
+    filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey", "CreateServiceA", "CreateServiceW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.registry_writes = dict()
         self.found_autorun = False
-
-    filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey", "CreateServiceA", "CreateServiceW"])
 
     def on_call(self, call, process):
         if call["api"].startswith("CreateService") and call["status"]:

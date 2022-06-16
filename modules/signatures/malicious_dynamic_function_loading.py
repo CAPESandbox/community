@@ -28,6 +28,8 @@ class malicious_dynamic_function_loading(Signature):
     ttps = ["T1073"]  # MITRE v6
     ttps += ["T1574", "T1574.002"]  # MITRE v7,8
 
+    filter_apinames = set(["LdrGetProcedureAddress", "LdrLoadDll"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.dll_loaded = False
@@ -53,8 +55,6 @@ class malicious_dynamic_function_loading(Signature):
             "AdjustTokenPrivileges",
             "OpenThreadToken",
         ]
-
-    filter_apinames = set(["LdrGetProcedureAddress", "LdrLoadDll"])
 
     def on_call(self, call, process):
         if call["api"] == "LdrLoadDll":

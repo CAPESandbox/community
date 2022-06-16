@@ -18,11 +18,11 @@ class OrcusRAT(Signature):
     # OrcusRAT:
     #  1. 2373c4b52ac6133345f309ac75b67bbb (variant1)
 
+    filter_apinames = set(["RegOpenKeyExW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.badness_files = 0
-
-    filter_apinames = set(["RegOpenKeyExW"])
 
     def on_call(self, call, process):
 

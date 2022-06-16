@@ -74,11 +74,11 @@ class StopRansomwareRegistry(Signature):
     minimum = "1.3"
     evented = True
 
+    filter_apinames = set(["RegSetValueExW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.match = False
-
-    filter_apinames = set(["RegSetValueExW"])
 
     def on_call(self, call, process):
         valuename = self.get_argument(call, "ValueName")

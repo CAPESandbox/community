@@ -29,14 +29,14 @@ class OfficeSuspiciousProcesses(Signature):
     ttps += ["T1027.004"]  # MITRE v7,8
     mbcs = ["OB0009", "E1059"]
 
+    filter_apinames = set(["CreateProcessInternalW", "NtCreateUserProcess"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.officeprocs = ["winword", "excel.exe", "powerpnt.exe"]
         self.suspiciousprocs = ["msbuild.exe", "cmd.exe", "wscript.exe", "cscript.exe", "powershell.exe", "csc.exe", "msdt.exe"]
         self.mastertrigger = False
         self.secondarytrigger = False
-
-    filter_apinames = set(["CreateProcessInternalW", "NtCreateUserProcess"])
 
     def on_call(self, call, process):
         processname = process["process_name"].lower()

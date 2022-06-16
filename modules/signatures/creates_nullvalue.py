@@ -30,12 +30,12 @@ class CreatesNullValue(Signature):
     mbcs = ["OB0006", "E1112", "F0006"]
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
+    filter_apinames = set(["NtSetValueKey", "NtCreateKey"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.saw_null = False
         self.regkeyvals = set()
-
-    filter_apinames = set(["NtSetValueKey", "NtCreateKey"])
 
     def on_call(self, call, process):
         if call["api"] == "NtCreateKey":

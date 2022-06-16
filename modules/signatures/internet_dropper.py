@@ -28,14 +28,14 @@ class Internet_Dropper(Signature):
     mbcs = ["OB0004", "B0030", "B0030.005"]
     mbcs += ["OC0006", "C0002"]  # micro-behaviour
 
+    # May need to expand this later (eg. InternetSetOption* for handle management)
+    filter_apinames = set(["HttpOpenRequestA", "HttpOpenRequestW", "InternetConnectA", "InternetConnectW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.dropper = dict()
         self.lasthost = str()
         self.uris = set()
-
-    # May need to expand this later (eg. InternetSetOption* for handle management)
-    filter_apinames = set(["HttpOpenRequestA", "HttpOpenRequestW", "InternetConnectA", "InternetConnectW"])
 
     def on_call(self, call, process):
         if call["api"].startswith("InternetConnect"):

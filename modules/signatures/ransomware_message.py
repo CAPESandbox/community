@@ -33,6 +33,8 @@ class RansomwareMessage(Signature):
     mbcs = ["OB0008", "E1486"]
     mbcs += ["OC0001", "C0016"]  # micro-behaviour
 
+    filter_apinames = set(["NtWriteFile"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.indicators = [
@@ -125,8 +127,6 @@ class RansomwareMessage(Signature):
             "your network",
         ]
         self.patterns = "|".join(self.indicators)
-
-    filter_apinames = set(["NtWriteFile"])
 
     def on_call(self, call, process):
         buff = self.get_raw_argument(call, "Buffer").lower()

@@ -22,14 +22,14 @@ class OfficeWriteEXE(Signature):
     ttps = ["T1137"]  # MITRE v6,7,8
     mbcs = ["OC0001", "C0016"]  # micro-behaviour
 
+    filter_apinames = set(["NtWriteFile"])
+    filter_analysistypes = set(["file"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.data = []
         self.exere = re.compile(r"\.exe$")
         self.office_proc_list = ["wordview.exe", "winword.exe", "excel.exe", "powerpnt.exe", "outlook.exe"]
-
-    filter_apinames = set(["NtWriteFile"])
-    filter_analysistypes = set(["file"])
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()

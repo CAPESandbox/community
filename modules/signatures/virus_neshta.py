@@ -57,11 +57,11 @@ class NeshtaRegKeys(Signature):
     mbcs = ["E1112"]
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
+    filter_apinames = set(["RegSetValueExA", "RegSetValueExW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.match = False
-
-    filter_apinames = set(["RegSetValueExA", "RegSetValueExW"])
 
     def on_call(self, call, process):
         if call["api"] == "RegSetValueExA":
@@ -91,11 +91,11 @@ class NeshtaFiles(Signature):
     evented = True
     mbcs = ["OC0001", "C0016"]  # micro-behaviour
 
+    filter_apinames = set(["NtCreateFile"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.match = False
-
-    filter_apinames = set(["NtCreateFile"])
 
     def on_call(self, call, process):
         if call["api"] == "NtCreateFile":

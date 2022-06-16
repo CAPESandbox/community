@@ -32,11 +32,11 @@ class antidebug_guardpages(Signature):
     mbcs = ["OB0001", "B0001", "B0001.009", "B0002", "B0002.008"]
     mbcs += ["OC0002", "C0008"]  # micro-behaviour
 
+    filter_apinames = set(["NtAllocateVirtualMemory", "NtProtectVirtualMemory", "VirtualProtectEx"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.found = False
-
-    filter_apinames = set(["NtAllocateVirtualMemory", "NtProtectVirtualMemory", "VirtualProtectEx"])
 
     def on_call(self, call, process):
         if call["api"] == "NtAllocateVirtualMemory":

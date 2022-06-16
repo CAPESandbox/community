@@ -32,12 +32,12 @@ class Kovter_APIs(Signature):
     minimum = "1.3"
     evented = True
 
+    filter_apinames = set(["CreateThread", "NtCreateEvent", "NtCreateSection", "LdrGetProcedureAddress"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.lastapi = str()
         self.chain = False
-
-    filter_apinames = set(["CreateThread", "NtCreateEvent", "NtCreateSection", "LdrGetProcedureAddress"])
 
     def on_call(self, call, process):
         continueChain = False

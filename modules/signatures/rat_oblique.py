@@ -83,13 +83,13 @@ class ObliquekRATNetworkActivity(Signature):
     mbcs = ["B0022"]
     mbcs += ["OC0006", "C0001"]  # micro-behaviour
 
+    filter_apinames = set(["send"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.username = self.get_environ_entry(self.get_initial_process(), "UserName")
         self.hostname = self.get_environ_entry(self.get_initial_process(), "ComputerName")
         self.match = False
-
-    filter_apinames = set(["send"])
 
     def on_call(self, call, process):
         if call["api"] == "send":

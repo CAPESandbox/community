@@ -32,6 +32,8 @@ class Upatre_APIs(Signature):
     minimum = "1.2"
     evented = True
 
+    filter_apinames = set(["DeleteFileA", "GetComputerNameW", "InternetConnectW", "HttpOpenRequestW", "CreateProcessInternalW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.created_procs = list()
@@ -52,8 +54,6 @@ class Upatre_APIs(Signature):
                 self.first_path = str(first_process["module_path"])
                 if first_process["children"]:
                     self.bad_pid = first_process["children"][0]["pid"]
-
-    filter_apinames = set(["DeleteFileA", "GetComputerNameW", "InternetConnectW", "HttpOpenRequestW", "CreateProcessInternalW"])
 
     def on_call(self, call, process):
         # We only care about top-most parent and first child processes

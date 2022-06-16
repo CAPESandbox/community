@@ -32,12 +32,12 @@ class Secure_Login_Phish(Signature):
     ttps = ["T1192"]  # MITRE v6
     ttps += ["T1566", "T1566.002"]  # MITRE v7,8
 
+    filter_apinames = set(["InternetCrackUrlW", "InternetReadFile"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.lasturl = str()
         self.phishingurls = set()
-
-    filter_apinames = set(["InternetCrackUrlW", "InternetReadFile"])
 
     def on_call(self, call, process):
         if call["api"] == "InternetCrackUrlW":

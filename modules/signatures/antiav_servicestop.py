@@ -23,13 +23,13 @@ class AntiAVServiceStop(Signature):
     ttps += ["T1543", "T1543.003", "T1562", "T1562.001"]  # MITRE v7,8
     mbcs = ["OB0006", "F0004", "F0011"]
 
+    filter_apinames = set(["OpenServiceW", "OpenServiceA", "ControlService"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.handles = dict()
         self.lastprocess = 0
         self.stoppedservices = []
-
-    filter_apinames = set(["OpenServiceW", "OpenServiceA", "ControlService"])
 
     def on_call(self, call, process):
         if process is not self.lastprocess:

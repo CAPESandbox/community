@@ -31,12 +31,12 @@ class WiperZeroedBytes(Signature):
     evented = True
     ttps = ["T1561"]
 
+    filter_apinames = set(["NtWriteFile"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.wipecount = 0
         self.lastfile = ""
-
-    filter_apinames = set(["NtWriteFile"])
 
     def on_call(self, call, process):
         filepath = self.get_raw_argument(call, "HandleName")

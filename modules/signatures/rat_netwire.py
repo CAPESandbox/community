@@ -23,11 +23,11 @@ class netwire(Signature):
     # NetWire:
     # 1. e9dc09a5dabdc98350d319469055733c93723d4dd262e577b7599c90de7386b9 (variant1)
 
+    filter_apinames = set(["RegSetValueExA"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.badness_reg = 0
-
-    filter_apinames = set(["RegSetValueExA"])
 
     def on_call(self, call, process):
         if call["api"] == "RegSetValueExA":

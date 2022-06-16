@@ -31,6 +31,8 @@ class SetsAutoconfigURL(Signature):
     evented = True
     ttps = ["T1090"]  # MITRE v6,7,8
 
+    filter_apinames = set(["RegSetValueExA", "NtWriteFile"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.pathbuf = str()
@@ -47,8 +49,6 @@ class SetsAutoconfigURL(Signature):
             "java.exe",
             "outlook.exe",
         ]
-
-    filter_apinames = set(["RegSetValueExA", "NtWriteFile"])
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()

@@ -30,6 +30,10 @@ class DeletesSelf(Signature):
     mbcs = ["OB0006", "F0007"]
     mbcs += ["OC0001", "C0047"]  # micro-behaviour
 
+    filter_apinames = set(
+        ["NtDeleteFile", "DeleteFileA", "DeleteFileW", "MoveFileWithProgressW", "MoveFileWithProgressTransactedW"]
+    )
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         # get the path of the initial monitored executable
@@ -37,10 +41,6 @@ class DeletesSelf(Signature):
         initialproc = self.get_initial_process()
         if initialproc:
             self.initialpath = initialproc["module_path"].lower()
-
-    filter_apinames = set(
-        ["NtDeleteFile", "DeleteFileA", "DeleteFileW", "MoveFileWithProgressW", "MoveFileWithProgressTransactedW"]
-    )
 
     def on_call(self, call, process):
         if not call["status"]:

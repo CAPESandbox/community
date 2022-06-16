@@ -26,6 +26,8 @@ class NetworkFakeUserAgent(Signature):
     evented = True
     ttps = ["T1032"]
 
+    filter_apinames = set(["InternetOpenA", "WinHttpOpen"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.match = False
@@ -42,8 +44,6 @@ class NetworkFakeUserAgent(Signature):
             "(BlackBerry;",
             "by NZXER",
         ]
-
-    filter_apinames = set(["InternetOpenA", "WinHttpOpen"])
 
     def on_call(self, call, process):
         if call["api"] == "InternetOpenA":

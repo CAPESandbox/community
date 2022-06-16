@@ -27,6 +27,20 @@ class InjectionNetworkTraffic(Signature):
     evented = True
     ttps = ["T1071"]  # MITRE v6,7,8
 
+    filter_apinames = set(
+        [
+            "connect",
+            "HttpOpenRequestA",
+            "HttpOpenRequestW",
+            "InternetConnectA",
+            "InternetConnectW",
+            "InternetCrackUrlW",
+            "InternetCrackUrlA",
+            "URLDownloadToFileW",
+            "WSASend",
+        ]
+    )
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.data = []
@@ -42,20 +56,6 @@ class InjectionNetworkTraffic(Signature):
             "wininit.exe",
             "winlogon.exe",
         ]
-
-    filter_apinames = set(
-        [
-            "connect",
-            "HttpOpenRequestA",
-            "HttpOpenRequestW",
-            "InternetConnectA",
-            "InternetConnectW",
-            "InternetCrackUrlW",
-            "InternetCrackUrlA",
-            "URLDownloadToFileW",
-            "WSASend",
-        ]
-    )
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()

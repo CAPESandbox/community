@@ -27,11 +27,11 @@ class Ursnif_APIs(Signature):
     minimum = "1.3"
     evented = True
 
+    filter_apinames = set(["RtlDecompressBuffer"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.decompMZ = set()
-
-    filter_apinames = set(["RtlDecompressBuffer"])
 
     def on_call(self, call, process):
         buf = self.get_argument(call, "UncompressedBuffer")

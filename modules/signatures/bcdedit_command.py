@@ -31,14 +31,14 @@ class BCDEditCommand(Signature):
     mbcs = ["OB0006", "E1478", "OB0009", "E1059"]
     mbcs += ["OC0008", "C0033"]  # micro-behaviour
 
+    filter_apinames = set(["CreateProcessInternalW", "ShellExecuteExW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.bcdedit = False
         self.systemrepair = False
         self.ignorefailures = False
         self.testsigning = False
-
-    filter_apinames = set(["CreateProcessInternalW", "ShellExecuteExW"])
 
     def on_call(self, call, process):
         if call["api"] == "CreateProcessInternalW":

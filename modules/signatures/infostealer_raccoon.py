@@ -92,13 +92,13 @@ class raccoon(Signature):
     # Raccoon:
     # 1. 726aa7c9d286afab16c956639ffe01a47ce556bc893f46d487b3148608a019d7 (variant1)
 
+    filter_apinames = set(["DeleteFileW", "FindFirstFileExW", "NtWriteFile"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.badness_filesSearched = 0
         self.badness_filesDeleted = 0
         self.badness_infoWrited = 0
-
-    filter_apinames = set(["DeleteFileW", "FindFirstFileExW", "NtWriteFile"])
 
     def on_call(self, call, process):
 

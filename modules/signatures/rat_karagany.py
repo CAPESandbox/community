@@ -33,6 +33,8 @@ class KaraganyEventObjects(Signature):
     ttps = ["T1219"]  # MITRE v6,7,8
     mbcs = ["B0022"]
 
+    filter_apinames = set(["NtCreateEvent", "NtCreateEventEx"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.match = False
@@ -41,8 +43,6 @@ class KaraganyEventObjects(Signature):
             "__pickill__",
             "__klgkillsoft__",
         ]
-
-    filter_apinames = set(["NtCreateEvent", "NtCreateEventEx"])
 
     def on_call(self, call, process):
         event = self.get_argument(call, "EventName")

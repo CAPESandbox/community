@@ -30,12 +30,12 @@ class UACBypassEventvwr(Signature):
     mbcs = ["OB0006"]
     references = ["https://enigma0x3.net/2016/08/15/fileless-uac-bypass-using-eventvwr-exe-and-registry-hijacking/"]
 
+    filter_apinames = set(["CreateProcessInternalW", "RegQueryValueExA", "RegQueryValueExW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.eventvrw = False
         self.ret = False
-
-    filter_apinames = set(["CreateProcessInternalW", "RegQueryValueExA", "RegQueryValueExW"])
 
     def on_call(self, call, process):
         if call["api"].startswith("RegQueryValueEx"):
@@ -112,13 +112,13 @@ class UACBypassCMSTP(Signature):
     mbcs = ["OB0006"]
     references = ["https://oddvar.moe/2017/08/15/research-on-cmstp-exe/"]
 
+    filter_apinames = set(["CopyFileExA", "CopyFileExW", "MoveFileWithProgressW", "MoveFileWithProgressTransactedW", "NtWriteFile"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.inf = False
         self.droppedinf = []
         self.ret = False
-
-    filter_apinames = set(["CopyFileExA", "CopyFileExW", "MoveFileWithProgressW", "MoveFileWithProgressTransactedW", "NtWriteFile"])
 
     def on_call(self, call, process):
         # This is a straight catch of the .inf file with content we want being dropped

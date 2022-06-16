@@ -27,13 +27,13 @@ class NetworkBIND(Signature):
     mbcs = ["OB0004", "B0030"]
     mbcs += ["OC0006", "C0001"]  # micro-behaviour
 
+    filter_apinames = set(["bind", "listen"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.binds = []
         self.bindmap = dict()
         self.listens = []
-
-    filter_apinames = set(["bind", "listen"])
 
     def on_call(self, call, process):
         # this isn't entirely accurate since we're not tracking sockets properly

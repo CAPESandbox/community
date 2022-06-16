@@ -29,6 +29,8 @@ class LuminosityRAT(Signature):
     ttps = ["T1219"]  # MITRE v6,7,8
     mbcs = ["B0022"]
 
+    filter_apinames = set(["CryptHashData", "NtCreateFile", "NtCreateMutant"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.chars = "0123456789ABCDEFabcdef"
@@ -36,8 +38,6 @@ class LuminosityRAT(Signature):
         self.filehit = False
         self.mutexhit = False
         self.lastapi = str()
-
-    filter_apinames = set(["CryptHashData", "NtCreateFile", "NtCreateMutant"])
 
     def on_call(self, call, process):
         if call["api"] == "CryptHashData":

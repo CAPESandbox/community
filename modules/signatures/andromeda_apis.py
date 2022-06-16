@@ -29,13 +29,13 @@ class Andromeda_APIs(Signature):
     ttps = ["T1082"]  # MITRE v6,7,8
     mbcs = ["OB0007", "E1082"]
 
+    filter_apinames = set(["NtOpenEvent"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.sysvolserial = self.get_environ_entry(self.get_initial_process(), "SystemVolumeSerialNumber")
         if self.sysvolserial:
             self.sysvolserial = int(self.sysvolserial.replace("-", ""), 16)
-
-    filter_apinames = set(["NtOpenEvent"])
 
     def on_call(self, call, process):
         eventname = self.get_argument(call, "EventName")

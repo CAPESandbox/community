@@ -25,10 +25,6 @@ class StealingClipboardData(Signature):
     minimum = "1.2"
     evented = True
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.detected = False
-
     filter_apinames = set(
         [
             # "AddClipboardFormatListener",
@@ -41,6 +37,10 @@ class StealingClipboardData(Signature):
             "SetClipboardData",
         ]
     )
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.detected = False
 
     def on_call(self, call, process):
         self.detected = True

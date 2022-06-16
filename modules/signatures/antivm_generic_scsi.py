@@ -30,11 +30,11 @@ class AntiVMSCSI(Signature):
     mbcs = ["OB0001", "B0009", "B0009.005", "OB0007", "E1082"]
     mbcs += ["OC0008", "C0036", "C0036.005"]  # micro-behaviour
 
+    filter_apinames = set(["RegOpenKeyExA", "RegOpenKeyExW", "RegQueryValueExA", "RegQueryValueExW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.lastprocess = None
-
-    filter_apinames = set(["RegOpenKeyExA", "RegOpenKeyExW", "RegQueryValueExA", "RegQueryValueExW"])
 
     def on_call(self, call, process):
         indicator_registry = "0x80000002"

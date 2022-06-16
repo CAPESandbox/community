@@ -29,14 +29,14 @@ class DiskInformation(Signature):
     ttps += ["U1312", "U1332"]  # Unprotect
     mbcs = ["OB0001", "B0009", "B0009.015", "OB0007", "E1082"]
 
+    filter_apinames = set(
+        ["NtCreateFile", "NtOpenFile", "NtClose", "DeviceIoControl", "NtDuplicateObject", "NtDeviceIoControlFile"]
+    )
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.lastprocess = 0
         self.handles = dict()
-
-    filter_apinames = set(
-        ["NtCreateFile", "NtOpenFile", "NtClose", "DeviceIoControl", "NtDuplicateObject", "NtDeviceIoControlFile"]
-    )
 
     def on_call(self, call, process):
         ioctls = [

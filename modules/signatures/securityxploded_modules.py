@@ -29,6 +29,8 @@ class SecurityXploded_Modules(Signature):
     ttps += ["T1589", "T1589.001"]  # MITRE v8
     mbcs = ["OB0005"]
 
+    filter_apinames = set(["NtWriteFile"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         # Tuple with file IOC and 'module' name
@@ -40,8 +42,6 @@ class SecurityXploded_Modules(Signature):
             ("Instant Messengers Password Recovery", "IMPasswordDump"),
             ("Windows License Key Recovery Report", "ProductKeyDecryptor"),
         ]
-
-    filter_apinames = set(["NtWriteFile"])
 
     def on_call(self, call, process):
         data = self.get_argument(call, "Buffer")

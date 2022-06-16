@@ -30,14 +30,14 @@ class AntiVMDirectoryObjects(Signature):
     mbcs = ["OB0001", "B0009", "B0009.001", "OB0007", "E1083"]
     mbcs += ["OC0001"]  # micro-behaviour
 
+    filter_apinames = set(["NtOpenDirectoryObject", "NtQueryDirectoryObject"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.check_dirs = set()
         self.directories = set()
         self.dirbuf = tuple()
         self.lastapi = str()
-
-    filter_apinames = set(["NtOpenDirectoryObject", "NtQueryDirectoryObject"])
 
     def on_call(self, call, process):
         if call["api"] == "NtOpenDirectoryObject":

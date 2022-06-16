@@ -30,6 +30,10 @@ class JS_Phish(Signature):
     ttps += ["T1059.007"]  # MITRE v7,8
     mbcs = ["OB0009", "E1059"]
 
+    filter_categories = set(["browser"])
+    # backward compat
+    filter_apinames = set(["JsEval", "COleScript_Compile", "COleScript_ParseScriptText"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.lures = [
@@ -45,10 +49,6 @@ class JS_Phish(Signature):
         ]
         self.lurehits = set()
         self.totalhits = 0
-
-    filter_categories = set(["browser"])
-    # backward compat
-    filter_apinames = set(["JsEval", "COleScript_Compile", "COleScript_ParseScriptText"])
 
     def on_call(self, call, process):
         if call["api"] == "JsEval":

@@ -18,6 +18,8 @@ class InfostealerBrowserPassword(Signature):
     ttps += ["T1552", "T1552.001", "T1555", "T1555.003"]  # MITRE v7,8
     mbcs = ["OB0005", "OC0003"]
 
+    filter_apinames = set(["LdrGetProcedureAddress", "NtReadFile"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.pidTrack = dict()
@@ -27,8 +29,6 @@ class InfostealerBrowserPassword(Signature):
             "PK11_Authenticate",
             "PK11SDR_Decrypt",
         ]
-
-    filter_apinames = set(["LdrGetProcedureAddress", "NtReadFile"])
 
     def on_call(self, call, process):
         if call["api"] == "LdrGetProcedureAddress":

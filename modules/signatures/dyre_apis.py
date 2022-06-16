@@ -32,14 +32,14 @@ class Dyre_APIs(Signature):
     minimum = "1.3"
     evented = True
 
+    filter_apinames = set(["CryptHashData", "HttpOpenRequestA", "NtCreateNamedPipeFile"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.cryptoapis = False
         self.networkapis = set()
         self.syncapis = False
         self.compname = self.get_environ_entry(self.get_initial_process(), "ComputerName")
-
-    filter_apinames = set(["CryptHashData", "HttpOpenRequestA", "NtCreateNamedPipeFile"])
 
     def on_call(self, call, process):
         # Legacy, modern Dyre doesn't have hardcoded hashes in

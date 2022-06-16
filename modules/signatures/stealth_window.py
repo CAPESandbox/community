@@ -32,11 +32,11 @@ class Hidden_Window(Signature):
     ttps = ["T1143"]  # MITRE v6
     ttps += ["T1564", "T1564.003"]  # MITRE v7,8
 
+    filter_apinames = set(["ShellExecuteExW", "CreateProcessInternalW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.hidden = list()
-
-    filter_apinames = set(["ShellExecuteExW", "CreateProcessInternalW"])
 
     def on_call(self, call, process):
         if call["api"] == "CreateProcessInternalW":

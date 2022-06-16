@@ -26,6 +26,8 @@ class ProcessCreationSuspiciousLocation(Signature):
     evented = True
     ttps = ["T1106"]
 
+    filter_apinames = set(["CreateProcessInternalW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
@@ -34,8 +36,6 @@ class ProcessCreationSuspiciousLocation(Signature):
             "\\AppData\\Roaming\\",
             "\\AppData\\Local\\Temp\\",
         ]
-
-    filter_apinames = set(["CreateProcessInternalW"])
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()

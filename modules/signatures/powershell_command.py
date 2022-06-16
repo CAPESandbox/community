@@ -318,10 +318,6 @@ class PowerShellNetworkConnection(Signature):
     ttps += ["T1059", "T1059.001", "T1071.001"]  # MITRE v7,8
     mbcs = ["OB0009", "E1059"]
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.data = []
-
     filter_apinames = set(
         [
             "InternetCrackUrlW",
@@ -334,6 +330,10 @@ class PowerShellNetworkConnection(Signature):
         ]
     )
     filter_analysistypes = set(["file"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.data = []
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()

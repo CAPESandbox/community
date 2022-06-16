@@ -27,14 +27,14 @@ class Cerber_APIs(Signature):
     minimum = "1.2"
     evented = True
 
+    filter_apinames = set(["socket", "sendto"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.udpCount = dict()
         self.lastIp = str()
         self.lastData = str()
         self.skip = False
-
-    filter_apinames = set(["socket", "sendto"])
 
     def on_call(self, call, process):
         if self.skip:

@@ -12,17 +12,10 @@ class Bootkit(Signature):
     categories = ["rootkit"]
     authors = ["Optiv"]
     minimum = "1.2"
+    evented = True
     ttps = ["T1067"]  # MITRE v6
     ttps += ["T1542", "T1542.003"]  # MITRE v7,8
     mbcs = ["OB0006", "F0013"]
-
-    evented = True
-
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.lastprocess = 0
-        self.handles = dict()
-        self.saw_stealth = False
 
     filter_apinames = set(
         [
@@ -36,6 +29,12 @@ class Bootkit(Signature):
             "NtDeviceIoControlFile",
         ]
     )
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.lastprocess = 0
+        self.handles = dict()
+        self.saw_stealth = False
 
     def on_call(self, call, process):
         if process is not self.lastprocess:
@@ -163,12 +162,12 @@ class SuspiciousIoctlSCSIPassthough(Signature):
     mbcs = ["0B0006", "F0013"]
     references = ["http://www.ioctls.net/"]
 
+    filter_apinames = set(["DeviceIoControl", "NtDeviceIoControlFile"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.pnames = []
         self.ret = False
-
-    filter_apinames = set(["DeviceIoControl", "NtDeviceIoControlFile"])
 
     def on_call(self, call, process):
         ioctl = self.get_argument(call, "IoControlCode")
@@ -198,11 +197,11 @@ class PotentialOverWriteMBR(Signature):
     evented = True
     ttps = ["T1067"]
 
+    filter_apinames = set(["NtWriteFile"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
-
-    filter_apinames = set(["NtWriteFile"])
 
     def on_call(self, call, process):
         if call["api"] == "NtWriteFile":

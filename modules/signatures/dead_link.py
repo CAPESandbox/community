@@ -15,11 +15,11 @@ class DeadLink(Signature):
     minimum = "1.2"
     evented = True
 
+    filter_apinames = set(["CreateProcessInternalW", "ShellExecuteExW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.appnames = []
-
-    filter_apinames = set(["CreateProcessInternalW", "ShellExecuteExW"])
 
     def on_call(self, call, process):
         if call["api"] == "CreateProcessInternalW":

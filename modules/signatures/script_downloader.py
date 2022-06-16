@@ -30,10 +30,6 @@ class ScriptNetworkActvity(Signature):
     mbcs = ["OB0004", "B0030", "OB0009", "E1059"]
     mbcs += ["OC0006"]  # micro-behaviour
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.ret = False
-
     filter_apinames = set(
         [
             "InternetCrackUrlW",
@@ -46,6 +42,10 @@ class ScriptNetworkActvity(Signature):
             "WSAConnect",
         ]
     )
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()
@@ -161,11 +161,11 @@ class ScriptCreatedProcess(Signature):
     mbcs = ["OB0009", "E1059"]
     mbcs += ["OC0003", "C0017"]  # micro-behaviour
 
+    filter_apinames = set(["CreateProcessInternalW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
-
-    filter_apinames = set(["CreateProcessInternalW"])
 
     def on_call(self, call, process):
         pname = process["process_name"]

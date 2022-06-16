@@ -28,6 +28,8 @@ class DEPBypass(Signature):
     ttps += ["T1562", "T1562.001"]  # MITRE v7,8
     mbcs = ["OB0006", "B0037"]
 
+    filter_apinames = set(["NtProtectVirtualMemory", "VirtualProtectEx"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ignore_it = True
@@ -40,8 +42,6 @@ class DEPBypass(Signature):
             "regsvr",
         ]:
             self.ignore_it = False
-
-    filter_apinames = set(["NtProtectVirtualMemory", "VirtualProtectEx"])
 
     def on_call(self, call, process):
         if self.ignore_it:

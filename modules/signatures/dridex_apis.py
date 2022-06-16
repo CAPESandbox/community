@@ -31,6 +31,20 @@ class Dridex_APIs(Signature):
     minimum = "1.3"
     evented = True
 
+    filter_apinames = set(
+        [
+            "RegQueryValueExA",
+            "CryptHashData",
+            "connect",
+            "send",
+            "recv",
+            "RtlDecompressBuffer",
+            "InternetConnectW",
+            "HttpOpenRequestW",
+            "InternetCrackUrlA",
+        ]
+    )
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.compname = ""
@@ -46,20 +60,6 @@ class Dridex_APIs(Signature):
         self.port_check = str()
         self.post_check = False
         self.ret = False
-
-    filter_apinames = set(
-        [
-            "RegQueryValueExA",
-            "CryptHashData",
-            "connect",
-            "send",
-            "recv",
-            "RtlDecompressBuffer",
-            "InternetConnectW",
-            "HttpOpenRequestW",
-            "InternetCrackUrlA",
-        ]
-    )
 
     def on_call(self, call, process):
         if call["api"] == "RegQueryValueExA":

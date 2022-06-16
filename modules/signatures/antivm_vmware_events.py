@@ -28,11 +28,11 @@ class VMwareDetectEvent(Signature):
     ttps += ["U1332"]  # Unprotect
     mbcs = ["OB0001", "B0009", "OB0007", "E1083", "E1083.m01"]
 
+    filter_apinames = set(["NtCreateEvent", "NtOpenEvent"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.matches = list()
-
-    filter_apinames = set(["NtCreateEvent", "NtOpenEvent"])
 
     def on_call(self, call, process):
         vmware_events = [

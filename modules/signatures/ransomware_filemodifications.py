@@ -33,14 +33,14 @@ class RansomwareFileModifications(Signature):
     ttps = ["T1486"]  # MITRE v6,7,8
     mbcs = ["OB0008", "E1486"]
 
+    filter_apinames = set(["MoveFileWithProgressW", "MoveFileWithProgressTransactedW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.movefilecount = 0
         self.appendcount = 0
         self.appendemailcount = 0
         self.newextensions = []
-
-    filter_apinames = set(["MoveFileWithProgressW", "MoveFileWithProgressTransactedW"])
 
     def on_call(self, call, process):
         if not call["status"]:

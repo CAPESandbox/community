@@ -27,13 +27,13 @@ class CapturesScreenshot(Signature):
     ttps = ["T1113"]  # MITRE v6,7,8
     mbcs = ["E1113"]
 
+    filter_apinames = set(["LdrGetProcedureAddress", "NtCreateFile"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.capturesc = False
         self.savesc = False
         self.wrtiesc = False
-
-    filter_apinames = set(["LdrGetProcedureAddress", "NtCreateFile"])
 
     def on_call(self, call, process):
         if call["api"] == "LdrGetProcedureAddress":

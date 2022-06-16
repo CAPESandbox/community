@@ -29,12 +29,12 @@ class antidebug_outputdebugstring(Signature):
     ttps += ["U0117"]  # Unprotect
     mbcs = ["OB0001", "B0001", "B0001.016"]
 
+    filter_apinames = set(["OutputDebugStringA", "OutputDebugStringW", "SetLastError", "GetLastError"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.set_err = False
         self.output = False
-
-    filter_apinames = set(["OutputDebugStringA", "OutputDebugStringW", "SetLastError", "GetLastError"])
 
     def on_call(self, call, process):
         if call["api"] == "OutputDebugStringA" or call["api"] == "OutputDebugStringW":

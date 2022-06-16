@@ -35,6 +35,8 @@ class NetworkDNSTunnelingRequest(Signature):
     mbcs = ["OB0004", "B0030"]
     mbcs += ["OC0006", "C0011"]  # micro-behaviour
 
+    filter_apinames = set(["DnsQuery_A", "DnsQuery_W"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.qcount = int()
@@ -52,8 +54,6 @@ class NetworkDNSTunnelingRequest(Signature):
             ".ip6.arpa",
             ".apple.com",
         ]
-
-    filter_apinames = set(["DnsQuery_A", "DnsQuery_W"])
 
     def on_call(self, call, process):
         qtype = self.get_argument(call, "Type")
@@ -91,11 +91,11 @@ class NetworkDNSIDN(Signature):
     ttps += ["T1071.004"]  # MITRE v7,8
     mbcs = ["OC0006", "C0011"]  # micro-behaviour
 
+    filter_apinames = set(["DnsQueryA"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.match = False
-
-    filter_apinames = set(["DnsQueryA"])
 
     def on_call(self, call, process):
         qname = self.get_argument(call, "Name")
@@ -120,12 +120,12 @@ class NetworkDNSSuspiciousQueryType(Signature):
     ttps += ["T1071.004", "T1095"]  # MITRE v7,8
     mbcs = ["OC0006", "C0011"]  # micro-behaviour
 
+    filter_apinames = set(["DnsQueryA"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.match = False
         self.qtype_whitelist = [1, 2, 5, 10, 12, 15, 16, 28, 255]
-
-    filter_apinames = set(["DnsQueryA"])
 
     def on_call(self, call, process):
         self.qtype = self.get_argument(call, "Type")
