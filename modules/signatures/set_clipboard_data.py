@@ -20,7 +20,7 @@ class GetClipboardData(Signature):
     name = "get_clipboard_data"
     description = "Get clipboard data."
     severity = 2
-    categories = []
+    categories = ["generic"]
     authors = ["doomedraven"]
     minimum = "1.2"
     evented = True

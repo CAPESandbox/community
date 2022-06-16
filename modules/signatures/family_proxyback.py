@@ -20,6 +20,7 @@ class FamilyProxyBack(Signature):
     name = "family_proxyback"
     description = "Exhibits behavior characteristic of Proxyback malware"
     severity = 3
+    categories = ["malware"]
     families = ["ProxyBack"]
     authors = ["Kevin Ross"]
     minimum = "1.2"

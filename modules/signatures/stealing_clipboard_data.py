@@ -20,7 +20,7 @@ class StealingClipboardData(Signature):
     name = "set_clipboard_data"
     description = "Set clipboard data."
     severity = 2
-    categories = []
+    categories = ["generic"]
     authors = ["doomedraven"]
     minimum = "1.2"
     evented = True
