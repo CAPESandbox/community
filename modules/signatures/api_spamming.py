@@ -48,6 +48,7 @@ class APISpamming(Signature):
             "c:\\program files (x86)\\microsoft office\\office14\\winword.exe": ["GetLocalTime"],
             "c:\\windows\\system32\\wbem\\wmiprvse.exe": ["GetSystemTimeAsFileTime"],
             "c:\\windows\\system32\\wscript.exe": ["GetLocalTime", "NtQuerySystemTime"],
+            "c:\\windows\\system32\\services.exe": ["GetSystemTimeAsFileTime"],
         }
         ret = False
         for pid, apis in self.spam.items():
