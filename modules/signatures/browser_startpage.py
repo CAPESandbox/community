@@ -20,7 +20,7 @@ class browser_startpage(Signature):
     name = "browser_startpage"
     description = "Attempts to modify Internet Explorer's start page"
     severity = 2
-    categories = ["browser", "adware"]
+    categories = ["browser"]
     authors = ["Kevin Ross"]
     minimum = "1.2"
     ttps = ["T1112"]  # MITRE v6,7,8

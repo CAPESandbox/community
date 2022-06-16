@@ -20,7 +20,7 @@ class IPC_NamedPipe(Signature):
     name = "ipc_namedpipe"
     description = "A named pipe was used for inter-process communication"
     severity = 2
-    categories = ["ipc"]
+    categories = ["generic"]
     authors = ["KillerInstinct"]
     minimum = "1.3"
     evented = True

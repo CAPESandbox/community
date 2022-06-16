@@ -20,7 +20,7 @@ class TampersPowerShellLogging(Signature):
     name = "tampers_powershell_logging"
     description = "Tampers with PowerShell logging options"
     severity = 3
-    categories = ["evasion", "tampering"]
+    categories = ["evasion"]
     authors = ["ditekshen"]
     minimum = "1.3"
     ttps = ["T1054"]  # MITRE v6

@@ -6,7 +6,7 @@ class Static_PDF(Signature):
     description = "The PDF file contains suspicious characteristics"
     severity = 2
     weight = 0
-    categories = ["pdf", "static"]
+    categories = ["static"]
     authors = ["Kevin Ross", "KillerInstinct"]
     minimum = "1.3"
     ttps = ["T1204"]  # MITRE v6,7,8

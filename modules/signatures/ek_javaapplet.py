@@ -26,7 +26,7 @@ class Java_JS(Signature):
     description = "Executes obfuscated JavaScript containing a Java appplet indicative of an exploit attempt"
     weight = 3
     severity = 3
-    categories = ["exploit_kit", "java"]
+    categories = ["exploit_kit"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True

@@ -21,7 +21,7 @@ class Ursnif_APIs(Signature):
     description = "Exhibits behavior characteristics of Ursnif spyware"
     severity = 3
     weight = 3
-    categories = ["spyware", "keylogger"]
+    categories = ["keylogger"]
     families = ["Ursnif"]
     authors = ["KillerInstinct"]
     minimum = "1.3"

@@ -26,7 +26,7 @@ class Accesses_RecycleBin(Signature):
     name = "accesses_recyclebin"
     description = "Manipulates data from or to the Recycle Bin"
     severity = 2
-    categories = ["evasion", "execution", "collection"]
+    categories = ["evasion", "execution"]
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True

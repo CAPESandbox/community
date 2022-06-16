@@ -20,7 +20,7 @@ class NetworkSMTP(Signature):
     name = "network_smtp"
     description = "Makes SMTP requests, possibly sending spam or exfiltrating data."
     severity = 3
-    categories = ["smtp", "spam"]
+    categories = ["network"]
     authors = ["nex", "KillerInstinct"]
     minimum = "0.5"
     ttps = ["T1071"]  # MITRE v6,7,8

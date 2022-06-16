@@ -22,7 +22,7 @@ class NetworkOpenProxy(Signature):
     name = "network_open_proxy"
     description = "Connects to open proxy IP address"
     severity = 3
-    categories = ["network", "proxy"]
+    categories = ["network"]
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True

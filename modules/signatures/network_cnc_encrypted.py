@@ -512,9 +512,9 @@ class NetworkCnCSMTPSGeneric(Signature):
 
 class NetworkCnCSMTPSExfil(Signature):
     name = "network_cnc_smtps_exfil"
-    description = "keylogger detected exfiltrating data via encrypted SMTPS connection"
+    description = "Keylogger detected exfiltrating data via encrypted SMTPS connection"
     severity = 3
-    categories = ["network", "encryption", "exfiltration", "infostealer", "rat"]
+    categories = ["network", "encryption", "infostealer", "rat", "keylogger"]
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True

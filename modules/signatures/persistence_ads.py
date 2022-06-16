@@ -25,7 +25,7 @@ class ADS(Signature):
     name = "persistence_ads"
     description = "Attempts to interact with an Alternate Data Stream (ADS)"
     severity = 3
-    categories = ["persistence", "ads"]
+    categories = ["persistence"]
     authors = ["nex", "Optiv"]
     minimum = "0.5"
     ttps = ["T1096"]  # MITRE v6

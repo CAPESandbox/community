@@ -25,7 +25,7 @@ class BrowserAddon(Signature):
     name = "browser_addon"
     description = "Installs a browser addon or extension"
     severity = 2
-    categories = ["browser", "adware"]
+    categories = ["browser"]
     authors = ["Kevin Ross"]
     minimum = "1.2"
     ttps = ["T1112", "T1176"]  # MITRE v6,7,8

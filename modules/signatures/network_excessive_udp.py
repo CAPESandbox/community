@@ -21,7 +21,7 @@ class NetworkExcessiveUDP(Signature):
     description = "Creates an excessive number of UDP connection attempts to external IP addresses"
     severity = 2
     confidence = 30
-    categories = ["udp", "c2", "p2p", "recon"]
+    categories = ["c2", "recon", "network"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     ttps = ["T1095"]  # MITRE v6,7,8

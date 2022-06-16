@@ -25,7 +25,7 @@ class UsesRemoteDesktopSession(Signature):
     name = "uses_remote_desktop_session"
     description = "Connects to/from or queries a remote desktop session"
     severity = 3
-    categories = ["access"]
+    categories = ["command"]
     authors = ["bartblaze"]
     minimum = "1.2"
     evented = True
@@ -59,7 +59,7 @@ class UsesRDPClip(Signature):
     name = "uses_rdp_clip"
     description = "Accesses the RDP Clip Monitor (RDP clipboard)"
     severity = 3
-    categories = ["access"]
+    categories = ["command"]
     authors = ["bartblaze"]
     minimum = "1.2"
     evented = True

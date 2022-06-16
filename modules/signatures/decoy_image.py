@@ -20,7 +20,7 @@ class DecoyImage(Signature):
     name = "decoy_image"
     description = "Executable displays a decoy image"
     severity = 2
-    categories = ["decoy", "stealth", "deception"]
+    categories = ["stealth"]
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True

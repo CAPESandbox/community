@@ -20,7 +20,7 @@ class PDF_Annot_URLs(Signature):
     name = "pdf_annot_urls"
     description = "The PDF contains a Link Annotation to a compressed archive or executable file"
     severity = 3
-    categories = ["pdf"]
+    categories = ["static"]
     authors = ["Optiv"]
     minimum = "1.3"
 

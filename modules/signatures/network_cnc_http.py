@@ -27,7 +27,7 @@ class NetworkCnCHTTP(Signature):
     severity = 2
     confidence = 30
     weight = 0
-    categories = ["http", "c2"]
+    categories = ["network", "c2"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     ttps = ["T1071"]  # MITRE v6,7,8

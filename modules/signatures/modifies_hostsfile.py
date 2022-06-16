@@ -20,7 +20,7 @@ class Modifies_HostFile(Signature):
     name = "modify_hostfile"
     description = "The sample wrote data to the system hosts file."
     severity = 3
-    categories = ["misc"]
+    categories = ["generic"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
     mbcs = ["OB0006", "OB0012", "E1478"]

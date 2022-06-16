@@ -20,7 +20,7 @@ class AllapleMutexes(Signature):
     name = "allaple_mutexes"
     description = "Creates known Allaple worm mutexes"
     severity = 3
-    categories = ["worm"]
+    categories = ["malware"]
     families = ["Allaple"]
     authors = ["ditekshen"]
     minimum = "0.5"

@@ -20,7 +20,7 @@ class Crash(Signature):
     name = "exec_crash"
     description = "At least one process apparently crashed during execution"
     severity = 1
-    categories = ["execution", "crash"]
+    categories = ["execution"]
     authors = ["nex", "doomedraven"]
     minimum = "1.0"
     evented = True

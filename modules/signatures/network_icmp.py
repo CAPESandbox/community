@@ -20,7 +20,7 @@ class NetworkICMP(Signature):
     name = "network_icmp"
     description = "Generates some ICMP traffic"
     severity = 3
-    categories = ["icmp"]
+    categories = ["network"]
     authors = ["David Maciejak"]
     minimum = "1.0"
     ttps = ["T1095"]  # MITRE v6,7,8

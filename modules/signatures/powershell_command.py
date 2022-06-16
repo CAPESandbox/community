@@ -282,7 +282,7 @@ class PowershellVariableObfuscation(Signature):
     description = "A powershell command using multiple variables was executed possibly indicative of obfuscation"
     severity = 3
     confidence = 50
-    categories = ["command", "obuscation"]
+    categories = ["command"]
     authors = ["Kevin Ross", "Optiv"]
     minimum = "1.3"
     evented = True
@@ -375,7 +375,7 @@ class PowerShellScriptBlockLogging(Signature):
     description = "Suspicious behavior was detected in a PowerShell process by script block logging"
     severity = 3
     confidence = 80
-    categories = ["powershell"]
+    categories = ["command"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True

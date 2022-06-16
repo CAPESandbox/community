@@ -259,7 +259,7 @@ class WMICCommandSuspicious(Signature):
     description = "Suspicious wmic.exe use was detected"
     severity = 3
     confidence = 80
-    categories = ["command", "wmi"]
+    categories = ["command"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -390,7 +390,7 @@ class OverwritesAccessibilityUtility(Signature):
     description = "Overwrites an accessibility feature binary for Windows login bypass, persistence or privilege escalation"
     severity = 3
     confidence = 100
-    categories = ["evasion", "privilege_escalation", "persistence"]
+    categories = ["evasion", "persistence"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -458,7 +458,7 @@ class UsesWindowsUtilitiesCipher(Signature):
     name = "uses_windows_utilities_cipher"
     description = "Uses cipher.exe to wipe the free space, as seen in some ransomware"
     severity = 3
-    categories = ["command", "impact"]
+    categories = ["command", "ransomware"]
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True

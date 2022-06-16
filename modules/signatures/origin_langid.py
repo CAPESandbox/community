@@ -21,7 +21,7 @@ class BuildLangID(Signature):
     description = "Unconventionial binary language"
     severity = 2
     authors = ["Benjamin K.", "Kevin R.", "nex"]
-    categories = ["origin"]
+    categories = ["static"]
     minimum = "1.3"
 
     def run(self):

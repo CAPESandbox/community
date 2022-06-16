@@ -26,7 +26,7 @@ class EXEDropper_JS(Signature):
     description = "Executes obfuscated JavaScript which drops an executable file"
     weight = 3
     severity = 3
-    categories = ["dropper", "downloader", "spam"]
+    categories = ["dropper", "downloader"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
