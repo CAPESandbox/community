@@ -21,7 +21,7 @@ class Fingerprint(Signature):
     description = "Collects information to fingerprint the system"
     severity = 3
     confidence = 75
-    categories = ["recon"]
+    categories = ["discovery"]
     authors = ["nex", "Optiv"]
     minimum = "1.2"
     ttps = ["T1012", "T1082"]  # MITRE v6,7,8

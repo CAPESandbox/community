@@ -14,7 +14,7 @@ class InstalledApps(Signature):
     description = "Collects information about installed applications"
     severity = 3
     confidence = 20
-    categories = ["recon"]
+    categories = ["discovery"]
     authors = ["Optiv"]
     minimum = "1.2"
     evented = True

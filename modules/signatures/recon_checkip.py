@@ -20,7 +20,7 @@ class CheckIP(Signature):
     name = "recon_checkip"
     description = "Looks up the external IP address"
     severity = 2
-    categories = ["recon"]
+    categories = ["network", "discovery"]
     authors = ["nex", "Optiv", "bartblaze"]
     minimum = "1.2"
 
