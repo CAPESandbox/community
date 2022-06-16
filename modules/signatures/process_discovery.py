@@ -20,7 +20,7 @@ class EmumeratesRunningProcesses(Signature):
     name = "enumerates_running_processes"
     description = "Enumerates running processes"
     severity = 2
-    categories = ["process_discovery"]
+    categories = ["discovery"]
     authors = ["Kevin Ross"]
     minimum = "0.5"
     evented = True
@@ -50,7 +50,7 @@ class CreateToolhelp32SnapshotProcessModuleEnumeration(Signature):
     name = "createtoolhelp32snapshot_module_enumeration"
     description = "Enumerates the modules from a process (may be used to locate base addresses in process injection)"
     severity = 2
-    categories = ["process_discovery"]
+    categories = ["discovery"]
     authors = ["Kevin Ross"]
     minimum = "0.5"
     evented = True
@@ -86,7 +86,7 @@ class CmdlineProcessDiscovery(Signature):
     name = "cmdline_process_discovery"
     description = "Uses Windows utilities to enumerate running processes"
     severity = 2
-    categories = ["process_discovery"]
+    categories = ["discovery"]
     authors = ["Kevin Ross"]
     minimum = "0.5"
     evented = True
