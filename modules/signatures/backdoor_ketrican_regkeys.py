@@ -20,7 +20,7 @@ class KetricanRegkeys(Signature):
     name = "ketrican_regkeys"
     description = "Interacts with a unique set of registry keys observed in malware"
     severity = 2
-    categories = ["backdoor"]
+    categories = ["malware"]
     authors = ["ditekshen"]
     minimum = "0.5"
     ttps = ["T1012"]  # MITRE v6,7,8
