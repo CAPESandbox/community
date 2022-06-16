@@ -296,7 +296,7 @@ class CommandLineForFilesWildCard(Signature):
     evented = True
     ttps = ["T1059"]  # MITRE v6,7,8
     mbcs = ["OB0009", "E1059"]
-    references = "https://twitter.com/danielhbohannon/status/1130833190019653633"
+    references = ["https://twitter.com/danielhbohannon/status/1130833190019653633"]
 
     def run(self):
         ret = False
