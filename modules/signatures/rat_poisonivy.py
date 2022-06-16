@@ -13,6 +13,7 @@ class PoisonIvyMutexes(Signature):
     authors = ["Optiv"]
     references = ["http://www.fireeye.com/resources/pdfs/fireeye-poison-ivy-report.pdf"]
     minimum = "1.2"
+    mbcs = ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = [")!VoqA.I4", "K^DJA^#FE", "KEIVH^#$S", "%1Sjfhtd8", "2SF#@R@#!"]

@@ -34,7 +34,9 @@ class PowershellCommandSuspicious(Signature):
     authors = ["Kevin Ross", "Optiv"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1086", "T1064"]
+    ttps = ["T1064", "T1086"]  # MITRE v6
+    ttps += ["T1059", "T1059.001"]  # MITRE v7,8
+    mbcs = ["OB0009", "E1059"]
 
     def run(self):
         commands = [
@@ -131,7 +133,9 @@ class PowershellRenamed(Signature):
     authors = ["Kevin Ross", "Optiv"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1086", "T1064"]
+    ttps = ["T1064", "T1086"]  # MITRE v6
+    ttps += ["T1059", "T1059.001"]  # MITRE v7,8
+    mbcs = ["OB0009", "E1059"]
 
     def run(self):
         commands = [
@@ -217,7 +221,9 @@ class PowershellReversed(Signature):
     authors = ["Kevin Ross", "Optiv"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1086", "T1064"]
+    ttps = ["T1064", "T1086"]  # MITRE v6
+    ttps += ["T1059", "T1059.001"]  # MITRE v7,8
+    mbcs = ["OB0009", "E1059"]
 
     def run(self):
         commands = [
@@ -280,7 +286,10 @@ class PowershellVariableObfuscation(Signature):
     authors = ["Kevin Ross", "Optiv"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1086", "T1064"]
+    ttps = ["T1064", "T1086"]  # MITRE v6
+    ttps += ["T1027"]  # MITRE v6,7,8
+    ttps += ["T1059", "T1059.001"]  # MITRE v7,8
+    mbcs = ["OB0009", "E1059"]
 
     def run(self):
         ret = False
@@ -304,7 +313,10 @@ class PowerShellNetworkConnection(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.2"
     evented = True
-    ttps = ["T1086", "T1064"]
+    ttps = ["T1064", "T1086"]  # MITRE v6
+    ttps += ["T1071"]  # MITRE v6,7,8
+    ttps += ["T1059", "T1059.001", "T1071.001"]  # MITRE v7,8
+    mbcs = ["OB0009", "E1059"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -330,12 +342,15 @@ class PowerShellNetworkConnection(Signature):
                 buff = self.get_argument(call, "FileName").lower()
                 self.data.append({"request": buff})
             if call["api"] == "HttpOpenRequestW":
+                self.ttps += ["OC0006", "C0002"]
                 buff = self.get_argument(call, "Path").lower()
                 self.data.append({"request": buff})
             if call["api"] == "InternetCrackUrlW":
+                self.ttps += ["OC0006", "C0005"]
                 buff = self.get_argument(call, "Url").lower()
                 self.data.append({"request": buff})
             if call["api"] == "InternetCrackUrlA":
+                self.ttps += ["OC0006", "C0005"]
                 buff = self.get_argument(call, "Url").lower()
                 self.data.append({"request": buff})
             if call["api"] == "send":
@@ -364,7 +379,9 @@ class PowerShellScriptBlockLogging(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1086"]
+    ttps = ["T1064", "T1086"]  # MITRE v6
+    ttps += ["T1059", "T1059.001"]  # MITRE v7,8
+    mbcs = ["OB0009", "E1059"]
 
     def run(self):
         ret = False

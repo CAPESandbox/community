@@ -12,7 +12,12 @@ class AntiAVSRP(Signature):
     categories = ["anti-av"]
     authors = ["Optiv"]
     minimum = "1.2"
-    ttps = ["T1089", "F0004.005", "E1478"]
+    ttps = ["T1089"]  # MITRE v6
+    ttps += ["T1112"]  # MITRE v6,7,8
+    ttps += ["T1562", "T1562.001"]  # MITRE v7,8
+    ttps += ["U0508"]  # Unprotect
+    mbcs = ["OB0006", "E1478", "F0004", "F0004.005"]
+    mbcs += ["OC0008", "C0036", "C0036.001"]  # micro-behaviours
 
     def run(self):
         match_key = self.check_write_key(

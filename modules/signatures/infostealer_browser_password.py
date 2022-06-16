@@ -13,7 +13,10 @@ class InfostealerBrowserPassword(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True
-    ttps = ["T1081", "T1003", "T1005"]
+    ttps = ["T1081", "T1503"]  # MITRE v6
+    ttps += ["T1003", "T1005"]  # MITRE v6,7,8
+    ttps += ["T1552", "T1552.001", "T1555", "T1555.003"]  # MITRE v7,8
+    mbcs = ["OB0005", "OC0003"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

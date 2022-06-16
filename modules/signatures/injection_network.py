@@ -25,7 +25,7 @@ class InjectionNetworkTraffic(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1071"]
+    ttps = ["T1071"]  # MITRE v6,7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

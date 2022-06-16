@@ -19,6 +19,8 @@ class OfficeWriteEXE(Signature):
     authors = ["Will Metcalf"]
     minimum = "1.2"
     evented = True
+    ttps = ["T1137"]  # MITRE v6,7,8
+    mbcs = ["OC0001", "C0016"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

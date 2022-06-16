@@ -84,6 +84,8 @@ class Kelihos_APIs(Signature):
         if self.config_key:
             self.data.append({"ConfigLocation": self.config_key})
             if self.peer_connect:
+                self.mbcs += ["OB0004", "B0030"]
+                self.mbcs += ["OC0006"]  # micro-behaviour
                 for peer in self.peer_connect:
                     self.data.append({"c2": peer})
 

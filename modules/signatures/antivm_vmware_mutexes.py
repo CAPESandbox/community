@@ -23,7 +23,10 @@ class VMwareDetectMutexes(Signature):
     categories = ["anti-vm"]
     authors = ["KillerInstinct"]
     minimum = "0.5"
-    mbcs = ["B0009"]
+    ttps = ["T1057", "T1497"]  # MITRE v6,7,8
+    ttps += ["U1332"]  # Unprotect
+    mbcs = ["OB0001", "B0009"]
+    mbcs += ["OC0003", "C0043"]  # micro-behaviour
 
     def run(self):
         ret = False

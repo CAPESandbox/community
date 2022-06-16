@@ -23,8 +23,10 @@ class VBoxDetectWindow(Signature):
     categories = ["anti-vm"]
     authors = ["nex"]
     minimum = "1.3"
-    mbcs = ["B0009.009"]
     evented = True
+    ttps = ["T1010", "T1497"]  # MITRE v6,7,8
+    ttps += ["U1332"]  # Unprotect
+    mbcs = ["OB0001", "B0009", "B0009.009"]
 
     filter_categories = set(["windows"])
 

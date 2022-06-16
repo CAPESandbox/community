@@ -24,6 +24,9 @@ class DisablesStartMenuSearch(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1112"]  # MITRE v6,7,8
+    mbcs = ["OB0006", "E1112"]
+    mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
         indicators = [

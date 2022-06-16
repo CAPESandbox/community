@@ -24,7 +24,9 @@ class PersistenceBootexecute(Signature):
     authors = ["Brad Spengler"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1060", "F0012"]
+    ttps = ["T1060"]  # MITRE v6
+    ttps += ["T1547", "T1547.001"]  # MITRE v7,8
+    mbcs = ["OB0012", "F0012"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

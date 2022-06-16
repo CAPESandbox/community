@@ -25,6 +25,8 @@ class StackPivot(Signature):
     authors = ["Optiv"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1203"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1203"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -84,6 +86,9 @@ class StackPivotFileCreated(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1203"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1203"]
+    mbcs += ["OC0001", "C0016"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -128,6 +133,9 @@ class StackPivotProcessCreate(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1203"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1203"]
+    mbcs += ["OC0003", "C0017"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

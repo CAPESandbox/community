@@ -24,6 +24,11 @@ class WineDetectFunc(Signature):
     authors = ["Optiv"]
     minimum = "1.0"
     evented = True
+    ttps = ["T1063"]  # MITRE v6
+    ttps += ["T1083", "T1518"]  # MITRE v6,7,8
+    ttps += ["T1518.001"]  # MITRE v7,8
+    ttps += ["U1314"]  # Unprotect
+    mbcs = ["OB0001", "B0004", "OB0007"]
 
     filter_apinames = set(["LdrGetProcedureAddress"])
 

@@ -24,6 +24,10 @@ class DirtJumper(Signature):
     families = ["DirtJumper"]
     authors = ["nex", "jjones"]
     minimum = "0.5"
+    ttps = ["T1071"]  # MITRE v6,7,8
+    ttps += ["T1071.001"]  # MITRE v7,8
+    mbcs = ["OB0004", "B0030"]
+    mbcs += ["OC0006", "C0002", "C0002.005"]  # micro-behaviour
 
     def run(self):
         if "network" in self.results:

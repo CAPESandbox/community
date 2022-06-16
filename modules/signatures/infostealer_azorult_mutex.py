@@ -24,6 +24,7 @@ class AzorultMutexes(Signature):
     families = ["Azorult"]
     authors = ["ditekshen"]
     minimum = "1.3"
+    mbcs = ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = [

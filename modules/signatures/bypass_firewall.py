@@ -25,7 +25,11 @@ class BypassFirewall(Signature):
     categories = ["bypass"]
     authors = ["Anderson Tamborim", "nex"]
     minimum = "0.5"
-    ttps = ["T1031", "E1478", "F0004"]
+    ttps = ["T1031"]  # MITRE v6
+    ttps += ["T1112"]  # MITRE v6,7,8
+    ttps += ["T1562", "T1562.004"]  # MITRE v7,8
+    mbcs = ["OB0006", "E1112", "E1478", "F0004"]
+    mbcs += ["OC0008", "C0036", "C0036.001"]  # micro-behaviour
 
     def run(self):
         return self.check_key(

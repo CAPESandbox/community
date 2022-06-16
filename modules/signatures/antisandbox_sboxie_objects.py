@@ -24,7 +24,11 @@ class AntiSandboxSboxieObjects(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.0"
     evented = True
-    ttps = ["T1063"]
+    ttps = ["T1063"]  # MITRE v6
+    ttps += ["T1497", "T1518"]  # MITRE v6,7,8
+    ttps += ["T1518.001"]  # MITRE v7,8
+    ttps += ["U0513"]  # Unprotect
+    mbcs = ["OB0001", "B0007", "B0009"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

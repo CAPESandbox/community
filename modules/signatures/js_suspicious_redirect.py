@@ -29,6 +29,10 @@ class JS_SuspiciousRedirect(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1064"]  # MITRE v6
+    ttps += ["T1059"]  # MITRE v6,7,8
+    ttps += ["T1059.007"]  # MITRE v7,8
+    mbcs = ["OB0009", "E1059"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

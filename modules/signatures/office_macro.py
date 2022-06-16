@@ -28,6 +28,8 @@ class Office_Macro(Signature):
     categories = ["office"]
     authors = ["KillerInstinct"]
     minimum = "1.3"
+    ttps = ["T1137"]  # MITRE v6,7,8
+    ttps += ["T1137.001"]  # MITRE v7,8
 
     def run(self):
         package = self.results["info"]["package"]

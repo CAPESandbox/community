@@ -21,6 +21,10 @@ class StealthFile(Signature):
     authors = ["Optiv"]
     minimum = "1.2"
     evented = True
+    ttps = ["T1158"]  # MITRE v6
+    ttps += ["T1564", "T1564.001"]  # MITRE v7,8
+    mbcs = ["OB0006", "F0005"]
+    mbcs += ["OC0001", "C0016"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

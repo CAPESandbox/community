@@ -29,7 +29,8 @@ class MartiansOffice(Signature):
     categories = ["martians"]
     authors = ["Will Metcalf"]
     minimum = "1.3"
-    ttps = ["T1059"]
+    ttps = ["T1059"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1059"]
 
     def go_deeper(self, pdict, result=None):
         if result is None:

@@ -23,7 +23,9 @@ class WineDetectReg(Signature):
     categories = ["anti-emulation"]
     authors = ["nex"]
     minimum = "0.5"
-    ttps = ["T1057"]
+    ttps = ["T1012", "T1057", "T1518"]  # MITRE v6,7,8
+    mbcs = ["OB0001", "B0004", "B0004.003"]
+    mbcs += ["OC0008", "C0036", "C0036.005"]  # micro-behaviour
 
     def run(self):
         return self.check_key(pattern="HKEY_CURRENT_USER\\Software\\Wine")

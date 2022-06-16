@@ -24,6 +24,7 @@ class BadSSLCerts(Signature):
     categories = ["network"]
     authors = ["KillerInstinct"]
     minimum = "1.3"
+    ttps = ["T1587", "T1587.003"]  # MITRE v8
 
     def run(self):
         # so that we don't modify the base list of BadSSLCerts via the below append

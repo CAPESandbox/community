@@ -12,7 +12,9 @@ class Bootkit(Signature):
     categories = ["rootkit"]
     authors = ["Optiv"]
     minimum = "1.2"
-    ttps = ["T1067"]
+    ttps = ["T1067"]  # MITRE v6
+    ttps += ["T1542", "T1542.003"]  # MITRE v7,8
+    mbcs = ["OB0006", "F0013"]
 
     evented = True
 
@@ -87,7 +89,10 @@ class DirectHDDAccess(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1014", "T1067"]
+    ttps = ["T1067"]  # MITRE v6
+    ttps += ["T1014"]  # MITRE v6,7,8
+    ttps += ["T1542", "T1542.003"]  # MITRE v7,8
+    mbcs = ["OB0006", "E1014", "F0013"]
 
     def run(self):
         ret = False
@@ -107,7 +112,10 @@ class AccessesPrimaryPartition(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1014", "T1067"]
+    ttps = ["T1067"]  # MITRE v6
+    ttps += ["T1014"]  # MITRE v6,7,8
+    ttps += ["T1542", "T1542.003"]  # MITRE v7,8
+    mbcs = ["OB0006", "E1014", "F0013"]
 
     def run(self):
         ret = False
@@ -127,7 +135,10 @@ class PhysicalDriveAccess(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1014", "T1067"]
+    ttps = ["T1067"]  # MITRE v6
+    ttps += ["T1014"]  # MITRE v6,7,8
+    ttps += ["T1542", "T1542.003"]  # MITRE v7,8
+    mbcs = ["OB0006", "E1014", "F0013"]
 
     def run(self):
         ret = False
@@ -147,7 +158,9 @@ class SuspiciousIoctlSCSIPassthough(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1067"]
+    ttps = ["T1067"]  # MITRE v6
+    ttps += ["T1542", "T1542.003"]  # MITRE v7,8
+    mbcs = ["0B0006", "F0013"]
     references = ["http://www.ioctls.net/"]
 
     def __init__(self, *args, **kwargs):

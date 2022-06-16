@@ -26,6 +26,8 @@ class AddsAdminUser(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1136"]  # MITRE v6,7,8
+    ttps += ["T1136.001"]  # MITRE v7,8
 
     def run(self):
         indicators = ".*net(\.exe)?.*localgroup\sadministrators.*/add"
@@ -46,6 +48,7 @@ class OverwritesAdminPassword(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1098"]  # MITRE v6,7,8
 
     def run(self):
         indicators = ".*net(\.exe)?.*user\sadministrator\s.*"
@@ -66,6 +69,8 @@ class AddsUser(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1136"]  # MITRE v6,7,8
+    ttps += ["T1136.001"]  # MITRE v7,8
 
     def run(self):
         indicators = ".*net(1)?(\.exe)?\suser\s[^administrator(s)?\s].*/add"

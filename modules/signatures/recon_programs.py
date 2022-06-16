@@ -18,7 +18,9 @@ class InstalledApps(Signature):
     authors = ["Optiv"]
     minimum = "1.2"
     evented = True
-    ttps = ["T1012", "T1082", "T1518"]
+    ttps = ["T1012", "T1082", "T1518"]  # MITRE v6,7,8
+    mbcs = ["OB0007"]
+    mbcs += ["OC0008", "OC0036"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

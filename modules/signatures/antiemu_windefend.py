@@ -28,7 +28,8 @@ class AntiEmuWinDefend(Signature):
     categories = ["anti-emulation"]
     authors = ["bartblaze"]
     minimum = "0.5"
-    ttps = ["T1497"]
+    ttps = ["T1057", "T1083", "T1497", "T1518"]  # MITRE v6,7,8
+    mbcs = ["OB0001", "B0004"]
     references = [
         "https://i.blackhat.com/us-18/Thu-August-9/us-18-Bulazel-Windows-Offender-Reverse-Engineering-Windows-Defenders-Antivirus-Emulator.pdf"
     ]

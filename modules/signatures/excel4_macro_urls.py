@@ -25,6 +25,7 @@ class Excel4MacroUrls(Signature):
     authors = ["doomedraven"]
     minimum = "2.0"
     evented = False
+    ttps = ["T1137", "T1137.001"]  # MITRE v6,7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

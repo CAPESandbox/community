@@ -23,16 +23,17 @@ class Static_Java(Signature):
     categories = ["java", "static", "exploit"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
+    references = [
+        "https://www.fireeye.com/content/dam/fireeye-www/global/en/current-threats/pdfs/wp-a-daily-grind-filtering-java-vulnerabilities.pdf",
+        "https://www.fireeye.com/content/dam/fireeye-www/global/en/current-threats/pdfs/rpt-java-vulnerabilities.pdf",
+        "https://www.virusbtn.com/virusbulletin/archive/2013/06/vb201306-Java-null",
+    ]
 
     def run(self):
 
         decompiled = self.results.get("static", {}).get("java", {}).get("decompiled", "")
         if not decompiled:
             return False
-
-        # https://www.fireeye.com/content/dam/fireeye-www/global/en/current-threats/pdfs/wp-a-daily-grind-filtering-java-vulnerabilities.pdf
-        # https://www.fireeye.com/content/dam/fireeye-www/global/en/current-threats/pdfs/rpt-java-vulnerabilities.pdf
-        # https://www.virusbtn.com/virusbulletin/archive/2013/06/vb201306-Java-null
 
         functions = (".invoke(", ".getMethod(", "class.forName(", ".getClass(", ".getField(", ".getConstructor(", ".newInstance(")
         permissions = (
@@ -84,6 +85,8 @@ class Static_Java(Signature):
 
         if "URL(" in decompiled or "URLEncoder.encode(" in decompiled or "openConnection(" in decompiled:
             self.data.append({"http": "Contains ability to make HTTP connections"})
+            self.ttps += ["T1071", "T1071.001"]  # MITRE v6,7,8
+            self.mbcs += ["OC0006", "C0002"]  # micro-behaviour
             self.weight += 1
 
         if ".exec(" in decompiled or ".getRuntime(" in decompiled:
@@ -151,6 +154,8 @@ class Static_Java(Signature):
             exploit += 1
 
         if exploit > 0:
+            self.ttps += ["T1203"]  # MITRE v6,7,8
+            self.mbcs += ["OB0008", "E1203"]
             self.description += " and possible exploit code."
             self.severity = 3
             self.weight += 1
@@ -161,6 +166,8 @@ class Static_Java(Signature):
                 self.data.append({"string_length": "Contains very large strings indicative of obfuscation"})
                 self.severity = 3
                 self.weight += 1
+                self.ttps += ["T1027"]  # MITRE v6,7,8
+                self.mbcs += ["OB0006", "E1027"]
                 break
 
         if self.weight:

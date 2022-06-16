@@ -24,7 +24,10 @@ class ThemidaPacked(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True
-    ttps = ["T1045"]
+    ttps = ["T1045"]  # MITRE v6
+    ttps += ["T1027"]  # MITRE v6,7,8
+    ttps += ["T1027.002"]  # MITRE v7,8
+    mbcs = ["OB0001", "OB0002", "OB0006", "F0001", "F0001.011"]
 
     filter_apinames = set(["FindWindowA"])
 
@@ -84,7 +87,10 @@ class ThemidaPackedSection(Signature):
     categories = ["packer"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    ttps = ["T1045"]
+    ttps = ["T1045"]  # MITRE v6
+    ttps += ["T1027"]  # MITRE v6,7,8
+    ttps += ["T1027.002"]  # MITRE v7,8
+    mbcs = ["OB0001", "OB0002", "OB0006", "F0001", "F0001.011"]
 
     def run(self):
         for section in self.results.get("static", {}).get("pe", {}).get("sections", []):

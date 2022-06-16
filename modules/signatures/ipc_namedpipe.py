@@ -24,6 +24,7 @@ class IPC_NamedPipe(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.3"
     evented = True
+    mbcs = ["OC0006", "C0003", "C0003.001"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

@@ -29,6 +29,8 @@ class NetworkHTTP(Signature):
     categories = ["http"]
     authors = ["nex", "Optiv"]
     minimum = "0.5"
+    ttps = ["T1071", "T1071.001"]  # MITRE v6,7,8
+    mbcs = ["OC0006", "C0002"]  # micro-behaviour
 
     filter_analysistypes = set(["file"])
 

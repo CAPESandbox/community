@@ -32,9 +32,10 @@ class Autorun_scheduler(Signature):
     categories = ["persistence"]
     authors = ["Michael Boman", "nex", "securitykitten", "Optiv", "KillerInstinct"]
     minimum = "1.3"
-    ttps = ["T1053"]
-
     evented = True
+    ttps = ["T1053", "T1112"]  # MITRE v6,7,8
+    ttps += ["T1053.005"]  # MITRE v7,8
+    mbcs = ["OB0012", "E1112"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -113,9 +114,11 @@ class Autorun(Signature):
     categories = ["persistence"]
     authors = ["Michael Boman", "nex", "securitykitten", "Optiv", "KillerInstinct"]
     minimum = "1.3"
-    ttps = ["T1060"]
-
     evented = True
+    ttps = ["T1060"]  # MITRE v6
+    ttps += ["T1112"]  # MITRE v6,7,8
+    ttps += ["T1547", "T1547.001"]  # MITRE v7,8
+    mbcs = ["OB0012", "E1112", "F0012"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -214,7 +217,10 @@ class PersistenceSafeBoot(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1060"]
+    ttps = ["T1060"]  # MITRE v6
+    ttps += ["T1112"]  # MITRE v6,7,8
+    ttps += ["T1547", "T1547.001"]  # MITRE v7,8
+    ttps += ["OB0012", "E1112"]
 
     def run(self):
         indicators = [

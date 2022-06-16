@@ -67,6 +67,9 @@ class MimicsFiletime(Signature):
     authors = ["Optiv"]
     minimum = "1.0"
     evented = True
+    ttps = ["T1099"]  # MITRE v6
+    ttps += ["T1036", "T1070"]  # MITRE v6,7,8
+    ttps += ["T1070.006"]  # MITRE v7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

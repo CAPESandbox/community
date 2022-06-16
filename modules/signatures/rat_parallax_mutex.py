@@ -24,6 +24,9 @@ class ParallaxMutexes(Signature):
     families = ["Parallax"]
     authors = ["bartblaze"]
     minimum = "0.5"
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
+    mbcs += ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = ["PS-[A-Za-z]{10}$", "PX-[A-Za-z]{10}$"]

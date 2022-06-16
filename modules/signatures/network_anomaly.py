@@ -46,6 +46,7 @@ class NetworkAnomaly(Signature):
                     self.ipBuffer.append(node)
 
         elif call["api"].startswith("InternetConnect"):
+            self.mbcs += ["OC0006", "C0005.001"]  # micro-behaviour
             ip = self.get_argument(call, "ServerName")
             # Connected to the IP, whitelist it
             if re.match(self.ipRex, ip):

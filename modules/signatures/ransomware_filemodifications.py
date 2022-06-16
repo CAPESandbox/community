@@ -30,7 +30,8 @@ class RansomwareFileModifications(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1486"]
+    ttps = ["T1486"]  # MITRE v6,7,8
+    mbcs = ["OB0008", "E1486"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -88,6 +89,7 @@ class RansomwareFileModifications(Signature):
                     % (deletedcount)
                 }
             )
+            self.mbcs += ["OC0001", "C0047"]  # micro-behaviour
             ret = True
 
         if self.movefilecount > 60:
@@ -97,6 +99,7 @@ class RansomwareFileModifications(Signature):
                     % (self.movefilecount)
                 }
             )
+            self.mbcs += ["OC0005", "C0027"]  # micro-behaviour
             ret = True
 
         if self.appendemailcount > 60:
@@ -131,8 +134,10 @@ class RansomwareFileModifications(Signature):
                 self.data.append(
                     {"appends_new_extension": "Appended %s unique file extensions to multiple modified files" % (newcount)}
                 )
+                self.mbcs += ["OC0001", "C0015"]  # micro-behaviour
             if newcount < 16:
                 self.data.append({"appends_new_extension": "Appends a new file extension to multiple modified files"})
+                self.mbcs += ["OC0001", "C0015"]  # micro-behaviour
                 for newextension in self.newextensions:
                     self.data.append({"new_appended_file_extension": newextension})
             ret = True

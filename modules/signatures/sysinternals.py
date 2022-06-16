@@ -24,6 +24,7 @@ class sysinternals_tools(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    mbcs = ["OB0009", "E1203", "E1203.m05"]
     references = ["https://docs.microsoft.com/en-us/sysinternals/"]
 
     def run(self):
@@ -47,6 +48,8 @@ class sysinternals_psexec(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1203"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1203", "E1203.m05"]
     references = ["https://docs.microsoft.com/en-us/sysinternals/"]
 
     def run(self):

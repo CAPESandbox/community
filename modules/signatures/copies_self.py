@@ -23,6 +23,7 @@ class CopiesSelf(Signature):
     categories = ["persistence"]
     authors = ["Optiv"]
     minimum = "1.2"
+    mbcs = ["OC0001", "C0016"]  # micro-behaviour
 
     def run(self):
         if self.results["target"]["category"] != "file":

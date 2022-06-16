@@ -24,6 +24,9 @@ class VenomRAT(Signature):
     families = ["VenomRAT"]
     authors = ["ditekshen"]
     minimum = "1.3"
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
+    mbcs += ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = [

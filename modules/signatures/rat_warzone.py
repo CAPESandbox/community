@@ -24,6 +24,9 @@ class WarzoneRATRegkeys(Signature):
     families = ["WarzoneRAT", "AveMaria"]
     authors = ["ditekshen"]
     minimum = "1.3"
+    ttps = ["T1112", "T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022", "E1112"]
+    mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
         indicators = [
@@ -48,6 +51,9 @@ class WarzoneRATFiles(Signature):
     families = ["WarzoneRAT", "AveMaria"]
     authors = ["ditekshen"]
     minimum = "1.3"
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
+    mbcs += ["OC0001", "C0016"]  # micro-behaviour
 
     def run(self):
         indicators = [

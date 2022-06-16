@@ -25,6 +25,8 @@ class SpicyHotPotBehavior(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1014"]  # MITRE v6,7,8
+    mbcs = ["E1014"]
 
     def run(self):
         score = 0

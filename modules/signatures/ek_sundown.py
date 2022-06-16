@@ -26,6 +26,10 @@ class Sundown_JS(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1064"]  # MITRE v6
+    ttps += ["T1059", "T1190"]  # MITRE v6,7,8
+    ttps += ["T1059.007"]  # MITRE v7,8
+    mbcs = ["OB0008", "E1190", "OB0009", "E1059"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

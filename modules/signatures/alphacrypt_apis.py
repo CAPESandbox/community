@@ -31,7 +31,10 @@ class Alphacrypt_APIs(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True
-    ttps = ["T1486"]
+    ttps = ["T1486"]  # MITRE v6,7,8
+    ttps += ["U0301"]  # Unprotect
+    mbcs = ["OB0008", "E1486"]
+    mbcs += ["OC0005", "C0031"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

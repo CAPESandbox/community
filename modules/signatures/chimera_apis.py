@@ -28,6 +28,7 @@ class Chimera_APIs(Signature):
     authors = ["Optiv"]
     minimum = "1.3"
     evented = True
+    mbcs = ["OC0003", "C0042"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

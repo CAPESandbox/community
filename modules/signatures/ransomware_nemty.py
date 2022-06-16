@@ -24,6 +24,8 @@ class NemtyMutexes(Signature):
     families = ["Nemty"]
     authors = ["ditekshen"]
     minimum = "1.3"
+    ttps = ["T1486"]  # MITRE v6,7,8
+    mbcs = ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = ["^hate$", "^just_a_little_game$", "^da mne pohui chto tebe tam.*", "^Vremya tik-tak.*"]
@@ -45,6 +47,9 @@ class NemtyRegkeys(Signature):
     families = ["Nemty"]
     authors = ["ditekshen"]
     minimum = "1.3"
+    ttps = ["T1112"]  # MITRE v6,7,8
+    mbcs = ["E1112"]
+    mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
         indicators = [
@@ -69,6 +74,8 @@ class NemtyNote(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1486"]  # MITRE v6,7,8
+    mbcs = ["OC0001", "C0016"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -96,6 +103,9 @@ class NemtyNetworkActivity(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1071"]  # MITRE v6,7,8
+    mbcs = ["OB0004", "B0030"]
+    mbcs += ["OC0006", "C0005"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -114,6 +124,7 @@ class NemtyNetworkActivity(Signature):
 
     def on_call(self, call, process):
         if call["api"] == "InternetOpenA":
+            self.mbcs += ["C0005.002"]  # micro-behaviour
             agent = self.get_argument(call, "Agent")
             if agent:
                 for ua in self.useragents:
@@ -121,6 +132,7 @@ class NemtyNetworkActivity(Signature):
                         self.match_agent = True
 
         if call["api"] == "InternetOpenUrlA":
+            self.mbcs += ["C0005.003"]  # micro-behaviour
             url = self.get_argument(call, "URL")
             if url:
                 for domain in self.domains:

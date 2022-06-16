@@ -23,7 +23,9 @@ class VMwareDetectDevices(Signature):
     categories = ["anti-vm"]
     authors = ["Optiv"]
     minimum = "1.2"
-    mbcs = ["B0009"]
+    ttps = ["T1083", "T1497"]  # MITRE v6,7,8
+    ttps += ["U1332"]  # Unprotect
+    mbcs = ["OB0001", "B0009", "B0009.008", "OB0007", "E1083"]
 
     def run(self):
         indicators = ["\\??\\vmci", "\\??\\HGFS"]

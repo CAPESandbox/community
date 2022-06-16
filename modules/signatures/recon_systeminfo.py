@@ -24,6 +24,8 @@ class SystemInfo(Signature):
     authors = ["nex"]
     minimum = "1.0"
     evented = True
+    ttps = ["T1082"]  # MITRE v6,7,8
+    mbcs = ["OB0007", "E1082"]
 
     filter_categories = set(["process"])
 

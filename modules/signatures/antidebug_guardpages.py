@@ -27,6 +27,10 @@ class antidebug_guardpages(Signature):
     authors = ["redsand"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1106"]  # MITRE v6,7,8
+    ttps += ["U0102"]  # Unprotect
+    mbcs = ["OB0001", "B0001", "B0001.009", "B0002", "B0002.008"]
+    mbcs += ["OC0002", "C0008"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

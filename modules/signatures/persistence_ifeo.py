@@ -23,8 +23,13 @@ class PersistenceIFEO(Signature):
     categories = ["persistence", "injection", "evasion", "escalation"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1183"]
     evented = True
+    ttps = ["T1183"]  # MITRE v6
+    ttps += ["T1055", "T1112"]  # MITRE v6,7,8
+    ttps += ["T1546", "T1546.012"]  # MITRE v7,8
+    ttps += ["U1222"]  # Unprotect
+    mbcs = ["OB0012", "E1055", "E1055.m02", "E1112"]
+    mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
         indicators = [
@@ -47,8 +52,12 @@ class PersistenceSilentProcessExit(Signature):
     categories = ["persistence", "injection", "evasion", "escalation"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1183"]
     evented = True
+    ttps = ["T1183"]  # MITRE v6
+    ttps = ["T1055", "T1112"]  # MITRE v6,7,8
+    ttps += ["T1546", "T1546.012"]  # MITRE v7,8
+    mbcs = ["OB0012", "E1055", "E1112"]
+    mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
         indicators = [

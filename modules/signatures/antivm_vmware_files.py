@@ -23,8 +23,9 @@ class VMwareDetectFiles(Signature):
     categories = ["anti-vm"]
     authors = ["Optiv"]
     minimum = "1.2"
-    ttps = ["T1083", "T1057"]
-    mbcs = ["B0009"]
+    ttps = ["T1057", "T1083", "T1497"]  # MITRE v6,7,8
+    ttps += ["U1333"]  # Unprotect
+    mbcs = ["OB0001", "B0009", "B0009.001", "OB0007", "E1083"]
 
     def run(self):
         indicators = [

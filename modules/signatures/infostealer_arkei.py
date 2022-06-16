@@ -24,6 +24,7 @@ class ArkeiFiles(Signature):
     families = ["Arkei"]
     authors = ["ditekshen"]
     minimum = "1.3"
+    mbcs = ["OC0001", "C0016", "C0046"]  # micro-behaviour
 
     def run(self):
         indicators = [

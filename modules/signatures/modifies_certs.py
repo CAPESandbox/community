@@ -12,7 +12,9 @@ class ModifiesCerts(Signature):
     categories = ["browser"]
     authors = ["Kevin Ross"]
     minimum = "1.2"
-    ttps = ["T1112", "T1553.004", "E1112"]
+    ttps = ["T1112"]  # MITRE v6,7,8
+    ttps += ["T1553", "T1553.004"]  # MITRE v7,8
+    mbcs = ["OC0008", "C0036", "E1112"]  # micro-behaviour
 
     filter_analysistypes = set(["file"])
 

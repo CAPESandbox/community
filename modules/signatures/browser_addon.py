@@ -28,6 +28,9 @@ class BrowserAddon(Signature):
     categories = ["browser", "adware"]
     authors = ["Kevin Ross"]
     minimum = "1.2"
+    ttps = ["T1112", "T1176"]  # MITRE v6,7,8
+    mbcs = ["OB0012", "E1112"]
+    mbcs += ["OC0008", "C0036", "C0036.001"]  # micro-behaviour
 
     def run(self):
         reg_indicators = [

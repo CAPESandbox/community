@@ -26,6 +26,8 @@ class NanocoreRAT(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -36,6 +38,7 @@ class NanocoreRAT(Signature):
 
     def on_call(self, call, process):
         if call["api"] == "CryptHashData":
+            self.mbcs += ["OC0005", "C0027"]  # micro-behaviour
             buf = self.get_argument(call, "Buffer")
             if buf:
                 tail = "6" * 48
@@ -56,10 +59,12 @@ class NanocoreRAT(Signature):
         ]
         for ioc in fileiocs:
             if self.check_write_file(pattern=ioc, regex=True):
+                self.mbcs += ["OC0001", "C0016"]  # micro-behaviour
                 badness += 1
 
         mutex = "(Global|Local)\\\\\{" + guid + "\}$"
         if self.check_mutex(pattern=mutex, regex=True):
+            self.mbcs += ["OC0003", "C0042"]  # micro-behaviour
             badness += 1
 
         if self.cryptmz >= 2 and self.cryptcalls:

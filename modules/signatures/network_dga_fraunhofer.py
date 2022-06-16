@@ -35,11 +35,15 @@ class NetworkDGAFraunhofer(Signature):
     categories = ["network"]
     authors = ["kklinger"]
     families = []
+    minimum = "1.3"
+    ttps = ["T1483"]  # MITRE v6
+    ttps += ["T1568", "T1568.002"]  # MITRE v7,8
+    ttps += ["U0906"]  # Unprotect
+    mbcs = ["B0031"]
     references = [
         "https://dgarchive.caad.fkie.fraunhofer.de",
         "https://github.com/DCSO/flor",
     ]
-    minimum = "1.3"
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

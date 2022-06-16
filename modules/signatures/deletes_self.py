@@ -23,8 +23,12 @@ class DeletesSelf(Signature):
     categories = ["persistence"]
     authors = ["Optiv"]
     minimum = "1.2"
-    ttps = ["F0007"]
     evented = True
+    ttps = ["T1107"]  # MITRE v6
+    ttps += ["T1070"]  # MITRE v6,7,8
+    ttps += ["T1070.004"]  # MITRE v7,8
+    mbcs = ["OB0006", "F0007"]
+    mbcs += ["OC0001", "C0047"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

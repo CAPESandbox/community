@@ -8,7 +8,8 @@ class MINERS(Signature):
     categories = ["cryptomining"]
     authors = ["doomedraven", "bartblaze"]
     minimum = "1.2"
-    ttps = ["T1496"]
+    ttps = ["T1496"]  # MITRE v6,7,8
+    mbcs = ["OB0008", "B0018"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

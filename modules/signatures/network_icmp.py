@@ -23,6 +23,8 @@ class NetworkICMP(Signature):
     categories = ["icmp"]
     authors = ["David Maciejak"]
     minimum = "1.0"
+    ttps = ["T1095"]  # MITRE v6,7,8
+    mbcs = ["OC0006", "C0014"]  # micro-behaviour
 
     def run(self):
         if "network" in self.results:

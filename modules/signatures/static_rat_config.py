@@ -13,6 +13,8 @@ class RATConfig(Signature):
     categories = ["static"]
     authors = ["Optiv"]
     minimum = "1.3"
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
 
     def run(self):
         if (

@@ -25,6 +25,10 @@ class BrowserScanbox(Signature):
     authors = ["Will Metcalf"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1056", "T1082", "T1119"]  # MITRE v6,7,8
+    ttps += ["T1056.001"]  # MITRE v7,8
+    ttps += ["T1592", "T1592.002", "T1592.004"]  # MITRE v8
+    mbcs = ["OB0003", "OB0007", "E1056", "E1082", "F0002"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

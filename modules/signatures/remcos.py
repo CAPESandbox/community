@@ -24,6 +24,9 @@ class RemcosFiles(Signature):
     families = ["Remcos"]
     authors = ["ditekshen"]
     minimum = "0.5"
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
+    mbcs += ["OC0001", "C0016"]  # micro-behaviour
 
     def run(self):
         indicators = [
@@ -48,6 +51,9 @@ class RemcosMutexes(Signature):
     families = ["Remcos"]
     authors = ["ditekshen"]
     minimum = "0.5"
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
+    mbcs += ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = [
@@ -74,6 +80,9 @@ class RemcosRegkeys(Signature):
     families = ["Remcos"]
     authors = ["ditekshen"]
     minimum = "0.5"
+    ttps = ["T1112", "T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022", "E1112"]
+    mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
         indicators = [

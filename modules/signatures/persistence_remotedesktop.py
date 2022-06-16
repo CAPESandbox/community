@@ -24,7 +24,10 @@ class PersistenceRDPRegistry(Signature):
     authors = ["bartblaze"]
     minimum = "1.2"
     evented = True
-    ttps = ["T1021"]
+    ttps = ["T1021", "T1112"]  # MITRE v6,7,8
+    ttps += ["T1021.001"]  # MITRE v7,8
+    mbcs = ["OB0012", "B0022", "E1203.m01", "E1112"]
+    mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
         ret = False

@@ -25,6 +25,10 @@ class Recon_Beacon(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1041", "T1082"]  # MITRE v6,7,8
+    ttps += ["T1592", "T1592.004"]  # MITRE v8
+    mbcs = ["OB0004", "B0030", "OB0007", "E1082"]
+    mbcs += ["OC0006", "C0002"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

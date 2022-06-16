@@ -70,11 +70,15 @@ class Dridex_APIs(Signature):
                 buf = self.get_argument(call, "Data")
                 if buf:
                     self.compname = buf.lower()
+                    self.ttps += ["T1082"]  # MITRE v6,7,8
+                    self.mbcs += ["OB0007", "E1082"]
             if testkey == "hkey_current_user\\volatile environment\\username":
                 if call["status"]:
                     buf = self.get_argument(call, "Data")
                     if buf:
                         self.username = buf.lower()
+                        self.ttps += ["T1033", "T1082"]  # MITRE v6,7,8
+                        self.mbcs += ["E1082"]
                 else:
                     self.is_xp = True
 
@@ -102,6 +106,9 @@ class Dridex_APIs(Signature):
                 # POST is a stable indicator observed so far
                 if buf and buf[:4] == "POST":
                     self.payloadip["send"] = self.sockmon[socknum]
+                    self.ttps += ["T1041"]  # MITRE v6,7,8
+                    self.mbcs += ["OB0004", "B0030"]
+                    self.mbcs += ["OC0006", "C0001"]  # micro-behaviour
 
         elif call["api"] == "recv":
             if not self.extract:
@@ -119,6 +126,9 @@ class Dridex_APIs(Signature):
                                 # Just a sanity check to make sure the IP hasn't changed
                                 # since this is a primitive send/recv monitor
                                 self.payloadip["recv"] = self.sockmon[socknum]
+                                self.ttps += ["T1041"]  # MITRE v6,7,8
+                                self.mbcs += ["OB0004", "B0030"]
+                                self.mbcs += ["OC0006", "C0001"]  # micro-behaviour
 
         elif call["api"] == "RtlDecompressBuffer":
             buf = self.get_argument(call, "UncompressedBuffer")
@@ -131,11 +141,15 @@ class Dridex_APIs(Signature):
                 if not any(char.isalpha() for char in ip):
                     self.ip_check = ip
                     self.port_check = str(self.get_argument(call, "ServerPort"))
+                    self.mbcs += ["OC0006", "C0005"]  # micro-behaviour
 
         elif call["api"] == "HttpOpenRequestW":
             if self.ip_check and self.port_check:
                 if self.get_argument(call, "Verb") == "POST":
                     self.post_check = True
+                    self.ttps += ["T1041", "T1071"]  # MITRE v6,7,8
+                    self.mbcs += ["OB0004", "B0030"]
+                    self.mbcs += ["OC0006", "C0002"]  # micro-behaviour
 
         elif call["api"] == "InternetCrackUrlA":
             if self.post_check:
@@ -143,6 +157,11 @@ class Dridex_APIs(Signature):
                 if buf.lower().startswith("https") and self.port_check != "443":
                     if buf.lower().split("/")[-1] == self.ip_check:
                         self.ret = True
+                        self.ttps += ["T1065"]  # MITRE v6
+                        self.ttps += ["T1041"]  # MITRE v6,7,8
+                        self.ttps += ["T1571"]  # MITRE v7,8
+                        self.mbcs += ["OB0004", "B0030"]
+                        self.mbcs += ["OC0006", "C0002"]  # micro-behaviour
 
         return None
 

@@ -14,7 +14,8 @@ class InjectionRWX(Signature):
     authors = ["Optiv"]
     minimum = "1.2"
     evented = True
-    ttps = ["T1055"]
+    ttps = ["T1055"]  # MITRE v6,7,8
+    mbcs = ["OB0006", "OB0013", "E1055"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

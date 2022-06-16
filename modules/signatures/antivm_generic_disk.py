@@ -24,6 +24,10 @@ class DiskInformation(Signature):
     authors = ["nex", "Optiv"]
     minimum = "1.2"
     evented = True
+    ttps = ["T1082", "T1106", "T1497"]  # MITRE v6,7,8
+    ttps += ["T1497.001"]  # MITRE v7,8
+    ttps += ["U1312", "U1332"]  # Unprotect
+    mbcs = ["OB0001", "B0009", "B0009.015", "OB0007", "E1082"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

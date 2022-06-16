@@ -24,6 +24,9 @@ class BadCerts(Signature):
     categories = ["static"]
     authors = ["Optiv"]
     minimum = "1.3"
+    ttps = ["T1036"]  # MITRE v6,7,8
+    ttps += ["T1036.001", "T1553", "T1553.002"]  # MITRE v7,8
+    ttps += ["U0503"]  # Unprotect
 
     def run(self):
         md5_indicators = []

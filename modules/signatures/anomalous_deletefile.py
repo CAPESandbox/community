@@ -25,6 +25,9 @@ class anomalous_deletefile(Signature):
     authors = ["redsand"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1485"]  # MITRE v6,7,8
+    mbcs = ["OB0008", "E1485"]
+    mbcs += ["OC0001", "C0047"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

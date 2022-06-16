@@ -24,6 +24,7 @@ class DebugsSelf(Signature):
     authors = ["Optiv"]
     minimum = "1.2"
     evented = True
+    mbcs = ["OB0001", "B0002", "B0002.024"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

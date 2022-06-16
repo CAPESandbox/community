@@ -24,6 +24,8 @@ class MedusaLockerMutexes(Signature):
     families = ["MedusaLocker"]
     authors = ["ditekshen"]
     minimum = "0.5"
+    ttps = ["T1486"]  # MITRE v6,7,8
+    mbcs = ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = [
@@ -49,6 +51,9 @@ class MedusaLockerRegkeys(Signature):
     families = ["MedusaLocker"]
     authors = ["ditekshen"]
     minimum = "0.5"
+    ttps = ["T1112"]  # MITRE v6,7,8
+    mbcs = ["E1112"]
+    mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
         indicators = [

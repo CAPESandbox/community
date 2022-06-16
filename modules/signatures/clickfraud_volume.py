@@ -13,6 +13,7 @@ class ClickfraudVolume(Signature):
     authors = ["Optiv"]
     minimum = "1.3"
     evented = True
+    mbcs = ["E1472"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

@@ -23,6 +23,7 @@ class Ruskill(Signature):
     alert = True
     categories = ["bot", "ddos"]
     authors = ["JoseMi Holguin", "nex"]
+    mbcs = ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         return self.check_mutex(pattern="FvLQ49IlzIyLjj6m")

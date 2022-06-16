@@ -13,6 +13,7 @@ class InjectionExtension(Signature):
     authors = ["Optiv"]
     minimum = "1.3"
     evented = True
+    mbcs = ["OC0001", "C0045"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

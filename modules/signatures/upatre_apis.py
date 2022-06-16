@@ -63,6 +63,7 @@ class Upatre_APIs(Signature):
                 if cli == "svchost.exe":
                     flags = int(self.get_argument(call, "CreationFlags"), 16)
                     # Only add if it's created with CREATE_SUSPENDED
+                    self.mbcs += ["OC0003", "C0017", "C0017.003"]  # micro-behaviour
                     if flags & 0x4:
                         self.created_procs.append(cli)
                 else:
@@ -73,22 +74,31 @@ class Upatre_APIs(Signature):
             if call["api"] == "DeleteFileA":
                 buf = self.get_argument(call, "FileName")
                 if buf and buf == self.first_path:
+                    self.ttps += ["T1107"]  # MITRE v6
+                    self.ttps += ["T1070"]  # MITRE v6,7,8
+                    self.ttps += ["T1070.004"]  # MITRE v7,8
+                    self.mbcs += ["OB0006", "F0007"]
+                    self.mbcs += ["OC00001", "C0047"]  # micro-behaviour
                     self.deletes_parentfile = True
 
             elif call["api"] == "GetComputerNameW":
                 if not self.hostname:
                     self.hostname = self.get_argument(call, "ComputerName")
+                    self.ttps += ["T1082"]  # MITRE v6,7,8
+                    self.mbcs += ["OB0007", "E1082"]
 
             elif call["api"] == "InternetConnectW":
                 self.current_handle = call["return"]
                 servername = self.get_argument(call, "ServerName")
                 serverport = self.get_argument(call, "ServerPort")
                 self.url_buffer = "{0}:{1}".format(servername, serverport)
+                self.mbcs += ["OC0006", "C0005", "C0005.001"]  # micro-behaviour
 
             elif call["api"] == "HttpOpenRequestW":
                 handle = self.get_argument(call, "InternetHandle")
                 url = self.get_argument(call, "Path")
                 if handle == self.current_handle:
+                    self.mbcs += ["OC0006", "C0002"]  # micro-behaviour
                     self.requestcount += 1
                     # Ignore Recon IP Checking Request
                     if self.requestcount > 1:

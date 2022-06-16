@@ -23,8 +23,9 @@ class CapturesScreenshot(Signature):
     categories = ["infostealer", "rat"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1113"]
     evented = True
+    ttps = ["T1113"]  # MITRE v6,7,8
+    mbcs = ["E1113"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

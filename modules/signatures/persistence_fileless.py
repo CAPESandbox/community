@@ -23,9 +23,9 @@ class PersistenceRegistryScript(Signature):
     categories = ["persistence"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    ttps = ["T1112"]
-
     evented = True
+    ttps = ["T1059", "T1112"]  # MITRE v6,7,8
+    mbcs = ["OB0012", "E1112", "OB0009", "E1059"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

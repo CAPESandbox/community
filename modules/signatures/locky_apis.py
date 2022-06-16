@@ -69,6 +69,9 @@ class Locky_APIs(Signature):
                         self.hashes.add(md5)
 
         elif call["api"] == "CryptHashData":
+            self.ttps += ["T1486"]  # MITRE v6,7,8
+            self.mbcs += ["OB0008", "E1486"]
+            self.mbcs += ["OC0005", "C0027"]  # micro-behaviour
             if self.hashes:
                 buf = self.get_argument(call, "Buffer")
                 if buf and all(word in buf for word in self.keywords):
@@ -142,6 +145,8 @@ class Locky_APIs(Signature):
                                     self.data.append(tmp)
 
             if self.payment:
+                self.mbcs += ["OB0004", "B0030"]
+                self.mbcs += ["OC0006"]  # micro-behaviour
                 for url in self.payment:
                     self.data.append({"Payment": url})
 

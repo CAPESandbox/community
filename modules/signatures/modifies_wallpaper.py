@@ -24,6 +24,9 @@ class ModifiesDesktopWallpaper(Signature):
     authors = ["Kevin Ross", "Brad Spengler"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1491"]  # MITRE v6,7,8
+    ttps += ["T1491.001"]  # MITRE v7,8
+    mbcs = ["OC0008", "C0035"]  # micro-behaviour
 
     filter_apinames = set(["SystemParametersInfoA", "SystemParametersInfoW"])
 

@@ -24,6 +24,7 @@ class Troldesh_APIs(Signature):
     authors = ["KillerInstinct"]
     families = ["Troldesh"]
     minimum = "1.0"
+    mbcs = ["OC0001", "C00016"]  # micro-behaviour
 
     def run(self):
         keypat = r".*\\SOFTWARE\\System32\\Configuration\\i$"

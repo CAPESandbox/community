@@ -17,13 +17,16 @@ from lib.cuckoo.common.abstracts import Signature
 
 
 class BochsDetectKeys(Signature):
-    name = "antivm_xen_keys"
+    name = "antivm_bochs_keys"
     description = "Detects Bochs through the presence of a registry key"
     severity = 3
     categories = ["anti-vm"]
     authors = ["Brad Spengler"]
     minimum = "0.5"
-    ttps = ["T1057", "T1012"]
+    ttps = ["T1012", "T1057"]  # MITRE v6,7,8
+    ttps += ["U1314"]  # Unprotect
+    mbcs = ["OB0001", "B0004", "B0004.003", "B0009", "B0009.005", "OB0007", "B0013"]
+    mbcs += ["OC0008", "C0036.005"]  # micro-behaviour
 
     def run(self):
         indicators = [

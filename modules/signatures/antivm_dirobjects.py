@@ -25,6 +25,10 @@ class AntiVMDirectoryObjects(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1083"]  # MITRE v6,7,8
+    ttps += ["U1332"]  # Unprotect
+    mbcs = ["OB0001", "B0009", "B0009.001", "OB0007", "E1083"]
+    mbcs += ["OC0001"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

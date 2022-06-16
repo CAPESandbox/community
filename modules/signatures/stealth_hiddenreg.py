@@ -12,6 +12,11 @@ class StealthHiddenReg(Signature):
     categories = ["stealth"]
     authors = ["Optiv"]
     minimum = "1.2"
+    ttps = ["T1054", "T1158"]  # MITRE v6
+    ttps += ["T1112"]  # MITRE v6,7,8
+    ttps += ["T1562", "T1562.006", "T1564", "T1564.001"]  # MITRE v7,8
+    mbcs = ["OB0006", "F0005", "F0006", "E1112", "E1478"]
+    mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
         reg_indicators = [

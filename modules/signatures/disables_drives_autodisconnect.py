@@ -24,6 +24,8 @@ class DisablesMappedDrivesAutodisconnect(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1059"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1059"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

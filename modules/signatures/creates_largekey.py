@@ -25,7 +25,9 @@ class CreatesLargeKey(Signature):
     authors = ["Optiv"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1112"]
+    ttps = ["T1112"]  # MITRE v6,7,8
+    mbcs = ["OB0006", "E1112", "OB0012"]
+    mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

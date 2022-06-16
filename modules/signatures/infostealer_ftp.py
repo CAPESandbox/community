@@ -23,7 +23,10 @@ class FTPStealer(Signature):
     categories = ["infostealer"]
     authors = ["nex", "Optiv"]
     minimum = "1.2"
-    ttps = ["T1081", "T1003", "T1005", "T1552.001"]
+    ttps = ["T1081"]  # MITRE v6
+    ttps += ["T1003", "T1005"]  # MITRE v6,7,8
+    ttps += ["T1552", "T1552.001"]  # MITRE v7,8
+    mbcs = ["OB0003", "OB0005"]
 
     def run(self):
         file_indicators = [

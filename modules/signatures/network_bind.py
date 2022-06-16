@@ -24,6 +24,8 @@ class NetworkBIND(Signature):
     authors = ["nex", "Optiv"]
     minimum = "1.0"
     evented = True
+    mbcs = ["OB0004", "B0030"]
+    mbcs += ["OC0006", "C0001"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

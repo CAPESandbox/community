@@ -24,7 +24,10 @@ class CypherITMutexes(Signature):
     families = ["AgentTesla", "HawkEye", "Nanocore", "Formbook", "Remcos", "Njrat", "Azorult", "Fareit", "Lokibot", "Predator"]
     authors = ["ditekshen"]
     minimum = "0.5"
-    ttps = ["T1045"]
+    ttps = ["T1045"]  # MITRE v6
+    ttps += ["T1027"]  # MITRE v6,7,8
+    ttps += ["T1027.002"]  # MITRE v7,8
+    mbcs = ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = [

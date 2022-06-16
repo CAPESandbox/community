@@ -17,15 +17,15 @@ from lib.cuckoo.common.abstracts import Signature
 
 
 class SystemInfoDiscoveryCMD(Signature):
-    name = "system_info_disovery_cmd"
+    name = "system_info_discovery_cmd"
     description = "Collects system information via command line"
     severity = 2
     categories = ["discovery"]
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1082"]
-    evented = True
+    ttps = ["T1082", "T1059"]  # MITRE v6,7,8
+    mbcs = ["OB0007", "E1082", "OB0009", "E1059"]
 
     def on_complete(self):
         indicators = [
@@ -43,16 +43,16 @@ class SystemInfoDiscoveryCMD(Signature):
         return False
 
 
-class SystemUserDisoveryCMD(Signature):
-    name = "system_user_disovery_cmd"
+class SystemUserDiscoveryCMD(Signature):
+    name = "system_user_discovery_cmd"
     description = "Collects system owner/user information via command line"
     severity = 2
     categories = ["discovery"]
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1033"]
-    evented = True
+    ttps = ["T1033", "T1059", "T1082"]  # MITRE v6,7,8
+    mbcs = ["OB0007", "E1082", "OB0009", "E1059"]
 
     def on_complete(self):
         indicators = [
@@ -68,16 +68,16 @@ class SystemUserDisoveryCMD(Signature):
         return False
 
 
-class SystemAccountDisoveryCMD(Signature):
-    name = "system_account_disovery_cmd"
+class SystemAccountDiscoveryCMD(Signature):
+    name = "system_account_discovery_cmd"
     description = "Collects system account information via command line"
     severity = 2
     categories = ["discovery"]
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1087"]
-    evented = True
+    ttps = ["T1059", "T1082", "T1087"]  # MITRE v6,7,8
+    mbcs = ["OB0007", "E1082", "OB0009", "E1059"]
 
     def on_complete(self):
         indicators = [
@@ -101,8 +101,9 @@ class SystemNetworkDiscoveryCMD(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1016", "S0103", "S0359"]
-    evented = True
+    ttps = ["S0103", "S0359"]  # MITRE
+    ttps += ["T1016", "T1059", "T1082"]  # MITRE v6,7,8
+    mbcs = ["OB0007", "E1082", "OB0009", "E1059"]
 
     def on_complete(self):
         indicators = [
@@ -123,15 +124,16 @@ class SystemNetworkDiscoveryCMD(Signature):
 
 
 class SystemInfoDiscoveryPWSH(Signature):
-    name = "system_info_disovery_pwsh"
+    name = "system_info_discovery_pwsh"
     description = "Collects system information via PowerShell"
     severity = 2
     categories = ["discovery"]
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1082"]
-    evented = True
+    ttps = ["T1059", "T1082"]  # MITRE v6,7,8
+    ttps += ["T1059.001"]  # MITRE v7,8
+    mbcs = ["OB0007", "E1082", "OB0009", "E1059"]
 
     def on_complete(self):
         indicators = [
@@ -157,8 +159,9 @@ class SystemNetworkDiscoveryPWSH(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1016"]
-    evented = True
+    ttps = ["T1016", "T1059", "T1082"]  # MITRE v6,7,8
+    ttps += ["T1059.001"]  # MITRE v7,8
+    mbcs = ["OB0007", "E1082", "OB0009", "E1059"]
 
     def on_complete(self):
         indicators = [

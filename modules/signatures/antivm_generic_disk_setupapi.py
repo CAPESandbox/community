@@ -24,6 +24,10 @@ class SetupAPIDiskInformation(Signature):
     authors = ["Optiv"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1082", "T1497"]  # MITRE v6
+    ttps += ["T1497.001"]  # MITRE v7,8
+    ttps += ["U1332"]  # Unprotect
+    mbcs = ["OB0001", "B0009", "OB0007", "E1082"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

@@ -13,6 +13,7 @@ class MimicsAgent(Signature):
     authors = ["Optiv"]
     minimum = "1.2"
     evented = True
+    ttps = ["T1036"]  # MITRE v6,7.8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

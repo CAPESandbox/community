@@ -23,7 +23,11 @@ class DisablesSmartScreen(Signature):
     categories = ["generic"]
     authors = ["ditekshen"]
     minimum = "0.5"
-    ttps = ["T1089"]
+    ttps = ["T1089"]  # MITRE v6
+    ttps += ["T1112"]  # MITRE v7,8
+    ttps += ["T1562", "T1562.001"]  # MITRE v7,8
+    mbcs = ["OB0006", "E1112", "F0004"]
+    mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
         re_match = False

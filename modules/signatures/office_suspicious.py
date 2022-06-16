@@ -28,6 +28,7 @@ class OfficeAnamalousFeature(Signature):
     categories = ["office"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
+    ttps = ["T1137"]  # MITRE v6,7,8
 
     def run(self):
 
@@ -135,6 +136,7 @@ class OfficeDDECommand(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1137"]  # MITRE v6,7,8
     references = ["sensepost.com/blog/2017/macro-less-code-exec-in-msword/"]
 
     def run(self):

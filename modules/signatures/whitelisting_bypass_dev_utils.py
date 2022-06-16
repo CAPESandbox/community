@@ -29,8 +29,9 @@ class PersistsDotNetDevUtility(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1118", "T1127"]
-    evented = True
+    ttps = ["T1118"]  # MITRE v6
+    ttps += ["T1127", "T1218"]  # MITRE v6,7,8
+    ttps += ["T1218.004"]  # MITRE v7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -76,8 +77,9 @@ class SpwansDotNetDevUtiliy(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1118", "T1127"]
-    evented = True
+    ttps = ["T1118"]  # MITRE v6
+    ttps += ["T1127", "T1218"]  # MITRE v6,7,8
+    ttps += ["T1218.004"]  # MITRE v7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

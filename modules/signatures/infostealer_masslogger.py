@@ -30,6 +30,7 @@ class MassLoggerVersion(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    mbcs = ["OC0001", "C0052"]  # micro-behaviour
 
     filter_apinames = set(["NtWriteFile"])
 
@@ -63,6 +64,7 @@ class MassLoggerArtifacts(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    mbcs = ["OC0001", "C0052"]  # micro-behaviour
 
     filter_apinames = set(["FindFirstFileExW", "CryptDecrypt"])
 
@@ -98,6 +100,7 @@ class MassLoggerFiles(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    mbcs = ["OC0001", "C0016"]  # micro-behaviour
 
     def run(self):
         user = self.get_environ_entry(self.get_initial_process(), "UserName")

@@ -29,7 +29,9 @@ class RansomwareMessage(Signature):
     authors = ["Kevin Ross", "bartblaze"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1486"]
+    ttps = ["T1486"]  # MITRE v6,7,8
+    mbcs = ["OB0008", "E1486"]
+    mbcs += ["OC0001", "C0016"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

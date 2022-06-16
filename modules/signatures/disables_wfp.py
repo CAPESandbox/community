@@ -13,6 +13,9 @@ class DisablesWFP(Signature):
     authors = ["Optiv"]
     minimum = "1.2"
     evented = True
+    ttps = ["T1089"]  # MITRE v6
+    ttps += ["T1562", "T1562.001"]  # MITRE v7,8
+    mbcs = ["OB0006", "F0004", "F0004.007"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

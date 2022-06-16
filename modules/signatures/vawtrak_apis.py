@@ -49,6 +49,10 @@ class Vawtrak_APIs(Signature):
             if "\\software\\microsoft\\windows\\currentversion\\run\\" in key:
                 buf = self.get_argument(call, "Buffer").lower()
                 if re.match(r"^[A-Z]:\\ProgramData\\\w+\\\w+\.exe$", buf):
+                    self.ttps += ["T1060"]  # MITRE v6
+                    self.ttps += ["T1547", "T1547.001"]  # MITRE v7,8
+                    self.mbcs += ["OB0012", "F0012"]
+                    self.mbcs += ["OC0008", "C0036"]  # micro-behaviour
                     self.vawtrakauto = True
 
         elif call["api"] == "NtCreateEvent" or call["api"] == "NtOpenEvent":
@@ -60,6 +64,7 @@ class Vawtrak_APIs(Signature):
 
         elif call["api"] == "CreateThread" or call["api"] == "NtOpenProcess":
             if self.eventtrigger:
+                self.mbcs += ["OC0003", "C0038"]  # micro-behaviour
                 self.malscore += 2
 
         self.lastcall = call["api"]
@@ -71,6 +76,7 @@ class Vawtrak_APIs(Signature):
         if self.vawtrakauto:
             self.malscore += 2
         if self.check_mutex(pattern=r"^\{[0-9A-F]{8}(-[0-9A-F]{4}){3}-[0-9A-F]{12}\}$", regex=True):
+            self.mbcs += ["OC0003", "C0042"]  # micro-behaviour
             self.malscore += 2
         if self.malscore >= 10:
             uri_indicators = [
@@ -80,6 +86,7 @@ class Vawtrak_APIs(Signature):
             for ioc in uri_indicators:
                 match = self.check_url(pattern=ioc, regex=True)
                 if match:
+                    self.mbcs += ["OB0004", "B0030"]
                     buf = {"c2": match}
                     if buf not in self.data:
                         self.data.append(buf)

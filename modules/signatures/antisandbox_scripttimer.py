@@ -24,6 +24,9 @@ class AntiSandboxScriptTimer(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1497"]  # MITRE v6,7,8
+    ttps += ["T1497.003"]  # MITRE v7,8
+    ttps += ["U1320"]  # Unprotect
 
     filter_categories = set(["windows"])
 

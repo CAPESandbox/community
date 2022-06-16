@@ -24,6 +24,7 @@ class SpyEyeMutexes(Signature):
     families = ["Spyeye"]
     authors = ["nex"]
     minimum = "0.5"
+    mbcs = ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = ["zXeRY3a_PtW.*", "SPYNET", "__CLEANSWEEP__", "__CLEANSWEEP_UNINSTALL__", "__CLEANSWEEP_RELOADCFG__"]

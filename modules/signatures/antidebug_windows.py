@@ -24,7 +24,9 @@ class AntiDBGWindows(Signature):
     authors = ["nex", "KillerInstinct", "Brad Spengler", "bartblaze"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1057"]
+    ttps = ["T1010", "T1057"]  # MITRE v6,7,8
+    ttps += ["U1314"]  # Unprotect
+    mbcs = ["OB0001", "OB0007", "B0013", "B0013.001", "B0013.009"]
 
     filter_categories = set(["windows"])
 

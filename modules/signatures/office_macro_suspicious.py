@@ -24,7 +24,9 @@ class OfficeMacroSuspicious(Signature):
     categories = ["office"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    ttps = ["T1064"]
+    ttps = ["T1064"]  # MITRE v6
+    ttps += ["T1059"]  # MITRE v6,7,8
+    ttps += ["T1059.005"]  # MITRE v7,8
 
     def run(self):
         ret = False
@@ -49,7 +51,9 @@ class OfficeMacroIOC(Signature):
     categories = ["office"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    ttps = ["T1064"]
+    ttps = ["T1064"]  # MITRE v6
+    ttps += ["T1059"]  # MITRE v6,7,8
+    ttps += ["T1059.005"]  # MITRE v7,8
 
     def run(self):
         ret = False
@@ -71,7 +75,9 @@ class OfficeMacroAutoExecution(Signature):
     categories = ["office"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    ttps = ["T1064"]
+    ttps = ["T1064"]  # MITRE v6
+    ttps += ["T1059"]  # MITRE v6,7,8
+    ttps += ["T1059.005"]  # MITRE v7,8
 
     def run(self):
         ret = False
@@ -93,7 +99,9 @@ class OfficeMacroMaliciousPredition(Signature):
     categories = ["office", "macro"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    ttps = ["T1064"]
+    ttps = ["T1064"]  # MITRE v6
+    ttps += ["T1059"]  # MITRE v6,7,8
+    ttps += ["T1059.005"]  # MITRE v7,8
 
     def run(self):
         ret = False

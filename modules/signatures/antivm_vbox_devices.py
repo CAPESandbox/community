@@ -23,8 +23,9 @@ class VBoxDetectDevices(Signature):
     categories = ["anti-vm"]
     authors = ["nex"]
     minimum = "1.2"
-    ttps = ["T1057", "T1012"]
-    mbcs = ["B0009"]
+    ttps = ["T1012", "T1057", "T1083", "T1497"]  # MITRE v6,7,8
+    ttps += ["U1332"]  # Unprotect
+    mbcs = ["OB0001", "B0009", "B0009.008", "OB0007", "E1083"]
 
     def run(self):
         indicators = [

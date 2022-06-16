@@ -25,7 +25,10 @@ class ScriptNetworkActvity(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.2"
     evented = True
-    ttps = ["T1064"]
+    ttps = ["T1064"]  # MITRE v6
+    ttps += ["T1059", "T1071"]  # MITRE v6,7,8
+    mbcs = ["OB0004", "B0030", "OB0009", "E1059"]
+    mbcs += ["OC0006"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -48,14 +51,17 @@ class ScriptNetworkActvity(Signature):
         pname = process["process_name"].lower()
         if pname.lower() in ["cscript.exe", "jscript.exe", "mshta.exe", "wscript.exe"]:
             if call["api"] == "URLDownloadToFileW":
+                self.mbcs += ["C0005"]  # micro-behaviour
                 buff = self.get_argument(call, "FileName").lower()
                 self.ret = True
                 self.data.append({"request": buff})
             if call["api"] == "HttpOpenRequestW":
+                self.mbcs += ["C0002"]  # micro-behaviour
                 buff = self.get_argument(call, "Path").lower()
                 self.ret = True
                 self.data.append({"request": buff})
             if call["api"] == "InternetCrackUrlW":
+                self.mbcs += ["C0005"]  # micro-behaviour
                 buff = self.get_argument(call, "Url").lower()
                 self.ret = True
                 self.data.append({"request": buff})
@@ -66,11 +72,13 @@ class ScriptNetworkActvity(Signature):
             if call["api"] == "send":
                 buff = self.get_argument(call, "buffer").lower()
                 if buff.startswith("get") or buff.startswith("post"):
+                    self.mbcs += ["C0001"]  # micro-behaviour
                     self.ret = True
                     self.data.append({"request": buff})
             if call["api"] == "SslEncryptPacket":
                 buff = self.get_argument(call, "Buffer").lower()
                 if buff.startswith("get") or buff.startswith("post"):
+                    self.mbcs += ["OC0005", "C0027"]  # micro-behaviour
                     self.ret = True
                     self.data.append({"request": buff})
             if call["api"] == "WSAConnect":
@@ -94,7 +102,10 @@ class SuspiciousJSScript(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1064"]
+    ttps = ["T1064"]  # MITRE v6
+    ttps += ["T1059"]  # MITRE v6,7,8
+    ttps += ["T1059.007"]  # MITRE v7,8
+    mbcs = ["OB0009", "E1059"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -145,7 +156,10 @@ class ScriptCreatedProcess(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1064"]
+    ttps = ["T1064"]  # MITRE v6
+    ttps += ["T1059"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1059"]
+    mbcs += ["OC0003", "C0017"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

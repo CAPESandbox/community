@@ -24,6 +24,8 @@ class Webmail_Phish(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.0"
     evented = True
+    ttps = ["T1503"]  # MITRE v6
+    ttps += ["T1555", "T1555.003"]  # MITRE v7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

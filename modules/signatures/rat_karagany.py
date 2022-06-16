@@ -30,6 +30,8 @@ class KaraganyEventObjects(Signature):
     authors = ["ditekshen"]
     minimum = "0.5"
     evented = True
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -62,6 +64,9 @@ class KaraganyFiles(Signature):
     families = ["Karagany", "xFrost"]
     authors = ["ditekshen"]
     minimum = "0.5"
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
+    mbcs += ["OC0001", "C0016"]  # micro-behaviour
 
     def on_complete(self):
         indicators = [

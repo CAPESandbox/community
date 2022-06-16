@@ -11,6 +11,11 @@ class TrickBotTaskDelete(Signature):
     authors = ["Eoin Miller", "Mark Parsons"]
     minimum = "1.0"
     evented = True
+    ttps = ["T1107"]  # MITRE v6
+    ttps += ["T1070"]  # MITRE v6,7,8
+    ttps += ["T1070.004"]  # MITRE v7,8
+    mbcs = ["OB0006", "F0007"]
+    mbcs += ["OC00001", "C0047"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

@@ -42,6 +42,10 @@ class PEAnomaly(Signature):
         osmajor = int(osver.split(".")[0], 10)
         if osmajor < 4 and compiletime.year >= 2000:
             self.data.append({"anomaly": "Minimum OS version is older than NT4 yet the PE timestamp year is newer than 2000"})
+            self.ttps += ["T1099"]  # MITRE v6
+            self.ttps += ["T1070"]  # MITRE v6,7,8
+            self.ttps += ["T1070.006"]  # MITRE v7,8
+            self.mbcs += ["OB0006", "F0005", "F0005.004"]
             self.weight += 1
 
         # throw out empty timestamps
@@ -52,6 +56,9 @@ class PEAnomaly(Signature):
                 self.data.append(
                     {"anomaly": "Timestamp on binary predates the release date of the OS version it requires by at least a year"}
                 )
+                self.ttps += ["T1099"]  # MITRE v6
+                self.ttps += ["T1070", "T1070.006"]  # MITRE v7,8
+                self.mbcs += ["OB0006", "F0005", "F0005.004"]
                 self.weight += 1
 
         if "sections" in self.results["static"]["pe"]:
@@ -223,7 +230,10 @@ class PECompileTimeStomping(Signature):
     categories = ["generic"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1099"]
+    ttps = ["T1099"]  # MITRE v6
+    ttps += ["T1070"]  # MITRE v6,7,8
+    ttps += ["T1070.006"]  # MITRE v7,8
+    mbcs = ["OB0006", "F0005", "F0005.004"]
 
     def run(self):
         rawcompiletime = self.results.get("static", {}).get("pe", {}).get("timestamp", "")

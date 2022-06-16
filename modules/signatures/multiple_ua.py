@@ -23,9 +23,8 @@ class Multiple_UA(Signature):
     categories = ["network"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
-    ttps = ["T1071"]
-
     evented = True
+    ttps = ["T1071"]  # MITRE v6,7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

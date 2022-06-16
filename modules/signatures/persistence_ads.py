@@ -28,7 +28,10 @@ class ADS(Signature):
     categories = ["persistence", "ads"]
     authors = ["nex", "Optiv"]
     minimum = "0.5"
-    ttps = ["T1096", "T1564.004"]
+    ttps = ["T1096"]  # MITRE v6
+    ttps += ["T1564", "T1564.004"]  # MITRE v7,8
+    ttps += ["U0501"]  # Unprotect
+    mbcs = ["OB0012"]
 
     def run(self):
         result = False

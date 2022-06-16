@@ -17,7 +17,12 @@ class AntiAVDetectFile(Signature):
     categories = ["anti-av"]
     authors = ["Optiv"]
     minimum = "1.2"
-    ttps = ["T1063"]
+    ttps = ["T1063"]  # MITRE v6
+    ttps += ["T1083", "T1518"]  # MITRE v6,7,8
+    ttps += ["T1518.001"]  # MITRE v7,8
+    ttps += ["U1314"]  # Unprotect
+    mbcs = ["OB0007", "E1083"]
+    mbcs += ["OC0001", "C0051"]  # MBC micro-behaviour
 
     def run(self):
         file_indicators = [

@@ -24,6 +24,8 @@ class AntiSandboxRestart(Signature):
     authors = ["Brad Spengler"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1106", "T1529"]  # MITRE v6,7,8
+    mbcs = ["OB0001", "B0003", "B0003.010", "OB0012"]
 
     filter_apinames = set(
         [

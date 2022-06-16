@@ -24,7 +24,10 @@ class InjectionExplorer(Signature):
     authors = ["Optiv"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1055"]
+    ttps = ["T1055"]  # MITRE v6,7,8
+    ttps += ["T1055.011"]  # MITRE v7,8
+    ttps += ["U1219"]  # Unprotect
+    mbcs = ["OB0006", "OB0013", "E1055"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

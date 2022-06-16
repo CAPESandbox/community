@@ -29,6 +29,8 @@ class CmdlineObfuscation(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1027", "T1059"]  # MITRE v6,7,8
+    mbcs = ["OB0002", "E1027", "OB0006", "OB0009", "E1059"]
     references = ["https://www.fireeye.com/content/dam/fireeye-www/blog/pdfs/dosfuscation-report.pdf"]
 
     def run(self):
@@ -82,6 +84,8 @@ class CmdlineSwitches(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1059"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1059"]
 
     def run(self):
         ret = False
@@ -102,6 +106,8 @@ class CmdlineTerminate(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1059"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1059"]
 
     def run(self):
         ret = False
@@ -123,6 +129,8 @@ class LongCommandline(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1059"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1059"]
 
     def run(self):
         utilities = [
@@ -155,6 +163,9 @@ class CommandLineHTTPLink(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1059", "T1071"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1059"]
+    mbcs += ["OC0006", "C0002"]  # micro-behaviour
 
     def run(self):
         utilities = [
@@ -188,6 +199,10 @@ class CommandLineReversedHTTPLink(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1059", "T1071", "T1132"]  # MITRE v6,7,8
+    ttps += ["T1132.001"]  # MITRE v7,8
+    mbcs = ["OB0009", "E1059"]
+    mbcs += ["OC0006", "C0002"]  # micro-behaviour
 
     def run(self):
         utilities = [
@@ -221,6 +236,8 @@ class PowershellRenamedCommandLine(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1059"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1059"]
 
     def run(self):
         ret = False
@@ -242,6 +259,8 @@ class CommandLineLongString(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1059"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1059"]
 
     def run(self):
         utilities = [
@@ -275,6 +294,8 @@ class CommandLineForFilesWildCard(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1059"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1059"]
     references = "https://twitter.com/danielhbohannon/status/1130833190019653633"
 
     def run(self):

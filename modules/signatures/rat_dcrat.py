@@ -29,6 +29,9 @@ class DCRatFiles(Signature):
     families = ["DCRat"]
     authors = ["ditekshen"]
     minimum = "1.3"
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
+    mbcs += ["OC0001", "C0016"]  # micro-behaviour
 
     def run(self):
         indicators = [
@@ -53,6 +56,9 @@ class DCRatMutex(Signature):
     families = ["DCRat"]
     authors = ["ditekshen"]
     minimum = "1.3"
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
+    mbcs += ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = [
@@ -89,6 +95,8 @@ class DCRatAPIs(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
 
     filter_apinames = set(["GetAddrInfo", "GetAddrInfoW", "CryptHashData"])
 
@@ -112,6 +120,7 @@ class DCRatAPIs(Signature):
                 self.nodename = buff
 
         elif call["api"] == "CryptHashData":
+            self.mbcs += ["OC0005", "C0027"]  # micro-behaviour
             buff = self.get_argument(call, "Buffer")
             if buff:
                 match = re.match(self.pat, buff)

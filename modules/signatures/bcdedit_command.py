@@ -26,6 +26,10 @@ class BCDEditCommand(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.2"
     evented = True
+    ttps = ["T1059"]  # MITRE v6,7,8
+    ttps += ["T1059.003"]  # MITRE v7,8
+    mbcs = ["OB0006", "E1478", "OB0009", "E1059"]
+    mbcs += ["OC0008", "C0033"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -64,10 +68,12 @@ class BCDEditCommand(Signature):
             self.data.append({"disables_system_recovery": "Modifies the boot configuration to disable startup recovery"})
             self.severity = 3
             self.weight += 1
+            self.ttps += ["T1490"]  # MITRE v6,7,8
 
         if self.ignorefailures:
             self.data.append({"ignorefailures": "Modifies the boot configuration to disable Windows error recovery"})
             self.weight += 1
+            self.ttps += ["T1490"]  # MITRE v6,7,8
 
         if self.testsigning:
             self.data.append(

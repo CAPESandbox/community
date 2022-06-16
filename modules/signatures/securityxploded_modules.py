@@ -24,6 +24,10 @@ class SecurityXploded_Modules(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.0"
     evented = True
+    ttps = ["T1003"]  # MITRE v6,7,8
+    ttps += ["T1555"]  # MITRE v7,8
+    ttps += ["T1589", "T1589.001"]  # MITRE v8
+    mbcs = ["OB0005"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

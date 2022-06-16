@@ -104,10 +104,16 @@ class Vawtrak_APIs(Signature):
         malscore = 0
         # Check for autorun registry/filesystem behavior
         if self.vawtrakauto:
+            self.ttps += ["T1060"]  # MITRE v6
+            self.ttps += ["T1547", "T1547.001"]  # MITRE v7,8
+            self.mbcs += ["OB0012", "F0012"]
+            self.mbcs += ["OC0008", "C0036"]  # micro-behaviour
             malscore += 4
 
         # Check for process injection event behavior
         if self.stepctr > 2:
+            self.ttps += ["T1055"]  # MITRE v6,7,8
+            self.mbcs += ["E1055"]
             malscore += 2
 
         # Check for regsvr32.exe process enumeration
@@ -120,6 +126,8 @@ class Vawtrak_APIs(Signature):
         if dllpath in self.cevents and explorerpath in self.cevents:
             for event in self.cevents[dllpath]:
                 if event in self.cevents[explorerpath]:
+                    self.ttps += ["T1055"]  # MITRE v6,7,8
+                    self.mbcs += ["E1055"]
                     malscore += 6
 
         # Check for autorun test event trigger

@@ -26,8 +26,8 @@ class UrsnifBehavior(Signature):
     families = ["Ursnif"]
     authors = ["ditekshen"]
     minimum = "2.0"
-    ttps = ["S0386"]
     evented = True
+    ttps = ["S0386"]  # MITRE
 
     def run(self):
         score = 0
@@ -54,18 +54,23 @@ class UrsnifBehavior(Signature):
             if match:
                 score += 1
                 self.data.append({"regkey": match})
+                self.ttps += ["T1112"]  # MITRE v6,7,8
+                self.mbcs += ["E1112"]
+                self.mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
         for findicator in file_indicators:
             match = self.check_write_file(pattern=findicator, regex=True)
             if match:
                 score += 1
                 self.data.append({"file": match})
+                self.mbcs += ["OC0001", "C0052"]  # micro-behaviour
 
         mutex_match = self.check_mutex(pattern=mutex_indicators, regex=True, all=True)
         if mutex_match:
             if len(mutex_match) >= 2:
                 score += 1
                 self.data.append({"mutex": mutex_match})
+                self.mbcs += ["OC0003", "C0042"]  # micro-behaviour
 
         if score > 4:
             return True

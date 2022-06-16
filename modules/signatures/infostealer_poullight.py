@@ -25,6 +25,9 @@ class PoullightFiles(Signature):
     authors = ["ditekshen"]
     minimum = "2.0"
     evented = True
+    ttps = ["T1003", "T1113", "T1115"]  # MITRE v6,7,8
+    mbcs = ["OB0003", "OB0005", "E1113"]
+    mbcs += ["OC0001", "C0052"]  # micro-behaviour
 
     def run(self):
         score = 0

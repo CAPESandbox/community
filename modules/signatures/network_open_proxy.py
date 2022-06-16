@@ -26,6 +26,7 @@ class NetworkOpenProxy(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1090"]  # MITRE v6,7,8
 
     def run(self):
         ip_indicators = [

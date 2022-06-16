@@ -25,6 +25,10 @@ class NetworkDocumentHTTP(Signature):
     authors = ["Kevin Ross", "Will Metcalf"]
     minimum = "1.2"
     evented = True
+    ttps = ["T1071", "T1221"]  # MITRE v6,7,8
+    ttps += ["T1071.001"]  # MITRE v7,8
+    mbcs = ["OB0004", "B0030"]
+    mbcs += ["OC0006", "C0002"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

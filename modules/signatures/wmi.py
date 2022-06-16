@@ -25,7 +25,8 @@ class WMICreateProcess(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1047"]
+    ttps = ["T1047"]  # MITRE v6,7,8
+    mbcs = ["OC0003", "C0017", "C0017.002"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -62,7 +63,9 @@ class WMIScriptProcess(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1047"]
+    ttps = ["T1064"]  # MITRE v6
+    ttps += ["T1047", "T1059"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1059"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -103,7 +106,7 @@ class ScrconsWMIScriptConsumer(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1047"]
+    ttps = ["T1047"]  # MITRE v6,7,8
 
     def run(self):
         ret = False

@@ -56,6 +56,10 @@ class Dyre_APIs(Signature):
             buf = self.get_argument(call, "Buffer")
             if buf in iocs:
                 self.cryptoapis = True
+                self.ttps += ["T1022"]  # MITRE v6
+                self.ttps += ["T1560"]  # MITRE v7,8
+                self.mbcs += ["OB0010", "E1560"]
+                self.mbcs += ["OC0005", "C0027"]  # micro-behaviour
             tmp = re.sub(r"\\x[0-9A-Fa-f]{2}", "", buf)
             if self.compname in tmp:
                 if re.match("^" + self.compname + "[0-9 ]+$", tmp):
@@ -64,11 +68,14 @@ class Dyre_APIs(Signature):
             buf = self.get_argument(call, "Path")
             if len(buf) > 10:
                 self.networkapis.add(buf)
+                self.ttps += ["T1071", "T1071.001"]  # MITRE v6,7,8
+                self.mbcs += ["OC0006", "C0002"]  # micro-behaviour
         elif call["api"] == "NtCreateNamedPipeFile":
             buf = self.get_argument(call, "PipeName")
             for npipe in pipe:
                 if buf == npipe:
                     self.syncapis = True
+                    self.mbcs += ["OC0006", "C0003"]  # micro-behaviour
                     break
 
         return None

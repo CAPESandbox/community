@@ -23,7 +23,11 @@ class TampersPowerShellLogging(Signature):
     categories = ["evasion", "tampering"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1054", "T1562"]
+    ttps = ["T1054"]  # MITRE v6
+    ttps += ["T1112"]  # MITRE v6,7,8
+    ttps += ["T1562", "T1562.003", "T1562.006"]  # MITRE v7,8
+    mbcs = ["OB0006", "E1112", "F0006"]
+    mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
         indicators = [

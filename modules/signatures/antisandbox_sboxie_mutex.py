@@ -23,7 +23,12 @@ class AntisandboxSboxieMutex(Signature):
     categories = ["anti-sandbox"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
-    ttps = ["T1063"]
+    ttps = ["T1063"]  # MITRE v6
+    ttps += ["T1057", "T1497", "T1518"]  # MITRE v6,7,8
+    ttps += ["T1518.001"]  # MITRE v7,8
+    ttps += ["U0513"]  # Unprotect
+    mbcs = ["OB0001", "B0007"]
+    mbcs += ["OC0003", "C0043"]  # micro-behaviour
 
     def run(self):
         indicators = [

@@ -24,6 +24,8 @@ class NetworkExcessiveUDP(Signature):
     categories = ["udp", "c2", "p2p", "recon"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
+    ttps = ["T1095"]  # MITRE v6,7,8
+    mbcs = ["OC0006", "C0001"]  # micro-behaviour
 
     filter_analysistypes = set(["file"])
 

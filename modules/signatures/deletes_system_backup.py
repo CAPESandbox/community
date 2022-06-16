@@ -24,7 +24,8 @@ class DeletesSystemStateBackup(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1490"]
+    ttps = ["T1490"]  # MITRE v6,7,8
+    mbcs = ["OB0008", "F0014"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

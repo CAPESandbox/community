@@ -13,6 +13,10 @@ class APISpamming(Signature):
     authors = ["KillerInstinct", "Brad Spengler"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1497"]  # MITRE v6,7,8
+    ttps += ["T1497.003"]  # MITRE v7,8
+    ttps += ["U1305"]  # Unprotect
+    mbcs = ["OB0001", "B0003", "B0003.002", "B0003.003"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

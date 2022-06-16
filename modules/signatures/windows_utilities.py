@@ -13,7 +13,7 @@ class UsesWindowsUtilitiesScheduler(Signature):
     categories = ["command", "lateral"]
     authors = ["Cuckoo Technologies", "Kevin Ross"]
     minimum = "1.3"
-    ttps = ["T1053"]
+    ttps = ["T1053"]  # MITRE v6,7,8
 
     evented = True
 
@@ -30,6 +30,7 @@ class UsesWindowsUtilitiesScheduler(Signature):
             lower = cmdline.lower()
             for utility in utilities:
                 if utility in lower:
+                    self.ttps += ["T1053.005"] if utility == "schtasks" else ["T1053.002"]  # MITRE v7,8
                     ret = True
                     self.data.append({"command": cmdline})
 
@@ -44,6 +45,8 @@ class UsesWindowsUtilities(Signature):
     categories = ["command", "lateral"]
     authors = ["Cuckoo Technologies", "Kevin Ross"]
     minimum = "1.3"
+    ttps = ["T1202"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1203.m06"]
 
     evented = True
 
@@ -125,6 +128,8 @@ class SuspiciousCommandTools(Signature):
     authors = ["Cuckoo Technologies", "Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1202"]  # MITRE v6,7,8
+    mbcs = ["OB0009"]
 
     def run(self):
         utilities = [
@@ -200,6 +205,9 @@ class ScriptToolExecuted(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1064"]  # MITRE v6
+    ttps += ["T1059"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1059"]
 
     def run(self):
         utilities = [
@@ -214,6 +222,8 @@ class ScriptToolExecuted(Signature):
             lower = cmdline.lower()
             for utility in utilities:
                 if utility in lower:
+                    if utility == "powershell":
+                        self.ttps += ["T1059.001"]  # MITRE v7,8
                     ret = True
                     self.data.append({"command": cmdline})
 
@@ -229,6 +239,7 @@ class SuspiciousPingUse(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    mbcs = ["OC0006", "C0014"]  # micro-behaviour
 
     def run(self):
 
@@ -252,6 +263,7 @@ class WMICCommandSuspicious(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1047"]  # MITRE v6,7,8
 
     def run(self):
         self.arguments = [
@@ -301,6 +313,8 @@ class AltersWindowsUtility(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1036"]  # MITRE v6,7,8
+    ttps += ["T1036.003"]  # MITRE v7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -353,8 +367,10 @@ class SuspiciousCertutilUse(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1130"]  # MITRE v6
+    ttps += ["T1105", "T1140"]  # MITRE v6,7,8
+    ttps += ["T1553", "T1553.004"]  # MITRE v7,8
     references = ["https://www.sentinelone.com/blog/malware-living-off-land-with-certutil/"]
-    ttps = ["T1140", "T1130", "T1105"]
 
     def run(self):
 
@@ -378,7 +394,8 @@ class OverwritesAccessibilityUtility(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1015"]
+    ttps = ["T1015"]  # MITRE v6
+    ttps += ["T1546", "T1546.008"]  # MITRE v7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -421,7 +438,9 @@ class DotNETCSCBuild(Signature):
     references = [
         "https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/command-line-building-with-csc-exe"
     ]
-    ttps = ["T1500"]
+    ttps = ["T1500"]  # MITRE v6
+    ttps += ["T1027"]  # MITRE v6,7,8
+    ttps += ["T1027.004"]  # MITRE v7,8
 
     def run(self):
         ret = False
@@ -442,9 +461,9 @@ class UsesWindowsUtilitiesCipher(Signature):
     categories = ["command", "impact"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    ttps = ["T1485"]
-
     evented = True
+    ttps = ["T1485"]  # MITRE v6,7,8
+    mbcs = ["OB0008", "E1485"]
 
     def run(self):
         utilities = [
@@ -471,10 +490,9 @@ class UsesWindowsUtilitiesClickOnce(Signature):
     categories = ["command", "evasion"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    references = ["http://blog.redxorblue.com/2020/07/one-click-to-compromise-fun-with.html"]
-    ttps = ["T1218"]
-
     evented = True
+    ttps = ["T1218"]  # MITRE v6,7,8
+    references = ["http://blog.redxorblue.com/2020/07/one-click-to-compromise-fun-with.html"]
 
     def run(self):
         utilities = [
@@ -502,9 +520,8 @@ class UsesWindowsUtilitiesMode(Signature):
     categories = ["command"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    references = ["https://www.robvanderwoude.com/mode.php"]
-
     evented = True
+    references = ["https://www.robvanderwoude.com/mode.php"]
 
     def run(self):
         utilities = [
@@ -532,9 +549,11 @@ class UsesWindowsUtilitiesNltest(Signature):
     categories = ["discovery"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    references = ["https://ss64.com/nt/nltest.html"]
-    ttps = ["T1016", "T1482"]
     evented = True
+    ttps = ["S0359"]  # MITRE
+    ttps += ["T1016", "T1082", "T1482"]  # MITRE v6,7,8
+    mbcs = ["E1082"]
+    references = ["https://ss64.com/nt/nltest.html"]
 
     def run(self):
         utilities = [
@@ -561,9 +580,9 @@ class UsesWindowsUtilitiesNTDSutil(Signature):
     categories = ["discovery"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    references = ["https://ss64.com/nt/ntdsutil.html"]
-    ttps = ["T1003"]
     evented = True
+    ttps = ["T1003"]  # MITRE v6,7,8
+    references = ["https://ss64.com/nt/ntdsutil.html"]
 
     def run(self):
         utilities = [
@@ -590,9 +609,9 @@ class UsesWindowsUtilitiesCSVDELDFIDE(Signature):
     categories = ["discovery"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    references = ["https://ss64.com/nt/csvde.html"]
-    ttps = ["T1087"]
     evented = True
+    ttps = ["T1087"]  # MITRE v6,7,8
+    references = ["https://ss64.com/nt/csvde.html"]
 
     def run(self):
         utilities = [
@@ -621,9 +640,10 @@ class UsesWindowsUtilitiesDSQuery(Signature):
     categories = ["discovery"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    references = ["https://ss64.com/nt/dsquery.html"]
-    ttps = ["T1069", "T1482", "T1087"]
     evented = True
+    ttps = ["S0105"]  # MITRE
+    ttps += ["T1069", "T1087", "T1482"]  # MITRE v6,7,8
+    references = ["https://ss64.com/nt/dsquery.html"]
 
     def run(self):
         utilities = [
@@ -650,9 +670,9 @@ class UsesWindowsUtilitiesAppCmd(Signature):
     categories = ["evasion"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    references = ["https://docs.microsoft.com/en-us/iis/get-started/getting-started-with-iis/getting-started-with-appcmdexe"]
-    ttps = ["T1202"]
     evented = True
+    ttps = ["T1202"]  # MITRE v6,7,8
+    references = ["https://docs.microsoft.com/en-us/iis/get-started/getting-started-with-iis/getting-started-with-appcmdexe"]
 
     def run(self):
         utilities = [
@@ -680,7 +700,8 @@ class SuspiciousMpCmdRunUse(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1105"]
+    ttps = ["T1105"]  # MITRE v6,7,8
+    mbcs = ["E1105"]
 
     def run(self):
         indicators = [
@@ -703,8 +724,8 @@ class MultipleExplorerInstances(Signature):
     categories = ["command", "evasion"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    references = ["https://twitter.com/CyberRaiju/status/1273597319322058752"]
     evented = True
+    references = ["https://twitter.com/CyberRaiju/status/1273597319322058752"]
 
     def run(self):
         indicators = [
@@ -727,8 +748,8 @@ class UsesWindowsUtilitiesFinger(Signature):
     categories = ["evasion"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    ttps = ["T1202"]
     evented = True
+    ttps = ["T1202"]  # MITRE v6,7,8
 
     def run(self):
         utilities = [

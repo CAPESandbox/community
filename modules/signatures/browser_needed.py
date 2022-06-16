@@ -24,6 +24,8 @@ class BrowserNeeded(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True
+    ttps = ["T1010"]  # MITRE v6,7,8
+    mbcs = ["OB0007", "E1010"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

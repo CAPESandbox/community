@@ -24,6 +24,9 @@ class ObliquekRATMutexes(Signature):
     families = ["ObliqueRAT"]
     authors = ["ditekshen"]
     minimum = "1.3"
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
+    mbcs += ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = [
@@ -47,6 +50,9 @@ class ObliquekRATFiles(Signature):
     families = ["ObliqueRAT"]
     authors = ["ditekshen"]
     minimum = "1.3"
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
+    mbcs += ["OC0001", "C0016"]  # micro-behaviour
 
     def run(self):
         indicators = [
@@ -73,6 +79,9 @@ class ObliquekRATNetworkActivity(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
+    mbcs += ["OC0006", "C0001"]  # micro-behaviour
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

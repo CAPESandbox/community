@@ -11,6 +11,8 @@ class OrcusRAT(Signature):
     authors = ["@NaxoneZ"]
     minimum = "1.2"
     evented = True
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
 
     # Sample List
     # OrcusRAT:

@@ -28,8 +28,9 @@ class NetworkCnCHTTPSGeneric(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -62,8 +63,9 @@ class NetworkCnCHTTPSSocialMedia(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -106,8 +108,9 @@ class NetworkCnCHTTPSPasteSite(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -154,8 +157,9 @@ class NetworkCnCHTTPSURLShortenerSite(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -207,8 +211,9 @@ class NetworkCnCHTTPSTempStorageSite(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -256,8 +261,9 @@ class NetworkCnCHTTPSUserAgent(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -304,8 +310,9 @@ class NetworkCnCHTTPSTempURLDNS(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -335,8 +342,9 @@ class NetworkCnCHTTPSInteractsh(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -366,8 +374,9 @@ class NetworkCnCHTTPSPayload(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -391,8 +400,9 @@ class NetworkCnCHTTPSFreeWebHosting(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -425,8 +435,9 @@ class NetworkCnCHTTPSTelegram(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -465,8 +476,9 @@ class NetworkCnCSMTPSGeneric(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -505,8 +517,10 @@ class NetworkCnCSMTPSExfil(Signature):
     categories = ["network", "encryption", "exfiltration", "infostealer", "rat"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1020", "T1032", "T1041"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1020", "T1041"]  # MITRE v6,7,8
+    ttps += ["T1573"]  # MITRE v7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -650,8 +664,9 @@ class NetworkCnCHTTPSArchive(Signature):
     categories = ["network", "encryption"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

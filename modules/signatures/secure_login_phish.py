@@ -29,6 +29,8 @@ class Secure_Login_Phish(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True
+    ttps = ["T1192"]  # MITRE v6
+    ttps += ["T1566", "T1566.002"]  # MITRE v7,8
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

@@ -30,6 +30,7 @@ class AndromutMutexes(Signature):
     families = ["Andromut"]
     authors = ["ditekshen"]
     minimum = "0.5"
+    mbcs = ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = [

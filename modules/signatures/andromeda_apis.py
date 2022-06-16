@@ -26,6 +26,8 @@ class Andromeda_APIs(Signature):
     authors = ["Optiv"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1082"]  # MITRE v6,7,8
+    mbcs = ["OB0007", "E1082"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

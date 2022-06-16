@@ -23,8 +23,10 @@ class VMwareDetectEvent(Signature):
     categories = ["anti-vm"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
-    mbcs = ["B0009"]
     evented = True
+    ttps = ["T1083", "T1106", "T1497"]  # MITRE v6,7,8
+    ttps += ["U1332"]  # Unprotect
+    mbcs = ["OB0001", "B0009", "OB0007", "E1083", "E1083.m01"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

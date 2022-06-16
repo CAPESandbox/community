@@ -23,11 +23,14 @@ class XtremeMutexes(Signature):
     categories = ["rat"]
     families = ["XtremeRAT"]
     authors = ["threatlead", "nex"]
+    minimum = "0.5"
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
+    mbcs += ["OC0003", "C0042"]  # micro-behaviour
     references = [
         "https://malwr.com/analysis/ZWM4YjI2MzI1MmQ2NDBkMjkwNzI3NzhjNWM5Y2FhY2U/",
         "https://malwr.com/analysis/MWY5YTAwZWI1NDc3NDJmMTgyNDA4ODc0NTk0MWIzNjM/",
     ]
-    minimum = "0.5"
 
     def run(self):
         indicators = ["XTREMEUPDATE", "\(\(Mutex\)\).*"]

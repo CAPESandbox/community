@@ -23,7 +23,9 @@ class EnablesWDigest(Signature):
     categories = ["persistence", "credential_access", "credential_dumping"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    ttps = ["T1112", "T1003"]
+    ttps = ["T1003", "T1112"]  # MITRE v6,7,8
+    mbcs = ["OB0003", "OB0005"]
+    mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
         ret = False

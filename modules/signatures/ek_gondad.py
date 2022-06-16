@@ -26,6 +26,10 @@ class Gondad_JS(Signature):
     authors = ["Optiv"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1064"]  # MITRE v6
+    ttps += ["T1059", "T1190", "T1203"]  # MITRE v6,7,8
+    ttps += ["T1059.007"]  # MITRE v7,8
+    mbcs = ["OB0008", "E1059", "E1203", "OB0009", "E1190"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
