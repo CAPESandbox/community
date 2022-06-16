@@ -25,11 +25,13 @@ class PersistenceShimDatabase(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.2"
     evented = True
+    ttps = ["T1138"]  # MITRE v6 (7,8)
+    ttps += ["T1546", "T1546.011"]  # MITRE v7,8
+    mbcs = ["E1055.m03"]
     references = [
         "https://www.fireeye.com/blog/threat-research/2017/05/fin7-shim-databases-persistence.html",
         "https://countercept.com/blog/hunting-for-application-shim-databases/",
     ]
-    ttps = ["T1138"]
 
     def run(self):
         ret = False
@@ -45,6 +47,9 @@ class PersistenceShimDatabase(Signature):
         for indicator in reg_indicators:
             match = self.check_write_key(pattern=indicator, regex=True)
             if match:
+                self.ttps += ["T1112"]  # MITRE v6,7,8
+                self.mbcs += ["OB0012", "E1112"]
+                self.mbcs += ["OC0008", "C0036"]  # micro-behaviour
                 ret = True
                 self.data.append({"regkey": match})
 

@@ -28,6 +28,9 @@ class BeebusMutexes(Signature):
         "http://www.fireeye.com/blog/technical/malware-research/2013/04/the-mutter-backdoor-operation-beebus-with-new-targets.html",
         "https://malwr.com/analysis/MjhmNmJhZjdjOWM4NDExZDkzOWMyMDQ2YzUzN2QwZDI/",
     ]
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
+    mbcs += ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = [

@@ -23,8 +23,11 @@ class AntiVMBios(Signature):
     categories = ["anti-vm"]
     authors = ["nex", "Optiv"]
     minimum = "1.2"
-    ttps = ["T1057", "T1012"]
-    mbcs = ["B0009.024", "B0009.005"]
+    ttps = ["T1012", "T1057", "T1082", "T1497"]  # MITRE v6,7,8
+    ttps += ["T1497.001"]  # MITRE v7,8
+    ttps += ["U1332"]  # Unprotect
+    mbcs = ["OB0001", "B0009", "B0009.005", "B0009.024", "OB0007", "E1082"]
+    mbcs += ["OC0008", "C0036", "C0036.005"]  # micro-behaviour
 
     def run(self):
         if self.check_read_key(

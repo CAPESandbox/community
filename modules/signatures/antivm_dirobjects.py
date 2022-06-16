@@ -25,6 +25,12 @@ class AntiVMDirectoryObjects(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1083"]  # MITRE v6,7,8
+    ttps += ["U1332"]  # Unprotect
+    mbcs = ["OB0001", "B0009", "B0009.001", "OB0007", "E1083"]
+    mbcs += ["OC0001"]  # micro-behaviour
+
+    filter_apinames = set(["NtOpenDirectoryObject", "NtQueryDirectoryObject"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -32,8 +38,6 @@ class AntiVMDirectoryObjects(Signature):
         self.directories = set()
         self.dirbuf = tuple()
         self.lastapi = str()
-
-    filter_apinames = set(["NtOpenDirectoryObject", "NtQueryDirectoryObject"])
 
     def on_call(self, call, process):
         if call["api"] == "NtOpenDirectoryObject":

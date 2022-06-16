@@ -9,10 +9,15 @@ class AntiAnalysisDetectFile(Signature):
     name = "antianalysis_detectfile"
     description = "Attempts to identify installed analysis tools by a known file location"
     severity = 3
-    categories = ["anti-analysis"]
+    categories = ["anti-analysis", "discovery"]
     authors = ["KillerInstinct", "Brad Spengler", "ditekshen"]
     minimum = "1.2"
-    ttps = ["T1063"]
+    ttps = ["T1063"]  # MITRE v6
+    ttps += ["T1083", "T1518"]  # MITRE v6,7,8
+    ttps += ["T1518.001"]  # MITRE v7,8
+    ttps += ["U1314"]  # Unprotect
+    mbcs = ["OB0007", "B0013", "B0013.008", "E1083"]
+    mbcs += ["OC0001", "C0051"]  # micro-behaviour
 
     def run(self):
         file_indicators = [

@@ -24,21 +24,10 @@ class InjectionExplorer(Signature):
     authors = ["Optiv"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1055"]
-
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.lastprocess = None
-        self.parent = (str(), int())
-        self.injected = (str(), int())
-        self.sharedsections = [
-            "\\basenamedobjects\\shimsharedmemory",
-            "\\basenamedobjects\\windows_shell_global_counters",
-            "\\basenamedobjects\\msctf.shared.sfm.mih",
-            "\\basenamedobjects\\msctf.shared.sfm.amf",
-            "\\basenamedobjects\\urlzonessm_administrator",
-            "\\basenamedobjects\\urlzonessm_system",
-        ]
+    ttps = ["T1055"]  # MITRE v6,7,8
+    ttps += ["T1055.011"]  # MITRE v7,8
+    ttps += ["U1219"]  # Unprotect
+    mbcs = ["OB0006", "OB0013", "E1055"]
 
     filter_apinames = set(
         [
@@ -60,6 +49,20 @@ class InjectionExplorer(Signature):
             "SetWindowLongPtrW",
         ]
     )
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.lastprocess = None
+        self.parent = (str(), int())
+        self.injected = (str(), int())
+        self.sharedsections = [
+            "\\basenamedobjects\\shimsharedmemory",
+            "\\basenamedobjects\\windows_shell_global_counters",
+            "\\basenamedobjects\\msctf.shared.sfm.mih",
+            "\\basenamedobjects\\msctf.shared.sfm.amf",
+            "\\basenamedobjects\\urlzonessm_administrator",
+            "\\basenamedobjects\\urlzonessm_system",
+        ]
 
     def on_call(self, call, process):
         if process is not self.lastprocess:

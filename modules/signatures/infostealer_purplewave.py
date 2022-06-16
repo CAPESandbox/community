@@ -25,6 +25,7 @@ class PurpleWaveMutexes(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    mbcs = ["OC0003", "C0043"]  # micro-behaviour
 
     def run(self):
         indicators = [
@@ -49,6 +50,9 @@ class PurpleWaveNetworkAcivity(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1071"]  # MITRE v6,7,8
+    ttps += ["T1071.001"]  # MITRE v7,8
+    mbcs = ["OC0006", "C0002"]  # micro-behaviour
 
     filter_apinames = set(["InternetOpenW", "HttpAddRequestHeadersA", "HttpSendRequestW", "HttpOpenRequestW"])
 

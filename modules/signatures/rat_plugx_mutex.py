@@ -25,6 +25,9 @@ class PlugxMutexes(Signature):
     authors = ["threatlead", "nex"]
     references = ["https://malwr.com/analysis/YTZjYmUwMzNlNzkwNGU5YmIxNDQwYTcyYjFkYWI0NWE/"]
     minimum = "0.5"
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
+    mbcs += ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = [

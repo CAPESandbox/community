@@ -25,6 +25,15 @@ class NetworkDocumentHTTP(Signature):
     authors = ["Kevin Ross", "Will Metcalf"]
     minimum = "1.2"
     evented = True
+    ttps = ["T1071", "T1221"]  # MITRE v6,7,8
+    ttps += ["T1071.001"]  # MITRE v7,8
+    mbcs = ["OB0004", "B0030"]
+    mbcs += ["OC0006", "C0002"]  # micro-behaviour
+
+    filter_apinames = set(
+        ["InternetCrackUrlW", "InternetCrackUrlA", "URLDownloadToFileW", "HttpOpenRequestW", "InternetReadFile", "WSASend"]
+    )
+    filter_analysistypes = set(["file"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -38,11 +47,6 @@ class NetworkDocumentHTTP(Signature):
             "acrord32.exe",
             "acrord64.exe",
         ]
-
-    filter_apinames = set(
-        ["InternetCrackUrlW", "InternetCrackUrlA", "URLDownloadToFileW", "HttpOpenRequestW", "InternetReadFile", "WSASend"]
-    )
-    filter_analysistypes = set(["file"])
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()

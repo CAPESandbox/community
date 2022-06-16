@@ -23,7 +23,7 @@ class MasqueradesProcessName(Signature):
     categories = ["masquerading", "evasion", "execution"]
     authors = ["ditekshen"]
     minimum = "0.5"
-    ttps = ["T1036"]
+    ttps = ["T1036"]  # MITRE v6,7,8
     evented = True
 
     def run(self):
@@ -52,14 +52,17 @@ class MasqueradesProcessName(Signature):
             procmatch = self.check_process_name(pattern=indicator)
             if procmatch:
                 self.data.append({"process": procmatch})
+                self.ttps += ["T1036.004"]  # MITRE v7,8
                 return True
             filematch = self.check_file(pattern=indicator, regex=True)
             if filematch:
                 self.data.append({"file": filematch})
+                self.ttps += ["T1036.005"]  # MITRE v7,8
                 return True
             wfilematch = self.check_write_file(pattern=indicator, regex=True)
             if wfilematch:
                 self.data.append({"file": wfilematch})
+                self.ttps += ["T1036.005"]  # MITRE v7,8
                 return True
 
         return False

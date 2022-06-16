@@ -28,8 +28,11 @@ class NetworkCnCHTTPSGeneric(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
+
+    filter_apinames = set(["SslEncryptPacket"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -40,8 +43,6 @@ class NetworkCnCHTTPSGeneric(Signature):
             "ET /",
             "OST /",
         ]
-
-    filter_apinames = set(["SslEncryptPacket"])
 
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
@@ -62,8 +63,11 @@ class NetworkCnCHTTPSSocialMedia(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
+
+    filter_apinames = set(["SslEncryptPacket"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -83,8 +87,6 @@ class NetworkCnCHTTPSSocialMedia(Signature):
             "api.vk.com",
             "files.slack.com",
         ]
-
-    filter_apinames = set(["SslEncryptPacket"])
 
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
@@ -106,8 +108,11 @@ class NetworkCnCHTTPSPasteSite(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
+
+    filter_apinames = set(["SslEncryptPacket"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -132,8 +137,6 @@ class NetworkCnCHTTPSPasteSite(Signature):
             "pastebin.pl",
         ]
 
-    filter_apinames = set(["SslEncryptPacket"])
-
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
         if buff:
@@ -154,8 +157,11 @@ class NetworkCnCHTTPSURLShortenerSite(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
+
+    filter_apinames = set(["SslEncryptPacket"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -185,8 +191,6 @@ class NetworkCnCHTTPSURLShortenerSite(Signature):
             "cml.lol",
         ]
 
-    filter_apinames = set(["SslEncryptPacket"])
-
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
         if buff:
@@ -207,8 +211,11 @@ class NetworkCnCHTTPSTempStorageSite(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
+
+    filter_apinames = set(["SslEncryptPacket"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -234,8 +241,6 @@ class NetworkCnCHTTPSTempStorageSite(Signature):
             "gofile.io",
         ]
 
-    filter_apinames = set(["SslEncryptPacket"])
-
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
         if buff:
@@ -256,8 +261,11 @@ class NetworkCnCHTTPSUserAgent(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
+
+    filter_apinames = set(["SslEncryptPacket"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -283,8 +291,6 @@ class NetworkCnCHTTPSUserAgent(Signature):
             "by NZXER",
         ]
 
-    filter_apinames = set(["SslEncryptPacket"])
-
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
         if buff:
@@ -304,8 +310,11 @@ class NetworkCnCHTTPSTempURLDNS(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
+
+    filter_apinames = set(["SslEncryptPacket"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -313,8 +322,6 @@ class NetworkCnCHTTPSTempURLDNS(Signature):
         self.domains = [
             ".requestbin.net",
         ]
-
-    filter_apinames = set(["SslEncryptPacket"])
 
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
@@ -335,8 +342,11 @@ class NetworkCnCHTTPSInteractsh(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
+
+    filter_apinames = set(["SslEncryptPacket"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -344,8 +354,6 @@ class NetworkCnCHTTPSInteractsh(Signature):
         self.domains = [
             ".interact.sh",
         ]
-
-    filter_apinames = set(["SslEncryptPacket"])
 
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
@@ -366,14 +374,15 @@ class NetworkCnCHTTPSPayload(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
+
+    filter_apinames = set(["SslDecryptPacket"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.match = False
-
-    filter_apinames = set(["SslDecryptPacket"])
 
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
@@ -391,8 +400,11 @@ class NetworkCnCHTTPSFreeWebHosting(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
+
+    filter_apinames = set(["SslEncryptPacket"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -403,8 +415,6 @@ class NetworkCnCHTTPSFreeWebHosting(Signature):
             ".glitch.me",
             ".ck.page",
         ]
-
-    filter_apinames = set(["SslEncryptPacket"])
 
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
@@ -425,15 +435,16 @@ class NetworkCnCHTTPSTelegram(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
+
+    filter_apinames = set(["SslEncryptPacket"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.found_snake = False
         self.found_matiex = False
-
-    filter_apinames = set(["SslEncryptPacket"])
 
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
@@ -465,8 +476,11 @@ class NetworkCnCSMTPSGeneric(Signature):
     categories = ["network", "encryption"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
+
+    filter_apinames = set(["SslEncryptPacket"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -479,8 +493,6 @@ class NetworkCnCSMTPSGeneric(Signature):
             "AIL FROM",
             "CPT TO",
         ]
-
-    filter_apinames = set(["SslEncryptPacket"])
 
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
@@ -505,8 +517,12 @@ class NetworkCnCSMTPSExfil(Signature):
     categories = ["network", "encryption", "exfiltration", "infostealer", "rat"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1020", "T1032", "T1041"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1020", "T1041"]  # MITRE v6,7,8
+    ttps += ["T1573"]  # MITRE v7,8
+
+    filter_apinames = set(["SslEncryptPacket"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -524,8 +540,6 @@ class NetworkCnCSMTPSExfil(Signature):
         self.found_a310logger = False
         self.found_matiex = False
         self.found_neptune = False
-
-    filter_apinames = set(["SslEncryptPacket"])
 
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
@@ -650,8 +664,11 @@ class NetworkCnCHTTPSArchive(Signature):
     categories = ["network", "encryption"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    ttps = ["T1032"]
     evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
+
+    filter_apinames = set(["SslEncryptPacket"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -660,8 +677,6 @@ class NetworkCnCHTTPSArchive(Signature):
             "archive.org",
             "archive.is",
         ]
-
-    filter_apinames = set(["SslEncryptPacket"])
 
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")

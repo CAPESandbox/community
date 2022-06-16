@@ -16,17 +16,6 @@ class Virus(Signature):
     minimum = "1.2"
     evented = True
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.lastprocess = 0
-        self.handles = dict()
-        self.copydests = set()
-        self.readcopyfiles = dict()
-        self.readfiles = set()
-        self.infected_files = set()
-        self.invalidated_files = set()
-        self.saw_virus = False
-
     filter_apinames = set(
         [
             "NtCreateFile",
@@ -40,6 +29,17 @@ class Virus(Signature):
             "CopyFileExW",
         ]
     )
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.lastprocess = 0
+        self.handles = dict()
+        self.copydests = set()
+        self.readcopyfiles = dict()
+        self.readfiles = set()
+        self.infected_files = set()
+        self.invalidated_files = set()
+        self.saw_virus = False
 
     def on_call(self, call, process):
         if process is not self.lastprocess:

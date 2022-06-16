@@ -28,11 +28,11 @@ class move_file_on_reboot(Signature):
     minimum = "1.3"
     evented = True
 
+    filter_apinames = set(["MoveFileWithProgressTransactedW", "MoveFileWithProgressTransactedA"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.match = False
-
-    filter_apinames = set(["MoveFileWithProgressTransactedW", "MoveFileWithProgressTransactedA"])
 
     def on_call(self, call, process):
         if (

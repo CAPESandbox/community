@@ -25,6 +25,7 @@ class RTFEmbeddedContent(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1137"]  # MITRE v6,7,8
 
     def run(self):
         ret = False
@@ -55,6 +56,8 @@ class RTFExploitStatic(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1137", "T1203"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1203"]
 
     def run(self):
         ret = False
@@ -82,6 +85,8 @@ class RTFEmbeddedOfficeFile(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1137"]  # MITRE v6,7,8
+    mbcs = ["OC0001", "C0016", "C0016.001"]  # micro-behaviour
 
     def run(self):
         ret = False
@@ -108,6 +113,8 @@ class RTFASLRBypass(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1137", "T1203"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1203"]
 
     def run(self):
         aslrbypass = [
@@ -141,6 +148,7 @@ class RTFAnomalyCharacterSet(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1137"]  # MITRE v6,7,8
 
     def run(self):
         ret = False
@@ -161,6 +169,7 @@ class RTFAnomalyVersion(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1137"]  # MITRE v6,7,8
 
     def run(self):
         ret = False

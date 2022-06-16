@@ -76,6 +76,8 @@ class GuLoaderAPIs(Signature):
             praddr = self.get_argument(call, "ProcedureAddress")
             if hookid and hookid == 4294967295 and praddr and praddr == "0x729a1e09":
                 self.hookmatch = True
+                self.ttps += ["T1055"]  # MITRE v6,7,8
+                self.mbcs += ["E1055", "E1055.m01"]
 
     def on_complete(self):
         if self.regmatch and self.filematch and self.hookmatch:

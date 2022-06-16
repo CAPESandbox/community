@@ -24,6 +24,11 @@ class Webmail_Phish(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.0"
     evented = True
+    ttps = ["T1503"]  # MITRE v6
+    ttps += ["T1555", "T1555.003"]  # MITRE v7,8
+
+    # Observed with IE8
+    filter_apinames = set(["InternetReadFile"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -36,9 +41,6 @@ class Webmail_Phish(Signature):
             "validateformother()",
         ]
         self.hits = set()
-
-    # Observed with IE8
-    filter_apinames = set(["InternetReadFile"])
 
     def on_call(self, call, process):
         data = self.get_argument(call, "Buffer")

@@ -24,6 +24,10 @@ class AntiSandboxCheckUserdomain(Signature):
     authors = ["enzok"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1082", "T1497"]  # MITRE v6,7,8
+    ttps += ["T1497.001"]  # MITRE v7,8
+    ttps += ["U1311"]  # Unprotect
+    mbcs = ["OB0007", "E1082"]
 
     filter_apinames = set(["rtcEnvironBstr"])
 

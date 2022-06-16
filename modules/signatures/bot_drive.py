@@ -29,6 +29,10 @@ class Drive(Signature):
     families = ["Drive"]
     authors = ["jjones", "nex"]
     minimum = "0.5"
+    ttps = ["T1071"]  # MITRE v6,7,8
+    ttps += ["T1071.001"]  # MITRE v7,8
+    mbcs = ["OB0004", "B0030"]
+    mbcs += ["OC0006", "C0002", "C0002.005"]  # micro-behaviour
 
     def run(self):
         drive_ua_re = re.compile(

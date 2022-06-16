@@ -42,6 +42,9 @@ class HawkEye_APIs(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1056"]  # MITRE v6,7,8
+    ttps += ["T1056.001"]  # MITRE v7,8
+    mbcs = ["OB0003", "F0002"]
 
     filter_apinames = set(["send", "WSAConnect", "getaddrinfo", "NtCreateEvent", "NtCreateSection"])
 

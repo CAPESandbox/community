@@ -30,6 +30,8 @@ class Pony_APIs(Signature):
     minimum = "1.2"
     evented = True
 
+    filter_apinames = set(["RegSetValueExA", "InternetCrackUrlA"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.urls = set()
@@ -38,8 +40,6 @@ class Pony_APIs(Signature):
         self.whitelist = [
             "http://download.oracle.com/",
         ]
-
-    filter_apinames = set(["RegSetValueExA", "InternetCrackUrlA"])
 
     def on_call(self, call, process):
         if call["api"] == "RegSetValueExA":

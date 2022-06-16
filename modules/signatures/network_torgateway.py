@@ -23,6 +23,10 @@ class TorGateway(Signature):
     categories = ["network"]
     authors = ["nex", "Optiv"]
     minimum = "1.2"
+    ttps = ["T1188"]  # MITRE v6
+    ttps += ["T1090"]  # MITRE v6,7,8
+    ttps += ["T1090.003"]  # MITRE v7,8
+    ttps += ["U0903"]  # Unprotect
 
     def run(self):
         domain_indicators = [

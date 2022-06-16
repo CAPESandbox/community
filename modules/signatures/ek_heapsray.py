@@ -12,9 +12,11 @@ class HeapSpray_JS(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
+    ttps = ["T1064"]  # MITRE v6
+    ttps += ["T1059"]  # MITRE v6,7,8
+    ttps += ["T1059.007"]  # MITRE v7,8
+    mbcs = ["OB0009", "E1059"]
+    mbcs += ["OC0002", "C0006"]  # micro-behaviour
 
     filter_categories = set(["browser"])
     # backward compat

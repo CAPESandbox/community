@@ -25,6 +25,12 @@ class ModifiesAttachmentManager(Signature):
     categories = ["anti-av", "bypass"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
+    ttps = ["T1089"]  # MITRE v6
+    ttps += ["T1112"]  # MITRE v6,7,8
+    ttps += ["T1562", "T1562.001"]  # MITRE v7,8
+    ttps += ["U0508"]  # Unprotect
+    mbcs = ["OB0006", "E1112", "F0004", "F0004.005"]
+    mbcs += ["OC0008", "C0036", "C0036.001"]  # micro-behaviour
     references = ["https://support.microsoft.com/en-us/help/883260/information-about-the-attachment-manager-in-microsoft-windows"]
 
     def run(self):

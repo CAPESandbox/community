@@ -41,12 +41,14 @@ class Shifu_APIs(Signature):
             if self.lastcall == "NtQuerySystemInformation":
                 buf = self.get_argument(call, "Buffer").lower()
                 if buf and "windows_" in buf:
+                    self.mbcs += ["OC0005", "C0027"]  # micro-behaviour
                     self.malscore += 1
 
         if call["api"] == "NtQueryValueKey":
             if self.get_argument(call, "ValueName") == "Blob":
                 key = self.get_argument(call, "FullName")
                 if "\\SOFTWARE\\Microsoft\\SystemCertificates\\" in key:
+                    self.mbcs += ["OC0008", "C0036"]  # micro-behaviour
                     self.certBuffer = self.get_argument(call, "Information")
 
         if call["api"] == "CryptDecodeObjectEx":
@@ -54,6 +56,7 @@ class Shifu_APIs(Signature):
                 buf = self.get_argument(call, "Encoded")[0:64]
                 if buf and self.certBuffer and buf in self.certBuffer:
                     self.countCertificates += 1
+                    self.mbcs += ["OC0005", "C0031"]  # micro-behaviour
 
         self.lastcall = call["api"]
 
@@ -66,6 +69,7 @@ class Shifu_APIs(Signature):
         ]
         for ioc in file_iocs:
             if self.check_file(pattern=ioc, regex=True):
+                self.mbcs += ["OC0001", "C0016"]  # micro-behaviour
                 self.malscore += 1
 
         mutex_iocs = [
@@ -74,6 +78,7 @@ class Shifu_APIs(Signature):
         ]
         for ioc in mutex_iocs:
             if self.check_mutex(pattern=ioc, regex=True):
+                self.mbcs += ["OC0003", "C0042"]  # micro-behaviour
                 self.malscore += 1
 
         if self.countCertificates > 20:

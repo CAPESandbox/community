@@ -23,7 +23,10 @@ class AntiDBGDevices(Signature):
     categories = ["anti-debug"]
     authors = ["nex"]
     minimum = "0.5"
-    ttps = ["T1083", "T1057"]
+    ttps = ["T1057", "T1083"]  # MITRE v6,7,8
+    ttps += ["U1314"]  # Unprotect
+    mbcs = ["OB0001", "OB0007", "B0013"]
+    mbcs += ["OC0001", "C0051"]  # micro-behaviour
 
     def run(self):
         indicators = [

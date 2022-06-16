@@ -23,6 +23,9 @@ class InstallsWinpcap(Signature):
     categories = ["sniffer"]
     authors = ["Thomas Birn", "nex"]
     minimum = "0.5"
+    ttps = ["T1040"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "B0023"]
+    mbcs = ["OB0009", "B0023"]
 
     def run(self):
         indicators = [".*\\\\packet\.dll$", ".*\\\\npf\.sys$", ".*\\\\wpcap\.dll$"]

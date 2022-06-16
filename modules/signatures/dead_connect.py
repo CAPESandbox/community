@@ -26,11 +26,11 @@ class DeadConnect(Signature):
     minimum = "1.0"
     evented = True
 
+    filter_apinames = set(["connect", "ConnectEx", "WSAConnect", "WSAConnectByList"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.connections = set()
-
-    filter_apinames = set(["connect", "ConnectEx", "WSAConnect", "WSAConnectByList"])
 
     def on_call(self, call, process):
         if not call["status"]:

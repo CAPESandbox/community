@@ -23,8 +23,10 @@ class XenDetectKeys(Signature):
     categories = ["anti-vm"]
     authors = ["Brad Spengler"]
     minimum = "0.5"
-    ttps = ["T1057", "T1012"]
-    mbcs = ["B0009"]
+    ttps = ["T1012", "T1057", "T1497"]  # MITRE v6,7,8
+    ttps += ["U1332"]  # Unprotect
+    mbcs = ["OB0001", "B0009", "B0009.005", "OB0007"]
+    mbcs += ["OC0008", "C0036", "C0036.005"]  # micro-behaviour
 
     def run(self):
         indicators = [

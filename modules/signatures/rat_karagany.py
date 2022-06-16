@@ -30,6 +30,10 @@ class KaraganyEventObjects(Signature):
     authors = ["ditekshen"]
     minimum = "0.5"
     evented = True
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
+
+    filter_apinames = set(["NtCreateEvent", "NtCreateEventEx"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -39,8 +43,6 @@ class KaraganyEventObjects(Signature):
             "__pickill__",
             "__klgkillsoft__",
         ]
-
-    filter_apinames = set(["NtCreateEvent", "NtCreateEventEx"])
 
     def on_call(self, call, process):
         event = self.get_argument(call, "EventName")
@@ -62,6 +64,9 @@ class KaraganyFiles(Signature):
     families = ["Karagany", "xFrost"]
     authors = ["ditekshen"]
     minimum = "0.5"
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
+    mbcs += ["OC0001", "C0016"]  # micro-behaviour
 
     def on_complete(self):
         indicators = [

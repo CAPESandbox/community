@@ -26,6 +26,10 @@ class LuminosityRAT(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
+
+    filter_apinames = set(["CryptHashData", "NtCreateFile", "NtCreateMutant"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -35,10 +39,9 @@ class LuminosityRAT(Signature):
         self.mutexhit = False
         self.lastapi = str()
 
-    filter_apinames = set(["CryptHashData", "NtCreateFile", "NtCreateMutant"])
-
     def on_call(self, call, process):
         if call["api"] == "CryptHashData":
+            self.mbcs += ["OC0005", "C0027"]  # micro-behaviour
             buf = self.get_argument(call, "Buffer")
             if buf and len(buf) <= 64 and len(buf) >= 32:
                 if all((c in self.chars) for c in buf):
@@ -46,12 +49,14 @@ class LuminosityRAT(Signature):
 
         elif call["api"] == "NtCreateFile":
             if self.lastapi == "CryptHashData":
+                self.mbcs += ["OC0001", "C0016"]  # micro-behaviour
                 buf = self.get_argument(call, "FileName")
                 if buf and self.crypthash and self.crypthash in buf:
                     self.filehit = True
 
         elif call["api"] == "NtCreateMutant":
             if self.lastapi == "CryptHashData":
+                self.mbcs += ["OC0003", "C0042"]  # micro-behaviour
                 buf = self.get_argument(call, "MutexName")
                 if buf and self.crypthash and self.crypthash in buf:
                     self.mutexhit = True

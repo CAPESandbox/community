@@ -24,7 +24,8 @@ class RansomwareRadamant(Signature):
     categories = ["ransomware"]
     authors = ["Kevin Ross"]
     minimum = "1.2"
-    ttps = ["T1486"]
+    ttps = ["T1486"]  # MITRE v6,7,8
+    mbcs = ["OB0008", "E1486"]
 
     def run(self):
         mutexes = [
@@ -32,8 +33,9 @@ class RansomwareRadamant(Signature):
             ".*radamantv.*",
         ]
 
-        for mutexes in mutexes:
-            if self.check_mutex(pattern=mutexes, regex=True):
+        for mutex in mutexes:
+            if self.check_mutex(pattern=mutex, regex=True):
+                self.mbcs += ["OC0003", "C0042"]  # micro-behaviour
                 return True
 
         # Check for creation of Autorun
@@ -41,10 +43,14 @@ class RansomwareRadamant(Signature):
             pattern=".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\(svchost|DirectX)$",
             regex=True,
         ) and self.check_write_file(pattern=".*\\\\Windows\\\\dirextx.exe$", regex=True):
+            self.ttps += ["T1112"]  # MITRE v6,7,8
+            self.mbcs += ["E1112"]
+            self.mbcs += ["OC0008", "C0036"]  # micro-behaviour
             return True
 
         # Check for creation of ransom message file
         if self.check_write_file(pattern=".*\\\\YOUR_FILES.url$", regex=True):
+            self.mbcs += ["OC0001", "C0016"]  # micro-behaviour
             return True
 
         return False

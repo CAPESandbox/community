@@ -9,10 +9,15 @@ class AntiAnalysisDetectReg(Signature):
     name = "antianalysis_detectreg"
     description = "Attempts to identify installed analysis tools by registry key"
     severity = 3
-    categories = ["anti-analysis"]
+    categories = ["anti-analysis", "discovery"]
     authors = ["Optiv"]
     minimum = "1.2"
-    ttps = ["T1063"]
+    ttps = ["T1063"]  # MITRE v6
+    ttps += ["T1012", "T1518"]  # MITRE v6,7,8
+    ttps += ["T1518.001"]  # MITRE v7,8
+    ttps += ["U1314"]  # Unprotect
+    mbcs = ["OB0007", "B0013"]
+    mbcs += ["OC0008", "C0036", "C0036.003"]  # micro-behaviour
 
     def run(self):
         reg_indicators = [

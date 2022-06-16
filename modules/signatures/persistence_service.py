@@ -23,6 +23,9 @@ class PersistenceService(Signature):
     categories = ["persistence"]
     authors = ["Optiv"]
     minimum = "1.2"
+    ttps = ["T1050"]  # MITRE v6
+    ttps += ["T1543", "T1543.003"]  # MITRE v7,8
+    mbcs = ["OB0012", "F0011"]
 
     def run(self):
         found = False

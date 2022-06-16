@@ -29,6 +29,9 @@ class BlackRATMutexes(Signature):
     families = ["BlackRAT", "BlackRemote"]
     authors = ["ditekshen"]
     minimum = "1.3"
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
+    mbcs += ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = [
@@ -53,6 +56,9 @@ class BlackRATRegistryKeys(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1112", "T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022", "E1112"]
+    mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     filter_apinames = set(["RegSetValueExW", "RegQueryValueExW"])
 
@@ -96,6 +102,10 @@ class BlackRATNetworkActivity(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
+    mbcs = ["B0022"]
+    mbcs += ["OC0006", "C0001"]  # micro-behaviour
 
     filter_apinames = set(["send"])
 
@@ -123,6 +133,8 @@ class BlackRATAPIs(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
 
     filter_apinames = set(["RtlDecompressBuffer", "CreateProcessInternalW", "CryptHashData"])
 
@@ -151,6 +163,7 @@ class BlackRATAPIs(Signature):
                         self.score += 2
 
         if call["api"] == "CryptHashData":
+            self.mbcs += ["OC0005", "C0027"]  # micro-behaviour
             buff = self.get_argument(call, "Buffer")
             if buff:
                 if buff.startswith("MZ"):

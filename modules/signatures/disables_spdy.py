@@ -15,9 +15,6 @@ class DisablesSPDY(Signature):
     minimum = "1.2"
     evented = True
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_apinames = set(["NtWriteFile"])
 
     def on_call(self, call, process):

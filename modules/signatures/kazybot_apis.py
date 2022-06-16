@@ -32,12 +32,12 @@ class KazyBot_APIs(Signature):
     minimum = "1.2"
     evented = True
 
+    filter_apinames = set(["send"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.postreq = False
         self.score = 0
-
-    filter_apinames = set(["send"])
 
     def on_call(self, call, process):
         buf = self.get_argument(call, "buffer")

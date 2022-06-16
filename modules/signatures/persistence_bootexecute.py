@@ -24,14 +24,16 @@ class PersistenceBootexecute(Signature):
     authors = ["Brad Spengler"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1060", "F0012"]
+    ttps = ["T1060"]  # MITRE v6
+    ttps += ["T1547", "T1547.001"]  # MITRE v7,8
+    mbcs = ["OB0012", "F0012"]
+
+    filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.registry_writes = dict()
         self.found_bootexecute = False
-
-    filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey"])
 
     def on_call(self, call, process):
         if call["status"]:

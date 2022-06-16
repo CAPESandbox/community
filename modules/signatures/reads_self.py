@@ -75,8 +75,10 @@ class ReadsSelf(Signature):
     authors = ["Optiv"]
     minimum = "1.2"
     evented = True
+    ttps = ["OC0001", "C0051"]
 
     filter_analysistypes = set(["file"])
+    filter_apinames = set(["NtOpenFile", "NtCreateFile", "NtClose", "NtReadFile", "NtSetInformationFile"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -87,8 +89,6 @@ class ReadsSelf(Signature):
         office_pkgs = ["ppt", "doc", "xls", "eml", "js"]
         if any(e in self.results["info"]["package"] for e in office_pkgs):
             self.is_office = True
-
-    filter_apinames = set(["NtOpenFile", "NtCreateFile", "NtClose", "NtReadFile", "NtSetInformationFile"])
 
     def on_call(self, call, process):
         FilePositionInformation = 14

@@ -26,13 +26,14 @@ class Nymaim_APIs(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True
+    mbcs = ["OC0008", "C0036"]  # micro-behaviour
+
+    filter_apinames = set(["NtCreateKey", "NtSetValueKey"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.regkey = False
         self.keyname = str()
-
-    filter_apinames = set(["NtCreateKey", "NtSetValueKey"])
 
     def on_call(self, call, process):
         if call["api"] == "NtCreateKey":

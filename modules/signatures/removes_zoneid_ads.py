@@ -12,12 +12,11 @@ class RemovesZoneIdADS(Signature):
     categories = ["generic"]
     authors = ["Optiv"]
     minimum = "1.0"
-    ttps = ["T1070", "T1096"]
-
     evented = True
-
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
+    ttps = ["T1096"]  # MITRE v6
+    ttps += ["T1070"]  # MITRE v6,7,8
+    ttps += ["T1564", "T1564.004"]  # MITRE v7,8
+    mbcs = ["OC0001", "C0047"]  # micro-behaviour
 
     filter_apinames = set(["DeleteFileA", "DeleteFileW"])
 

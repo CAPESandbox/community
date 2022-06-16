@@ -29,6 +29,7 @@ class NeshtaMutexes(Signature):
     families = ["Neshta"]
     authors = ["ditekshen"]
     minimum = "0.5"
+    mbcs = ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = [
@@ -52,12 +53,15 @@ class NeshtaRegKeys(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1112"]  # MITRE v6,7,8
+    mbcs = ["E1112"]
+    mbcs += ["OC0008", "C0036"]  # micro-behaviour
+
+    filter_apinames = set(["RegSetValueExA", "RegSetValueExW"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.match = False
-
-    filter_apinames = set(["RegSetValueExA", "RegSetValueExW"])
 
     def on_call(self, call, process):
         if call["api"] == "RegSetValueExA":
@@ -85,12 +89,13 @@ class NeshtaFiles(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    mbcs = ["OC0001", "C0016"]  # micro-behaviour
+
+    filter_apinames = set(["NtCreateFile"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.match = False
-
-    filter_apinames = set(["NtCreateFile"])
 
     def on_call(self, call, process):
         if call["api"] == "NtCreateFile":

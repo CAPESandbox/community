@@ -13,7 +13,8 @@ class VolMalfind1(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     minimum = "0.5"
-    ttps = ["T1055", "E1055"]
+    ttps = ["T1055"]  # MITRE v6,7,8
+    mbcs = ["E1055"]
 
     def run(self):
         if "volatility" in self.results and "malfind" in self.results["volatility"]:
@@ -33,7 +34,8 @@ class VolMalfind2(Signature):
     authors = ["Thorsten Sick"]
     minimum = "0.5"
     families = ["ZBot", "Paelvo", "Sinowal"]
-    ttps = ["T1055", "E1055"]
+    ttps = ["T1055"]  # MITRE v6,7,8
+    mbcs = ["E1055"]
 
     def run(self):
         pids = set()
@@ -56,7 +58,8 @@ class VolLdrModules1(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     minimum = "0.5"
-    ttps = ["E1055"]
+    ttps = ["T1055"]  # MITRE v6,7,8
+    mbcs = ["E1055"]
 
     # http://mnin.blogspot.de/2011/06/examining-stuxnets-footprint-in-memory.html
 
@@ -87,7 +90,8 @@ class VolLdrModules2(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     minimum = "0.5"
-    ttps = ["E1055"]
+    ttps = ["T1055"]  # MITRE v6,7,8
+    mbcs = ["E1055"]
 
     # http://mnin.blogspot.de/2011/06/examining-stuxnets-footprint-in-memory.html
 
@@ -111,9 +115,8 @@ class VolDevicetree1(Signature):
     authors = ["Thorsten Sick"]
     families = ["ZeroAccess"]
     minimum = "0.5"
-    ttps = ["F0010.001"]
-
-    # http://mnin.blogspot.de/2011/10/zeroaccess-volatility-and-kernel-timers.html
+    mbcs = ["F0010", "F0010.001"]
+    references = ["http://mnin.blogspot.de/2011/10/zeroaccess-volatility-and-kernel-timers.html"]
 
     def run(self):
         res = False
@@ -135,7 +138,9 @@ class VolSvcscan1(Signature):
     authors = ["Thorsten Sick"]
     families = ["ZeroAccess"]
     minimum = "0.5"
-    ttps = ["T1031", "F0004"]
+    ttps = ["T1031", "T1050", "T1089"]  # MITRE v6
+    ttps += ["T1543", "T1543.003", "T1562", "T1562.004"]  # MITRE v7,8
+    mbcs = ["F0004", "F0011"]
 
     def run(self):
         res = False
@@ -157,7 +162,9 @@ class VolSvcscan2(Signature):
     authors = ["Thorsten Sick"]
     families = ["ZeroAccess"]
     minimum = "0.5"
-    ttps = ["T1031", "T1089", "F0004"]
+    ttps = ["T1031", "T1050", "T1089"]  # MITRE v6
+    ttps += ["T1543", "T1543.003", "T1562"]  # MITRE v7,8
+    mbcs = ["F0004", "F0011"]
 
     def run(self):
         res = False
@@ -179,7 +186,9 @@ class VolSvcscan3(Signature):
     authors = ["Thorsten Sick"]
     families = ["ZeroAccess"]
     minimum = "0.5"
-    ttps = ["T1031", "F0004"]
+    ttps = ["T1031", "T1050"]  # MITRE v6
+    ttps += ["T1543", "T1543.003"]  # MITRE v7,8
+    mbcs = ["F0011"]
 
     def run(self):
         res = False
@@ -201,7 +210,8 @@ class VolModscan1(Signature):
     authors = ["Thorsten Sick"]
     families = ["ZeroAccess"]
     minimum = "0.5"
-    ttps = ["T1055", "E1055"]
+    ttps = ["T1055"]  # MITRE v6,7,8
+    mbcs = ["E1055"]
 
     def run(self):
         res = False
@@ -222,7 +232,8 @@ class VolHandles1(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     minimum = "0.5"
-    ttps = ["T1055", "E1055"]
+    ttps = ["T1055"]  # MITRE v6,7,8
+    mbcs = ["E1055"]
 
     def run(self):
         threads = set()

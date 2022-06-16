@@ -23,6 +23,7 @@ class MappedDrivesUAC(Signature):
     categories = ["generic"]
     authors = ["ditekshen"]
     minimum = "0.5"
+    mbcs = ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
         indicators = [

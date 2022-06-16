@@ -23,14 +23,15 @@ class EmumeratesRunningProcesses(Signature):
     categories = ["process_discovery"]
     authors = ["Kevin Ross"]
     minimum = "0.5"
-    ttps = ["T1057"]
     evented = True
+    ttps = ["T1057"]  # MITRE v6,7,8
+    mbcs = ["OB0007"]
+
+    filter_apinames = set(["Process32NextA", "Process32NextW"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.enumeratedpids = []
-
-    filter_apinames = set(["Process32NextA", "Process32NextW"])
 
     def on_call(self, call, process):
         procname = self.get_argument(call, "ProcessName")
@@ -52,15 +53,16 @@ class CreateToolhelp32SnapshotProcessModuleEnumeration(Signature):
     categories = ["process_discovery"]
     authors = ["Kevin Ross"]
     minimum = "0.5"
-    ttps = ["T1057"]
     evented = True
+    ttps = ["T1057"]  # MITRE v6,7,8
+    mbcs = ["OB0007"]
+
+    filter_apinames = set(["CreateToolhelp32Snapshot", "Module32NextA", "Module32NextW"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
         self.snapshotpids = []
-
-    filter_apinames = set(["CreateToolhelp32Snapshot", "Module32NextA", "Module32NextW"])
 
     def on_call(self, call, process):
         if call["api"] == "CreateToolhelp32Snapshot":
@@ -87,8 +89,9 @@ class CmdlineProcessDiscovery(Signature):
     categories = ["process_discovery"]
     authors = ["Kevin Ross"]
     minimum = "0.5"
-    ttps = ["T1057"]
     evented = True
+    ttps = ["T1057"]  # MITRE v6,7,8
+    mbcs = ["OB0007"]
 
     def run(self):
         ret = False

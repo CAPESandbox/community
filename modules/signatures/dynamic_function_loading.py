@@ -26,13 +26,13 @@ class dynamic_function_loading(Signature):
     minimum = "1.3"
     evented = True
 
+    filter_apinames = set(["LdrGetProcedureAddress", "LdrLoadDll"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.dll_loaded = False
         self.loadctr = 0
         self.list = []
-
-    filter_apinames = set(["LdrGetProcedureAddress", "LdrLoadDll"])
 
     def on_call(self, call, process):
         if call["api"] == "LdrLoadDll":

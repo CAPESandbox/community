@@ -23,13 +23,13 @@ class ExplorerHTTP(Signature):
     categories = ["masquerading", "evasion", "execution", "injection"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1055", "T1036"]
     evented = True
+    ttps = ["T1036", "T1055", "T1071"]  # MITRE v6,7,8
+    ttps += ["T1071.001"]  # MITRE v7,8
+    mbcs = ["E1055"]
+    mbcs += ["OC0006", "C0002"]  # micro-behaviour
 
     filter_apinames = set(["WinHttpConnect", "WinHttpOpenRequest"])
-
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
 
     def on_call(self, call, process):
         processname = process["process_name"].lower()

@@ -25,15 +25,17 @@ class UACBypassEventvwr(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1088"]  # MITRE v6
+    ttps += ["T1548", "T1548.002"]  # MITRE v7,8
+    mbcs = ["OB0006"]
     references = ["https://enigma0x3.net/2016/08/15/fileless-uac-bypass-using-eventvwr-exe-and-registry-hijacking/"]
-    ttps = ["T1088"]
+
+    filter_apinames = set(["CreateProcessInternalW", "RegQueryValueExA", "RegQueryValueExW"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.eventvrw = False
         self.ret = False
-
-    filter_apinames = set(["CreateProcessInternalW", "RegQueryValueExA", "RegQueryValueExW"])
 
     def on_call(self, call, process):
         if call["api"].startswith("RegQueryValueEx"):
@@ -67,8 +69,10 @@ class UACBypassDelegateExecuteSdclt(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1088"]  # MITRE v6
+    ttps += ["T1548", "T1548.002"]  # MITRE v7,8
+    mbcs = ["OB0006"]
     references = ["http://blog.sevagas.com/?Yet-another-sdclt-UAC-bypass"]
-    ttps = ["T1088"]
 
     def run(self):
         regkey = False
@@ -103,16 +107,18 @@ class UACBypassCMSTP(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1088"]  # MITRE v6
+    ttps += ["T1548", "T1548.002"]  # MITRE v7,8
+    mbcs = ["OB0006"]
     references = ["https://oddvar.moe/2017/08/15/research-on-cmstp-exe/"]
-    ttps = ["T1088"]
+
+    filter_apinames = set(["CopyFileExA", "CopyFileExW", "MoveFileWithProgressW", "MoveFileWithProgressTransactedW", "NtWriteFile"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.inf = False
         self.droppedinf = []
         self.ret = False
-
-    filter_apinames = set(["CopyFileExA", "CopyFileExW", "MoveFileWithProgressW", "MoveFileWithProgressTransactedW", "NtWriteFile"])
 
     def on_call(self, call, process):
         # This is a straight catch of the .inf file with content we want being dropped
@@ -154,9 +160,9 @@ class UACBypassFodhelper(Signature):
     categories = ["persistence"]
     authors = ["bartblaze"]
     minimum = "1.2"
-    references = ["https://winscripting.blog/2017/05/12/first-entry-welcome-and-uac-bypass/"]
     evented = True
     ttps = ["T1548"]
+    references = ["https://winscripting.blog/2017/05/12/first-entry-welcome-and-uac-bypass/"]
 
     def run(self):
         ret = False
@@ -178,7 +184,8 @@ class UACBypassCMSTPCOM(Signature):
     categories = ["uac_bypass"]
     authors = ["ditekshen"]
     minimum = "2.0"
-    ttps = ["T1218"]
+    ttps = ["T1218"]  # MITRE v6,7,8
+    ttps += ["T1218.003"]  # MITRE 7,8
 
     def run(self):
         # CMSTPLUA, CMLUAUTIL, Connection Manager LUA Host Object

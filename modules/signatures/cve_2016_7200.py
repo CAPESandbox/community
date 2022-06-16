@@ -26,10 +26,10 @@ class CVE_2016_7200(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1203", "T1499"]  # MITRE v6,7,8
+    ttps += ["T1499.004"]  # MITRE v7,8
+    mbcs = ["OB0008", "B0033", "E1203", "OB0009"]
     references = ["http://malware.dontneedcoffee.com/2017/01/CVE-2016-7200-7201.html"]
-
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
 
     filter_categories = set(["browser"])
     # backward compat

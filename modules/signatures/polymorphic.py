@@ -32,6 +32,7 @@ class Polymorphic(Signature):
     categories = ["persistence"]
     authors = ["lordr", "Optiv"]
     minimum = "1.2"
+    mbcs = ["OB0006", "B0029"]
 
     filter_analysistypes = set(["file"])
 

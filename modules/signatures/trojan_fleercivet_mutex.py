@@ -25,6 +25,7 @@ class FleerCivetMutexes(Signature):
     families = ["Fleercivet"]
     authors = ["Optiv"]
     minimum = "0.5"
+    mbcs = ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = ["_HSJ909NJJNJ90203_"]

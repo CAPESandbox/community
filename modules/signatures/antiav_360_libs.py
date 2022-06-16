@@ -24,7 +24,11 @@ class QihooDetectLibs(Signature):
     authors = ["bartblaze"]
     minimum = "1.2"
     evented = True
-    ttps = ["T1063"]
+    ttps = ["T1063"]  # MITRE v6
+    ttps += ["T1083", "T1518"]  # MITRE v6,7,8
+    ttps += ["T1518.001"]  # MITRE v7,8
+    ttps += ["U1314"]  # Unprotect
+    mbcs = ["OB0001", "OB0007"]
 
     filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])
 

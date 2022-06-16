@@ -21,6 +21,13 @@ class StealthFile(Signature):
     authors = ["Optiv"]
     minimum = "1.2"
     evented = True
+    ttps = ["T1158"]  # MITRE v6
+    ttps += ["T1564", "T1564.001"]  # MITRE v7,8
+    mbcs = ["OB0006", "F0005"]
+    mbcs += ["OC0001", "C0016"]  # micro-behaviour
+
+    filter_apinames = set(["NtCreateFile", "NtDuplicateObject", "NtOpenFile", "NtClose", "NtSetInformationFile"])
+    filter_analysistypes = set(["file"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -31,9 +38,6 @@ class StealthFile(Signature):
         office_pkgs = ["ppt", "doc", "xls", "eml"]
         if any(e in self.results["info"]["package"] for e in office_pkgs):
             self.is_office = True
-
-    filter_apinames = set(["NtCreateFile", "NtDuplicateObject", "NtOpenFile", "NtClose", "NtSetInformationFile"])
-    filter_analysistypes = set(["file"])
 
     def on_call(self, call, process):
         BasicFileInformation = 4

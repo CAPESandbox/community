@@ -12,7 +12,8 @@ class BitcoinWallet(Signature):
     categories = ["infostealer"]
     authors = ["Kevin Ross", "Optiv"]
     minimum = "1.2"
-    ttps = ["T1005"]
+    ttps = ["T1005"]  # MITRE v6,7,8
+    mbcs = ["OB0003", "B0028", "B0028.001"]
 
     def run(self):
         indicators = [

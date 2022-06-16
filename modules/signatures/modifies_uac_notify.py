@@ -12,7 +12,10 @@ class ModifiesUACNotify(Signature):
     categories = ["stealth"]
     authors = ["Kevin Ross"]
     minimum = "1.2"
-    ttps = ["T1088", "T1548.002", "E1112"]
+    ttps = ["T1088"]  # MITRE v6
+    ttps += ["T1112"]  # MITRE v6,7,8
+    ttps += ["T1548", "T1548.002"]  # MITRE v7,8
+    mbcs = ["E1112"]
 
     def run(self):
         reg_indicators = [

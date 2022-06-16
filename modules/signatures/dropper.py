@@ -24,8 +24,8 @@ class Dropper(Signature):
     categories = ["dropper"]
     authors = ["Optiv"]
     minimum = "1.2"
-    ttps = ["T1129"]
-    mbcs = ["B0023"]
+    ttps = ["T1129"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "B0023"]
 
     def run(self):
         is_dropper = False

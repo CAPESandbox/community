@@ -24,13 +24,17 @@ class AntiVMSCSI(Signature):
     authors = ["nex"]
     minimum = "1.0"
     evented = True
-    ttps = ["T1057", "T1012"]
+    ttps = ["T1012", "T1057", "T1082", "T1497"]  # MITRE v6,7,8
+    ttps += ["T1497.001"]  # MITRE v7,8
+    ttps += ["U1332"]  # Unprotect
+    mbcs = ["OB0001", "B0009", "B0009.005", "OB0007", "E1082"]
+    mbcs += ["OC0008", "C0036", "C0036.005"]  # micro-behaviour
+
+    filter_apinames = set(["RegOpenKeyExA", "RegOpenKeyExW", "RegQueryValueExA", "RegQueryValueExW"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.lastprocess = None
-
-    filter_apinames = set(["RegOpenKeyExA", "RegOpenKeyExW", "RegQueryValueExA", "RegQueryValueExW"])
 
     def on_call(self, call, process):
         indicator_registry = "0x80000002"

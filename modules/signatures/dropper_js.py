@@ -30,11 +30,11 @@ class EXEDropper_JS(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1064"]  # MITRE v6
+    ttps += ["T1059", "T1059.007"]  # MITRE v7,8
+    mbcs = ["OB0009", "E1059"]
 
     filter_analysistypes = set(["file"])
-
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
 
     filter_categories = set(["browser"])
     # backward compat

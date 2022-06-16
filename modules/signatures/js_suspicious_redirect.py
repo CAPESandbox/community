@@ -29,16 +29,20 @@ class JS_SuspiciousRedirect(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1064"]  # MITRE v6
+    ttps += ["T1059"]  # MITRE v6,7,8
+    ttps += ["T1059.007"]  # MITRE v7,8
+    mbcs = ["OB0009", "E1059"]
+
+    filter_categories = set(["browser"])
+    # backward compat
+    filter_apinames = set(["COleScript_Compile", "COleScript_ParseScriptText", "CDocument_write", "JsEval"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.styleRE = r".*\<style\>(?:[^\.]+)?\.(?P<styleName>[^\{]+).*\</style>"
         self.iframeRE = r"\<iframe src=(?:(?:\"|')(?P<redir>[^\"']+)(?:\"|'))"
         self.ret = False
-
-    filter_categories = set(["browser"])
-    # backward compat
-    filter_apinames = set(["COleScript_Compile", "COleScript_ParseScriptText", "CDocument_write", "JsEval"])
 
     def on_call(self, call, process):
         if call["api"] == "CDocument_write":

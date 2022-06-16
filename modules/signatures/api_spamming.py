@@ -13,6 +13,10 @@ class APISpamming(Signature):
     authors = ["KillerInstinct", "Brad Spengler"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1497"]  # MITRE v6,7,8
+    ttps += ["T1497.003"]  # MITRE v7,8
+    ttps += ["U1305"]  # Unprotect
+    mbcs = ["OB0001", "B0003", "B0003.002", "B0003.003"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -44,6 +48,7 @@ class APISpamming(Signature):
             "c:\\program files (x86)\\microsoft office\\office14\\winword.exe": ["GetLocalTime"],
             "c:\\windows\\system32\\wbem\\wmiprvse.exe": ["GetSystemTimeAsFileTime"],
             "c:\\windows\\system32\\wscript.exe": ["GetLocalTime", "NtQuerySystemTime"],
+            "c:\\windows\\system32\\services.exe": ["GetSystemTimeAsFileTime"],
         }
         ret = False
         for pid, apis in self.spam.items():

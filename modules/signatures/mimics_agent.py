@@ -13,13 +13,14 @@ class MimicsAgent(Signature):
     authors = ["Optiv"]
     minimum = "1.2"
     evented = True
+    ttps = ["T1036"]  # MITRE v6,7.8
+
+    filter_apinames = set(["ObtainUserAgentString", "InternetOpenA", "InternetOpenW"])
+    filter_analysistypes = set(["file"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.useragent = None
-
-    filter_apinames = set(["ObtainUserAgentString", "InternetOpenA", "InternetOpenW"])
-    filter_analysistypes = set(["file"])
 
     def on_call(self, call, process):
         if call["api"] == "ObtainUserAgentString":

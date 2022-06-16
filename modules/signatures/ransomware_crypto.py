@@ -27,7 +27,11 @@ class MassDataEncryption(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1486"]
+    ttps = ["T1486"]  # MITRE v6,7,8
+    mbcs = ["OB0008", "E1486"]
+    mbcs += ["OC0005", "C0027", "C0028"]  # micro-behaviour
+
+    filter_apinames = set(["CryptEncrypt"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -44,8 +48,6 @@ class MassDataEncryption(Signature):
             "powerpnt.exe",
             "winword.exe",
         ]
-
-    filter_apinames = set(["CryptEncrypt"])
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()

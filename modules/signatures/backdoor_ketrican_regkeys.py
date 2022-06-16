@@ -23,6 +23,8 @@ class KetricanRegkeys(Signature):
     categories = ["backdoor"]
     authors = ["ditekshen"]
     minimum = "0.5"
+    ttps = ["T1012"]  # MITRE v6,7,8
+    mbcs = ["OC0008", "C0036", "C0036.005"]  # micro-behaviour
 
     def run(self):
         score = 0

@@ -25,9 +25,10 @@ class antidebug_gettickcount(Signature):
     authors = ["redsand"]
     minimum = "1.3"
     evented = True
-
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
+    ttps = ["T1497"]  # MITRE v6
+    ttps += ["T1497.003"]  # MITRE v7,8
+    ttps += ["U0125"]  # Unprotect
+    mbcs = ["OB0001", "B0001", "B0001.032"]
 
     filter_apinames = set(["GetTickCount"])
 

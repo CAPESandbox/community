@@ -23,6 +23,9 @@ class NetworkSMTP(Signature):
     categories = ["smtp", "spam"]
     authors = ["nex", "KillerInstinct"]
     minimum = "0.5"
+    ttps = ["T1071"]  # MITRE v6,7,8
+    ttps += ["T1071.002"]  # MITRE v7,8
+    mbcs = ["OC0006", "C0012"]  # micro-behaviour
 
     def run(self):
         if "network" in self.results:

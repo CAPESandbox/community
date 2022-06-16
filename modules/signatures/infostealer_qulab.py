@@ -24,6 +24,7 @@ class QulabMutexes(Signature):
     families = ["Qulab", "MASAD"]
     authors = ["ditekshen"]
     minimum = "1.3"
+    mbcs = ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = [
@@ -47,6 +48,7 @@ class QulabFiles(Signature):
     families = ["Qulab", "MASAD"]
     authors = ["ditekshen"]
     minimum = "1.3"
+    mbcs = ["OC0001", "C0016"]  # micro-behaviour
 
     def run(self):
         indicators = [

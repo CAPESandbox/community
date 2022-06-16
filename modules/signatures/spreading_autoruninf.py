@@ -23,7 +23,8 @@ class CreatesAutorunInf(Signature):
     categories = ["spreading"]
     authors = ["Thomas Birn", "nex"]
     minimum = "0.5"
-    ttps = ["T1091"]
+    ttps = ["T1091"]  # MITRE v6,7,8
+    mbcs = ["OC0001", "C0016"]  # micro-behaviour
 
     def run(self):
         return self.check_file(pattern=".*\\\\autorun\.inf$", regex=True)

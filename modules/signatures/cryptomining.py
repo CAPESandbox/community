@@ -27,11 +27,12 @@ class CryptominingStratumCommand(Signature):
     authors = ["Kevin Ross", "Cuckoo Technologies"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1496"]  # MITRE v6,7,8
+    mbcs = ["OB0008", "B0018", "B0018.002"]
     references = [
         "blog.talosintelligence.com/2018/01/malicious-xmr-mining.html",
         "www.fireeye.com/blog/threat-research/2018/07/cryptocurrencies-cyber-crime-growth-of-miners.html",
     ]
-    ttps = ["T1496"]
 
     def run(self):
         xmr_address_re = "-u[ ]*4[0-9AB][123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{93}"

@@ -4,12 +4,11 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-domain_passlist = []
-
 try:
     from data.safelist.domains import domain_passlist
 except ImportError:
     print("Please update CAPE from main repo")
+    domain_passlist = ["acroipm.adobe.com", "acroipm2.adobe.com", "microsoft.com", "ocsp.digicert.com", "apps.identrust.com"]
 
 
 class HTTP_Request(Signature):
@@ -20,12 +19,9 @@ class HTTP_Request(Signature):
     authors = ["enzok", "ditekshen"]
     minimum = "1.2"
     evented = True
-
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.request = dict()
-        self.lasthost = str()
-        self.urls = list()
+    ttps = ["T1071"]  # MITRE v6,7,8
+    ttps += ["T1071.001"]  # MITRE v7,8
+    mbcs = ["OC0006", "C0002"]  # micro-behaviour
 
     filter_apinames = set(
         [
@@ -38,6 +34,12 @@ class HTTP_Request(Signature):
             "InternetOpenUrlA",
         ]
     )
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.request = dict()
+        self.lasthost = str()
+        self.urls = set()
 
     def on_call(self, call, process):
         if call["api"].startswith("InternetConnect"):
@@ -65,14 +67,12 @@ class HTTP_Request(Signature):
             url = self.get_argument(call, "Url")
             if url:
                 for wlhost in domain_passlist:
-                    if wlhost not in url:
-                        self.urls.append(url)
+                    self.urls.add(url)
         elif call["api"].startswith("InternetOpenUrl"):
             url = self.get_argument(call, "URL")
             if url:
                 for wlhost in domain_passlist:
-                    if wlhost not in url:
-                        self.urls.append(url)
+                    self.urls.add(url)
 
     def on_complete(self):
         ret = False

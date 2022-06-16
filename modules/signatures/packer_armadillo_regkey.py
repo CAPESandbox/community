@@ -23,7 +23,10 @@ class ArmadilloRegKey(Signature):
     categories = ["packer"]
     authors = ["KillerInstinct"]
     minimum = "0.5"
-    ttps = ["T1045"]
+    ttps = ["T1045"]  # MITRE v6
+    ttps += ["T1027"]  # MITRE v6,7,8
+    ttps += ["T1027.002"]  # MITRE v7,8
+    mbcs = ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
         indicators = [".*\\\\The\\ Silicon\\ Realms\\ Toolworks\\\\Armadillo$"]

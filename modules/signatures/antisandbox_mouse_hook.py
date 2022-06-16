@@ -24,6 +24,10 @@ class HookMouse(Signature):
     authors = ["nex"]
     minimum = "1.0"
     evented = True
+    ttps = ["T1056", "T1497"]  # MITRE v6,7,8
+    ttps += ["T1497.002"]  # MITRE v7,8
+    ttps += ["U1317"]  # Unprotect
+    mbcs = ["OB0001", "B0007", "B0007.003", "B0009", "B0009.012", "F0003", "F0003.003", "OB0003", "E1056", "E1056.m01"]
 
     filter_apinames = set(["SetWindowsHookExA", "SetWindowsHookExW"])
 

@@ -23,10 +23,10 @@ class ADFind(Signature):
     categories = ["discovery"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    references = ["http://www.joeware.net/freetools/tools/adfind/"]
-    ttps = ["T1069"]
-
     evented = True
+    ttps = ["S0552"]  # MITRE
+    ttps += ["T1069"]  # MITRE v6,7,8
+    references = ["http://www.joeware.net/freetools/tools/adfind/"]
 
     def run(self):
         utilities = [

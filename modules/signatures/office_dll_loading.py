@@ -29,7 +29,8 @@ class OfficeAddinLoading(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1137"]
+    ttps = ["T1137"]  # MITRE v6,7,8
+    ttps += ["T1137.006"]  # MITRE v7,8
 
     def run(self):
         indicators = [
@@ -55,7 +56,9 @@ class OfficePerfKey(Signature):
     categories = ["office", "persistence", "evasion", "execution"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    ttps = ["T1137"]
+    ttps = ["T1112", "T1137"]  # MITRE v6,7,8
+    mbcs = ["OB0012", "E1112"]
+    mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
         indicators = ["HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Office test\\\\Special\\\\Perf$"]
@@ -79,8 +82,10 @@ class OfficeVBLLoad(Signature):
     categories = ["office", "macro"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1137", "T1204"]
     evented = True
+    ttps = ["T1059", "T1137", "T1204"]  # MITRE v6,7,8
+    ttps += ["T1059.005", "T1137.001", "T1204.002"]  # MITRE v7,8
+    mbcs = ["OB0009", "E1059"]
 
     filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])
 
@@ -110,8 +115,10 @@ class OfficeWMILoad(Signature):
     categories = ["office", "macro"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1137", "T1204"]
     evented = True
+    ttps = ["T1059", "T1137", "T1204"]  # MITRE v6,7,8
+    ttps += ["T1137.001", "T1204.002"]  # MITRE v7,8
+    mbcs = ["OB0009", "E1059"]
 
     filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])
 
@@ -136,8 +143,10 @@ class OfficeCOMLoad(Signature):
     categories = ["office", "macro"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1137", "T1204"]
     evented = True
+    ttps = ["T1059", "T1137", "T1204"]  # MITRE v6,7,8
+    ttps += ["T1059.003", "T1137.001", "T1204.002"]  # MITRE v7,8
+    mbcs = ["OB0009", "E1059"]
 
     filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])
 
@@ -165,8 +174,9 @@ class OfficeDotNetLoad(Signature):
     categories = ["office", "macro"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1137", "T1204"]
     evented = True
+    ttps = ["T1137", "T1204"]  # MITRE v6,7,8
+    ttps += ["T1137.001", "T1204.002"]  # MITRE v7,8
 
     filter_apinames = set(["LdrLoadDll"])
 
@@ -199,8 +209,8 @@ class OfficeMSHTMLLoad(Signature):
     categories = ["office"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    ttps = ["T1204"]
     evented = True
+    ttps = ["T1204"]  # MITRE v6,7,8
 
     filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])
 

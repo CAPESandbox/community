@@ -25,7 +25,9 @@ class SquiblydooBypass(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1086", "T1117"]
+    ttps = ["T1086", "T1117"]  # MITRE v6
+    ttps += ["T1059", "T1059.001", "T1218", "T1218.010"]  # MITRE v7,8
+    mbcs = ["OB0009", "E1059"]
 
     def run(self):
         ret = False
@@ -52,7 +54,9 @@ class RegSrv32SquiblydooDLLLoad(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.2"
     evented = True
-    ttps = ["T1086", "T1117"]
+    ttps = ["T1086", "T1117"]  # MITRE v6
+    ttps += ["T1059", "T1059.001", "T1218", "T1218.010"]  # MITRE v7,8
+    mbcs = ["OB0009", "E1059"]
 
     filter_apinames = set(["LdrLoadDll"])
 
@@ -73,7 +77,9 @@ class SquiblytwoBypass(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1086", "T1117"]
+    ttps = ["T1086", "T1117"]  # MITRE v6
+    ttps += ["T1059", "T1059.001", "T1218", "T1218.010"]  # MITRE v7,8
+    mbcs = ["OB0009", "E1059"]
 
     def run(self):
         ret = False
@@ -96,7 +102,9 @@ class OdbcconfBypass(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1086", "T1117"]
+    ttps = ["T1086", "T1117"]  # MITRE v6
+    ttps += ["T1059", "T1059.001", "T1218", "T1218.010"]  # MITRE v7,8
+    mbcs = ["OB0009", "E1059"]
 
     def run(self):
         ret = False

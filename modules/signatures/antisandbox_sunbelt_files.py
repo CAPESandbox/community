@@ -23,8 +23,9 @@ class SunbeltDetectFiles(Signature):
     categories = ["anti-sandbox"]
     authors = ["Kevin Ross"]
     minimum = "0.5"
-    ttps = ["T1083", "T1057"]
-    mbcs = ["B0007"]
+    ttps = ["T1057", "T1083", "T1497"]  # MITRE v6,7,8
+    ttps += ["U1333"]  # Unprotect
+    mbcs = ["OB0001", "B0007", "B0007.002", "OB0007", "E1083"]
 
     def run(self):
         indicators = [

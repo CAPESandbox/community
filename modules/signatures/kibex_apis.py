@@ -20,23 +20,26 @@ class Kibex_APIs(Signature):
     name = "kibex_behavior"
     description = "Exhibits behavior characteristic of Kibex Spyware/KeyBase Keylogger"
     severity = 3
-    references = [
-        "http://www.trendmicro.com/vinfo/us/threat-encyclopedia/malware/tspy_kibex.a",
-        "http://www.trendmicro.com/vinfo/us/threat-encyclopedia/malware/tspy_kibex.i",
-        "http://researchcenter.paloaltonetworks.com/2015/06/keybase-keylogger-malware-family-exposed/",
-    ]
     categories = ["spyware", "keylogger"]
     families = ["Kibex", "Keybase"]
     authors = ["KillerInstinct"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1003", "T1056"]  # MITRE v6,7,8
+    ttps += ["T1056.001"]  # MITRE v7,8
+    mbcs = ["OB0003", "OB0005", "F0002"]
+    references = [
+        "http://www.trendmicro.com/vinfo/us/threat-encyclopedia/malware/tspy_kibex.a",
+        "http://www.trendmicro.com/vinfo/us/threat-encyclopedia/malware/tspy_kibex.i",
+        "http://researchcenter.paloaltonetworks.com/2015/06/keybase-keylogger-malware-family-exposed/",
+    ]
+
+    filter_apinames = set(["SetWindowsHookExA", "WinHttpGetProxyForUrl"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.keylog_inits = 0
         self.c2s = set()
-
-    filter_apinames = set(["SetWindowsHookExA", "WinHttpGetProxyForUrl"])
 
     def on_call(self, call, process):
         if call["api"] == "SetWindowsHookExA":
@@ -83,6 +86,8 @@ class Kibex_APIs(Signature):
                 bad_score += 1
 
         if bad_score >= 10:
+            self.mbcs += ["OB0004", "B0030"]
+            self.mbcs += ["OC0006"]  # micro-behaviour
             for c2 in self.c2s:
                 self.data.append({"c2": c2})
 

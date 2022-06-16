@@ -27,14 +27,14 @@ class Kelihos_APIs(Signature):
     minimum = "1.2"
     evented = True
 
+    filter_apinames = set(["RegSetValueExA", "connect", "ioctlsocket", "socket", "setsockopt", "WSASocketA", "closesocket"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.config_key = str()
         self.peer_connect = set()
         self.socket_tracker = dict()
         self.bad_pid = 0
-
-    filter_apinames = set(["RegSetValueExA", "connect", "ioctlsocket", "socket", "setsockopt", "WSASocketA", "closesocket"])
 
     def on_call(self, call, process):
         if call["api"] == "RegSetValueExA":
@@ -84,6 +84,8 @@ class Kelihos_APIs(Signature):
         if self.config_key:
             self.data.append({"ConfigLocation": self.config_key})
             if self.peer_connect:
+                self.mbcs += ["OB0004", "B0030"]
+                self.mbcs += ["OC0006"]  # micro-behaviour
                 for peer in self.peer_connect:
                     self.data.append({"c2": peer})
 

@@ -28,6 +28,9 @@ class Chimera_APIs(Signature):
     authors = ["Optiv"]
     minimum = "1.3"
     evented = True
+    mbcs = ["OC0003", "C0042"]  # micro-behaviour
+
+    filter_apinames = set(["NtCreateMutant"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -47,8 +50,6 @@ class Chimera_APIs(Signature):
             self.mutexmatch = "{{{0:08X}-{1:04X}-{2:04X}-{3:04X}-{4:08X}{5:04X}}}".format(
                 dword1, word2, word3, word4, dword5, word6
             )
-
-    filter_apinames = set(["NtCreateMutant"])
 
     def on_call(self, call, process):
         mutexname = self.get_argument(call, "MutexName")

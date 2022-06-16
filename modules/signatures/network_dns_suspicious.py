@@ -28,8 +28,14 @@ class NetworkDNSTunnelingRequest(Signature):
     categories = ["network", "dns"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1048", "T1071", "T1094", "T1320"]
     evented = True
+    ttps = ["T1094"]  # MITRE v6
+    ttps += ["T1048", "T1071", "T1095"]  # MITRE v6,7,8
+    ttps += ["T1071.004"]  # MITRE v7,8
+    mbcs = ["OB0004", "B0030"]
+    mbcs += ["OC0006", "C0011"]  # micro-behaviour
+
+    filter_apinames = set(["DnsQuery_A", "DnsQuery_W"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -48,8 +54,6 @@ class NetworkDNSTunnelingRequest(Signature):
             ".ip6.arpa",
             ".apple.com",
         ]
-
-    filter_apinames = set(["DnsQuery_A", "DnsQuery_W"])
 
     def on_call(self, call, process):
         qtype = self.get_argument(call, "Type")
@@ -83,12 +87,15 @@ class NetworkDNSIDN(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1071"]  # MITRE v6,7,8
+    ttps += ["T1071.004"]  # MITRE v7,8
+    mbcs = ["OC0006", "C0011"]  # micro-behaviour
+
+    filter_apinames = set(["DnsQueryA"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.match = False
-
-    filter_apinames = set(["DnsQueryA"])
 
     def on_call(self, call, process):
         qname = self.get_argument(call, "Name")
@@ -107,15 +114,18 @@ class NetworkDNSSuspiciousQueryType(Signature):
     categories = ["network", "dns"]
     authors = ["ditekshen"]
     minimum = "1.3"
-    ttps = ["T1048", "T1071", "T1094", "T1320"]
     evented = True
+    ttps = ["T1094"]  # MITRE v6
+    ttps += ["T1048", "T1071"]  # MITRE v6,7,8
+    ttps += ["T1071.004", "T1095"]  # MITRE v7,8
+    mbcs = ["OC0006", "C0011"]  # micro-behaviour
+
+    filter_apinames = set(["DnsQueryA"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.match = False
         self.qtype_whitelist = [1, 2, 5, 10, 12, 15, 16, 28, 255]
-
-    filter_apinames = set(["DnsQueryA"])
 
     def on_call(self, call, process):
         self.qtype = self.get_argument(call, "Type")
@@ -135,6 +145,9 @@ class NetworkDNSBlockChain(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1071"]  # MITRE v6,7,8
+    ttps += ["T1071.004"]  # MITRE v7,8
+    mbcs = ["OC0006", "C0011"]  # micro-behaviour
 
     def run(self):
         domain_indictors = [
@@ -163,6 +176,9 @@ class NetworkDNSOpenNIC(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1071"]  # MITRE v6,7,8
+    ttps += ["T1071.004"]  # MITRE v7,8
+    mbcs = ["OC0006", "C0011"]  # micro-behaviour
 
     def run(self):
         domain_indictors = [
@@ -204,6 +220,9 @@ class NetworkDOHTLS(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1071"]  # MITRE v6,7,8
+    ttps += ["T1071.004", "T1071.001"]  # MITRE v7,8
+    mbcs = ["OC0006", "C0011"]  # micro-behaviour
 
     def run(self):
         domain_indicators = [
@@ -364,6 +383,9 @@ class NetworkDNSReverseProxy(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1071"]  # MITRE v6,7,8
+    ttps += ["T1071.001", "T1071.004"]  # MITRE v7,8
+    mbcs = ["OC0006", "C0011"]  # micro-behaviour
 
     def run(self):
         domain_indictors = [

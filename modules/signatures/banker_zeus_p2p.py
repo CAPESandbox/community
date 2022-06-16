@@ -24,6 +24,7 @@ class ZeusP2P(Signature):
     families = ["Zeus"]
     authors = ["Robby Zeitfuchs", "Optiv"]
     minimum = "1.2"
+    mbcs = ["OC0003", "C0042"]  # micro-behaviour
     references = [
         "https://malwr.com/analysis/NmNhODg5ZWRkYjc0NDY0M2I3YTJhNDRlM2FlOTZiMjA/",
         "https://malwr.com/analysis/MmMwNDJlMTI0MTNkNGFjNmE0OGY3Y2I5MjhiMGI1NzI/",

@@ -27,9 +27,6 @@ class CriticalProcess(Signature):
     minimum = "1.3"
     evented = True
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
     filter_apinames = set(["NtSetInformationProcess"])
 
     def on_call(self, call, process):

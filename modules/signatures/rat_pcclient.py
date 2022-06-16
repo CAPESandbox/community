@@ -25,6 +25,8 @@ class PcClientMutexes(Signature):
     authors = ["threatlead"]
     references = ["https://malwr.com/analysis/MDIxN2NhMjg4MTg2NDY4MWIyNTE0Zjk5MTY1OGU4YzE/"]
     minimum = "0.5"
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
 
     def run(self):
         indicators = [
@@ -34,6 +36,7 @@ class PcClientMutexes(Signature):
 
         for indicator in indicators:
             if self.check_mutex(pattern=indicator, regex=True):
+                self.mbcs += ["OC0003", "C0042"]  # micro-behaviour
                 return True
 
         indicators = [
@@ -45,6 +48,7 @@ class PcClientMutexes(Signature):
 
         for indicator in indicators:
             if self.check_file(pattern=indicator, regex=True):
+                self.mbcs += ["OC0001", "C0016"]  # micro-behaviour
                 return True
 
         return False

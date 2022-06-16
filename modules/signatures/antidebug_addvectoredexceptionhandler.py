@@ -25,9 +25,8 @@ class antidebug_addvectoredexceptionhandler(Signature):
     authors = ["redsand"]
     minimum = "1.3"
     evented = True
-
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
+    ttps = ["T1106"]  # MITRE v6,7,8
+    mbcs = ["OB0001", "B0001"]
 
     filter_apinames = set(["AddVectoredExceptionHandler"])
 

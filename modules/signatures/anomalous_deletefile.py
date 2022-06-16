@@ -25,13 +25,16 @@ class anomalous_deletefile(Signature):
     authors = ["redsand"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1485"]  # MITRE v6,7,8
+    mbcs = ["OB0008", "E1485"]
+    mbcs += ["OC0001", "C0047"]  # micro-behaviour
+
+    filter_apinames = set(["NtDeleteFile", "DeleteFileA", "DeleteFileW"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.loadctr = 0
         self.list = []
-
-    filter_apinames = set(["NtDeleteFile", "DeleteFileA", "DeleteFileW"])
 
     def on_call(self, call, process):
         if call["api"] == "NtDeleteFile" or call["api"] == "DeleteFileA" or call["api"] == "DeleteFileW":

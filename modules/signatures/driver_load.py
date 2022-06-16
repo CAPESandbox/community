@@ -23,14 +23,17 @@ class DriverLoad(Signature):
     categories = ["stealth"]
     authors = ["Optiv"]
     minimum = "1.2"
-    ttps = ["C0023"]
     evented = True
+    ttps = ["T1215"]  # MITRE v6
+    ttps += ["T1547", "T1547.006"]  # MITRE v7,8
+    mbcs = ["OB0012", "F0010"]
+    mbcs += ["OC0007", "C0023"]  # micro-behaviour
+
+    filter_apinames = set(["NtLoadDriver"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.found_driverload = False
-
-    filter_apinames = set(["NtLoadDriver"])
 
     def on_call(self, call, process):
         drivername = self.get_argument(call, "DriverServiceName")

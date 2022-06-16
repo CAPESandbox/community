@@ -87,6 +87,10 @@ class Tinba_APIs(Signature):
         autorun = ""
         tmp = self.check_write_key(pattern=runkey, regex=True)
         if tmp:
+            self.ttps += ["T1060"]  # MITRE v6
+            self.ttps += ["T1547", "T1547.001"]  # MITRE v7,8
+            self.mbcs += ["OB0012", "F0012"]
+            self.mbcs += ["OC0008", "C0036"]  # micro-behaviour
             autorun = self.check_write_key(pattern=runkey, regex=True)
             malscore += 1
 
@@ -94,22 +98,26 @@ class Tinba_APIs(Signature):
         for mutex in mutexes:
             buf = mutex + "ntf"
             if buf in mutexes:
+                self.mbcs += ["OC0003", "C0042"]  # micro-behaviour
                 malscore += 2
                 break
 
         for mutex in mutexes:
             if mutex == autorun.split("\\")[-1]:
                 malscore += 10
+                self.mbcs += ["OC0003", "C0042"]  # micro-behaviour
                 break
 
         for ioc in file_iocs:
             buf = self.check_write_file(pattern=ioc, regex=True)
             if buf:
+                self.mbcs += ["OC0001", "C0016"]  # micro-behaviour
                 malscore += 2
 
         inject_hooks = 0
         for unhook in self.unhooks:
             if unhook in unhook_list:
+                self.mbcs += ["OC0006"]  # micro-behaviour
                 inject_hooks += 1
 
         if inject_hooks > 25:

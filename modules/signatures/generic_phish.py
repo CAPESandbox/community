@@ -31,6 +31,9 @@ class Generic_Phish(Signature):
     minimum = "1.0"
     evented = True
 
+    # Observed with IE8
+    filter_apinames = set(["InternetReadFile"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         # Named group to extract the URL of the cloned website.
@@ -39,9 +42,6 @@ class Generic_Phish(Signature):
             "mirrored from": re.compile(r"<!--\smirrored\sfrom\s(?P<url>[^\s]+)\sby\sHTTrack", re.I),
         }
         self.hits = set()
-
-    # Observed with IE8
-    filter_apinames = set(["InternetReadFile"])
 
     def on_call(self, call, process):
         data = self.get_argument(call, "Buffer")

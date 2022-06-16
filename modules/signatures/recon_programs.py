@@ -18,7 +18,11 @@ class InstalledApps(Signature):
     authors = ["Optiv"]
     minimum = "1.2"
     evented = True
-    ttps = ["T1012", "T1082", "T1518"]
+    ttps = ["T1012", "T1082", "T1518"]  # MITRE v6,7,8
+    mbcs = ["OB0007"]
+    mbcs += ["OC0008", "OC0036"]  # micro-behaviour
+
+    filter_apinames = set(["RegQueryValueExA", "RegQueryValueExW"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -27,8 +31,6 @@ class InstalledApps(Signature):
         office_pkgs = ["ppt", "doc", "xls", "eml", "pdf"]
         if any(e in self.results["info"]["package"] for e in office_pkgs):
             self.check = False
-
-    filter_apinames = set(["RegQueryValueExA", "RegQueryValueExW"])
 
     def on_call(self, call, process):
         if not self.check:

@@ -27,9 +27,10 @@ class antidebug_ntcreatethreadex(Signature):
     authors = ["redsand"]
     minimum = "1.3"
     evented = True
-
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
+    ttps = ["T1106"]  # MITRE v6,7,8
+    ttps += ["U0119"]  # Unprotect
+    mbcs = ["OB0001", "B0002"]
+    mbcs += ["OC0003", "C0038"]  # micro-behaviour
 
     filter_apinames = set(["NtCreateThreadEx"])
 

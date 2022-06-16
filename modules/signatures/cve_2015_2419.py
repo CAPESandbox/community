@@ -23,14 +23,14 @@ class CVE2015_2419_JS(Signature):
     categories = ["exploit"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
+    evented = True
+    ttps = ["T1203", "T1499"]  # MITRE v6,7,8
+    ttps += ["T1499.004"]  # MITRE v7,8
+    mbcs = ["OB0008", "B0033", "E1203", "OB0009"]
     references = [
         "https://www.fireeye.com/blog/threat-research/2015/08/cve-2015-2419_inte.html",
         "blog.checkpoint.com/2016/02/10/too-much-freedom-is-dangerous-understanding-ie-11-cve-2015-2419-exploitation/",
     ]
-    evented = True
-
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
 
     filter_categories = set(["browser"])
     # backward compat

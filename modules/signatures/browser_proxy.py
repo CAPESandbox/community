@@ -28,6 +28,9 @@ class ModifyProxy(Signature):
     categories = ["browser"]
     authors = ["Kevin Ross", "Optiv"]
     minimum = "1.2"
+    ttps = ["T1112"]  # MITRE v6,7,8
+    mbcs = ["OB0006", "E1112"]
+    mbcs += ["OC0008", "C0036", "C0036.001"]  # micro-behaviour
 
     filter_analysistypes = set(["file"])
 

@@ -24,7 +24,10 @@ class AccessesSysvol(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1552"]
+    ttps = ["T1081"]  # MITRE v6
+    ttps += ["T1552", "T1552.001", "T1552.006"]  # MITRE v7,8
+    mbcs = ["OB0005"]
+    mbcs += ["OC0001", "C0051"]  # micro-behaviour
 
     def run(self):
         indicators = [".*\\\\Windows\\\\SYSVOL\\\\.*", "\\\\sysvol\\\\.*\\\\policies\\\\.*", "\\\\sysvol\\\\.*\\\\scripts\\\\.*"]
@@ -47,6 +50,7 @@ class WritesSysvol(Signature):
     minimum = "1.3"
     evented = True
     ttps = ["T1552"]
+    mbcs = ["OC0001", "C0052"]  # micro-behaviour
 
     def run(self):
         indicators = [".*\\\\Windows\\\\SYSVOL\\\\.*", "\\\\sysvol\\\\.*\\\\policies\\\\.*", "\\\\sysvol\\\\.*\\\\scripts\\\\.*"]

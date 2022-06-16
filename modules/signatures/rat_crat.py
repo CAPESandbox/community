@@ -24,6 +24,7 @@ class CRATMutexes(Signature):
     families = ["CRAT"]
     authors = ["ditekshen"]
     minimum = "2.0"
+    mbcs = ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = [

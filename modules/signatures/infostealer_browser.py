@@ -30,7 +30,11 @@ class BrowserStealer(Signature):
     authors = ["nex", "Optiv"]
     minimum = "1.2"
     evented = True
-    ttps = ["T1081", "T1003", "T1005", "T1555.003", "T1552.001"]
+    ttps = ["T1081", "T1503"]  # MITRE v6
+    ttps += ["T1003", "T1005"]  # MITRE v6,7,8
+    ttps += ["T1552", "T1552.001", "T1555", "T1555.003"]  # MITRE v7,8
+    mbcs = ["OB0005"]
+    mbcs += ["OC0001", "C0051"]  # micro-behaviour
 
     filter_apinames = set(["NtReadFile", "CopyFileA", "CopyFileW", "CopyFileExW"])
 

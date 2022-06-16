@@ -24,7 +24,8 @@ class MimikatzModules(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1003"]
+    ttps = ["S0002"]  # MITRE
+    ttps += ["T1003"]  # MITRE v6,7,8
 
     def run(self):
         ret = False

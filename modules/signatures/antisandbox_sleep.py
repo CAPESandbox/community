@@ -14,11 +14,11 @@ class AntiSandboxSleep(Signature):
     minimum = "1.2"
     evented = True
 
+    filter_apinames = set(["NtDelayExecution"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.sleeps = []
-
-    filter_apinames = set(["NtDelayExecution"])
 
     def on_call(self, call, process):
         if call["api"] == "NtDelayExecution":

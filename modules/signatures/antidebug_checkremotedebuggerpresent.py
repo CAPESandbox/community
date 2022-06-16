@@ -27,14 +27,15 @@ class antidebug_checkremotedebuggerpresent(Signature):
     authors = ["redsand"]
     minimum = "1.3"
     evented = True
-
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
+    ttps = ["T1106"]  # MITRE v6,7,8
+    mbcs = ["OB0001", "B0001"]
 
     filter_apinames = set(["CheckRemoteDebuggerPresent", "NtQueryInformationProcess"])
 
     def on_call(self, call, process):
         if call["api"] == "CheckRemoteDebuggerPresent":
+            self.ttps += ["U0121"]  # Unprotect
+            self.mbcs += ["B0001.002"]
             return True
         elif call["api"] == "NtQueryInformationProcess":
             ProcessInformationClass = int(self.get_raw_argument(call, "ProcessInformationClass"))
@@ -43,4 +44,6 @@ class antidebug_checkremotedebuggerpresent(Signature):
                 # - ProcessDebugObjectHandle 0x1E
                 # - ProcessDebugFlags 0x1F
                 # - ProcessBasicInformation 0x00
+                self.ttps += ["U0120"]  # Unprotect
+                self.mbcs += ["B0001.012"]
                 return True

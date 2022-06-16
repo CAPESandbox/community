@@ -23,12 +23,14 @@ class InjectionRUNPE(Signature):
     authors = ["glysbaysb", "Optiv", "KillerInstinct"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1055"]  # MITRE v6,7,8
+    mbcs = ["OB0006", "OB0013", "E1055"]
+
+    filter_categories = set(["process", "threading"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.lastprocess = None
-
-    filter_categories = set(["process", "threading"])
 
     def on_call(self, call, process):
         if process is not self.lastprocess:

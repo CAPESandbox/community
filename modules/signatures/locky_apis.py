@@ -35,6 +35,8 @@ class Locky_APIs(Signature):
     minimum = "1.2"
     evented = True
 
+    filter_apinames = set(["GetVolumeNameForVolumeMountPointW", "InternetCrackUrlA", "CryptHashData", "NtOpenEvent"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.checkEvent = False
@@ -46,8 +48,6 @@ class Locky_APIs(Signature):
         self.payment = set()
         self.keywords = ["id=", "act=", "lang="]
         self.sigchanged = False
-
-    filter_apinames = set(["GetVolumeNameForVolumeMountPointW", "InternetCrackUrlA", "CryptHashData", "NtOpenEvent"])
 
     def on_call(self, call, process):
         if self.checkEvent and self.lastapi == "CryptHashData":
@@ -69,6 +69,9 @@ class Locky_APIs(Signature):
                         self.hashes.add(md5)
 
         elif call["api"] == "CryptHashData":
+            self.ttps += ["T1486"]  # MITRE v6,7,8
+            self.mbcs += ["OB0008", "E1486"]
+            self.mbcs += ["OC0005", "C0027"]  # micro-behaviour
             if self.hashes:
                 buf = self.get_argument(call, "Buffer")
                 if buf and all(word in buf for word in self.keywords):
@@ -142,6 +145,8 @@ class Locky_APIs(Signature):
                                     self.data.append(tmp)
 
             if self.payment:
+                self.mbcs += ["OB0004", "B0030"]
+                self.mbcs += ["OC0006"]  # micro-behaviour
                 for url in self.payment:
                     self.data.append({"Payment": url})
 

@@ -10,6 +10,7 @@ class TrickBotMutexes(Signature):
     families = ["TrickBot"]
     authors = ["Eoin Miller", "Mark Parsons"]
     minimum = "0.5"
+    mbcs = ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         if self.check_mutex("Global\\TrickBot") or self.check_mutex("Global\\MGlob"):

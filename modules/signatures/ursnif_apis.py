@@ -27,11 +27,11 @@ class Ursnif_APIs(Signature):
     minimum = "1.3"
     evented = True
 
+    filter_apinames = set(["RtlDecompressBuffer"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.decompMZ = set()
-
-    filter_apinames = set(["RtlDecompressBuffer"])
 
     def on_call(self, call, process):
         buf = self.get_argument(call, "UncompressedBuffer")
@@ -56,6 +56,8 @@ class Ursnif_APIs(Signature):
                         arg1 = arg1.replace('"', "")
                         arg2 = arg2.replace('"', "")
                         if arg2 in buf:
+                            self.ttps += ["T1059"]  # MITRE v6,7,8
+                            self.mbcs += ["OB0009", "E1059"]
                             if arg1 in buf:
                                 badness += 8
                             # Handle shortnames
@@ -78,11 +80,15 @@ class Ursnif_APIs(Signature):
 
         keypat = r".*\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\EnableSPDY3_0$"
         if self.check_write_key(pattern=keypat, regex=True):
+            self.ttps += ["T1112"]  # MITRE v6,7,8
+            self.mbcs += ["E1112"]
+            self.mbcs += ["OC0008", "C0036"]  # micro-behaviour
             badness += 2
 
         mutexpat = r"(?:Local\\)?\{[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}\}"
         mutexes = self.check_mutex(pattern=mutexpat, regex=True, all=True)
         if mutexes:
+            self.mbcs += ["OC0003", "C0042"]  # micro-behaviour
             mutex_count = len(mutexes)
             if mutex_count >= 2:
                 badness += 2

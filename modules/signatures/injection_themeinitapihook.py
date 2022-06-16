@@ -26,12 +26,12 @@ class injection_themeinitapihook(Signature):
     minimum = "1.3"
     evented = True
 
+    filter_apinames = set(["ThemeInitApiHook"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.loadctr = 0
         self.list = []
-
-    filter_apinames = set(["ThemeInitApiHook"])
 
     def on_call(self, call, process):
         if call["api"] == "ThemeInitApiHook":

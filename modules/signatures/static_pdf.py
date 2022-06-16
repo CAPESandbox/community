@@ -9,6 +9,8 @@ class Static_PDF(Signature):
     categories = ["pdf", "static"]
     authors = ["Kevin Ross", "KillerInstinct"]
     minimum = "1.3"
+    ttps = ["T1204"]  # MITRE v6,7,8
+    ttps += ["T1024.002"]  # MITRE v7,8
 
     def run(self):
 
@@ -53,6 +55,10 @@ class Static_PDF(Signature):
                             or self.results["static"]["pdf"]["Keywords"]["/JS"] > 0
                         ):
                             self.data.append({"javascript_object": "PDF contains JavaScript usage"})
+                            self.ttps += ["T1064"]  # MITRE v6
+                            self.ttps += ["T1059"]  # MITRE v6,7,8
+                            self.ttps += ["T1059.007"]  # MITRE v7,8
+                            self.mbcs += ["OB0009", "E1059"]
                             self.weight += 1
 
                 if "Keywords" in self.results["static"]["pdf"]:
@@ -65,6 +71,7 @@ class Static_PDF(Signature):
                     if "/EmbeddedFile" in self.results["static"]["pdf"]["Keywords"]:
                         if self.results["static"]["pdf"]["Keywords"]["/EmbeddedFile"] > 0:
                             self.data.append({"attachment": "PDF contains an attachment"})
+                            self.mbcs += ["OB0009", "B0023"]
                             self.weight += 1
 
                 if "Keywords" in self.results["static"]["pdf"]:
@@ -87,6 +94,8 @@ class Static_PDF(Signature):
                             exploit += 1
 
             if exploit > 0:
+                self.ttps += ["T1203"]  # MITRE v6,7,8
+                self.mbcs += ["OB0009", "E1203"]
                 self.description += " and contains possible exploit code."
                 self.severity = 3
                 self.weight += 1

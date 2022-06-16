@@ -17,6 +17,8 @@ class MimicsExtension(Signature):
     categories = ["stealth"]
     authors = ["KillerInstinct"]
     minimum = "0.5"
+    ttps = ["T1036"]  # MITRE v6,7.8
+    mbcs = ["OC0001", "C0015"]  # micro-behaviour
 
     def run(self):
         # There are more, but these are the only ones I've observed

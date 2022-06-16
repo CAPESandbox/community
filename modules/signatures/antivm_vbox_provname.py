@@ -23,11 +23,11 @@ class VBoxDetectProvname(Signature):
     categories = ["anti-vm"]
     authors = ["Optiv"]
     minimum = "1.3"
-    mbcs = ["B0009.001"]
     evented = True
-
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
+    ttps = ["T1016", "T1497"]  # MITRE v6,7,8
+    ttps += ["T1497.001"]  # MITRE v7,8
+    ttps += ["U1332"]  # Unprotect
+    mbcs = ["OB0001", "B0009", "B0009.001"]
 
     filter_apinames = set(["WNetGetProviderNameW"])
 

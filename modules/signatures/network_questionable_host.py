@@ -51,7 +51,6 @@ class NetworkQuestionableHost(Signature):
     filter_analysistypes = set(["file"])
 
     def run(self):
-
         checked = {}
         for key, value in [("hosts", "ip"), ("tcp", "dst"), ("udp", "dst"), ("icmp", "dst"), ("icmp", "src")]:
             for host in self.results.get("network", {}).get(key, []):

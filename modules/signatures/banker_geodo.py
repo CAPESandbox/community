@@ -13,6 +13,10 @@ class Geodo(Signature):
     families = ["Geodo", "Emotet"]
     authors = ["Optiv"]
     minimum = "1.2"
+    ttps = ["T1060"]  # MITRE v6
+    ttps += ["T1112", "T1547", "T1547.001"]  # MITRE v7,8
+    mbcs = ["OB0012", "E1112", "F0012"]
+    mbcs += ["OC0003", "C0042", "OC0008", "C0036", "C0036.001"]  # micro-behaviour
 
     def run(self):
         match_file = self.check_file(

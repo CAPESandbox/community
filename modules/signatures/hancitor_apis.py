@@ -35,14 +35,14 @@ class Hancitor_APIs(Signature):
     minimum = "1.2"
     evented = True
 
+    filter_apinames = set(["CreateProcessInternalW", "WriteProcessMemory", "NtClose"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.c2s = []
         self.found = False
         self.lastapi = str()
         self.suspended = dict()
-
-    filter_apinames = set(["CreateProcessInternalW", "WriteProcessMemory", "NtClose"])
 
     def getWrittenUrls(self, data):
         memstruct = None

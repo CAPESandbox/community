@@ -31,13 +31,16 @@ class BetaBot_APIs(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True
+    ttps = ["T1071"]  # MITRE v6,7,8
+    ttps += ["T1071.001"]  # MITRE v7,8
+    mbcs = ["OC0006", "C0002"]  # micro-behaviour
+
+    filter_apinames = set(["NtCreateEvent", "NtOpenEvent", "HttpSendRequestA"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.events = set()
         self.postreqs = set()
-
-    filter_apinames = set(["NtCreateEvent", "NtOpenEvent", "HttpSendRequestA"])
 
     def on_call(self, call, process):
         if call["api"] == "NtCreateEvent" or call["api"] == "NtOpenEvent":

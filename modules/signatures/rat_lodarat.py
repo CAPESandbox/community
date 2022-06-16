@@ -25,6 +25,7 @@ class LodaRATFileBehavior(Signature):
     authors = ["ditekshen"]
     minimum = "2.0"
     evented = True
+    mbcs = ["OC0001"]  # micro-behaviour
 
     def run(self):
         file_indicators = [

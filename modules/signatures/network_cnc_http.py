@@ -30,6 +30,10 @@ class NetworkCnCHTTP(Signature):
     categories = ["http", "c2"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
+    ttps = ["T1071"]  # MITRE v6,7,8
+    ttps += ["T1071.001"]  # MITRE v7,8
+    mbcs = ["OB0004", "B00330"]
+    mbcs += ["OC0006", "C0002"]  # micro-behaviour
 
     filter_analysistypes = set(["file"])
 

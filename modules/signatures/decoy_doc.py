@@ -26,6 +26,8 @@ class DecoyDocument(Signature):
     minimum = "1.2"
     evented = True
 
+    filter_analysistypes = set(["file"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.decoys = []
@@ -42,8 +44,6 @@ class DecoyDocument(Signature):
         initialproc = self.get_initial_process()
         if initialproc:
             self.initialpath = initialproc["module_path"].lower()
-
-    filter_analysistypes = set(["file"])
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()

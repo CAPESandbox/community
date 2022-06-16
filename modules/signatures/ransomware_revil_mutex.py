@@ -24,6 +24,8 @@ class RevilMutexes(Signature):
     families = ["REvil", "Sodinokibi"]
     authors = ["ditekshen"]
     minimum = "0.5"
+    ttps = ["T1486"]  # MITRE v6,7,8
+    mbcs = ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = [

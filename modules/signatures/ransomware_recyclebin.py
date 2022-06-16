@@ -12,6 +12,9 @@ class RansomwareRecyclebin(Signature):
     categories = ["ransomware"]
     authors = ["Optiv"]
     minimum = "1.2"
+    ttps = ["T1485"]  # MITRE v6,7,8
+    mbcs = ["OB0008", "E1485"]
+    mbcs += ["OC0001", "C0047"]  # micro-behaviour
 
     def run(self):
         if self.check_delete_file(pattern="C:\\\\RECYCLER\\\\.*", regex=True):

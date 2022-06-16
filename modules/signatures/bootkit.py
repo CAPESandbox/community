@@ -12,15 +12,10 @@ class Bootkit(Signature):
     categories = ["rootkit"]
     authors = ["Optiv"]
     minimum = "1.2"
-    ttps = ["T1067"]
-
     evented = True
-
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.lastprocess = 0
-        self.handles = dict()
-        self.saw_stealth = False
+    ttps = ["T1067"]  # MITRE v6
+    ttps += ["T1542", "T1542.003"]  # MITRE v7,8
+    mbcs = ["OB0006", "F0013"]
 
     filter_apinames = set(
         [
@@ -34,6 +29,12 @@ class Bootkit(Signature):
             "NtDeviceIoControlFile",
         ]
     )
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.lastprocess = 0
+        self.handles = dict()
+        self.saw_stealth = False
 
     def on_call(self, call, process):
         if process is not self.lastprocess:
@@ -87,7 +88,10 @@ class DirectHDDAccess(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1014", "T1067"]
+    ttps = ["T1067"]  # MITRE v6
+    ttps += ["T1014"]  # MITRE v6,7,8
+    ttps += ["T1542", "T1542.003"]  # MITRE v7,8
+    mbcs = ["OB0006", "E1014", "F0013"]
 
     def run(self):
         ret = False
@@ -107,7 +111,10 @@ class AccessesPrimaryPartition(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1014", "T1067"]
+    ttps = ["T1067"]  # MITRE v6
+    ttps += ["T1014"]  # MITRE v6,7,8
+    ttps += ["T1542", "T1542.003"]  # MITRE v7,8
+    mbcs = ["OB0006", "E1014", "F0013"]
 
     def run(self):
         ret = False
@@ -127,7 +134,10 @@ class PhysicalDriveAccess(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1014", "T1067"]
+    ttps = ["T1067"]  # MITRE v6
+    ttps += ["T1014"]  # MITRE v6,7,8
+    ttps += ["T1542", "T1542.003"]  # MITRE v7,8
+    mbcs = ["OB0006", "E1014", "F0013"]
 
     def run(self):
         ret = False
@@ -147,15 +157,17 @@ class SuspiciousIoctlSCSIPassthough(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1067"]
+    ttps = ["T1067"]  # MITRE v6
+    ttps += ["T1542", "T1542.003"]  # MITRE v7,8
+    mbcs = ["0B0006", "F0013"]
     references = ["http://www.ioctls.net/"]
+
+    filter_apinames = set(["DeviceIoControl", "NtDeviceIoControlFile"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.pnames = []
         self.ret = False
-
-    filter_apinames = set(["DeviceIoControl", "NtDeviceIoControlFile"])
 
     def on_call(self, call, process):
         ioctl = self.get_argument(call, "IoControlCode")
@@ -185,11 +197,11 @@ class PotentialOverWriteMBR(Signature):
     evented = True
     ttps = ["T1067"]
 
+    filter_apinames = set(["NtWriteFile"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
-
-    filter_apinames = set(["NtWriteFile"])
 
     def on_call(self, call, process):
         if call["api"] == "NtWriteFile":

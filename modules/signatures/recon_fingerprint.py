@@ -24,7 +24,9 @@ class Fingerprint(Signature):
     categories = ["recon"]
     authors = ["nex", "Optiv"]
     minimum = "1.2"
-    ttps = ["T1082"]
+    ttps = ["T1012", "T1082"]  # MITRE v6,7,8
+    mbcs = ["OB0007", "E1082"]
+    mbcs += ["OC0008", "OC0036"]  # micro-behaviour
 
     def run(self):
         indicators = [

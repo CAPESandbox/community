@@ -25,7 +25,10 @@ class WMICreateProcess(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1047"]
+    ttps = ["T1047"]  # MITRE v6,7,8
+    mbcs = ["OC0003", "C0017", "C0017.002"]  # micro-behaviour
+
+    filter_apinames = set(["CreateProcessInternalW"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -33,8 +36,6 @@ class WMICreateProcess(Signature):
         self.whitelist = [
             "werfault.exe",
         ]
-
-    filter_apinames = set(["CreateProcessInternalW"])
 
     def on_call(self, call, process):
         pname = process["process_name"]
@@ -62,7 +63,11 @@ class WMIScriptProcess(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1047"]
+    ttps = ["T1064"]  # MITRE v6
+    ttps += ["T1047", "T1059"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1059"]
+
+    filter_apinames = set(["CreateProcessInternalW"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -77,8 +82,6 @@ class WMIScriptProcess(Signature):
             "vbscript",
             "wscript",
         ]
-
-    filter_apinames = set(["CreateProcessInternalW"])
 
     def on_call(self, call, process):
         pname = process["process_name"]
@@ -103,7 +106,7 @@ class ScrconsWMIScriptConsumer(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1047"]
+    ttps = ["T1047"]  # MITRE v6,7,8
 
     def run(self):
         ret = False

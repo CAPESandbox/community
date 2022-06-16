@@ -24,6 +24,9 @@ class AccessesMailslot(Signature):
     authors = ["bartblaze"]
     minimum = "1.2"
     evented = True
+    ttps = ["T1082"]  # MITRE v6,7,8
+    mbcs = ["OB0007", "E1082"]
+    mbcs += ["OC0008", "C0036", "C0036.003"]  # micro-behaviour
     references = ["https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/2cff75a9-5871-4493-a704-017b506f8df0"]
 
     def run(self):
@@ -48,6 +51,9 @@ class AccessesNetlogonRegkey(Signature):
     authors = ["bartblaze"]
     minimum = "1.2"
     evented = True
+    ttps = ["T1012", "T1082"]  # MITRE v6,7,8
+    mbcs = ["OB0007", "E1082"]
+    mbcs += ["OC0008", "C0036", "C0036.003"]  # micro-behaviour
     references = ["https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nrpc/ff8f970f-3e37-40f7-bd4b-af7336e4792f"]
 
     def run(self):

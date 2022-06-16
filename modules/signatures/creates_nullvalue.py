@@ -24,14 +24,18 @@ class CreatesNullValue(Signature):
     authors = ["Optiv"]
     minimum = "1.2"
     evented = True
-    ttps = ["T1054", "T1112", "F0006", "E1112"]
+    ttps = ["T1054"]  # MITRE v6
+    ttps += ["T1112"]  # MITRE v6,7,8
+    ttps += ["T1562", "T1562.006"]  # MITRE v7,8
+    mbcs = ["OB0006", "E1112", "F0006"]
+    mbcs += ["OC0008", "C0036"]  # micro-behaviour
+
+    filter_apinames = set(["NtSetValueKey", "NtCreateKey"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.saw_null = False
         self.regkeyvals = set()
-
-    filter_apinames = set(["NtSetValueKey", "NtCreateKey"])
 
     def on_call(self, call, process):
         if call["api"] == "NtCreateKey":

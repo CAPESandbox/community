@@ -25,12 +25,12 @@ class AntiSandboxSuspend(Signature):
     authors = ["Optiv"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1083", "T1057"]
+    ttps = ["T1057", "T1083", "T1106"]  # MITRE v6,7,8
+    ttps += ["U0101"]  # Unprotect
+    mbcs = ["OB0001", "B0003", "OB0006", "F0004"]
+    mbcs += ["OC0003"]  # micro-behaviour
 
     filter_apinames = set(["NtSuspendThread"])
-
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
 
     def on_call(self, call, process):
         alert = self.get_argument(call, "Alert")

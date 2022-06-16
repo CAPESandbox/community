@@ -25,7 +25,10 @@ class Unhook(Signature):
     authors = ["nex", "Optiv"]
     minimum = "1.2"
     evented = True
-    ttps = ["T1089"]
+    ttps = ["T1089"]  # MITRE v6
+    ttps += ["T1562", "T1562.001"]  # MITRE v 7,8
+    ttps += ["U1330"]  # Unprotect
+    mbcs = ["OB0001", "B0003", "OB0006", "F0004", "F0004.003"]
 
     filter_categories = set(["__notification__"])
 

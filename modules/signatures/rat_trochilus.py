@@ -25,6 +25,8 @@ class TrochilusRATAPIs(Signature):
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["B0022"]
 
     filter_apinames = set(["OutputDebugStringW", "CreateProcessInternalW", "RegSetValueExW"])
 

@@ -9,7 +9,9 @@ class RansomwareExtensions(Signature):
     categories = ["ransomware"]
     authors = ["Kevin Ross", "bartblaze"]
     minimum = "1.2"
-    ttps = ["T1486"]
+    ttps = ["T1486"]  # MITRE v6,7,8
+    mbcs = ["OB0008", "E1486"]
+    mbcs += ["OC0001", "C0015"]  # micro-behaviour
 
     def run(self):
         indicators = [

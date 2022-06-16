@@ -18,19 +18,20 @@ class sodinokibi(Signature):
     authors = ["@NaxoneZ"]
     minimum = "1.2"
     evented = True
-    ttps = ["T1486"]
+    ttps = ["T1486"]  # MITRE v6,7,8
+    mbcs = ["OB0008", "E1486"]
 
     # Sample List
     # Sodinokibi:
     # 1. 03eb9b0e4e842cbe3726872ed46e241f5b79e18a09e1655341a403ac3e5136a6 (variant1)
+
+    filter_apinames = set(["RegSetValueExW", "CreateProcessInternalW", "WinHttpOpen", "bind"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.badness_reg = 0
         self.badness_powershell = 0
         self.badness_url = 0
-
-    filter_apinames = set(["RegSetValueExW", "CreateProcessInternalW", "WinHttpOpen", "bind"])
 
     def on_call(self, call, process):
         if call["api"] == "RegSetValueExW":
@@ -45,11 +46,13 @@ class sodinokibi(Signature):
                 self.badness_powershell += 1
 
         if call["api"] == "WinHttpOpen":
+            self.mbcs += ["OC0006", "C0002"]  # micro-behaviour
             node = self.get_argument(call, "UserAgent")
             if "Mozilla/5.0 (Windows NT 5.1; rv:36.0) Gecko/20100101 Firefox/36.0" in node:
                 self.badness_url += 1
 
         if call["api"] == "bind":
+            self.mbcs += ["OC0006", "C0001"]  # micro-behaviour
             node = self.get_argument(call, "ip")
             if "0.0.0.0" in node:
                 self.badness_url += 1

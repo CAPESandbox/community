@@ -26,6 +26,8 @@ class DocScriptEXEDrop(Signature):
     ttps = ["T1059"]
     evented = True
 
+    filter_apinames = set(["NtWriteFile"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
@@ -44,8 +46,6 @@ class DocScriptEXEDrop(Signature):
             "wscript.exe",
             "powershell.exe",
         ]
-
-    filter_apinames = set(["NtWriteFile"])
 
     def on_call(self, call, process):
         pname = process["process_name"]

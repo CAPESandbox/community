@@ -23,9 +23,9 @@ class WebShellProcesses(Signature):
     categories = ["command", "evasion"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    ttps = ["T1505"]
-
     evented = True
+    ttps = ["T1505"]  # MITRE v6,7,8
+    ttps += ["T1505.003"]  # MITRE v7,8
 
     def run(self):
         utilities = [
@@ -56,7 +56,8 @@ class WebShellFiles(Signature):
     categories = ["webshell"]
     authors = ["bartblaze"]
     minimum = "0.5"
-    ttps = ["T1505"]
+    ttps = ["T1505"]  # MITRE v6,7,8
+    ttps += ["T1505.003"]  # MITRE v7,8
 
     def run(self):
         indicators = [".*\\\\inetpub\\\\wwwroot\\\\.*", ".*\\\\System32\\\\inetsrv\\\\.*"]
@@ -77,7 +78,8 @@ class OWAWebShellFiles(Signature):
     categories = ["webshell"]
     authors = ["bartblaze"]
     minimum = "0.5"
-    ttps = ["T1505"]
+    ttps = ["T1505"]  # MITRE v6,7,8
+    ttps += ["T1505.003"]  # MITRE v7,8
 
     def run(self):
         indicators = [

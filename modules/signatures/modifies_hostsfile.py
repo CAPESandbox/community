@@ -23,6 +23,8 @@ class Modifies_HostFile(Signature):
     categories = ["misc"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
+    mbcs = ["OB0006", "OB0012", "E1478"]
+    mbcs += ["OC0001", "C0052"]  # micro-behaviour
 
     def run(self):
         ret = False

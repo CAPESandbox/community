@@ -25,6 +25,7 @@ class Cridex(Signature):
     families = ["Cridex"]
     authors = ["Robby Zeitfuchs", "@robbyFux"]
     minimum = "0.5"
+    mbcs = ["OC0003", "C0042"]  # micro-behaviour
     references = [
         "http://stopmalvertising.com/rootkits/analysis-of-cridex.html",
         "http://sempersecurus.blogspot.de/2012/08/cridex-analysis-using-volatility.html",

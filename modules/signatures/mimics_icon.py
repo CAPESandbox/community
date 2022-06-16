@@ -12,6 +12,7 @@ class MimicsIcon(Signature):
     categories = ["stealth"]
     authors = ["Optiv"]
     minimum = "1.3"
+    ttps = ["T1036"]  # MITRE v6,7.8
 
     def run(self):
         # Alphanumerica hash list by category

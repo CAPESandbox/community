@@ -23,6 +23,11 @@ class NetworkDGA(Signature):
     categories = ["network"]
     authors = ["Optiv"]
     minimum = "1.3"
+    ttps = ["T1483"]  # MITRE v6
+    ttps += ["T1568", "T1568.002"]  # MITRE v7,8
+    ttps += ["U0906"]  # Unprotect
+    mbcs = ["B0031"]
+    mbcs += ["OC0006", "C0011"]  # micro-behaviour
 
     def run(self):
         resolv_success = 0

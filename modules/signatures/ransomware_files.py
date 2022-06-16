@@ -25,7 +25,9 @@ class RansomwareFiles(Signature):
     categories = ["ransomware"]
     authors = ["KillerInstinct", "bartblaze"]
     minimum = "1.2"
-    ttps = ["T1486", "E1486", "C0016.002"]
+    ttps = ["T1486"]  # MITRE v6,7,8
+    mbcs = ["OB0008", "E1486"]
+    mbcs += ["OC0001", "C0016", "C0016.002"]  # micro-behaviour
 
     def run(self):
         # List of tuples with a regex pattern for the file name and a list of

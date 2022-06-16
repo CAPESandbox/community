@@ -24,7 +24,9 @@ class DisablesBackups(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1490"]
+    ttps = ["T1112", "T1490"]  # MITRE v6,7,8
+    mbcs = ["OB0006", "E1112"]
+    mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
         indicators = [

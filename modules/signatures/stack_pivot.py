@@ -25,6 +25,21 @@ class StackPivot(Signature):
     authors = ["Optiv"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1203"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1203"]
+
+    filter_apinames = set(
+        [
+            "NtAllocateVirtualMemory",
+            "NtProtectVirtualMemory",
+            "VirtualProtectEx",
+            "NtWriteVirtualMemory",
+            "NtWow64WriteVirtualMemory64",
+            "WriteProcessMemory",
+            "NtMapViewOfSection",
+            "URLDownloadToFileW",
+        ]
+    )
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -43,19 +58,6 @@ class StackPivot(Signature):
             "powerpnt.exe",
             "winword.exe",
         ]
-
-    filter_apinames = set(
-        [
-            "NtAllocateVirtualMemory",
-            "NtProtectVirtualMemory",
-            "VirtualProtectEx",
-            "NtWriteVirtualMemory",
-            "NtWow64WriteVirtualMemory64",
-            "WriteProcessMemory",
-            "NtMapViewOfSection",
-            "URLDownloadToFileW",
-        ]
-    )
 
     def on_call(self, call, process):
         if process["process_name"].lower() in self.processes:
@@ -84,6 +86,11 @@ class StackPivotFileCreated(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1203"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1203"]
+    mbcs += ["OC0001", "C0016"]  # micro-behaviour
+
+    filter_apinames = set(["NtCreateFile"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -101,8 +108,6 @@ class StackPivotFileCreated(Signature):
             "powerpnt.exe",
             "winword.exe",
         ]
-
-    filter_apinames = set(["NtCreateFile"])
 
     def on_call(self, call, process):
         pname = process["process_name"]
@@ -128,6 +133,11 @@ class StackPivotProcessCreate(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1203"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1203"]
+    mbcs += ["OC0003", "C0017"]  # micro-behaviour
+
+    filter_apinames = set(["CreateProcessInternalW"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -145,8 +155,6 @@ class StackPivotProcessCreate(Signature):
             "powerpnt.exe",
             "winword.exe",
         ]
-
-    filter_apinames = set(["CreateProcessInternalW"])
 
     def on_call(self, call, process):
         pname = process["process_name"]

@@ -23,7 +23,10 @@ class BrowserSecurity(Signature):
     categories = ["browser", "clickfraud", "banker"]
     authors = ["Kevin Ross", "Optiv"]
     minimum = "1.2"
-    ttps = ["T1089"]
+    ttps = ["T1089", "T1112"]  # MITRE v6
+    ttps += ["T1562", "T1562.001"]  # MITRE v7,8
+    mbcs = ["OB0006", "E1112", "F0004"]
+    mbcs += ["OC0008", "C0036", "C0036.001"]  # micro-behaviour
 
     def run(self):
         if self.results["info"]["package"] in ["pdf"]:

@@ -24,6 +24,10 @@ class BrowserNeeded(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True
+    ttps = ["T1010"]  # MITRE v6,7,8
+    mbcs = ["OB0007", "E1010"]
+
+    filter_apinames = set(["FindWindowA", "FindWindowW", "FindWindowExA", "FindWindowExW"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -33,8 +37,6 @@ class BrowserNeeded(Signature):
             "Chrome_WidgetWin_1": 0,
             "MozillaWindowClass": 0,
         }
-
-    filter_apinames = set(["FindWindowA", "FindWindowW", "FindWindowExA", "FindWindowExW"])
 
     def on_call(self, call, process):
         class_name = self.get_argument(call, "ClassName")

@@ -29,8 +29,8 @@ class Accesses_RecycleBin(Signature):
     categories = ["evasion", "execution", "collection"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    ttps = ["T1074"]
     evented = True
+    ttps = ["T1074"]  # MITRE v6,7,8
 
     filter_apinames = set(["NtCreateFile", "NtOpenFile", "NtReadFile"])
 

@@ -24,8 +24,12 @@ class ClearsLogs(Signature):
     categories = ["stealth"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    ttps = ["T1070.001"]
     evented = True
+    ttps = ["T1485", "T1070"]  # MITRE v6,7,8
+    ttps += ["T1070.001"]  # MITRE v7,8
+    ttps += ["U0302"]  # Unprotect
+    mbcs = ["OB0008", "E1485"]
+    mbcs += ["OC0001", "C0047"]  # micro-behaviour
 
     def run(self):
         file_indicators = [

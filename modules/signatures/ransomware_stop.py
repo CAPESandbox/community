@@ -25,7 +25,8 @@ class StopRansomMutexes(Signature):
     authors = ["bartblaze"]
     minimum = "0.5"
     evented = True
-    ttps = ["T1486"]
+    ttps = ["T1486"]  # MITRE v6,7,8
+    mbcs = ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = [
@@ -73,11 +74,11 @@ class StopRansomwareRegistry(Signature):
     minimum = "1.3"
     evented = True
 
+    filter_apinames = set(["RegSetValueExW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.match = False
-
-    filter_apinames = set(["RegSetValueExW"])
 
     def on_call(self, call, process):
         valuename = self.get_argument(call, "ValueName")

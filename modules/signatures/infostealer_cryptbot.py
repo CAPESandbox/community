@@ -59,12 +59,12 @@ class CryptBotNetwork(Signature):
     minimum = "1.3"
     evented = True
 
+    filter_apinames = set(["HttpOpenRequestW", "HttpSendRequestW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.matchpath = False
         self.matchpost = False
-
-    filter_apinames = set(["HttpOpenRequestW", "HttpSendRequestW"])
 
     def on_call(self, call, process):
         if call["api"] == "HttpOpenRequestW":

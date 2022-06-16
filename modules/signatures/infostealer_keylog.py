@@ -12,7 +12,10 @@ class KeyLogger(Signature):
     authors = ["Optiv"]
     minimum = "1.2"
     evented = True
-    ttps = ["T1081", "T1003", "T1005", "F0002.001", "F0003.003"]
+    ttps = ["T1081"]  # MITRE v6
+    ttps += ["T1003", "T1005", "T1056"]  # MITRE v6,7,8
+    ttps += ["T1552", "T1552.001", "T1056.001"]  # MITRE v7,8
+    mbcs = ["OB0003", "F0002", "F0002.001", "F0003", "F0003.003"]
 
     filter_apinames = set(["SetWindowsHookExA", "SetWindowsHookExW", "GetAsyncKeyState"])
 

@@ -28,8 +28,10 @@ class UsesRemoteDesktopSession(Signature):
     categories = ["access"]
     authors = ["bartblaze"]
     minimum = "1.2"
-    ttps = ["T1021"]
     evented = True
+    ttps = ["T1021"]  # MITRE v6,7,8
+    ttps += ["T1021.001"]  # MITRE v7,8
+    mbcs = ["OB0012", "B0022", "E1203.m01"]
 
     def run(self):
         utilities = [
@@ -60,8 +62,10 @@ class UsesRDPClip(Signature):
     categories = ["access"]
     authors = ["bartblaze"]
     minimum = "1.2"
-    ttps = ["T1021"]
     evented = True
+    ttps = ["T1021"]  # MITRE v6,7,8
+    ttps += ["T1021.001"]  # MITRE v7,8
+    mbcs = ["B0022", "E1203.m01"]
 
     def run(self):
         utilities = ["rdpclip ", "rdpclip.exe"]
@@ -85,7 +89,9 @@ class RDPTCPKey(Signature):
     categories = ["persistence", "evasion", "execution"]
     authors = ["bartblaze"]
     minimum = "1.3"
-    ttps = ["T1137"]
+    ttps = ["T1112", "T1137"]  # MITRE v6,7,8
+    mbcs = ["E1112"]
+    mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
         indicators = [".*\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\Terminal Server\\\\WinStations\\\\RDP-Tcp"]

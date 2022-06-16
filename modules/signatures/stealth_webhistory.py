@@ -12,6 +12,7 @@ class StealthWebHistory(Signature):
     categories = ["stealth"]
     authors = ["Optiv"]
     minimum = "1.2"
+    ttps = ["T1070"]  # MITRE v6,7,8
 
     def run(self):
         file_indicators = [

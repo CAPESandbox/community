@@ -27,14 +27,14 @@ class Cerber_APIs(Signature):
     minimum = "1.2"
     evented = True
 
+    filter_apinames = set(["socket", "sendto"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.udpCount = dict()
         self.lastIp = str()
         self.lastData = str()
         self.skip = False
-
-    filter_apinames = set(["socket", "sendto"])
 
     def on_call(self, call, process):
         if self.skip:
@@ -84,6 +84,7 @@ class Cerber_APIs(Signature):
         for ioc in regiocs:
             if self.check_write_key(pattern=ioc, regex=True):
                 badness += 4
+                self.mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
         mutexiocs = [
             r"^shell\.\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\}$",
@@ -91,6 +92,7 @@ class Cerber_APIs(Signature):
         for ioc in mutexiocs:
             if self.check_mutex(pattern=ioc, regex=True):
                 badness += 2
+                self.mbcs += ["OC0003", "C0042"]  # micro-behaviour
 
         if badness >= 10:
             return True
