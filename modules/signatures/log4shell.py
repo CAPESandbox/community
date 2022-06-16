@@ -29,6 +29,7 @@ class Log4j(Signature):
     name = "log4shell"
     description = "Log4Shell"
     severity = 3
+    categories = ["malware"]
     authors = ["Busra Yenidogan"]
     minimum = "0.5"
     enabled = False

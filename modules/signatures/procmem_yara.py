@@ -20,6 +20,7 @@ class Procmem_Yara(Signature):
     name = "procmem_yara"
     description = "Yara rule detections observed from a process memory dump/dropped files/CAPE"
     severity = 1
+    categories = ["malware"]
     authors = ["KillerInstinct"]
     minimum = "0.5"
 
