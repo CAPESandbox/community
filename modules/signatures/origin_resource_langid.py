@@ -21,7 +21,7 @@ class ResourceLangID(Signature):
     description = "Unconventionial language used in binary resources"
     severity = 2
     authors = ["Optiv"]
-    categories = ["origin"]
+    categories = ["static"]
     minimum = "1.3"
 
     def run(self):

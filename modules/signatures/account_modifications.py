@@ -41,8 +41,8 @@ class AddsAdminUser(Signature):
 
 
 class OverwritesAdminPassword(Signature):
-    name = "overwites_admin_password"
-    description = "Overwites local Administrator password"
+    name = "overwrites_admin_password"
+    description = "Overwrites local Administrator password"
     severity = 3
     categories = ["account"]
     authors = ["ditekshen"]

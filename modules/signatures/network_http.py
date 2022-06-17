@@ -26,7 +26,7 @@ class NetworkHTTP(Signature):
     description = "Performs some HTTP requests"
     severity = 2
     confidence = 30
-    categories = ["http"]
+    categories = ["network"]
     authors = ["nex", "Optiv"]
     minimum = "0.5"
     ttps = ["T1071", "T1071.001"]  # MITRE v6,7,8

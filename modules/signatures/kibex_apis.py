@@ -20,7 +20,7 @@ class Kibex_APIs(Signature):
     name = "kibex_behavior"
     description = "Exhibits behavior characteristic of Kibex Spyware/KeyBase Keylogger"
     severity = 3
-    categories = ["spyware", "keylogger"]
+    categories = ["keylogger"]
     families = ["Kibex", "Keybase"]
     authors = ["KillerInstinct"]
     minimum = "1.3"

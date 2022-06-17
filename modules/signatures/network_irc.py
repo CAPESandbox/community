@@ -20,7 +20,7 @@ class NetworkIRC(Signature):
     name = "network_irc"
     description = "Connects to an IRC server, possibly part of a botnet"
     severity = 3
-    categories = ["irc"]
+    categories = ["network"]
     authors = ["nex"]
     minimum = "0.6"
 

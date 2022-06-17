@@ -20,7 +20,7 @@ class Flame(Signature):
     name = "targeted_flame"
     description = "Shows some indicators associated with the Flame malware"
     severity = 3
-    categories = ["targeted"]
+    categories = ["malware"]
     families = ["Flame", "Skywiper"]
     authors = ["nex"]
     minimum = "0.5"

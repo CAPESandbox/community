@@ -21,7 +21,7 @@ class Recon_Beacon(Signature):
     description = "A process sent information about the computer to a remote location."
     weight = 2
     severity = 3
-    categories = ["network", "recon"]
+    categories = ["network", "discovery"]
     authors = ["KillerInstinct"]
     minimum = "1.3"
     evented = True

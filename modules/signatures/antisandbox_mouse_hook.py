@@ -20,7 +20,7 @@ class HookMouse(Signature):
     name = "antisandbox_mouse_hook"
     description = "Installs an hook procedure to monitor for mouse events"
     severity = 3
-    categories = ["hooking", "anti-sandbox"]
+    categories = ["anti-sandbox", "generic"]
     authors = ["nex"]
     minimum = "1.0"
     evented = True

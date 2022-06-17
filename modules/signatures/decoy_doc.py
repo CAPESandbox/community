@@ -21,7 +21,7 @@ class DecoyDocument(Signature):
     description = "A potential decoy document was displayed to the user"
     severity = 3
     confidence = 10
-    categories = ["exploit", "stealth", "decoy"]
+    categories = ["exploit", "stealth"]
     authors = ["Kevin Ross"]
     minimum = "1.2"
     evented = True

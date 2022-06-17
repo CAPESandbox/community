@@ -102,7 +102,7 @@ class ScrconsWMIScriptConsumer(Signature):
     description = "Windows Management Instrumentation (WMI) script consumer process was launched indicating script execution or using an event consumer for persistence"
     severity = 3
     confidence = 50
-    categories = ["wmi"]
+    categories = ["command"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True

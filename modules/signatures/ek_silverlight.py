@@ -26,7 +26,7 @@ class Silverlight_JS(Signature):
     description = "Executes obfuscated JavaScript containing a Silverlight object indicative of an exploit attempt"
     weight = 3
     severity = 3
-    categories = ["exploit_kit", "silverlight"]
+    categories = ["exploit_kit"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True

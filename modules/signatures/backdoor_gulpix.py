@@ -18,9 +18,9 @@ from lib.cuckoo.common.abstracts import Signature
 
 class GulpixBehavior(Signature):
     name = "gulpix_behavior"
-    description = "Gulpix backdoor artificats detected"
+    description = "Gulpix backdoor artifacts detected"
     severity = 3
-    categories = ["backdoor"]
+    categories = ["malware"]
     families = ["Gulpix"]
     authors = ["ditekshen"]
     minimum = "1.3"

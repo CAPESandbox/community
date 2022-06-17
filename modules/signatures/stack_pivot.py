@@ -82,7 +82,7 @@ class StackPivotFileCreated(Signature):
     description = "A file was created using stack pivoting"
     severity = 3
     confidence = 100
-    categories = ["exploit", "shellcode"]
+    categories = ["exploit"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -129,7 +129,7 @@ class StackPivotProcessCreate(Signature):
     description = "A process was created using stack pivoting"
     severity = 3
     confidence = 100
-    categories = ["exploit", "shellcode"]
+    categories = ["exploit"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True

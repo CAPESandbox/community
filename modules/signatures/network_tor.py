@@ -20,7 +20,7 @@ class Tor(Signature):
     name = "network_tor"
     description = "Installs Tor on the infected machine"
     severity = 3
-    categories = ["network", "anonimity", "tor"]
+    categories = ["network", "stealth"]
     authors = ["nex"]
     minimum = "1.3"
     evented = True

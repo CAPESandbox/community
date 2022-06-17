@@ -53,7 +53,7 @@ class WebShellFiles(Signature):
     name = "web_shell_files"
     description = "Writes to the inetpub or inetsrv default path, typically seen in web shells"
     severity = 2
-    categories = ["webshell"]
+    categories = ["command", "evasion"]
     authors = ["bartblaze"]
     minimum = "0.5"
     ttps = ["T1505"]  # MITRE v6,7,8
@@ -75,7 +75,7 @@ class OWAWebShellFiles(Signature):
     name = "owa_web_shell_files"
     description = "Writes to the Exchange OWA folder, typically seen in Outlook Web Access web shells"
     severity = 2
-    categories = ["webshell"]
+    categories = ["command", "evasion"]
     authors = ["bartblaze"]
     minimum = "0.5"
     ttps = ["T1505"]  # MITRE v6,7,8

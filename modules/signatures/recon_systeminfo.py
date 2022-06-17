@@ -20,7 +20,7 @@ class SystemInfo(Signature):
     name = "recon_systeminfo"
     description = "Collects information on the system (ipconfig, netstat, systeminfo)"
     severity = 3
-    categories = ["recon"]
+    categories = ["discovery"]
     authors = ["nex"]
     minimum = "1.0"
     evented = True

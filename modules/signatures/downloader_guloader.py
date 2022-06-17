@@ -25,7 +25,7 @@ class GuLoaderAPIs(Signature):
     name = "guloader_apis"
     description = "Exhibits behavior characteristics of GuLoader"
     severity = 3
-    categories = ["downloader", "injection", "shellcode"]
+    categories = ["downloader", "injection"]
     families = ["GuLoader", "CloudEye"]
     authors = ["ditekshen"]
     minimum = "1.3"

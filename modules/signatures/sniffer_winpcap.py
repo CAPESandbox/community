@@ -20,7 +20,7 @@ class InstallsWinpcap(Signature):
     name = "sniffer_winpcap"
     description = "Installs WinPCAP"
     severity = 3
-    categories = ["sniffer"]
+    categories = ["network"]
     authors = ["Thomas Birn", "nex"]
     minimum = "0.5"
     ttps = ["T1040"]  # MITRE v6,7,8

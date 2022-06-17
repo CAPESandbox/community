@@ -20,7 +20,7 @@ class OfficeSuspiciousProcesses(Signature):
     name = "office_suspicious_processes"
     description = "Office document spawned a series of suspicious child processes"
     severity = 3
-    categories = ["evasion", "execution", "dropper", "office", "lolbin"]
+    categories = ["evasion", "execution", "dropper", "office"]
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True

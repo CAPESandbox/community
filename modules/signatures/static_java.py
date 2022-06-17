@@ -20,7 +20,7 @@ class Static_Java(Signature):
     description = "JAR file contains suspicious characteristics"
     severity = 2
     weight = 0
-    categories = ["java", "static", "exploit"]
+    categories = ["static", "exploit"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     references = [

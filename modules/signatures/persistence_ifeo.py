@@ -20,7 +20,7 @@ class PersistenceIFEO(Signature):
     name = "persistence_ifeo"
     description = "Modifies Image File Execution Options, indicative of process injection or persistence"
     severity = 3
-    categories = ["persistence", "injection", "evasion", "escalation"]
+    categories = ["persistence", "injection", "evasion"]
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True
@@ -49,7 +49,7 @@ class PersistenceSilentProcessExit(Signature):
     name = "persistence_slient_process_exit"
     description = "Modifies Slient Process Exit Options, indicative of process injection or persistence"
     severity = 3
-    categories = ["persistence", "injection", "evasion", "escalation"]
+    categories = ["persistence", "injection", "evasion"]
     authors = ["ditekshen"]
     minimum = "1.3"
     evented = True

@@ -20,7 +20,7 @@ class TorHiddenService(Signature):
     name = "network_tor_service"
     description = "Creates a Tor Hidden Service on the machine"
     severity = 3
-    categories = ["network", "anonimity", "tor"]
+    categories = ["network", "stealth"]
     authors = ["nex"]
     minimum = "0.5"
     ttps = ["T1188"]  # MITRE v6

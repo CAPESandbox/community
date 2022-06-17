@@ -20,7 +20,7 @@ class UserEnum(Signature):
     name = "user_enum"
     description = "Enumerates user accounts on the system"
     weight = 2
-    categories = ["recon"]
+    categories = ["discovery"]
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True

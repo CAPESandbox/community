@@ -20,7 +20,7 @@ class CreatesAutorunInf(Signature):
     name = "spreading_autoruninf"
     description = "Creates an autorun.inf file"
     severity = 2
-    categories = ["spreading"]
+    categories = ["persistence"]
     authors = ["Thomas Birn", "nex"]
     minimum = "0.5"
     ttps = ["T1091"]  # MITRE v6,7,8

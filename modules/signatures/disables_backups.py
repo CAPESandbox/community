@@ -20,7 +20,7 @@ class DisablesBackups(Signature):
     name = "disables_backups"
     description = "Disables backups, often seen in ransomware"
     severity = 3
-    categories = ["impact"]
+    categories = ["ransomware"]
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True

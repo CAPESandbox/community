@@ -20,7 +20,7 @@ class OkrumMutexes(Signature):
     name = "okrum_mutexes"
     description = "Creates known Ke3chang Okrum mutexes"
     severity = 3
-    categories = ["backdoor"]
+    categories = ["malware"]
     families = ["Okrum"]
     authors = ["ditekshen"]
     minimum = "0.5"

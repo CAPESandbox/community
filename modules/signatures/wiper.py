@@ -25,7 +25,7 @@ class WiperZeroedBytes(Signature):
     name = "wiper_zeroedbytes"
     description = "Overwrites multiple files with zero bytes (hex 00) indicative of a wiper"
     severity = 3
-    categories = ["wiper"]
+    categories = ["malware", "ransomware"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True

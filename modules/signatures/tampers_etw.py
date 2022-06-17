@@ -20,7 +20,7 @@ class TampersETW(Signature):
     name = "tampers_etw"
     description = "Tampers with ETW"
     severity = 3
-    categories = ["evasion", "tampering"]
+    categories = ["evasion"]
     authors = ["ditekshen"]
     minimum = "1.3"
     ttps = ["T1054"]  # MITRE v6
