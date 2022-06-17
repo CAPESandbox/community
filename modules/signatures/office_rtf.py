@@ -21,7 +21,7 @@ class RTFEmbeddedContent(Signature):
     description = "The RTF file contains embedded content"
     severity = 1
     confidence = 100
-    categories = ["rtf", "static"]
+    categories = ["office", "static"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -52,7 +52,7 @@ class RTFExploitStatic(Signature):
     description = "The RTF file contains an object with potential exploit code"
     severity = 3
     confidence = 100
-    categories = ["exploit", "office", "rtf", "static"]
+    categories = ["exploit", "office", "static"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -81,7 +81,7 @@ class RTFEmbeddedOfficeFile(Signature):
     )
     severity = 2
     confidence = 100
-    categories = ["rtf", "static"]
+    categories = ["office", "static"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -109,7 +109,7 @@ class RTFASLRBypass(Signature):
     description = "The RTF file contains a potential ASLR bypass"
     severity = 3
     confidence = 50
-    categories = ["rtf", "static", "exploit"]
+    categories = ["office", "static", "exploit"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -144,7 +144,7 @@ class RTFAnomalyCharacterSet(Signature):
     description = "The RTF file has an unknown character set"
     severity = 2
     confidence = 100
-    categories = ["office", "rtf", "static"]
+    categories = ["office", "static"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -165,7 +165,7 @@ class RTFAnomalyVersion(Signature):
     description = "The RTF file has an unknown version"
     severity = 2
     confidence = 100
-    categories = ["office", "rtf", "static"]
+    categories = ["office", "static"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
