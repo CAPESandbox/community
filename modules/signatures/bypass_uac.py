@@ -21,7 +21,7 @@ class UACBypassEventvwr(Signature):
     description = "Uses eventvwr technique to bypass User Access Control (UAC)"
     severity = 3
     confidence = 100
-    categories = ["uac_bypass"]
+    categories = ["bypass"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -65,7 +65,7 @@ class UACBypassDelegateExecuteSdclt(Signature):
     description = "Uses delegate execute sdclt technique to bypass User Access Control (UAC)"
     severity = 3
     confidence = 100
-    categories = ["uac_bypass"]
+    categories = ["bypass"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -103,7 +103,7 @@ class UACBypassCMSTP(Signature):
     description = "Uses cmstp.exe sendkeys technique to bypass User Access Control (UAC)"
     severity = 3
     confidence = 100
-    categories = ["uac_bypass"]
+    categories = ["bypass"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -112,7 +112,9 @@ class UACBypassCMSTP(Signature):
     mbcs = ["OB0006"]
     references = ["https://oddvar.moe/2017/08/15/research-on-cmstp-exe/"]
 
-    filter_apinames = set(["CopyFileExA", "CopyFileExW", "MoveFileWithProgressW", "MoveFileWithProgressTransactedW", "NtWriteFile"])
+    filter_apinames = set(
+        ["CopyFileExA", "CopyFileExW", "MoveFileWithProgressW", "MoveFileWithProgressTransactedW", "NtWriteFile"]
+    )
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -181,7 +183,7 @@ class UACBypassCMSTPCOM(Signature):
     name = "uac_bypass_cmstpcom"
     description = "UAC bypass via CMSTP COM interface detected"
     severity = 3
-    categories = ["uac_bypass"]
+    categories = ["bypass"]
     authors = ["ditekshen"]
     minimum = "2.0"
     ttps = ["T1218"]  # MITRE v6,7,8
