@@ -112,9 +112,7 @@ class UACBypassCMSTP(Signature):
     mbcs = ["OB0006"]
     references = ["https://oddvar.moe/2017/08/15/research-on-cmstp-exe/"]
 
-    filter_apinames = set(
-        ["CopyFileExA", "CopyFileExW", "MoveFileWithProgressW", "MoveFileWithProgressTransactedW", "NtWriteFile"]
-    )
+    filter_apinames = set(["CopyFileExA", "CopyFileExW", "MoveFileWithProgressW", "MoveFileWithProgressTransactedW", "NtWriteFile"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
