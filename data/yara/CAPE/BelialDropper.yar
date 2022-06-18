@@ -1,9 +1,9 @@
-rule Matanbuchus
+rule BelialDropper
 {
     meta:
-        description = "Detects Matanbuchus loader"
+        description = "Detects BelialDropper used to download Matanbuchus loader"
         author = "Rony (@r0ny_123)"
-        cape_type = "Matanbuchus loader"
+        cape_type = "Matanbuchus Dropper"
         cretaion_date = "2021-12-09"
         revision = "0"
         reference = "https://www.capesandbox.com/analysis/212747"
