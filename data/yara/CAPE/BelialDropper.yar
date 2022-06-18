@@ -3,7 +3,7 @@ rule BelialDropper
     meta:
         description = "Detects BelialDropper used to download Matanbuchus loader"
         author = "Rony (@r0ny_123)"
-        cape_type = "Matanbuchus Dropper"
+        cape_type = "BelialDropper"
         cretaion_date = "2021-12-09"
         revision = "0"
         reference = "https://www.capesandbox.com/analysis/212747"
