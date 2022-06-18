@@ -1,7 +1,7 @@
 rule MatanbuchusLoader
 {
     meta:
-        description = "Detects MatanBuchus loader (BelialDropper) used to download Matanbuchus payload"
+        description = "Detects Matanbuchus loader (BelialDropper) used to download Matanbuchus payload"
         author = "Rony (@r0ny_123)"
         cape_type = "Matanbuchus loader"
         cretaion_date = "2021-12-09"
