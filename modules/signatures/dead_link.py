@@ -46,7 +46,7 @@ class DeadLink(Signature):
                         break
             if deadnames:
                 for deadname in deadnames:
-                    self.data.append({"dead_binary": deadname})
+                    self.data.append({"binary": deadname})
                 return True
 
         return False

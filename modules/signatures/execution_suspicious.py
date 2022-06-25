@@ -45,8 +45,8 @@ class ProcessCreationSuspiciousLocation(Signature):
             for suspiciouspath in self.suspicious_paths:
                 if suspiciouspath in appname:
                     self.ret = True
-                    self.data.append({"File executed": appname})
-                    self.data.append({"Commandline executed": cmdline})
+                    self.data.append({"file": appname})
+                    self.data.append({"command": cmdline})
 
     def on_complete(self):
         return self.ret
