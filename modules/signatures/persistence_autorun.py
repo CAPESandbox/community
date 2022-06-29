@@ -50,8 +50,8 @@ class Autorun_scheduler(Signature):
             servicename = self.get_argument(call, "ServiceName")
             binpath = self.get_argument(call, "BinaryPathName")
             if starttype < 3:
-                self.data.append({"service name": servicename})
-                self.data.append({"service path": binpath})
+                self.data.append({"service": servicename})
+                self.data.append({"service_path": binpath})
                 self.found_autorun = True
         elif call["status"]:
             fullname = self.get_argument(call, "FullName")
@@ -133,8 +133,8 @@ class Autorun(Signature):
             servicename = self.get_argument(call, "ServiceName")
             binpath = self.get_argument(call, "BinaryPathName")
             if starttype < 3:
-                self.data.append({"service name": servicename})
-                self.data.append({"service path": binpath})
+                self.data.append({"service": servicename})
+                self.data.append({"service_path": binpath})
                 self.found_autorun = True
         elif call["status"]:
             fullname = self.get_argument(call, "FullName")
