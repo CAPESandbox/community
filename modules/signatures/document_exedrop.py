@@ -56,7 +56,7 @@ class DocScriptEXEDrop(Signature):
                 self.ret = True
                 if handle not in self.dropped:
                     self.dropped.append(handle)
-                    self.data.append({"dropped_executable": "%s dropped file %s" % (pname, handle)})
+                    self.data.append({"file": "%s dropped file %s" % (pname, handle)})
 
     def on_complete(self):
         return self.ret

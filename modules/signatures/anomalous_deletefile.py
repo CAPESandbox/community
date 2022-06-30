@@ -39,7 +39,7 @@ class anomalous_deletefile(Signature):
     def on_call(self, call, process):
         if call["api"] == "NtDeleteFile" or call["api"] == "DeleteFileA" or call["api"] == "DeleteFileW":
             self.loadctr += 1
-            self.data.append({"DeletedFile": "%s" % (self.get_argument(call, "FileName"))})
+            self.data.append({"file": "%s" % (self.get_argument(call, "FileName"))})
 
     def on_complete(self):
         if self.loadctr > 10:
