@@ -86,7 +86,7 @@ class NetworkDynDNS(Signature):
             ".*\\.tcp4\\.me",
             ".*\\.x443\\.pw",
         ]
- 
+
         found_matches = False
         for indicator in domains_re:
             matches = self.check_domain(pattern=indicator, regex=True, all=True)
