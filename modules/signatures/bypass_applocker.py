@@ -99,7 +99,7 @@ class OdbcconfBypass(Signature):
     severity = 3
     confidence = 70
     categories = ["bypass", "command"]
-    authors = ["Kevin Ross"]
+    authors = ["Kevin Ross", "@CybercentreCanada"]
     minimum = "1.3"
     evented = True
     ttps = ["T1086", "T1117"]  # MITRE v6
@@ -114,5 +114,10 @@ class OdbcconfBypass(Signature):
             if "odbcconf" in lower and "regsvr" in lower:
                 ret = True
                 self.data.append({"command": cmdline})
+            else:
+                match = self.check_executed_command(pattern=".*odbcconf(\.exe)?.*-f.+\.rsp", regex=True)
+                if match:
+                    self.data.append({"command": match})
+                    return True
 
         return ret
