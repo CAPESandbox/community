@@ -1,8 +1,8 @@
 import logging
 import os
 import re
-import xmltodict
 
+import xmltodict
 from lib.cuckoo.common.abstracts import Processing
 from lib.cuckoo.common.exceptions import CuckooProcessingError
 

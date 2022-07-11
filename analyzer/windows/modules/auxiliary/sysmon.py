@@ -70,7 +70,7 @@ class Sysmon(threading.Thread, Auxiliary):
                 sysmon = os.path.join(bin_path, "SMaster64.exe")
             else:
                 sysmon = os.path.join(bin_path, "SMaster32.exe")
-        #TODO: Platform is Linux, add support for https://github.com/Sysinternals/SysmonForLinux
+        # TODO: Platform is Linux, add support for https://github.com/Sysinternals/SysmonForLinux
         else:
             self.enabled = False
             return False
