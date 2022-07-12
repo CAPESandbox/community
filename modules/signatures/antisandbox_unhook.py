@@ -37,7 +37,7 @@ class Unhook(Signature):
         self.saw_unhook = False
         self.unhook_info = set()
         self.is_url_analysis = False
-        if self.results["target"]["category"] != "file":
+        if self.results.get("target", {}).get("category", "") == "url":
             self.is_url_analysis = True
 
     def on_call(self, call, process):
