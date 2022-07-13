@@ -21,7 +21,7 @@ class LokibotMutexes(Signature):
     description = "Creates Lokibot mutexes"
     severity = 3
     categories = ["trojan"]
-    families = ["Lokibot"]
+    families = ["LokiBot"]
     authors = ["ditekshen"]
     minimum = "1.3"
     mbcs = ["OC0003", "C0042"]  # micro-behaviour
