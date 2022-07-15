@@ -25,7 +25,7 @@ class ZoneID(Signature):
     # Migrated by @CybercentreCanada
     authors = ["nex", "@CybercentreCanada"]
     minimum = "2.0"
-    ttp = ["T1070", "T1096"]
+    ttps = ["T1070", "T1096"]
     evented = True
 
     filter_apinames = "NtCreateFile", "NtWriteFile"
