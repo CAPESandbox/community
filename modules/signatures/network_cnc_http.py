@@ -38,7 +38,7 @@ class NetworkHTTPPOST(Signature):
             "microsoft.com",
             "windowsupdate\.com",
             "adobe.com",
-            ]
+        ]
 
         if "network" in self.results and "http" in self.results["network"]:
             for http in self.results["network"]["http"]:
@@ -53,6 +53,7 @@ class NetworkHTTPPOST(Signature):
             return True
         else:
             return False
+
 
 class NetworkCnCHTTP(Signature):
     name = "network_cnc_http"

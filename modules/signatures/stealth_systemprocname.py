@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class StealthSystemProcName(Signature):
     name = "stealth_system_procname"
     description = "Created a process named as a common system process"
@@ -52,4 +53,3 @@ class StealthSystemProcName(Signature):
                 if not filepath.endswith("svchost.exe"):
                     self.severity = 3
                 return True
-

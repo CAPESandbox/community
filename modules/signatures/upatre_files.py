@@ -27,7 +27,7 @@ class UpatreFiles(Signature):
             ".*Temp.*seefile.*exe",
             ".*Temp.*sinstall.*exe",
             ".*Temp.*Umlineded.*exe",
-            ".*Temp.*planeris.*exe"
+            ".*Temp.*planeris.*exe",
         ]
 
     def on_complete(self):

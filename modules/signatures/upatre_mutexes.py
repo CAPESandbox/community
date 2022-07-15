@@ -16,7 +16,6 @@ class UpatreMutexes(Signature):
     authors = ["RedSocks", "@CybercentreCanada"]
     minimum = "2.0"
 
-    
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.mutexes_re = [

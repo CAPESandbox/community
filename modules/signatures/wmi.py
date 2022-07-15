@@ -131,12 +131,13 @@ class Win32ProcessCreate(Signature):
     ttps = ["T1047"]
     evented = True
 
-    filter_apinames =set([
-        "IWbemServices_ExecMethod",
-        "IWbemServices_ExecMethodAsync",
-    ])
+    filter_apinames = set(
+        [
+            "IWbemServices_ExecMethod",
+            "IWbemServices_ExecMethodAsync",
+        ]
+    )
 
     def on_call(self, call, _):
-        if self.get_argument(call, "class") == "Win32_Process" and \
-                self.get_argument(call, "method") == "Create":
+        if self.get_argument(call, "class") == "Win32_Process" and self.get_argument(call, "method") == "Create":
             return True

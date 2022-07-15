@@ -27,25 +27,39 @@ class NetworkDocumentFile(Signature):
     ttps = ["T1071"]
     evented = True
 
-    filter_apinames = set([
-        "InternetCrackUrlW", "InternetCrackUrlA", "URLDownloadToFileW",
-        "URLDownloadToCacheFileW", "HttpOpenRequestW", "WSASend", "send"
-    ])
+    filter_apinames = set(
+        [
+            "InternetCrackUrlW",
+            "InternetCrackUrlA",
+            "URLDownloadToFileW",
+            "URLDownloadToCacheFileW",
+            "HttpOpenRequestW",
+            "WSASend",
+            "send",
+        ]
+    )
     filter_analysistypes = set(["file"])
-
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.proc_list = [
-            "wordview.exe", "winword.exe", "excel.exe", "powerpnt.exe",
-            "outlook.exe", "acrord32.exe", "acrord64.exe", "wscript.exe",
-            "mspub.exe", "powershell.exe",
+            "wordview.exe",
+            "winword.exe",
+            "excel.exe",
+            "powerpnt.exe",
+            "outlook.exe",
+            "acrord32.exe",
+            "acrord64.exe",
+            "wscript.exe",
+            "mspub.exe",
+            "powershell.exe",
         ]
 
     def on_call(self, _, process):
         pname = process["process_name"].lower()
         if pname in self.proc_list:
             return True
+
 
 class NetworkEXE(Signature):
     name = "network_downloader_exe"
@@ -63,9 +77,17 @@ class NetworkEXE(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.high_risk_proc = [
-            "wordview.exe", "winword.exe", "excel.exe", "powerpnt.exe",
-            "outlook.exe", "acrord32.exe", "acrord64.exe", "wscript.exe",
-            "java.exe", "javaw.exe", "powershell.exe",
+            "wordview.exe",
+            "winword.exe",
+            "excel.exe",
+            "powerpnt.exe",
+            "outlook.exe",
+            "acrord32.exe",
+            "acrord64.exe",
+            "wscript.exe",
+            "java.exe",
+            "javaw.exe",
+            "powershell.exe",
         ]
 
     def on_call(self, call, process):

@@ -21,7 +21,7 @@ class AntiAVWhitespace(Signature):
         if matches:
             for match in matches:
                 self.data.append({"command": match})
-        
+
         if len(self.data) > 0:
             return True
         else:
