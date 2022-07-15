@@ -536,3 +536,38 @@ class NetworkDNSTempURLDNS(Signature):
                 return True
 
         return False
+
+
+class Suspicious_TLD(Signature):
+    name = "suspicious_tld"
+    description = "Resolves a suspicious Top Level Domain (TLD)"
+    severity = 2
+    categories = ["network"]
+    # Migrated by @CybercentreCanada
+    authors = ["RedSocks", "Kevin Ross", "@CybercentreCanada"]
+    minimum = "1.2"
+
+    def run(self):
+        domains_re = [
+            (".*\\.by$", "Belarus domain TLD"),
+            (".*\\.cc$", "Cocos Islands domain TLD"),
+            (".*\\.onion$", "TOR hidden services domain TLD"),
+            (".*\\.pw$", "Palau domain TLD"),
+            (".*\\.ru$", "Russian Federation domain TLD"),
+            (".*\\.su$", "Soviet Union domain TLD"),
+            (".*\\.top$", "Generic top level domain TLD"),
+        ]
+        queried_domains = []
+
+        for indicator in domains_re:
+            matches = self.check_domain(pattern=indicator[0], regex=True, all=True)
+            if matches:
+                for tld in matches:
+                    if tld not in queried_domains:
+                        queried_domains.append(tld)
+                        self.data.append({"domain": tld})
+
+        if len(self.data) > 0:
+            return True
+        else:
+            return False

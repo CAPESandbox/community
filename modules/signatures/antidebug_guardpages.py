@@ -38,17 +38,21 @@ class antidebug_guardpages(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.found = False
 
-    def on_call(self, call, process):
-        if call["api"] == "NtAllocateVirtualMemory":
-            protection = int(self.get_raw_argument(call, "Protection"), 0)
-            if protection & PAGE_GUARD:
-                self.found = True
-        if call["api"] == "VirtualProtectEx":
-            protection = int(self.get_raw_argument(call, "Protection"), 0)
+    def on_call(self, call, _):
+        if call["api"] in ["NtAllocateVirtualMemory", "VirtualProtectEx"]:
+            protection = self.get_raw_argument(call, "Protection")
+            if not protection:
+                return False
+            else:
+                protection = int(protection, 0)
             if protection & PAGE_GUARD:
                 self.found = True
         elif call["api"] == "NtProtectVirtualMemory":
-            protection = int(self.get_raw_argument(call, "NewAccessProtection"), 0)
+            protection = self.get_raw_argument(call, "NewAccessProtection")
+            if not protection:
+                return False
+            else:
+                protection = int(protection, 0)
             if protection & PAGE_GUARD:
                 self.found = True
 
