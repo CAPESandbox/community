@@ -393,3 +393,53 @@ class PowerShellScriptBlockLogging(Signature):
                     self.data.append({pid: joined})
 
         return ret
+
+
+class PowershellDownload(Signature):
+    name = "powershell_download"
+    description = "Data downloaded by powershell script"
+    severity = 2
+    categories = ["downloader"]
+    # Migrated by @CybercentreCanada
+    authors = ["FDD", "Cuckoo Technologies", "@CybercentreCanada"]
+    minimum = "1.2"
+    ttps = ["T1112", "T1086"]
+    evented = True
+
+    filter_apinames = set(["recv"])
+    filter_processnames = set(["powershell.exe"])
+
+    def on_call(self, call, _):
+        if self.get_argument(call, "buffer"):
+            self.data.append({"data": self.get_argument(call, "buffer")})
+
+    def on_complete(self):
+        if len(self.data) > 0:
+            return True
+        else:
+            return False
+
+
+class PowershellRequest(Signature):
+    name = "powershell_request"
+    description = "Poweshell is sending data to a remote host"
+    severity = 2
+    categories = ["downloader"]
+    # Migrated by @CybercentreCanada
+    authors = ["FDD", "Cuckoo Technologies", "@CybercentreCanada"]
+    minimum = "1.2"
+    ttps = ["T1086", "T1071"]
+    evented = True
+
+    filter_apinames = set(["send"])
+    filter_processnames = set(["powershell.exe"])
+
+    def on_call(self, call, _):
+        if self.get_argument(call, "buffer"):
+            self.data.append({"data": self.get_argument(call, "buffer")})
+
+    def on_complete(self):
+        if len(self.data) > 0:
+            return True
+        else:
+            return False

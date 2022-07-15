@@ -1,4 +1,4 @@
-# Copyright (C) 2015 Optiv, Inc. (brad.spengler@optiv.com)
+# Copyright (C) 2017 Kevin Ross
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,23 +16,18 @@
 from lib.cuckoo.common.abstracts import Signature
 
 
-class WineDetectFunc(Signature):
-    name = "antiemu_wine_func"
-    description = "Detects the presence of Wine emulator via function name"
-    severity = 3
-    categories = ["anti-emulation"]
-    authors = ["Optiv"]
-    minimum = "1.0"
+class TerminatesRemoteProcess(Signature):
+    name = "terminates_remote_process"
+    description = "Terminates another process"
+    severity = 2
+    categories = ["persistence", "stealth"]
+    # Migrated by @CybercentreCanada
+    authors = ["Kevin Ross", "@CybercentreCanada"]
+    minimum = "1.2"
     evented = True
-    ttps = ["T1063"]  # MITRE v6
-    ttps += ["T1083", "T1518"]  # MITRE v6,7,8
-    ttps += ["T1518.001"]  # MITRE v7,8
-    ttps += ["U1314"]  # Unprotect
-    mbcs = ["OB0001", "B0004", "OB0007"]
 
-    filter_apinames = set(["LdrGetProcedureAddress"])
+    filter_apinames = set(["NtTerminateProcess"])
 
     def on_call(self, call, _):
-        funcname = self.get_argument(call, "FunctionName")
-        if not call["status"] and funcname in ["wine_get_unix_file_name", "wine_get_version", "wine_nt_to_unix_file_name", "wine_server_call"]:
+        if self.get_argument(call, "ProcessHandle") not in ["0xffffffff", "0xffffffffffffffff", "0x00000000", "0x0000000000000000"]:
             return True

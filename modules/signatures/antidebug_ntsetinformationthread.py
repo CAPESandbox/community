@@ -34,8 +34,11 @@ class antidebug_ntsetinformationthread(Signature):
 
     filter_apinames = set(["NtSetInformationThread"])
 
-    def on_call(self, call, process):
-        if call["api"] == "NtSetInformationThread":
-            ThreadInformationClass = int(self.get_raw_argument(call, "ThreadInformationClass"))
-            if ThreadInformationClass == THREAD_HIDE_FROM_DEBUGGER:
-                return True
+    def on_call(self, call, _):
+        ThreadInformationClass = self.get_raw_argument(call, "ThreadInformationClass")
+        if not ThreadInformationClass:
+            return False
+        else:
+            ThreadInformationClass = int(ThreadInformationClass)
+        if ThreadInformationClass == THREAD_HIDE_FROM_DEBUGGER:
+            return True

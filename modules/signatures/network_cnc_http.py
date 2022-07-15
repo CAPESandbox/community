@@ -21,6 +21,39 @@ except ImportError:
 from lib.cuckoo.common.abstracts import Signature
 
 
+class NetworkHTTPPOST(Signature):
+    name = "network_http_post"
+    description = "Sends data using the HTTP POST Method"
+    severity = 2
+    # Migrated by @CybercentreCanada
+    categories = ["network", "c2"]
+    authors = ["Kevin Ross", "@CybercentreCanada"]
+    minimum = "1.2"
+    evented = True
+
+    filter_analysistypes = set(["file"])
+
+    def on_complete(self):
+        safelist = [
+            "microsoft.com",
+            "windowsupdate\.com",
+            "adobe.com",
+            ]
+
+        if "network" in self.results and "http" in self.results["network"]:
+            for http in self.results["network"]["http"]:
+                if any(safelisted in http["host"] for safelisted in safelist):
+                    continue
+
+                if http["method"] == "POST":
+                    request = "%s %s" % (http["method"], http["uri"])
+                    self.data.append({"request": request})
+
+        if len(self.data) > 0:
+            return True
+        else:
+            return False
+
 class NetworkCnCHTTP(Signature):
     name = "network_cnc_http"
     description = "HTTP traffic contains suspicious features which may be indicative of malware related traffic"
@@ -118,3 +151,24 @@ class NetworkCnCHTTP(Signature):
             return True
 
         return False
+
+
+class NetworkIPEXE(Signature):
+    name = "network_ip_exe"
+    description = "Executable is attempted to be downloaded from an IP"
+    severity = 5
+    categories = ["network", "downloader"]
+    authors = ["@CybercentreCanada"]
+    minimum = "1.2"
+
+    def on_complete(self):
+        indicator = "\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}.*\.exe"
+        # Downloading an EXE from an IP is ALWAYS SKETCHY
+        matches = self.check_url(pattern=indicator, regex=True, all=True)
+        for match in matches:
+            self.data.append({"request": match})
+
+        if len(self.data) > 0:
+            return True
+        else:
+            return False
