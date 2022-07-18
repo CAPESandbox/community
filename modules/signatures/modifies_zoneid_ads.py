@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 
 class ZoneID(Signature):
-    name = "modifies_zoneid"
+    name = "modify_zoneid_ads"
     description = "Modifies the ZoneTransfer.ZoneID in Zone.Identifier ADS, " "generally to disable security warnings"
     severity = 2
     categories = ["generic"]

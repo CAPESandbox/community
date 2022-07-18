@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 
 class DisableRunCommand(Signature):
-    name = "disable_run_command"
+    name = "disables_run_command"
     description = (
         "Attempts to disable or modify the Run command from the Start menu and the New Task (Run) command from Task Manager"
     )

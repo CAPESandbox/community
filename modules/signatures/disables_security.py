@@ -9,7 +9,7 @@ class DisablesSecurity(Signature):
     name = "disables_security"
     description = "Disables Windows Security features"
     severity = 3
-    categories = ["anti-av"]
+    categories = ["generic"]
     # Migrated by @CybercentreCanada
     authors = ["Cuckoo Technologies", "Brad Spengler", "@CybercentreCanada"]
     minimum = "2.0"

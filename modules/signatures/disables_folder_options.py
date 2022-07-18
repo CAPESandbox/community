@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 
 class DisableFolderOptions(Signature):
-    name = "disable_folder_options"
+    name = "disables_folder_options"
     description = "Attempts to disable or modify Explorer Folder Options"
     severity = 3
     categories = ["generic"]
