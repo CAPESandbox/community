@@ -61,7 +61,7 @@ class Dyre_APIs(Signature):
                 self.mbcs += ["OB0010", "E1560"]
                 self.mbcs += ["OC0005", "C0027"]  # micro-behaviour
             tmp = re.sub(r"\\x[0-9A-Fa-f]{2}", "", buf)
-            if self.compname in tmp:
+            if self.compname and self.compname in tmp:
                 if re.match("^" + self.compname + "[0-9 ]+$", tmp):
                     self.cryptoapis = True
         elif call["api"] == "HttpOpenRequestA":
