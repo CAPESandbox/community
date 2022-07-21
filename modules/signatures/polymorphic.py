@@ -40,7 +40,7 @@ class Polymorphic(Signature):
         package = self.results["info"]["package"]
 
         found_polymorphic = False
-        target_ssdeep = self.results["target"]["file"]["ssdeep"]
+        target_ssdeep = self.results["target"]["file"].get("ssdeep")
         target_sha1 = self.results["target"]["file"]["sha1"]
         target_size = self.results["target"]["file"]["size"]
 
