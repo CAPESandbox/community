@@ -56,7 +56,7 @@ class CryptoWall_APIs(Signature):
                         self.campaign = buf.split("00")[0]
                 else:
                     buf = buf.replace("\\x00", "")
-                    if buf.startswith(self.compname):
+                    if self.compname and buf.startswith(self.compname):
                         self.cryptInfo = True
                     else:
                         self.cryptInfo = False
