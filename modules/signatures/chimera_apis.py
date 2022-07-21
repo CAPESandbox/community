@@ -50,6 +50,8 @@ class Chimera_APIs(Signature):
             self.mutexmatch = "{{{0:08X}-{1:04X}-{2:04X}-{3:04X}-{4:08X}{5:04X}}}".format(
                 dword1, word2, word3, word4, dword5, word6
             )
+        else:
+            self.mutexmatch = "no match"
 
     def on_call(self, call, process):
         mutexname = self.get_argument(call, "MutexName")
