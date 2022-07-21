@@ -26,7 +26,7 @@ class StealthTimeout(Signature):
             "NtQuerySystemTime",
             "NtDelayExecution",
             "NtWaitForSingleObject",
-            "NtTerminateProcess"
+            "NtTerminateProcess",
         ]
     )
 
