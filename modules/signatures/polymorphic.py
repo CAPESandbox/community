@@ -41,8 +41,8 @@ class Polymorphic(Signature):
 
         found_polymorphic = False
         target_ssdeep = self.results["target"]["file"].get("ssdeep")
-        target_sha1 = self.results["target"]["file"]["sha1"]
-        target_size = self.results["target"]["file"]["size"]
+        target_sha1 = self.results["target"]["file"].get("sha1")
+        target_size = self.results["target"]["file"].get("size", 0)
 
         if target_ssdeep == "" or target_ssdeep == None:
             return False
