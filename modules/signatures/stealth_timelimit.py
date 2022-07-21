@@ -18,6 +18,18 @@ class StealthTimeout(Signature):
     ttps += ["T1497.003"]  # MITRE v7,8
     mbcs = ["OB0001", "B0003", "B003.003"]
 
+    filter_apinames = set(
+        [
+            "GetSystemTimeAsFileTime",
+            "GetSystemTime",
+            "GetLocalTime",
+            "NtQuerySystemTime",
+            "NtDelayExecution",
+            "NtWaitForSingleObject",
+            "NtTerminateProcess"
+        ]
+    )
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.lastprocess = 0
