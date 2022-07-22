@@ -40,9 +40,9 @@ class Polymorphic(Signature):
         package = self.results["info"]["package"]
 
         found_polymorphic = False
-        target_ssdeep = self.results["target"]["file"].get("ssdeep")
-        target_sha1 = self.results["target"]["file"].get("sha1")
-        target_size = self.results["target"]["file"].get("size", 0)
+        target_ssdeep = self.results.get("target", {})["file"].get("ssdeep")
+        target_sha1 = self.results.get("target", {})["file"].get("sha1")
+        target_size = self.results.get("target", {})["file"].get("size", 0)
 
         if target_ssdeep == "" or target_ssdeep == None:
             return False
@@ -52,7 +52,7 @@ class Polymorphic(Signature):
                 if (
                     package == "xls"
                     and len(drop["guest_paths"]) == 1
-                    and drop["guest_paths"][0].endswith("\\Temp\\" + self.results["target"]["file"]["name"])
+                    and drop["guest_paths"][0].endswith("\\Temp\\" + self.results.get("target", {})["file"]["name"])
                 ):
                     continue
                 if drop["sha1"] == target_sha1:

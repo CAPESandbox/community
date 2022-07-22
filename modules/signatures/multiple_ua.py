@@ -46,7 +46,7 @@ class Multiple_UA(Signature):
 
         else:
             if ua not in self.useragents:
-                if self.results["target"]["category"] == "file" or proc != "iexplore.exe":
+                if self.results.get("target", {}).get("category", "") == "file" or proc != "iexplore.exe":
                     self.useragents.append(ua)
                     self.procs.append((process["process_name"], ua))
 

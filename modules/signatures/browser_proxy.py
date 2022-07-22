@@ -53,7 +53,7 @@ class ModifyProxy(Signature):
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\Wpad\\\\[^\\\\]*\\\\WpadNetworkName$",
         ]
         # Get rid of a PDF false positive
-        if "file" in self.results["target"]:
+        if "file" in self.results.get("target", {}):
             if "PDF" in self.results["target"]["file"].get("type", "") or self.results["info"]["package"] == "pdf":
                 ignore = True
 

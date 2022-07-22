@@ -26,9 +26,9 @@ class CopiesSelf(Signature):
     mbcs = ["OC0001", "C0016"]  # micro-behaviour
 
     def run(self):
-        if self.results["target"]["category"] != "file":
+        if self.results.get("target", {}).get("category", "") != "file":
             return False
-        if "PE32" not in self.results["target"]["file"].get("type", "") and "MS-DOS executable" not in self.results["target"][
+        if "PE32" not in self.results.get("target", {})["file"].get("type", "") and "MS-DOS executable" not in self.results.get("target", {})[
             "file"
         ].get("type", ""):
             return False
@@ -38,7 +38,7 @@ class CopiesSelf(Signature):
         initialproc = self.get_initial_process()
         if initialproc:
             initialpath = initialproc["module_path"].lower()
-        target_sha1 = self.results["target"]["file"]["sha1"]
+        target_sha1 = self.results.get("target", {})["file"]["sha1"]
 
         for drop in self.results.get("dropped", {}) or []:
             if drop["sha1"] == target_sha1:

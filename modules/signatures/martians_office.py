@@ -54,7 +54,7 @@ class MartiansOffice(Signature):
         return result
 
     def run(self):
-        if self.results["target"]["category"] == "url":
+        if self.results.get("target", {}).get("category", "") == "url":
             return False
 
         office_pkgs = ["ppt", "doc", "xls", "eml"]

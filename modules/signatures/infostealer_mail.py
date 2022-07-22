@@ -42,7 +42,7 @@ class EmailStealer(Signature):
             ".*\\\\Software\\\\(Wow6432Node\\\\)?IncrediMail.*"
             ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\ Live\\ Mail.*",
         ]
-        if self.results["target"]["category"] == "file":
+        if self.results.get("target", {}).get("category", "") == "file":
             registry_indicators.append(".*\\\\Software\\\\(Wow6432Node\\\\)?Clients\\\\Mail.*")
 
         found_stealer = False
