@@ -19,7 +19,7 @@ class StealthWebHistory(Signature):
             ".*\\\\History\\\\History\.IE5\\\\.*",
             ".*\\\\Temporary\\\\ Internet\\ Files\\\\Content\.IE5\\\\.*",
         ]
-        if self.results["target"]["category"] == "file":
+        if self.results.get("target", {}).get("category", "") == "file":
             file_indicators.append(".*\\\\Cookies\\\\.*")
         found_cleaner = False
         for indicator in file_indicators:

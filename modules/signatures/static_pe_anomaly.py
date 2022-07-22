@@ -120,8 +120,8 @@ class PEAnomaly(Signature):
                 if (
                     ver["name"] == "OriginalFilename"
                     and ver["value"].lower().endswith(".dll")
-                    and "PE32" in self.results["target"]["file"].get("type", "")
-                    and "DLL" not in self.results["target"]["file"].get("type", "")
+                    and "PE32" in self.results.get("target", {})["file"].get("type", "")
+                    and "DLL" not in self.results.get("target", {})["file"].get("type", "")
                 ):
                     self.data.append(
                         {"anomaly": "OriginalFilename version info claims file is a DLL but binary is a main executable"}

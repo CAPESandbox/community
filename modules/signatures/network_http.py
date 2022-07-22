@@ -42,7 +42,7 @@ class NetworkHTTP(Signature):
             "^http://ctldl\.windowsupdate\.com/.*",
             "^http://go\.microsoft\.com/.*",
         ]
-        if "file" in self.results["target"]:
+        if "file" in self.results.get("target", {}):
             if "PDF" in self.results["target"]["file"].get("type", "") or self.results["info"]["package"] == "pdf":
                 whitelist.append("^http://.*\.adobe\.com/.*")
 

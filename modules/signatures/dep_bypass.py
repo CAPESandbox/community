@@ -34,7 +34,7 @@ class DEPBypass(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.ignore_it = True
         self.procs = set()
-        if self.results["target"]["category"] != "file" or self.results["info"]["package"] not in [
+        if self.results.get("target", {}).get("category", "") != "file" or self.results["info"]["package"] not in [
             "exe",
             "rar",
             "zip",

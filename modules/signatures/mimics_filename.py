@@ -41,8 +41,8 @@ class MimicsExtension(Signature):
             "xml": "XML document",
         }
         pat = ".*[ _\-\.](?P<FakeExtension>{0})\.(?:{1})".format("|".join(exts.keys()), "|".join(execs))
-        if self.results["target"]["category"] == "file":
-            check = re.match(pat, self.results["target"]["file"]["name"])
+        if self.results.get("target", {}).get("category", "") == "file":
+            check = re.match(pat, self.results.get("target", {})["file"]["name"])
             if check:
                 ext = check.group("FakeExtension")
                 self.description = self.description.format(ext, exts[ext.lower()])

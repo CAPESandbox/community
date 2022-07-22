@@ -139,10 +139,10 @@ class StealthFile(Signature):
         saw_stealth = False
         target_name = None
 
-        if self.is_office and "file" in self.results["target"]:
+        if self.is_office and "file" in self.results.get("target", {}):
             target_name = self.results["target"]["file"]["name"]
 
-        if "url" in self.results["target"]:
+        if "url" in self.results.get("target", {}):
             whitelists.extend(url_whitelist)
 
         for hfile in self.stealth_files:

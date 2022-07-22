@@ -74,7 +74,7 @@ class MartiansIE(Signature):
         return result
 
     def run(self):
-        if self.results["target"]["category"] == "file":
+        if self.results.get("target", {}).get("category", "") == "file":
             return False
 
         # Sometimes if we get a service loaded we get out of order processes in tree need iterate over IE processes get the path of the initial monitored executable

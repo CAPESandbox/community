@@ -152,7 +152,7 @@ class RTFAnomalyCharacterSet(Signature):
 
     def run(self):
         ret = False
-        if "file" in self.results["target"]:
+        if "file" in self.results.get("target", {}):
             filetype = self.results["target"]["file"].get("type", "")
             if "Rich Text Format" in filetype and "unknown character set" in filetype:
                 ret = True
@@ -173,7 +173,7 @@ class RTFAnomalyVersion(Signature):
 
     def run(self):
         ret = False
-        if "file" in self.results["target"]:
+        if "file" in self.results.get("target", {}):
             filetype = self.results["target"]["file"].get("type", "")
             if "Rich Text Format" in filetype and "unknown version" in filetype:
                 ret = True

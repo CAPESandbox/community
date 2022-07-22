@@ -34,11 +34,11 @@ class ClamAV(Signature):
         clam_no_score_re = re.compile(r"^(SaneSecurity\.FoxHole|MiscreantPunch\.(?:Susp|INFO))", re.I)
         clam_ignore = ["PhishTank.Phishing.6117523.UNOFFICIAL"]
         self.data = []
-        if self.results["target"]["category"] not in ("url", "pcap"):
+        if self.results.get("target", {}).get("category", "") not in ("url", "pcap"):
             if self.results.get("target", {}).get("file", {}).get("clamav") and self.results.get("target", {}).get("file", {}).get(
                 "sha256"
             ):
-                for detection in self.results["target"]["file"]["clamav"]:
+                for detection in self.results.get("target", {})["file"]["clamav"]:
                     entry = "%s, target" % (detection)
                     if detection in clam_ignore:
                         continue
