@@ -29,7 +29,8 @@ class ZoneID(Signature):
 
     filter_apinames = "NtCreateFile", "NtWriteFile"
 
-    def init(self):
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
         self.zone_handle = None
 
     def on_call(self, call, _):
