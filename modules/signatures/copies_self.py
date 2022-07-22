@@ -28,9 +28,9 @@ class CopiesSelf(Signature):
     def run(self):
         if self.results.get("target", {}).get("category", "") != "file":
             return False
-        if "PE32" not in self.results.get("target", {})["file"].get("type", "") and "MS-DOS executable" not in self.results.get("target", {})[
-            "file"
-        ].get("type", ""):
+        if "PE32" not in self.results.get("target", {})["file"].get("type", "") and "MS-DOS executable" not in self.results.get(
+            "target", {}
+        )["file"].get("type", ""):
             return False
         created_copy = False
         # get the path of the initial monitored executable
