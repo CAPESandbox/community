@@ -32,6 +32,8 @@ class BrowserSecurity(Signature):
         if self.results["info"]["package"] in ["pdf"]:
             return False
 
+        safelist = ["zoom.exe"]
+
         reg_indicators = [
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\Privacy\\\\EnableInPrivateMode$",
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\PhishingFilter\\\\.*",
@@ -47,7 +49,13 @@ class BrowserSecurity(Signature):
         ]
 
         for indicator in reg_indicators:
-            if self.check_write_key(pattern=indicator, regex=True):
-                return True
+            regkeys = self.check_write_key(pattern=indicator, regex=True, all=True)
+            if regkeys:
+                for regkey in regkeys:
+                    if not any(item in regkey.lower() for item in safelist):
+                        self.data.append({"regkey": regkey})
 
-        return False
+        if len(self.data) > 0:
+            return True
+        else:
+            return False

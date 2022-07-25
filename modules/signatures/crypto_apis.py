@@ -28,5 +28,11 @@ class CryptGenKey(Signature):
 
     filter_apinames = set(["CryptGenKey", "CryptExportKey"])
 
-    def on_call(self, _, __):
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.process_safelist = ["powershell.exe"]
+
+    def on_call(self, _, process):
+        if process["process_name"] in self.process_safelist:
+            return False
         return True

@@ -41,7 +41,11 @@ class AntiSandboxSleep(Signature):
             "adobearm.exe",
             "iexplore.exe",
             "acrord32.exe",
+            "winword.exe",
+            "excel.exe",
             "splwow64.exe",
+            "powershell.exe",
+            "outlook.exe",
         ]
         procs = dict()
         for pname, sleep, skip in self.sleeps:

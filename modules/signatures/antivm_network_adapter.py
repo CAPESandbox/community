@@ -30,7 +30,7 @@ class NetworkAdapters(Signature):
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.safelistprocs = ["iexplore.exe", "firefox.exe", "chrome.exe", "safari.exe"]
+        self.safelistprocs = ["iexplore.exe", "firefox.exe", "chrome.exe", "safari.exe", "outlook.exe"]
 
     def on_call(self, _, process):
         if process["process_name"].lower() not in self.safelistprocs:

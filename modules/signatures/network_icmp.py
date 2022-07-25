@@ -31,7 +31,10 @@ class NetworkICMP(Signature):
             if "icmp" in self.results["network"]:
                 for icmp in self.results["network"]["icmp"]:
                     # ignore dest unreachable
-                    if icmp["type"] != 3:
-                        return True
+                    if icmp["type"] not in [0, 3]:
+                        self.data.append({"ip": icmp["dst"]})
 
-        return False
+        if len(self.data) > 0:
+            return True
+        else:
+            return False
