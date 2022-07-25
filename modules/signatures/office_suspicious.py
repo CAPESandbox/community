@@ -138,6 +138,7 @@ class OfficeDDECommand(Signature):
     evented = True
     ttps = ["T1137"]  # MITRE v6,7,8
     references = ["sensepost.com/blog/2017/macro-less-code-exec-in-msword/"]
+    families = ["Office DDE"]
 
     def run(self):
         ret = False
