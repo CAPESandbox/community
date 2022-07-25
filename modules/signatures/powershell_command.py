@@ -373,8 +373,8 @@ class PowerShellNetworkConnection(Signature):
 class PowerShellScriptBlockLogging(Signature):
     name = "powershell_scriptblock_logging"
     description = "Suspicious behavior was detected in a PowerShell process by script block logging"
-    severity = 3
-    confidence = 80
+    severity = 1
+    confidence = 40
     categories = ["command"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
