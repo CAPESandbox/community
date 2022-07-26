@@ -97,7 +97,7 @@ class Dyre_APIs(Signature):
                 break
 
         # C2 Beacon check
-        if self.networkapis:
+        if self.compname and self.networkapis:
             # Gather computer name
             for httpreq in self.networkapis:
                 # Generate patterns (should only ever be one per indicator)
