@@ -93,7 +93,7 @@ class NetworkEXE(Signature):
     def on_call(self, call, process):
         buf = self.get_argument(call, "buffer")
         pname = process["process_name"].lower()
-        if "MZ" in buf and "This program" in buf:
+        if buf and "MZ" in buf and "This program" in buf:
             if pname in self.high_risk_proc:
                 self.severity = 3
             return True
