@@ -612,7 +612,7 @@ class Curtain(Processing):
             "$_.PSParentPath.Replace",
             "$ExecutionContext.SessionState.Path.Combine",
             "get-help about_Command_Precedence",
-            '"Get-WmiObject"\nParameterBinding(Get-WmiObject): name="ComputerName"; value="Localhost"\nParameterBinding(Get-WmiObject): name="Class"; value="win32_computersystem"\nCommandInvocation(Out-Default): "Out-Default"\nParameterBinding(Out-Default): name="Transcript"; value="True"\nParameterBinding(Out-Default): name="InputObject";'
+            '"Get-WmiObject"\nParameterBinding(Get-WmiObject): name="ComputerName"; value="Localhost"\nParameterBinding(Get-WmiObject): name="Class"; value="win32_computersystem"\nCommandInvocation(Out-Default): "Out-Default"\nParameterBinding(Out-Default): name="Transcript"; value="True"\nParameterBinding(Out-Default): name="InputObject";',
         )
 
         # Determine oldest Curtain log and remove the rest
