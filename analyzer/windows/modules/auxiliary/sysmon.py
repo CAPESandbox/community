@@ -18,9 +18,7 @@ __version__ = "1.0.1"
 class Sysmon(threading.Thread, Auxiliary):
     def __init__(self, options, config):
         Auxiliary.__init__(self, options, config)
-        self.config = Config(cfg="analysis.conf")
-        self.enabled = self.config.sysmon
-        self.do_run = self.enabled
+        self.enabled = config.sysmon
         self.startupinfo = subprocess.STARTUPINFO()
         self.startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
