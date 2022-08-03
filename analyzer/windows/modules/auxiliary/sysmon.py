@@ -7,7 +7,6 @@ import threading
 from lib.common.abstracts import Auxiliary
 from lib.common.exceptions import CuckooPackageError
 from lib.common.results import upload_to_host
-from lib.core.config import Config
 
 log = logging.getLogger(__name__)
 
