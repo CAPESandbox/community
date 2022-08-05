@@ -67,16 +67,19 @@ class PurpleWaveNetworkAcivity(Signature):
         if call["api"] == "InternetOpenW":
             useragent = self.get_argument(call, "Agent")
             if useragent and useragent == "app":
+                self.mark_call()
                 self.uamatch = True
 
         if call["api"] == "HttpAddRequestHeadersA":
             headers = self.get_argument(call, "Headers")
             if headers and "boundary=boundaryaswell" in headers:
+                self.mark_call()
                 self.hematch = True
 
         if call["api"] == "HttpSendRequestW":
             postdata = self.get_argument(call, "PostData")
             if postdata and "--boundaryaswell" in postdata:
+                self.mark_call()
                 self.pomatch = True
 
         if call["api"] == "HttpOpenRequestW":
@@ -84,6 +87,7 @@ class PurpleWaveNetworkAcivity(Signature):
             httpverb = self.get_argument(call, "Verb")
             if httppath and httpverb:
                 if (httppath == "/config" or httppath == "/gate") and httpverb == "POST":
+                    self.mark_call()
                     self.urmatch = True
 
     def on_complete(self):

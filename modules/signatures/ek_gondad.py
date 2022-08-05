@@ -37,4 +37,5 @@ class Gondad_JS(Signature):
     def on_call(self, call, process):
         buf = self.get_argument(call, "Buffer")
         if buf and buf.count("gondad") > 4:
+            self.mark_call()
             return True

@@ -37,6 +37,7 @@ class DeletesSystemStateBackup(Signature):
                 and ("delete" in cmdline and "systemstatebackup" in cmdline)
                 or ("delete" in cmdline and "catalog" in cmdline)
             ):
+                self.mark_call()
                 return True
         elif call["api"] == "ShellExecuteExW":
             filepath = self.get_argument(call, "FilePath").lower()
@@ -46,4 +47,5 @@ class DeletesSystemStateBackup(Signature):
                 and ("delete" in params and "systemstatebackup" in params)
                 or ("delete" in params and "catalog" in params)
             ):
+                self.mark_call()
                 return True

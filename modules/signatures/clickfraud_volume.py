@@ -27,4 +27,5 @@ class ClickfraudVolume(Signature):
 
         # FEATURE_DISABLE_NAVIGATION_SOUNDS
         if entry == 21 and enable:
+            self.mark_call()
             return True

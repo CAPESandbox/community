@@ -70,4 +70,5 @@ class Virtualcheck_JS(Signature):
 
         for indicator in indicators:
             if indicator.lower() in buf.lower() or indicator.lower() in buf2.lower():
+                self.mark_call()
                 return True

@@ -36,4 +36,5 @@ class DebugsSelf(Signature):
             for proc in self.results["behavior"]["processes"]:
                 if proc["process_id"] == pid and proc["module_path"].lower() == process["module_path"].lower():
                     # DEBUG_PROCESS on a copy of ourselves
+                    self.mark_call()
                     return True

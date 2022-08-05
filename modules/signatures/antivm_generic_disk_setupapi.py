@@ -34,4 +34,5 @@ class SetupAPIDiskInformation(Signature):
     def on_call(self, call, process):
         known = self.get_argument(call, "Known")
         if known and known in ("DiskDrive", "CDROM"):
+            self.mark_call()
             return True

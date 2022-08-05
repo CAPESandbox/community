@@ -39,6 +39,7 @@ class DriverLoad(Signature):
         drivername = self.get_argument(call, "DriverServiceName")
         self.data.append({"driver_service_name": drivername})
         self.found_driverload = True
+        self.mark_call()
 
     def on_complete(self):
         return self.found_driverload

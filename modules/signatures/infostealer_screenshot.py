@@ -47,8 +47,10 @@ class CapturesScreenshot(Signature):
                             or funcationname.lower() == "gdipcreatebitmapfromscan0"
                         ):
                             self.capturesc = True
+                            self.mark_call()
                         if funcationname.lower() == "gdipsaveimagetofile":
                             self.savesc = True
+                            self.mark_call()
 
         if self.capturesc and self.savesc:
             if call["api"] == "NtCreateFile":
@@ -56,6 +58,7 @@ class CapturesScreenshot(Signature):
                 if filename:
                     if filename.lower().endswith((".jpg", ".jpeg", ".png", ".bmp")):
                         self.wrtiesc = True
+                        self.mark_call()
 
     def on_complete(self):
         if self.capturesc and self.savesc and self.wrtiesc:

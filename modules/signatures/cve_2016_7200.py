@@ -42,4 +42,5 @@ class CVE_2016_7200(Signature):
             buf = self.get_argument(call, "Script")
 
         if " getPrototypeOf" in buf and "__proto__" in buf and "Array" in buf and "Symbol" in buf:
+            self.mark_call()
             return True

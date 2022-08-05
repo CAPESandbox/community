@@ -35,4 +35,5 @@ class AvastDetectLibs(Signature):
     def on_call(self, call, process):
         dllname = self.get_argument(call, "FileName")
         if "snxhk" in dllname.lower():
+            self.mark_call()
             return True

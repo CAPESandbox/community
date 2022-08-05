@@ -36,8 +36,10 @@ class AntiSandboxForegroundWindow(Signature):
     def on_call(self, call, _):
         if call["api"] == "GetForegroundWindow":
             self.get_foreground_window_count += 1
+            self.mark_call()
         elif call["api"] == "GetForegroundWindow":
             self.nt_delay_execution_count += 1
+            self.mark_call()
 
     def on_complete(self):
         # The check for NtDelayExecution may not be necessary, but then

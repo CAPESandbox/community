@@ -74,6 +74,7 @@ class Hancitor_APIs(Signature):
                     if buf:
                         check = self.getWrittenUrls(buf)
                         if len(check) >= 2:
+                            self.mark_call()
                             self.c2s = check
 
         elif call["api"] == "NtClose":

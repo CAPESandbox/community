@@ -36,6 +36,7 @@ class antidebug_checkremotedebuggerpresent(Signature):
         if call["api"] == "CheckRemoteDebuggerPresent":
             self.ttps += ["U0121"]  # Unprotect
             self.mbcs += ["B0001.002"]
+            self.mark_call()
             return True
         elif call["api"] == "NtQueryInformationProcess":
             ProcessInformationClass = int(self.get_raw_argument(call, "ProcessInformationClass"))
@@ -46,4 +47,5 @@ class antidebug_checkremotedebuggerpresent(Signature):
                 # - ProcessBasicInformation 0x00
                 self.ttps += ["U0120"]  # Unprotect
                 self.mbcs += ["B0001.012"]
+                self.mark_call()
                 return True

@@ -45,6 +45,7 @@ class Internet_Dropper(Signature):
                 self.dropper[host] = dict()
                 self.dropper[host]["uris"] = list()
             self.dropper[host]["curhandle"] = str(call["return"])
+            self.mark_call()
         elif call["api"].startswith("HttpOpenRequest"):
             handle = str(self.get_argument(call, "InternetHandle"))
             # Sanity check
@@ -54,6 +55,7 @@ class Internet_Dropper(Signature):
                     self.uris.add(uri)
                     self.dropper[self.lasthost]["uris"].append(uri)
                     self.dropper[self.lasthost]["curhandle"] = call["return"]
+                    self.mark_call()
 
     def on_complete(self):
         ret = False

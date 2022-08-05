@@ -22,6 +22,7 @@ class StealthNetwork(Signature):
 
     def on_call(self, call, process):
         self.foundnetwork = True
+        self.mark_call()
 
     def on_complete(self):
         initialproc = self.get_initial_process()

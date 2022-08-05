@@ -32,4 +32,5 @@ class antidebug_debugactiveprocess(Signature):
 
     def on_call(self, call, process):
         if call["api"] == "DebugActiveProcess":
+            self.mark_call()
             return True

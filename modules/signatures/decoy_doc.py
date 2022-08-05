@@ -51,6 +51,7 @@ class DecoyDocument(Signature):
             docpath = process["environ"]["CommandLine"].lower()
             if self.initialpath not in docpath and docpath not in self.decoys:
                 self.decoys.append(docpath)
+                self.mark_call()
 
     def on_complete(self):
         if self.results["info"]["package"] in ["exe", "bin", "msi", "dll"]:

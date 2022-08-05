@@ -42,6 +42,7 @@ class dynamic_function_loading(Signature):
             self.data.append(
                 {"DynamicLoader": "%s/%s" % (self.get_argument(call, "ModuleName"), self.get_argument(call, "FunctionName"))}
             )
+            self.mark_call()
 
     def on_complete(self):
         if self.loadctr < 8:

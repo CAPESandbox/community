@@ -51,8 +51,10 @@ class Generic_Phish(Signature):
                     buf = self.rex[regex].search(data)
                     if buf:
                         if "-->" in data:
+                            self.mark_call()
                             self.hits.add((buf.group("url"), "ok"))
                         else:
+                            self.mark_call()
                             self.hits.add((buf.group("url"), "truncated"))
 
     def on_complete(self):

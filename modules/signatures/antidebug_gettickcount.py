@@ -34,4 +34,5 @@ class antidebug_gettickcount(Signature):
 
     def on_call(self, call, process):
         if call["api"] == "GetTickCount":
+            self.mark_call()
             return True

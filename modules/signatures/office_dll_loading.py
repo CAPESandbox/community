@@ -105,6 +105,7 @@ class OfficeVBLLoad(Signature):
                         if dll in dllname.lower():
                             self.score += 1
                             if self.score >= 2:
+                                self.mark_call()
                                 return True
 
 
@@ -133,6 +134,7 @@ class OfficeWMILoad(Signature):
                 dllname = self.get_argument(call, "FileName")
                 if dllname:
                     if "wbemdisp.dll" in dllname.lower():
+                        self.mark_call()
                         return True
 
 
@@ -164,6 +166,7 @@ class OfficeCOMLoad(Signature):
                 if dllname:
                     for dll in self.comdlls:
                         if dll in dllname.lower():
+                            self.mark_call()
                             return True
 
 
@@ -195,10 +198,12 @@ class OfficeDotNetLoad(Signature):
                 dllname = self.get_argument(call, "FileName")
                 if dllname:
                     if "clr.dll" in dllname.lower():
+                        self.mark_call()
                         return True
                     else:
                         for dllpath in self.dotnetpaths:
                             if re.search(dllpath, dllname.lower(), re.IGNORECASE):
+                                self.mark_call()
                                 return True
 
 
@@ -225,4 +230,5 @@ class OfficeMSHTMLLoad(Signature):
                 dllname = self.get_argument(call, "FileName")
                 if dllname:
                     if "mshtml.dll" in dllname.lower():
+                        self.mark_call()
                         return True

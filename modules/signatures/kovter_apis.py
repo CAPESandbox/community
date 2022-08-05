@@ -61,6 +61,7 @@ class Kovter_APIs(Signature):
 
             elif call["api"] == "CreateThread":
                 if self.lastapi == "NtCreateSection" and self.chain:
+                    self.mark_call()
                     return True
 
         self.chain = continueChain

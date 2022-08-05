@@ -38,6 +38,7 @@ class OfficeWriteEXE(Signature):
                 buff = self.get_raw_argument(call, "Buffer")
                 if buff and len(buff) > 2 and buff[0:1] == "MZ" and "This program" in buff:
                     self.data.append({"office_dl_write_exe": "%s_NtWriteFile_%s" % (pname, self.get_argument(call, "HandleName"))})
+                    self.mark_call()
 
         return None
 

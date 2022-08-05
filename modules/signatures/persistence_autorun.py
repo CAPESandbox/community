@@ -53,9 +53,11 @@ class Autorun_scheduler(Signature):
                 self.data.append({"service": servicename})
                 self.data.append({"service_path": binpath})
                 self.found_autorun = True
+                self.mark_call()
         elif call["status"]:
             fullname = self.get_argument(call, "FullName")
             self.registry_writes[fullname] = self.get_argument(call, "Buffer")
+            self.mark_call()
 
     def on_complete(self):
         indicators = [
@@ -136,9 +138,11 @@ class Autorun(Signature):
                 self.data.append({"service": servicename})
                 self.data.append({"service_path": binpath})
                 self.found_autorun = True
+                self.mark_call()
         elif call["status"]:
             fullname = self.get_argument(call, "FullName")
             self.registry_writes[fullname] = self.get_argument(call, "Buffer")
+            self.mark_call()
 
     def on_complete(self):
         indicators = [

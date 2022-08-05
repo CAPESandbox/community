@@ -35,9 +35,11 @@ class InjectionRWX(Signature):
             protection = self.get_argument(call, "Protection")
             # PAGE_EXECUTE_READWRITE
             if protection == "0x00000040":
+                self.mark_call()
                 return True
         elif call["api"] == "NtProtectVirtualMemory":
             protection = self.get_argument(call, "NewAccessProtection")
             # PAGE_EXECUTE_READWRITE
             if protection == "0x00000040":
+                self.mark_call()
                 return True

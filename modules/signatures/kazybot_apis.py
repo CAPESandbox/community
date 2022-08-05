@@ -45,7 +45,9 @@ class KazyBot_APIs(Signature):
             if "HWID=" in buf:
                 if "DATA=" in buf or "SERVER=" in buf or "PASSWORD=" in buf:
                     self.score += 1
+                    self.mark_call()
         if re.match("POST\s/[^\.]+\.php", buf):
+            self.mark_call()
             self.postreq = True
         else:
             self.postreq = False

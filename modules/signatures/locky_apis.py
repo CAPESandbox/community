@@ -57,6 +57,7 @@ class Locky_APIs(Signature):
                 if len(event) == 2:
                     if event[1] in self.hashes and event[0] in ["Global", "Local"]:
                         self.found = True
+                        self.mark_call()
 
         if call["api"] == "GetVolumeNameForVolumeMountPointW":
             if call["status"]:
@@ -93,6 +94,7 @@ class Locky_APIs(Signature):
                     if args and "id" in args.keys():
                         if args["id"][0] in self.hashes:
                             self.found = process["process_id"]
+                            self.mark_call()
                         if "affid" in args:
                             tmp = {"Affid": args["affid"][0]}
                             if tmp not in self.data:
@@ -112,6 +114,7 @@ class Locky_APIs(Signature):
                 url = self.get_argument(call, "Url")
                 if url and url.endswith(".php"):
                     self.c2s.add(url)
+                    self.mark_call()
 
     def on_complete(self):
         carve_mem = True

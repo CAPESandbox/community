@@ -54,6 +54,7 @@ class UACBypassEventvwr(Signature):
                 cmdline = self.get_argument(call, "CommandLine")
                 if ("mmc " in cmdline.lower() or "mmc.exe" in cmdline.lower()) and "eventvwr.msc" in cmdline.lower():
                     self.data.append({"command": cmdline})
+                    self.mark_call()
                     self.ret = True
 
     def on_complete(self):
@@ -129,6 +130,7 @@ class UACBypassCMSTP(Signature):
                 if "runpresetupcommands" in buf.lower():
                     self.data.append({"dropped .inf file": filename})
                     self.droppedinf.append(filename)
+                    self.mark_call()
                     self.inf = True
 
         # This is for a file being moved/renamed into .inf. This is to avoid a possible evasion that could be created by dropped the content in a .txt or something and then renaming the file/moving it into a .inf for use my cmstp. Also in case of copying .inf files into new ones too.
@@ -138,6 +140,7 @@ class UACBypassCMSTP(Signature):
             if destfile.endswith(".inf"):
                 self.data.append({"dropped .inf file": "%s was moved to destination file %s" % (origfile, destfile)})
                 self.droppedinf.append(destfile)
+                self.mark_call()
                 self.inf = True
 
     def on_complete(self):

@@ -43,6 +43,7 @@ class IPC_NamedPipe(Signature):
                 if name:
                     self.pipeNames.add(name)
                     self.created[name] = process["process_id"]
+                    self.mark_call()
 
             elif call["api"] == "NtReadFile" or call["api"] == "NtWriteFile":
                 handle = self.get_argument(call, "HandleName")
@@ -63,8 +64,10 @@ class IPC_NamedPipe(Signature):
                                 self.ipc[name][pid] = set()
                             if call["api"] == "NtReadFile":
                                 self.ipc[name][pid].add("reads")
+                                self.mark_call()
                             elif call["api"] == "NtWriteFile":
                                 self.ipc[name][pid].add("writes")
+                                self.mark_call()
 
     def on_complete(self):
         ret = False
