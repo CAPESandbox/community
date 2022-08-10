@@ -12,7 +12,6 @@ from lib.common.abstracts import Auxiliary
 from lib.common.constants import ROOT
 from lib.common.exceptions import CuckooPackageError
 from lib.common.results import upload_to_host
-from lib.core.config import Config
 
 
 class Procmon(Auxiliary, Thread):
@@ -21,9 +20,7 @@ class Procmon(Auxiliary, Thread):
     def __init__(self, options, config):
         Thread.__init__(self)
         Auxiliary.__init__(self, options, config)
-        self.config = Config(cfg="analysis.conf")
-        self.enabled = self.config.procmon
-        self.do_run = self.enabled
+        self.enabled = config.procmon
         self.startupinfo = subprocess.STARTUPINFO()
         self.startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 

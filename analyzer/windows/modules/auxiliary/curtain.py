@@ -6,7 +6,6 @@ from threading import Thread
 
 from lib.common.abstracts import Auxiliary
 from lib.common.results import upload_to_host
-from lib.core.config import Config
 
 log = logging.getLogger(__name__)
 
@@ -22,9 +21,7 @@ class Curtain(Thread, Auxiliary):
             options = {}
         Thread.__init__(self)
         Auxiliary.__init__(self, options, config)
-        self.config = Config(cfg="analysis.conf")
-        self.enabled = self.config.curtain
-        self.do_run = self.enabled
+        self.enabled = config.curtain
         self.startupinfo = subprocess.STARTUPINFO()
         self.startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
