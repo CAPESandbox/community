@@ -421,7 +421,6 @@ class PowershellDownload(Signature):
             self.data.append({"data": self.get_argument(call, "buffer")})
             self.mark_call()
 
-
     def on_complete(self):
         if len(self.data) > 0:
             return True
