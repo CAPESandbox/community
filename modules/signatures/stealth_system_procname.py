@@ -52,4 +52,5 @@ class StealthSystemProcName(Signature):
             if filepath.endswith(systemproc):
                 if not filepath.endswith("svchost.exe"):
                     self.severity = 3
+                self.mark_call()
                 return True

@@ -65,6 +65,7 @@ class RegSrv32SquiblydooDLLLoad(Signature):
         if pname.lower() == "regsvr32.exe":
             filename = self.get_argument(call, "FileName")
             if filename.lower() in ["scrobj.dll", "jscript.dll", "vbscript.dll"]:
+                self.mark_call()
                 return True
 
 

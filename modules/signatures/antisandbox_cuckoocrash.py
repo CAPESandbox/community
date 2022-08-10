@@ -41,6 +41,7 @@ class CuckooCrash(Signature):
                 self.data.append({"pid": process["process_id"]})
                 self.data.append({"message": message})
                 self.found_crash = True
+                self.mark_call()
 
     def on_complete(self):
         return self.found_crash

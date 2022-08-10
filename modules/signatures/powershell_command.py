@@ -341,26 +341,33 @@ class PowerShellNetworkConnection(Signature):
             if call["api"] == "URLDownloadToFileW":
                 buff = self.get_argument(call, "FileName").lower()
                 self.data.append({"request": buff})
+                self.mark_call()
             if call["api"] == "HttpOpenRequestW":
                 self.ttps += ["OC0006", "C0002"]
                 buff = self.get_argument(call, "Path").lower()
                 self.data.append({"request": buff})
+                self.mark_call()
             if call["api"] == "InternetCrackUrlW":
                 self.ttps += ["OC0006", "C0005"]
                 buff = self.get_argument(call, "Url").lower()
                 self.data.append({"request": buff})
+                self.mark_call()
             if call["api"] == "InternetCrackUrlA":
                 self.ttps += ["OC0006", "C0005"]
                 buff = self.get_argument(call, "Url").lower()
                 self.data.append({"request": buff})
+                self.mark_call()
             if call["api"] == "send":
                 buff = self.get_argument(call, "buffer").lower()
                 self.data.append({"request": buff})
+                self.mark_call()
+
             if call["api"] == "WSAConnect":
                 buff = self.get_argument(call, "ip").lower()
                 port = self.get_argument(call, "port").lower()
                 if not buff.startswith(("10.", "172.16.", "192.168.")):
                     self.data.append({"request": "%s:%s" % (buff, port)})
+                    self.mark_call()
         return None
 
     def on_complete(self):
@@ -412,6 +419,8 @@ class PowershellDownload(Signature):
     def on_call(self, call, _):
         if self.get_argument(call, "buffer"):
             self.data.append({"data": self.get_argument(call, "buffer")})
+            self.mark_call()
+
 
     def on_complete(self):
         if len(self.data) > 0:
@@ -437,6 +446,7 @@ class PowershellRequest(Signature):
     def on_call(self, call, _):
         if self.get_argument(call, "buffer"):
             self.data.append({"data": self.get_argument(call, "buffer")})
+            self.mark_call()
 
     def on_complete(self):
         if len(self.data) > 0:

@@ -23,6 +23,7 @@ class RemovesZoneIdADS(Signature):
     def on_call(self, call, process):
         if call["api"].startswith("DeleteFile") and self.get_argument(call, "FileName").endswith(":Zone.Identifier"):
             self.data.append({"file": self.get_argument(call, "FileName")})
+            self.mark_call()
             return True
 
         return None

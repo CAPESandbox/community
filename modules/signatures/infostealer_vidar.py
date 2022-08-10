@@ -63,6 +63,7 @@ class vidar(Signature):
             for i in files:
                 if i in node:
                     self.badness_files += 1
+                    self.mark_call()
 
         if call["api"] == "HttpOpenRequestA":
             node = self.get_argument(call, "Path")
@@ -70,11 +71,13 @@ class vidar(Signature):
             for i in urls:
                 if i in node:
                     self.badness_urls += 1
+                    self.mark_call()
 
         if call["api"] == "HttpAddRequestHeadersA":
             node = self.get_argument(call, "Headers")
             if header in node:
                 self.badness_headers += 1
+                self.mark_call()
 
     def on_complete(self):
         if self.badness_files > 40 and self.badness_urls > 5 and self.badness_headers > 5:

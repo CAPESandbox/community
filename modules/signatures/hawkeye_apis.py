@@ -113,6 +113,7 @@ class HawkEye_APIs(Signature):
                 buf = self.get_argument(call, "ObjectAttributes")
                 if self.evguid in buf:
                     self.evmatch = True
+                    self.mark_call()
 
         self.lastcall = call["api"]
 

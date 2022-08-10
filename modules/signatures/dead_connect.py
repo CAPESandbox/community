@@ -38,6 +38,7 @@ class DeadConnect(Signature):
             port = self.get_argument(call, "port")
             if ip and port:
                 self.connections.add("{0}:{1}".format(ip, port))
+                self.mark_call()
 
     def on_complete(self):
         if self.connections:

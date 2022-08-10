@@ -20,4 +20,5 @@ class DisablesSPDY(Signature):
     def on_call(self, call, process):
         buf = self.get_argument(call, "Buffer")
         if "network.http.spdy.enabled" in buf and "false" in buf:
+            self.mark_call()
             return True

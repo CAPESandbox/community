@@ -55,6 +55,8 @@ class antidebug_guardpages(Signature):
                 protection = int(protection, 0)
             if protection & PAGE_GUARD:
                 self.found = True
+        if self.found:
+            self.mark_call()
 
     def on_complete(self):
         if self.found:

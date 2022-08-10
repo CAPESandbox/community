@@ -32,6 +32,7 @@ class AntiSandboxSleep(Signature):
                     skip = "Slept"
                 new = (current_proc, sleepy, skip)
                 self.sleeps.append(new)
+                self.mark_call()
         return None
 
     def on_complete(self):

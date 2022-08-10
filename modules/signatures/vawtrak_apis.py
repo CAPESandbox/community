@@ -54,11 +54,13 @@ class Vawtrak_APIs(Signature):
                     self.mbcs += ["OB0012", "F0012"]
                     self.mbcs += ["OC0008", "C0036"]  # micro-behaviour
                     self.vawtrakauto = True
+                    self.mark_call()
 
         elif call["api"] == "NtCreateEvent" or call["api"] == "NtOpenEvent":
             buf = self.get_argument(call, "EventName")
             if re.match(r"^\{[0-9A-F]{8}(-[0-9A-F]{4}){3}-[0-9A-F]{12}\}$", buf):
                 self.eventtrigger = True
+                self.mark_call()
             else:
                 self.eventtrigger = False
 
@@ -66,6 +68,7 @@ class Vawtrak_APIs(Signature):
             if self.eventtrigger:
                 self.mbcs += ["OC0003", "C0038"]  # micro-behaviour
                 self.malscore += 2
+                self.mark_call()
 
         self.lastcall = call["api"]
         # Reset event trigger if the current API isn't Nt[Create|Open]Event

@@ -43,6 +43,7 @@ class Shifu_APIs(Signature):
                 if buf and "windows_" in buf:
                     self.mbcs += ["OC0005", "C0027"]  # micro-behaviour
                     self.malscore += 1
+                    self.mark_call()
 
         if call["api"] == "NtQueryValueKey":
             if self.get_argument(call, "ValueName") == "Blob":
@@ -50,6 +51,7 @@ class Shifu_APIs(Signature):
                 if "\\SOFTWARE\\Microsoft\\SystemCertificates\\" in key:
                     self.mbcs += ["OC0008", "C0036"]  # micro-behaviour
                     self.certBuffer = self.get_argument(call, "Information")
+                    self.mark_call()
 
         if call["api"] == "CryptDecodeObjectEx":
             if self.lastcall == "NtQueryValueKey":
@@ -57,6 +59,7 @@ class Shifu_APIs(Signature):
                 if buf and self.certBuffer and buf in self.certBuffer:
                     self.countCertificates += 1
                     self.mbcs += ["OC0005", "C0031"]  # micro-behaviour
+                    self.mark_call()
 
         self.lastcall = call["api"]
 

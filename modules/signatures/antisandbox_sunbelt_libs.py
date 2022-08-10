@@ -38,4 +38,5 @@ class SunbeltDetectLibs(Signature):
 
         for indicator in indicators:
             if indicator in dllname:
+                self.mark_call()
                 return True

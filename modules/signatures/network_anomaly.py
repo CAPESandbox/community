@@ -44,6 +44,7 @@ class NetworkAnomaly(Signature):
             if node and node not in self.ipBuffer:
                 if re.match(self.ipRex, node) and node not in self.ipWhitelist:
                     self.ipBuffer.append(node)
+                    self.mark_call()
 
         elif call["api"].startswith("InternetConnect"):
             self.mbcs += ["OC0006", "C0005.001"]  # micro-behaviour

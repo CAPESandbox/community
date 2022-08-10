@@ -47,6 +47,7 @@ class Cerber_APIs(Signature):
                 if proto == "17" and stype == "2":
                     sock = str(self.get_argument(call, "socket"))
                     self.udpCount[sock] = 0
+                    self.mark_call()
 
             elif call["api"] == "sendto":
                 sock = str(self.get_argument(call, "socket"))
@@ -62,6 +63,7 @@ class Cerber_APIs(Signature):
                         if self.udpCount[sock] >= 300:
                             self.skip = True
                     self.lastIp = ip
+                    self.mark_call()
 
         return None
 

@@ -52,6 +52,7 @@ class move_file_on_reboot(Signature):
             ):
                 self.data.append({"File Move on Reboot": "Old: %s -> New: %s" % (existingname, newname)})
                 self.match = True
+                self.mark_call()
 
     def on_complete(self):
         return self.match

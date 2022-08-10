@@ -39,6 +39,7 @@ class injection_themeinitapihook(Signature):
             self.data.append(
                 {"injection": "%s/%s" % (self.get_argument(call, "ModuleName"), self.get_argument(call, "FunctionName"))}
             )
+            self.mark_call()
 
     def on_complete(self):
         if self.loadctr > 0:

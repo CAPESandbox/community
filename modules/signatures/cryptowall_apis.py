@@ -54,10 +54,12 @@ class CryptoWall_APIs(Signature):
                 if self.cryptInfo and buf.startswith("crypt"):
                     if not self.campaign:
                         self.campaign = buf.split("00")[0]
+                        self.mark_call()
                 else:
                     buf = buf.replace("\\x00", "")
                     if self.compname and buf.startswith(self.compname):
                         self.cryptInfo = True
+                        self.mark_call()
                     else:
                         self.cryptInfo = False
 
@@ -66,6 +68,7 @@ class CryptoWall_APIs(Signature):
                 buf = self.get_argument(call, "UncompressedBuffer")
                 if buf:
                     self.buffers.add(buf)
+                    self.mark_call()
 
         elif call["api"] == "NtOpenEvent":
             eventName = self.get_argument(call, "EventName")
@@ -74,6 +77,7 @@ class CryptoWall_APIs(Signature):
                 if bno and bno in self.lastLargeBuf:
                     idx = self.lastLargeBuf.find(bno)
                     self.campaign = self.lastLargeBuf[0:idx]
+                    self.mark_call()
 
     def on_complete(self):
         if self.campaign:

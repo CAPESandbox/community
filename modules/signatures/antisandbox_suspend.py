@@ -39,5 +39,6 @@ class AntiSandboxSuspend(Signature):
             buf = {"process": proc}
             if buf not in self.data:
                 self.data.append(buf)
+                self.mark_call()
 
             return True

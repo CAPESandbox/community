@@ -139,4 +139,5 @@ class RansomwareMessage(Signature):
             if len(set(re.findall(self.patterns, buff))) > 1:
                 self.data.append({"ransom_note": "%s" % (filepath)})
                 self.data.append({"begining_of_ransom_message": "%s" % (buff)})
+                self.mark_call()
                 return True

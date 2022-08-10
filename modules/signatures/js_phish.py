@@ -60,6 +60,7 @@ class JS_Phish(Signature):
             if lure[0].lower() in buf.lower():
                 self.lurehits.add(lure[1])
                 self.totalhits += 1
+                self.mark_call()
 
     def on_complete(self):
         if self.totalhits:

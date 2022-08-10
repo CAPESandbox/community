@@ -35,4 +35,5 @@ class QurbDetectLibs(Signature):
     def on_call(self, call, process):
         dll_name = self.get_argument(call, "FileName")
         if "qoehook" in dll_name.lower():
+            self.mark_call()
             return True

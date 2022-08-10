@@ -46,6 +46,7 @@ class WiperZeroedBytes(Signature):
             if len(buff) > 30 and regex.match(buff):
                 self.lastfile = filepath
                 self.wipecount += 1
+                self.mark_call()
 
     def on_complete(self):
         ret = False

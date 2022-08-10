@@ -45,6 +45,7 @@ class InstalledApps(Signature):
                     # Ignore language/architecture name segments
                     buf = re.sub(r"\([^\)]+\)", "", app).strip()
                     self.programs.add(buf)
+                    self.mark_call()
 
     def on_complete(self):
         if self.programs:

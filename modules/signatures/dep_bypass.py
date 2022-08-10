@@ -69,6 +69,7 @@ class DEPBypass(Signature):
 
         if oldprotect == 4 and newprotect == 0x40:
             self.procs.add(process["process_name"] + ":" + str(process["process_id"]))
+            self.mark_call()
 
     def on_complete(self):
         for proc in self.procs:

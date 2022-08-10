@@ -32,4 +32,5 @@ class Prinimalka(Signature):
         if self.get_argument(call, "ValueName").endswith("_opt_server1"):
             server = self.get_argument(call, "Buffer").rstrip("\\x00")
             self.description += " (C&C: {0})".format(server)
+            self.mark_call()
             return True

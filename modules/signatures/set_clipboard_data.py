@@ -44,6 +44,7 @@ class GetClipboardData(Signature):
 
     def on_call(self, call, process):
         self.detected = True
+        self.mark_call()
 
     def on_complete(self):
         return self.detected

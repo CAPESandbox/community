@@ -41,10 +41,12 @@ class NetworkBIND(Signature):
             socket = self.get_argument(call, "socket")
             bind = "{0}:{1}".format(self.get_argument(call, "ip"), self.get_argument(call, "port"))
             self.bindmap[socket] = bind
+            self.mark_call()
         elif call["api"] == "listen":
             socket = self.get_argument(call, "socket")
             if socket not in self.listens:
                 self.listens.append(socket)
+                self.mark_call()
 
     def on_complete(self):
         for socket in self.listens:

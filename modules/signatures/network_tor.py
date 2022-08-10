@@ -48,4 +48,5 @@ class Tor(Signature):
 
         for indicator in indicators:
             if self.check_file(pattern=indicator, regex=True):
+                self.mark_call()
                 return True

@@ -39,6 +39,7 @@ class PersistenceBootexecute(Signature):
         if call["status"]:
             fullname = self.get_argument(call, "FullName")
             self.registry_writes[fullname] = self.get_argument(call, "Buffer")
+            self.mark_call()
 
     def on_complete(self):
         match_key = self.check_write_key(

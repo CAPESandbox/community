@@ -118,6 +118,7 @@ class DCRatAPIs(Signature):
             buff = self.get_argument(call, "NodeName")
             if buff:
                 self.nodename = buff
+                self.mark_call()
 
         elif call["api"] == "CryptHashData":
             self.mbcs += ["OC0005", "C0027"]  # micro-behaviour
@@ -126,18 +127,22 @@ class DCRatAPIs(Signature):
                 match = re.match(self.pat, buff)
                 if match:
                     self.score += 1
+                    self.mark_call()
                 elif buff.startswith(self.nodename):
                     for word in self.dkeywords:
                         tag = self.nodename + word
                         if buff == tag:
                             self.score += 1
+                            self.mark_call()
                 elif buff.startswith("userdatahttp"):
                     self.score += 1
+                    self.mark_call()
                 else:
                     decoded = unbuffered_b64decode(buff)
                     for word in self.bkeywords:
                         if word in decoded:
                             self.score += 2
+                            self.mark_call()
 
     def on_complete(self):
         if self.score >= 5:

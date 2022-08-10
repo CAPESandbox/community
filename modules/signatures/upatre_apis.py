@@ -66,8 +66,10 @@ class Upatre_APIs(Signature):
                     self.mbcs += ["OC0003", "C0017", "C0017.003"]  # micro-behaviour
                     if flags & 0x4:
                         self.created_procs.append(cli)
+                    self.mark_call()
                 else:
                     self.created_procs.append(cli)
+                    self.mark_call()
 
         # We only care about the first child of the top-most parent process
         if process["parent_id"] == self.first_pid and process["process_id"] == self.bad_pid:
@@ -80,12 +82,14 @@ class Upatre_APIs(Signature):
                     self.mbcs += ["OB0006", "F0007"]
                     self.mbcs += ["OC00001", "C0047"]  # micro-behaviour
                     self.deletes_parentfile = True
+                    self.mark_call()
 
             elif call["api"] == "GetComputerNameW":
                 if not self.hostname:
                     self.hostname = self.get_argument(call, "ComputerName")
                     self.ttps += ["T1082"]  # MITRE v6,7,8
                     self.mbcs += ["OB0007", "E1082"]
+                    self.mark_call()
 
             elif call["api"] == "InternetConnectW":
                 self.current_handle = call["return"]
@@ -93,6 +97,7 @@ class Upatre_APIs(Signature):
                 serverport = self.get_argument(call, "ServerPort")
                 self.url_buffer = "{0}:{1}".format(servername, serverport)
                 self.mbcs += ["OC0006", "C0005", "C0005.001"]  # micro-behaviour
+                self.mark_call()
 
             elif call["api"] == "HttpOpenRequestW":
                 handle = self.get_argument(call, "InternetHandle")
@@ -108,9 +113,11 @@ class Upatre_APIs(Signature):
                             # Upatre structured URI
                             if not self.campaign:
                                 self.campaign = tmp.group(1)
+                                self.mark_call()
                         else:
                             # Potential payload
                             self.network_data.add(self.url_buffer + url)
+                            self.mark_call()
 
         return None
 

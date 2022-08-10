@@ -53,6 +53,7 @@ class NetworkFakeUserAgent(Signature):
                     if fakeua in useragent:
                         self.match = True
                         self.data.append({"fake_useragent": useragent})
+                        self.mark_call()
         elif call["api"] == "WinHttpOpen":
             useragent = self.get_argument(call, "UserAgent")
             if useragent:
@@ -60,6 +61,7 @@ class NetworkFakeUserAgent(Signature):
                     if fakeua in useragent:
                         self.match = True
                         self.data.append({"fake_useragent": useragent})
+                        self.mark_call()
 
     def on_complete(self):
         return self.match

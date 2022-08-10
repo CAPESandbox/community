@@ -29,4 +29,5 @@ class ClickfraudCookies(Signature):
                 pass
             # INTERNET_SUPPRESS_COOKIE_POLICY
             if not handle and val == 1:
+                self.mark_call()
                 return True

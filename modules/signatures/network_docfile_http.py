@@ -69,6 +69,7 @@ class NetworkDocumentHTTP(Signature):
                 addit = {"http_request": "%s_WSASend_%s" % (pname, buff)}
             if addit and addit not in self.data:
                 self.data.append(addit)
+                self.mark_call()
 
         return None
 

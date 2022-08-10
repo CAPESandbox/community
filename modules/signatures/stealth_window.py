@@ -50,6 +50,7 @@ class Hidden_Window(Signature):
                     spawn = self.get_argument(call, "CommandLine")
                 self.hidden.append((proc, spawn))
                 self.data.append({"process": proc + " -> " + spawn})
+                self.mark_call()
             # Handle CREATE_NO_WINDOW flag, ignored for CREATE_NEW_CONSOLE and DETACHED_PROCESS
             elif cfbuf & 0x08000000 and not (cfbuf & 0x10 or cfbuf & 0x8):
                 proc = process["process_name"]
@@ -58,6 +59,7 @@ class Hidden_Window(Signature):
                     spawn = self.get_argument(call, "CommandLine")
                 self.hidden.append((proc, spawn))
                 self.data.append({"process": proc + " -> " + spawn})
+                self.mark_call()
 
         elif call["api"] == "ShellExecuteExW":
             buf = int(self.get_argument(call, "Show"), 10)
@@ -67,6 +69,7 @@ class Hidden_Window(Signature):
                 spawn = self.get_argument(call, "FilePath")
                 self.hidden.append((proc, spawn))
                 self.data.append({"process": proc + " -> " + spawn})
+                self.mark_call()
 
     def on_complete(self):
         ret = False

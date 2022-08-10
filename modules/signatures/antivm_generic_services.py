@@ -61,4 +61,5 @@ class AntiVMServices(Signature):
         else:
             if call["api"].startswith("RegEnumKeyEx"):
                 if self.get_argument(call, "Handle") == self.handle:
+                    self.mark_call()
                     return True
