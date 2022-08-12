@@ -40,7 +40,7 @@ class EmumeratesRunningProcesses(Signature):
             if procpid not in self.enumeratedpids and procpid != "0":
                 self.enumeratedpids.append(procpid)
                 self.data.append({"process": "%s with pid %s" % (procname, procpid)})
-                self.mark_call()
+                if self.pid: self.mark_call()
 
     def on_complete(self):
         if len(self.enumeratedpids) > 5:
@@ -71,7 +71,7 @@ class CreateToolhelp32SnapshotProcessModuleEnumeration(Signature):
             if procpid:
                 if procpid not in self.snapshotpids and procpid != "0":
                     self.snapshotpids.append(procpid)
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
         if call["api"].startswith("Module32Next"):
             procpid = self.get_argument(call, "ProcessId")
@@ -79,7 +79,7 @@ class CreateToolhelp32SnapshotProcessModuleEnumeration(Signature):
             if procpid in self.snapshotpids:
                 self.ret = True
                 self.data.append({"module": "pid %s module %s" % (procpid, modulename)})
-                self.mark_call()
+                if self.pid: self.mark_call()
 
     def on_complete(self):
         return self.ret

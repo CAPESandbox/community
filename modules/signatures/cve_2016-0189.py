@@ -43,5 +43,5 @@ class CVE_2016_0189(Signature):
 
         if 'valueOf": function' in buf and "triggerBug()" in buf and "exploit(" in buf:
             self.data.append({"cve_2016-0189_poc": "Proof of concept exploit code used. Seen in Sundown & Neutrino exploit kits"})
-            self.mark_call()
+            if self.pid: self.mark_call()
             return True

@@ -66,7 +66,7 @@ class JS_SuspiciousRedirect(Signature):
                         self.severity = 3
                         self.data.append({"Info": "Javascript generated CSS styling for a div " "containing an iframe redirect."})
                         self.data.append({"Redirect": redirect.group("redir")})
-                        self.mark_call()
+                        if self.pid: self.mark_call()
 
     def on_complete(self):
         if self.ret:

@@ -26,10 +26,10 @@ class DeletesShadowCopies(Signature):
                 and ("delete" in cmdline and "shadows" in cmdline)
                 or ("resize" in cmdline and "shadowstorage" in cmdline)
             ):
-                self.mark_call()
+                if self.pid: self.mark_call()
                 return True
             elif "wmic" in cmdline and "shadowcopy" in cmdline and "delete" in cmdline:
-                self.mark_call()
+                if self.pid: self.mark_call()
                 return True
         elif call["api"] == "ShellExecuteExW":
             filepath = self.get_argument(call, "FilePath").lower()
@@ -39,8 +39,8 @@ class DeletesShadowCopies(Signature):
                 and ("delete" in params and "shadows" in params)
                 or ("resize" in params and "shadowstorage" in params)
             ):
-                self.mark_call()
+                if self.pid: self.mark_call()
                 return True
             elif "wmic" in filepath and "shadowcopy" in params and "delete" in params:
-                self.mark_call()
+                if self.pid: self.mark_call()
                 return True

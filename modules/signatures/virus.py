@@ -63,7 +63,7 @@ class Virus(Signature):
             if dstname in self.readfiles:
                 self.infected_files.add(dstname)
                 self.saw_virus = True
-                self.mark_call()
+                if self.pid: self.mark_call()
         elif call["api"] == "NtClose":
             handle = int(self.get_argument(call, "Handle"), 16)
             self.handles.pop(handle, None)
@@ -93,7 +93,7 @@ class Virus(Signature):
                         key = self.readcopyfiles[key]
                 self.infected_files.add(key)
                 self.saw_virus = True
-                self.mark_call()
+                if self.pid: self.mark_call()
 
         return None
 

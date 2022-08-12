@@ -68,13 +68,13 @@ class HTTP_Request(Signature):
             if url:
                 for wlhost in domain_passlist:
                     self.urls.add(url)
-                    self.mark_call()
+                    if self.pid: self.mark_call()
         elif call["api"].startswith("InternetOpenUrl"):
             url = self.get_argument(call, "URL")
             if url:
                 for wlhost in domain_passlist:
                     self.urls.add(url)
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
     def on_complete(self):
         ret = False

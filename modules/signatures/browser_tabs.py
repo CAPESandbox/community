@@ -35,7 +35,7 @@ class FirefoxDisablesProcessPerTab(Signature):
             handlename = self.get_argument(call, "HandleName")
             self.data.append({"handlename": handlename})
             self.data.append({"written_content": buf})
-            self.mark_call()
+            if self.pid: self.mark_call()
             return True
 
 

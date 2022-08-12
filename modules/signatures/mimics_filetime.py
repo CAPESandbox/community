@@ -135,7 +135,7 @@ class MimicsFiletime(Signature):
                     return None
                 self.mimics.add((filename, obj.filename))
                 self.saw_mimic = True
-                self.mark_call()
+                if self.pid: self.mark_call()
         return None
 
     def on_complete(self):

@@ -75,10 +75,10 @@ class BlackRATRegistryKeys(Signature):
             name = self.get_argument(call, "FullName")
             if value and buff and name:
                 if value == "ID" and buff == "HVNC":
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                     self.match = True
                 elif value == "ID" and re.match(self.regpat, name):
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                     self.match = True
 
         if call["api"] == "RegQueryValueExW":
@@ -87,10 +87,10 @@ class BlackRATRegistryKeys(Signature):
             name = self.get_argument(call, "FullName")
             if value and data and name:
                 if value == "ID" and data == "HVNC":
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                     self.match = True
                 elif value == "ID" and re.match(self.regpat, name):
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                     self.match = True
 
     def on_complete(self):
@@ -122,7 +122,7 @@ class BlackRATNetworkActivity(Signature):
             buff = self.get_argument(call, "buffer")
             if buff:
                 if "x00>Clientx, Version=" in buff:
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                     self.match = True
 
     def on_complete(self):
@@ -155,7 +155,7 @@ class BlackRATAPIs(Signature):
         if call["api"] == "RtlDecompressBuffer":
             ubuff = self.get_argument(call, "UncompressedBuffer")
             if ubuff and ubuff.startswith("MZ"):
-                self.mark_call()
+                if self.pid: self.mark_call()
                 self.rtldecmz = True
                 self.score += 1
 
@@ -166,7 +166,7 @@ class BlackRATAPIs(Signature):
                     flags = int(self.get_argument(call, "CreationFlags"), 16)
                     # CREATE_SUSPENDED|CREATE_NO_WINDOW
                     if flags & 0x4 or flags & 0x08000004:
-                        self.mark_call()
+                        if self.pid: self.mark_call()
                         self.score += 2
 
         if call["api"] == "CryptHashData":
@@ -174,11 +174,11 @@ class BlackRATAPIs(Signature):
             buff = self.get_argument(call, "Buffer")
             if buff:
                 if buff.startswith("MZ"):
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                     self.cryptmz = True
                     self.score += 1
                 if buff == "Nativ3M3thodsKey":
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                     self.score += 1
 
     def on_complete(self):

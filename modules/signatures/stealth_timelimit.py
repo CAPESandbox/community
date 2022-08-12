@@ -63,7 +63,7 @@ class StealthTimeout(Signature):
                 if self.systimeidx and self.exitidx and self.systimeidx > (self.exitidx - 10):
                     if process["module_path"].lower() != "c:\\windows\\system32\\attrib.exe":
                         self.data.append({"process": process["process_name"] + ", PID " + str(process["process_id"])})
-                        self.mark_call()
+                        if self.pid: self.mark_call()
                         return True
 
         return None

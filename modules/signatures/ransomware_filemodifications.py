@@ -68,7 +68,7 @@ class RansomwareFileModifications(Signature):
                         self.newextensions.append(newextension)
         if origfile != newfile and "@" in newfile:
             self.appendemailcount += 1
-            self.mark_call()
+            if self.pid: self.mark_call()
 
     def on_complete(self):
         ret = False

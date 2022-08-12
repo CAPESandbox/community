@@ -78,7 +78,7 @@ class InjectionRUNPE(Signature):
                     self.thread_map[handle],
                 )
                 self.data.append({"injection": desc})
-                self.mark_call()
+                if self.pid: self.mark_call()
                 return True
         elif call["api"] == "NtResumeProcess" and (self.sequence == 2 or self.sequence == 3):
             handle = self.get_argument(call, "ProcessHandle")
@@ -90,5 +90,5 @@ class InjectionRUNPE(Signature):
                     self.process_map[handle],
                 )
                 self.data.append({"injection": desc})
-                self.mark_call()
+                if self.pid: self.mark_call()
                 return True

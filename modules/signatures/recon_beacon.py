@@ -43,7 +43,7 @@ class Recon_Beacon(Signature):
                 if process["process_name"] not in self.proclogs:
                     self.proclogs[process["process_name"]] = set()
                 self.proclogs[process["process_name"]].add(buf)
-                self.mark_call()
+                if self.pid: self.mark_call()
 
         elif call["api"] == "HttpOpenRequestA":
             buf = self.get_argument(call, "Path")
@@ -51,7 +51,7 @@ class Recon_Beacon(Signature):
                 if process["process_name"] not in self.proclogs:
                     self.proclogs[process["process_name"]] = set()
                 self.proclogs[process["process_name"]].add(buf)
-                self.mark_call()
+                if self.pid: self.mark_call()
 
     def on_complete(self):
         ret = False

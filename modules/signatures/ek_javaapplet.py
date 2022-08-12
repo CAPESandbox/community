@@ -46,5 +46,5 @@ class Java_JS(Signature):
             buf = self.get_argument(call, "Script")
 
         if re.search("\<applet.*?archive[ \t\n]*?=", buf, re.IGNORECASE | re.DOTALL):
-            self.mark_call()
+            if self.pid: self.mark_call()
             return True

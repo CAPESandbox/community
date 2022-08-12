@@ -49,7 +49,7 @@ class DeletesSelf(Signature):
         if call["api"] != "MoveFileWithProgressW" and call["api"] != "MoveFileWithProgressTransactedW":
             filename = self.get_argument(call, "FileName").lower()
             if filename == self.initialpath:
-                self.mark_call()
+                if self.pid: self.mark_call()
                 return True
         else:
             filename = self.get_argument(call, "ExistingFileName").lower()
@@ -61,5 +61,5 @@ class DeletesSelf(Signature):
                     (filename[-1] == "\\" and self.initialpath.startswith(filename)) or self.initialpath.startswith(filename + "\\")
                 )
             ):
-                self.mark_call()
+                if self.pid: self.mark_call()
                 return True

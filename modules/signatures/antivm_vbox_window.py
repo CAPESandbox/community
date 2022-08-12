@@ -36,5 +36,5 @@ class VBoxDetectWindow(Signature):
         for indicator in indicators:
             if self.check_argument_call(call, pattern=indicator, ignorecase=True):
                 self.data.append({"window": indicator})
-                self.mark_call()
+                if self.pid: self.mark_call()
                 return True

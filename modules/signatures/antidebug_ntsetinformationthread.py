@@ -41,5 +41,5 @@ class antidebug_ntsetinformationthread(Signature):
         else:
             ThreadInformationClass = int(ThreadInformationClass)
         if ThreadInformationClass == THREAD_HIDE_FROM_DEBUGGER:
-            self.mark_call()
+            if self.pid: self.mark_call()
             return True

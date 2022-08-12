@@ -36,7 +36,7 @@ class QuilClipperNetworkBehavior(Signature):
         agent = self.get_argument(call, "Agent")
         if agent:
             if ("quilclipper" or ("/ username:" and "/ system:")) in agent.lower():
-                self.mark_call()
+                if self.pid: self.mark_call()
                 self.match = True
 
     def on_complete(self):

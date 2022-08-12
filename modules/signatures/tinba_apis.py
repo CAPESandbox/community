@@ -41,7 +41,7 @@ class Tinba_APIs(Signature):
             deld = self.get_argument(call, "UnhookType")
             if deld == "removal":
                 self.unhooks.add(self.get_argument(call, "FunctionName"))
-                self.mark_call()
+                if self.pid: self.mark_call()
 
     def on_complete(self):
         malscore = 0

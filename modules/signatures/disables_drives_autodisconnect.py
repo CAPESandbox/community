@@ -33,11 +33,11 @@ class DisablesMappedDrivesAutodisconnect(Signature):
         if call["api"] == "CreateProcessInternalW":
             cmdline = self.get_argument(call, "CommandLine").lower()
             if "config server" in cmdline and "/autodisconnect:" in cmdline and "net" in cmdline:
-                self.mark_call()
+                if self.pid: self.mark_call()
                 return True
         elif call["api"] == "ShellExecuteExW":
             filepath = self.get_argument(call, "FilePath").lower()
             params = self.get_argument(call, "Parameters").lower()
             if "config server" in params and "/autodisconnect:" in params and "net" in filepath:
-                self.mark_call()
+                if self.pid: self.mark_call()
                 return True

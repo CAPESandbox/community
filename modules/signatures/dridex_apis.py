@@ -72,7 +72,7 @@ class Dridex_APIs(Signature):
                     self.compname = buf.lower()
                     self.ttps += ["T1082"]  # MITRE v6,7,8
                     self.mbcs += ["OB0007", "E1082"]
-                    self.mark_call()
+                    if self.pid: self.mark_call()
             if testkey == "hkey_current_user\\volatile environment\\username":
                 if call["status"]:
                     buf = self.get_argument(call, "Data")
@@ -80,13 +80,13 @@ class Dridex_APIs(Signature):
                         self.username = buf.lower()
                         self.ttps += ["T1033", "T1082"]  # MITRE v6,7,8
                         self.mbcs += ["E1082"]
-                        self.mark_call()
+                        if self.pid: self.mark_call()
                 else:
                     self.is_xp = True
 
         elif call["api"] == "CryptHashData":
             self.crypted.append(self.get_argument(call, "Buffer").lower())
-            self.mark_call()
+            if self.pid: self.mark_call()
 
         elif call["api"] == "connect":
             if not self.extract:
@@ -98,7 +98,7 @@ class Dridex_APIs(Signature):
 
             lastip = self.get_argument(call, "ip")
             self.sockmon[socknum] = lastip
-            self.mark_call()
+            if self.pid: self.mark_call()
 
         elif call["api"] == "send":
             if not self.extract:
@@ -113,7 +113,7 @@ class Dridex_APIs(Signature):
                     self.ttps += ["T1041"]  # MITRE v6,7,8
                     self.mbcs += ["OB0004", "B0030"]
                     self.mbcs += ["OC0006", "C0001"]  # micro-behaviour
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
         elif call["api"] == "recv":
             if not self.extract:
@@ -134,13 +134,13 @@ class Dridex_APIs(Signature):
                                 self.ttps += ["T1041"]  # MITRE v6,7,8
                                 self.mbcs += ["OB0004", "B0030"]
                                 self.mbcs += ["OC0006", "C0001"]  # micro-behaviour
-                                self.mark_call()
+                                if self.pid: self.mark_call()
 
         elif call["api"] == "RtlDecompressBuffer":
             buf = self.get_argument(call, "UncompressedBuffer")
             if buf.startswith("MZ"):
                 self.decompMZ = True
-                self.mark_call()
+                if self.pid: self.mark_call()
 
         elif call["api"] == "InternetConnectW":
             if self.decompMZ:
@@ -149,7 +149,7 @@ class Dridex_APIs(Signature):
                     self.ip_check = ip
                     self.port_check = str(self.get_argument(call, "ServerPort"))
                     self.mbcs += ["OC0006", "C0005"]  # micro-behaviour
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
         elif call["api"] == "HttpOpenRequestW":
             if self.ip_check and self.port_check:
@@ -158,7 +158,7 @@ class Dridex_APIs(Signature):
                     self.ttps += ["T1041", "T1071"]  # MITRE v6,7,8
                     self.mbcs += ["OB0004", "B0030"]
                     self.mbcs += ["OC0006", "C0002"]  # micro-behaviour
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
         elif call["api"] == "InternetCrackUrlA":
             if self.post_check:
@@ -171,7 +171,7 @@ class Dridex_APIs(Signature):
                         self.ttps += ["T1571"]  # MITRE v7,8
                         self.mbcs += ["OB0004", "B0030"]
                         self.mbcs += ["OC0006", "C0002"]  # micro-behaviour
-                        self.mark_call()
+                        if self.pid: self.mark_call()
 
         return None
 

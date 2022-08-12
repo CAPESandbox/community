@@ -41,12 +41,12 @@ class ProcessInterest(Signature):
                 self.lastprocessname = ""
             else:
                 self.lastprocessname = self.get_argument(call, "ProcessName")
-                self.mark_call()
+                if self.pid: self.mark_call()
         else:
             # is Process32FirstW
             if self.lastprocessname:
                 self.interested_processes.add(self.lastprocessname)
-                self.mark_call()
+                if self.pid: self.mark_call()
 
     def on_complete(self):
         if self.lastprocessname:

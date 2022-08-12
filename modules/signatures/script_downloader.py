@@ -55,45 +55,45 @@ class ScriptNetworkActvity(Signature):
                 buff = self.get_argument(call, "FileName").lower()
                 self.ret = True
                 self.data.append({"request": buff})
-                self.mark_call()
+                if self.pid: self.mark_call()
             if call["api"] == "HttpOpenRequestW":
                 self.mbcs += ["C0002"]  # micro-behaviour
                 buff = self.get_argument(call, "Path").lower()
                 self.ret = True
                 self.data.append({"request": buff})
-                self.mark_call()
+                if self.pid: self.mark_call()
             if call["api"] == "InternetCrackUrlW":
                 self.mbcs += ["C0005"]  # micro-behaviour
                 buff = self.get_argument(call, "Url").lower()
                 self.ret = True
                 self.data.append({"request": buff})
-                self.mark_call()
+                if self.pid: self.mark_call()
             if call["api"] == "InternetCrackUrlA":
                 buff = self.get_argument(call, "Url").lower()
                 self.ret = True
                 self.data.append({"request": buff})
-                self.mark_call()
+                if self.pid: self.mark_call()
             if call["api"] == "send":
                 buff = self.get_argument(call, "buffer").lower()
                 if buff.startswith("get") or buff.startswith("post"):
                     self.mbcs += ["C0001"]  # micro-behaviour
                     self.ret = True
                     self.data.append({"request": buff})
-                    self.mark_call()
+                    if self.pid: self.mark_call()
             if call["api"] == "SslEncryptPacket":
                 buff = self.get_argument(call, "Buffer").lower()
                 if buff.startswith("get") or buff.startswith("post"):
                     self.mbcs += ["OC0005", "C0027"]  # micro-behaviour
                     self.ret = True
                     self.data.append({"request": buff})
-                    self.mark_call()
+                    if self.pid: self.mark_call()
             if call["api"] == "WSAConnect":
                 buff = self.get_argument(call, "ip").lower()
                 port = self.get_argument(call, "port").lower()
                 if not buff.startswith(("10.", "172.16.", "192.168.")):
                     self.ret = True
                     self.data.append({"request": "%s:%s" % (buff, port)})
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
     def on_complete(self):
         return self.ret
@@ -137,7 +137,7 @@ class SuspiciousJSScript(Signature):
                         if suspicious in javascript.lower():
                             self.data.append({"process": pname})
                             self.ret = True
-                            self.mark_call()
+                            if self.pid: self.mark_call()
                             break
 
         if call["api"] == "COleScript_ParseScriptText":
@@ -149,7 +149,7 @@ class SuspiciousJSScript(Signature):
                         if suspicious in javascript.lower():
                             self.data.append({"process": pname})
                             self.ret = True
-                            self.mark_call()
+                            if self.pid: self.mark_call()
                             break
 
     def on_complete(self):
@@ -183,7 +183,7 @@ class ScriptCreatedProcess(Signature):
             if cmdline:
                 self.ret = True
                 self.data.append({pname.replace(".", "_"): cmdline})
-                self.mark_call()
+                if self.pid: self.mark_call()
 
     def on_complete(self):
         return self.ret

@@ -88,7 +88,7 @@ class NemtyNote(Signature):
         handle = self.get_argument(call, "HandleName")
         if buff and handle:
             if "NEMTY PROJECT" in buff and handle.endswith(".txt"):
-                self.mark_call()
+                if self.pid: self.mark_call()
                 self.match = True
 
     def on_complete(self):
@@ -131,7 +131,7 @@ class NemtyNetworkActivity(Signature):
                 for ua in self.useragents:
                     if ua.lower() == agent.lower():
                         self.match_agent = True
-                        self.mark_call()
+                        if self.pid: self.mark_call()
 
         if call["api"] == "InternetOpenUrlA":
             self.mbcs += ["C0005.003"]  # micro-behaviour
@@ -140,7 +140,7 @@ class NemtyNetworkActivity(Signature):
                 for domain in self.domains:
                     if domain in url:
                         self.match_domain = True
-                        self.mark_call()
+                        if self.pid: self.mark_call()
 
     def on_complete(self):
         if self.match_agent and self.match_domain:

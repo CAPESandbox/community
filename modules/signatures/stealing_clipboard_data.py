@@ -44,7 +44,7 @@ class StealingClipboardData(Signature):
 
     def on_call(self, call, process):
         self.detected = True
-        self.mark_call()
+        if self.pid: self.mark_call()
 
     def on_complete(self):
         return self.detected

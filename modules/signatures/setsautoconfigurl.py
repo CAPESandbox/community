@@ -58,7 +58,7 @@ class SetsAutoconfigURL(Signature):
                 value = self.get_argument(call, "ValueName").lower()
                 if value == "autoconfigurl":
                     self.keybuf = self.get_argument(call, "Buffer")
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
         elif call["api"] == "NtWriteFile" and pname not in self.procwhitelist:
             path = self.get_argument(call, "HandleName")
@@ -67,7 +67,7 @@ class SetsAutoconfigURL(Signature):
                 if "user_pref" in buf and "network.proxy.autoconfig_url" in buf:
                     tmp = buf.split("(")[1].split(")")[0].split(",")[1]
                     self.pathbuf = tmp.strip().replace('"', "").replace("'", "")
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
     def on_complete(self):
         ret = False

@@ -71,7 +71,7 @@ class StealthFile(Signature):
                     filename = self.get_argument(call, "FileName")
                     if filename not in self.stealth_files:
                         self.stealth_files.append(filename)
-                        self.mark_call()
+                        if self.pid: self.mark_call()
         elif call["api"] == "NtSetInformationFile":
             handle = int(self.get_argument(call, "FileHandle"), 16)
             settype = int(self.get_argument(call, "FileInformationClass"), 10)
@@ -85,7 +85,7 @@ class StealthFile(Signature):
                     if handle in self.handles:
                         if self.handles[handle] not in self.stealth_files:
                             self.stealth_files.append(self.handles[handle])
-                            self.mark_call()
+                            if self.pid: self.mark_call()
                     # else:
                     #    if "UNKNOWN" not in self.stealth_files:
                     #        self.stealth_files.append("UNKNOWN")

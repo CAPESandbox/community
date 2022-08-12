@@ -42,31 +42,31 @@ class Angler_JS(Signature):
             buf = self.get_argument(call, "Script")
 
         if "/malware.dontneedcoffee.com/.test()" in buf:
-            self.mark_call()
+            if self.pid: self.mark_call()
             return True
         if "Kaspersky.IeVir' + " in buf:
-            self.mark_call()
+            if self.pid: self.mark_call()
             return True
         if (
             "+'%u0000')" in buf
             and "Math.floor(Math.random() * (6 -3) +3);" in buf
             and "{return 'Accept: ' +'*' +'/' +'*' +'" in buf
         ):
-            self.mark_call()
+            if self.pid: self.mark_call()
             return True
         if (
             "2830293d2668364336343734364526" in buf.lower()
             and "2831293d2668364336343245364326" in buf.lower()
             and "2832293d2668373236393536373426" in buf.lower()
         ):
-            self.mark_call()
+            if self.pid: self.mark_call()
             return True
         if "value='\" +url" in buf.lower() and "<param name='play' value='true'>\" + \"<param name='flashvars'" in buf.lower():
-            self.mark_call()
+            if self.pid: self.mark_call()
             return True
         if "getkolaio()" in buf.lower():
-            self.mark_call()
+            if self.pid: self.mark_call()
             return True
         if "var cryptKey = " in buf.lower():
-            self.mark_call()
+            if self.pid: self.mark_call()
             return True

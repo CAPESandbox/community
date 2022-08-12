@@ -40,24 +40,24 @@ class TrochilusRATAPIs(Signature):
             if outputstr:
                 if "init servant. server" in outputstr:
                     self.score += 3
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
         if call["api"] == "CreateProcessInternalW":
             cmdline = self.get_argument(call, "CommandLine")
             if cmdline:
                 if "XLServant" in cmdline:
                     self.score += 2
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
         if call["api"] == "RegSetValueExW":
             valname = self.get_argument(call, "ValueName")
             fulname = self.get_argument(call, "FullName")
             if valname and valname == "XLServant":
                 self.score += 1
-                self.mark_call()
+                if self.pid: self.mark_call()
             if fulname and fulname.endswith("XLServant"):
                 self.score += 1
-                self.mark_call()
+                if self.pid: self.mark_call()
 
     def on_complete(self):
         if self.score >= 3:

@@ -42,7 +42,7 @@ class DEPDisable(Signature):
             processinfo = self.get_raw_argument(call, "ProcessInformation")
             if processinfo == 0:
                 self.data.append({"process": process["process_name"] + ":" + str(process["process_id"])})
-                self.mark_call()
+                if self.pid: self.mark_call()
 
     def on_complete(self):
         if self.data:

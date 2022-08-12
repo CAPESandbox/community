@@ -30,15 +30,15 @@ class OrcusRAT(Signature):
             node = self.get_argument(call, "FullName")
             if "HKEY_CURRENT_USER\\SOFTWARE\\Orcus" in node:
                 self.badness_files += 1
-                self.mark_call()
+                if self.pid: self.mark_call()
 
             if "Orcus.Plugins" in node:
                 self.badness_files += 1
-                self.mark_call()
+                if self.pid: self.mark_call()
 
             if "Orcus.Shared" in node:
                 self.badness_files += 1
-                self.mark_call()
+                if self.pid: self.mark_call()
 
     def on_complete(self):
         if self.badness_files >= 3:

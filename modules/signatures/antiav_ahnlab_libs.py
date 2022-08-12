@@ -40,5 +40,5 @@ class AhnlabDetectLibs(Signature):
             or "AhnACtrl" in dllname.lower()
             or "AhnI2" in dllname.lower()
         ):
-            self.mark_call()
+            if self.pid: self.mark_call()
             return True

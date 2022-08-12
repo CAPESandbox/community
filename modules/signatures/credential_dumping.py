@@ -59,7 +59,7 @@ class LsassCredentialDumping(Signature):
                     )
                     self.lsasshandle.append(self.get_argument(call, "ProcessHandle"))
                     self.readaccessprocs.append(pname)
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                     self.ret = True
 
         if call["api"] == "ReadProcessMemory":
@@ -71,7 +71,7 @@ class LsassCredentialDumping(Signature):
                         {"lsass credential dumping": "The process %s is reading memory from the lsass.exe process" % (pname)}
                     )
                     self.creddumpprocs.append(pname)
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                     self.ret = True
 
     def on_complete(self):

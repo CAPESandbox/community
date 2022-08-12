@@ -59,11 +59,11 @@ class ThemidaPacked(Signature):
         if cname and cname != "0" and cname in indicators:
             if cname not in self.ret[pid]["apivalues"]:
                 self.ret[pid]["apivalues"].append(cname)
-                self.mark_call()
+                if self.pid: self.mark_call()
         if wname and wname != 0 and wname in indicators:
             if wname not in self.ret[pid]["apivalues"]:
                 self.ret[pid]["apivalues"].append(wname)
-                self.mark_call()
+                if self.pid: self.mark_call()
         return None
 
     def on_complete(self):

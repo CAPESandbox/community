@@ -64,7 +64,7 @@ class H1N1_APIs(Signature):
                     if section[:-1] in self.events:
                         if process["process_id"] != self.injPid:
                             self.c2Pid = process["process_id"]
-                            self.mark_call()
+                            if self.pid: self.mark_call()
                             self.ret = True
 
         elif call["api"] == "InternetConnectA":
@@ -81,7 +81,7 @@ class H1N1_APIs(Signature):
                         uri = "/" + uri
                     c2 = self.lastConnect + uri
                     if c2 not in self.c2s:
-                        self.mark_call()
+                        if self.pid: self.mark_call()
                         self.c2s.append(c2)
 
     def on_complete(self):

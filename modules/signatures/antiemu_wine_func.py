@@ -40,5 +40,5 @@ class WineDetectFunc(Signature):
             "wine_nt_to_unix_file_name",
             "wine_server_call",
         ]:
-            self.mark_call()
+            if self.pid: self.mark_call()
             return True

@@ -34,19 +34,19 @@ class Modiloader_APIs(Signature):
 
         if url:
             if url.startswith("https://cdn.discordapp.com/attachments/"):
-                self.mark_call()
+                if self.pid: self.mark_call()
                 self.urls.append(url)
             elif url.startswith("/attachments/"):
-                self.mark_call()
+                if self.pid: self.mark_call()
                 self.urls.append("https://cdn.discordapp.com" + url)
             elif url.startswith("/u/0/uc?id="):
-                self.mark_call()
+                if self.pid: self.mark_call()
                 self.urls.append("https://drive.google.com" + url)
             elif "basecamp.com/p/" in url:
-                self.mark_call()
+                if self.pid: self.mark_call()
                 self.urls.append(url)
             elif url.startswith("https://anonymousfiles.io/"):
-                self.mark_call()
+                if self.pid: self.mark_call()
                 self.urls.append(url)
 
     def on_complete(self):

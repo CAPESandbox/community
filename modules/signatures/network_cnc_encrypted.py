@@ -51,7 +51,7 @@ class NetworkCnCHTTPSGeneric(Signature):
                 if buff.startswith(verb):
                     self.match = True
                     self.data.append({"http_request": buff})
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
     def on_complete(self):
         return self.match
@@ -97,7 +97,7 @@ class NetworkCnCHTTPSSocialMedia(Signature):
                 if host_header in buff:
                     self.match = True
                     self.data.append({"http_request": buff})
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
     def on_complete(self):
         return self.match
@@ -147,7 +147,7 @@ class NetworkCnCHTTPSPasteSite(Signature):
                 if host_header in buff:
                     self.match = True
                     self.data.append({"http_request": buff})
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
     def on_complete(self):
         return self.match
@@ -202,7 +202,7 @@ class NetworkCnCHTTPSURLShortenerSite(Signature):
                 if host_header in buff:
                     self.match = True
                     self.data.append({"http_request": buff})
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
     def on_complete(self):
         return self.match
@@ -253,7 +253,7 @@ class NetworkCnCHTTPSTempStorageSite(Signature):
                 if host_header in buff:
                     self.match = True
                     self.data.append({"http_request": buff})
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
     def on_complete(self):
         return self.match
@@ -303,7 +303,7 @@ class NetworkCnCHTTPSUserAgent(Signature):
                 if ua in buff:
                     self.match = True
                     self.data.append({"http_request": buff})
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
     def on_complete(self):
         return self.match
@@ -336,7 +336,7 @@ class NetworkCnCHTTPSTempURLDNS(Signature):
                 if domain in buff:
                     self.match = True
                     self.data.append({"http_request": buff})
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
     def on_complete(self):
         return self.match
@@ -369,7 +369,7 @@ class NetworkCnCHTTPSInteractsh(Signature):
                 if domain in buff:
                     self.match = True
                     self.data.append({"http_request": buff})
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
     def on_complete(self):
         return self.match
@@ -396,7 +396,7 @@ class NetworkCnCHTTPSPayload(Signature):
         buff = self.get_argument(call, "Buffer")
         if buff and "MZ" in buff and "This program cannot be run in" in buff:
             self.match = True
-            self.mark_call()
+            if self.pid: self.mark_call()
 
     def on_complete(self):
         return self.match
@@ -432,7 +432,7 @@ class NetworkCnCHTTPSFreeWebHosting(Signature):
                 if domain in buff:
                     self.match = True
                     self.data.append({"http_request": buff})
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
     def on_complete(self):
         return self.match
@@ -462,11 +462,11 @@ class NetworkCnCHTTPSTelegram(Signature):
             if "Snake" in buff and "Keylogger" in buff:
                 self.found_snake = True
                 self.data.append({"http_request": buff})
-                self.mark_call()
+                if self.pid: self.mark_call()
             elif "Matiex" and "Keylogger" in buff:
                 self.found_matiex = True
                 self.data.append({"http_request": buff})
-                self.mark_call()
+                if self.pid: self.mark_call()
 
     def on_complete(self):
         if self.found_snake:
@@ -513,12 +513,12 @@ class NetworkCnCSMTPSGeneric(Signature):
                 if buff.startswith(header):
                     self.match = True
                     self.data.append({"smtp_header": buff})
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
             if "From: " in buff or "To: " in buff or "Subject: " in buff:
                 self.match = True
                 self.data.append({"smtp_header": buff})
-                self.mark_call()
+                if self.pid: self.mark_call()
 
     def on_complete(self):
         return self.match
@@ -560,7 +560,7 @@ class NetworkCnCSMTPSExfil(Signature):
         if buff:
             if "From: " in buff or "To: " in buff:
                 self.data.append({"smtp_header": buff})
-                self.mark_call()
+                if self.pid: self.mark_call()
             if "Subject: " in buff:
                 if (
                     "SGF3a0V5ZSBLZXlsb" in buff
@@ -569,16 +569,16 @@ class NetworkCnCSMTPSExfil(Signature):
                     or "HawkEye Reborn" in buff
                 ):
                     self.found_hawkeye = True
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                 if " Recovered " in buff:
                     self.found_agentteslat1 = True
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                 if "PSWD |" in buff or "Logs |" in buff or "Screenshot |" in buff:
                     self.found_phoenix = True
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                 if "Orion Logger" in buff or "Orion" in buff:
                     self.found_orion = True
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                 if (
                     "Subject: P_" in buff
                     or "Subject: S_" in buff
@@ -589,10 +589,10 @@ class NetworkCnCSMTPSExfil(Signature):
                     or "Subject: KL_" in buff
                 ):
                     self.found_agentteslat2 = True
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                 if "AspireLogger" in buff or "Aspire" in buff:
                     self.found_aspire = True
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                 if (
                     "U3RlYWxlciBMb2dz" in buff
                     or "Execution Alert!" in buff
@@ -603,28 +603,28 @@ class NetworkCnCSMTPSExfil(Signature):
                     or "Clipboard Monitoring" in buff
                 ):
                     self.found_m00nd3v = True
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                 if "MassLogger |" in buff:
                     self.found_masslogger = True
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                 if ": PASSWORDS" in buff:
                     self.found_firebirdrat = True
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                 if "Snake Keylogger" in buff or "| Snake" in buff:
                     self.found_snake = True
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                 if "Passwords:::" in buff or "PW::" in buff or "FILES::" in buff or "SC::" in buff:
                     self.found_a310logger = True
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                 if "Matiex Keylogger" in buff:
                     self.found_matiex = True
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                 if "Neptune" in buff:
                     self.found_neptune = True
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                 if "Screen Capture" in buff or "Keylog" in buff:
                     self.match = True
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
     def on_complete(self):
         if self.found_orion:
@@ -715,7 +715,7 @@ class NetworkCnCHTTPSArchive(Signature):
                 if host_header in buff:
                     self.match = True
                     self.data.append({"http_request": buff})
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
     def on_complete(self):
         return self.match

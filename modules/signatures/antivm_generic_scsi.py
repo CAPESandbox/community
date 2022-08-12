@@ -79,5 +79,5 @@ class AntiVMSCSI(Signature):
 
             # Finally, if everything went well, I consider the signature as matched.
             if args_matched == 2:
-                self.mark_call()
+                if self.pid: self.mark_call()
                 return True

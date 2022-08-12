@@ -66,7 +66,7 @@ class StackPivot(Signature):
                 return
             if pivot == "yes":
                 self.procs.add(process["process_name"] + ":" + str(process["process_id"]))
-                self.mark_call()
+                if self.pid: self.mark_call()
 
     def on_complete(self):
         for proc in self.procs:
@@ -117,7 +117,7 @@ class StackPivotFileCreated(Signature):
             filename = self.get_argument(call, "FileName")
             if pivot == "yes":
                 self.data.append({pname: filename})
-                self.mark_call()
+                if self.pid: self.mark_call()
 
     def on_complete(self):
         if self.data:
@@ -165,7 +165,7 @@ class StackPivotProcessCreate(Signature):
             cmdline = self.get_argument(call, "CommandLine")
             if pivot == "yes":
                 self.data.append({pname.replace(".", "_"): cmdline})
-                self.mark_call()
+                if self.pid: self.mark_call()
 
     def on_complete(self):
         if self.data:

@@ -46,7 +46,7 @@ class LuminosityRAT(Signature):
             if buf and len(buf) <= 64 and len(buf) >= 32:
                 if all((c in self.chars) for c in buf):
                     self.crypthash = buf
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
         elif call["api"] == "NtCreateFile":
             if self.lastapi == "CryptHashData":
@@ -54,7 +54,7 @@ class LuminosityRAT(Signature):
                 buf = self.get_argument(call, "FileName")
                 if buf and self.crypthash and self.crypthash in buf:
                     self.filehit = True
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
         elif call["api"] == "NtCreateMutant":
             if self.lastapi == "CryptHashData":
@@ -62,7 +62,7 @@ class LuminosityRAT(Signature):
                 buf = self.get_argument(call, "MutexName")
                 if buf and self.crypthash and self.crypthash in buf:
                     self.mutexhit = True
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
         self.lastapi = call["api"]
 

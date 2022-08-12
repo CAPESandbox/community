@@ -48,5 +48,5 @@ class EXEDropper_JS(Signature):
 
         if re.search('(Save|Write)ToFile(\(|\/).*?\.exe"', buf, re.IGNORECASE | re.DOTALL):
             self.data.append({"dropper_script": buf})
-            self.mark_call()
+            if self.pid: self.mark_call()
             return True

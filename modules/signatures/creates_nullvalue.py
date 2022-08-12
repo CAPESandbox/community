@@ -42,13 +42,13 @@ class CreatesNullValue(Signature):
             keyname = self.get_argument(call, "ObjectAttributes")
             if "\\x00" in keyname:
                 self.regkeyvals.add(keyname)
-                self.mark_call()
+                if self.pid: self.mark_call()
                 self.saw_null = True
         else:
             valuename = self.get_argument(call, "ValueName")
             if "\\x00" in valuename:
                 self.regkeyvals.add(self.get_argument(call, "FullName"))
-                self.mark_call()
+                if self.pid: self.mark_call()
                 self.saw_null = True
 
     def on_complete(self):

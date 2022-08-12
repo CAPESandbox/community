@@ -85,7 +85,7 @@ class InjectionCRT(Signature):
                         process["process_name"], str(process["process_id"]), procname, self.handle_map[handle]
                     )
                     self.data.append({"injection": desc})
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                     return True
         elif (call["api"] == "CreateRemoteThread" or call["api"].startswith("NtCreateThread")) and self.sequence == 2:
             handle = self.get_argument(call, "ProcessHandle")
@@ -95,7 +95,7 @@ class InjectionCRT(Signature):
                     process["process_name"], str(process["process_id"]), procname, self.handle_map[handle]
                 )
                 self.data.append({"injection": desc})
-                self.mark_call()
+                if self.pid: self.mark_call()
                 return True
         elif call["api"].startswith("NtQueueApcThread") and self.sequence == 2:
             if str(self.get_argument(call, "ProcessId")) in self.process_pids:
@@ -107,5 +107,5 @@ class InjectionCRT(Signature):
                     str(process["process_id"]),
                 )
                 self.data.append({"injection": desc})
-                self.mark_call()
+                if self.pid: self.mark_call()
                 return True

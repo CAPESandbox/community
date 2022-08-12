@@ -49,7 +49,7 @@ class WMICreateProcess(Signature):
             if not whitelisted:
                 self.ret = True
                 self.data.append({"command": cmdline})
-                self.mark_call()
+                if self.pid: self.mark_call()
 
     def on_complete(self):
         return self.ret
@@ -92,7 +92,7 @@ class WMIScriptProcess(Signature):
                 if utility in cmdline.lower():
                     self.ret = True
                     self.data.append({"command": cmdline})
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                     break
 
     def on_complete(self):
@@ -142,5 +142,5 @@ class Win32ProcessCreate(Signature):
 
     def on_call(self, call, _):
         if self.get_argument(call, "class") == "Win32_Process" and self.get_argument(call, "method") == "Create":
-            self.mark_call()
+            if self.pid: self.mark_call()
             return True

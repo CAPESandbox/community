@@ -31,7 +31,7 @@ class StealthChildProc(Signature):
             self.data.append(
                 {"created_process": "Process %s has spoofed parent process with real parent process %s" % (cmdline, pname)}
             )
-            self.mark_call()
+            if self.pid: self.mark_call()
 
     def on_complete(self):
         return self.ret

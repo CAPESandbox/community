@@ -39,20 +39,20 @@ class InfostealerBrowserPassword(Signature):
                     if pid not in self.pidTrack:
                         self.pidTrack[pid] = set()
                     self.pidTrack[pid].add(api)
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                 # Check using 'in' to cover the varients of .*sqlite3_prepare.*
                 # which apparently changes based on the dll you load from
                 elif "sqlite3_prepare" in api:
                     if pid not in self.pidTrack:
                         self.pidTrack[pid] = set()
                     self.pidTrack[pid].add("sqlite3_prepare")
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
         elif call["api"] == "NtReadFile":
             buf = self.get_argument(call, "Buffer")
             if buf and "sqlite format" in buf.lower():
                 self.readsSqlite.add(process["process_id"])
-                self.mark_call()
+                if self.pid: self.mark_call()
 
     def on_complete(self):
         ret = False

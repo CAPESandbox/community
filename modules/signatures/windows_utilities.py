@@ -353,7 +353,7 @@ class AltersWindowsUtility(Signature):
             if lower.endswith(utility):
                 self.ret = True
                 self.data.append({"utility": "source file %s destination file %s" % (origfile, destfile)})
-                self.mark_call()
+                if self.pid: self.mark_call()
 
     def on_complete(self):
         return self.ret
@@ -422,7 +422,7 @@ class OverwritesAccessibilityUtility(Signature):
             if lower.endswith(utility):
                 self.ret = True
                 self.data.append({"utility": "source file %s destination file %s" % (origfile, destfile)})
-                self.mark_call()
+                if self.pid: self.mark_call()
 
     def on_complete(self):
         return self.ret

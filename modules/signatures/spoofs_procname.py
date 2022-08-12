@@ -46,7 +46,7 @@ class SpoofsProcname(Signature):
             newentry = {"original_name": origname, "original_path": origpath, "modified_name": modname, "modified_path": modpath}
             if newentry not in self.spoof_sets:
                 self.spoof_sets.append(newentry)
-                self.mark_call()
+                if self.pid: self.mark_call()
 
     def on_complete(self):
         for spoof in self.spoof_sets:

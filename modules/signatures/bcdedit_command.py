@@ -49,19 +49,19 @@ class BCDEditCommand(Signature):
             cmdline = filepath + " " + params
 
         if "bcdedit" in cmdline:
-            self.mark_call()
+            if self.pid: self.mark_call()
             self.bcdedit = True
 
         if "bcdedit" in cmdline and "set" in cmdline and "recoveryenabled no" in cmdline or "recoveryenabled off" in cmdline:
-            self.mark_call()
+            if self.pid: self.mark_call()
             self.systemrepair = True
 
         if "bcdedit" in cmdline and "set" in cmdline and "ignoreallfailures" in cmdline:
-            self.mark_call()
+            if self.pid: self.mark_call()
             self.ignorefailures = True
 
         if "bcdedit" in cmdline and "set" in cmdline and "testsigning on" in cmdline:
-            self.mark_call()
+            if self.pid: self.mark_call()
             self.testsigning = True
 
     def on_complete(self):

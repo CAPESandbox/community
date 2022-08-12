@@ -107,21 +107,21 @@ class raccoon(Signature):
             for i in filesDeleted:
                 if i in node:
                     self.badness_filesDeleted += 1
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
         if call["api"] == "FindFirstFileExW":
             node = self.get_argument(call, "FileName")
             for i in filesSearched:
                 if i in node:
                     self.badness_filesSearched += 1
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
         if call["api"] == "NtWriteFile":
             node = self.get_argument(call, "Buffer")
             for i in infoWrited:
                 if i in node:
                     self.badness_infoWrited += 1
-                    self.mark_call()
+                    if self.pid: self.mark_call()
 
     def on_complete(self):
         if self.badness_filesSearched > 50 and self.badness_filesDeleted > 9 and self.badness_infoWrited > 15:

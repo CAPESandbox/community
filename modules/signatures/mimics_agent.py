@@ -28,5 +28,5 @@ class MimicsAgent(Signature):
         elif call["api"] == "InternetOpenA" or call["api"] == "InternetOpenW":
             agent = self.get_argument(call, "Agent")
             if self.useragent and self.useragent == agent:
-                self.mark_call()
+                if self.pid: self.mark_call()
                 return True

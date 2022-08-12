@@ -35,5 +35,5 @@ class BullguardDetectLibs(Signature):
     def on_call(self, call, process):
         dll_name = self.get_argument(call, "FileName")
         if "bgagent" in dll_name.lower():
-            self.mark_call()
+            if self.pid: self.mark_call()
             return True

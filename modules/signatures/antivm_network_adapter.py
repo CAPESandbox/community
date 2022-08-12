@@ -34,5 +34,5 @@ class NetworkAdapters(Signature):
 
     def on_call(self, _, process):
         if process["process_name"].lower() not in self.safelistprocs:
-            self.mark_call()
+            if self.pid: self.mark_call()
             return True

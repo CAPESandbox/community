@@ -28,12 +28,12 @@ class DeadLink(Signature):
                 appname = self.get_argument(call, "CommandLine").lower()
             if appname not in self.appnames:
                 self.appnames.append(appname)
-                self.mark_call()
+                if self.pid: self.mark_call()
         elif call["api"] == "ShellExecuteExW":
             appname = self.get_argument(call, "FilePath").lower()
             if appname not in self.appnames and not appname.endswith(".htm") and not appname.endswith(".html"):
                 self.appnames.append(appname)
-                self.mark_call()
+                if self.pid: self.mark_call()
 
     def on_complete(self):
         if "dropped" in self.results:

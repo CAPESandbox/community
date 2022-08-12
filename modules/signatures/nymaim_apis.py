@@ -40,14 +40,14 @@ class Nymaim_APIs(Signature):
             buf = self.get_argument(call, "ObjectAttributes")
             if buf and buf.startswith("HKEY_CURRENT_USER\\Software\\Microsoft\\") and buf.count("\\") == 3:
                 self.keyname = buf
-                self.mark_call()
+                if self.pid: self.mark_call()
 
         elif call["api"] == "NtSetValueKey":
             if self.keyname:
                 buflen = int(self.get_argument(call, "BufferLength"))
                 key = self.get_argument(call, "FullName")
                 if buflen and buflen > 2048 and key.startswith(self.keyname):
-                    self.mark_call()
+                    if self.pid: self.mark_call()
                     self.regkey = True
 
     def on_complete(self):

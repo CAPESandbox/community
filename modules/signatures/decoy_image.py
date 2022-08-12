@@ -35,7 +35,7 @@ class DecoyImage(Signature):
                 if path:
                     if path.lower().endswith((".jpg", ".jpeg", ".png", ".bmp", ".tiff")):
                         self.data.append(path)
-                        self.mark_call()
+                        if self.pid: self.mark_call()
 
     def on_complete(self):
         if len(self.data) > 0:

@@ -57,7 +57,7 @@ class AntiVMDirectoryObjects(Signature):
                     if call["return"] == "0x8000001a":
                         if self.dirbuf[1] in self.check_dirs:
                             self.directories.add(self.dirbuf[1])
-                            self.mark_call()
+                            if self.pid: self.mark_call()
 
         self.lastapi = call["api"]
 

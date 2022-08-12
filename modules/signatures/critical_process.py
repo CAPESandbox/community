@@ -37,7 +37,7 @@ class CriticalProcess(Signature):
         if call["return"] == 0 and infoclass == ProcessBreakOnTermination:
             processinfo = self.get_raw_argument(call, "ProcessInformation")
             if processinfo == 1:
-                self.mark_call()
+                if self.pid: self.mark_call()
                 self.data.append({"process": process["process_name"] + ":" + str(process["process_id"])})
 
     def on_complete(self):

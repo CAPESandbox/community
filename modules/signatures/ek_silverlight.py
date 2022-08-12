@@ -48,5 +48,5 @@ class Silverlight_JS(Signature):
         if re.search(
             "application\/x\-silverlight.*?\<param name[ \t\n]*=.*?value[ \t\n]*=.*?\<\/object\>.*", buf, re.IGNORECASE | re.DOTALL
         ):
-            self.mark_call()
+            if self.pid: self.mark_call()
             return True

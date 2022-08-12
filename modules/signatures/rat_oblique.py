@@ -100,7 +100,7 @@ class ObliquekRATNetworkActivity(Signature):
                     if buff.startswith(sysinfo) and "oblique" in buff:
                         self.data.append({"data": buff})
                         self.match = True
-                        self.mark_call()
+                        if self.pid: self.mark_call()
 
     def on_complete(self):
         return self.match
