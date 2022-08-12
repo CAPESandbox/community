@@ -75,7 +75,7 @@ class ReadsSelf(Signature):
     authors = ["Optiv"]
     minimum = "1.2"
     evented = True
-    ttps = ["OC0001", "C0051"]
+    mbcs = ["OC0001", "C0051"]
 
     filter_analysistypes = set(["file"])
     filter_apinames = set(["NtOpenFile", "NtCreateFile", "NtClose", "NtReadFile", "NtSetInformationFile"])
