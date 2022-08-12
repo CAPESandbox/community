@@ -161,7 +161,7 @@ class SuspiciousIoctlSCSIPassthough(Signature):
     evented = True
     ttps = ["T1067"]  # MITRE v6
     ttps += ["T1542", "T1542.003"]  # MITRE v7,8
-    mbcs = ["0B0006", "F0013"]
+    mbcs = ["OB0006", "F0013"]
     references = ["http://www.ioctls.net/"]
 
     filter_apinames = set(["DeviceIoControl", "NtDeviceIoControlFile"])
