@@ -52,7 +52,8 @@ class Kibex_APIs(Signature):
             url = self.get_argument(call, "Url")
             if url and "&machine" in url.lower():
                 self.c2s.add(url)
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
         return None
 

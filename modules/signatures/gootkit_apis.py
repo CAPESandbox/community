@@ -35,5 +35,6 @@ class Gootkit_APIs(Signature):
             valName = self.get_argument(call, "ValueName")
             if valName and valName.lower().startswith("binaryimage"):
                 if "_" in valName and valName[-1].isdigit():
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
                     return True

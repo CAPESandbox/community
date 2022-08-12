@@ -51,5 +51,6 @@ class Neutrino_JS(Signature):
             )
             and "unescape" in buf
         ):
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
             return True

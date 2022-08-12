@@ -38,7 +38,8 @@ class Ursnif_APIs(Signature):
         if buf.startswith("MZ"):
             try:
                 self.decompMZ.add(str(process["module_path"]).lower())
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
             except:
                 pass
 

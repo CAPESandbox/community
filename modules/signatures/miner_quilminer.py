@@ -37,7 +37,8 @@ class QuilMinerNetworkBehavior(Signature):
         if agent:
             if "quilminer" in agent.lower():
                 self.match = True
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
     def on_complete(self):
         return self.match

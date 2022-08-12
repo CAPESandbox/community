@@ -71,12 +71,14 @@ class Bootkit(Signature):
                 handle = int(self.get_argument(call, "FileHandle"), 16)
             # IOCTL_SCSI_PASS_THROUGH_DIRECT
             if handle in self.handles and ioctl == 0x4D014:
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
                 return True
         elif call["api"] == "NtWriteFile":
             handle = int(self.get_argument(call, "FileHandle"), 16)
             if handle in self.handles:
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
                 return True
 
         return None
@@ -184,7 +186,8 @@ class SuspiciousIoctlSCSIPassthough(Signature):
                     }
                 )
                 self.ret = True
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
     def on_complete(self):
         return self.ret
@@ -215,7 +218,8 @@ class PotentialOverWriteMBR(Signature):
             ) and writelength == 512:
                 self.data.append({"modified_drive": "%s" % (filepath)})
                 self.ret = True
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
     def on_complete(self):
         return self.ret

@@ -87,7 +87,8 @@ class BrowserStealer(Signature):
         for indicator in self.indicators:
             if indicator.match(filename):
                 self.filematches.add(filename)
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
                 self.saw_stealer = True
 
     def on_complete(self):

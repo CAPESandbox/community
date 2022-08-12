@@ -39,27 +39,31 @@ class sodinokibi(Signature):
             for i in reg:
                 if i in node:
                     self.badness_reg += 1
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
 
         if call["api"] == "CreateProcessInternalW":
             node = self.get_argument(call, "CommandLine")
             if powershell in node:
                 self.badness_powershell += 1
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
         if call["api"] == "WinHttpOpen":
             self.mbcs += ["OC0006", "C0002"]  # micro-behaviour
             node = self.get_argument(call, "UserAgent")
             if "Mozilla/5.0 (Windows NT 5.1; rv:36.0) Gecko/20100101 Firefox/36.0" in node:
                 self.badness_url += 1
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
         if call["api"] == "bind":
             self.mbcs += ["OC0006", "C0001"]  # micro-behaviour
             node = self.get_argument(call, "ip")
             if "0.0.0.0" in node:
                 self.badness_url += 1
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
     def on_complete(self):
         # Variant 1

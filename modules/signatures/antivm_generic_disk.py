@@ -78,5 +78,6 @@ class DiskInformation(Signature):
             else:
                 handle = int(self.get_argument(call, "FileHandle"), 16)
             if handle in self.handles and ioctl in ioctls:
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
                 return True

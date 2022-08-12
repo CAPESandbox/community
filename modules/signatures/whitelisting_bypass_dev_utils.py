@@ -61,7 +61,8 @@ class PersistsDotNetDevUtility(Signature):
                 fname = self.get_argument(call, "FullName")
                 if fname:
                     self.data.append({"regkey": fname})
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
     def on_complete(self):
         if len(self.data) > 0:
@@ -123,20 +124,23 @@ class SpwansDotNetDevUtiliy(Signature):
                                 if re.search(tool, appname):
                                     procname = process["process_name"]
                                     self.data.append({"process": procname + " > " + appname})
-                                    if self.pid: self.mark_call()
+                                    if self.pid:
+                                        self.mark_call()
                         elif self.dname and self.dname.lower() in cmdline:
                             self.executecopy = True
                             procname = process["process_name"]
                             self.data.append({"copy": self.sname.lower() + " > " + self.dname.lower()})
                             self.data.append({"process": procname + " > " + self.dname.lower()})
-                            if self.pid: self.mark_call()
+                            if self.pid:
+                                self.mark_call()
                         elif re.search(tool, cmdline):
                             procname = process["process_name"]
                             spawnapp = self.get_argument(call, "ApplicationName")
                             if not spawnapp:
                                 spawnapp = cmdline
                             self.data.append({"process": procname + " > " + spawnapp})
-                            if self.pid: self.mark_call()
+                            if self.pid:
+                                self.mark_call()
             # Handle cases were CommandLine is null
             elif appname:
                 flags = int(self.get_argument(call, "CreationFlags"), 16)
@@ -146,7 +150,8 @@ class SpwansDotNetDevUtiliy(Signature):
                         if re.search(tool, appname):
                             procname = process["process_name"]
                             self.data.append({"process": procname + " > " + appname})
-                            if self.pid: self.mark_call()
+                            if self.pid:
+                                self.mark_call()
 
     def on_complete(self):
         if len(self.data) > 0:

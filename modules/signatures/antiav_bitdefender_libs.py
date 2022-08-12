@@ -35,5 +35,6 @@ class BitdefenderDetectLibs(Signature):
     def on_call(self, call, process):
         dllname = self.get_argument(call, "FileName")
         if "avcuf32" in dllname.lower():
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
             return True

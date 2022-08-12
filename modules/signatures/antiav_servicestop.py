@@ -39,13 +39,15 @@ class AntiAVServiceStop(Signature):
         if (call["api"] == "OpenServiceA" or call["api"] == "OpenServiceW") and call["status"]:
             handle = int(call["return"], 16)
             self.handles[handle] = self.get_argument(call, "ServiceName")
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
         elif call["api"] == "ControlService":
             handle = int(self.get_argument(call, "ServiceHandle"), 16)
             code = int(self.get_argument(call, "ControlCode"), 10)
             if code == 1 and handle in self.handles and self.handles[handle] not in self.stoppedservices:
                 self.stoppedservices.append(self.handles[handle])
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
     def on_complete(self):
         ret = False

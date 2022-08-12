@@ -50,7 +50,8 @@ class Multiple_UA(Signature):
                 if self.results.get("target", {}).get("category", "") == "file" or proc != "iexplore.exe":
                     self.useragents.append(ua)
                     self.procs.append((process["process_name"], ua))
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
 
     def on_complete(self):
         if len(self.useragents) < 2:

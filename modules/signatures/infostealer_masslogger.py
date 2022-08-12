@@ -52,7 +52,8 @@ class MassLoggerVersion(Signature):
                         version = re.search(pat, buff)
                         if version:
                             self.data.append({"Version": version})
-                            if self.pid: self.mark_call()
+                            if self.pid:
+                                self.mark_call()
                             return True
 
 
@@ -83,14 +84,16 @@ class MassLoggerArtifacts(Signature):
                 for artifact in self.artifacts:
                     if re.match(artifact, filename):
                         self.data.append({"Artifact": filename})
-                        if self.pid: self.mark_call()
+                        if self.pid:
+                            self.mark_call()
                         return True
 
         if call["api"] == "CryptDecrypt":
             buff = self.get_argument(call, "Buffer")
             if buff and buff.startswith("MassLogger"):
                 self.data.append({"Buffer": buff})
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
                 return True
 
 

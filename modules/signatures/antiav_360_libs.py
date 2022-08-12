@@ -40,5 +40,6 @@ class QihooDetectLibs(Signature):
             or "360base" in dllname.lower()
             or "360base64" in dllname.lower()
         ):
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
             return True

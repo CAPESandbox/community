@@ -97,7 +97,8 @@ class InjectionNetworkTraffic(Signature):
                     addit = {"network_connection": "%s_connect_%s" % (pname, buff)}
             if addit and addit not in self.data:
                 self.data.append(addit)
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
         return None
 

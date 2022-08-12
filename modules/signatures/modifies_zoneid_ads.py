@@ -46,5 +46,6 @@ class ZoneID(Signature):
         if call["api"] == "NtWriteFile" and self.zone_handle:
             buf = self.get_argument(call, "buffer").lower()
             if "[zonetransfer]" in buf and "zoneid" in buf:
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
                 return True

@@ -72,5 +72,6 @@ class HeapSpray_JS(Signature):
 
         for indicator in indicators:
             if indicator in buf.lower():
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
                 return True

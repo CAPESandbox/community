@@ -48,7 +48,8 @@ class VMwareDetectEvent(Signature):
         for check in vmware_events:
             if check in event:
                 self.matches.append(event)
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
     def on_complete(self):
         ret = False

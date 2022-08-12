@@ -58,7 +58,8 @@ class NetworkDocumentFile(Signature):
     def on_call(self, _, process):
         pname = process["process_name"].lower()
         if pname in self.proc_list:
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
             return True
 
 
@@ -97,5 +98,6 @@ class NetworkEXE(Signature):
         if buf and "MZ" in buf and "This program" in buf:
             if pname in self.high_risk_proc:
                 self.severity = 3
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
             return True

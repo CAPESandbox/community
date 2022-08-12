@@ -48,7 +48,8 @@ class Webmail_Phish(Signature):
             for indicator in self.indicators:
                 if indicator in data.lower():
                     self.hits.add(indicator)
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
 
     def on_complete(self):
         ret = False

@@ -43,8 +43,10 @@ class AntiSandboxRestart(Signature):
         if call["api"] == "NtRaiseHardError":
             response = int(self.get_argument(call, "ResponseOptions"))
             if response == 6:
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
                 return True
         else:
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
             return True

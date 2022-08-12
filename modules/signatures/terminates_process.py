@@ -30,5 +30,6 @@ class TerminatesRemoteProcess(Signature):
 
     def on_call(self, call, _):
         if self.get_argument(call, "ProcessHandle") not in ["0xffffffff", "0xffffffffffffffff", "0x00000000", "0x0000000000000000"]:
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
             return True

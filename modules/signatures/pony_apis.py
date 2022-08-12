@@ -49,12 +49,14 @@ class Pony_APIs(Signature):
                 test = re.match(self.guidpat, guid)
                 if test and not self.badpid:
                     self.badpid = str(process["process_id"])
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
 
         elif call["api"] == "InternetCrackUrlA":
             if str(process["process_id"]) == self.badpid:
                 self.urls.add(self.get_argument(call, "Url"))
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
         return None
 

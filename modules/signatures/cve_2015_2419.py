@@ -44,5 +44,6 @@ class CVE2015_2419_JS(Signature):
             buf = self.get_argument(call, "Script")
 
         if "JSON[" in buf and "prototype" in buf and "stringify" in buf:
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
             return True

@@ -68,11 +68,13 @@ class NetworkDNSTunnelingRequest(Signature):
                             if re.match(pat, qname):
                                 self.qcount += 1
                                 self.match = True
-                                if self.pid: self.mark_call()
+                                if self.pid:
+                                    self.mark_call()
                         if len(qname) > 50:
                             self.qcount += 1
                             self.match = True
-                            if self.pid: self.mark_call()
+                            if self.pid:
+                                self.mark_call()
 
     def on_complete(self):
         if self.match and self.qcount > 5:
@@ -104,7 +106,8 @@ class NetworkDNSIDN(Signature):
         if qname:
             if qname.startswith("xn--"):
                 self.match = True
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
     def on_complete(self):
         return self.match
@@ -135,7 +138,8 @@ class NetworkDNSSuspiciousQueryType(Signature):
         if self.qtype:
             if self.qtype not in self.qtype_whitelist:
                 self.match = True
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
     def on_complete(self):
         return self.match

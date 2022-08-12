@@ -52,5 +52,6 @@ class Sundown_JS(Signature):
             for key in self.payloadRC4keys:
                 if key[0] in buf:
                     self.data.append({"Known RC4 Payload Key": "%s" % (key[1])})
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
             return True

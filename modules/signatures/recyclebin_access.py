@@ -48,7 +48,8 @@ class Accesses_RecycleBin(Signature):
                 if filename and re.match(self.filepattern, filename, re.IGNORECASE):
                     self.filematch = True
                     self.filenames.append(filename)
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
 
         if call["api"] == "NtOpenFile":
             desiredaccess = int(self.get_argument(call, "DesiredAccess"), 16)
@@ -57,14 +58,16 @@ class Accesses_RecycleBin(Signature):
                 if filename and re.match(self.filepattern, filename, re.IGNORECASE):
                     self.filematch = True
                     self.filenames.append(filename)
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
 
         if call["api"] == "NtReadFile":
             filename = self.get_argument(call, "FileName")
             if filename and re.match(self.filepattern, filename, re.IGNORECASE):
                 self.filematch = True
                 self.filenames.append(filename)
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
     def on_complete(self):
         if self.filematch and self.filenames:

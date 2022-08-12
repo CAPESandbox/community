@@ -42,7 +42,8 @@ class Kelihos_APIs(Signature):
             if buf and buf.startswith(r"\xa2IM\xf3\xd9\x1e\x9f\x88\x01"):
                 self.bad_pid = process["process_id"]
                 self.config_key = self.get_argument(call, "FullName")
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
                 return None
 
         if self.bad_pid and process["process_id"] == self.bad_pid:
@@ -73,7 +74,8 @@ class Kelihos_APIs(Signature):
                             ip = self.get_argument(call, "ip")
                             port = self.get_argument(call, "port")
                             self.peer_connect.add("{0}:{1}".format(ip, port))
-                            if self.pid: self.mark_call()
+                            if self.pid:
+                                self.mark_call()
 
             elif call["api"] == "closesocket":
                 requested_socket = self.get_argument(call, "socket")

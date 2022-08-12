@@ -33,7 +33,8 @@ class ModifiesDesktopWallpaper(Signature):
     def on_call(self, call, process):
         action = int(self.get_argument(call, "Action"), 16)
         if action == 0x14:
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
             return True
 
     def on_complete(self):

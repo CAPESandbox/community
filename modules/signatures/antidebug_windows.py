@@ -124,7 +124,8 @@ class AntiDBGWindows(Signature):
                     window = self.get_argument(call, "WindowName")
                 if window not in self.ret[process["process_name"]]:
                     self.ret[process["process_name"]].append(window)
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
                 return None
 
     def on_complete(self):

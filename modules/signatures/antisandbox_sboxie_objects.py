@@ -36,5 +36,6 @@ class AntiSandboxSboxieObjects(Signature):
         objectattr = self.get_argument(call, "ObjectAttributes")
         if len(objectattr) >= 10:
             if objectattr[2:10] == r"\Sandbox":
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
                 return True

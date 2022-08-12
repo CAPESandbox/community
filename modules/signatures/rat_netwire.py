@@ -35,7 +35,8 @@ class netwire(Signature):
             for i in matches:
                 if i in node:
                     self.badness_reg += 1
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
 
     def on_complete(self):
         if self.badness_reg > 1:

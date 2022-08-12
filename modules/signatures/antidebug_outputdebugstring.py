@@ -40,13 +40,15 @@ class antidebug_outputdebugstring(Signature):
         if call["api"] == "OutputDebugStringA" or call["api"] == "OutputDebugStringW":
             if self.set_err:
                 self.output = True
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
             else:
                 self.output = False
         elif call["api"] == "SetLastError":
             self.output = False
             self.set_err = True
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
         elif call["api"] == "GetLastError":
             if not self.set_err or not self.output:
                 self.set_err = self.output = False

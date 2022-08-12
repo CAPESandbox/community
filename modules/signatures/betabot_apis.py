@@ -50,7 +50,8 @@ class BetaBot_APIs(Signature):
                 buf = self.get_argument(call, "PostData")
                 if buf:
                     self.postreqs.add(buf)
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
         return None
 
     def on_complete(self):

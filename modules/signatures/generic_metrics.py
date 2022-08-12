@@ -45,7 +45,8 @@ class SystemMetrics(Signature):
         # of filter_apinames above.
         if call["api"] == "GetSystemMetrics":
             # Signature matched, return True.
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
             return True
 
         # continue

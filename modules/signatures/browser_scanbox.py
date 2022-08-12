@@ -40,12 +40,14 @@ class BrowserScanbox(Signature):
         else:
             buf = self.get_argument(call, "Script")
             if "softwarelist.push(" in buf.lower() and 'indexof("-2147023083")' in buf.lower():
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
                 return True
             elif (
                 "var logger" in buf.lower()
                 and "document.onkeypress = keypress;" in buf.lower()
                 and "setinterval(sendchar," in buf.lower()
             ):
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
                 return True

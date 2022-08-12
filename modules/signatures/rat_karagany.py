@@ -51,7 +51,8 @@ class KaraganyEventObjects(Signature):
                 if obj in event:
                     self.match = True
                     self.data.append({"system_event_object": event})
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
 
     def on_complete(self):
         return self.match

@@ -57,23 +57,27 @@ class GuLoaderAPIs(Signature):
                 for pat in self.filepatterns:
                     if filename and re.match(pat, filename, re.IGNORECASE):
                         self.filematch = True
-                        if self.pid: self.mark_call()
+                        if self.pid:
+                            self.mark_call()
 
         if call["api"] == "RegOpenKeyExA":
             fullname = self.get_argument(call, "FullName")
             if fullname and fullname == self.regpattern:
                 self.regmatch = True
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
         if call["api"] == "InternetOpenA" and self.filematch:
             self.useragent = self.get_argument(call, "Agent")
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
 
         if call["api"] == "InternetOpenUrlA" and self.useragent == self.uapattern:
             url = self.get_argument(call, "URL")
             if url:
                 self.data.append({"url": url})
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
         if call["api"] == "SetWindowsHookExA" or call["api"] == "SetWindowsHookExW":
             hookid = int(self.get_argument(call, "HookIdentifier"))
@@ -82,7 +86,8 @@ class GuLoaderAPIs(Signature):
                 self.hookmatch = True
                 self.ttps += ["T1055"]  # MITRE v6,7,8
                 self.mbcs += ["E1055", "E1055.m01"]
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
     def on_complete(self):
         if self.regmatch and self.filematch and self.hookmatch:

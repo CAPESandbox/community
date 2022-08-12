@@ -39,13 +39,15 @@ class ExplorerHTTP(Signature):
                 serverport = self.get_argument(call, "ServerPort")
                 if servername and serverport:
                     self.data.append({"Domain:Port": servername + ":" + serverport})
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
             if call["api"] == "WinHttpOpenRequest":
                 httpverb = self.get_argument(call, "Verb")
                 httpuri = self.get_argument(call, "ObjectName")
                 if httpverb and httpuri:
                     self.data.append({"HTTPMethod:URI": httpverb + ":" + httpuri})
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
 
     def on_complete(self):
         if len(self.data) > 0:

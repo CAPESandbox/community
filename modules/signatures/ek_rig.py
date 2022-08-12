@@ -61,10 +61,12 @@ class RIG_JS(Signature):
             and any(e in buf for e in str3)
             and any(e in buf for e in str4)
         ):
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
             return True
         if any(e in buf for e in str5) or any(e in buf for e in str6):
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
             return True
         # Rig-V Browser Fingerprinting
         if (
@@ -81,5 +83,6 @@ class RIG_JS(Signature):
             and "isIE++" in buf
             and "'FileReader'" in buf
         ):
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
             return True

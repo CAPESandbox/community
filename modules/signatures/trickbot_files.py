@@ -27,7 +27,8 @@ class TrickBotTaskDelete(Signature):
             or self.get_argument(call, "FileName").endswith("Tasks\\Bot.job")
         ):
             self.data.append({"file": self.get_argument(call, "FileName")})
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
             return True
 
         return None

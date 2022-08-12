@@ -46,7 +46,8 @@ class OfficeSuspiciousProcesses(Signature):
                 for proc in self.suspiciousprocs:
                     if proc in cmdline:
                         self.mastertrigger = True
-                        if self.pid: self.mark_call()
+                        if self.pid:
+                            self.mark_call()
 
         if processname in self.suspiciousprocs:
             cmdline = self.get_argument(call, "CommandLine")
@@ -54,7 +55,8 @@ class OfficeSuspiciousProcesses(Signature):
                 for proc in self.suspiciousprocs:
                     if proc in cmdline:
                         self.secondarytrigger = True
-                        if self.pid: self.mark_call()
+                        if self.pid:
+                            self.mark_call()
 
     def on_complete(self):
         if self.results["info"]["package"] in ["doc", "xls", "ppt"]:

@@ -77,7 +77,8 @@ class Unhook(Signature):
                             break
 
                 if addit:
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
                     self.unhook_info.add("function_name: " + funcname + ", type: " + self.get_argument(call, "UnhookType"))
 
     def on_complete(self):

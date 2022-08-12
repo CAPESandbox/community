@@ -56,7 +56,8 @@ class DocScriptEXEDrop(Signature):
                 self.ret = True
                 if handle not in self.dropped:
                     self.dropped.append(handle)
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
                     self.data.append({"file": "%s dropped file %s" % (pname, handle)})
 
     def on_complete(self):

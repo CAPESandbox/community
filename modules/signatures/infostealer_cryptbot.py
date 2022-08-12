@@ -71,12 +71,14 @@ class CryptBotNetwork(Signature):
             httppath = self.get_argument(call, "Path")
             if httppath and httppath == "/index.php":
                 self.matchpath = True
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
         if call["api"] == "HttpSendRequestW":
             httppost = self.get_argument(call, "PostData")
             if httppost and "_AllForms_list.t" in httppost:
                 self.matchpost = True
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
     def on_complete(self):
         if self.matchpath and self.matchpost:

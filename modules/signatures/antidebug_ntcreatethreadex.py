@@ -38,5 +38,6 @@ class antidebug_ntcreatethreadex(Signature):
         if call["api"] == "NtCreateThreadEx":
             ThreadCreationFlags = int(self.get_raw_argument(call, "CreateFlags"), 0)
             if ThreadCreationFlags & THREAD_CREATE_HIDE_FROM_DEBUGGER:
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
                 return True

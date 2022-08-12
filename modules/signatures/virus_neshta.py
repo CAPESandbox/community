@@ -70,7 +70,8 @@ class NeshtaRegKeys(Signature):
                 buf = self.get_argument(call, "Buffer").lower()
                 if re.match(r"^c:\\windows\\svchost.com\ \"%1\"\ %\*$", buf):
                     self.match = True
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
         return None
 
     def on_complete(self):
@@ -102,7 +103,8 @@ class NeshtaFiles(Signature):
         if call["api"] == "NtCreateFile":
             filename = self.get_argument(call, "FileName").lower()
             if filename and "c:\\windows\\svchost.com" in filename:
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
                 return True
         return None
 

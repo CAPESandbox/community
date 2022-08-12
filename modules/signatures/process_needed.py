@@ -41,11 +41,13 @@ class ProcessNeeded(Signature):
                     self.did_openprocess = 0
                 else:
                     self.searches += 1
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
         else:
             # is NtOpenProcess
             self.did_openprocess = 1
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
 
     def on_complete(self):
         if self.searches > 5:

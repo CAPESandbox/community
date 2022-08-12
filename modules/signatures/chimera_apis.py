@@ -56,5 +56,6 @@ class Chimera_APIs(Signature):
     def on_call(self, call, process):
         mutexname = self.get_argument(call, "MutexName")
         if mutexname == self.mutexmatch:
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
             return True

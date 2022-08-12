@@ -35,5 +35,6 @@ class CryptGenKey(Signature):
     def on_call(self, _, process):
         if process["process_name"] in self.process_safelist:
             return False
-        if self.pid: self.mark_call()
+        if self.pid:
+            self.mark_call()
         return True

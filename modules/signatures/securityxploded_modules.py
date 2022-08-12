@@ -52,7 +52,8 @@ class SecurityXploded_Modules(Signature):
                     addit = {indicator[1]: saved_to}
                     if addit not in self.data:
                         self.data.append(addit)
-                        if self.pid: self.mark_call()
+                        if self.pid:
+                            self.mark_call()
 
     def on_complete(self):
         if self.data:

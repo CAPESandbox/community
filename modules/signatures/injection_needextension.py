@@ -30,5 +30,6 @@ class InjectionExtension(Signature):
                         process["process_name"], process["process_id"], self.get_name_from_pid(createdpid), createdpid
                     )
                     self.data.append({"injection": desc})
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
                     return True

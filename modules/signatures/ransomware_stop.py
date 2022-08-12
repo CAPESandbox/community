@@ -86,7 +86,8 @@ class StopRansomwareRegistry(Signature):
             buff = self.get_argument(call, "Buffer")
             if "--AutoStart" in buff:
                 self.match = True
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
     def on_complete(self):
         if self.match:

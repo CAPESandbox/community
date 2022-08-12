@@ -34,5 +34,6 @@ class HookMouse(Signature):
     def on_call(self, call, process):
         if int(self.get_argument(call, "HookIdentifier")) in [7, 14]:
             if int(self.get_argument(call, "ThreadId")) == 0:
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
                 return True

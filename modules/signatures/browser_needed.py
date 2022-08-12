@@ -44,7 +44,8 @@ class BrowserNeeded(Signature):
             # Not interested in a successful status
             if not call["status"]:
                 self.class_names[class_name] += 1
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
     def on_complete(self):
         ret = False

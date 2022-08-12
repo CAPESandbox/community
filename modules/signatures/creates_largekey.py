@@ -42,7 +42,8 @@ class CreatesLargeKey(Signature):
             length = int(vallen)
             if length > 16 * 1024:
                 self.regkeyvals.add(self.get_argument(call, "FullName"))
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
                 self.saw_large = True
 
     def on_complete(self):

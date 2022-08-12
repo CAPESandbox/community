@@ -47,7 +47,8 @@ class ProcessCreationSuspiciousLocation(Signature):
                     self.ret = True
                     self.data.append({"file": appname})
                     self.data.append({"command": cmdline})
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
 
     def on_complete(self):
         return self.ret

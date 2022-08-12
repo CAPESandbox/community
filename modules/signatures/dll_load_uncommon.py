@@ -45,5 +45,6 @@ class DllLoadUncommonFileTypes(Signature):
         dllname = self.get_argument(call, "FileName")
         if not any(item in dllname.lower() for item in self.safelist):
             if self._check_value(self.indicator, dllname, regex=True):
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
                 return True

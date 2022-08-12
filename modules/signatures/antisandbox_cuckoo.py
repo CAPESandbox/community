@@ -31,5 +31,6 @@ class AntiCuckoo(Signature):
     def on_call(self, call, process):
         subcategory = self.check_argument_call(call, api="__anomaly__", name="Subcategory", pattern="anticuckoo")
         if subcategory:
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
             return True

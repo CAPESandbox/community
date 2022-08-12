@@ -34,5 +34,6 @@ class VBoxDetectProvname(Signature):
     def on_call(self, call, process):
         nettype = int(self.get_argument(call, "NetType"))
         if nettype == 0x250000:
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
             return True

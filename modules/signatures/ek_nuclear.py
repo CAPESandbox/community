@@ -42,5 +42,6 @@ class Nuclear_JS(Signature):
             buf = self.get_argument(call, "Script")
 
         if "window.runer = true;" in buf and "function flash_run(fu," in buf:
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
             return True

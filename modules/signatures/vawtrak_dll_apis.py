@@ -62,24 +62,28 @@ class Vawtrak_APIs(Signature):
                 if "regsvr32.exe" in buff:
                     if "\\programdata\\" + val + "\\" in buff:
                         self.vawtrakauto = True
-                        if self.pid: self.mark_call()
+                        if self.pid:
+                            self.mark_call()
 
         if call["api"] == "CreateToolhelp32Snapshot":
             if process["module_path"].lower() == regsvr:
                 if self.pidwalk == 0:
                     self.pidwalk += 1
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
 
         elif call["api"] == "Process32FirstW":
             if process["module_path"].lower() == regsvr:
                 if self.pidwalk > 0:
                     self.pidwalk += 1
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
 
         elif call["api"] == "Process32NextW":
             if self.pidwalk > 1:
                 self.pidwalk += 1
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
 
         elif call["api"] == "NtCreateEvent":
             # Increase process injection event counter
@@ -93,7 +97,8 @@ class Vawtrak_APIs(Signature):
             if modpath not in self.cevents:
                 self.cevents[modpath] = set()
             self.cevents[modpath].add(self.get_argument(call, "EventName"))
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
 
         elif call["api"] == "NtOpenEvent":
             # Add event to process event monitor
@@ -101,7 +106,8 @@ class Vawtrak_APIs(Signature):
             if modpath not in self.oevents:
                 self.oevents[modpath] = set()
             self.oevents[modpath].add(self.get_argument(call, "EventName"))
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
 
         self.nextlastcall = self.lastcall
         self.lastcall = call["api"]

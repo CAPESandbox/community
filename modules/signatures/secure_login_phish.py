@@ -44,7 +44,8 @@ class Secure_Login_Phish(Signature):
             url = self.get_argument(call, "Url")
             if url:
                 self.lasturl = url
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
         elif call["api"] == "InternetReadFile":
             buf = self.get_argument(call, "Buffer")
             if buf and not self.lasturl.startswith("https"):
@@ -52,23 +53,28 @@ class Secure_Login_Phish(Signature):
                     if re.search("<title>\s*Secure\s*Login\s*</t", buf, re.I):
                         self.phishingurls.add(self.lasturl)
                         self.description = self.description.format("Secure Login")
-                        if self.pid: self.mark_call()
+                        if self.pid:
+                            self.mark_call()
                     elif re.search("<title>Goog[li]e\sDoc.*</t", buf, re.I):
                         self.phishingurls.add(self.lasturl)
                         self.description = self.description.format("Google Doc")
-                        if self.pid: self.mark_call()
+                        if self.pid:
+                            self.mark_call()
                     elif re.search("<title>\s*Dropbox.*</t", buf, re.I):
                         self.phishingurls.add(self.lasturl)
                         self.description = self.description.format("Dropbox")
-                        if self.pid: self.mark_call()
+                        if self.pid:
+                            self.mark_call()
                     elif re.search("<title>Goog[li]e\sDrive.*</t", buf, re.I):
                         self.phishingurls.add(self.lasturl)
                         self.description = self.description.format("Google Drive")
-                        if self.pid: self.mark_call()
+                        if self.pid:
+                            self.mark_call()
                     elif re.search("<title>\s*Outlook.*</t", buf, re.I):
                         self.phishingurls.add(self.lasturl)
                         self.description = self.description.format("Microsoft Outlook")
-                        if self.pid: self.mark_call()
+                        if self.pid:
+                            self.mark_call()
 
     def on_complete(self):
         if self.phishingurls:

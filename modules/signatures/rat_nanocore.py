@@ -44,10 +44,12 @@ class NanocoreRAT(Signature):
                 tail = "6" * 48
                 if buf.endswith(tail):
                     self.cryptcalls += 1
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
                 if buf.startswith("MZ"):
                     self.cryptmz += 1
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
 
     def on_complete(self):
         badness = 0

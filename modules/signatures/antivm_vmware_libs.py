@@ -37,5 +37,6 @@ class VMwareDetectLibs(Signature):
 
         for indicator in indicators:
             if self.check_argument_call(call, pattern=indicator, name="FileName", ignorecase=True):
-                if self.pid: self.mark_call()
+                if self.pid:
+                    self.mark_call()
                 return True

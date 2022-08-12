@@ -40,7 +40,8 @@ class UserEnum(Signature):
                     if process["process_id"] not in self.users.keys():
                         self.users[process["process_id"]] = set()
                     self.users[process["process_id"]].add(buf)
-                    if self.pid: self.mark_call()
+                    if self.pid:
+                        self.mark_call()
         return None
 
     def on_complete(self):

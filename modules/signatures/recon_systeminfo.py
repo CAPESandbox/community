@@ -34,5 +34,6 @@ class SystemInfo(Signature):
             call, pattern="(^cmd\.exe).*[(systeminfo)|(ipconfig)|(netstat)]", name="CommandLine", category="process", regex=True
         )
         if match:
-            if self.pid: self.mark_call()
+            if self.pid:
+                self.mark_call()
         return match
