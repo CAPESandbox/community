@@ -224,7 +224,7 @@ class PersistenceSafeBoot(Signature):
     ttps = ["T1060"]  # MITRE v6
     ttps += ["T1112"]  # MITRE v6,7,8
     ttps += ["T1547", "T1547.001"]  # MITRE v7,8
-    mbcs += ["OB0012", "E1112"]
+    mbcs = ["OB0012", "E1112"]
 
     def run(self):
         indicators = [
