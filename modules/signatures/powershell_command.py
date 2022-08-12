@@ -343,17 +343,17 @@ class PowerShellNetworkConnection(Signature):
                 self.data.append({"request": buff})
                 self.mark_call()
             if call["api"] == "HttpOpenRequestW":
-                self.ttps += ["OC0006", "C0002"]
+                self.mbcs += ["OC0006", "C0002"]
                 buff = self.get_argument(call, "Path").lower()
                 self.data.append({"request": buff})
                 self.mark_call()
             if call["api"] == "InternetCrackUrlW":
-                self.ttps += ["OC0006", "C0005"]
+                self.mbcs += ["OC0006", "C0005"]
                 buff = self.get_argument(call, "Url").lower()
                 self.data.append({"request": buff})
                 self.mark_call()
             if call["api"] == "InternetCrackUrlA":
-                self.ttps += ["OC0006", "C0005"]
+                self.mbcs += ["OC0006", "C0005"]
                 buff = self.get_argument(call, "Url").lower()
                 self.data.append({"request": buff})
                 self.mark_call()
