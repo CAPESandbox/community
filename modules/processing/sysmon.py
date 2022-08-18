@@ -54,6 +54,6 @@ class Sysmon(Processing):
             xml = xml.decode("latin1").encode("utf8")
             data = xmltodict.parse(xml)["Events"]["Event"]
         except Exception as e:
-            raise CuckooProcessingError("Failed parsing sysmon.xml: %s" % e.message)
+            raise CuckooProcessingError(f"Failed parsing sysmon.xml: {e}")
 
         return self.remove_noise(data)
