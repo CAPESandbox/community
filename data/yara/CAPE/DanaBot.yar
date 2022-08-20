@@ -27,5 +27,5 @@ rule DanaBot {
         //$o5 = { 80 bc 24 4a 01 00 00 01 75 14 ba 80 d7 4f 00 a1 }
         //$o6 = { ba 80 d7 4f 00 a1 80 8f 4f 00 e8 4c 4a f1 ff e9 }
     condition:
-        uint16(0) == 0x5a4d and (7 of ($s*) or all of ($ds*))
+        uint16(0) == 0x5a4d and (7 of ($s*) or 3 of ($ds*))
 }
