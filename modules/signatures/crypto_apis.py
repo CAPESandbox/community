@@ -20,7 +20,6 @@ class CryptGenKey(Signature):
     name = "generates_crypto_key"
     description = "Uses Windows APIs to generate a cryptographic key"
     severity = 1
-    families = ["generic"]
     # Migrated by @CybercentreCanada
     authors = ["Kevin Ross", "@CybercentreCanada"]
     minimum = "1.2"
