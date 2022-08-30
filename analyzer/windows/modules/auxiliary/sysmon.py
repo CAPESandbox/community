@@ -1,10 +1,10 @@
-from itertools import product
 import logging
 import os
 import platform
 import subprocess
 import threading
-from zipfile import ZipFile, ZIP_DEFLATED
+from itertools import product
+from zipfile import ZIP_DEFLATED, ZipFile
 
 from lib.common.abstracts import Auxiliary
 from lib.common.exceptions import CuckooPackageError
