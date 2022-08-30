@@ -162,8 +162,8 @@ class NetworkIPEXE(Signature):
     authors = ["@CybercentreCanada"]
     minimum = "1.2"
 
-    def on_complete(self):
-        indicator = "\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}.*\.exe"
+    def run(self):
+        indicator = "(https?://)?\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}.*\.exe"
         # Downloading an EXE from an IP is ALWAYS SKETCHY
         matches = self.check_url(pattern=indicator, regex=True, all=True)
         for match in matches:
