@@ -166,8 +166,9 @@ class NetworkIPEXE(Signature):
         indicator = "(https?://)?\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}.*\.exe"
         # Downloading an EXE from an IP is ALWAYS SKETCHY
         matches = self.check_url(pattern=indicator, regex=True, all=True)
-        for match in matches:
-            self.data.append({"request": match})
+        if matches:
+            for match in matches:
+                self.data.append({"request": match})
 
         if len(self.data) > 0:
             return True
