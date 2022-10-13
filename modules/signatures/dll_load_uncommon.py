@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 class DllLoadUncommonFileTypes(Signature):
     name = "dll_load_uncommon_file_types"
     description = "A file with an unusual extension was attempted to be loaded as a DLL."
-    severity = 2
+    severity = 1
     categories = ["anti-debug"]
     authors = ["@CybercentreCanada"]
     minimum = "1.2"

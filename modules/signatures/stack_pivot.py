@@ -48,15 +48,12 @@ class StackPivot(Signature):
             "acrobat.exe",
             "acrord32.exe",
             "chrome.exe",
-            "excel.exe",
             "FLTLDR.EXE",
             "firefox.exe",
             "HimTrayIcon.exe",
             "hwp.exe",
             "iexplore.exe",
             "outlook.exe",
-            "powerpnt.exe",
-            "winword.exe",
         ]
 
     def on_call(self, call, process):

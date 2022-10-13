@@ -19,7 +19,8 @@ from lib.cuckoo.common.abstracts import Signature
 class NetworkAdapters(Signature):
     name = "antivm_network_adapters"
     description = "Checks adapter addresses which can be used to detect virtual network interfaces"
-    severity = 2
+    severity = 1
+    confidence = 40
     categories = ["anti-vm"]
     # Migrated by @CybercentreCanada
     authors = ["Kevin Ross", "@CybercentreCanada"]
@@ -30,7 +31,7 @@ class NetworkAdapters(Signature):
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.safelistprocs = ["iexplore.exe", "firefox.exe", "chrome.exe", "safari.exe", "outlook.exe"]
+        self.safelistprocs = ["iexplore.exe", "firefox.exe", "chrome.exe", "safari.exe", "outlook.exe", "winword.exe", "excel.exe", "powerpnt.exe"]
 
     def on_call(self, _, process):
         if process["process_name"].lower() not in self.safelistprocs:
