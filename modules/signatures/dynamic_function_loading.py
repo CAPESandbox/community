@@ -21,6 +21,7 @@ class dynamic_function_loading(Signature):
     name = "dynamic_function_loading"
     description = "Dynamic (imported) function loading detected"
     severity = 1
+    confidence = 40
     categories = ["anti-debug"]
     authors = ["redsand"]
     minimum = "1.3"

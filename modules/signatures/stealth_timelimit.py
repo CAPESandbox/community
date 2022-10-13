@@ -8,8 +8,8 @@ from lib.cuckoo.common.abstracts import Signature
 class StealthTimeout(Signature):
     name = "stealth_timeout"
     description = "Possible date expiration check, exits too soon after checking local time"
-    severity = 2
-    confidence = 50
+    severity = 1
+    confidence = 40
     categories = ["stealth"]
     authors = ["Optiv"]
     minimum = "1.3"

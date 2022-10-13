@@ -21,6 +21,7 @@ class antidebug_setunhandledexceptionfilter(Signature):
     name = "antidebug_setunhandledexceptionfilter"
     description = "SetUnhandledExceptionFilter detected (possible anti-debug)"
     severity = 1
+    confidence = 40
     categories = ["anti-debug"]
     authors = ["redsand"]
     minimum = "1.3"

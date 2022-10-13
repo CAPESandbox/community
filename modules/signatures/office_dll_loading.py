@@ -78,7 +78,7 @@ from lib.cuckoo.common.abstracts import Signature
 class OfficeVBLLoad(Signature):
     name = "office_vb_load"
     description = "Office loads VB DLLs, indicative of Office Macros"
-    severity = 2
+    severity = 1
     categories = ["office", "macro"]
     authors = ["ditekshen"]
     minimum = "1.3"
@@ -143,7 +143,7 @@ class OfficeWMILoad(Signature):
 class OfficeCOMLoad(Signature):
     name = "office_com_load"
     description = "Office loads COM DLLs, indicative of Office Macros spawning CMD process for execution"
-    severity = 2
+    severity = 1
     categories = ["office", "macro"]
     authors = ["ditekshen"]
     minimum = "1.3"
