@@ -1,4 +1,4 @@
-# Copyright (C) 2016 Kevin Ross
+# Copyright (C) 2022 Kevin Ross
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ class BCDEditCommand(Signature):
     confidence = 20
     weight = 0
     categories = ["generic"]
-    authors = ["Kevin Ross"]
+    authors = ["Kevin Ross", "Zane C. Bowers-Hadley"]
     minimum = "1.2"
     evented = True
     ttps = ["T1059"]  # MITRE v6,7,8
