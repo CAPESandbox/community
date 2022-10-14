@@ -1,4 +1,4 @@
-# Copyright (C) 2019 ditekshen
+# Copyright (C) 2022 ditekshen
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,16 +21,22 @@ class DisablesMappedDrivesAutodisconnect(Signature):
     description = "Attempts to disable or change the mapped dirves autodisconnect feature via command line"
     severity = 3
     categories = ["ransomware"]
-    authors = ["ditekshen"]
+    authors = ["ditekshen", "Zane C. Bowers-Hadley"]
     minimum = "1.3"
     evented = True
     ttps = ["T1059"]  # MITRE v6,7,8
     mbcs = ["OB0009", "E1059"]
 
-    filter_apinames = set(["CreateProcessInternalW", "ShellExecuteExW"])
+    filter_apinames = set(["CreateProcessInternalW", "ShellExecuteExW", "NtCreateUserProcess"])
 
     def on_call(self, call, process):
         if call["api"] == "CreateProcessInternalW":
+            cmdline = self.get_argument(call, "CommandLine").lower()
+            if "config server" in cmdline and "/autodisconnect:" in cmdline and "net" in cmdline:
+                if self.pid:
+                    self.mark_call()
+                return True
+        if call["api"] == "NtCreateUserProcess":
             cmdline = self.get_argument(call, "CommandLine").lower()
             if "config server" in cmdline and "/autodisconnect:" in cmdline and "net" in cmdline:
                 if self.pid:
