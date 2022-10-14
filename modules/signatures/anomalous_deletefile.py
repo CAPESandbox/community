@@ -35,8 +35,17 @@ class anomalous_deletefile(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.loadctr = 0
         self.list = []
+        self.safelistprocs = [
+            "winword.exe",
+            "excel.exe",
+            "powerpnt.exe",
+            "acrord32.exe",
+        ]
 
     def on_call(self, call, process):
+        if process["process_name"].lower() in self.safelistprocs:
+            return
+
         if call["api"] == "NtDeleteFile" or call["api"] == "DeleteFileA" or call["api"] == "DeleteFileW":
             self.loadctr += 1
             self.data.append({"file": "%s" % (self.get_argument(call, "FileName"))})
