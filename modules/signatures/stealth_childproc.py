@@ -1,4 +1,4 @@
-# Copyright (C) 2014 Optiv, Inc. (brad.spengler@optiv.com)
+# Copyright (C) 2022 Optiv, Inc. (brad.spengler@optiv.com)
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
@@ -11,12 +11,12 @@ class StealthChildProc(Signature):
     severity = 3
     confidence = 100
     categories = ["stealth"]
-    authors = ["Optiv"]
+    authors = ["Optiv", "Zane C. Bowers-Hadley"]
     minimum = "1.2"
     evented = True
     references = ["https://www.countercept.com/blog/detecting-parent-pid-spoofing/"]
 
-    filter_apinames = set(["NtCreateProcess", "NtCreateProcessEx", "RtlCreateUserProcess", "CreateProcessInternalW"])
+    filter_apinames = set(["NtCreateProcess", "NtCreateProcessEx", "RtlCreateUserProcess", "CreateProcessInternalW", "NtCreateUserProcess"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

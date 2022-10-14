@@ -1,4 +1,4 @@
-# Copyright (C) 2020 ditekshen
+# Copyright (C) 2022 ditekshen
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -76,14 +76,14 @@ class SpwansDotNetDevUtiliy(Signature):
     description = "Attempts to bypass application whitelisting"
     severity = 3
     categories = ["masquerading", "evasion", "execution", "dotnet"]
-    authors = ["ditekshen"]
+    authors = ["ditekshen", "Zane C. Bowers-Hadley"]
     minimum = "1.3"
     evented = True
     ttps = ["T1118"]  # MITRE v6
     ttps += ["T1127", "T1218"]  # MITRE v6,7,8
     ttps += ["T1218.004"]  # MITRE v7,8
 
-    filter_apinames = set(["CreateProcessInternalA", "CreateProcessInternalW", "CopyFileA", "CopyFileW", "CopyFileExW"])
+    filter_apinames = set(["CreateProcessInternalA", "CreateProcessInternalW", "CopyFileA", "CopyFileW", "CopyFileExW", "NtCreateUserProcess"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -110,7 +110,11 @@ class SpwansDotNetDevUtiliy(Signature):
                     if re.search(tool, self.sname.lower()):
                         self.dname = self.get_argument(call, "NewFileName")
 
-        if call["api"] == "CreateProcessInternalA" or call["api"] == "CreateProcessInternalW":
+        if (
+                call["api"] == "CreateProcessInternalA"
+                or call["api"] == "CreateProcessInternalW"
+                or call["api"] == "NtCreateUserProcess"
+        ):
             cmdline = self.get_argument(call, "CommandLine").lower()
             appname = self.get_argument(call, "ApplicationName")
             if cmdline:

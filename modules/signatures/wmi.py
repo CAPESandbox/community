@@ -1,4 +1,4 @@
-# Copyright (C) 2019 Kevin Ross
+# Copyright (C) 2022 Kevin Ross
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,13 +22,13 @@ class WMICreateProcess(Signature):
     severity = 3
     confidence = 50
     categories = ["martians"]
-    authors = ["Kevin Ross"]
+    authors = ["Kevin Ross", "Zane C. Bowers-Hadley"]
     minimum = "1.3"
     evented = True
     ttps = ["T1047"]  # MITRE v6,7,8
     mbcs = ["OC0003", "C0017", "C0017.002"]  # micro-behaviour
 
-    filter_apinames = set(["CreateProcessInternalW"])
+    filter_apinames = set(["CreateProcessInternalW", "NtCreateUserProcess"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -62,14 +62,14 @@ class WMIScriptProcess(Signature):
     severity = 3
     confidence = 100
     categories = ["martians"]
-    authors = ["Kevin Ross"]
+    authors = ["Kevin Ross", "Zane C. Bowers-Hadley"]
     minimum = "1.3"
     evented = True
     ttps = ["T1064"]  # MITRE v6
     ttps += ["T1047", "T1059"]  # MITRE v6,7,8
     mbcs = ["OB0009", "E1059"]
 
-    filter_apinames = set(["CreateProcessInternalW"])
+    filter_apinames = set(["CreateProcessInternalW", "NtCreateUserProcess"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
