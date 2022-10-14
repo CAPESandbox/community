@@ -10,13 +10,13 @@ class DeletesShadowCopies(Signature):
     description = "Attempts to delete or modify volume shadow copies"
     severity = 3
     categories = ["ransomware"]
-    authors = ["Optiv"]
+    authors = ["Optiv", "Zane C. Bowers-Hadley"]
     minimum = "1.2"
     evented = True
     ttps = ["T1490"]  # MITRE v6,7,8
     mbcs = ["OB0008", "F0014", "F0014.001"]
 
-    filter_apinames = set(["CreateProcessInternalW", "ShellExecuteExW"])
+    filter_apinames = set(["CreateProcessInternalW", "ShellExecuteExW", "NtCreateUserProcess"])
 
     def on_call(self, call, process):
         if call["api"] == "CreateProcessInternalW":
@@ -45,6 +45,20 @@ class DeletesShadowCopies(Signature):
                     self.mark_call()
                 return True
             elif "wmic" in filepath and "shadowcopy" in params and "delete" in params:
+                if self.pid:
+                    self.mark_call()
+                return True
+        elif call["api"] == "NtCreateUserProcess":
+            cmd_line = self.get_argument(call, "CommandLine").lower()
+            if (
+                "vssadmin" in cmd_line
+                and ("delete" in cmd_line and "shadows" in cmd_line)
+                or ("resize" in cmd_line and "shadowstorage" in cmd_line)
+            ):
+                if self.pid:
+                    self.mark_call()
+                return True
+            elif "wmic" in cmd_line and "shadowcopy" in cmd_line and "delete" in cmd_line:
                 if self.pid:
                     self.mark_call()
                 return True
