@@ -1,4 +1,4 @@
-# Copyright (C) 2016 Kevin Ross
+# Copyright (C) 2022 Kevin Ross
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -171,7 +171,7 @@ class ScriptCreatedProcess(Signature):
     severity = 3
     confidence = 100
     categories = ["downloader", "dropper"]
-    authors = ["Kevin Ross"]
+    authors = ["Kevin Ross", "Zane C. Bowers-Hadley"]
     minimum = "1.3"
     evented = True
     ttps = ["T1064"]  # MITRE v6
@@ -179,7 +179,7 @@ class ScriptCreatedProcess(Signature):
     mbcs = ["OB0009", "E1059"]
     mbcs += ["OC0003", "C0017"]  # micro-behaviour
 
-    filter_apinames = set(["CreateProcessInternalW"])
+    filter_apinames = set(["CreateProcessInternalW", "NtCreateUserProcess"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
