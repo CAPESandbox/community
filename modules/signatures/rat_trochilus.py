@@ -28,7 +28,7 @@ class TrochilusRATAPIs(Signature):
     ttps = ["T1219"]  # MITRE v6,7,8
     mbcs = ["B0022"]
 
-    filter_apinames = set(["OutputDebugStringW", "CreateProcessInternalW", "RegSetValueExW"])
+    filter_apinames = set(["OutputDebugStringW", "CreateProcessInternalW", "RegSetValueExW", "NtCreateUserProcess"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -43,7 +43,10 @@ class TrochilusRATAPIs(Signature):
                     if self.pid:
                         self.mark_call()
 
-        if call["api"] == "CreateProcessInternalW":
+        if (
+                call["api"] == "CreateProcessInternalW"
+                or call["api"] == "NtCreateUserProcess"
+        ):
             cmdline = self.get_argument(call, "CommandLine")
             if cmdline:
                 if "XLServant" in cmdline:

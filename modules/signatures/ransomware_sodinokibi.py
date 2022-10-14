@@ -15,7 +15,7 @@ class sodinokibi(Signature):
     severity = 3
     categories = ["ransomware"]
     families = ["Sodinokibi"]
-    authors = ["@NaxoneZ"]
+    authors = ["@NaxoneZ", "Zane C. Bowers-Hadley"]
     minimum = "1.2"
     evented = True
     ttps = ["T1486"]  # MITRE v6,7,8
@@ -25,7 +25,7 @@ class sodinokibi(Signature):
     # Sodinokibi:
     # 1. 03eb9b0e4e842cbe3726872ed46e241f5b79e18a09e1655341a403ac3e5136a6 (variant1)
 
-    filter_apinames = set(["RegSetValueExW", "CreateProcessInternalW", "WinHttpOpen", "bind"])
+    filter_apinames = set(["RegSetValueExW", "CreateProcessInternalW", "WinHttpOpen", "bind", "NtCreateUserProcess"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -42,7 +42,10 @@ class sodinokibi(Signature):
                     if self.pid:
                         self.mark_call()
 
-        if call["api"] == "CreateProcessInternalW":
+        if (
+                call["api"] == "CreateProcessInternalW"
+                or call["api"] == "NtCreateUserProcess"
+        ):
             node = self.get_argument(call, "CommandLine")
             if powershell in node:
                 self.badness_powershell += 1
