@@ -1,4 +1,4 @@
-# Copyright (C) 2019 ditekshen
+# Copyright (C) 2022 ditekshen
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ class CompilesDotNetCode(Signature):
     description = "Compiles .NET code into an executable and executes it"
     severity = 3
     categories = ["evasion", "execution", "dropper", "dotnet", "exploit", "office"]
-    authors = ["ditekshen"]
+    authors = ["ditekshen", "Zane C. Bowers-Hadley"]
     minimum = "1.3"
     evented = True
     ttps = ["T1500"]  # MITRE v6
@@ -34,7 +34,7 @@ class CompilesDotNetCode(Signature):
     ttps += ["T1027.004"]  # MITRE v7,8
     mbcs = ["OB0002", "E1027"]
 
-    filter_apinames = set(["CreateProcessInternalA", "CreateProcessInternalW", "NtWriteFile"])
+    filter_apinames = set(["CreateProcessInternalA", "CreateProcessInternalW", "NtWriteFile", "NtCreateUserProcess"])
     filter_analysistypes = set(["file"])
 
     def __init__(self, *args, **kwargs):
@@ -45,7 +45,11 @@ class CompilesDotNetCode(Signature):
         self.writemz = False
 
     def on_call(self, call, process):
-        if call["api"] == "CreateProcessInternalA" or call["api"] == "CreateProcessInternalW":
+        if (
+                call["api"] == "CreateProcessInternalA"
+                or call["api"] == "CreateProcessInternalW"
+                or call["api"] == "NtCreateUserProcess"
+            ):
             cmdline = self.get_argument(call, "CommandLine")
             if cmdline:
                 if "csc.exe" in cmdline or "vbc.exe" in cmdline:
@@ -54,7 +58,11 @@ class CompilesDotNetCode(Signature):
 
         processname = process["process_name"].lower()
         if processname == "csc.exe" or processname == "vbc.exe":
-            if call["api"] == "CreateProcessInternalA" or call["api"] == "CreateProcessInternalW":
+            if (
+                    call["api"] == "CreateProcessInternalA"
+                    or call["api"] == "CreateProcessInternalW"
+                    or call["api"] == "NtCreateUserProcess"
+            ):
                 cmdline = self.get_argument(call, "CommandLine")
                 if cmdline:
                     if "cvtres.exe" in cmdline:
