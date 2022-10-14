@@ -1,4 +1,4 @@
-# Copyright (C) 2014 Optiv, Inc. (brad.spengler@optiv.com)
+# Copyright (C) 2022 Optiv, Inc. (brad.spengler@optiv.com)
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
@@ -10,12 +10,12 @@ class InjectionExtension(Signature):
     description = "Attempted to execute a copy of itself but requires an .exe extension to work"
     severity = 3
     categories = ["injection"]
-    authors = ["Optiv"]
+    authors = ["Optiv", "Zane C. Bowers-Hadley"]
     minimum = "1.3"
     evented = True
     mbcs = ["OC0001", "C0045"]  # micro-behaviour
 
-    filter_apinames = set(["CreateProcessInternalW"])
+    filter_apinames = set(["CreateProcessInternalW", "NtCreateUserProcess"])
 
     def on_call(self, call, process):
         if call["status"] == False:
