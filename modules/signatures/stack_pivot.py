@@ -130,14 +130,14 @@ class StackPivotProcessCreate(Signature):
     severity = 3
     confidence = 100
     categories = ["exploit"]
-    authors = ["Kevin Ross"]
+    authors = ["Kevin Ross", "Zane C. Bowers-Hadley"]
     minimum = "1.3"
     evented = True
     ttps = ["T1203"]  # MITRE v6,7,8
     mbcs = ["OB0009", "E1203"]
     mbcs += ["OC0003", "C0017"]  # micro-behaviour
 
-    filter_apinames = set(["CreateProcessInternalW"])
+    filter_apinames = set(["CreateProcessInternalW", "NtCreateUserProcess"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
