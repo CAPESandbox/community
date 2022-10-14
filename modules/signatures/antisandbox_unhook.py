@@ -39,8 +39,14 @@ class Unhook(Signature):
         self.is_url_analysis = False
         if self.results.get("target", {}).get("category", "") == "url":
             self.is_url_analysis = True
+        self.safelistprocs = [
+            "acrord32.exe"
+        ]
 
     def on_call(self, call, process):
+        if process["process_name"].lower() in self.safelistprocs:
+            return
+
         subcategory = self.check_argument_call(call, api="__anomaly__", name="Subcategory", pattern="unhook")
         if subcategory:
             self.saw_unhook = True

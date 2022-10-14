@@ -46,7 +46,6 @@ class StackPivot(Signature):
         self.procs = set()
         self.processes = [
             "acrobat.exe",
-            "acrord32.exe",
             "chrome.exe",
             "FLTLDR.EXE",
             "firefox.exe",
