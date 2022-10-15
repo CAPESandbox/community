@@ -1,4 +1,4 @@
-# Copyright (C) 2016 Kevin Ross
+# Copyright (C) 2022 Kevin Ross
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ class BCDEditCommand(Signature):
     confidence = 20
     weight = 0
     categories = ["generic"]
-    authors = ["Kevin Ross"]
+    authors = ["Kevin Ross", "Zane C. Bowers-Hadley"]
     minimum = "1.2"
     evented = True
     ttps = ["T1059"]  # MITRE v6,7,8
@@ -31,7 +31,7 @@ class BCDEditCommand(Signature):
     mbcs = ["OB0006", "E1478", "OB0009", "E1059"]
     mbcs += ["OC0008", "C0033"]  # micro-behaviour
 
-    filter_apinames = set(["CreateProcessInternalW", "ShellExecuteExW"])
+    filter_apinames = set(["CreateProcessInternalW", "ShellExecuteExW", "NtCreateUserProcess"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -42,6 +42,8 @@ class BCDEditCommand(Signature):
 
     def on_call(self, call, process):
         if call["api"] == "CreateProcessInternalW":
+            cmdline = self.get_argument(call, "CommandLine").lower()
+        elif call["api"] == "NtCreateUserProcess":
             cmdline = self.get_argument(call, "CommandLine").lower()
         else:
             filepath = self.get_argument(call, "FilePath").lower()

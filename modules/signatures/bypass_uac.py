@@ -1,4 +1,4 @@
-# Copyright (C) 2019 Kevin Ross
+# Copyright (C) 2022 Kevin Ross
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ class UACBypassEventvwr(Signature):
     severity = 3
     confidence = 100
     categories = ["bypass"]
-    authors = ["Kevin Ross"]
+    authors = ["Kevin Ross", "Zane C. Bowers-Hadley"]
     minimum = "1.3"
     evented = True
     ttps = ["T1088"]  # MITRE v6
@@ -30,7 +30,7 @@ class UACBypassEventvwr(Signature):
     mbcs = ["OB0006"]
     references = ["https://enigma0x3.net/2016/08/15/fileless-uac-bypass-using-eventvwr-exe-and-registry-hijacking/"]
 
-    filter_apinames = set(["CreateProcessInternalW", "RegQueryValueExA", "RegQueryValueExW"])
+    filter_apinames = set(["CreateProcessInternalW", "RegQueryValueExA", "RegQueryValueExW", "NtCreateUserProcess"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -49,6 +49,16 @@ class UACBypassEventvwr(Signature):
                     self.data.append({"reg_query_data": data})
 
         if call["api"] == "CreateProcessInternalW":
+            pname = process["process_name"]
+            if pname.lower() == "eventvwr.exe" and self.eventvrw:
+                cmdline = self.get_argument(call, "CommandLine")
+                if ("mmc " in cmdline.lower() or "mmc.exe" in cmdline.lower()) and "eventvwr.msc" in cmdline.lower():
+                    self.data.append({"command": cmdline})
+                    if self.pid:
+                        self.mark_call()
+                    self.ret = True
+
+        if call["api"] == "NtCreateUserProcess":
             pname = process["process_name"]
             if pname.lower() == "eventvwr.exe" and self.eventvrw:
                 cmdline = self.get_argument(call, "CommandLine")
