@@ -83,7 +83,9 @@ class SpwansDotNetDevUtiliy(Signature):
     ttps += ["T1127", "T1218"]  # MITRE v6,7,8
     ttps += ["T1218.004"]  # MITRE v7,8
 
-    filter_apinames = set(["CreateProcessInternalA", "CreateProcessInternalW", "CopyFileA", "CopyFileW", "CopyFileExW", "NtCreateUserProcess"])
+    filter_apinames = set(
+        ["CreateProcessInternalA", "CreateProcessInternalW", "CopyFileA", "CopyFileW", "CopyFileExW", "NtCreateUserProcess"]
+    )
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -111,9 +113,9 @@ class SpwansDotNetDevUtiliy(Signature):
                         self.dname = self.get_argument(call, "NewFileName")
 
         if (
-                call["api"] == "CreateProcessInternalA"
-                or call["api"] == "CreateProcessInternalW"
-                or call["api"] == "NtCreateUserProcess"
+            call["api"] == "CreateProcessInternalA"
+            or call["api"] == "CreateProcessInternalW"
+            or call["api"] == "NtCreateUserProcess"
         ):
             cmdline = self.get_argument(call, "CommandLine").lower()
             appname = self.get_argument(call, "ApplicationName")

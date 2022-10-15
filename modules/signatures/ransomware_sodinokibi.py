@@ -42,10 +42,7 @@ class sodinokibi(Signature):
                     if self.pid:
                         self.mark_call()
 
-        if (
-                call["api"] == "CreateProcessInternalW"
-                or call["api"] == "NtCreateUserProcess"
-        ):
+        if call["api"] == "CreateProcessInternalW" or call["api"] == "NtCreateUserProcess":
             node = self.get_argument(call, "CommandLine")
             if powershell in node:
                 self.badness_powershell += 1

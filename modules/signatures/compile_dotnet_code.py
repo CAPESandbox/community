@@ -46,10 +46,10 @@ class CompilesDotNetCode(Signature):
 
     def on_call(self, call, process):
         if (
-                call["api"] == "CreateProcessInternalA"
-                or call["api"] == "CreateProcessInternalW"
-                or call["api"] == "NtCreateUserProcess"
-            ):
+            call["api"] == "CreateProcessInternalA"
+            or call["api"] == "CreateProcessInternalW"
+            or call["api"] == "NtCreateUserProcess"
+        ):
             cmdline = self.get_argument(call, "CommandLine")
             if cmdline:
                 if "csc.exe" in cmdline or "vbc.exe" in cmdline:
@@ -59,9 +59,9 @@ class CompilesDotNetCode(Signature):
         processname = process["process_name"].lower()
         if processname == "csc.exe" or processname == "vbc.exe":
             if (
-                    call["api"] == "CreateProcessInternalA"
-                    or call["api"] == "CreateProcessInternalW"
-                    or call["api"] == "NtCreateUserProcess"
+                call["api"] == "CreateProcessInternalA"
+                or call["api"] == "CreateProcessInternalW"
+                or call["api"] == "NtCreateUserProcess"
             ):
                 cmdline = self.get_argument(call, "CommandLine")
                 if cmdline:
