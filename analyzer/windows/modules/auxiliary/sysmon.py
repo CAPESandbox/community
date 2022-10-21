@@ -106,7 +106,7 @@ class Sysmon(threading.Thread, Auxiliary):
             raise CuckooPackageError(
                 "In order to use the Sysmon functionality, it "
                 "is required to have the SMaster(64|32).exe file and "
-                "sysmonconfig.xml file in the bin path. Note that the SMaster(64|32).exe files are "
+                "sysmonconfig-export.xml file in the bin path. Note that the SMaster(64|32).exe files are "
                 "just the standard Sysmon binaries renamed to avoid anti-analysis detection techniques."
             )
 
