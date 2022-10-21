@@ -105,8 +105,9 @@ class Sysmon(threading.Thread, Auxiliary):
         if not os.path.exists(sysmon) or not os.path.exists(config_file):
             raise CuckooPackageError(
                 "In order to use the Sysmon functionality, it "
-                "is required to have the sysmon(64|32).exe file and "
-                "sysmonconfig.xml file in the bin path."
+                "is required to have the SMaster(64|32).exe file and "
+                "sysmonconfig.xml file in the bin path. Note that the SMaster(64|32).exe files are "
+                "just the standard Sysmon binaries renamed to avoid anti-analysis detection techniques."
             )
 
         # Start Sysmon in the background
