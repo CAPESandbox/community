@@ -120,7 +120,10 @@ class SpwansDotNetDevUtiliy(Signature):
             cmdline = self.get_argument(call, "CommandLine").lower()
             appname = self.get_argument(call, "ApplicationName")
             if cmdline:
-                flags = int(self.get_argument(call, "CreationFlags"), 16)
+                creation_flags = self.get_argument(call, "CreationFlags")
+                if creation_flags is None:
+                    return
+                flags = int(creation_flags, 16)
                 # CREATE_SUSPENDED or CREATE_SUSPENDED|CREATE_NO_WINDOW
                 if flags & 0x4 or flags & 0x08000004:
                     for tool in self.devtools:
