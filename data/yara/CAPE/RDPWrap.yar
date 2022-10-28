@@ -16,5 +16,5 @@ strings:
 	$ = "stascorp" ascii wide
 
 condition:
-	any of them
+	2 of them
 }
