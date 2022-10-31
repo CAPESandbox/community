@@ -86,7 +86,7 @@ class Locky_APIs(Signature):
                         self.description = "Potential Locky ransomware behavioral characteristics observed. (See Note)"
                         self.data.append(
                             {
-                                "Note": "Unexpected behavior observed for Locky. Please "
+                                "note": "Unexpected behavior observed for Locky. Please "
                                 "report this sample to https://github.com/spende"
                                 "rsandbox/community-modified/issues"
                             }
