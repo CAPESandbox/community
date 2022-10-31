@@ -19,7 +19,7 @@ from lib.cuckoo.common.abstracts import Signature
 class ExplorerHTTP(Signature):
     name = "explorer_http"
     description = "Explorer.exe process established HTTP connections"
-    severity = 3
+    severity = 4
     categories = ["masquerading", "evasion", "execution", "injection"]
     authors = ["ditekshen"]
     minimum = "1.3"
