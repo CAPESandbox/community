@@ -21,7 +21,7 @@ class CypherITMutexes(Signature):
     description = "Creates known CypherIT/Frenchy Shellcode mutexes"
     severity = 3
     categories = ["trojan"]
-    families = ["AgentTesla", "HawkEye", "Nanocore", "Formbook", "Remcos", "Njrat", "Azorult", "Fareit", "Lokibot", "Predator"]
+    families = ["AgentTesla", "HawkEye", "Nanocore", "Formbook", "Remcos", "Njrat", "Azorult", "Fareit", "LokiBot", "Predator"]
     authors = ["ditekshen"]
     minimum = "0.5"
     ttps = ["T1045"]  # MITRE v6
