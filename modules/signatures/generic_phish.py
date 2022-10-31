@@ -66,6 +66,6 @@ class Generic_Phish(Signature):
             for url, info in self.hits:
                 self.data.append({"Page cloned from": url})
                 if info == "truncated":
-                    self.data.append({"Note": "The above URL may be truncated"})
+                    self.data.append({"note": "The above URL may be truncated"})
 
         return ret

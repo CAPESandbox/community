@@ -67,7 +67,7 @@ class AntiSandboxSleep(Signature):
                 attempted = str(procs[process]["Attempted"] / 1000)
                 self.data.append(
                     {
-                        "process": "%s tried to sleep %s seconds, actually delayed analysis time by %s seconds"
+                        "note": "%s tried to sleep %s seconds, actually delayed analysis time by %s seconds"
                         % (process, attempted, actual)
                     }
                 )
