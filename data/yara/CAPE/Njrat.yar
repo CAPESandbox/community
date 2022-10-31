@@ -1,11 +1,11 @@
-rule njRat
+rule Njrat
 {
         meta:
                 author = " Kevin Breen <kevin@techanarchy.net> & ditekSHen"
                 ref = "http://malwareconfig.com/stats/njRat"
                 maltype = "Remote Access Trojan"
                 filetype = "exe"
-        cape_type = "njRat Payload"
+        cape_type = "Njrat Payload"
 
         strings:
 

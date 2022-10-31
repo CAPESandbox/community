@@ -21,7 +21,7 @@ class NjratRegkeys(Signature):
     description = "Creates known Njrat/Bladabindi RAT registry keys"
     severity = 3
     categories = ["rat"]
-    families = ["njRat", "Bladabindi"]
+    families = ["Njrat", "Bladabindi"]
     authors = ["ditekshen"]
     minimum = "0.5"
     ttps = ["T1112", "T1219"]  # MITRE v6,7,8
