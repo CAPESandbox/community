@@ -19,7 +19,7 @@ from lib.cuckoo.common.abstracts import Signature
 class Procmem_Yara(Signature):
     name = "procmem_yara"
     description = "Yara rule detections observed from a process memory dump/dropped files/CAPE"
-    severity = 1
+    severity = 4
     categories = ["malware"]
     authors = ["KillerInstinct"]
     minimum = "0.5"
@@ -57,10 +57,10 @@ class Procmem_Yara(Signature):
 
         if hits:
             for pid, rule in hits:
-                if rule.lower() in suspicious and self.severity == 1:
-                    self.severity = 2
-                elif rule.lower() in malicious and self.severity <= 2:
-                    self.severity = 3
+                if rule.lower() in suspicious and self.severity == 4:
+                    self.severity = 5
+                elif rule.lower() in malicious and self.severity <= 5:
+                    self.severity = 6
                 self.data.append({"Hit": "PID %s trigged the Yara rule '%s'" % (pid, rule)})
             return True
 
