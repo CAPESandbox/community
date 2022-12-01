@@ -93,7 +93,12 @@ class NetworkEXE(Signature):
         ]
 
     def on_call(self, call, process):
-        buf = self.get_argument(call, "buffer")
+        if call["api"] == "recv":
+            buf = self.get_argument(call, "buffer")
+        elif call["api"] == "InternetReadFile":
+            buf = self.get_argument(call, "Buffer")
+        else:
+            return
         pname = process["process_name"].lower()
         if buf and "MZ" in buf and "This program" in buf:
             if pname in self.high_risk_proc:
