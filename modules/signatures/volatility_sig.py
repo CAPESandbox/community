@@ -73,7 +73,7 @@ class VolLdrModules1(Signature):
                     not d["dll_in_init"]
                     and not d["dll_in_load"]
                     and not d["dll_in_mem"]
-                    and not d["process_name"].lower() in exceptions
+                    and d["process_name"].lower() not in exceptions
                 ):
                     self.data.append({"unlinked": d})
                     res = True

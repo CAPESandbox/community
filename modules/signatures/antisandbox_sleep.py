@@ -23,7 +23,7 @@ class AntiSandboxSleep(Signature):
     def on_call(self, call, process):
         if call["api"] == "NtDelayExecution":
             sleepy = self.get_argument(call, "Milliseconds")
-            if sleepy != None:
+            if sleepy is not None:
                 current_proc = process["process_name"]
                 skip = self.get_argument(call, "Status")
                 if skip and skip == "Infinite":

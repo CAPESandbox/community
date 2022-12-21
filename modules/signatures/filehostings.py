@@ -1,5 +1,4 @@
 import logging
-import os
 
 from lib.cuckoo.common.abstracts import Signature
 

@@ -58,7 +58,7 @@ class StackPivot(Signature):
     def on_call(self, call, process):
         if process["process_name"].lower() in self.processes:
             pivot = self.get_argument(call, "StackPivoted")
-            if pivot == None:
+            if pivot is None:
                 return
             if pivot == "yes":
                 self.procs.add(process["process_name"] + ":" + str(process["process_id"]))

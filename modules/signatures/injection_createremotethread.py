@@ -42,14 +42,14 @@ class InjectionCRT(Signature):
             self.handle_map = dict()
             self.lastprocess = process
 
-        if call["api"] == "OpenProcess" and call["status"] == True:
+        if call["api"] == "OpenProcess" and call["status"] is True:
             if self.get_argument(call, "ProcessId") != process["process_id"]:
                 handle = call["return"]
                 pid = str(self.get_argument(call, "ProcessId"))
                 self.process_handles.add(handle)
                 self.process_pids.add(pid)
                 self.handle_map[handle] = pid
-        elif call["api"] == "NtOpenProcess" and call["status"] == True:
+        elif call["api"] == "NtOpenProcess" and call["status"] is True:
             if self.get_argument(call, "ProcessIdentifier") != process["process_id"]:
                 handle = self.get_argument(call, "ProcessHandle")
                 pid = str(self.get_argument(call, "ProcessIdentifier"))

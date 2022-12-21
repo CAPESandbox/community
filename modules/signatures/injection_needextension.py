@@ -18,9 +18,9 @@ class InjectionExtension(Signature):
     filter_apinames = set(["CreateProcessInternalW", "NtCreateUserProcess"])
 
     def on_call(self, call, process):
-        if call["status"] == False:
+        if call["status"] is False:
             procname = process["process_name"].lower()
-            if procname.endswith(".exe") == False:
+            if procname.endswith(".exe") is False:
                 procname += ".exe"
                 apiarg1 = self.get_argument(call, "ApplicationName")
                 apiarg2 = self.get_argument(call, "CommandLine")

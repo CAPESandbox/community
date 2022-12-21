@@ -44,7 +44,7 @@ class Polymorphic(Signature):
         target_sha1 = self.results.get("target", {})["file"].get("sha1")
         target_size = self.results.get("target", {})["file"].get("size", 0)
 
-        if target_ssdeep == "" or target_ssdeep == None:
+        if target_ssdeep == "" or target_ssdeep is None:
             return False
 
         if self.results.get("dropped", []):
@@ -60,7 +60,7 @@ class Polymorphic(Signature):
                 if fabs(target_size - drop["size"]) >= 1024:
                     continue
                 drop_ssdeep = drop["ssdeep"]
-                if drop_ssdeep == "" or drop_ssdeep == None:
+                if drop_ssdeep == "" or drop_ssdeep is None:
                     continue
                 try:
                     percent = pydeep.compare(target_ssdeep, drop_ssdeep)

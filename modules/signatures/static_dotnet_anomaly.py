@@ -51,7 +51,7 @@ class DotNetAnomaly(Signature):
     minimum = "1.3"
 
     def run(self):
-        if not "static" in self.results or not "dotnet" in self.results["static"]:
+        if "static" not in self.results or "dotnet" not in self.results["static"]:
             return False
 
         if "assemblyinfo" in self.results["static"]["dotnet"] and self.results["static"]["dotnet"]["assemblyinfo"]:

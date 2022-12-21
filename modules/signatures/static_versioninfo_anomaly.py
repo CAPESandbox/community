@@ -16,7 +16,7 @@ class VersionInfoAnomaly(Signature):
     def run(self):
         found_sig = False
 
-        if not "static" in self.results or not "pe" in self.results["static"] or not "versioninfo" in self.results["static"]["pe"]:
+        if "static" not in self.results or "pe" not in self.results["static"] or "versioninfo" not in self.results["static"]["pe"]:
             return False
 
         msincopyright = None
@@ -41,10 +41,10 @@ class VersionInfoAnomaly(Signature):
                 else:
                     msincompanyname = False
 
-        if msincopyright == True and msincompanyname == False:
+        if msincopyright is True and msincompanyname is False:
             self.data.append({"anomaly": "Microsoft mentioned in LegalCopyright, but not in CompanyName field"})
             found_sig = True
-        if mstransposed == True:
+        if mstransposed is True:
             self.data.append({"anomaly": 'CompanyName is a transposed form of "Microsoft Corporation".'})
             self.families = ["Bedep"]
             found_sig = True

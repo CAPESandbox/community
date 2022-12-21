@@ -18,7 +18,7 @@ try:
 except:
     import re
 
-from datetime import date, datetime
+from datetime import datetime
 
 from lib.cuckoo.common.abstracts import Signature
 

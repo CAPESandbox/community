@@ -50,7 +50,7 @@ class DEPBypass(Signature):
         # CoW'd memory will still be MEM_IMAGE/MEM_MAPPED as appropriate
         # MEM_PRIVATE = 0x20000
         memtype = self.get_argument(call, "MemType")
-        if memtype == None:
+        if memtype is None:
             return False
 
         if memtype != 0x20000:
