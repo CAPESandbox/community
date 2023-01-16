@@ -18,7 +18,6 @@ import ntpath
 import os
 
 import requests
-
 from lib.cuckoo.common.abstracts import Report
 from lib.cuckoo.common.constants import CUCKOO_ROOT
 from lib.cuckoo.common.objects import File
