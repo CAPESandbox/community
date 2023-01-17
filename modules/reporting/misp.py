@@ -9,10 +9,10 @@
 import json
 import logging
 import os
-from pathlib import Path
 from collections import deque
 from contextlib import suppress
 from io import BytesIO
+from pathlib import Path
 
 from lib.cuckoo.common.abstracts import Report
 from lib.cuckoo.common.config import Config
@@ -180,9 +180,7 @@ class MISP(Report):
         for r in results.get("dropped", []) or []:
             data = Path(r.get("path")).read_bytes()
             with BytesIO(data) as f:
-                event.add_attribute(
-                    "malware-sample", value=os.path.basename(r.get("path")), data=f, expand="binary"
-                )
+                event.add_attribute("malware-sample", value=os.path.basename(r.get("path")), data=f, expand="binary")
         event.run_expansions()
         self.misp.update_event(event)
         """
