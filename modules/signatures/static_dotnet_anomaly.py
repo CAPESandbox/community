@@ -35,7 +35,7 @@ def decode_b64(data):
     decoded = None
     try:
         decoded = data.decode("base64")
-    except Exception as e:
+    except Exception:
         pass
 
     return decoded

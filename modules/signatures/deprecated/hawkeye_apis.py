@@ -26,7 +26,7 @@ def unbuffered_b64decode(data):
     data += "=" * ((4 - len(data) % 4) % 4)
     try:
         data = data.decode("base64")
-    except Exception as e:
+    except Exception:
         pass
 
     return data

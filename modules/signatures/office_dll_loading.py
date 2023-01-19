@@ -97,17 +97,16 @@ class OfficeVBLLoad(Signature):
 
     def on_call(self, call, process):
         processname = process["process_name"]
-        if processname:
-            if processname.lower() in self.officeprocs:
-                dllname = self.get_argument(call, "FileName")
-                if dllname:
-                    for dll in self.vbdlls:
-                        if dll in dllname.lower():
-                            self.score += 1
-                            if self.score >= 2:
-                                if self.pid:
-                                    self.mark_call()
-                                return True
+        if processname and processname.lower() in self.officeprocs:
+            dllname = self.get_argument(call, "FileName")
+            if dllname:
+                for dll in self.vbdlls:
+                    if dll in dllname.lower():
+                        self.score += 1
+                        if self.score >= 2:
+                            if self.pid:
+                                self.mark_call()
+                            return True
 
 
 class OfficeWMILoad(Signature):
@@ -130,14 +129,13 @@ class OfficeWMILoad(Signature):
 
     def on_call(self, call, process):
         processname = process["process_name"]
-        if processname:
-            if processname.lower() in self.officeprocs:
-                dllname = self.get_argument(call, "FileName")
-                if dllname:
-                    if "wbemdisp.dll" in dllname.lower():
-                        if self.pid:
-                            self.mark_call()
-                        return True
+        if processname and processname.lower() in self.officeprocs:
+            dllname = self.get_argument(call, "FileName")
+            if dllname:
+                if "wbemdisp.dll" in dllname.lower():
+                    if self.pid:
+                        self.mark_call()
+                    return True
 
 
 class OfficeCOMLoad(Signature):
@@ -160,17 +158,15 @@ class OfficeCOMLoad(Signature):
         self.comdlls = ["combase.dll", "coml2.dll", "comsvcs.dll"]
 
     def on_call(self, call, process):
-        score = int()
         processname = process["process_name"]
-        if processname:
-            if processname.lower() in self.officeprocs:
-                dllname = self.get_argument(call, "FileName")
-                if dllname:
-                    for dll in self.comdlls:
-                        if dll in dllname.lower():
-                            if self.pid:
-                                self.mark_call()
-                            return True
+        if processname and processname.lower() in self.officeprocs:
+            dllname = self.get_argument(call, "FileName")
+            if dllname:
+                for dll in self.comdlls:
+                    if dll in dllname.lower():
+                        if self.pid:
+                            self.mark_call()
+                        return True
 
 
 class OfficeDotNetLoad(Signature):

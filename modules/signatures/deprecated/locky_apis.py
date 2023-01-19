@@ -103,7 +103,7 @@ class Locky_APIs(Signature):
                                 self.data.append(tmp)
 
                 elif buf in self.volumes and self.lastapi == "GetVolumeNameForVolumeMountPointW":
-                    checkEvent = True
+                    self.checkEvent = True
 
                 else:
                     check = re.findall(r"\s((?:https?://)?\w+(?:\.onion|\.tor2web)[/.](?:\w+\/)?)", buf, re.I)

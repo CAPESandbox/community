@@ -123,7 +123,7 @@ class MassLoggerFiles(Signature):
                 + user.decode("utf-8")
                 + "_.*_[A-F0-9]{10}_\d{2}-\d{2}-\d{4}\s.*.zip"
             )
-        except Exception as err:
+        except Exception:
             return False
 
         for indicator in indicators:

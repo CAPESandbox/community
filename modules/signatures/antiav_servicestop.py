@@ -2,11 +2,6 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
-try:
-    import re2 as re
-except ImportError:
-    import re
-
 from lib.cuckoo.common.abstracts import Signature
 
 

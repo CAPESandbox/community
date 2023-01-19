@@ -13,11 +13,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-try:
-    import re2 as re
-except ImportError:
-    import re
-
 from lib.cuckoo.common.abstracts import Signature
 
 
@@ -32,8 +27,6 @@ class Office_Macro(Signature):
     ttps += ["T1137.001"]  # MITRE v7,8
 
     def run(self):
-        package = self.results["info"]["package"]
-
         ret = False
         if "static" in self.results and "office" in self.results["static"]:
             # 97-2003 OLE and 2007+ XML macros

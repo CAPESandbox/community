@@ -32,9 +32,8 @@ class PEAnomaly(Signature):
             "6.3": (2012, 10),
             "10.0": (2014, 6),
         }
-        found_sig = False
 
-        if "static" not in self.results or "pe" not in self.results["static"]:
+        if "pe" not in self.results.get("static", {}):
             return False
 
         compiletime = datetime.strptime(self.results["static"]["pe"]["timestamp"], "%Y-%m-%d %H:%M:%S")

@@ -69,7 +69,7 @@ class XpertRATFiles(Signature):
 
         try:
             indicators.append(".*\\\\AppData\\\\Local\\\\Temp\\\\" + user.decode("utf-8") + "\.bmp")
-        except Exception as err:
+        except Exception:
             return False
 
         indicators.append(".*\\\\AppData\\\\Roaming\\\\" + guid + "\\\\ut$")

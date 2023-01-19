@@ -86,10 +86,6 @@ class Unhook(Signature):
                     self.unhook_info.add("function_name: " + funcname + ", type: " + self.get_argument(call, "UnhookType"))
 
     def on_complete(self):
-        if len(self.unhook_info) > 5:
-            weight = len(self.unhook_info)
-            confidence = 100
-
         if not self.unhook_info:
             self.saw_unhook = False
 

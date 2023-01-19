@@ -2,11 +2,6 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
-try:
-    import re2 as re
-except ImportError:
-    import re
-
 from lib.cuckoo.common.abstracts import Signature
 
 
@@ -25,7 +20,7 @@ class AntiAVDetectFile(Signature):
     mbcs += ["OC0001", "C0051"]  # MBC micro-behaviour
 
     def run(self):
-        file_indicators = [
+        file_indicators = (
             ".*\\\\AVAST\\ Software",
             ".*\\\\Avira\\ GmbH",
             ".*\\\\Avira",
@@ -79,7 +74,7 @@ class AntiAVDetectFile(Signature):
             ".*\\\\Microsoft\\ Security\\ Client",
             ".*\\\\System32\\\\drivers\\\\kl1\\.sys$",
             ".*\\\\System32\\\\drivers\\\\(tm((actmon|comm)\\.|e(vtmgr\\.|ext\\.)|(nciesc|tdi)\\.)|TMEBC32\\.)sys$",
-        ]
+        )
         found = False
         for indicator in file_indicators:
             file_match = self.check_file(pattern=indicator, regex=True, all=True)

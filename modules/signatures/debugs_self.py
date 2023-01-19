@@ -30,7 +30,6 @@ class DebugsSelf(Signature):
 
     def on_call(self, call, process):
         createflags = int(self.get_argument(call, "CreationFlags"), 16)
-        applicationname = self.get_argument(call, "ApplicationName").lower()
         pid = self.get_argument(call, "ProcessId")
         if createflags & 1:
             for proc in self.results["behavior"]["processes"]:
