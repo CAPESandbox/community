@@ -25,14 +25,13 @@ except ImportError:
 # Cuckoo root
 CUCKOO_ROOT = os.path.join(os.path.abspath(os.path.dirname(__file__)), "..")
 sys.path.append(CUCKOO_ROOT)
+from lib.cuckoo.common.config import Config
+from lib.cuckoo.common.utils import store_temp_file
+from lib.cuckoo.core.database import Database
 from sqlalchemy import Boolean, Column, DateTime, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import func
-
-from lib.cuckoo.common.config import Config
-from lib.cuckoo.common.utils import store_temp_file
-from lib.cuckoo.core.database import Database
 
 main_db = Database()
 Base = declarative_base()
