@@ -64,6 +64,8 @@ class Procmon(Auxiliary, Thread):
         return True
 
     def stop(self) -> bool:
+        if not self.enabled:
+            return False
         try:
             # Terminate process monitor.
             subprocess.call((self.procmon_exe, "/Terminate"), startupinfo=self.startupinfo, shell=True)
@@ -86,9 +88,7 @@ class Procmon(Auxiliary, Thread):
 
             # Upload the XML file to the host.
             upload_to_host(self.procmon_xml, "procmon.xml")
-
-            if self.enabled:
-                return True
-            return False
+            return True
         except Exception as e:
             logging.error(e, exc_info=True)
+            return False
