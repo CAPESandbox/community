@@ -9,6 +9,7 @@ import logging
 import os
 import smtplib
 import sys
+from pathlib import Path
 from datetime import datetime
 from email import encoders
 from email.mime.base import MIMEBase
@@ -38,7 +39,7 @@ class SmtpSink(SMTPServer):
 
             # Duplicate check.
             i = 0
-            while path_exists(os.path.join(self.mail_dir, file_name + str(i))):
+            while Path(os.path.join(self.mail_dir, file_name + str(i))).exists():
                 i += 1
 
             file_name += str(i)
