@@ -16,11 +16,7 @@ class RunStatistics(Report):
         """Count DroppedFiles.
         @return int value.
         """
-        try:
-            count = len(results.get("dropped"))
-        except Exception as e:
-            count = 0
-        return count
+        return len(results.get("dropped", ""))
 
     def getRuningProcessesCount(self, results):
         """Count running processes.
