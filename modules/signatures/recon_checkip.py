@@ -272,9 +272,7 @@ dns_indicators = (
     "stunserver.org",
 )
 
-ip_indicators = (
-    "23.21.150.121",
-)
+ip_indicators = ("23.21.150.121",)
 
 
 class CheckIP(Signature):
