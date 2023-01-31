@@ -7,7 +7,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class UsesWindowsUtilitiesScheduler(Signature):
     name = "uses_windows_utilities_to_create_scheduled_task"
-    description = "Uses Windows utilities for basic functionality"
+    description = "Uses Windows utilities to create a scheduled task"
     severity = 2
     confidence = 80
     categories = ["command", "lateral"]
