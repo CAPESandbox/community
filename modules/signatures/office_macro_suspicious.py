@@ -30,19 +30,13 @@ class OfficeMacroSuspicious(Signature):
 
     def run(self):
         ret = False
-        strings = []
-        if "static" in self.results and "office" in self.results["static"]:
-            if "Macro" in self.results["static"]["office"]:
-                if "Analysis" in self.results["static"]["office"]["Macro"]:
-                    if "Suspicious" in self.results["static"]["office"]["Macro"]["Analysis"]:
-                        for string, description in self.results["static"]["office"]["Macro"]["Analysis"]["Suspicious"]:
-                            if string not in strings:
-                                strings.append(string)
-                                self.data.append({string: description})
-                        ret = True
+        if self.results.get("target", {}).get("category", "") not in ("url", "pcap"):
+            if self.results.get("target", {}).get("file", {}).get("office", {}).get("Macro", {}).get("Analysis", {}).get("Suspicious"):
+                for string, description in self.results.get("target", {})["file"]["office"]["Macro"]["Analysis"]["Suspicious"]:
+                    self.data.append({string: description})
+                ret = True
 
         return ret
-
 
 class OfficeMacroIOC(Signature):
     name = "office_macro_ioc"
@@ -57,16 +51,14 @@ class OfficeMacroIOC(Signature):
 
     def run(self):
         ret = False
-        if "static" in self.results and "office" in self.results["static"]:
-            if "Macro" in self.results["static"]["office"]:
-                if "Analysis" in self.results["static"]["office"]["Macro"]:
-                    if "IOCs" in self.results["static"]["office"]["Macro"]["Analysis"]:
-                        for description, indicator in self.results["static"]["office"]["Macro"]["Analysis"]["IOCs"]:
+        if self.results.get("target", {}).get("category", "") not in ("url", "pcap"):
+            if self.results.get("target", {}).get("file", {}).get("office", {}).get("Macro", {}).get("Analysis", {}).get("IOCs"):
+                for description, indicator in self.results.get("target", {})["file"]["office"]["Macro"]["Analysis"]["IOCs"]:
+                        for description, indicator in self.results["target"]["office"]["Macro"]["Analysis"]["IOCs"]:
                             self.data.append({description: indicator})
                         ret = True
 
         return ret
-
 
 class OfficeMacroAutoExecution(Signature):
     name = "office_macro_autoexecution"
@@ -81,16 +73,13 @@ class OfficeMacroAutoExecution(Signature):
 
     def run(self):
         ret = False
-        if "static" in self.results and "office" in self.results["static"]:
-            if "Macro" in self.results["static"]["office"]:
-                if "Analysis" in self.results["static"]["office"]["Macro"]:
-                    if "AutoExec" in self.results["static"]["office"]["Macro"]["Analysis"]:
-                        for string, description in self.results["static"]["office"]["Macro"]["Analysis"]["AutoExec"]:
-                            self.data.append({string: description})
-                        ret = True
+        if self.results.get("target", {}).get("category", "") not in ("url", "pcap"):
+            if self.results.get("target", {}).get("file", {}).get("office", {}).get("Macro", {}).get("Analysis", {}).get("AutoExec"):
+                for string, description in self.results.get("target", {})["file"]["office"]["Macro"]["Analysis"]["AutoExec"]:
+                    self.data.append({string: description})
+                ret = True
 
         return ret
-
 
 class OfficeMacroMaliciousPredition(Signature):
     name = "office_macro_malicious_prediction"
