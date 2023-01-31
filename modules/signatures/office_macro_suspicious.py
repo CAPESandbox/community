@@ -30,10 +30,13 @@ class OfficeMacroSuspicious(Signature):
 
     def run(self):
         ret = False
+        strings = []
         if self.results.get("target", {}).get("category", "") not in ("url", "pcap"):
             if self.results.get("target", {}).get("file", {}).get("office", {}).get("Macro", {}).get("Analysis", {}).get("Suspicious"):
                 for string, description in self.results.get("target", {})["file"]["office"]["Macro"]["Analysis"]["Suspicious"]:
-                    self.data.append({string: description})
+                    if string not in strings:
+                        strings.append(string)
+                        self.data.append({string: description})
                 ret = True
 
         return ret
@@ -73,10 +76,13 @@ class OfficeMacroAutoExecution(Signature):
 
     def run(self):
         ret = False
+        strings = []
         if self.results.get("target", {}).get("category", "") not in ("url", "pcap"):
             if self.results.get("target", {}).get("file", {}).get("office", {}).get("Macro", {}).get("Analysis", {}).get("AutoExec"):
                 for string, description in self.results.get("target", {})["file"]["office"]["Macro"]["Analysis"]["AutoExec"]:
-                    self.data.append({string: description})
+                    if string not in strings:
+                        strings.append(string)
+                        self.data.append({string: description})
                 ret = True
 
         return ret
