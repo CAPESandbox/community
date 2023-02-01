@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DisablesCrashdumps(Signature):
     name = "disables_crashdumps"
     description = "Attempts to disable crashdumps"
@@ -37,5 +38,5 @@ class DisablesCrashdumps(Signature):
             if match:
                 self.data.append({"regkey": match})
                 ret = True
-                
+
         return ret

@@ -32,7 +32,14 @@ class OfficeMacroSuspicious(Signature):
         ret = False
         strings = []
         if self.results.get("target", {}).get("category", "") not in ("url", "pcap"):
-            if self.results.get("target", {}).get("file", {}).get("office", {}).get("Macro", {}).get("Analysis", {}).get("Suspicious"):
+            if (
+                self.results.get("target", {})
+                .get("file", {})
+                .get("office", {})
+                .get("Macro", {})
+                .get("Analysis", {})
+                .get("Suspicious")
+            ):
                 for string, description in self.results.get("target", {})["file"]["office"]["Macro"]["Analysis"]["Suspicious"]:
                     if string not in strings:
                         strings.append(string)
@@ -40,6 +47,7 @@ class OfficeMacroSuspicious(Signature):
                 ret = True
 
         return ret
+
 
 class OfficeMacroIOC(Signature):
     name = "office_macro_ioc"
@@ -57,11 +65,12 @@ class OfficeMacroIOC(Signature):
         if self.results.get("target", {}).get("category", "") not in ("url", "pcap"):
             if self.results.get("target", {}).get("file", {}).get("office", {}).get("Macro", {}).get("Analysis", {}).get("IOCs"):
                 for description, indicator in self.results.get("target", {})["file"]["office"]["Macro"]["Analysis"]["IOCs"]:
-                        for description, indicator in self.results["target"]["office"]["Macro"]["Analysis"]["IOCs"]:
-                            self.data.append({description: indicator})
-                        ret = True
+                    for description, indicator in self.results["target"]["office"]["Macro"]["Analysis"]["IOCs"]:
+                        self.data.append({description: indicator})
+                    ret = True
 
         return ret
+
 
 class OfficeMacroAutoExecution(Signature):
     name = "office_macro_autoexecution"
@@ -78,7 +87,14 @@ class OfficeMacroAutoExecution(Signature):
         ret = False
         strings = []
         if self.results.get("target", {}).get("category", "") not in ("url", "pcap"):
-            if self.results.get("target", {}).get("file", {}).get("office", {}).get("Macro", {}).get("Analysis", {}).get("AutoExec"):
+            if (
+                self.results.get("target", {})
+                .get("file", {})
+                .get("office", {})
+                .get("Macro", {})
+                .get("Analysis", {})
+                .get("AutoExec")
+            ):
                 for string, description in self.results.get("target", {})["file"]["office"]["Macro"]["Analysis"]["AutoExec"]:
                     if string not in strings:
                         strings.append(string)
@@ -86,6 +102,7 @@ class OfficeMacroAutoExecution(Signature):
                 ret = True
 
         return ret
+
 
 class OfficeMacroMaliciousPredition(Signature):
     name = "office_macro_malicious_prediction"
