@@ -113,17 +113,17 @@ class RansomwareFileModifications(Signature):
             if ":" in self.description:
                 self.description += " appends_email_to_filenames"
             else:
-                self.description += ": appends_email_to_filenames"	    
+                self.description += ": appends_email_to_filenames"
             ret = True
 
         if self.modifiedexistingcount > 50:
             if ":" in self.description:
                 self.description += " overwrites_existing_files"
             else:
-                self.description += ": overwrites_existing_files"	    
+                self.description += ": overwrites_existing_files"
             ret = True
 
-	# This needs tweaked. No longer works due to dropped files limits in CAPE
+        # This needs tweaked. No longer works due to dropped files limits in CAPE
         if "dropped" in self.results:
             droppedunknowncount = 0
             for dropped in self.results["dropped"]:
