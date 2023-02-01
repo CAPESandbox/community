@@ -284,7 +284,6 @@ class CheckIP(Signature):
     minimum = "1.2"
 
     def run(self):
-
         found_matches = False
         for indicator in dns_indicators:
             if self.check_domain(pattern=indicator):

@@ -31,7 +31,6 @@ class OfficeAnamalousFeature(Signature):
     ttps = ["T1137"]  # MITRE v6,7,8
 
     def run(self):
-
         known_malicious_authors = [
             "Adder",
             "Alex",

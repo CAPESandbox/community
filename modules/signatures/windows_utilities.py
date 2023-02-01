@@ -242,7 +242,6 @@ class SuspiciousPingUse(Signature):
     mbcs = ["OC0006", "C0014"]  # micro-behaviour
 
     def run(self):
-
         ret = False
         cmdlines = self.results["behavior"]["summary"]["executed_commands"]
         for cmdline in cmdlines:
@@ -375,7 +374,6 @@ class SuspiciousCertutilUse(Signature):
     references = ["https://www.sentinelone.com/blog/malware-living-off-land-with-certutil/"]
 
     def run(self):
-
         ret = False
         cmdlines = self.results["behavior"]["summary"]["executed_commands"]
         for cmdline in cmdlines:

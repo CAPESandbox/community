@@ -101,7 +101,6 @@ class raccoon(Signature):
         self.badness_infoWrited = 0
 
     def on_call(self, call, process):
-
         if call["api"] == "DeleteFileW":
             node = self.get_argument(call, "FileName")
             for i in filesDeleted:

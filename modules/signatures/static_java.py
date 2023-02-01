@@ -30,7 +30,6 @@ class Static_Java(Signature):
     ]
 
     def run(self):
-
         decompiled = self.results.get("static", {}).get("java", {}).get("decompiled", "")
         if not decompiled:
             return False

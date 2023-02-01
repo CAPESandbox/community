@@ -26,7 +26,6 @@ class KnownVirustotal(Signature):
     minimum = "0.5"
 
     def run(self):
-
         if "virustotal" in self.results:
             if "positives" in self.results["virustotal"]:
                 positives = self.results["virustotal"]["positives"]

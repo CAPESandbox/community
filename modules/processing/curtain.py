@@ -401,12 +401,10 @@ def replaceDecoder(inputString, MODFLAG):
         inputString = inputString.rsplit("|", 1)[0]
 
     while "replace" in inputString.rsplit(".", 1)[-1].lower() or "replace" in inputString.rsplit("-", 1)[-1].lower():
-
         inputString = inputString.replace("'+'", "")
         inputString = inputString.replace("'|'", "char[124]")
 
         if len(inputString.rsplit(".", 1)[-1]) > len(inputString.rsplit("-", 1)[-1]):
-
             tempString = inputString.rsplit("-", 1)[0]
             replaceString = inputString.rsplit("-", 1)[-1]
 
@@ -554,7 +552,6 @@ class Curtain(Processing):
     """Parse Curtain log for PowerShell 4104 Events."""
 
     def run(self):
-
         self.key = "curtain"
         # Remove some event entries which are commonly found in all samples (noise reduction)
         noise = (
@@ -651,7 +648,6 @@ class Curtain(Processing):
         for item in root:
             # Setup PID Dict
             if item[0][1].text in ["4104", "4103", "4100"]:
-
                 FILTERFLAG = 0
 
                 PID = item[0][10].attrib["ProcessID"]
@@ -682,7 +678,6 @@ class Curtain(Processing):
             pid = block["pid"]
             # Save the record
             if FILTERFLAG == 0 and MESSAGE is not None:
-
                 COUNTER += 1
                 ALTMSG = deobfuscate(MESSAGE)
 

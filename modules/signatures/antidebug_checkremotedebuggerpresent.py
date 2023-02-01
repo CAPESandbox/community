@@ -18,6 +18,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 PROCESS_DEBUG_PORT = 0x7
 
+
 # https://www.apriorit.com/dev-blog/367-anti-reverse-engineering-protection-techniques-to-use-before-releasing-software
 class antidebug_checkremotedebuggerpresent(Signature):
     name = "antidebug_checkremotedebuggerpresent"

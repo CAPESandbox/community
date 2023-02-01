@@ -37,7 +37,6 @@ class CVE2015_2419_JS(Signature):
     filter_apinames = set(["JsEval", "COleScript_Compile", "COleScript_ParseScriptText"])
 
     def on_call(self, call, process):
-
         if call["api"] == "JsEval":
             buf = self.get_argument(call, "Javascript")
         else:

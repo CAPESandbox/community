@@ -25,7 +25,6 @@ class OrcusRAT(Signature):
         self.badness_files = 0
 
     def on_call(self, call, process):
-
         if call["api"] == "RegOpenKeyExW":
             node = self.get_argument(call, "FullName")
             if "HKEY_CURRENT_USER\\SOFTWARE\\Orcus" in node:

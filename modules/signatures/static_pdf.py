@@ -13,7 +13,6 @@ class Static_PDF(Signature):
     ttps += ["T1024.002"]  # MITRE v7,8
 
     def run(self):
-
         exploit = 0
 
         if "static" in self.results and "pdf" in self.results["static"]:

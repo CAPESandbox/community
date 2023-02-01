@@ -72,7 +72,6 @@ class NetworkCnCHTTP(Signature):
     filter_analysistypes = set(["file"])
 
     def run(self):
-
         whitelist = [
             "^http://.*\.microsoft\.com/.*",
             "^http://.*\.windowsupdate\.com/.*",
