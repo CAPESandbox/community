@@ -1,12 +1,12 @@
 import logging
 
 import requests
-
 from lib.cuckoo.common.config import Config
 
 log = logging.getLogger()
 externalservices_cfg = Config("externalservices")
 apikey = externalservices_cfg.whoisxmlapi.apikey
+
 
 def whoisxmlapi_lookup(host):
     if not externalservices_cfg.whoisxmlapi.enabled or not apikey:
