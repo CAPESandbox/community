@@ -2,9 +2,9 @@
 # pymisp is known to break api on updates.
 # So you need it? You fix it!
 
-import os
 import json
 import logging
+import os
 
 from lib.cuckoo.common.config import Config
 from lib.cuckoo.common.constants import CUCKOO_ROOT
@@ -32,7 +32,6 @@ if HAVE_MISP:
 
 
 def misp_hash_lookup(sha256: str, task_id: str, file_info: dict):
-
     if not MISP_HASH_LOOKUP:
         return
 
@@ -157,7 +156,6 @@ def misp_hash_lookup(sha256: str, task_id: str, file_info: dict):
                         galaxy_cluster["GalaxyCluster"]["description"],
                         galaxy_cluster["GalaxyCluster"]["id"],
                     ]
-
 
         file_info.setdefault("misp", {})
         file_info["misp"] = {
