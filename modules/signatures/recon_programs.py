@@ -20,7 +20,7 @@ class InstalledApps(Signature):
     evented = True
     ttps = ["T1012", "T1082", "T1518"]  # MITRE v6,7,8
     mbcs = ["OB0007"]
-    mbcs += ["OC0008", "OC0036"]  # micro-behaviour
+    mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     filter_apinames = set(["RegQueryValueExA", "RegQueryValueExW"])
 

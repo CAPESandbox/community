@@ -28,7 +28,7 @@ class BypassFirewall(Signature):
     ttps = ["T1031"]  # MITRE v6
     ttps += ["T1112"]  # MITRE v6,7,8
     ttps += ["T1562", "T1562.004"]  # MITRE v7,8
-    mbcs = ["OB0006", "E1112", "E1478", "F0004"]
+    mbcs = ["OB0006", "E1112", "B0047", "F0004"]
     mbcs += ["OC0008", "C0036", "C0036.001"]  # micro-behaviour
 
     def run(self):

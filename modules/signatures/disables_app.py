@@ -15,7 +15,7 @@ class DisablesAppLaunch(Signature):
     ttps = ["T1089"]  # MITRE v6
     ttps += ["T1112"]  # MITRE v6,7,8
     ttps += ["T1562", "T1562.001"]  # MITRE v7,8
-    mbcs = ["OB0006", "E1112", "E1478", "F0004", "F0004.005"]
+    mbcs = ["OB0006", "E1112", "B0047", "F0004", "F0004.005"]
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):

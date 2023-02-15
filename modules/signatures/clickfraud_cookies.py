@@ -13,7 +13,7 @@ class ClickfraudCookies(Signature):
     authors = ["Optiv"]
     minimum = "1.2"
     evented = True
-    mbcs = ["E1472"]
+    mbcs = ["F0004"]
 
     filter_apinames = set(["InternetSetOptionA"])
 

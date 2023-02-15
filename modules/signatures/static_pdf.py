@@ -10,7 +10,7 @@ class Static_PDF(Signature):
     authors = ["Kevin Ross", "KillerInstinct"]
     minimum = "1.3"
     ttps = ["T1204"]  # MITRE v6,7,8
-    ttps += ["T1024.002"]  # MITRE v7,8
+    ttps += ["T1204.002"]  # MITRE v7,8
 
     def run(self):
         exploit = 0
