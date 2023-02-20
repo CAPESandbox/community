@@ -701,3 +701,14 @@ rule INDICATOR_EXE_Packed_Babel {
     condition:
         uint16(0) == 0x5a4d and 1 of them
 }
+
+rule INDICATOR_EXE_Packed_CryptoObfuscator {
+    meta:
+        author = "bartblaze"
+        description = "Detects executables packed with CryptoObfuscator"
+    strings:
+        $s1 = "created with an evaluation version of CryptoObfuscator" ascii wide
+        $s2 = "\\CryptoObfuscator_Output\\" ascii wide
+    condition:
+        uint16(0) == 0x5a4d and 1 of them
+}
