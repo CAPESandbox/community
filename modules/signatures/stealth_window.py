@@ -31,6 +31,7 @@ class Hidden_Window(Signature):
     evented = True
     ttps = ["T1143"]  # MITRE v6
     ttps += ["T1564", "T1564.003"]  # MITRE v7,8
+    mbcs = ["E1564"]
 
     filter_apinames = set(["ShellExecuteExW", "CreateProcessInternalW"])
 

@@ -25,6 +25,7 @@ class RevilRegkey(Signature):
     minimum = "1.2"
     evented = True
     ttps = ["T1486"]
+    mbcs = ["E1486", "C0036"]
 
     def run(self):
         ret = False

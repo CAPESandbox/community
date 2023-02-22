@@ -26,6 +26,7 @@ class ADFind(Signature):
     evented = True
     ttps = ["S0552"]  # MITRE
     ttps += ["T1069"]  # MITRE v6,7,8
+    mbcs = ["E1082"]
     references = ["http://www.joeware.net/freetools/tools/adfind/"]
 
     def run(self):

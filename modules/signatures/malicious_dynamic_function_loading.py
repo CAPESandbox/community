@@ -27,6 +27,7 @@ class malicious_dynamic_function_loading(Signature):
     evented = True
     ttps = ["T1073"]  # MITRE v6
     ttps += ["T1574", "T1574.002"]  # MITRE v7,8
+    mbcs = ["F0015"]
 
     filter_apinames = set(["LdrGetProcedureAddress", "LdrLoadDll"])
 

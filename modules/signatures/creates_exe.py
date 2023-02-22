@@ -12,6 +12,7 @@ class CreatesExe(Signature):
     categories = ["generic"]
     authors = ["Cuckoo Developers"]
     minimum = "0.5"
+    mbcs = ["OC0052"]
 
     # This is a signature template. It should be used as a skeleton for
     # creating custom signatures, therefore is disabled by default.

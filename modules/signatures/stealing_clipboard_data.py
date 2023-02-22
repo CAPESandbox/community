@@ -23,6 +23,7 @@ class StealingClipboardData(Signature):
     categories = ["generic"]
     authors = ["doomedraven"]
     minimum = "1.2"
+    mbcs = ["E1510"]
     evented = True
 
     filter_apinames = set(

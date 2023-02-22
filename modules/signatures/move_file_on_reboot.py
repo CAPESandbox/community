@@ -27,6 +27,7 @@ class move_file_on_reboot(Signature):
     authors = ["redsand"]
     minimum = "1.3"
     evented = True
+    mbcs = ["C0063"]
 
     filter_apinames = set(["MoveFileWithProgressTransactedW", "MoveFileWithProgressTransactedA"])
 

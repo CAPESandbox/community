@@ -23,6 +23,7 @@ class DisablesWindowsFileProtection(Signature):
     categories = ["evasion"]
     authors = ["bartblaze"]
     minimum = "1.2"
+    mbcs = ["F0004"]
 
     def run(self):
         ret = False

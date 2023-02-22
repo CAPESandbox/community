@@ -30,6 +30,7 @@ class WiperZeroedBytes(Signature):
     minimum = "1.3"
     evented = True
     ttps = ["T1561"]
+    mbcs = ["C0052", "F0014"]
 
     filter_apinames = set(["NtWriteFile"])
 

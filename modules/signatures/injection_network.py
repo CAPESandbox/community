@@ -26,6 +26,7 @@ class InjectionNetworkTraffic(Signature):
     minimum = "1.3"
     evented = True
     ttps = ["T1071"]  # MITRE v6,7,8
+    mbcs = ["B0030"]
 
     filter_apinames = set(
         [

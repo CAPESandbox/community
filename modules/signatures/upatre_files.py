@@ -14,6 +14,7 @@ class UpatreFiles(Signature):
     families = ["upatre"]
     # Migrated by @CybercentreCanada
     authors = ["RedSocks", "@CybercentreCanada"]
+    mbcs = ["C0052"]
     minimum = "2.0"
 
     def __init__(self, *args, **kwargs):

@@ -25,6 +25,7 @@ class DisablesCrashdumps(Signature):
     minimum = "1.2"
     evented = True
     ttps = ["T1070"]
+    mbcs = ["F0004"]
 
     def run(self):
         ret = False

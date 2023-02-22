@@ -14,6 +14,7 @@ class DisablesSecurity(Signature):
     authors = ["Cuckoo Technologies", "Brad Spengler", "@CybercentreCanada"]
     minimum = "2.0"
     ttps = ["T1089", "T1112"]
+    mbcs = ["F0004"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
