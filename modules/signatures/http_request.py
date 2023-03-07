@@ -58,7 +58,7 @@ class HTTP_Request(Signature):
             # Sanity check
             if self.lasthost in domain_passlist:
                 return None
-            if handle == self.request[self.lasthost]["curhandle"]:
+            if self.lasthost and handle == self.request[self.lasthost]["curhandle"]:
                 uri = self.get_argument(call, "Path")
                 if uri != "/" and uri != "":
                     self.request[self.lasthost]["uris"].append(uri)
