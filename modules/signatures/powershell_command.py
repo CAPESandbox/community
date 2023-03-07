@@ -437,7 +437,7 @@ class PowershellDownload(Signature):
 
 class PowershellRequest(Signature):
     name = "powershell_request"
-    description = "Poweshell is sending data to a remote host"
+    description = "Powershell is sending data to a remote host"
     severity = 2
     categories = ["downloader"]
     # Migrated by @CybercentreCanada
