@@ -134,7 +134,7 @@ class PhysicalDriveAccess(Signature):
     name = "physical_drive_access"
     description = "Attempted to write directly to a physical drive"
     severity = 3
-    categories = ["bootkit", "rootkit"]
+    categories = ["bootkit", "rootkit", "wiper"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -145,13 +145,40 @@ class PhysicalDriveAccess(Signature):
 
     def run(self):
         ret = False
-        match = self.check_write_file(pattern="^\\\\\?\?\\\\PhysicalDrive.*", regex=True)
-        if match:
-            self.data.append({"physical drive access": match})
-            ret = True
+        matches = self.check_write_file(pattern="^\\\\\?\?\\\\PhysicalDrive.*", regex=True, all=True)
+        if matches:
+            for match in matches:
+                self.data.append({"physical drive write attempt": match})
+                ret = True
 
         return ret
 
+class EnumeratesPhysicalDrives(Signature):
+    name = "enumerates_physical_drives"
+    description = "Emumerates physical drives"
+    severity = 3
+    categories = ["bootkit", "rootkit", "wiper"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1067"]  # MITRE v6
+    ttps += ["T1014"]  # MITRE v6,7,8
+    ttps += ["T1542", "T1542.003"]  # MITRE v7,8
+    mbcs = ["OB0006", "E1014", "F0013"]
+
+    def run(self):
+        enumerateddrives = 0
+        ret = False
+        matches = self.check_file(pattern="^\\\\\?\?\\\\PhysicalDrive.*", regex=True, all=True)
+        if matches:
+            for match in matches:
+                self.data.append({"physical drive access": match})
+                enumerateddrives += 1
+
+        if enumerateddrives > 1:
+            ret = True
+            
+        return ret
 
 class SuspiciousIoctlSCSIPassthough(Signature):
     name = "suspicious_ioctl_scsipassthough"
