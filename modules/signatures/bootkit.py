@@ -153,6 +153,7 @@ class PhysicalDriveAccess(Signature):
 
         return ret
 
+
 class EnumeratesPhysicalDrives(Signature):
     name = "enumerates_physical_drives"
     description = "Emumerates physical drives"
@@ -177,8 +178,9 @@ class EnumeratesPhysicalDrives(Signature):
 
         if enumerateddrives > 1:
             ret = True
-            
+
         return ret
+
 
 class SuspiciousIoctlSCSIPassthough(Signature):
     name = "suspicious_ioctl_scsipassthough"
