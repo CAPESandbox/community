@@ -1,4 +1,4 @@
-rule Ransomware_Win_DARKSIDE_v1_1
+rule DarksideV1
 {
     meta:
         author = "FireEye"

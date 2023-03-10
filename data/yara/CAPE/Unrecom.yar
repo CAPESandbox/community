@@ -1,11 +1,11 @@
-rule unrecom
+rule Unrecom
 {
 	meta:
 		author = " Kevin Breen <kevin@techanarchy.net>"
 		ref = "http://malwareconfig.com/stats/AAR"
 		maltype = "Remote Access Trojan"
 		filetype = "exe"
-        cape_type = "unrecom Payload"
+        cape_type = "Unrecom Payload"
 
 	strings:
 		$meta = "META-INF"

@@ -2,7 +2,7 @@ rule Fabookie {
      meta:
         author = "ditekSHen"
         description = "Detects Fabookie / ElysiumStealer"
-        cape_type = "Fabookie Infostealer Payload"
+        cape_type = "Fabookie Payload"
     strings:
         $s1 = "rwinssyslog" fullword wide
         $s2 = "_kasssperskdy" fullword wide

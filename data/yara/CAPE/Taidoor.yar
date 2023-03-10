@@ -1,9 +1,9 @@
-rule TAIDOOR
+rule Taidoor
 {
    meta:
        author = "CISA Code & Media Analysis"
-       description = "TAIDOOR loader payload"
-       cape_type = "TAIDOOR payload"
+       description = "Taidoor loader payload"
+       cape_type = "Taidoor payload"
    strings:
        $s0 = { 8A 46 01 88 86 00 01 00 00 8A 46 03 88 86 01 01 00 00 8A 46 05 88 86 02 01 00 00 8A 46 07 88 86 03 01 00 00 }
        $s1 = { 88 04 30 40 3D 00 01 00 00 7C F5 }

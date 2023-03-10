@@ -1,8 +1,8 @@
-rule HawkEyev9 {
+rule HawkEyeV9 {
     meta:
         author = "ditekshen"
-        description = "HawkEye v9 Payload"
-        cape_type = "HawkEyev9 Payload"
+        description = "HawkEye V9 Payload"
+        cape_type = "HawkEyeV9 Payload"
     strings:
         $id1 = "HawkEye Keylogger - Reborn v9 - {0} Logs - {1} \\ {2}" wide
         $id2 = "HawkEye Keylogger - Reborn v9{0}{1} Logs{0}{2} \\ {3}{0}{0}{4}" wide

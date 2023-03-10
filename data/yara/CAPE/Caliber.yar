@@ -1,6 +1,6 @@
 import "pe"
 
-rule caliber {
+rule Caliber {
     meta:
         author      = "c3rb3ru5"
         description = "44Caliber Stealer"
@@ -8,6 +8,7 @@ rule caliber {
         os          = "windows"
         tlp         = "white"
         rev         = "1"
+        cape_type   = "Caliber Payload"
     strings:
         $stealer_name = "44 CALIBER STEALER" ascii wide
         $webhooks     = /https?:\/\/discord.com\/api\/webhooks\// ascii wide

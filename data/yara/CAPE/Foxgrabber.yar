@@ -1,8 +1,8 @@
-rule FOXGRABBER {
+rule Foxgrabber {
     meta:
         author = "ditekSHen"
-        description = "Detects FOXGRABBER utility"
-        cape_type = "FOXGRABBER Payload"
+        description = "Detects Foxgrabber utility"
+        cape_type = "Foxgrabber Payload"
     strings:
         $s1 = "start grabbing" wide
         $s2 = "end grabbing in" wide

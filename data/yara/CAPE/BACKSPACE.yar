@@ -1,8 +1,8 @@
-rule BACKSPACE {
+rule Backspace {
     meta:
         author = "ditekshen"
-        description = "BACKSPACE backdoor payload"
-        cape_type = "BACKSPACE payload"
+        description = "Backspace backdoor payload"
+        cape_type = "Backspace payload"
     strings:
         $s1 = "Software\\Microsoft\\PnpSetup" ascii wide
         $s2 = "Mutex_lnkword_little" ascii wide

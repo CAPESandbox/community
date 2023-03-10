@@ -1,8 +1,8 @@
-rule RSJON {
+rule Rsjon {
     meta:
         author = "ditekSHen"
-        description = "Detects RSJON / Ryzerlo / HiddenTear ransomware"
-        cape_type = "RSJON Payload"
+        description = "Detects Rsjon / Ryzerlo / HiddenTear ransomware"
+        cape_type = "Rsjon Payload"
     strings:
         $pdb1 = "C:\\Users\\brknc\\source\\repos\\" ascii
         $pdb2 = "\\rs-jon\\obj\\Debug\\rs-jon.pdb" ascii

@@ -1,8 +1,8 @@
-rule DECAF {
+rule Decaf {
     meta:
         author = "ditekSHen"
-        description = "Detects DECAF ransomware"
-        cape_type = "DECAF Payload"
+        description = "Detects Decaf ransomware"
+        cape_type = "Decaf Payload"
     strings:
         $s1 = "main.EncWorker" fullword ascii
         $s2 = "Paths2Encrypt" fullword ascii

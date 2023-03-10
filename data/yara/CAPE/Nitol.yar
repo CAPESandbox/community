@@ -2,7 +2,7 @@ rule Nitol {
     meta:
         author = "ditekSHen"
         description = "Detects Nitol backdoor"
-        cape_type = "Nitol Backdoor Payload"
+        cape_type = "Nitol Payload"
     strings:
         $s1 = "%$#@!.aspGET ^&*().htmlGET" ascii
         $s2 = "Applications\\iexplore.exe\\shell\\open\\command" fullword ascii

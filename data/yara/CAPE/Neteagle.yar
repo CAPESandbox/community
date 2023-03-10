@@ -1,8 +1,8 @@
-rule NETEAGLE {
+rule Neteagle {
     meta:
         author = "ditekshen"
-        description = "NETEAGLE backdoor payload"
-        cape_type = "NETEAGLE payload"
+        description = "Neteagle backdoor payload"
+        cape_type = "Neteagle payload"
     strings:
         $s1 = "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" fullword ascii
         $s2 = "System\\CurrentControlSet\\control\\ComputerName\\ComputerName" fullword ascii
