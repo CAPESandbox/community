@@ -25,6 +25,7 @@ class injection_themeinitapihook(Signature):
     authors = ["redsand"]
     minimum = "1.3"
     evented = True
+    mbcs = ["E1055"]
 
     filter_apinames = set(["ThemeInitApiHook"])
 

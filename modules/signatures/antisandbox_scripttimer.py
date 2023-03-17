@@ -27,6 +27,7 @@ class AntiSandboxScriptTimer(Signature):
     ttps = ["T1497"]  # MITRE v6,7,8
     ttps += ["T1497.003"]  # MITRE v7,8
     ttps += ["U1320"]  # Unprotect
+    mbcs = ["OB0001", "B0007"]
 
     filter_categories = set(["windows"])
 

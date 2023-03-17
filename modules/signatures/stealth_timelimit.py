@@ -16,7 +16,7 @@ class StealthTimeout(Signature):
     evented = True
     ttps = ["T1497"]  # MITRE v6,7,8
     ttps += ["T1497.003"]  # MITRE v7,8
-    mbcs = ["OB0001", "B0003", "B003.003"]
+    mbcs = ["OB0001", "B0003", "B0003.003"]
 
     filter_apinames = set(
         [

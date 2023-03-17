@@ -24,6 +24,7 @@ class CuckooCrash(Signature):
     authors = ["Brad Spengler"]
     minimum = "1.3"
     evented = True
+    mbcs = ["OB0001", "B0007"]
 
     filter_categories = set(["__notification__"])
 

@@ -25,6 +25,7 @@ class DeletesExecutedFiles(Signature):
     authors = ["Optiv", "Kevin Ross", "@CybercentreCanada"]
     minimum = "1.2"
     ttps = ["T1070"]
+    mbcs = ["F0007"]
     evented = True
 
     def run(self):

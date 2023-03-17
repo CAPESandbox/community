@@ -25,6 +25,7 @@ class AntiSandboxForegroundWindow(Signature):
     authors = ["Cuckoo Technologies", "@CybercentreCanada"]
     minimum = "1.2"
     evented = True
+    mbcs = ["OB0001", "B0007"]
 
     filter_apinames = set(["GetForegroundWindow", "NtDelayExecution"])
 

@@ -23,6 +23,7 @@ class ModiRATBehavior(Signature):
     categories = ["rat"]
     families = ["MoDiRAT"]
     authors = ["ditekshen"]
+    mbcs = ["C0036"]
     minimum = "1.3"
 
     def run(self):

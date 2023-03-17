@@ -29,6 +29,7 @@ class WHOIS_Create(Signature):
     severity = 2
     categories = ["network"]
     authors = ["KillerInstinct"]
+    mbcs = ["B0031"]
     minimum = "1.3"
 
     def run(self):

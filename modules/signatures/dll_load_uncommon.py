@@ -22,6 +22,7 @@ class DllLoadUncommonFileTypes(Signature):
     authors = ["@CybercentreCanada"]
     minimum = "1.2"
     ttps = ["T1574"]
+    mbcs = ["F0015"]
     evented = True
 
     filter_apinames = set(["LdrLoadDll"])

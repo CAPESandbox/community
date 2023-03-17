@@ -14,7 +14,7 @@ class DeletesShadowCopies(Signature):
     minimum = "1.2"
     evented = True
     ttps = ["T1490"]  # MITRE v6,7,8
-    mbcs = ["OB0008", "F0014", "F0014.001"]
+    mbcs = ["OB0008", "F0014"]
 
     filter_apinames = set(["CreateProcessInternalW", "ShellExecuteExW", "NtCreateUserProcess"])
 

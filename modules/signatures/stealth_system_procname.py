@@ -25,6 +25,7 @@ class StealthSystemProcName(Signature):
     authors = ["Kevin Ross", "@CybercentreCanada"]
     minimum = "1.2"
     ttps = ["T1036"]
+    mbcs = ["C0017"]
     evented = True
 
     filter_apinames = set(["CreateProcessInternalW", "ShellExecuteExW"])

@@ -14,6 +14,7 @@ class NetworkDynDNS(Signature):
     authors = ["RedSocks"]
     minimum = "1.2"
     ttps = ["T1568"]
+    mbcs = ["B0030"]
 
     def run(self):
         domains_re = [

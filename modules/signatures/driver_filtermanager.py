@@ -24,6 +24,7 @@ class DriverFilterManager(Signature):
     authors = ["bartblaze"]
     minimum = "0.5"
     ttps = ["T1083"]
+    mbcs = ["E1083"]
     references = ["https://docs.microsoft.com/en-us/windows-hardware/drivers/ifs/filter-manager-concepts"]
 
     def run(self):

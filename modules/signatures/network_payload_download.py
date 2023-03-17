@@ -25,6 +25,7 @@ class NetworkDocumentFile(Signature):
     authors = ["Kevin Ross", "Will Metcalf", "@CybercentreCanada"]
     minimum = "1.2"
     ttps = ["T1071"]
+    mbcs = ["E1105"]
     evented = True
 
     filter_apinames = set(

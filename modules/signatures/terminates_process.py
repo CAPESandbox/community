@@ -24,6 +24,7 @@ class TerminatesRemoteProcess(Signature):
     # Migrated by @CybercentreCanada
     authors = ["Kevin Ross", "@CybercentreCanada"]
     minimum = "1.2"
+    mbcs = ["C0018"]
     evented = True
 
     filter_apinames = set(["NtTerminateProcess"])

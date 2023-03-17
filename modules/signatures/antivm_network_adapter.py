@@ -26,6 +26,7 @@ class NetworkAdapters(Signature):
     authors = ["Kevin Ross", "@CybercentreCanada"]
     minimum = "1.2"
     evented = True
+    mbcs = ["OB0001", "B0009"]
 
     filter_apinames = set(["GetAdaptersAddresses"])
 

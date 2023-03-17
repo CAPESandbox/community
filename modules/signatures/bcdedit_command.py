@@ -28,7 +28,7 @@ class BCDEditCommand(Signature):
     evented = True
     ttps = ["T1059"]  # MITRE v6,7,8
     ttps += ["T1059.003"]  # MITRE v7,8
-    mbcs = ["OB0006", "E1478", "OB0009", "E1059"]
+    mbcs = ["OB0006", "B0047", "OB0009", "E1059"]
     mbcs += ["OC0008", "C0033"]  # micro-behaviour
 
     filter_apinames = set(["CreateProcessInternalW", "ShellExecuteExW", "NtCreateUserProcess"])

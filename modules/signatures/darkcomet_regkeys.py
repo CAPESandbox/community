@@ -24,6 +24,7 @@ class DarkCometRegkeys(Signature):
     families = ["DarkComet"]
     authors = ["KillerInstinct"]
     minimum = "0.5"
+    mbcs = ["C0036"]
 
     def run(self):
         dc_keys = False

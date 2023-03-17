@@ -13,6 +13,7 @@ class AntiAVWhitespace(Signature):
     authors = ["@CybercentreCanada"]
     minimum = "1.3"
     ttps = ["T1027"]
+    mbcs = ["OB0006", "F0004"]
 
     def run(self):
         indicator = "\s{10,}"

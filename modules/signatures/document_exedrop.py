@@ -24,6 +24,7 @@ class DocScriptEXEDrop(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     ttps = ["T1059"]
+    mbcs = ["E1059"]
     evented = True
 
     filter_apinames = set(["NtWriteFile"])

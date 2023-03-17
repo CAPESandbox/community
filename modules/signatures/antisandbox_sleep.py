@@ -13,6 +13,7 @@ class AntiSandboxSleep(Signature):
     authors = ["KillerInstinct"]
     minimum = "1.2"
     evented = True
+    mbcs = ["OB0001", "B0007", "B0007.008"]
 
     filter_apinames = set(["NtDelayExecution"])
 
