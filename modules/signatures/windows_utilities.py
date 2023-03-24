@@ -24,8 +24,8 @@ class UsesWindowsUtilitiesScheduler(Signature):
         utilities = [
             "at.exe",
             "schtasks",
-            "schtasks.exe"
-            "at"
+            "schtasks.exe",
+            "at ",
         ]
 
         whitelist = [
