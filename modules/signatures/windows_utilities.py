@@ -193,14 +193,19 @@ class SuspiciousCommandTools(Signature):
             "xcacls",
         ]
 
+        whitelist = [
+            r"Internet Explorer",
+        ]
+
         ret = False
         cmdlines = self.results["behavior"]["summary"]["executed_commands"]
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            for utility in utilities:
-                if utility in lower:
-                    ret = True
-                    self.data.append({"command": cmdline})
+            for utility_regex in utilities:
+                if re.search(utility_regex, lower):
+                    if not any(re.search(whitelist_regex, cmdline) for whitelist_regex in whitelist):
+                        ret = True
+                        self.data.append({"command": cmdline})
 
         return ret
 
