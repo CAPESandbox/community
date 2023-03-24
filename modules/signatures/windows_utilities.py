@@ -3,7 +3,7 @@
 # See the file 'docs/LICENSE' for copying permission.
 
 from lib.cuckoo.common.abstracts import Signature
-
+import re
 
 class UsesWindowsUtilitiesScheduler(Signature):
     name = "uses_windows_utilities_to_create_scheduled_task"
@@ -19,20 +19,26 @@ class UsesWindowsUtilitiesScheduler(Signature):
 
     def run(self):
         utilities = [
-            "at ",
             "at.exe",
             "schtasks",
+            "schtasks.exe"
+            "at"
+        ]
+
+        whitelist = [
+            r"Acrobat DC",
         ]
 
         ret = False
         cmdlines = self.results["behavior"]["summary"]["executed_commands"]
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            for utility in utilities:
-                if utility in lower:
-                    self.ttps += ["T1053.005"] if utility == "schtasks" else ["T1053.002"]  # MITRE v7,8
-                    ret = True
-                    self.data.append({"command": cmdline})
+            for utility_regex in utilities:
+                if re.search(utility_regex, lower):
+                    if not any(re.search(whitelist_regex, cmdline) for whitelist_regex in whitelist):
+                        self.ttps += ["T1053.005"] if utility_regex == "schtasks" else ["T1053.002"]  # MITRE v7,8
+                        ret = True
+                        self.data.append({"command": cmdline})
 
         return ret
 
