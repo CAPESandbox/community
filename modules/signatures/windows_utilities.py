@@ -83,7 +83,8 @@ class UsesWindowsUtilities(Signature):
             "netstat",
             "nslookup",
             "ping",
-            "powercfg" "qprocess",
+            "powercfg",
+            "qprocess",
             "query ",
             "query.exe",
             "quser",
@@ -115,15 +116,18 @@ class UsesWindowsUtilities(Signature):
             "wmic",
             "wusa",
         ]
-
+        whitelist = [
+            r"Internet Explorer",
+        ]
         ret = False
         cmdlines = self.results["behavior"]["summary"]["executed_commands"]
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for utility in utilities:
-                if utility in lower and "-" + utility not in lower:
-                    ret = True
-                    self.data.append({"command": cmdline})
+                if re.search(utility, lower):
+                    if utility in lower and "-" + utility not in lower and not any(re.search(whitelist_regex, cmdline) for whitelist_regex in whitelist):
+                        ret = True
+                        self.data.append({"command": cmdline})
 
         return ret
 
