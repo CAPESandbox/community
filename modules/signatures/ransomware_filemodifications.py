@@ -116,7 +116,7 @@ class RansomwareFileModifications(Signature):
                 self.description += ": appends_email_to_filenames"
             ret = True
 
-        if self.modifiedexistingcount > 50:
+        if self.modifiedexistingcount > 100:
             if ":" in self.description:
                 self.description += " overwrites_existing_files"
             else:
