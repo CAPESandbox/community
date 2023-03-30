@@ -52,6 +52,8 @@ class PhishingKit(Signature):
                 if decoded_url and decoded_user:
                     self.weight = 2
                     return True
+                else:
+                    return True
         
         return False
 
