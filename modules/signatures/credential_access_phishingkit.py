@@ -19,7 +19,7 @@ try:
     import re2 as re
 except ImportError:
     import re
-    
+
 import base64
 
 class PhishingKit(Signature):
@@ -44,11 +44,14 @@ class PhishingKit(Signature):
             regex_base64 = r'value="([^&]+?)"></input>'
             decodeString = re.findall(regex_base64,str(data))
             if decodeString:
+                self.weight = 1
                 decoded_url = base64.b64decode(decodeString[0])
                 self.data.append({"decoded_url": decoded_url})
                 decoded_user = base64.b64decode(decodeString[1])
                 self.data.append({"decoded_user": decoded_user})
-            return True
+                if decoded_url and decoded_user:
+                    self.weight = 2
+                    return True
         
         return False
 
@@ -69,7 +72,7 @@ class JSAtob(Signature):
     def run(self):
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
             data =  self.results['target']['file']['data']
-            if  "atob" in data:
+            if "atob" in data:
                 return True
             
         return False
