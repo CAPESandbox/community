@@ -20,15 +20,19 @@ try:
 except ImportError:
     import re
 
+try:
+    from chepy import Chepy
+except ImportError:
+    raise ImportError("Please install chepy")
+
 import base64
 
-class PhishingKit(Signature):
+class PhishingKit0(Signature):
     name = "phishing_kit_detected"
     description = "Phishing Kit Detected, sample is trying to harvest credentials"
     severity = 3
     confidence = 100
     categories = ["credential_access","evasion","infostealer","phishing", "static"]
-    families = ["PhishingKit"]
     authors = ["Yasin Tas",  "Eye Security"]
     enabled = True
     minimum = "1.2"
@@ -51,6 +55,8 @@ class PhishingKit(Signature):
                 self.data.append({"decoded_user": decoded_user})
                 if decoded_url and decoded_user:
                     self.weight = 2
+                    self.description = "Phishing kit detected, extracted config from sample"
+                    self.families = ["PhishingKit"]
                     return True
                 else:
                     return True
@@ -63,7 +69,6 @@ class JSAtob(Signature):
     severity = 2
     confidence = 70
     categories = ["evasion","phishing", "static"]
-    families = ["PhishingKit"]
     authors = ["Yasin Tas",  "Eye Security"]
     enabled = True
     minimum = "1.2"
@@ -79,3 +84,72 @@ class JSAtob(Signature):
             
         return False
         
+class URLDecode(Signature):
+    name = "JS_decode_detected"
+    description = "JS decode Detected, file is obfuscated"
+    severity = 2
+    confidence = 70
+    categories = ["evasion","phishing", "static"]
+    authors = ["Yasin Tas",  "Eye Security"]
+    enabled = True
+    minimum = "1.2"
+    ttps = ["T1140"]  # MITRE v6
+    ttps += ["T1566.001"]  # MITRE v6,7,8
+    mbcs = ["C0029.003"]  # micro-behaviour
+
+    def run(self):
+        if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
+            data =  self.results['target']['file']['data']
+            if "decodeURIComponent" in data:
+                return True
+            
+        return False
+
+class PhishingKit1(Signature):
+    name = "phishing_kit_detected"
+    description = "Phishing Kit Detected, sample is trying to harvest credentials"
+    severity = 3
+    confidence = 100
+    categories = ["credential_access","evasion","infostealer","phishing", "static"]
+    authors = ["Yasin Tas",  "Eye Security"]
+    enabled = True
+    minimum = "1.2"
+    ttps = ["T1111", "T1193", "T1140"]  # MITRE v6
+    ttps += ["T1566.001"]  # MITRE v6,7,8
+    ttps += ["T1606"]  # MITRE v7,8
+    mbcs = ["C0029.003"]  # micro-behaviour
+
+    def run(self):
+        if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
+            data =  self.results['target']['file']['data']
+            regex_decodedURL = r"unescape( '([^&]+?)' ) );</script>"
+            decodeString = re.search(regex_decodedURL,str(data))
+            if decodeString:
+                self.weight = 1
+                decoded_string = Chepy(decodeString).url_decode()
+                self.description = "File obfuscation detected with url decode"
+                if "atob" in decoded_string:
+                    self.weight += 1
+                    self.description = "File obfuscation detected with url decode and atob"
+                if "encoded_string" in decoded_string:
+                    self.weight += 1
+                    self.description = "File obfuscation detected with url decode, atob and encoded_string"
+                if "encoded_string" in decoded_string and "atob" in decoded_string:
+                    self.weight = 3
+                    self.families = ["PhishingKit"]
+                    user_regex = r"var encoded_string = '([^&]+?)';"
+                    url_regex = r"window.atob('([^&]+?)')"
+                    aws_regex = r"window.location.href=\"([^&]+?)\""
+                    user = re.search(user_regex,decoded_string)
+                    url = re.search(url_regex,decoded_string)
+                    aws = re.search(aws_regex,decoded_string)
+                    if user and url and aws:
+                        self.description = "Phishing kit detected, extracted config from sample"
+                        self.data.append({"decoded_url": base64.b64decode(url)})
+                        self.data.append({"decoded_user": base64.b64decode(user)})
+                        self.data.append({"aws_url": aws})
+                        return True
+                    return True
+        return False
+                
+                
