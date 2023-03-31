@@ -138,3 +138,21 @@ class PhishingKit2(Signature):
                 self.data.append({"url": url})
                 self.data.append({"user": user})
                 return True
+            
+class PhishingKit3(Signature):
+    name = "phishing2_kit_detected"
+    description = "Phishing Kit Detected, sample is trying to harvest credentials"
+    severity = 3
+    confidence = 100
+    categories = ["credential_access","infostealer","phishing", "static"]
+    authors = ["Yasin Tas",  "Eye Security"]
+    enabled = True
+    minimum = "1.2"
+    ttps = ["T1111", "T1193", "T1140"]  # MITRE v6
+    ttps += ["T1566.001"]  # MITRE v6,7,8
+    ttps += ["T1606"]  # MITRE v7,8
+
+    def run(self)
+        if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
+            data =  self.results['target']['file']['data']
+            

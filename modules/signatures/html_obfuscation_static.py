@@ -32,7 +32,8 @@ class JSAtob(Signature):
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
             data =  self.results['target']['file']['data']
             if "atob" in data:
-                return True
+                times_atob = data.count("atob")
+                self.confidence = (times_atob * 5)
         
 class URLDecode(Signature):
     name = "JS_decode_detected"
