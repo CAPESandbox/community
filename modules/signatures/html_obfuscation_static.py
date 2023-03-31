@@ -34,6 +34,8 @@ class JSAtob(Signature):
             if "atob" in data:
                 times_atob = data.count("atob")
                 self.confidence = (times_atob * 5)
+                self.data.append({f"Found atob {times_atob} times"})
+                return True
         
 class URLDecode(Signature):
     name = "JS_decode_detected"
