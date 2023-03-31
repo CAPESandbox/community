@@ -21,18 +21,21 @@ class UsesWindowsUtilitiesScheduler(Signature):
     evented = True
 
     filter_processnames = set([
-            "at ",
-            "at.exe",
-            "schtasks",
-            "schtasks.exe",
-        ])
-    
+                "at ",
+                "at.exe",
+                "schtasks",
+                "schtasks.exe",
+            ])
+        
     def on_call(self, _, process):
         if process["process_name"].lower() in self.filter_processnames:
             self.ttps += ["T1053.005"] if process["process_name"].lower() == "schtasks" else ["T1053.002"]  # MITRE v7,8
-            ret = True
-            self.data.append({"command": process["command_line"]})
-            return ret
+            cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+            for cmdline in cmdlines:
+                lower = cmdline.lower()
+                if re.search(process["process_name"].lower(), lower):
+                    self.data.append({"command": cmdline})
+            return True
 
 class UsesWindowsUtilities(Signature):
     name = "uses_windows_utilities"
