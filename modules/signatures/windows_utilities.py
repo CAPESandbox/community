@@ -20,31 +20,19 @@ class UsesWindowsUtilitiesScheduler(Signature):
 
     evented = True
 
-    def run(self):
-        utilities = [
+    filter_processnames = set([
+            "at ",
             "at.exe",
             "schtasks",
             "schtasks.exe",
-            "at ",
-        ]
-
-        whitelist = [
-            r"Acrobat DC",
-        ]
-
-        ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
-        for cmdline in cmdlines:
-            lower = cmdline.lower()
-            for utility_regex in utilities:
-                if re.search(utility_regex, lower):
-                    if not any(re.search(whitelist_regex, cmdline) for whitelist_regex in whitelist):
-                        self.ttps += ["T1053.005"] if utility_regex == "schtasks" else ["T1053.002"]  # MITRE v7,8
-                        ret = True
-                        self.data.append({"command": cmdline})
-
-        return ret
-
+        ])
+    
+    def on_call(self, call, process):
+        if process["process_name"].lower() in self.filter_processnames:
+            self.ttps += ["T1053.005"] if process["process_name"].lower() == "schtasks" else ["T1053.002"]  # MITRE v7,8
+            ret = True
+            self.data.append({"command": process["command_line"]})
+            return ret
 
 class UsesWindowsUtilities(Signature):
     name = "uses_windows_utilities"
