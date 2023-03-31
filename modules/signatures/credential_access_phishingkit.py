@@ -173,7 +173,7 @@ class PhishingKit4(Signature):
     confidence = 100
     categories = ["credential_access","infostealer","phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
-    enabled = True
+    enabled = False
     minimum = "1.2"
     ttps = ["T1111", "T1193", "T1140"]  # MITRE v6
     ttps += ["T1566.001"]  # MITRE v6,7,8
