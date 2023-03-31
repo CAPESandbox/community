@@ -128,7 +128,7 @@ class PhishingKit2(Signature):
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
             data =  self.results['target']['file']['data']
             url_regex = r"<form method=\"post\" action=\"([^&]+?)\">"
-            user_regex = r"<input  name=\"login\" type=\"hidden\" value=\"([^&]+?)\""
+            user_regex = r"<input name=\"login\" type=\"hidden\" value=\"([^&]+?)\">"
             url = re.search(url_regex,str(data))
             user = re.search(user_regex,str(data))
             if url and user:
@@ -173,7 +173,7 @@ class PhishingKit4(Signature):
     confidence = 100
     categories = ["credential_access","infostealer","phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
-    enabled = False
+    enabled = True
     minimum = "1.2"
     ttps = ["T1111", "T1193", "T1140"]  # MITRE v6
     ttps += ["T1566.001"]  # MITRE v6,7,8
