@@ -152,7 +152,7 @@ class PhishingKit3(Signature):
     ttps += ["T1566.001"]  # MITRE v6,7,8
     ttps += ["T1606"]  # MITRE v7,8
 
-    def run(self)
+    def run(self):
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
             data =  self.results['target']['file']['data']
             user = re.search(r"var eml = \"([^&]+?)\";",str(data))
