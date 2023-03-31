@@ -56,7 +56,7 @@ class PhishingKit0(Signature):
                 if decoded_url and decoded_user:
                     self.weight = 2
                     self.description = "Phishing kit detected, extracted config from sample"
-                    self.families = ["PhishingKit"]
+                    self.families = ["PhishingKit-0"]
                     return True
                 else:
                     return True
@@ -91,10 +91,10 @@ class PhishingKit1(Signature):
                     self.description = "File obfuscation detected with url decode and atob"
                 if "encoded_string" in decoded_string:
                     self.weight += 1
-                    self.description = "File obfuscation detected with url decode, atob and encoded_string"
+                    self.description = "File obfuscation detected with url decode and found encoded_string"
                 if "encoded_string" in decoded_string and "atob" in decoded_string:
                     self.weight = 3
-                    self.families = ["PhishingKit"]
+                    self.families = ["PhishingKit-1"]
                     user_regex = r"var encoded_string = \"([^&]+?)\";"
                     url_regex = r"window.atob\(\'([^&]+?)\'\)"
                     #this regex can be improved
@@ -134,7 +134,7 @@ class PhishingKit2(Signature):
             if url and user:
                 self.weight = 1
                 self.description = "Phishing kit detected, extracted config from sample"
-                self.families = ["PhishingKit"]
+                self.families = ["PhishingKit-2"]
                 self.data.append({"url": url})
                 self.data.append({"user": user})
                 return True
