@@ -81,10 +81,10 @@ class PhishingKit1(Signature):
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
             data =  self.results['target']['file']['data']
             regex_decodedURL = r"unescape\( \'([^&]+?)\' \) \);</script>"
-            decodeString = re.search(regex_decodedURL,str(data)).group(0)
+            decodeString = re.search(regex_decodedURL,str(data)).group(1)
             if decodeString:
                 self.weight = 1
-                decoded_string = Chepy(decodeString).url_decode()
+                decoded_string = Chepy(decodeString).url_decode().o
                 self.description = "File obfuscation detected with url decode"
                 if "atob" in decoded_string:
                     self.weight += 1
@@ -140,7 +140,7 @@ class PhishingKit2(Signature):
                 return True
             
 class PhishingKit3(Signature):
-    name = "phishing2_kit_detected"
+    name = "phishing3_kit_detected"
     description = "Phishing Kit Detected, sample is trying to harvest credentials"
     severity = 3
     confidence = 100
@@ -155,4 +155,31 @@ class PhishingKit3(Signature):
     def run(self)
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
             data =  self.results['target']['file']['data']
+            user = re.search(r"var eml = \"([^&]+?)\";",str(data))
+            url_regex = re.search(r'window.atob\(\'([^&]+?)\"\)}`',str(data))
+            url_decoded = Chepy(url_regex).base64_decode().o
+            if user and url_regex:
+                self.weight = 1
+                self.description = "Phishing kit detected, extracted config from sample"
+                self.families = ["PhishingKit-3"]
+                self.data.append({"url": url_decoded})
+                self.data.append({"user": user})
+                return True
             
+class PhishingKit4(Signature):
+    name = "phishing4_kit_detected"
+    description = "Phishing Kit Detected, sample is trying to harvest credentials"
+    severity = 3
+    confidence = 100
+    categories = ["credential_access","infostealer","phishing", "static"]
+    authors = ["Yasin Tas",  "Eye Security"]
+    enabled = True
+    minimum = "1.2"
+    ttps = ["T1111", "T1193", "T1140"]  # MITRE v6
+    ttps += ["T1566.001"]  # MITRE v6,7,8
+    ttps += ["T1606"]  # MITRE v7,8
+
+    def run(self)
+        if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
+            data =  self.results['target']['file']['data']
+            # TODO
