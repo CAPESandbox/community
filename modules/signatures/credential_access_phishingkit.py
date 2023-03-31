@@ -28,7 +28,7 @@ except ImportError:
 import base64
 
 class PhishingKit0(Signature):
-    name = "phishing_kit_detected"
+    name = "phishing0_kit_detected"
     description = "Phishing Kit Detected, sample is trying to harvest credentials"
     severity = 3
     confidence = 100
@@ -63,50 +63,8 @@ class PhishingKit0(Signature):
         
         return False
 
-class JSAtob(Signature):
-    name = "JS_atob_detected"
-    description = "JS atob Detected, file is obfuscated"
-    severity = 2
-    confidence = 70
-    categories = ["evasion","phishing", "static"]
-    authors = ["Yasin Tas",  "Eye Security"]
-    enabled = True
-    minimum = "1.2"
-    ttps = ["T1140"]  # MITRE v6
-    ttps += ["T1566.001"]  # MITRE v6,7,8
-    mbcs = ["C0029.003"]  # micro-behaviour
-
-    def run(self):
-        if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
-            data =  self.results['target']['file']['data']
-            if "atob" in data:
-                return True
-            
-        return False
-        
-class URLDecode(Signature):
-    name = "JS_decode_detected"
-    description = "JS decode Detected, file is obfuscated"
-    severity = 2
-    confidence = 70
-    categories = ["evasion","phishing", "static"]
-    authors = ["Yasin Tas",  "Eye Security"]
-    enabled = True
-    minimum = "1.2"
-    ttps = ["T1140"]  # MITRE v6
-    ttps += ["T1566.001"]  # MITRE v6,7,8
-    mbcs = ["C0029.003"]  # micro-behaviour
-
-    def run(self):
-        if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
-            data =  self.results['target']['file']['data']
-            if "decodeURIComponent" in data:
-                return True
-            
-        return False
-
 class PhishingKit1(Signature):
-    name = "phishing_kit_detected"
+    name = "phishing1_kit_detected"
     description = "Phishing Kit Detected, sample is trying to harvest credentials"
     severity = 3
     confidence = 100
@@ -152,4 +110,30 @@ class PhishingKit1(Signature):
                     return True
         return False
                 
-                
+class PhishingKit2(Signature):
+    name = "phishing2_kit_detected"
+    description = "Phishing Kit Detected, sample is trying to harvest credentials"
+    severity = 3
+    confidence = 100
+    categories = ["credential_access","infostealer","phishing", "static"]
+    authors = ["Yasin Tas",  "Eye Security"]
+    enabled = True
+    minimum = "1.2"
+    ttps = ["T1111", "T1193", "T1140"]  # MITRE v6
+    ttps += ["T1566.001"]  # MITRE v6,7,8
+    ttps += ["T1606"]  # MITRE v7,8
+
+    def run(self):
+        if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
+            data =  self.results['target']['file']['data']
+            url_regex = r"<form method=\"post\" action=\"([^&]+?)\">"
+            user_regex = r"<input  name=\"login\" type=\"hidden\" value=\"([^&]+?)\""
+            url = re.search(url_regex,str(data))
+            user = re.search(user_regex,str(data))
+            if url and user:
+                self.weight = 1
+                self.description = "Phishing kit detected, extracted config from sample"
+                self.families = ["PhishingKit"]
+                self.data.append({"url": url})
+                self.data.append({"user": user})
+                return True
