@@ -80,8 +80,8 @@ class PhishingKit1(Signature):
     def run(self):
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
             data =  self.results['target']['file']['data']
-            regex_decodedURL = r"unescape( '([^&]+?)' ) );</script>"
-            decodeString = re.search(regex_decodedURL,str(data))
+            regex_decodedURL = r"unescape\( \'([^&]+?)\' \) \);</script>"
+            decodeString = re.search(regex_decodedURL,str(data)).group(0)
             if decodeString:
                 self.weight = 1
                 decoded_string = Chepy(decodeString).url_decode()
@@ -95,16 +95,17 @@ class PhishingKit1(Signature):
                 if "encoded_string" in decoded_string and "atob" in decoded_string:
                     self.weight = 3
                     self.families = ["PhishingKit"]
-                    user_regex = r"var encoded_string = '([^&]+?)';"
-                    url_regex = r"window.atob('([^&]+?)')"
-                    aws_regex = r"window.location.href=\"([^&]+?)\""
-                    user = re.search(user_regex,decoded_string)
-                    url = re.search(url_regex,decoded_string)
-                    aws = re.search(aws_regex,decoded_string)
+                    user_regex = r"var encoded_string = \"([^&]+?)\";"
+                    url_regex = r"window.atob\(\'([^&]+?)\'\)"
+                    #this regex can be improved
+                    aws_regex = r'window.location.href="([Hh][Tt][Tt][Pp][Ss]?://(.*)+?)'
+                    user = re.search(user_regex,decoded_string).group(1)
+                    url = re.search(url_regex,decoded_string).group(1)
+                    aws = re.search(aws_regex,decoded_string).group(0).replace("window.location.href=\"","")
                     if user and url and aws:
                         self.description = "Phishing kit detected, extracted config from sample"
                         self.data.append({"decoded_url": base64.b64decode(url)})
-                        self.data.append({"decoded_user": base64.b64decode(user)})
+                        self.data.append({"decoded_user": user})
                         self.data.append({"aws_url": aws})
                         return True
                     return True
