@@ -69,4 +69,33 @@ class htmlTitle(Signature):
                 self.description = "Sample contains empty HTML title"
                 return True
         return False
+
+class suspiciousHTMLname(Signature):
+    name = "suspicious_html_name"
+    description = "Sample contains suspicious HTML name"
+    severity = 1
+    confidence = 80
+    categories = ["phishing", "static"]
+    authors = ["Yasin Tas",  "Eye Security"]
+    enabled = False
+    minimum = "1.2"
+    ttps = ["T1566.001"]  # MITRE v6,7,8
+    mbcs = ["C0029.003"]  # micro-behaviour
     
+    def run(self):
+        
+        indicators = ['payment',
+                      'remittence',
+                      'Invoice',
+                      'inv',
+                      'voicemail',
+                      'remit',
+                      ]
+        
+        if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
+            name = self.results['target']['file']['name']
+            for indicator in indicators:
+                if indicator in name:
+                    self.data.append({f"Found {indicator} in sample name"})
+                    return True
+        
