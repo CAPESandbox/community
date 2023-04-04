@@ -27,8 +27,8 @@ except ImportError:
 
 import base64
 
-class PhishingKit0(Signature):
-    name = "phishing0_kit_detected"
+class PhishHTMLGenahtml(Signature):
+    name = "phishing_kit_detected"
     description = "Phishing Kit Detected, sample is trying to harvest credentials"
     severity = 3
     confidence = 100
@@ -56,15 +56,15 @@ class PhishingKit0(Signature):
                 if decoded_url and decoded_user:
                     self.weight = 2
                     self.description = "Phishing kit detected, extracted config from sample"
-                    self.families = ["PhishingKit-0"]
+                    self.families = ["Phish:HTML/Gen.a!html"]
                     return True
                 else:
                     return True
         
         return False
 
-class PhishingKit1(Signature):
-    name = "phishing1_kit_detected"
+class PhishHTMLGenbhtml(Signature):
+    name = "phishing_kit_detected"
     description = "Phishing Kit Detected, sample is trying to harvest credentials"
     severity = 3
     confidence = 100
@@ -94,7 +94,7 @@ class PhishingKit1(Signature):
                     self.description = "File obfuscation detected with url decode and found encoded_string"
                 if "encoded_string" in decoded_string and "atob" in decoded_string:
                     self.weight = 3
-                    self.families = ["PhishingKit-1"]
+                    self.families = ["Phish:HTML/Gen.b!html"]
                     user_regex = r"var encoded_string = \"([^&]+?)\";"
                     url_regex = r"window.atob\(\'([^&]+?)\'\)"
                     #this regex can be improved
@@ -111,8 +111,8 @@ class PhishingKit1(Signature):
                     return True
         return False
                 
-class PhishingKit2(Signature):
-    name = "phishing2_kit_detected"
+class PhishHTMLGenchtml(Signature):
+    name = "phishing_kit_detected"
     description = "Phishing Kit Detected, sample is trying to harvest credentials"
     severity = 3
     confidence = 100
@@ -134,13 +134,13 @@ class PhishingKit2(Signature):
             if url and user:
                 self.weight = 1
                 self.description = "Phishing kit detected, extracted config from sample"
-                self.families = ["PhishingKit-2"]
+                self.families = ["Phish:HTML/Gen.c!html"]
                 self.data.append({"url": url})
                 self.data.append({"user": user})
                 return True
             
-class PhishingKit3(Signature):
-    name = "phishing3_kit_detected"
+class PhishHTMLGendhtml(Signature):
+    name = "phishing_kit_detected"
     description = "Phishing Kit Detected, sample is trying to harvest credentials"
     severity = 3
     confidence = 100
@@ -161,13 +161,13 @@ class PhishingKit3(Signature):
             if user and url_regex:
                 self.weight = 1
                 self.description = "Phishing kit detected, extracted config from sample"
-                self.families = ["PhishingKit-3"]
+                self.families = ["Phish:HTML/Gen.d!html"]
                 self.data.append({"url": url_decoded})
                 self.data.append({"user": user})
                 return True
             
-class PhishingKit4(Signature):
-    name = "phishing4_kit_detected"
+class PhishHTMLGenehtml(Signature):
+    name = "phishing_kit_detected"
     description = "Phishing Kit Detected, sample is trying to harvest credentials"
     severity = 3
     confidence = 100
