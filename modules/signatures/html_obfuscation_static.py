@@ -33,7 +33,9 @@ class JSAtob(Signature):
             data =  self.results['target']['file']['data']
             if "atob" in data:
                 times_atob = data.count("atob")
-                self.confidence = (times_atob * 5)
+                self.confidence = self.confidence + (times_atob * 5)
+                if self.confidence => 100:
+                    self.confidence = 100
                 self.data.append({f"Found atob {times_atob} times"})
                 return True
         
