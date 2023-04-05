@@ -79,35 +79,24 @@ class PhishHTMLGenbhtml(Signature):
 
     def run(self):
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
-            data =  self.results['target']['file']['data']
-            regex_decodedURL = r"unescape\( \'([^&]+?)\' \) \);</script>"
-            decodeString = re.search(regex_decodedURL,str(data)).group(1)
+            strings = self.results["target"]['file']["strings"]
+            data = ''.join(strings)
+            regex_decodedURL = r"unescape\(\'([^&]+?)\'\)\); </script>"
+            decodeString = re.search(regex_decodedURL,data).group(1)
             if decodeString:
                 self.weight = 1
-                decoded_string = Chepy(decodeString).url_decode().o
+                decoded_string = Chepy(decodeString).url_decode().url_decode().o
                 self.description = "File obfuscation detected with url decode"
-                if "atob" in decoded_string:
-                    self.weight += 1
-                    self.description = "File obfuscation detected with url decode and atob"
-                if "encoded_string" in decoded_string:
-                    self.weight += 1
-                    self.description = "File obfuscation detected with url decode and found encoded_string"
-                if "encoded_string" in decoded_string and "atob" in decoded_string:
+                regex_user = r'value="([^&]+?)"'
+                regex_url = r"url: '([^&]+?)',"
+                user = re.search(regex_user,decoded_string).group(1)
+                url = re.search(regex_url,decoded_string).group(1)
+                if user and url:
                     self.weight = 3
                     self.families = ["Phish:HTML/Gen.b!html"]
-                    user_regex = r"var encoded_string = \"([^&]+?)\";"
-                    url_regex = r"window.atob\(\'([^&]+?)\'\)"
-                    #this regex can be improved
-                    aws_regex = r'window.location.href="([Hh][Tt][Tt][Pp][Ss]?://(.*)+?)'
-                    user = re.search(user_regex,decoded_string).group(1)
-                    url = re.search(url_regex,decoded_string).group(1)
-                    aws = re.search(aws_regex,decoded_string).group(0).replace("window.location.href=\"","")
-                    if user and url and aws:
-                        self.description = "Phishing kit detected, extracted config from sample"
-                        self.data.append({"decoded_url": base64.b64decode(url)})
-                        self.data.append({"decoded_user": user})
-                        self.data.append({"aws_url": aws})
-                        return True
+                    self.description = "Phishing kit detected, extracted config from sample"
+                    self.data.append({"url": url})
+                    self.data.apend({"user": user})
                     return True
         return False
                 
