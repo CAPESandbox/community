@@ -79,21 +79,22 @@ class PhishHTMLGenbhtml(Signature):
             strings = self.results["target"]['file']["strings"]
             data = ''.join(strings)
             regex_decoded = r"unescape\(\'([^&]+?)\'\)\); </script>"
-            decodeString = re.search(regex_decoded,data).group(1)
+            decodeString = re.search(regex_decoded,data)
             if decodeString:
+                decodeString = decodeString.group(1)
                 self.weight = 1
                 decoded_string = Chepy(decodeString).url_decode().url_decode().o
                 self.description = "File obfuscation detected with url decode"
                 regex_user = r'value="([^&]+?)"'
                 regex_url = r"url: '([^&]+?)',"
-                user = re.search(regex_user,decoded_string).group(1)
-                url = re.search(regex_url,decoded_string).group(1)
+                user = re.search(regex_user,decoded_string)
+                url = re.search(regex_url,decoded_string)
                 if user and url:
                     self.weight = 3
                     self.families = ["Phish:HTML/Gen.b!html"]
                     self.description = "Phishing kit detected, extracted config from sample"
-                    self.data.append({"url": url})
-                    self.data.apend({"user": user})
+                    self.data.append({"url": url.group(1)})
+                    self.data.apend({"user": user.group(1)})
                     return True
         return False
                 
