@@ -1,3 +1,44 @@
+/*
+   YARA Rule Set for HTML phishing
+   Author: Yasin Tas, Eye Security
+   Date: 2023-04-05
+   Identifier: Phish:HTML/Gen.*!html
+   Reference: Personal Research, Florian Roth yarGen
+*/
+
+rule PhishHTMLGenahtml {
+   meta:
+      description = "YARA detection for Phish:HTML/Gen.a!html"
+      author = "Yasin Tas, Eye Security"
+      reference = "Personal Research, Florian Roth yarGen"
+      date = "2023-04-05"
+
+   strings:
+      $s1 = "74%20%32%73%20%69%6E%66%69%6E%69%74%65%7D%2E%70%72%6F%67%72%65%73%73%3E%64%69%76%3A%6E%74%68%2D%63%68%69%6C%64%28%31%29%7B%2D%77" ascii /* hex encoded string 't 2s infinite}.progress>div:nth-child(1){-w' */
+      $s2 = "31%70%78%20%73%6F%6C%69%64%20%23%30%30%37%38%64%37%3B%62%6F%72%64%65%72%2D%74%6F%70%2D%77%69%64%74%68%3A%30%3B%62%6F%72%64%65%72" ascii /* hex encoded string '1px solid #0078d7;border-top-width:0;border' */
+      $s3 = "72%6F%75%70%7B%66%6F%6E%74%2D%77%65%69%67%68%74%3A%37%30%30%7D%74%61%62%6C%65%7B%62%6F%72%64%65%72%2D%63%6F%6C%6C%61%70%73%65%3A" ascii /* hex encoded string 'roup{font-weight:700}table{border-collapse:' */
+      $s4 = "73%20%73%68%6F%77%2D%66%72%6F%6D%2D%72%69%67%68%74%7B%66%72%6F%6D%7B%6C%65%66%74%3A%32%30%30%70%78%3B%6F%70%61%63%69%74%79%3A%30" ascii /* hex encoded string 's show-from-right{from{left:200px;opacity:0' */
+      $s5 = "63%6F%6C%6F%72%3A%23%62%33%62%33%62%33%3B%62%61%63%6B%67%72%6F%75%6E%64%2D%63%6F%6C%6F%72%3A%72%67%62%61%28%30%2C%30%2C%30%2C%2E" ascii /* hex encoded string 'color:#b3b3b3;background-color:rgba(0,0,0,.' */
+      $s6 = "65%2C%2E%69%6E%70%75%74%2D%67%72%6F%75%70%2D%62%74%6E%3A%6C%61%73%74%2D%63%68%69%6C%64%3E%2E%62%74%6E%2D%67%72%6F%75%70%3A%6E%6F" ascii /* hex encoded string 'e,.input-group-btn:last-child>.btn-group:no' */
+      $s7 = "3A%35%70%78%3B%77%69%64%74%68%3A%35%70%78%3B%62%61%63%6B%67%72%6F%75%6E%64%2D%63%6F%6C%6F%72%3A%23%30%30%36%37%62%38%3B%7A%2D%69" ascii /* hex encoded string ':5px;width:5px;background-color:#0067b8;z-i' */
+      $s8 = "7B%61%6E%69%6D%61%74%69%6F%6E%2D%64%75%72%61%74%69%6F%6E%3A%2E%32%35%73%3B%2D%77%65%62%6B%69%74%2D%61%6E%69%6D%61%74%69%6F%6E%2D" ascii /* hex encoded string '{animation-duration:.25s;-webkit-animation-' */
+      $s9 = "31%2E%37%35%72%65%6D%3B%70%61%64%64%69%6E%67%2D%62%6F%74%74%6F%6D%3A%32%2E%33%36%70%78%3B%70%61%64%64%69%6E%67%2D%74%6F%70%3A%32" ascii /* hex encoded string '1.75rem;padding-bottom:2.36px;padding-top:2' */
+      $s10 = "2E%31%36%36%36%37%25%7D%2E%63%6F%6C%2D%6D%64%2D%70%75%73%68%2D%31%34%7B%6C%65%66%74%3A%35%38%2E%33%33%33%33%33%25%7D%2E%63%6F%6C" ascii /* hex encoded string '.16667%}.col-md-push-14{left:58.33333%}.col' */
+      $s11 = "65%66%74%3A%35%30%25%7D%2E%63%6F%6C%2D%6C%67%2D%6F%66%66%73%65%74%2D%31%33%7B%6D%61%72%67%69%6E%2D%6C%65%66%74%3A%35%34%2E%31%36" ascii /* hex encoded string 'eft:50%}.col-lg-offset-13{margin-left:54.16' */
+      $s12 = "66%66%73%65%74%3A%2D%32%70%78%3B%6F%75%74%6C%69%6E%65%3A%35%70%78%20%61%75%74%6F%20%2D%77%65%62%6B%69%74%2D%66%6F%63%75%73%2D%72" ascii /* hex encoded string 'ffset:-2px;outline:5px auto -webkit-focus-r' */
+      $s13 = "69%63%61%6C%2D%61%6C%69%67%6E%3A%6D%69%64%64%6C%65%7D%2E%64%69%61%6C%6F%67%2D%6F%75%74%65%72%20%2E%64%69%61%6C%6F%67%2D%6D%69%64" ascii /* hex encoded string 'ical-align:middle}.dialog-outer .dialog-mid' */
+      $s14 = "70%61%63%69%74%79%3A%30%7D%7D%40%2D%6D%6F%7A%2D%6B%65%79%66%72%61%6D%65%73%20%70%72%6F%67%72%65%73%73%44%6F%74%7B%30%25%2C%32%30" ascii /* hex encoded string 'pacity:0}}@-moz-keyframes progressDot{0%,20' */
+      $s15 = "6E%61%6D%65%3A%68%69%64%65%2D%74%6F%2D%72%69%67%68%74%7D%68%74%6D%6C%5B%64%69%72%3D%6C%74%72%5D%20%2E%61%6E%69%6D%61%74%65%2E%73" ascii /* hex encoded string 'name:hide-to-right}html[dir=ltr] .animate.s' */
+      $s16 = "2D%77%65%62%6B%69%74%2D%70%6C%61%63%65%68%6F%6C%64%65%72%2C%69%6E%70%75%74%5B%74%79%70%65%3D%63%6F%6C%6F%72%5D%3A%3A%2D%77%65%62" ascii /* hex encoded string '-webkit-placeholder,input[type=color]::-web' */
+      $s17 = "33%70%78%20%32%30%70%78%3B%66%6F%6E%74%2D%73%69%7A%65%3A%31%32%70%78%3B%6C%69%6E%65%2D%68%65%69%67%68%74%3A%31%2E%34%32%38%35%37" ascii /* hex encoded string '3px 20px;font-size:12px;line-height:1.42857' */
+      $s18 = "3B%2D%77%65%62%6B%69%74%2D%62%6F%78%2D%73%68%61%64%6F%77%3A%30%20%32%70%78%20%36%70%78%20%72%67%62%61%28%30%2C%30%2C%30%2C%2E%32" ascii /* hex encoded string ';-webkit-box-shadow:0 2px 6px rgba(0,0,0,.2' */
+      $s19 = "33%33%33%25%7D%2E%63%6F%6C%2D%6C%67%2D%70%75%73%68%2D%31%35%7B%6C%65%66%74%3A%36%32%2E%35%25%7D%2E%63%6F%6C%2D%6C%67%2D%70%75%73" ascii /* hex encoded string '333%}.col-lg-push-15{left:62.5%}.col-lg-pus' */
+      $s20 = "74%69%74%6C%65%2E%74%65%78%74%2D%6D%61%78%6C%69%6E%65%73%2D%34%7B%6D%61%78%2D%68%65%69%67%68%74%3A%38%30%2E%34%35%70%78%3B%6D%61" ascii /* hex encoded string 'title.text-maxlines-4{max-height:80.45px;ma' */
+   condition:
+      ( uint16(0) == 0x733c and filesize < 1000KB and ( 8 of them )
+      ) or ( all of them )
+}
+
 rule PhishHTMLGenbhtml {
    meta:
       description = "YARA detection for Phish:HTML/Gen.b!html"

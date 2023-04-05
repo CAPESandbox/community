@@ -82,7 +82,6 @@ class PhishHTMLGenbhtml(Signature):
             decodeString = re.search(regex_decoded,data)
             if decodeString:
                 decodeString = decodeString.group(1)
-                self.weight = 1
                 decoded_string = Chepy(decodeString).url_decode().url_decode().o
                 self.description = "File obfuscation detected with url decode"
                 regex_user = r'value="([^&]+?)"'
