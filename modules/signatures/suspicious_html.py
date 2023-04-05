@@ -73,7 +73,7 @@ class htmlTitle(Signature):
                 if indicator in data:
                     self.data.append({f"Found {indicator} in HTML title"})
                     return True
-            if title_regex.search(data):
+            if not title_regex.search(data):
                 self.description = "Sample contains empty HTML title"
                 return True
         return False

@@ -182,4 +182,4 @@ class PhishHTMLGenehtml(Signature):
     def run(self):
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
             data =  self.results['target']['file']['data']
-            # TODO
+            regex_user = r'data-emailValue="([^&]+?)"'
