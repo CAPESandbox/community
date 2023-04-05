@@ -39,26 +39,28 @@ class PhishHTMLGenahtml(Signature):
     mbcs = ["C0029.003"]  # micro-behaviour
 
     def run(self):
-
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
-            data =  self.results['target']['file']['data']
-            regex_base64 = r'value="([^&]+?)"></input>'
-            decodeString = re.findall(regex_base64,str(data))
+            strings =  self.results['target']['file']['strings']
+            regex_decodedURL = r"unescape\( \'([^&]+?)\' \) \);</script>"
+            data = ''.join(strings)
+            decodeString = re.search(regex_decodedURL,data)
             if decodeString:
-                self.weight = 1
-                decoded_url = base64.b64decode(decodeString[0])
-                self.data.append({"decoded_url": decoded_url})
-                decoded_user = base64.b64decode(decodeString[1])
-                self.data.append({"decoded_user": decoded_user})
-                if decoded_url and decoded_user:
-                    self.weight = 2
-                    self.description = "Phishing kit detected, extracted config from sample"
+                decodeString = decodeString.group(1)
+                decoded_string = Chepy(decodeString).url_decode().o
+                self.description = "File obfuscation detected with url decode"
+                regex_user = r'var encoded_string = "([^&]+?)"'
+                regex_url = r"var url =  window.atob\('([^&]+?)'\)"
+                regex_post_url = r'window\.location\.href="([^&]+.*)";'
+                user = re.search(regex_user,decoded_string)
+                url = re.search(regex_url,decoded_string)
+                post_url = re.search(regex_post_url,decoded_string)
+                if user and url and post_url:
+                    self.weight = 3
                     self.families = ["Phish:HTML/Gen.a!html"]
-                    return True
-                else:
-                    return True
-        
-        return False
+                    self.description = "Phishing kit detected, extracted config from sample"
+                    self.data.append({"url": base64.b64decode(url.group(1)).decode("utf-8")})
+                    self.data.append({"user": user.group(1)})
+                    self.data.append({"post_url": post_url.group(1)})
 
 class PhishHTMLGenbhtml(Signature):
     name = "phishing_kit_detected"
