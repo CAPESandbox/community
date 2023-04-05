@@ -31,7 +31,8 @@ class JSAtob(Signature):
     def run(self):
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
             data =  self.results['target']['file']['data']
-            if "atob" in data:
+            data = str(data)
+            if "atob" in str(data):
                 times_atob = data.count("atob")
                 self.confidence = self.confidence + (times_atob * 5)
                 if self.confidence >= 100:
