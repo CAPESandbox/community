@@ -47,7 +47,6 @@ class PhishHTMLGenahtml(Signature):
             if decodeString:
                 decodeString = decodeString.group(1)
                 decoded_string = Chepy(decodeString).url_decode().o
-                self.description = "File obfuscation detected with url decode"
                 regex_user = r'var encoded_string = "([^&]+?)"'
                 regex_url = r"var url =  window.atob\('([^&]+?)'\)"
                 regex_post_url = r'window\.location\.href="([^&]+.*)";'
@@ -55,12 +54,15 @@ class PhishHTMLGenahtml(Signature):
                 url = re.search(regex_url,decoded_string)
                 post_url = re.search(regex_post_url,decoded_string)
                 if user and url and post_url:
-                    self.weight = 3
+                    self.weight = 3                self.description = "File obfuscation detected, with url encoding"
+
                     self.families = ["Phish:HTML/Gen.a!html"]
                     self.description = "Phishing kit detected, extracted config from sample"
                     self.data.append({"url": base64.b64decode(url.group(1)).decode("utf-8")})
                     self.data.append({"user": user.group(1)})
                     self.data.append({"post_url": post_url.group(1)})
+                    return True
+        return False
 
 class PhishHTMLGenbhtml(Signature):
     name = "phishing_kit_detected"
@@ -85,7 +87,7 @@ class PhishHTMLGenbhtml(Signature):
             if decodeString:
                 decodeString = decodeString.group(1)
                 decoded_string = Chepy(decodeString).url_decode().url_decode().o
-                self.description = "File obfuscation detected with url decode"
+                self.description = "File obfuscation detected, with url encoding"
                 regex_user = r'value="([^&]+?)"'
                 regex_url = r"url: '([^&]+?)',"
                 user = re.search(regex_user,decoded_string)
@@ -126,6 +128,7 @@ class PhishHTMLGenchtml(Signature):
                 self.data.append({"url": url})
                 self.data.append({"user": user})
                 return True
+        return False
             
 class PhishHTMLGendhtml(Signature):
     name = "phishing_kit_detected"
