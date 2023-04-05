@@ -45,6 +45,7 @@ class PhishHTMLGenahtml(Signature):
             data = ''.join(strings)
             decodeString = re.search(regex_decodedURL,data)
             if decodeString:
+                self.description = "File obfuscation detected, with url encoding"
                 decodeString = decodeString.group(1)
                 decoded_string = Chepy(decodeString).url_decode().o
                 regex_user = r'var encoded_string = "([^&]+?)"'
@@ -54,8 +55,7 @@ class PhishHTMLGenahtml(Signature):
                 url = re.search(regex_url,decoded_string)
                 post_url = re.search(regex_post_url,decoded_string)
                 if user and url and post_url:
-                    self.weight = 3                self.description = "File obfuscation detected, with url encoding"
-
+                    self.weight = 3
                     self.families = ["Phish:HTML/Gen.a!html"]
                     self.description = "Phishing kit detected, extracted config from sample"
                     self.data.append({"url": base64.b64decode(url.group(1)).decode("utf-8")})
