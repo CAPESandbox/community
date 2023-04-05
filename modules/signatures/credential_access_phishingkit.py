@@ -15,10 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-try:
-    import re2 as re
-except ImportError:
-    import re
+import re
 
 try:
     from chepy import Chepy
@@ -81,8 +78,8 @@ class PhishHTMLGenbhtml(Signature):
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
             strings = self.results["target"]['file']["strings"]
             data = ''.join(strings)
-            regex_decodedURL = r"unescape\(\'([^&]+?)\'\)\); </script>"
-            decodeString = re.search(regex_decodedURL,data).group(1)
+            regex_decoded = r"unescape\(\'([^&]+?)\'\)\); </script>"
+            decodeString = re.search(regex_decoded,data).group(1)
             if decodeString:
                 self.weight = 1
                 decoded_string = Chepy(decodeString).url_decode().url_decode().o
