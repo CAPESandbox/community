@@ -40,7 +40,7 @@ class PhishHTMLGenahtml(Signature):
 
     def run(self):
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
-            strings =  self.results['target']['file']['strings']
+            strings =  self.results["target"]["file"]["strings"]
             regex_decodedURL = r"unescape\( \'([^&]+?)\' \) \);</script>"
             data = ''.join(strings)
             decodeString = re.search(regex_decodedURL,data)
@@ -80,7 +80,7 @@ class PhishHTMLGenbhtml(Signature):
 
     def run(self):
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
-            strings = self.results["target"]['file']["strings"]
+            strings = self.results["target"]["file"]["strings"]
             data = ''.join(strings)
             regex_decoded = r"unescape\(\'([^&]+?)\'\)\); </script>"
             decodeString = re.search(regex_decoded,data)
