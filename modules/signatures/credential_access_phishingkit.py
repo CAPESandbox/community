@@ -94,7 +94,7 @@ class PhishHTMLGenbhtml(Signature):
                     self.families = ["Phish:HTML/Gen.b!html"]
                     self.description = "Phishing kit detected, extracted config from sample"
                     self.data.append({"url": url.group(1)})
-                    self.data.apend({"user": user.group(1)})
+                    self.data.append({"user": user.group(1)})
                     return True
         return False
                 

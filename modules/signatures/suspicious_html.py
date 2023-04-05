@@ -15,7 +15,6 @@
 
 from lib.cuckoo.common.abstracts import Signature
     
-
 import re
 
 class htmlBody(Signature):
