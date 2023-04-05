@@ -15,6 +15,12 @@
 
 from lib.cuckoo.common.abstracts import Signature
     
+
+try:
+    import re2 as re
+except ImportError:
+    import re
+
 class htmlBody(Signature):
     name = "suspicious_html_body"
     description = "Sample contains suspicious HTML body"
@@ -59,13 +65,15 @@ class htmlTitle(Signature):
         indicators = ['Sign in to your account',
                     ]
         
+        title_regex = re.compile(r'/<title>.*<\/title>/i')
+
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
             data =  self.results['target']['file']['data']
             for indicator in indicators:
                 if indicator in data:
                     self.data.append({f"Found {indicator} in HTML title"})
                     return True
-            if "<title></title>" in data:
+            if title_regex.search(data):
                 self.description = "Sample contains empty HTML title"
                 return True
         return False
@@ -86,7 +94,7 @@ class suspiciousHTMLname(Signature):
         
         indicators = ['payment',
                       'remittence',
-                      'Invoice',
+                      'invoice',
                       'inv',
                       'voicemail',
                       'remit',
@@ -94,8 +102,9 @@ class suspiciousHTMLname(Signature):
         
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
             name = self.results['target']['file']['name']
+            lower = name.lower()
             for indicator in indicators:
-                if indicator in name:
+                if indicator in lower:
                     self.data.append({f"Found {indicator} in sample name"})
                     return True
         
