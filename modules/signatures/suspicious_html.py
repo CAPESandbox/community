@@ -103,4 +103,47 @@ class suspiciousHTMLname(Signature):
                 if indicator in lower:
                     self.data.append({f"Found {indicator} in sample name"})
                     return True
+
+class JSAtob(Signature):
+    name = "JS_atob_detected"
+    description = "JS atob Detected, file is obfuscated"
+    severity = 2
+    confidence = 70
+    categories = ["evasion","phishing", "static"]
+    authors = ["Yasin Tas",  "Eye Security"]
+    enabled = True
+    minimum = "1.2"
+    ttps = ["T1140"]  # MITRE v6
+    ttps += ["T1566.001"]  # MITRE v6,7,8
+    mbcs = ["C0029.003"]  # micro-behaviour
+
+    def run(self):
+        if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
+            data =  self.results['target']['file']['data']
+            data = str(data)
+            if "atob" in str(data):
+                times_atob = data.count("atob")
+                self.confidence = self.confidence + (times_atob * 5)
+                if self.confidence >= 100:
+                    self.confidence = 100
+                self.data.append({f"Found atob {times_atob} times"})
+                return True
         
+class URLDecode(Signature):
+    name = "JS_decode_detected"
+    description = "JS decode Detected, file is obfuscated"
+    severity = 2
+    confidence = 70
+    categories = ["evasion","phishing", "static"]
+    authors = ["Yasin Tas",  "Eye Security"]
+    enabled = True
+    minimum = "1.2"
+    ttps = ["T1140"]  # MITRE v6
+    ttps += ["T1566.001"]  # MITRE v6,7,8
+    mbcs = ["C0029.003"]  # micro-behaviour
+
+    def run(self):
+        if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
+            data =  self.results['target']['file']['data']
+            if "decodeURIComponent" in data:
+                return True

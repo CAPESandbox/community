@@ -6,9 +6,9 @@
    Reference: Personal Research, Florian Roth yarGen
 */
 
-rule PhishHTMLGenahtml {
+rule CAPE_HTML_Pish_1 {
    meta:
-      description = "YARA detection for Phish:HTML/Gen.a!html"
+      description = "YARA detection for HTMLPhisher_2023"
       author = "Yasin Tas, Eye Security"
       reference = "Personal Research, Florian Roth yarGen"
       date = "2023-04-05"
@@ -39,9 +39,9 @@ rule PhishHTMLGenahtml {
       ) or ( all of them )
 }
 
-rule PhishHTMLGenbhtml {
+rule CAPE_HTML_Pish_2 {
    meta:
-      description = "YARA detection for Phish:HTML/Gen.b!html"
+      description = "YARA detection for HTMLPhisher_2023"
       author = "Yasin Tas, Eye Security"
       reference = "Personal Research, Florian Roth yarGen"
       date = "2023-04-05"

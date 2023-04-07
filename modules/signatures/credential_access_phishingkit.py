@@ -56,7 +56,7 @@ class PhishHTMLGenahtml(Signature):
                 post_url = re.search(regex_post_url,decoded_string)
                 if user and url and post_url:
                     self.weight = 3
-                    self.families = ["Phish:HTML/Gen.a!html"]
+                    self.families = ["HTMLPhisher_2023"]
                     self.description = "Phishing kit detected, extracted config from sample"
                     self.data.append({"url": base64.b64decode(url.group(1)).decode("utf-8")})
                     self.data.append({"user": user.group(1)})
@@ -94,7 +94,7 @@ class PhishHTMLGenbhtml(Signature):
                 url = re.search(regex_url,decoded_string)
                 if user and url:
                     self.weight = 3
-                    self.families = ["Phish:HTML/Gen.b!html"]
+                    self.families = ["HTMLPhisher_2023"]
                     self.description = "Phishing kit detected, extracted config from sample"
                     self.data.append({"url": url.group(1)})
                     self.data.append({"user": user.group(1)})
@@ -124,7 +124,7 @@ class PhishHTMLGenchtml(Signature):
             if url and user:
                 self.weight = 1
                 self.description = "Phishing kit detected, extracted config from sample"
-                self.families = ["Phish:HTML/Gen.c!html"]
+                self.families = ["HTMLPhisher_2023"]
                 self.data.append({"url": url})
                 self.data.append({"user": user})
                 return True
@@ -156,6 +156,7 @@ class PhishHTMLGendhtml(Signature):
                 self.data.append({"url": url_decoded})
                 self.data.append({"user": user})
                 return True
+        return False
             
 class PhishHTMLGenehtml(Signature):
     name = "phishing_kit_detected"
