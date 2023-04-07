@@ -40,6 +40,8 @@ class HTMLPhisher_0(Signature):
 
     def run(self):
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
+            if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
+                return False
             strings =  self.results["target"]["file"]["strings"]
             regex_decodedURL = r"unescape\( \'([^&]+?)\' \) \);</script>"
             data = ''.join(strings)
@@ -80,6 +82,8 @@ class HTMLPhisher_1(Signature):
 
     def run(self):
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
+            if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
+                return False
             strings = self.results["target"]["file"]["strings"]
             data = ''.join(strings)
             regex_decoded = r"unescape\(\'([^&]+?)\'\)\); </script>"

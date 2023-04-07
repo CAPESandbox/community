@@ -31,14 +31,17 @@ class htmlBody(Signature):
     
     def run(self):
         
-        indicators = ['password',
-                  'email',
-                  'username',
-                  'encoded_string',
-                  'url',
+        indicators = [
+            'password',
+            'email',
+            'username',
+            'encoded_string',
+            'url',
                   ]
         
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
+            if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
+                return False
             strings = self.results["target"]["file"]["strings"]
             data = ''.join(strings)
             for indicator in indicators:
@@ -61,12 +64,15 @@ class htmlTitle(Signature):
     
     def run(self):
         
-        indicators = ['Sign in to your account',
+        indicators = [
+            'Sign in to your account',
                     ]
         
         title_regex = re.compile(r'/<title>.*<\/title>/i')
 
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
+            if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
+                return False
             strings = self.results["target"]["file"]["strings"]
             data = ''.join(strings)
             for indicator in indicators:
@@ -92,13 +98,14 @@ class suspiciousHTMLname(Signature):
     
     def run(self):
         
-        indicators = ['payment',
-                      'remittence',
-                      'invoice',
-                      'inv',
-                      'voicemail',
-                      'remit',
-                      'voice',
+        indicators = [
+            'payment',
+            'remittence',
+            'invoice',
+            'inv',
+            'voicemail',
+            'remit',
+            'voice',
                       ]
         
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
@@ -124,6 +131,8 @@ class JSAtob(Signature):
 
     def run(self):
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
+            if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
+                return False
             strings = self.results["target"]["file"]["strings"]
             data = ''.join(strings)
             if "atob" in str(data):
@@ -150,7 +159,9 @@ class URLDecode(Signature):
 
     def run(self):
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
-            data =  self.results['target']['file']['data']
+            if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
+                return False
+            data =  self.results['target']['file']['strings']
             if "decodeURIComponent" in data:
                 return True
         return False
@@ -170,6 +181,8 @@ class jsUnescape(Signature):
 
     def run(self):
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
+            if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
+                return False
             strings = self.results["target"]["file"]["strings"]
             data = ''.join(strings)
             if "unescape" in str(data):

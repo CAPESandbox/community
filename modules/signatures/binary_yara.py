@@ -33,5 +33,5 @@ class BinaryTriggeredYARA(Signature):
                     self.description = "Binary file triggered YARA rule"
                 for yara in yara_triggered:
                     self.data.append({"Binary triggered YARA rule": yara["name"]})
-                return True
+                    return True
         return False
