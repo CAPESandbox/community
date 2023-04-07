@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class BinaryTriggeredYARA(Signature):
     name = "binary_yara"
-    description = "Binary file triggered YARA rule"
+    description = "Binary file triggered multiple YARA rule(s)"
     severity = 3
     confidence = 50
     weight = 1
@@ -27,10 +27,9 @@ class BinaryTriggeredYARA(Signature):
 
     def run(self):
         if self.results["target"]["file"]["yara"]:
-            self.description = "Binary file triggered YARA rule(s)"
             yara_triggered = self.results["target"]["file"]["yara"]
-            if len(yara_triggered) > 1:
-                self.description = "Binary file triggered multiple YARA rule(s)"
+            if len(yara_triggered) == 1:
+                self.description = "Binary file triggered YARA rule"
             for yara in yara_triggered:
                 self.data.append({"Binary triggered YARA rule": yara["name"]})
             return True
