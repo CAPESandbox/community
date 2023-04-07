@@ -24,7 +24,7 @@ class htmlBody(Signature):
     confidence = 80
     categories = ["phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
-    enabled = False
+    enabled = True
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
     mbcs = ["C0029.003"]  # micro-behaviour
@@ -51,7 +51,7 @@ class htmlTitle(Signature):
     confidence = 80
     categories = ["phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
-    enabled = False
+    enabled = True
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
     mbcs = ["C0029.003"]  # micro-behaviour
@@ -81,7 +81,7 @@ class suspiciousHTMLname(Signature):
     confidence = 80
     categories = ["phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
-    enabled = False
+    enabled = True
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
     mbcs = ["C0029.003"]  # micro-behaviour
@@ -105,7 +105,7 @@ class suspiciousHTMLname(Signature):
                     return True
 
 class JSAtob(Signature):
-    name = "JS_atob_detected"
+    name = "suspicous_js_atob"
     description = "JS atob Detected, file is obfuscated"
     severity = 2
     confidence = 70
@@ -130,7 +130,7 @@ class JSAtob(Signature):
                 return True
         
 class URLDecode(Signature):
-    name = "JS_decode_detected"
+    name = "suspicous_url_decode"
     description = "JS decode Detected, file is obfuscated"
     severity = 2
     confidence = 70
