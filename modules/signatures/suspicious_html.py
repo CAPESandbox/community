@@ -37,7 +37,8 @@ class htmlBody(Signature):
                   ]
         
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
-            data =  self.results['target']['file']['data']
+            strings = self.results["target"]["file"]["strings"]
+            data = ''.join(strings)
             for indicator in indicators:
                 if indicator in data:
                     self.data.append({f"Found {indicator} in HTML body"})
@@ -64,7 +65,8 @@ class htmlTitle(Signature):
         title_regex = re.compile(r'/<title>.*<\/title>/i')
 
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
-            data =  self.results['target']['file']['data']
+            strings = self.results["target"]["file"]["strings"]
+            data = ''.join(strings)
             for indicator in indicators:
                 if indicator in data:
                     self.data.append({f"Found {indicator} in HTML title"})
@@ -94,6 +96,7 @@ class suspiciousHTMLname(Signature):
                       'inv',
                       'voicemail',
                       'remit',
+                      'voice',
                       ]
         
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
@@ -119,8 +122,8 @@ class JSAtob(Signature):
 
     def run(self):
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
-            data =  self.results['target']['file']['data']
-            data = str(data)
+            strings = self.results["target"]["file"]["strings"]
+            data = ''.join(strings)
             if "atob" in str(data):
                 times_atob = data.count("atob")
                 self.confidence = self.confidence + (times_atob * 5)
@@ -128,6 +131,7 @@ class JSAtob(Signature):
                     self.confidence = 100
                 self.data.append({f"Found atob {times_atob} times"})
                 return True
+        return False
         
 class URLDecode(Signature):
     name = "suspicous_url_decode"
@@ -147,3 +151,4 @@ class URLDecode(Signature):
             data =  self.results['target']['file']['data']
             if "decodeURIComponent" in data:
                 return True
+        return False

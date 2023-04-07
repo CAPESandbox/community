@@ -24,7 +24,7 @@ except ImportError:
 
 import base64
 
-class PhishHTMLGenahtml(Signature):
+class HTMLPhisher_0(Signature):
     name = "phishing_kit_detected"
     description = "Phishing Kit Detected, sample is trying to harvest credentials"
     severity = 3
@@ -64,7 +64,7 @@ class PhishHTMLGenahtml(Signature):
                     return True
         return False
 
-class PhishHTMLGenbhtml(Signature):
+class HTMLPhisher_1(Signature):
     name = "phishing_kit_detected"
     description = "Phishing Kit Detected, sample is trying to harvest credentials"
     severity = 3
@@ -101,7 +101,7 @@ class PhishHTMLGenbhtml(Signature):
                     return True
         return False
                 
-class PhishHTMLGenchtml(Signature):
+class HTMLPhisher_2(Signature):
     name = "phishing_kit_detected"
     description = "Phishing Kit Detected, sample is trying to harvest credentials"
     severity = 3
@@ -116,21 +116,31 @@ class PhishHTMLGenchtml(Signature):
 
     def run(self):
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
-            data =  self.results['target']['file']['data']
-            url_regex = r"<form method=\"post\" action=\"([^&]+?)\">"
-            user_regex = r"<input name=\"login\" type=\"hidden\" value=\"([^&]+?)\">"
-            url = re.search(url_regex,str(data))
-            user = re.search(user_regex,str(data))
-            if url and user:
-                self.weight = 1
-                self.description = "Phishing kit detected, extracted config from sample"
-                self.families = ["HTMLPhisher_2023"]
-                self.data.append({"url": url})
-                self.data.append({"user": user})
-                return True
+            strings = self.results["target"]["file"]["strings"]
+            regex_decodedURL = r"unescape\( \'([^&]+?)\' \) \);</script>"
+            data = ''.join(strings)
+            decodeString = re.search(regex_decodedURL,data)
+            if decodeString:
+                decodeString = decodeString.group(1)
+                decoded_string = Chepy(decodeString).url_decode().url_decode().o
+                self.description = "File obfuscation detected, with url encoding"
+                regex_user = r'var encoded_string = "([^&]+?)"'
+                regex_url = r"var url =  window.atob\('([^&]+?)'\)"
+                regex_aws_url = r'window\.location\.href="([^&]+.*)'
+                user = re.search(regex_user,decoded_string)
+                url = re.search(regex_url,decoded_string)
+                post_url = re.search(regex_aws_url,decoded_string)
+                if user and url and post_url:
+                    self.weight = 3
+                    self.families = ["Phish:HTML/Gen.b!html"]
+                    self.description = "Phishing kit detected, extracted config from sample"
+                    self.data.append({"post_url": post_url.group(1)})
+                    self.data.append({"url": base64.b64decode(url.group(1))})
+                    self.data.append({"user": user.group(1)})
+                    return True
         return False
-            
-class PhishHTMLGendhtml(Signature):
+    
+class HTMLPhisher_3(Signature):
     name = "phishing_kit_detected"
     description = "Phishing Kit Detected, sample is trying to harvest credentials"
     severity = 3
@@ -158,7 +168,7 @@ class PhishHTMLGendhtml(Signature):
                 return True
         return False
             
-class PhishHTMLGenehtml(Signature):
+class HTMLPhisher_4(Signature):
     name = "phishing_kit_detected"
     description = "Phishing Kit Detected, sample is trying to harvest credentials"
     severity = 3
