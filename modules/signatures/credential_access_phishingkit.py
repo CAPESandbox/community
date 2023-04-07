@@ -101,24 +101,3 @@ class HTMLPhisher_1(Signature):
                     return True
         return False
                 
-class HTMLPhisher_2(Signature):
-    name = "phishing_kit_detected"
-    description = "Phishing Kit Detected, sample is trying to harvest credentials"
-    severity = 3
-    confidence = 100
-    categories = ["credential_access","infostealer","phishing", "static"]
-    authors = ["Yasin Tas",  "Eye Security"]
-    enabled = False
-    minimum = "1.2"
-    ttps = ["T1111", "T1193", "T1140"]  # MITRE v6
-    ttps += ["T1566.001"]  # MITRE v6,7,8
-    ttps += ["T1606"]  # MITRE v7,8
-
-    def run(self):
-        if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
-            strings = self.results["target"]["file"]["strings"]
-            data = ''.join(strings)
-            regex = r'value="([^&]+?)"'
-            payload = re.findall(regex,data)
-            if payload:
-                pass
