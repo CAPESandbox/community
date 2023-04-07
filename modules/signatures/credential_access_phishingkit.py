@@ -108,7 +108,7 @@ class HTMLPhisher_2(Signature):
     confidence = 100
     categories = ["credential_access","infostealer","phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
-    enabled = True
+    enabled = False
     minimum = "1.2"
     ttps = ["T1111", "T1193", "T1140"]  # MITRE v6
     ttps += ["T1566.001"]  # MITRE v6,7,8
@@ -118,4 +118,7 @@ class HTMLPhisher_2(Signature):
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
             strings = self.results["target"]["file"]["strings"]
             data = ''.join(strings)
-            pass
+            regex = r'value="([^&]+?)"'
+            payload = re.findall(regex,data)
+            if payload:
+                pass
