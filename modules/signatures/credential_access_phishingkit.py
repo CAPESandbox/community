@@ -135,7 +135,7 @@ class HTMLPhisher_2(Signature):
                     self.families = ["Phish:HTML/Gen.b!html"]
                     self.description = "Phishing kit detected, extracted config from sample"
                     self.data.append({"post_url": post_url.group(1)})
-                    self.data.append({"url": base64.b64decode(url.group(1))})
+                    self.data.append({"url": base64.b64decode(url.group(1)).decode("utf-8")})
                     self.data.append({"user": user.group(1)})
                     return True
         return False
