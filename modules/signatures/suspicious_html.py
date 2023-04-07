@@ -154,3 +154,29 @@ class URLDecode(Signature):
             if "decodeURIComponent" in data:
                 return True
         return False
+    
+class jsUnescape(Signature):
+    name = "suspicous_js_unescape"
+    description = "JS unescape Detected, file is obfuscated"
+    severity = 2
+    confidence = 70
+    categories = ["evasion","phishing", "static"]
+    authors = ["Yasin Tas",  "Eye Security"]
+    enabled = True
+    minimum = "1.2"
+    ttps = ["T1140"]  # MITRE v6
+    ttps += ["T1566.001"]  # MITRE v6,7,8
+    mbcs = ["C0029.003"]  # micro-behaviour
+
+    def run(self):
+        if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
+            strings = self.results["target"]["file"]["strings"]
+            data = ''.join(strings)
+            if "unescape" in str(data):
+                times_unescape = data.count("unescape")
+                self.confidence = self.confidence + (times_unescape * 5)
+                if self.confidence >= 100:
+                    self.confidence = 100
+                self.data.append({f"Found unescape {times_unescape} times"})
+                return True
+        return False

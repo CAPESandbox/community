@@ -28,10 +28,10 @@ class BinaryTriggeredYARA(Signature):
     def run(self):
         if self.results["target"]["file"]["yara"]:
             yara_triggered = self.results["target"]["file"]["yara"]
-            if len(yara_triggered) == 1:
-                self.description = "Binary file triggered YARA rule"
-            for yara in yara_triggered:
-                self.data.append({"Binary triggered YARA rule": yara["name"]})
-            return True
-
+            if yara_triggered != []:
+                if len(yara_triggered) == 1:
+                    self.description = "Binary file triggered YARA rule"
+                for yara in yara_triggered:
+                    self.data.append({"Binary triggered YARA rule": yara["name"]})
+                return True
         return False
