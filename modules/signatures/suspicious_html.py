@@ -34,6 +34,8 @@ class htmlBody(Signature):
         indicators = ['password',
                   'email',
                   'username',
+                  'encoded_string',
+                  'url',
                   ]
         
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
