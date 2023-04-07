@@ -6,7 +6,7 @@
    Reference: Personal Research, Florian Roth yarGen
 */
 
-rule CAPE_HTML_Pish_1 {
+rule CAPEHTML_Phish_1 {
    meta:
       description = "YARA detection for HTMLPhisher_2023"
       author = "Yasin Tas, Eye Security"
@@ -39,7 +39,7 @@ rule CAPE_HTML_Pish_1 {
       ) or ( all of them )
 }
 
-rule CAPE_HTML_Pish_2 {
+rule CAPEHTML_Phish_2 {
    meta:
       description = "YARA detection for HTMLPhisher_2023"
       author = "Yasin Tas, Eye Security"
