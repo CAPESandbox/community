@@ -91,7 +91,7 @@ class HTMLPhisher_1(Signature):
                 r"unescape\( \'([^&]+?)\' \) \);</script>",
                 r"unescape\(\'([^&]+?)\'\) \);</script>",
                 r"unescape\( \'([^&]+?)\'\) \);</script>",
-            
+            ]
             for regex in regex_decoded:
                 decodeString = re.search(regex,data)
                 if decodeString:
