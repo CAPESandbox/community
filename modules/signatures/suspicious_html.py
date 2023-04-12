@@ -188,9 +188,11 @@ class jsUnescape(Signature):
             data = ''.join(strings)
             if "unescape" in str(data):
                 times_unescape = data.count("unescape")
-                self.confidence = self.confidence + (times_unescape * 5)
-                if self.confidence >= 100:
+                confidence = self.confidence + (times_unescape * 5)
+                if confidence >= 100:
                     self.confidence = 100
-                self.data.append({f"Found unescape {str(times_unescape)} times"})
+                else:
+                    self.confidence = confidence
+                self.data.append({f"Found unescape {times_unescape} times"})
                 return True
         return False
