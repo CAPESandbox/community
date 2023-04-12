@@ -174,7 +174,7 @@ class jsUnescape(Signature):
     confidence = 70
     categories = ["evasion","phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
-    enabled = False
+    enabled = True
     minimum = "1.2"
     ttps = ["T1140"]  # MITRE v6
     ttps += ["T1566.001"]  # MITRE v6,7,8
@@ -191,6 +191,6 @@ class jsUnescape(Signature):
                 self.confidence = self.confidence + (times_unescape * 5)
                 if self.confidence >= 100:
                     self.confidence = 100
-                self.data.append({f"Found unescape {times_unescape} times"})
+                self.data.append({f"Found unescape {str(times_unescape)} times"})
                 return True
         return False
