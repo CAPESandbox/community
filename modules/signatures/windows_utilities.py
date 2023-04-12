@@ -36,6 +36,7 @@ class UsesWindowsUtilitiesScheduler(Signature):
                 if re.search(process["process_name"].lower(), lower):
                     self.data.append({"command": cmdline})
             return True
+        return False
 
 class UsesWindowsUtilities(Signature):
     name = "uses_windows_utilities"
