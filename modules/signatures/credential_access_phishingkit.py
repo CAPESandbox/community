@@ -90,7 +90,7 @@ class HTMLPhisher_1(Signature):
             regex_decoded_variant_1 = r"unescape\( \'([^&]+?)\' \) \);</script>"
             decodeString = re.search(regex_decoded_variant_0,data)
             if not decodeString:
-                decoded_string = re.search(regex_decoded_variant_1, data)
+                decodeString = re.search(regex_decoded_variant_1, data)
             if decodeString:
                 decodeString = decodeString.group(1)
                 decoded_string = Chepy(decodeString).url_decode().url_decode().o

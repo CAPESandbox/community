@@ -149,7 +149,7 @@ class URLDecode(Signature):
     name = "suspicous_url_decode"
     description = "JS decode Detected, file is obfuscated"
     severity = 2
-    confidence = 70
+    confidence = 80
     categories = ["evasion","phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
     enabled = True
@@ -171,7 +171,7 @@ class jsUnescape(Signature):
     name = "suspicous_js_unescape"
     description = "JS unescape Detected, file is obfuscated"
     severity = 2
-    confidence = 70
+    confidence = 80
     categories = ["evasion","phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
     enabled = True
