@@ -24,7 +24,7 @@ class htmlBody(Signature):
     confidence = 80
     categories = ["phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
-    enabled = False
+    enabled = True
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
     mbcs = ["C0029.003"]  # micro-behaviour
@@ -57,7 +57,7 @@ class htmlTitle(Signature):
     confidence = 80
     categories = ["phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
-    enabled = False
+    enabled = True
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
     mbcs = ["C0029.003"]  # micro-behaviour
@@ -91,7 +91,7 @@ class suspiciousHTMLname(Signature):
     confidence = 80
     categories = ["phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
-    enabled = False
+    enabled = True
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
     mbcs = ["C0029.003"]  # micro-behaviour
@@ -124,7 +124,7 @@ class JSAtob(Signature):
     confidence = 70
     categories = ["evasion","phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
-    enabled = False
+    enabled = True
     minimum = "1.2"
     ttps = ["T1140"]  # MITRE v6
     ttps += ["T1566.001"]  # MITRE v6,7,8
@@ -152,7 +152,7 @@ class URLDecode(Signature):
     confidence = 70
     categories = ["evasion","phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
-    enabled = False
+    enabled = True
     minimum = "1.2"
     ttps = ["T1140"]  # MITRE v6
     ttps += ["T1566.001"]  # MITRE v6,7,8
@@ -174,7 +174,7 @@ class jsUnescape(Signature):
     confidence = 70
     categories = ["evasion","phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
-    enabled = True
+    enabled = False
     minimum = "1.2"
     ttps = ["T1140"]  # MITRE v6
     ttps += ["T1566.001"]  # MITRE v6,7,8
@@ -186,13 +186,6 @@ class jsUnescape(Signature):
                 return False
             strings = self.results["target"]["file"]["strings"]
             data = ''.join(strings)
-            if "unescape" in str(data):
-                times_unescape = data.count("unescape")
-                confidence = self.confidence + (times_unescape * 5)
-                if confidence >= 100:
-                    self.confidence = 100
-                else:
-                    self.confidence = confidence
-                self.data.append({f"Found unescape {times_unescape} times"})
+            if "unescape" in data:
                 return True
         return False
