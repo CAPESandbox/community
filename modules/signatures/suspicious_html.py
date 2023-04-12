@@ -152,7 +152,7 @@ class URLDecode(Signature):
     confidence = 70
     categories = ["evasion","phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
-    enabled = True
+    enabled = False
     minimum = "1.2"
     ttps = ["T1140"]  # MITRE v6
     ttps += ["T1566.001"]  # MITRE v6,7,8
@@ -174,7 +174,7 @@ class jsUnescape(Signature):
     confidence = 70
     categories = ["evasion","phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
-    enabled = True
+    enabled = False
     minimum = "1.2"
     ttps = ["T1140"]  # MITRE v6
     ttps += ["T1566.001"]  # MITRE v6,7,8
