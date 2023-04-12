@@ -121,7 +121,7 @@ class JSAtob(Signature):
     name = "suspicous_js_atob"
     description = "JS atob Detected, file is obfuscated"
     severity = 2
-    confidence = 70
+    confidence = 80
     categories = ["evasion","phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
     enabled = True
