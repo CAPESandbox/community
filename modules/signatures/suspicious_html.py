@@ -24,7 +24,7 @@ class htmlBody(Signature):
     confidence = 80
     categories = ["phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
-    enabled = True
+    enabled = False
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
     mbcs = ["C0029.003"]  # micro-behaviour
@@ -57,7 +57,7 @@ class htmlTitle(Signature):
     confidence = 80
     categories = ["phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
-    enabled = True
+    enabled = False
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
     mbcs = ["C0029.003"]  # micro-behaviour
@@ -91,7 +91,7 @@ class suspiciousHTMLname(Signature):
     confidence = 80
     categories = ["phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
-    enabled = True
+    enabled = False
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
     mbcs = ["C0029.003"]  # micro-behaviour
@@ -109,7 +109,7 @@ class suspiciousHTMLname(Signature):
                       ]
         
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
-            name = self.results['target']['file']['name']
+            name = self.results["target"]["file"]["name"]
             lower = name.lower()
             for indicator in indicators:
                 if indicator in lower:
@@ -124,7 +124,7 @@ class JSAtob(Signature):
     confidence = 70
     categories = ["evasion","phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
-    enabled = True
+    enabled = False
     minimum = "1.2"
     ttps = ["T1140"]  # MITRE v6
     ttps += ["T1566.001"]  # MITRE v6,7,8
