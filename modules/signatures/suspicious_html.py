@@ -115,6 +115,7 @@ class suspiciousHTMLname(Signature):
                 if indicator in lower:
                     self.data.append({f"Found {indicator} in sample name"})
                     return True
+        return False
 
 class JSAtob(Signature):
     name = "suspicous_js_atob"
