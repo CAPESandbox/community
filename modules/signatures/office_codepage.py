@@ -18,7 +18,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class Office_Code_Page(Signature):
     name = "office_code_page"
-    description = "The office file has a unconventional code page"
+    description = "The Office file has an unconventional code page"
     severity = 2
     categories = ["office", "static"]
     authors = ["Kevin Ross"]

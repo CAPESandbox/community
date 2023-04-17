@@ -18,7 +18,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class Office_Macro(Signature):
     name = "office_macro"
-    description = "The office file contains a macro"
+    description = "The Office file contains a macro"
     severity = 2
     categories = ["office"]
     authors = ["KillerInstinct"]
