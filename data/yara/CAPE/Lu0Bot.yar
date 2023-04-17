@@ -1,9 +1,9 @@
-rule Lu0Bot
+rule Lu0BotLoader
 {
     meta:
         author = "ditekSHen, @Fmk0, @r0ny123"
-        description = "Detects Lu0Bot"
-        cape_type = "Lu0Bot Payload"
+        description = "Detects Lu0Bot cpp Loader"
+        cape_type = "Lu0BotLoader Payload"
         modified_date = "2021-12-14"
     strings:
         /*
