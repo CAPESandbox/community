@@ -1,6 +1,7 @@
 /*
    YARA Rule Set for OneNote Files  
 */
+/* WIP
 rule susp_embedded_OneNote_files{
    meta:
       description = "Detects suspicious embedded files in OneNote files"
@@ -14,6 +15,7 @@ rule susp_embedded_OneNote_files{
    condition:
       any of them
 }
+*/
 rule SUSP_Email_Suspicious_OneNote_Attachment_Jan23_1 {
    meta:
       description = "Detects suspicious OneNote attachment that embeds suspicious payload, e.g. an executable (FPs possible if the PE is attached separately)"
