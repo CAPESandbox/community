@@ -35,7 +35,7 @@ class BinaryTriggeredYARA(Signature):
                 count += 1
             if count > 1:
                 self.description = "Binary file triggered multiple YARA rules"
-            if count > 3:
+            elif count > 3:
                 self.weight = 3
             return True
         return False
