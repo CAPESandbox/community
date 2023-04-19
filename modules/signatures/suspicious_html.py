@@ -89,15 +89,15 @@ class htmlTitle(Signature):
                 return False
             strings = self.results["target"]["file"]["strings"]
             data = ''.join(strings)
-            for indicator in indicators:
-                if title_regex.search(data):
+            if not title_regex.search(data):
+                self.description = "Sample contains empty HTML title"
+                return True
+            else:
+                for indicator in indicators:
                     title = title_regex.search(data).group(1)
                     if indicator in title:
                         self.data.append({f"Found {indicator} in HTML title"})
                         return True
-            if not title_regex.search(data):
-                self.description = "Sample contains empty HTML title"
-                return True
         return False
 
 class suspiciousHTMLname(Signature):
