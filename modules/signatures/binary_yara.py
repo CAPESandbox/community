@@ -38,4 +38,5 @@ class BinaryTriggeredYARA(Signature):
             elif count > 3:
                 self.weight = 3
             return True
-        return False
+        else:
+            return False
