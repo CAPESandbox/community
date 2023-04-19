@@ -32,7 +32,8 @@ rule susp_obfuscated_HTML_atob_btoa {
       reference = "Personal Research"
 
    strings:
-      $html_magic = { 3C 21 44 4F 43 54 59 50 45 20 68 74 6D 6C 3E }
+      $html_magic0 = { 3C 21 44 4F 43 54 59 50 45 20 68 74 6D 6C 3E }
+      $html_magic1 = { 3C 68 74 6D 6C 3E }
       $script_magic0 = { 3C 73 63 72 69 70 74 3E }
       $script_magic1 = { 3C 73 63 72 69 70 74 20 }
 
@@ -51,7 +52,8 @@ rule susp_obfuscated_HTML_eval {
       reference = "Personal Research"
 
    strings:
-      $html_magic = { 3C 21 44 4F 43 54 59 50 45 20 68 74 6D 6C 3E }
+      $html_magic0 = { 3C 21 44 4F 43 54 59 50 45 20 68 74 6D 6C 3E }
+      $html_magic1 = { 3C 68 74 6D 6C 3E }
       $script_magic0 = { 3C 73 63 72 69 70 74 3E }
       $script_magic1 = { 3C 73 63 72 69 70 74 20 }
 
@@ -69,7 +71,8 @@ rule susp_obfuscated_HTML_fromCharCode {
       reference = "Personal Research"
 
    strings:
-      $html_magic = { 3C 21 44 4F 43 54 59 50 45 20 68 74 6D 6C 3E }
+      $html_magic0 = { 3C 21 44 4F 43 54 59 50 45 20 68 74 6D 6C 3E }
+      $html_magic1 = { 3C 68 74 6D 6C 3E }
       $script_magic0 = { 3C 73 63 72 69 70 74 3E }
       $script_magic1 = { 3C 73 63 72 69 70 74 20 }
 
@@ -87,7 +90,8 @@ rule susp_obfuscated_HTML_unescape_escape {
       reference = "Personal Research"
 
    strings:
-      $html_magic = { 3C 21 44 4F 43 54 59 50 45 20 68 74 6D 6C 3E }
+      $html_magic0 = { 3C 21 44 4F 43 54 59 50 45 20 68 74 6D 6C 3E }
+      $html_magic1 = { 3C 68 74 6D 6C 3E }
       $script_magic0 = { 3C 73 63 72 69 70 74 3E }
       $script_magic1 = { 3C 73 63 72 69 70 74 20 }
 
@@ -106,7 +110,8 @@ rule susp_obfuscated_HTML_decodeURIComponent {
       reference = "Personal Research"
 
    strings:
-      $html_magic = { 3C 21 44 4F 43 54 59 50 45 20 68 74 6D 6C 3E }
+      $html_magic0 = { 3C 21 44 4F 43 54 59 50 45 20 68 74 6D 6C 3E }
+      $html_magic1 = { 3C 68 74 6D 6C 3E }
       $script_magic0 = { 3C 73 63 72 69 70 74 3E }
       $script_magic1 = { 3C 73 63 72 69 70 74 20 }
 
