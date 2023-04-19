@@ -33,10 +33,10 @@ class BinaryTriggeredYARA(Signature):
             for yara in yara_triggered:
                 self.data.append({"Binary triggered YARA rule": yara["name"]})
                 count += 1
-            if count > 1:
-                self.description = "Binary file triggered multiple YARA rules"
-            elif count > 3:
-                self.weight = 3
+                if count > 1:
+                    self.description = "Binary file triggered multiple YARA rules"
+                elif count > 3:
+                    self.weight = 3    
             return True
         else:
             return False
