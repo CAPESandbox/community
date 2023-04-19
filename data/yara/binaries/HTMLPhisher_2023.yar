@@ -13,14 +13,15 @@ rule susp_documentwrite_HTML {
       reference = "Personal Research"
 
    strings:
-      $html_magic = { 3C 21 44 4F 43 54 59 50 45 20 68 74 6D 6C 3E }
+      $html_magic0 = { 3C 21 44 4F 43 54 59 50 45 20 68 74 6D 6C 3E }
+      $html_magic1 = { 3C 68 74 6D 6C 3E }
       $script_magic0 = { 3C 73 63 72 69 70 74 3E }
       $script_magic1 = { 3C 73 63 72 69 70 74 20 }
 
       $document_write = { 64 6F 63 75 6D 65 6E 74 2E 77 72 69 74 65 }
 
    condition:
-      ($html_magic or $script_magic0 or $script_magic1 at 0)
+      ($html_magic0 or $html_magic1 or $script_magic0 or $script_magic1 at 0)
       and $document_write 
 }
 
@@ -39,7 +40,7 @@ rule susp_obfuscated_HTML_atob_btoa {
       $btoa = { 62 74 6f 61 }
 
    condition:
-      ($html_magic or $script_magic0 or $script_magic1 at 0)
+      ($html_magic0 or $html_magic1 or $script_magic0 or $script_magic1 at 0)
       and ($atob or $btoa) 
 }
 
@@ -57,7 +58,7 @@ rule susp_obfuscated_HTML_eval {
       $eval = { 65 76 61 6c }
 
    condition:
-      ($html_magic or $script_magic0 or $script_magic1 at 0)
+      ($html_magic0 or $html_magic1 or $script_magic0 or $script_magic1 at 0)
       and ($eval)
 }
 
@@ -75,7 +76,7 @@ rule susp_obfuscated_HTML_fromCharCode {
       $fromCharCode = { 66 72 6f 6d 43 68 61 72 43 6f 64 65 }
 
    condition:
-      ($html_magic or $script_magic0 or $script_magic1 at 0)
+      ($html_magic0 or $html_magic1 or $script_magic0 or $script_magic1 at 0)
       and $fromCharCode
 }
 
@@ -94,7 +95,7 @@ rule susp_obfuscated_HTML_unescape_escape {
       $escape = { 65 73 63 61 70 65 }
 
    condition:
-      ($html_magic or $script_magic0 or $script_magic1 at 0)
+      ($html_magic0 or $html_magic1 or $script_magic0 or $script_magic1 at 0)
       and ($unescape or $escape)
 }
 
@@ -112,6 +113,6 @@ rule susp_obfuscated_HTML_decodeURIComponent {
       $decodeURIComponent = { 64 65 63 6f 64 65 55 52 49 43 6f 6d 70 6f 6e 65 6e 74 }
 
    condition:
-      ($html_magic or $script_magic0 or $script_magic1 at 0)
+      ($html_magic0 or $html_magic1 or $script_magic0 or $script_magic1 at 0)
       and $decodeURIComponent
 }
