@@ -24,6 +24,12 @@ class htmlBody(Signature):
     confidence = 80
     categories = ["phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
+    references = [
+    "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
+    "https://socradar.io/what-is-a-phishing-kit/"
+    "https://github.com/SteveD3/kit_hunter/tree/master/tag_files"
+    ]
+    references = [""]
     enabled = True
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
@@ -37,6 +43,8 @@ class htmlBody(Signature):
             'username',
             'encoded_string',
             'url',
+            'emails'
+            '// remove email, and put ur mailer code',
                   ]
         
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
@@ -57,6 +65,11 @@ class htmlTitle(Signature):
     confidence = 80
     categories = ["phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
+    references = [
+    "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
+    "https://socradar.io/what-is-a-phishing-kit/"
+    "https://github.com/SteveD3/kit_hunter/tree/master/tag_files"
+    ]
     enabled = True
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
@@ -91,6 +104,11 @@ class suspiciousHTMLname(Signature):
     confidence = 80
     categories = ["phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
+    references = [
+    "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
+    "https://socradar.io/what-is-a-phishing-kit/"
+    "https://github.com/SteveD3/kit_hunter/tree/master/tag_files"
+    ]
     enabled = True
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
@@ -124,6 +142,11 @@ class JSAtob(Signature):
     confidence = 80
     categories = ["evasion","phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
+    references = [
+    "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
+    "https://socradar.io/what-is-a-phishing-kit/"
+    "https://github.com/SteveD3/kit_hunter/tree/master/tag_files"
+    ]
     enabled = True
     minimum = "1.2"
     ttps = ["T1140"]  # MITRE v6
@@ -137,11 +160,6 @@ class JSAtob(Signature):
             strings = self.results["target"]["file"]["strings"]
             data = ''.join(strings)
             if "atob" in str(data):
-                times_atob = data.count("atob")
-                self.confidence = self.confidence + (times_atob * 5)
-                if self.confidence >= 100:
-                    self.confidence = 100
-                self.data.append({f"Found atob {times_atob} times"})
                 return True
         return False
         
@@ -152,6 +170,11 @@ class URLDecode(Signature):
     confidence = 80
     categories = ["evasion","phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
+    references = [
+    "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
+    "https://socradar.io/what-is-a-phishing-kit/"
+    "https://github.com/SteveD3/kit_hunter/tree/master/tag_files"
+    ]
     enabled = True
     minimum = "1.2"
     ttps = ["T1140"]  # MITRE v6
@@ -174,6 +197,11 @@ class jsUnescape(Signature):
     confidence = 80
     categories = ["evasion","phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
+    references = [
+    "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
+    "https://socradar.io/what-is-a-phishing-kit/"
+    "https://github.com/SteveD3/kit_hunter/tree/master/tag_files"
+    ]
     enabled = True
     minimum = "1.2"
     ttps = ["T1140"]  # MITRE v6

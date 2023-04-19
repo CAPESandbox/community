@@ -31,6 +31,11 @@ class HTMLPhisher_0(Signature):
     confidence = 100
     categories = ["credential_access","evasion","infostealer","phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
+    references = [
+        "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
+        "https://socradar.io/what-is-a-phishing-kit/"
+        "https://github.com/SteveD3/kit_hunter/tree/master/tag_files"
+        ]
     enabled = True
     minimum = "1.2"
     ttps = ["T1111", "T1193", "T1140"]  # MITRE v6
@@ -73,6 +78,11 @@ class HTMLPhisher_1(Signature):
     confidence = 100
     categories = ["credential_access","evasion","infostealer","phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
+    references = [
+    "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
+    "https://socradar.io/what-is-a-phishing-kit/"
+    "https://github.com/SteveD3/kit_hunter/tree/master/tag_files"
+    ]
     enabled = True
     minimum = "1.2"
     ttps = ["T1111", "T1193", "T1140"]  # MITRE v6
@@ -110,4 +120,3 @@ class HTMLPhisher_1(Signature):
                         self.data.append({"user": user.group(1)})
                         return True
             return False
-                
