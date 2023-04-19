@@ -21,6 +21,7 @@ class BinaryTriggeredYARA(Signature):
     severity = 3
     confidence = 80
     weight = 1
+    enabled = True
     categories = ["static"]
     authors = ["Yasin Tas",  "Eye Security"]
     minimum = "1.3"
