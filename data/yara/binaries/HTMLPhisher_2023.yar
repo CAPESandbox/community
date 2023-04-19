@@ -5,6 +5,7 @@
    Identifier: HTMLPhisher_2023
    Reference: Personal Research
 */
+
 rule susp_documentwrite_HTML {
    meta:
       description = "Detection for document.write in HTML files"

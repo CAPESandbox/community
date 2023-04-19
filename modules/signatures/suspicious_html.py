@@ -78,10 +78,11 @@ class htmlTitle(Signature):
     def run(self):
         
         indicators = [
-            'Sign in to your account',
+            'Please wait',
+            'Sign in',
                     ]
         
-        title_regex = re.compile(r'/<title>.*<\/title>/i')
+        title_regex = re.compile(r'<\s*title[^>]*>(.*?)<\/\s*title\s*>')
 
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
             if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
@@ -89,9 +90,11 @@ class htmlTitle(Signature):
             strings = self.results["target"]["file"]["strings"]
             data = ''.join(strings)
             for indicator in indicators:
-                if indicator in data:
-                    self.data.append({f"Found {indicator} in HTML title"})
-                    return True
+                if title_regex.search(data):
+                    title = title_regex.search(data).group(1)
+                    if indicator in title:
+                        self.data.append({f"Found {indicator} in HTML title"})
+                        return True
             if not title_regex.search(data):
                 self.description = "Sample contains empty HTML title"
                 return True
