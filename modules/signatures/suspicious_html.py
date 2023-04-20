@@ -54,7 +54,7 @@ class htmlBody(Signature):
                 data = ''.join(strings)
                 for indicator in indicators:
                     if indicator in data:
-                        self.add_match(None, 'string', indicator)
+                        self.add_match(None, 'string', f'Found string {indicator} in HTML body')
         return self.has_matches()
 
 
@@ -89,13 +89,13 @@ class htmlTitle(Signature):
             if "strings" in self.results["target"]["file"]:
                 strings = self.results["target"]["file"]["strings"]
                 data = ''.join(strings)
-                if not title_regex.search(data):
+                title = title_regex.search(data)
+                if not title:
                     self.description = "Sample contains empty HTML title"
                     self.add_match(None, 'string', 'Empty HTML title')
                 else:
                     for indicator in indicators:
-                        title = title_regex.search(data).group(1)
-                        if indicator in title:
+                        if indicator in title.group(1):
                             self.add_match(None, 'string', f'Found {indicator} in HTML title')
                             
             return self.has_matches()
