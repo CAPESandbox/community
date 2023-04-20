@@ -19,7 +19,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class OfficeMacroSuspicious(Signature):
     name = "office_macro_suspicious"
-    description = "The office file contains a macro with suspicious strings"
+    description = "The Office file contains a macro with suspicious strings"
     severity = 3
     categories = ["office"]
     authors = ["Kevin Ross"]
@@ -51,7 +51,7 @@ class OfficeMacroSuspicious(Signature):
 
 class OfficeMacroIOC(Signature):
     name = "office_macro_ioc"
-    description = "The office file contains a macro with potential indicators of compromise"
+    description = "The Office file contains a macro with potential indicators of compromise"
     severity = 3
     categories = ["office"]
     authors = ["Kevin Ross"]
@@ -74,7 +74,7 @@ class OfficeMacroIOC(Signature):
 
 class OfficeMacroAutoExecution(Signature):
     name = "office_macro_autoexecution"
-    description = "The office file contains a macro with auto execution"
+    description = "The Office file contains a macro with auto execution"
     severity = 2
     categories = ["office"]
     authors = ["Kevin Ross"]

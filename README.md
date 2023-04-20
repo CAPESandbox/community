@@ -9,6 +9,6 @@
 
 ### Huge special thank you to:
 * @ditekshen
-* @1bartblaze
-* @4kevross33
+* @bartblaze
+* @kevross33
 * @cccs-kevin 🇨🇦

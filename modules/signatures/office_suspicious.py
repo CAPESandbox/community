@@ -23,7 +23,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class OfficeAnamalousFeature(Signature):
     name = "office_anomalous_feature"
-    description = "The office file contains anomalous features"
+    description = "The Office file contains anomalous features"
     severity = 2
     categories = ["office"]
     authors = ["Kevin Ross"]
