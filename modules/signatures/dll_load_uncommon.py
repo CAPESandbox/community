@@ -40,6 +40,7 @@ class DllLoadUncommonFileTypes(Signature):
             ".cnv",  # Word
             ".api",  # Adobe Reader
             ".dub",  # Word
+            "office.odf",  # Word
         ]
 
     def on_call(self, call, _):
