@@ -98,7 +98,7 @@ class htmlTitle(Signature):
                         if indicator in title.group(1):
                             self.add_match(None, 'string', f'Found {indicator} in HTML title')
                             
-            return self.has_matches()
+        return self.has_matches()
 
 class suspiciousHTMLname(Signature):
     name = "suspicious_html_name"
@@ -112,7 +112,7 @@ class suspiciousHTMLname(Signature):
     "https://socradar.io/what-is-a-phishing-kit/"
     "https://github.com/SteveD3/kit_hunter/tree/master/tag_files"
     ]
-    enabled = False
+    enabled = True      
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
     mbcs = ["C0029.003"]  # micro-behaviour
