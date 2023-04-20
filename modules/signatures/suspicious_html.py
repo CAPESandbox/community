@@ -30,36 +30,33 @@ class htmlBody(Signature):
     "https://github.com/SteveD3/kit_hunter/tree/master/tag_files"
     ]
     enabled = True
+    evented = True
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
     mbcs = ["C0029.003"]  # micro-behaviour
+
+
     
+        
     def run(self):
-        
+        packages = ['html', 'edge', 'chrome', 'firefox']
         indicators = [
-            'password',
-            'email',
-            'username',
-            'encoded_string',
-            'url',
-            'emails'
-            '// remove email, and put ur mailer code',
+                'password',
+                'email',
+                'username',
+                'encoded_string',
+                'url',
+                '// remove email, and put ur mailer code',
             ]
-        
-        if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
-            if "strings" not in self.results["target"]["file"]:
-                return False
-            else:
+        if self.results["info"]["package"] in packages:
+            if "strings" in self.results["target"]["file"]:
                 strings = self.results["target"]["file"]["strings"]
                 data = ''.join(strings)
                 for indicator in indicators:
                     if indicator in data:
-                        self.data.append({f"Found {indicator} in HTML body"})
-                        return True
-                    else:
-                        return False
-        return False
-                
+                        self.add_match(None, 'string', indicator)
+        return self.has_matches()
+
 
 class htmlTitle(Signature):
     name = "suspicious_html_title"
@@ -80,6 +77,7 @@ class htmlTitle(Signature):
     
     def run(self):
         
+        packages = ['html', 'edge', 'chrome', 'firefox']
         indicators = [
             'Please wait',
             'Sign in',
@@ -87,21 +85,20 @@ class htmlTitle(Signature):
         
         title_regex = re.compile(r'<\s*title[^>]*>(.*?)<\/\s*title\s*>')
 
-        if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
-            if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
-                return False
-            strings = self.results["target"]["file"]["strings"]
-            data = ''.join(strings)
-            if not title_regex.search(data):
-                self.description = "Sample contains empty HTML title"
-                return True
-            else:
-                for indicator in indicators:
-                    title = title_regex.search(data).group(1)
-                    if indicator in title:
-                        self.data.append({f"Found {indicator} in HTML title"})
-                        return True
-        return False
+        if self.results["info"]["package"] in packages:
+            if "strings" in self.results["target"]["file"]:
+                strings = self.results["target"]["file"]["strings"]
+                data = ''.join(strings)
+                if not title_regex.search(data):
+                    self.description = "Sample contains empty HTML title"
+                    self.add_match(None, 'string', 'Empty HTML title')
+                else:
+                    for indicator in indicators:
+                        title = title_regex.search(data).group(1)
+                        if indicator in title:
+                            self.add_match(None, 'string', f'Found {indicator} in HTML title')
+                            
+            return self.has_matches()
 
 class suspiciousHTMLname(Signature):
     name = "suspicious_html_name"
@@ -121,7 +118,7 @@ class suspiciousHTMLname(Signature):
     mbcs = ["C0029.003"]  # micro-behaviour
     
     def run(self):
-        
+        packages = ['html', 'edge', 'chrome', 'firefox']
         indicators = [
             'payment',
             'remittence',
@@ -132,11 +129,10 @@ class suspiciousHTMLname(Signature):
             'voice',
                       ]
         
-        if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
+        if self.results["info"]["package"] in packages:
             name = self.results["target"]["file"]["name"]
             lower = name.lower()
             for indicator in indicators:
                 if indicator in lower:
-                    self.data.append({f"Found {indicator} in sample name"})
-                    return True
-        return False
+                    self.add_match(None, 'string', f'Found {indicator} in HTML name')
+        return self.has_matches()
