@@ -49,7 +49,7 @@ class htmlBody(Signature):
                 '// remove email, and put ur mailer code',
                 'headers'
                 'tokenName',
-                'var'
+                'headers',
             ]
         if self.results["info"]["package"] in packages:
             if "strings" in self.results["target"]["file"]:
