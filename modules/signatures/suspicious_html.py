@@ -21,7 +21,7 @@ class htmlBody(Signature):
     name = "suspicious_html_body"
     description = "Sample contains suspicious HTML body"
     severity = 1
-    confidence = 80
+    confidence = 100
     categories = ["phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
     references = [
@@ -47,6 +47,9 @@ class htmlBody(Signature):
                 'encoded_string',
                 'url',
                 '// remove email, and put ur mailer code',
+                'headers'
+                'tokenName',
+                'var'
             ]
         if self.results["info"]["package"] in packages:
             if "strings" in self.results["target"]["file"]:
@@ -54,7 +57,7 @@ class htmlBody(Signature):
                 data = ''.join(strings)
                 for indicator in indicators:
                     if indicator in data:
-                        self.add_match(None, 'string', f'Found string {indicator} in HTML body')
+                        self.add_match(None, 'string', f'Found {indicator} in HTML body')
         return self.has_matches()
 
 
@@ -62,7 +65,7 @@ class htmlTitle(Signature):
     name = "suspicious_html_title"
     description = "Sample contains suspicious HTML title"
     severity = 1
-    confidence = 80
+    confidence = 100
     categories = ["phishing", "static"]
     authors = ["Yasin Tas",  "Eye Security"]
     references = [
@@ -81,6 +84,7 @@ class htmlTitle(Signature):
         indicators = [
             'Please wait',
             'Sign in',
+            '<title></title>', # Empty title
                     ]
         
         title_regex = re.compile(r'<\s*title[^>]*>(.*?)<\/\s*title\s*>')

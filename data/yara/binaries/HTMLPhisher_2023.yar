@@ -5,6 +5,7 @@
    Identifier: HTMLPhisher_2023
    Reference: Personal Research
 */
+// TODO: Add base64 encoded strings detection
 
 rule susp_documentwrite_HTML {
    meta:

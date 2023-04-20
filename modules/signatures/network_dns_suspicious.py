@@ -563,7 +563,12 @@ class Suspicious_TLD(Signature):
             (".*\\.pw$", "Palau domain TLD"),
             (".*\\.ru$", "Russian Federation domain TLD"),
             (".*\\.su$", "Soviet Union domain TLD"),
-            (".*\\.top$", "Generic top level domain TLD"),
+            (".*\\.top$", "Generic top level domain TLD")
+            (".*\\.tk$", "Tokelau domain TLD"),
+            (".*\\.ua$", "Ukraine domain TLD"),
+            (".*\\.xyz$", "Generic top level domain TLD"),
+            (".*\\.za$", "South Africa domain TLD"),
+            (".*\\.ng$", "Nigeria domain TLD"),
         ]
         queried_domains = []
 
