@@ -70,7 +70,7 @@ class htmlTitle(Signature):
     "https://socradar.io/what-is-a-phishing-kit/"
     "https://github.com/SteveD3/kit_hunter/tree/master/tag_files"
     ]
-    enabled = False
+    enabled = True
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
     mbcs = ["C0029.003"]  # micro-behaviour
