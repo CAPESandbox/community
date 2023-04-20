@@ -29,7 +29,6 @@ class htmlBody(Signature):
     "https://socradar.io/what-is-a-phishing-kit/"
     "https://github.com/SteveD3/kit_hunter/tree/master/tag_files"
     ]
-    references = [""]
     enabled = True
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
@@ -45,18 +44,22 @@ class htmlBody(Signature):
             'url',
             'emails'
             '// remove email, and put ur mailer code',
-                  ]
+            ]
         
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
-            if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
+            if "strings" not in self.results["target"]["file"]:
                 return False
-            strings = self.results["target"]["file"]["strings"]
-            data = ''.join(strings)
-            for indicator in indicators:
-                if indicator in data:
-                    self.data.append({f"Found {indicator} in HTML body"})
-                    return True
+            else:
+                strings = self.results["target"]["file"]["strings"]
+                data = ''.join(strings)
+                for indicator in indicators:
+                    if indicator in data:
+                        self.data.append({f"Found {indicator} in HTML body"})
+                        return True
+                    else:
+                        return False
         return False
+                
 
 class htmlTitle(Signature):
     name = "suspicious_html_title"
@@ -70,7 +73,7 @@ class htmlTitle(Signature):
     "https://socradar.io/what-is-a-phishing-kit/"
     "https://github.com/SteveD3/kit_hunter/tree/master/tag_files"
     ]
-    enabled = True
+    enabled = False
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
     mbcs = ["C0029.003"]  # micro-behaviour
@@ -112,7 +115,7 @@ class suspiciousHTMLname(Signature):
     "https://socradar.io/what-is-a-phishing-kit/"
     "https://github.com/SteveD3/kit_hunter/tree/master/tag_files"
     ]
-    enabled = True
+    enabled = False
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
     mbcs = ["C0029.003"]  # micro-behaviour
