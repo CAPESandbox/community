@@ -33,7 +33,7 @@ class RansomwareFileModifications(Signature):
     ttps = ["T1486"]  # MITRE v6,7,8
     mbcs = ["OB0008", "E1486"]
 
-    filter_apinames = set(["MoveFileWithProgressW", "MoveFileWithProgressTransactedW", "NtCreateFile"])
+    filter_apinames = set(["MoveFileWithProgressW", "MoveFileWithProgressTransactedW", "NtCreateFile", "NtWriteFile"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -42,6 +42,7 @@ class RansomwareFileModifications(Signature):
         self.appendemailcount = 0
         self.modifiedexistingcount = 0
         self.newextensions = []
+        self.handle =[]
 
     def on_call(self, call, process):
         if not call["status"]:
@@ -76,9 +77,15 @@ class RansomwareFileModifications(Signature):
         if call["api"] == "NtCreateFile":
             existed = self.get_argument(call, "ExistedBefore")
             if existed == "yes":
-                self.modifiedexistingcount += 1
-                if self.pid and self.modifiedexistingcount <= 10:
-                    self.mark_call()
+                if self.pid:
+                    self.handle = self.get_argument(call, "FileHandle")
+
+        if call["api"] == "NtWriteFile":
+            if self.handle:
+               if self.get_argument(call, "FileHandle") == self.handle:
+                   if self.modifiedexistingcount <= 10:
+                       self.mark_call()
+                   self.modifiedexistingcount += 1
 
     def on_complete(self):
         ret = False
@@ -116,7 +123,7 @@ class RansomwareFileModifications(Signature):
                 self.description += ": appends_email_to_filenames"
             ret = True
 
-        if self.modifiedexistingcount > 100:
+        if self.modifiedexistingcount > 50:
             if ":" in self.description:
                 self.description += " overwrites_existing_files"
             else:
