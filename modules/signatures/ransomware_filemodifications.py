@@ -42,7 +42,7 @@ class RansomwareFileModifications(Signature):
         self.appendemailcount = 0
         self.modifiedexistingcount = 0
         self.newextensions = []
-        self.handle =[]
+        self.handle = []
 
     def on_call(self, call, process):
         if not call["status"]:
@@ -82,10 +82,10 @@ class RansomwareFileModifications(Signature):
 
         if call["api"] == "NtWriteFile":
             if self.handle:
-               if self.get_argument(call, "FileHandle") == self.handle:
-                   if self.modifiedexistingcount <= 10:
-                       self.mark_call()
-                   self.modifiedexistingcount += 1
+                if self.get_argument(call, "FileHandle") == self.handle:
+                    if self.modifiedexistingcount <= 10:
+                        self.mark_call()
+                    self.modifiedexistingcount += 1
 
     def on_complete(self):
         ret = False
