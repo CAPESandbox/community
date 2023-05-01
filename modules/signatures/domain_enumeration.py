@@ -31,7 +31,7 @@ class DomainEnumerationCommands(Signature):
         for cmdline in cmdlines:
             lower = cmdline.lower()
             
-            if "nltest" in lower and ("domain_trusts" in lower or "domain_trusts" in lower or "trusted_domains" in lower or "dclist" in lower):
+            if "nltest" in lower and ("domain_trusts" in lower or "all_trusts" in lower or "trusted_domains" in lower or "dclist" in lower):
                 ret = True
                 self.data.append({"command": cmdline})
  
