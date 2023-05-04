@@ -23,10 +23,15 @@ class CookiesStealer(Signature):
     categories = ["infostealer"]
     authors = ["bartblaze"]
     minimum = "0.5"
+    evented = True
     ttps = ["T1539"]  # MITRE v6,7,8
 
-    def run(self):
-        indicators = [
+    filter_apinames = ["NtQueryValueKey"]
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.data = []
+        self.indicators = [
             ".*\\\\Chromium\\\\User Data\\\\.*\\\\Cookies$",
             ".*\\\\Google\\\\Chrome\\\\User Data\\\\.*\\\\Cookies$",
             ".*\\\\Microsoft\\\\Windows\\\\INetCookies$",
@@ -39,11 +44,18 @@ class CookiesStealer(Signature):
             ".*\\\\Opera Software\\\\Opera Stable\\\\Cookies$",
             ".*\\\\Brave-Browser\\\\User Data\\\\.*\\\\Cookies$",
         ]
-
-        for indicator in indicators:
-            match = self.check_file(pattern=indicator, regex=True)
-            if match:
-                self.data.append({"cookie": match})
-                return True
+        self.safe_indicators = ["chrome.exe", 
+                                "firefox.exe",
+                                "opera.exe", 
+                                "msedge.exe", 
+                                "acrobat.exe"
+                                ]
+    def on_call(self, call, process):
+        if process["process_name"] not in self.safe_indicators:
+            for indicator in self.indicators:
+                match = self.check_file(pattern=indicator, regex=True)
+                if match:
+                    self.data.append({"cookie": match})
+                    return True
 
         return False
