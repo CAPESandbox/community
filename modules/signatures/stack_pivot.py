@@ -21,6 +21,7 @@ class StackPivot(Signature):
     description = "Stack pivoting was detected when using a critical API"
     severity = 3
     confidence = 100
+    enabled = False
     categories = ["exploit"]
     authors = ["Optiv"]
     minimum = "1.3"
