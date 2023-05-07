@@ -20,6 +20,7 @@ try:
 except ImportError:
     import re
 
+
 class BrowserAddon(Signature):
     name = "browser_addon"
     description = "Installs a browser addon or extension"
@@ -55,6 +56,7 @@ class BrowserAddon(Signature):
                         self.data.append({"regkey": match})
                         found = True
         return found
+
 
 class ChromiumBrowserExtensionDirectory(Signature):
     name = "chromium_browser_extension_directory"
