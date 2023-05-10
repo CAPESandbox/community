@@ -56,3 +56,26 @@ class BrowserAddon(Signature):
                         self.data.append({"regkey": match})
                         found = True
         return found
+
+
+class ChromiumBrowserExtensionDirectory(Signature):
+    name = "chromium_browser_extension_directory"
+    description = "Loads Chromium browser extension from directory"
+    severity = 3
+    confidence = 50
+    categories = ["browser", "infostealer"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    ttps = ["T1176"]
+    references = ["https://www.mandiant.com/resources/blog/lnk-between-browsers"]
+
+    def run(self):
+        ret = False
+        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            if "--load-extension=" in lower:
+                ret = True
+                self.data.append({"command": cmdline})
+
+        return ret
