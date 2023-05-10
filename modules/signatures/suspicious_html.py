@@ -131,6 +131,7 @@ class suspiciousHTMLname(Signature):
             'voicemail',
             'remit',
             'voice',
+            'statement',
                       ]
         
         if self.results["info"]["package"] in packages:
