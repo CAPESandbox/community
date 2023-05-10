@@ -30,7 +30,7 @@ class RansomwareFileModifications(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    enabled = False
+    enabled = True
     ttps = ["T1486"]  # MITRE v6,7,8
     mbcs = ["OB0008", "E1486"]
 
