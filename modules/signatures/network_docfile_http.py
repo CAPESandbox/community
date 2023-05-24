@@ -15,8 +15,6 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-from data.safelist.domains import domain_passlist
-
 class NetworkDocumentHTTP(Signature):
     name = "network_document_http"
     description = "A document file initiated network communications indicative of a potential exploit or payload download"
@@ -48,6 +46,7 @@ class NetworkDocumentHTTP(Signature):
             "acrord32.exe",
             "acrord64.exe",
         ]
+        self.domain_passlist_bool = False
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()
@@ -55,25 +54,16 @@ class NetworkDocumentHTTP(Signature):
             addit = None
             if call["api"] == "URLDownloadToFileW":
                 buff = self.get_argument(call, "URL")
-                if buff in domain_passlist:
-                    return None
-                else:
-                    addit = {"http_downloadurl": "%s_URLDownloadToFileW_%s" % (pname, buff)}
+                addit = {"http_downloadurl": "%s_URLDownloadToFileW_%s" % (pname, buff)}
             if call["api"] == "HttpOpenRequestW":
                 buff = self.get_argument(call, "Path")
                 addit = {"http_request_path": "%s_HttpOpenRequestW_%s" % (pname, buff)}
             if call["api"] == "InternetCrackUrlW":
                 buff = self.get_argument(call, "Url")
-                if buff in domain_passlist:
-                    return None
-                else:
-                    addit = {"http_request": "%s_InternetCrackUrlW_%s" % (pname, buff)}
+                addit = {"http_request": "%s_InternetCrackUrlW_%s" % (pname, buff)}
             if call["api"] == "InternetCrackUrlA":
                 buff = self.get_argument(call, "Url")
-                if buff in domain_passlist:
-                    return None
-                else:
-                    addit = {"http_request": "%s_InternetCrackUrlA_%s" % (pname, buff)}
+                addit = {"http_request": "%s_InternetCrackUrlA_%s" % (pname, buff)}
             if call["api"] == "WSASend":
                 buff = self.get_argument(call, "Buffer").lower()
                 addit = {"http_request": "%s_WSASend_%s" % (pname, buff)}
@@ -90,6 +80,13 @@ class NetworkDocumentHTTP(Signature):
             and "http_request" in self.data[0]
             and self.data[0]["http_request"].startswith("acrord32.exe_WSASend_get /10/rdr/enu/win/nooem/none/message.zip")
             and self.check_url("http://acroipm.adobe.com/10/rdr/ENU/win/nooem/none/message.zip")
+        ):
+            return False
+        if (
+            len(self.data) == 1
+            and "http_request" in self.data[0]
+            and self.data[0]["http_request"].startswith("winword.exe_InternetCrackUrlA_https://self.events.data.microsoft.com/OneCollector/1.0/")
+            and self.check_url("https://self.events.data.microsoft.com/OneCollector/1.0/")
         ):
             return False
 
