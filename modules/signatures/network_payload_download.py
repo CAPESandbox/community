@@ -57,13 +57,15 @@ class NetworkDocumentFile(Signature):
             "powershell.exe",
         ]
 
-    def on_call(self, _, process):
+    def on_call(self, call, process):
         pname = process["process_name"].lower()
         if pname in self.proc_list:
-            if self.get_argument(process) in domain_passlist:
-                return None
-            else:
-                if self.pid:
+            if self.pid:
+                if call["api"].startswith("InternetCrackUrlA"):
+                    self.url = self.get_argument(call, "Url")
+                    if self.url in domain_passlist:
+                        return False
+                else:
                     self.mark_call()
                     return True
 
