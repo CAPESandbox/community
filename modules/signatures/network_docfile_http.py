@@ -82,10 +82,9 @@ class NetworkDocumentHTTP(Signature):
             and self.check_url("http://acroipm.adobe.com/10/rdr/ENU/win/nooem/none/message.zip")
         ):
             return False
-        if (
+        elif (
             len(self.data) == 1
             and "http_request" in self.data[0]
-            and self.data[0]["http_request"].startswith("winword.exe_InternetCrackUrlA_https://self.events.data.microsoft.com/OneCollector/1.0/")
             and self.check_url("https://self.events.data.microsoft.com/OneCollector/1.0/")
         ):
             return False
