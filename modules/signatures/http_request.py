@@ -66,17 +66,23 @@ class HTTP_Request(Signature):
         elif call["api"] == "WinHttpGetProxyForUrl":
             url = self.get_argument(call, "Url")
             if url:
-                for wlhost in domain_passlist:
-                    self.urls.add(url)
-                    if self.pid:
-                        self.mark_call()
+                if any(domain in url for domain in domain_passlist):
+                    return None
+                else:
+                    for wlhost in domain_passlist:
+                        self.urls.add(url)
+                        if self.pid:
+                            self.mark_call()
         elif call["api"].startswith("InternetOpenUrl"):
             url = self.get_argument(call, "URL")
             if url:
-                for wlhost in domain_passlist:
-                    self.urls.add(url)
-                    if self.pid:
-                        self.mark_call()
+                if any(domain in url for domain in domain_passlist):
+                    return None
+                else:
+                    for wlhost in domain_passlist:
+                        self.urls.add(url)
+                        if self.pid:
+                            self.mark_call()
 
     def on_complete(self):
         ret = False
