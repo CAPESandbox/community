@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+from data.safelist.domains import domain_passlist
 
 class NetworkDocumentFile(Signature):
     name = "network_document_file"
@@ -59,9 +60,12 @@ class NetworkDocumentFile(Signature):
     def on_call(self, _, process):
         pname = process["process_name"].lower()
         if pname in self.proc_list:
-            if self.pid:
-                self.mark_call()
-            return True
+            if self.get_argument(process) in domain_passlist:
+                return None
+            else:
+                if self.pid:
+                    self.mark_call()
+                    return True
 
 
 class NetworkEXE(Signature):
