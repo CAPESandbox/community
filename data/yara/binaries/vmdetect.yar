@@ -78,5 +78,5 @@ rule vmdetect
         $virtualbox_mac_1c = "080027"
 
     condition:
-        any of them
+        2 of them 
 }
