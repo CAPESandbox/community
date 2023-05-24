@@ -15,6 +15,8 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+from data.safelist.domains import domain_passlist
+
 class NetworkDocumentHTTP(Signature):
     name = "network_document_http"
     description = "A document file initiated network communications indicative of a potential exploit or payload download"
@@ -54,16 +56,25 @@ class NetworkDocumentHTTP(Signature):
             addit = None
             if call["api"] == "URLDownloadToFileW":
                 buff = self.get_argument(call, "URL")
-                addit = {"http_downloadurl": "%s_URLDownloadToFileW_%s" % (pname, buff)}
+                if buff in domain_passlist:
+                    self.domain_passlist_bool = True
+                else:
+                    addit = {"http_downloadurl": "%s_URLDownloadToFileW_%s" % (pname, buff)}
             if call["api"] == "HttpOpenRequestW":
                 buff = self.get_argument(call, "Path")
                 addit = {"http_request_path": "%s_HttpOpenRequestW_%s" % (pname, buff)}
             if call["api"] == "InternetCrackUrlW":
                 buff = self.get_argument(call, "Url")
-                addit = {"http_request": "%s_InternetCrackUrlW_%s" % (pname, buff)}
+                if buff in domain_passlist:
+                    self.domain_passlist_bool = True
+                else:
+                    addit = {"http_request": "%s_InternetCrackUrlW_%s" % (pname, buff)}
             if call["api"] == "InternetCrackUrlA":
                 buff = self.get_argument(call, "Url")
-                addit = {"http_request": "%s_InternetCrackUrlA_%s" % (pname, buff)}
+                if buff in domain_passlist:
+                    self.domain_passlist_bool = True
+                else:
+                    addit = {"http_request": "%s_InternetCrackUrlA_%s" % (pname, buff)}
             if call["api"] == "WSASend":
                 buff = self.get_argument(call, "Buffer").lower()
                 addit = {"http_request": "%s_WSASend_%s" % (pname, buff)}
@@ -80,12 +91,7 @@ class NetworkDocumentHTTP(Signature):
             and "http_request" in self.data[0]
             and self.data[0]["http_request"].startswith("acrord32.exe_WSASend_get /10/rdr/enu/win/nooem/none/message.zip")
             and self.check_url("http://acroipm.adobe.com/10/rdr/ENU/win/nooem/none/message.zip")
-        ):
-            return False
-        elif (
-            len(self.data) == 1
-            and "http_request" in self.data[0]
-            and self.check_url("https://self.events.data.microsoft.com/OneCollector/1.0/")
+            or self.domain_passlist_bool == True
         ):
             return False
 
