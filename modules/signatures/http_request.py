@@ -46,7 +46,7 @@ class HTTP_Request(Signature):
             host = self.get_argument(call, "ServerName")
             port = self.get_argument(call, "ServerPort")
             self.lasthost = host
-            if host in domain_passlist:
+            if any(domain in host for domain in domain_passlist) :
                 return None
             if host not in self.request:
                 self.request[host] = dict()
@@ -56,7 +56,7 @@ class HTTP_Request(Signature):
         elif call["api"].startswith("HttpOpenRequest"):
             handle = str(self.get_argument(call, "InternetHandle"))
             # Sanity check
-            if self.lasthost in domain_passlist:
+            if any(domain in self.lasthost for domain in domain_passlist):
                 return None
             if self.lasthost and handle == self.request[self.lasthost]["curhandle"]:
                 uri = self.get_argument(call, "Path")
