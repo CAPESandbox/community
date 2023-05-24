@@ -55,16 +55,25 @@ class NetworkDocumentHTTP(Signature):
             addit = None
             if call["api"] == "URLDownloadToFileW":
                 buff = self.get_argument(call, "URL")
-                addit = {"http_downloadurl": "%s_URLDownloadToFileW_%s" % (pname, buff)}
+                if buff in domain_passlist:
+                    return None
+                else:
+                    addit = {"http_downloadurl": "%s_URLDownloadToFileW_%s" % (pname, buff)}
             if call["api"] == "HttpOpenRequestW":
                 buff = self.get_argument(call, "Path")
                 addit = {"http_request_path": "%s_HttpOpenRequestW_%s" % (pname, buff)}
             if call["api"] == "InternetCrackUrlW":
                 buff = self.get_argument(call, "Url")
-                addit = {"http_request": "%s_InternetCrackUrlW_%s" % (pname, buff)}
+                if buff in domain_passlist:
+                    return None
+                else:
+                    addit = {"http_request": "%s_InternetCrackUrlW_%s" % (pname, buff)}
             if call["api"] == "InternetCrackUrlA":
                 buff = self.get_argument(call, "Url")
-                addit = {"http_request": "%s_InternetCrackUrlA_%s" % (pname, buff)}
+                if buff in domain_passlist:
+                    return None
+                else:
+                    addit = {"http_request": "%s_InternetCrackUrlA_%s" % (pname, buff)}
             if call["api"] == "WSASend":
                 buff = self.get_argument(call, "Buffer").lower()
                 addit = {"http_request": "%s_WSASend_%s" % (pname, buff)}
@@ -81,7 +90,6 @@ class NetworkDocumentHTTP(Signature):
             and "http_request" in self.data[0]
             and self.data[0]["http_request"].startswith("acrord32.exe_WSASend_get /10/rdr/enu/win/nooem/none/message.zip")
             and self.check_url("http://acroipm.adobe.com/10/rdr/ENU/win/nooem/none/message.zip")
-            and self.data[0]["http_request"] in domain_passlist
         ):
             return False
 
