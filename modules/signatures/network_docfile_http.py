@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+from data.safelist.domains import domain_passlist
 
 class NetworkDocumentHTTP(Signature):
     name = "network_document_http"
@@ -54,19 +55,24 @@ class NetworkDocumentHTTP(Signature):
             addit = None
             if call["api"] == "URLDownloadToFileW":
                 buff = self.get_argument(call, "URL")
-                addit = {"http_downloadurl": "%s_URLDownloadToFileW_%s" % (pname, buff)}
+                if buff not in domain_passlist:
+                    addit = {"http_downloadurl": "%s_URLDownloadToFileW_%s" % (pname, buff)}
             if call["api"] == "HttpOpenRequestW":
                 buff = self.get_argument(call, "Path")
-                addit = {"http_request_path": "%s_HttpOpenRequestW_%s" % (pname, buff)}
+                if buff not in domain_passlist:
+                    addit = {"http_request_path": "%s_HttpOpenRequestW_%s" % (pname, buff)}
             if call["api"] == "InternetCrackUrlW":
                 buff = self.get_argument(call, "Url")
-                addit = {"http_request": "%s_InternetCrackUrlW_%s" % (pname, buff)}
+                if buff not in domain_passlist:
+                    addit = {"http_request": "%s_InternetCrackUrlW_%s" % (pname, buff)}
             if call["api"] == "InternetCrackUrlA":
                 buff = self.get_argument(call, "Url")
-                addit = {"http_request": "%s_InternetCrackUrlA_%s" % (pname, buff)}
+                if buff not in domain_passlist:
+                    addit = {"http_request": "%s_InternetCrackUrlA_%s" % (pname, buff)}
             if call["api"] == "WSASend":
                 buff = self.get_argument(call, "Buffer").lower()
-                addit = {"http_request": "%s_WSASend_%s" % (pname, buff)}
+                if buff not in domain_passlist:
+                    addit = {"http_request": "%s_WSASend_%s" % (pname, buff)}
             if addit and addit not in self.data:
                 self.data.append(addit)
                 if self.pid:
