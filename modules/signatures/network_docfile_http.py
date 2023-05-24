@@ -48,7 +48,6 @@ class NetworkDocumentHTTP(Signature):
             "acrord32.exe",
             "acrord64.exe",
         ]
-        self.domain_passlist_bool = False
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()
@@ -56,8 +55,8 @@ class NetworkDocumentHTTP(Signature):
             addit = None
             if call["api"] == "URLDownloadToFileW":
                 buff = self.get_argument(call, "URL")
-                if buff in domain_passlist:
-                    self.domain_passlist_bool = True
+                if any(domain in buff for domain in domain_passlist):
+                    return None
                 else:
                     addit = {"http_downloadurl": "%s_URLDownloadToFileW_%s" % (pname, buff)}
             if call["api"] == "HttpOpenRequestW":
@@ -65,14 +64,14 @@ class NetworkDocumentHTTP(Signature):
                 addit = {"http_request_path": "%s_HttpOpenRequestW_%s" % (pname, buff)}
             if call["api"] == "InternetCrackUrlW":
                 buff = self.get_argument(call, "Url")
-                if buff in domain_passlist:
-                    self.domain_passlist_bool = True
+                if any(domain in buff for domain in domain_passlist):
+                    return None
                 else:
                     addit = {"http_request": "%s_InternetCrackUrlW_%s" % (pname, buff)}
             if call["api"] == "InternetCrackUrlA":
                 buff = self.get_argument(call, "Url")
-                if buff in domain_passlist:
-                    self.domain_passlist_bool = True
+                if any(domain in buff for domain in domain_passlist):
+                    return None
                 else:
                     addit = {"http_request": "%s_InternetCrackUrlA_%s" % (pname, buff)}
             if call["api"] == "WSASend":
@@ -92,9 +91,6 @@ class NetworkDocumentHTTP(Signature):
             and self.data[0]["http_request"].startswith("acrord32.exe_WSASend_get /10/rdr/enu/win/nooem/none/message.zip")
             and self.check_url("http://acroipm.adobe.com/10/rdr/ENU/win/nooem/none/message.zip")    
         ):
-            return False
-        
-        if self.domain_passlist_bool == True:
             return False
         
         if self.data:
