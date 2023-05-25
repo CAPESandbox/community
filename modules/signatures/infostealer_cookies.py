@@ -57,11 +57,10 @@ class CookiesStealer(Signature):
         if pname in self.safe_indicators:
             return False
         else:
-            if call["api"] == "NtQueryAttributesFile":
-                for indicator in self.indicators:
-                    match = self.check_file(pattern=indicator, regex=True)
-                    if match:
-                        self.add_match(process, 'file', match)
+            for indicator in self.indicators:
+                match = self.check_argument_call(call, pattern=indicator, api="NtQueryAttributesFile", category="filesystem", regex=True)
+                if match:
+                    self.add_match(process, 'file', match)
 
     def on_complete(self):
         return self.has_matches()
