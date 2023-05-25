@@ -53,10 +53,11 @@ class CookiesStealer(Signature):
                                 "winword.exe",
                                 ]
     def on_call(self, _, process):
-        if process["process_name"].lower() in self.safe_indicators:
+        pname = process["process_name"].lower()
+        if pname in self.safe_indicators:
             return False
         for indicator in self.indicators:
             match = self.check_file(pattern=indicator, regex=True)
             if match:
-                self.data.append({"cookie": match})
+                self.data.append({f"Process: {pname} read the following cookie: {match}"})
                 return True
