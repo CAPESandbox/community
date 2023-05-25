@@ -59,5 +59,5 @@ class CookiesStealer(Signature):
         for indicator in self.indicators:
             match = self.check_file(pattern=indicator, regex=True)
             if match:
-                self.data.append({f"Process: {pname} read the following cookie: {match}"})
+                self.data.append({"Process: {pname} read the following cookie: {match}"})
                 return True
