@@ -26,7 +26,7 @@ class CookiesStealer(Signature):
     evented = True
     ttps = ["T1539"]  # MITRE v6,7,8
 
-    filter_apinames = ["NtQueryValueKey"]
+    filter_apinames = set(["NtQueryValueKey"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -57,10 +57,11 @@ class CookiesStealer(Signature):
         if pname in self.safe_indicators:
             return False
         else:
-            for indicator in self.indicators:
-                match = self.check_key(pattern=indicator, regex=True)
-                if match:
-                    self.add_match(process, 'registry', indicator)
+            if call["api"] == "NtQueryValueKey":
+                for indicator in self.indicators:
+                    match = self.check_file(pattern=indicator, regex=True)
+                    if match:
+                        self.add_match(process, 'file', match)
 
     def on_complete(self):
         return self.has_matches()
