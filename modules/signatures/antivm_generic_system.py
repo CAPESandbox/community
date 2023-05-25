@@ -46,7 +46,7 @@ class AntiVMSystem(Signature):
             "acrord32.exe",
             "acrord64.exe",
         ]
-    def on_call(self, call, process):
+    def on_call(self, _, process):
         pname = process["process_name"].lower()
         if pname in self.office_proc_list:
             return False

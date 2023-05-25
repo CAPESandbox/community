@@ -52,7 +52,7 @@ class CookiesStealer(Signature):
                                 "excel.exe",
                                 "winword.exe",
                                 ]
-    def on_call(self, call, process):
+    def on_call(self, _, process):
         if process["process_name"] not in self.safe_indicators:
             for indicator in self.indicators:
                 match = self.check_file(pattern=indicator, regex=True)
