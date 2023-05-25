@@ -57,4 +57,7 @@ class AntiVMSystem(Signature):
         )
             
         if match:
-            return True
+            self.add_match(process, 'registry', match)
+
+    def on_complete(self):
+        return self.has_matches()
