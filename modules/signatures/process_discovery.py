@@ -32,10 +32,15 @@ class EmumeratesRunningProcesses(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.enumeratedpids = []
+        self.safelist = [
+            "acrobat.exe",
+        ]
 
     def on_call(self, call, process):
         procname = self.get_argument(call, "ProcessName")
         procpid = self.get_argument(call, "ProcessId")
+        if procname in self.safelist:
+            return False
         if procpid and procname:
             if procpid not in self.enumeratedpids and procpid != "0":
                 self.enumeratedpids.append(procpid)
