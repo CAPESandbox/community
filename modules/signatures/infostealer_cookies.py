@@ -56,11 +56,13 @@ class CookiesStealer(Signature):
         pname = process["process_name"].lower()
         if pname in self.safe_indicators:
             return False
-        for indicator in self.indicators:
-            match = self.check_file(pattern=indicator, regex=True)
-            if match:
-                self.add_match(process, 'api', match)
-            #     self.data.append({"cookie": match})
-            #     return True
+        else:
+            for indicator in self.indicators:
+                match = self.check_file(pattern=indicator, regex=True)
+                if match:
+                    self.add_match(process, 'api', match)
+                    self.data.append("cookie " + match)
+                    self.data.append("process " + pname)
+
     def on_complete(self):
         return self.has_matches()
