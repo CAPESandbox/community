@@ -28,12 +28,31 @@ class AntiVMSystem(Signature):
     ttps += ["U1332"]  # Unprotect
     mbcs = ["OB0001", "B0009", "B0009.005", "OB0007", "E1082"]
     mbcs += ["OC0008", "C0036", "C0036.005"]  # micro-behaviour
+    evented = True
 
-    def run(self):
-        if self.check_read_key(
-            pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\SystemInformation\\\\SystemManufacturer$",
-            regex=True,
-        ):
+    filter_category = set([
+        "registry",
+    ])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.data = []
+        self.office_proc_list = [
+            "wordview.exe",
+            "winword.exe",
+            "excel.exe",
+            "powerpnt.exe",
+            "outlook.exe",
+            "acrord32.exe",
+            "acrord64.exe",
+        ]
+    def on_call(self, call, process):
+        pname = process["process_name"].lower()
+        if pname in self.office_proc_list:
+            return False
+        else:
+            self.check_read_key(
+                pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\SystemInformation\\\\SystemManufacturer$",
+                regex=True,
+            )
             return True
-
-        return False
