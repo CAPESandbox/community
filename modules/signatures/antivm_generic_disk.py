@@ -48,6 +48,9 @@ class DiskInformation(Signature):
         ]
 
     def on_call(self, call, process):
+        if process["process_name"].lower() in self.office_proc_list:
+            return False
+        
         ioctls = [
             0x2D1400,  # IOCTL_STORAGE_QUERY_PROPERTY
             0x70000,  # IOCTL_DISK_GET_DRIVE_GEOMETRY
@@ -59,8 +62,6 @@ class DiskInformation(Signature):
         if process is not self.lastprocess:
             self.handles = dict()
             self.lastprocess = process
-        if process["process_name"].lower() in self.office_proc_list:
-            return False
 
         if call["api"] == "NtDuplicateObject" and call["status"]:
             tgtarg = self.get_argument(call, "TargetHandle")

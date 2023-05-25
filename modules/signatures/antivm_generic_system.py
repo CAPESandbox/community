@@ -51,8 +51,10 @@ class AntiVMSystem(Signature):
         if pname in self.office_proc_list:
             return False
         else:
-            self.check_read_key(
+            match = self.check_read_key(
             pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\SystemInformation\\\\SystemManufacturer$",
             regex=True,
         )
+            
+        if match:
             return True
