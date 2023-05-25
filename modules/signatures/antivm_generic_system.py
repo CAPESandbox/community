@@ -46,18 +46,17 @@ class AntiVMSystem(Signature):
             "acrord32.exe",
             "acrord64.exe",
         ]
-    def on_call(self, _, process):
+    def on_call(self, call, process):
         pname = process["process_name"].lower()
         if pname in self.office_proc_list:
             return False
         else:
-            match = self.check_read_key(
-            pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\SystemInformation\\\\SystemManufacturer$",
-            regex=True,
-        )
-            
+            match = self.check_argument_call(call, 
+                                             pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\SystemInformation\\\\SystemManufacturer$", 
+                                             category="registry",
+                                             regex=True)    
         if match:
-            self.add_match(process, 'registry', match)
+            self.add_match(process, "registry", match)
 
     def on_complete(self):
         return self.has_matches()
