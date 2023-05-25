@@ -50,6 +50,7 @@ class CookiesStealer(Signature):
                                 "msedge.exe", 
                                 "acrobat.exe",
                                 "excel.exe",
+                                "winword.exe",
                                 ]
     def on_call(self, call, process):
         if process["process_name"] not in self.safe_indicators:
