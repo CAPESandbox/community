@@ -50,9 +50,10 @@ class AntiVMSystem(Signature):
         pname = process["process_name"].lower()
         if pname in self.office_proc_list:
             return False
-        else:
-            self.check_read_key(
-                pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\SystemInformation\\\\SystemManufacturer$",
-                regex=True,
-            )
+        if self.check_read_key(
+            pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\SystemInformation\\\\SystemManufacturer$",
+            regex=True,
+        ):
             return True
+
+        return False

@@ -37,6 +37,15 @@ class DiskInformation(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.lastprocess = 0
         self.handles = dict()
+        self.office_proc_list = [
+            "wordview.exe",
+            "winword.exe",
+            "excel.exe",
+            "powerpnt.exe",
+            "outlook.exe",
+            "acrord32.exe",
+            "acrord64.exe",
+        ]
 
     def on_call(self, call, process):
         ioctls = [
@@ -50,6 +59,8 @@ class DiskInformation(Signature):
         if process is not self.lastprocess:
             self.handles = dict()
             self.lastprocess = process
+        if process["process_name"].lower() in self.office_proc_list:
+            return False
 
         if call["api"] == "NtDuplicateObject" and call["status"]:
             tgtarg = self.get_argument(call, "TargetHandle")
