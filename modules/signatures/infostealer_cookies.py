@@ -58,11 +58,9 @@ class CookiesStealer(Signature):
             return False
         else:
             for indicator in self.indicators:
-                match = self.check_file(pattern=indicator, regex=True)
+                match = self.check_key(pattern=indicator, regex=True)
                 if match:
-                    self.add_match(process, 'api', match)
-                    self.data.append("cookie " + match)
-                    self.data.append("process " + pname)
+                    self.add_match(process, 'registry', indicator)
 
     def on_complete(self):
         return self.has_matches()
