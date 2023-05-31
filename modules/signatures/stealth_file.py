@@ -120,7 +120,7 @@ class StealthFile(Signature):
             r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Feeds\\.*",
             r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Feeds Cache\\$",
             r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Local\\Microsoft\\Feeds Cache\\index\.dat$",
-            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Templates\\~$Normal\.dotm",
+            r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Templates\\~\$Normal\.dotm",
             r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\IETldCache\\$",
             r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\IETldCache\\index\.dat$",
             r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\IECompatUACache\\Low$",
