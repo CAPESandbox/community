@@ -29,9 +29,35 @@ class AntiVMCPU(Signature):
     mbcs = ["OB0001", "B0009", "B0009.005", "B0009.024", "OB0007", "E1082"]
     mbcs += ["OC0008", "C0036", "C0036.005"]  # micro-behaviour
 
-    def run(self):
-        if self.check_read_key(
-            pattern=r".*\\HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\[^\\]+\\ProcessorNameString$", regex=True
-        ):
-            return True
-        return False
+    filter_apinames = set([
+        "RegQueryValueExW", 
+        "RegQueryValueExA",
+        "NtQueryValueKey",
+        ])
+    filter_categories = set(["registry"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.safe_proc_list = [
+            "wordview.exe",
+            "winword.exe",
+            "excel.exe",
+            "powerpnt.exe",
+            "outlook.exe",
+            "acrord32.exe",
+            "acrord64.exe",
+            "acrobat.exe",
+        ]
+
+    def on_call(self, call, process):
+        if process["process_name"].lower() in self.office_proc_list:
+            return False
+        else:
+            match = self.check_read_key(
+                pattern=r".*\\HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\[^\\]+\\ProcessorNameString$", regex=True
+            )
+            if match:
+                self.add_match(process, "registry", match)
+                            
+    def on_complete(self):
+        return self.has_matches()

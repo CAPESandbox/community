@@ -36,7 +36,6 @@ class AntiVMSystem(Signature):
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.data = []
         self.office_proc_list = [
             "wordview.exe",
             "winword.exe",
