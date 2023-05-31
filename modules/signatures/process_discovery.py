@@ -34,6 +34,13 @@ class EmumeratesRunningProcesses(Signature):
         self.enumeratedpids = []
         self.safelist = [
             "acrobat.exe",
+            "winword.exe",
+            "excel.exe",
+            "powerpnt.exe",
+            "outlook.exe",
+            "acrord32.exe",
+            "acrord64.exe",
+            "wordview.exe",
         ]
 
     def on_call(self, call, process):
