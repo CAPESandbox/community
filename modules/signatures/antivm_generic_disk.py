@@ -45,6 +45,7 @@ class DiskInformation(Signature):
             "outlook.exe",
             "acrord32.exe",
             "acrord64.exe",
+            "acrobat.exe",
         ]
 
     def on_call(self, call, process):
