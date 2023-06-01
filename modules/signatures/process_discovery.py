@@ -48,7 +48,7 @@ class EmumeratesRunningProcesses(Signature):
     def on_call(self, call, process):
         procname = self.get_argument(call, "ProcessName")
         procpid = self.get_argument(call, "ProcessId")
-        if procname in self.safelist:
+        if process["process_name"].lower() in self.safelist:
             return False
         else:
             if procpid and procname:
