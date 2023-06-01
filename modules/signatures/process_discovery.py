@@ -50,12 +50,13 @@ class EmumeratesRunningProcesses(Signature):
         procpid = self.get_argument(call, "ProcessId")
         if procname in self.safelist:
             return False
-        if procpid and procname:
-            if procpid not in self.enumeratedpids and procpid != "0":
-                self.enumeratedpids.append(procpid)
-                self.data.append({"process": "%s with pid %s" % (procname, procpid)})
-                if self.pid:
-                    self.mark_call()
+        else:
+            if procpid and procname:
+                if procpid not in self.enumeratedpids and procpid != "0":
+                    self.enumeratedpids.append(procpid)
+                    self.data.append({"process": "%s with pid %s" % (procname, procpid)})
+                    if self.pid:
+                        self.mark_call()
 
     def on_complete(self):
         if len(self.enumeratedpids) > 5:
