@@ -34,41 +34,46 @@ class ModifyProxy(Signature):
 
     filter_analysistypes = set(["file"])
 
-    def run(self):
-        ignore = False
-        # will need to turn this into an evented signature later, as IE will read the existing value of some of these entries
-        # and write them back as the same value
-        reg_indicators = [
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.proc_safelist = [
+            "acrobat.exe",
+            "winword.exe",
+            "excel.exe",
+            "powerpnt.exe",
+            "outlook.exe",
+            "acrord32.exe",
+            "acrord64.exe",
+            "wordview.exe",
+            "adobearm.exe",
+            "ai.exe",
+        ]
+        self.indicators = [
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\ProxyEnable$",
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\ProxyServer$",
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\ZoneMap\\\\ProxyBypass$",
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\ProxyOverride$",
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\Wpad\\\\.*",
         ]
-        whitelist = [
+        self.whitelist = [
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\Wpad\\\\WpadLastNetwork$",
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\Wpad\\\\[^\\\\]*\\\\WpadDecisionReason$",
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\Wpad\\\\[^\\\\]*\\\\WpadDecisionTime$",
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\Wpad\\\\[^\\\\]*\\\\WpadDecision$",
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\Wpad\\\\[^\\\\]*\\\\WpadNetworkName$",
         ]
-        # Get rid of a PDF false positive
-        if "file" in self.results.get("target", {}):
-            if "PDF" in self.results["target"]["file"].get("type", "") or self.results["info"]["package"] == "pdf":
-                ignore = True
-
-        if ignore:
+    def on_call(self, call, process):
+        if process["process_name"].lower() in self.proc_safelist:
             return False
-
-        for indicator in reg_indicators:
-            matches = self.check_write_key(pattern=indicator, regex=True, all=True)
-            if matches:
-                for match in matches:
-                    foundwhite = False
-                    for white in whitelist:
-                        if re.match(white, match, re.IGNORECASE):
-                            foundwhite = True
-                    if not foundwhite:
-                        return True
-
-        return False
+        else:
+            for indicator in self.indicators:
+                matches = self.check_write_key(pattern=indicator, regex=True, all=True)
+                if matches:
+                    for match in matches:
+                        foundwhite = False
+                        for white in self.whitelist:
+                            if re.match(white, match, re.IGNORECASE):
+                                foundwhite = True
+                        if not foundwhite:
+                            self.mark_call()
+                            return True

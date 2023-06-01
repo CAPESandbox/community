@@ -34,9 +34,6 @@ class htmlBody(Signature):
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
     mbcs = ["C0029.003"]  # micro-behaviour
-
-
-    
         
     def run(self):
         packages = ['html', 'edge', 'chrome', 'firefox']
@@ -85,6 +82,7 @@ class htmlTitle(Signature):
             'Please wait',
             'Sign in',
             '<title></title>', # Empty title
+            'Redirecting',
                     ]
         
         title_regex = re.compile(r'<\s*title[^>]*>(.*?)<\/\s*title\s*>')

@@ -41,6 +41,8 @@ class EmumeratesRunningProcesses(Signature):
             "acrord32.exe",
             "acrord64.exe",
             "wordview.exe",
+            "adobearm.exe",
+            "ai.exe",
         ]
 
     def on_call(self, call, process):
