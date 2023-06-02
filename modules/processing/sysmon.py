@@ -15,6 +15,7 @@ __version__ = "2.0.0"
 def parseXmlToJson(xml):
     return {child.tag: parseXmlToJson(child) if list(child) else child.text or "" for child in list(xml)}
 
+
 def massage_linux_data(journalctl_output: list) -> bytes:
     # Remove the date+hostname+service+pid from each line
     massaged_output = []

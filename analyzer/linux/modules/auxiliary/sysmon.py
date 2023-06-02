@@ -1,7 +1,7 @@
-from datetime import datetime
 import logging
 import os
 import subprocess
+from datetime import datetime
 from threading import Thread
 
 from lib.common.abstracts import Auxiliary
@@ -17,6 +17,7 @@ SYSLOG_PATH = "/var/log/syslog"
 SYSLOGVIEW_PATH = "/opt/sysmon/sysmonLogView"
 SYSMON_LOG_NAME = "sysmon.data"
 SYSMON_LOG_PATH = "/tmp/sysmon.data"
+
 
 def is_sysmon_installed() -> bool:
     # SysmonForLinux must be installed manually on the VM
@@ -46,7 +47,7 @@ class Sysmon(Thread, Auxiliary):
             "-u",
             "sysmon.service",
             "-g",
-            "\"Linux-Sysmon\""
+            '"Linux-Sysmon"',
         ]
         try:
             completed_process = subprocess.run(
@@ -83,8 +84,7 @@ class Sysmon(Thread, Auxiliary):
 
         if not os.path.exists(config_file):
             raise CuckooPackageError(
-                "In order to use the Sysmon functionality, it "
-                "is required to have the sysmonconfig.xml file in the bin path."
+                "In order to use the Sysmon functionality, it " "is required to have the sysmonconfig.xml file in the bin path."
             )
 
         # Start Sysmon service
