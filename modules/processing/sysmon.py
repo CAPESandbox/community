@@ -8,12 +8,24 @@ from lib.cuckoo.common.exceptions import CuckooProcessingError
 
 log = logging.getLogger(__name__)
 
-__author__ = "@FernandoDoming"
-__version__ = "1.0.0"
+__author__ = "@FernandoDoming,@cccs-kevin"
+__version__ = "2.0.0"
 
 
 def parseXmlToJson(xml):
     return {child.tag: parseXmlToJson(child) if list(child) else child.text or "" for child in list(xml)}
+
+
+def massage_linux_data(journalctl_output: list) -> bytes:
+    # Remove the date+hostname+service+pid from each line
+    massaged_output = []
+    for line in journalctl_output:
+        if b": <" in line:
+            _, content = line.split(b": <")
+            refined_content = b"<" + content
+            massaged_output.append(refined_content.strip())
+
+    return b"<Events>" + b"\n".join(massaged_output) + b"</Events>"
 
 
 class Sysmon(Processing):
@@ -43,17 +55,46 @@ class Sysmon(Processing):
 
     def run(self):
         self.key = "sysmon"
-        sysmon_path = f"{self.analysis_path}/sysmon/sysmon.xml"
+        sysmon_dir = os.path.join(self.analysis_path, "sysmon")
+        windows_sysmon_data_path = os.path.join(sysmon_dir, "sysmon.xml")
+        linux_sysmon_data_path = os.path.join(sysmon_dir, "sysmon.data")
 
-        if not os.path.exists(sysmon_path) or os.path.getsize(sysmon_path) < 100:
+        # Windows size check
+        if os.path.exists(windows_sysmon_data_path) and os.path.getsize(windows_sysmon_data_path) < 100:
+            return
+        # Linux size check
+        elif os.path.exists(linux_sysmon_data_path) and os.path.getsize(linux_sysmon_data_path) < 100:
+            return
+        # General file check
+        elif not os.path.exists(windows_sysmon_data_path) and not os.path.exists(linux_sysmon_data_path):
+            return
+
+        # Figure out which sysmon data file we will be using
+        sysmon_path = None
+        windows = False
+        linux = False
+        if os.path.exists(windows_sysmon_data_path):
+            sysmon_path = windows_sysmon_data_path
+            windows = True
+        elif os.path.exists(linux_sysmon_data_path):
+            sysmon_path = linux_sysmon_data_path
+            linux = True
+        else:
             return
 
         data = None
         try:
-            xml = open(sysmon_path, "rb").read()
-            xml = xml.decode("latin1").encode("utf8")
-            data = xmltodict.parse(xml)["Events"]["Event"]
+            if windows:
+                xml = open(sysmon_path, "rb").read()
+                xml = xml.decode("latin1").encode("utf8")
+                data = xmltodict.parse(xml)["Events"]["Event"]
+            elif linux:
+                journalctl_output = open(sysmon_path, "rb").readlines()
+                xml = massage_linux_data(journalctl_output)
+                data = xmltodict.parse(xml)["Events"]["Event"]
+            else:
+                return
         except Exception as e:
-            raise CuckooProcessingError(f"Failed parsing sysmon.xml: {e}")
+            raise CuckooProcessingError(f"Failed parsing {sysmon_path}: {e}")
 
         return self.remove_noise(data)
