@@ -83,8 +83,7 @@ class Sysmon(Thread, Auxiliary):
 
         if not os.path.exists(config_file):
             raise CuckooPackageError(
-                "In order to use the Sysmon functionality, it "
-                "is required to have the sysmonconfig.xml file in the bin path."
+                "In order to use the Sysmon functionality, it " "is required to have the sysmonconfig.xml file in the bin path."
             )
 
         # Start Sysmon service
