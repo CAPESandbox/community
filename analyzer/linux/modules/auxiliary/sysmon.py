@@ -50,11 +50,10 @@ class Sysmon(Thread, Auxiliary):
             '"Linux-Sysmon"',
         ]
         try:
-            completed_process = subprocess.run(
+            _ = subprocess.run(
                 args,
                 stdout=open(SYSMON_LOG_PATH, "wb"),
             )
-            log.debug(completed_process.args)
         except Exception as e:
             log.error("Could not create sysmon log file - %s", e)
 
@@ -84,12 +83,12 @@ class Sysmon(Thread, Auxiliary):
 
         if not os.path.exists(config_file):
             raise CuckooPackageError(
-                "In order to use the Sysmon functionality, it " "is required to have the sysmonconfig.xml file in the bin path."
+                "In order to use the Sysmon functionality, it "
+                "is required to have the sysmonconfig.xml file in the bin path."
             )
 
         # Start Sysmon service
-        completed_process = subprocess.run(["sudo", "sysmon", "-accepteula", "-i", config_file], capture_output=True)
-        log.debug(completed_process.stdout)
+        _ = subprocess.run(["sudo", "sysmon", "-accepteula", "-i", config_file], capture_output=True)
         self.start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     def stop(self) -> bool:
