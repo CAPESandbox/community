@@ -24,8 +24,8 @@ class Sysmon(threading.Thread, Auxiliary):
 
     def __init__(self, options, config):
         Auxiliary.__init__(self, options, config)
-        self.enabled = config.sysmon
-        self.extract_evtx = config.sysmon and not config.evtx
+        self.enabled = config.sysmon_windows
+        self.extract_evtx = config.sysmon_windows and not config.evtx
         self.startupinfo = subprocess.STARTUPINFO()
         self.startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
