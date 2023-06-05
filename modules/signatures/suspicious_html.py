@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
     
 import re
 
-class htmlBody(Signature):
+class suspiciousHRML_Body(Signature):
     name = "suspicious_html_body"
     description = "Sample contains suspicious HTML body"
     severity = 1
@@ -58,7 +58,7 @@ class htmlBody(Signature):
         return self.has_matches()
 
 
-class htmlTitle(Signature):
+class suspiciousHTML_Title(Signature):
     name = "suspicious_html_title"
     description = "Sample contains suspicious HTML title"
     severity = 1
@@ -102,7 +102,7 @@ class htmlTitle(Signature):
                             
         return self.has_matches()
 
-class suspiciousHTMLname(Signature):
+class suspiciousHTML_Filename(Signature):
     name = "suspicious_html_name"
     description = "Sample contains suspicious HTML name"
     severity = 1
