@@ -6,7 +6,6 @@ rule XorStringsNET {
         author = "dr4k0nia"
         version = "1.0"
         date = "26/03/2023"
-        cape_type = "XorStringsNET Payload"
     strings:
         $pattern = { 06 1e 58 07 8e 69 fe 17 }
     condition:
