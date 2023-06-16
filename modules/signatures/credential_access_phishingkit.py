@@ -146,25 +146,16 @@ class HTMLPhisher_2(Signature):
                 return False
             strings = self.results["target"]["file"]["strings"]
             data = ''.join(strings)
-            regex_decoded = [ 
-                r"<form method=\"post\" action=\"([^&]+?)\">",
-                r"<input  name=\"login\" type=\"email\" value=\"([^&]+?)\" disabled>",
-            ]
-            for regex in regex_decoded:
-                decodeString = re.search(regex,data)
-                if decodeString:
-                    decodeString = decodeString.group(1)
-                    decoded_string = Chepy(decodeString).url_decode().url_decode().o
-                    self.description = "File obfuscation detected, with url encoding"
-                    regex_user = r'value="([^&]+?)"'
-                    regex_url = r"url: '([^&]+?)',"
-                    user = re.search(regex_user,decoded_string)
-                    url = re.search(regex_url,decoded_string)
-                    if user and url:
-                        self.weight = 3
-                        self.families = ["HTMLPhisher_2023"]
-                        self.description = "Phishing kit detected, extracted config from sample"
-                        self.data.append({"url": url.group(1)})
-                        self.data.append({"user": user.group(1)})
-                        return True
+        
+            regex_user = r"<input  name=\"login\" type=\"email\" value=\"([^&]+?)\" disabled>"
+            regex_url = r"<form method=\"post\" action=\"([^&]+?)\">"
+            user = re.search(regex_user,data)
+            url = re.search(regex_url,data)
+            if user and url:
+                self.weight = 3
+                self.families = ["HTMLPhisher_2023"]
+                self.description = "Phishing kit detected, extracted config from sample"
+                self.data.append({"url": url.group(1)})
+                self.data.append({"user": user.group(1)})
+                return True
             return False
