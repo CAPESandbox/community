@@ -124,6 +124,7 @@ class suspiciousHTML_Filename(Signature):
         indicators = [
             'payment',
             'remittence',
+            'remmitance '
             'invoice',
             'inv',
             'voicemail',
