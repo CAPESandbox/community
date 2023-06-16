@@ -120,3 +120,51 @@ class HTMLPhisher_1(Signature):
                         self.data.append({"user": user.group(1)})
                         return True
             return False
+        
+class HTMLPhisher_2(Signature):
+    name = "phishing_kit_detected"
+    description = "Phishing Kit Detected, sample is trying to harvest credentials"
+    severity = 3
+    confidence = 100
+    categories = ["credential_access","evasion","infostealer","phishing", "static"]
+    authors = ["Yasin Tas",  "Eye Security"]
+    references = [
+    "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
+    "https://socradar.io/what-is-a-phishing-kit/"
+    "https://github.com/SteveD3/kit_hunter/tree/master/tag_files"
+    ]
+    enabled = True
+    minimum = "1.2"
+    ttps = ["T1111", "T1193", "T1140"]  # MITRE v6
+    ttps += ["T1566.001"]  # MITRE v6,7,8
+    ttps += ["T1606"]  # MITRE v7,8
+    mbcs = ["C0029.003"]  # micro-behaviour
+
+    def run(self):
+        if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
+            if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
+                return False
+            strings = self.results["target"]["file"]["strings"]
+            data = ''.join(strings)
+            regex_decoded = [ 
+                r"<form method=\"post\" action=\"([^&]+?)\">",
+                r"<input  name=\"login\" type=\"email\" value=\"([^&]+?)\" disabled>",
+            ]
+            for regex in regex_decoded:
+                decodeString = re.search(regex,data)
+                if decodeString:
+                    decodeString = decodeString.group(1)
+                    decoded_string = Chepy(decodeString).url_decode().url_decode().o
+                    self.description = "File obfuscation detected, with url encoding"
+                    regex_user = r'value="([^&]+?)"'
+                    regex_url = r"url: '([^&]+?)',"
+                    user = re.search(regex_user,decoded_string)
+                    url = re.search(regex_url,decoded_string)
+                    if user and url:
+                        self.weight = 3
+                        self.families = ["HTMLPhisher_2023"]
+                        self.description = "Phishing kit detected, extracted config from sample"
+                        self.data.append({"url": url.group(1)})
+                        self.data.append({"user": user.group(1)})
+                        return True
+            return False

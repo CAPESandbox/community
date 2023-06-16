@@ -62,6 +62,7 @@ class ModifyProxy(Signature):
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\Wpad\\\\[^\\\\]*\\\\WpadDecision$",
             ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\Wpad\\\\[^\\\\]*\\\\WpadNetworkName$",
         ]
+        
     def on_call(self, call, process):
         if process["process_name"].lower() in self.proc_safelist:
             return False
