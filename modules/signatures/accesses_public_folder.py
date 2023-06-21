@@ -21,7 +21,7 @@ class AccessesPublicFolder(Signature):
     categories = ["generic"]
     authors = ["@CybercentreCanada"]
     minimum = "1.2"
-    ttps = []
+    ttps = ["T1548", "T1078", "T1036"]
     mbcs = []
     evented = True
 
