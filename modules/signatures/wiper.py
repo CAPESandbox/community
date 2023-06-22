@@ -42,7 +42,12 @@ class WiperZeroedBytes(Signature):
     def on_call(self, call, process):
         filepath = self.get_raw_argument(call, "HandleName")
         if filepath != self.lastfile:
-            buff = self.get_raw_argument(call, "Buffer").lower()
+            buff = self.get_raw_argument(call, "Buffer")
+
+            if not buff:
+                return
+
+            buff = buff.lower()
             regex = re.compile("^[\\x00\.]+$")
             if len(buff) > 30 and regex.match(buff):
                 self.lastfile = filepath
