@@ -13,6 +13,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+try:
+    import re2 as re
+except ImportError:
+    import re
+
 from lib.cuckoo.common.abstracts import Signature
 
 
@@ -64,11 +69,10 @@ class NetworkCnCHTTPSSocialMedia(Signature):
     ttps = ["T1032"]  # MITRE v6
     ttps += ["T1573"]  # MITRE v7,8
 
-    filter_apinames = set(["SslEncryptPacket"])
+    filter_apinames = set(["SslEncryptPacket", "InternetOpenUrlA", "InternetOpenUrlW"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.match = False
         self.domains = [
             "api.twitter.com",
             "cdn.discordapp.com",
@@ -84,6 +88,7 @@ class NetworkCnCHTTPSSocialMedia(Signature):
             "api.vk.com",
             "files.slack.com",
         ]
+        self.urls = []
 
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
@@ -91,13 +96,25 @@ class NetworkCnCHTTPSSocialMedia(Signature):
             for domain in self.domains:
                 host_header = "Host: " + domain
                 if host_header in buff:
-                    self.match = True
                     self.data.append({"http_request": buff})
                     if self.pid:
                         self.mark_call()
 
+        elif call["api"] in ("InternetOpenUrlA", "InternetOpenUrlW"):
+            url = self.get_argument(call, "URL")
+            for domain in self.domains:
+                if url.startswith("https://" + domain):
+                    self.urls.append(url)
+                    if self.pid:
+                        self.mark_call()
+
     def on_complete(self):
-        return self.match
+        for url in list(set(self.urls)):
+            self.data.append({"url": url})
+
+        if self.data:
+            return True
+        return False
 
 
 class NetworkCnCHTTPSPasteSite(Signature):
@@ -111,11 +128,10 @@ class NetworkCnCHTTPSPasteSite(Signature):
     ttps = ["T1032"]  # MITRE v6
     ttps += ["T1573"]  # MITRE v7,8
 
-    filter_apinames = set(["SslEncryptPacket"])
+    filter_apinames = set(["SslEncryptPacket", "InternetOpenUrlA", "InternetOpenUrlW"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.match = False
         self.domains = [
             "pastebin.com",
             "paste.ee",
@@ -135,6 +151,7 @@ class NetworkCnCHTTPSPasteSite(Signature):
             "dpaste.com",
             "pastebin.pl",
         ]
+        self.urls = []
 
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
@@ -142,13 +159,25 @@ class NetworkCnCHTTPSPasteSite(Signature):
             for domain in self.domains:
                 host_header = "Host: " + domain
                 if host_header in buff:
-                    self.match = True
                     self.data.append({"http_request": buff})
                     if self.pid:
                         self.mark_call()
 
+        elif call["api"] in ("InternetOpenUrlA", "InternetOpenUrlW"):
+            url = self.get_argument(call, "URL")
+            for domain in self.domains:
+                if url.startswith("https://" + domain):
+                    self.urls.append(url)
+                    if self.pid:
+                        self.mark_call()
+
     def on_complete(self):
-        return self.match
+        for url in list(set(self.urls)):
+            self.data.append({"url": url})
+
+        if self.data:
+            return True
+        return False
 
 
 class NetworkCnCHTTPSURLShortenerSite(Signature):
@@ -162,11 +191,10 @@ class NetworkCnCHTTPSURLShortenerSite(Signature):
     ttps = ["T1032"]  # MITRE v6
     ttps += ["T1573"]  # MITRE v7,8
 
-    filter_apinames = set(["SslEncryptPacket"])
+    filter_apinames = set(["SslEncryptPacket", "InternetOpenUrlA", "InternetOpenUrlW"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.match = False
         self.domains = [
             "bit.ly",
             "cutt.ly",
@@ -191,6 +219,7 @@ class NetworkCnCHTTPSURLShortenerSite(Signature):
             "shorturl.at",
             "cml.lol",
         ]
+        self.urls = []
 
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
@@ -198,13 +227,25 @@ class NetworkCnCHTTPSURLShortenerSite(Signature):
             for domain in self.domains:
                 host_header = "Host: " + domain
                 if host_header in buff:
-                    self.match = True
                     self.data.append({"http_request": buff})
                     if self.pid:
                         self.mark_call()
 
+        elif call["api"] in ("InternetOpenUrlA", "InternetOpenUrlW"):
+            url = self.get_argument(call, "URL")
+            for domain in self.domains:
+                if url.startswith("https://" + domain):
+                    self.urls.append(url)
+                    if self.pid:
+                        self.mark_call()
+
     def on_complete(self):
-        return self.match
+        for url in list(set(self.urls)):
+            self.data.append({"url": url})
+
+        if self.data:
+            return True
+        return False
 
 
 class NetworkCnCHTTPSTempStorageSite(Signature):
@@ -218,11 +259,10 @@ class NetworkCnCHTTPSTempStorageSite(Signature):
     ttps = ["T1032"]  # MITRE v6
     ttps += ["T1573"]  # MITRE v7,8
 
-    filter_apinames = set(["SslEncryptPacket"])
+    filter_apinames = set(["SslEncryptPacket", "InternetOpenUrlA", "InternetOpenUrlW"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.match = False
         self.domains = [
             "send-anywhere.com",
             "sendgb.com",
@@ -243,6 +283,7 @@ class NetworkCnCHTTPSTempStorageSite(Signature):
             "1fichier.com",
             "gofile.io",
         ]
+        self.urls = []
 
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
@@ -250,13 +291,25 @@ class NetworkCnCHTTPSTempStorageSite(Signature):
             for domain in self.domains:
                 host_header = "Host: " + domain
                 if host_header in buff:
-                    self.match = True
                     self.data.append({"http_request": buff})
                     if self.pid:
                         self.mark_call()
 
+        elif call["api"] in ("InternetOpenUrlA", "InternetOpenUrlW"):
+            url = self.get_argument(call, "URL")
+            for domain in self.domains:
+                if url.startswith("https://" + domain):
+                    self.urls.append(url)
+                    if self.pid:
+                        self.mark_call()
+
     def on_complete(self):
-        return self.match
+        for url in list(set(self.urls)):
+            self.data.append({"url": url})
+
+        if self.data:
+            return True
+        return False
 
 
 class NetworkCnCHTTPSUserAgent(Signature):
@@ -321,27 +374,39 @@ class NetworkCnCHTTPSTempURLDNS(Signature):
     ttps = ["T1032"]  # MITRE v6
     ttps += ["T1573"]  # MITRE v7,8
 
-    filter_apinames = set(["SslEncryptPacket"])
+    filter_apinames = set(["SslEncryptPacket", "InternetOpenUrlA", "InternetOpenUrlW"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.match = False
         self.domains = [
             ".requestbin.net",
         ]
+        self.urls = []
 
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
         if buff:
             for domain in self.domains:
                 if domain in buff:
-                    self.match = True
                     self.data.append({"http_request": buff})
                     if self.pid:
                         self.mark_call()
 
+        elif call["api"] in ("InternetOpenUrlA", "InternetOpenUrlW"):
+            url = self.get_argument(call, "URL")
+            for domain in self.domains:
+                if re.match("https://.*\\" + domain + ".*", url):
+                    self.urls.append(url)
+                    if self.pid:
+                        self.mark_call()
+
     def on_complete(self):
-        return self.match
+        for url in list(set(self.urls)):
+            self.data.append({"url": url})
+
+        if self.data:
+            return True
+        return False
 
 
 class NetworkCnCHTTPSInteractsh(Signature):
@@ -355,27 +420,39 @@ class NetworkCnCHTTPSInteractsh(Signature):
     ttps = ["T1032"]  # MITRE v6
     ttps += ["T1573"]  # MITRE v7,8
 
-    filter_apinames = set(["SslEncryptPacket"])
+    filter_apinames = set(["SslEncryptPacket", "InternetOpenUrlA", "InternetOpenUrlW"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.match = False
         self.domains = [
             ".interact.sh",
         ]
+        self.urls = []
 
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
         if buff:
             for domain in self.domains:
                 if domain in buff:
-                    self.match = True
                     self.data.append({"http_request": buff})
                     if self.pid:
                         self.mark_call()
 
+        elif call["api"] in ("InternetOpenUrlA", "InternetOpenUrlW"):
+            url = self.get_argument(call, "URL")
+            for domain in self.domains:
+                if re.match("https://.*\\" + domain + ".*", url):
+                    self.urls.append(url)
+                    if self.pid:
+                        self.mark_call()
+
     def on_complete(self):
-        return self.match
+        for url in list(set(self.urls)):
+            self.data.append({"url": url})
+
+        if self.data:
+            return True
+        return False
 
 
 class NetworkCnCHTTPSPayload(Signature):
@@ -417,30 +494,42 @@ class NetworkCnCHTTPSFreeWebHosting(Signature):
     ttps = ["T1032"]  # MITRE v6
     ttps += ["T1573"]  # MITRE v7,8
 
-    filter_apinames = set(["SslEncryptPacket"])
+    filter_apinames = set(["SslEncryptPacket", "InternetOpenUrlA", "InternetOpenUrlW"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.match = False
         self.domains = [
             ".000webhostapp.com",
             ".repl.co",
             ".glitch.me",
             ".ck.page",
         ]
+        self.urls = []
 
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
         if buff:
             for domain in self.domains:
                 if domain in buff:
-                    self.match = True
                     self.data.append({"http_request": buff})
                     if self.pid:
                         self.mark_call()
 
+        elif call["api"] in ("InternetOpenUrlA", "InternetOpenUrlW"):
+            url = self.get_argument(call, "URL")
+            for domain in self.domains:
+                if re.match("https://.*\\" + domain + ".*", url):
+                    self.urls.append(url)
+                    if self.pid:
+                        self.mark_call()
+
     def on_complete(self):
-        return self.match
+        for url in list(set(self.urls)):
+            self.data.append({"url": url})
+
+        if self.data:
+            return True
+        return False
 
 
 class NetworkCnCHTTPSTelegram(Signature):
@@ -721,15 +810,15 @@ class NetworkCnCHTTPSArchive(Signature):
     ttps = ["T1032"]  # MITRE v6
     ttps += ["T1573"]  # MITRE v7,8
 
-    filter_apinames = set(["SslEncryptPacket"])
+    filter_apinames = set(["SslEncryptPacket", "InternetOpenUrlA", "InternetOpenUrlW"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.match = False
         self.domains = [
             "archive.org",
             "archive.is",
         ]
+        self.urls = []
 
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
@@ -737,10 +826,70 @@ class NetworkCnCHTTPSArchive(Signature):
             for domain in self.domains:
                 host_header = "Host: " + domain
                 if host_header in buff:
-                    self.match = True
                     self.data.append({"http_request": buff})
                     if self.pid:
                         self.mark_call()
 
+        elif call["api"] in ("InternetOpenUrlA", "InternetOpenUrlW"):
+            url = self.get_argument(call, "URL")
+            for domain in self.domains:
+                if url.startswith("https://" + domain):
+                    self.urls.append(url)
+                    if self.pid:
+                        self.mark_call()
+
     def on_complete(self):
-        return self.match
+        for url in list(set(self.urls)):
+            self.data.append({"url": url})
+
+        if self.data:
+            return True
+        return False
+
+
+class NetworkCnCHTTPSOpenSource(Signature):
+    name = "network_cnc_https_opensource"
+    description = "Establishes an encrypted HTTPS connection to an open-source code-hosting platform"
+    severity = 1
+    categories = ["network", "encryption"]
+    authors = ["@CybercentreCanada"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1032"]  # MITRE v6
+    ttps += ["T1573"]  # MITRE v7,8
+
+    filter_apinames = set(["SslEncryptPacket", "InternetOpenUrlA", "InternetOpenUrlW"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.domains = [
+            "gist.github.com",
+            "raw.githubusercontent.com",
+        ]
+        self.urls = []
+
+    def on_call(self, call, process):
+        buff = self.get_argument(call, "Buffer")
+        if buff:
+            for domain in self.domains:
+                host_header = "Host: " + domain
+                if host_header in buff:
+                    self.data.append({"http_request": buff})
+                    if self.pid:
+                        self.mark_call()
+
+        elif call["api"] in ("InternetOpenUrlA", "InternetOpenUrlW"):
+            url = self.get_argument(call, "URL")
+            for domain in self.domains:
+                if url.startswith("https://" + domain):
+                    self.urls.append(url)
+                    if self.pid:
+                        self.mark_call()
+
+    def on_complete(self):
+        for url in list(set(self.urls)):
+            self.data.append({"url": url})
+
+        if self.data:
+            return True
+        return False
