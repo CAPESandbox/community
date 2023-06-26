@@ -177,6 +177,7 @@ class SystemNetworkDiscoveryPWSH(Signature):
 
         return False
 
+
 class SystemCurrentlyLoggedinUserCMD(Signature):
     name = "system_currently_loggedin_user_cmd"
     description = "Queries for the currently logged-in user"

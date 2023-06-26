@@ -177,6 +177,7 @@ class DisablesWindowsDefenderLogging(Signature):
 
         return False
 
+
 class DisablesWindowsDefenderDISM(Signature):
     name = "disables_windows_defender_dism"
     description = "Disable Windows Defender via DISM"
