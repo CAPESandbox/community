@@ -176,3 +176,27 @@ class SystemNetworkDiscoveryPWSH(Signature):
                 return True
 
         return False
+
+class SystemCurrentlyLoggedinUserCMD(Signature):
+    name = "system_currently_loggedin_user_cmd"
+    description = "Queries for the currently logged-in user"
+    severity = 2
+    categories = ["discovery"]
+    authors = ["ditekshen"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1082", "T1059"]  # MITRE v6,7,8
+    mbcs = ["OB0007", "E1082", "OB0009", "E1059"]
+
+    def on_complete(self):
+        indicators = [
+            ".*\squser(.exe)?.*",
+        ]
+
+        for indicator in indicators:
+            match = self.check_executed_command(pattern=indicator, regex=True)
+            if match:
+                self.data.append({"command": match})
+                return True
+
+        return False
