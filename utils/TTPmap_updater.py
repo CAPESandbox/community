@@ -1,13 +1,12 @@
-import re
-import os
 import json
+import os
+import re
 
 import requests
+from lib.cuckoo.common.abstracts import CUCKOO_ROOT
+from lib.cuckoo.core.plugins import import_package, list_plugins
 
 import modules.signatures
-from lib.cuckoo.core.plugins import list_plugins
-from lib.cuckoo.core.plugins import import_package
-from lib.cuckoo.common.abstracts import CUCKOO_ROOT
 
 
 def mapMitre(oldID):
