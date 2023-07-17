@@ -28,7 +28,7 @@ class RansomwareExtensions(Signature):
             (".*\.herbst$", ["Herbst"]),
             (".*\.CrySiS$", ["Crysis"]),
             (".*\.bart\.zip$", ["Bart"]),
-            (".*\.crypt$", ["CryptXXX"]),
+            # (".*\.crypt$", ["CryptXXX"]),
             (".*\.crypz$", ["CryptXXX"]),
             (".*\.cryp1$", ["CryptXXX"]),
             (".*\.[0-9A-F]{32}\.[0-9A-F]{5}$", ["CryptXXX"]),
