@@ -1,4 +1,4 @@
-rule Snake {
+rule Snake_Keylogger {
     meta:
         author = "ditekSHen"
         description = "Detects Snake Keylogger"
