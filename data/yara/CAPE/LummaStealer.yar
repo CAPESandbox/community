@@ -7,13 +7,16 @@ rule LummaStealer {
         $x1 = /Lum[0-9]{3}xedmaC2,\sBuild/ ascii
         $x2 = /LID\(Lu[0-9]{3}xedmma\sID\):/ ascii
         $s1 = /os_c[0-9]{3}xedrypt\.encry[0-9]{3}xedpted_key/ fullword ascii
-        $s2 = "profile.info_cache" fullword ascii
-        $s3 = "lid=%s&ver=" ascii
-        $s4 = "c2sock" wide
-        $s5 = "c2conf" wide
-        $s6 = "TeslaBrowser/" wide
-        $s7 = "2%localappdata%\\Packages" fullword wide
-        $s8 = "Software.txt" fullword wide
+        $s2 = "c2sock" wide
+        $s3 = "c2conf" wide
+        $s4 = "TeslaBrowser/" wide
+        $s5 = "Software.txt" fullword wide
+        $s6 = "SysmonDrv" fullword
+        $s7 = "*.eml" fullword wide nocase
+        $s8 = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall" wide
+        $s9 = "- Screen Resoluton:" ascii
+        $s10 = "lid=%s" ascii
+        $s11 = "&ver=" ascii
     condition:
         uint16(0) == 0x5a4d and (all of ($x*) or (1 of ($x*) and 2 of ($s*)) or 5 of ($s*) or 7 of them)
-}
+} 

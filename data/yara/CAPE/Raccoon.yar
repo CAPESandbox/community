@@ -173,5 +173,5 @@ rule Raccoon_RecordBreaker {
         $s5 = "PASS:%s" fullword ascii
         $s6 = "Content-Type: application/x-object" fullword ascii
     condition:
-        uint16(0) == 0x5a4d and (4 of ($f*) or all of ($s*) or 7 of them)
+        (uint16(0) == 0x5a4d and (4 of ($f*) or all of ($s*) or 7 of them)) or (11 of them)
 }

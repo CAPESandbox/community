@@ -127,6 +127,13 @@ rule RedLine {
         $v5_7 = "RecordHeaderField" fullword ascii
         $v5_8 = "EndpointConnection" fullword ascii
         $v5_9 = "BCRYPT_KEY_LENGTHS_STRUCT" fullword ascii
+        // another variant (v11?)
+        $v6_1 = "%localappdata%\\" fullword wide
+        $v6_2 = "GetDecoded" fullword ascii
+        $v6_3 = "//settinString.Removeg[@name=\\PasswString.Removeord\\]/valuString.RemoveeROOT\\SecurityCenter" fullword wide
+        $v6_4 = "AppData\\Roaming\\ //settString.Replaceing[@name=\\UString.Replacesername\\]/vaString.Replaceluemoz_cookies" wide
+        $v6_5 = "<GetWindowsVersion>g__HKLM_GetString|11_0" fullword ascii
+        $v6_6 = "net.tcp://" fullword wide
     condition:
-        (uint16(0) == 0x5a4d and (all of ($s*) or 2 of ($x*) or 7 of ($u*) or 7 of ($pat*) or (1 of ($x*) and (5 of ($u*) or 2 of ($pat*))) or 5 of ($v2*) or 4 of ($v3*) or (3 of ($v2*) and (2 of ($pat*) or 2 of ($u*)) or (1 of ($vx4*) and 5 of ($v4*)) or 5 of ($v4*) or 6 of ($v5*)))) or (all of ($x*) and 4 of ($s*))
+        (uint16(0) == 0x5a4d and (all of ($s*) or 2 of ($x*) or 7 of ($u*) or 7 of ($pat*) or (1 of ($x*) and (5 of ($u*) or 2 of ($pat*))) or 5 of ($v2*) or 4 of ($v3*) or (3 of ($v2*) and (2 of ($pat*) or 2 of ($u*)) or (1 of ($vx4*) and 5 of ($v4*)) or 5 of ($v4*) or 6 of ($v5*)) or 5 of ($v6*) or (4 of ($v6*) and 3 of them ))) or ((all of ($x*) and 4 of ($s*)) or (4 of ($v6*) and 4 of them))
 }
