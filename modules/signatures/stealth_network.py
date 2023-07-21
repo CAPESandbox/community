@@ -7,8 +7,8 @@ from lib.cuckoo.common.abstracts import Signature
 
 class StealthNetwork(Signature):
     name = "stealth_network"
-    description = "Network activity detected but not expressed in API logs"
-    severity = 3
+    description = "Network activity detected but not expressed in monitor API logs"
+    severity = 1
     categories = ["stealth"]
     authors = ["Optiv"]
     minimum = "1.2"
@@ -27,14 +27,15 @@ class StealthNetwork(Signature):
 
     def on_complete(self):
         initialproc = self.get_initial_process()
-        if "network" in self.results:
-            if (
-                (
-                    (("hosts" in self.results["network"]) and len(self.results["network"]["hosts"]) > 0)
-                    or (("domains" in self.results["network"]) and len(self.results["network"]["domains"]) > 0)
-                )
-                and initialproc
-                and not self.foundnetwork
-            ):
+        if "network" in self.results and initialproc and not self.foundnetwork:
+            hosts = False
+            for key in ["hosts", "domains"]:
+                for host in self.results["network"].get(key, []):
+                    hosts = True
+                    if key == "hosts":
+                        self.data.append({"ip": host["ip"]})
+                    else:
+                       self.data.append({"domain": host["domain"]})
+            if hosts:
                 return True
         return False
