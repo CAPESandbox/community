@@ -35,7 +35,7 @@ class StealthNetwork(Signature):
                     if key == "hosts":
                         self.data.append({"ip": host["ip"]})
                     else:
-                       self.data.append({"domain": host["domain"]})
+                        self.data.append({"domain": host["domain"]})
             if hosts:
                 return True
         return False
