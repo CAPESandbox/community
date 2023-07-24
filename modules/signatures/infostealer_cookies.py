@@ -18,7 +18,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class CookiesStealer(Signature):
     name = "infostealer_cookies"
-    description = "Harvests cookies for information gathering"
+    description = "Touches a file containing cookies, possibly for information gathering"
     severity = 3
     categories = ["infostealer"]
     authors = ["bartblaze"]
@@ -43,6 +43,10 @@ class CookiesStealer(Signature):
         for indicator in indicators:
             match = self.check_file(pattern=indicator, regex=True)
             if match:
+                # So many benign files touch this cookie path, that we should reduce the
+                # severity of the signature (or ignore it in the future)
+                if indicator == ".*\\\\Microsoft\\\\Windows\\\\INetCookies$":
+                    self.severity = 1
                 self.data.append({"cookie": match})
                 return True
 
