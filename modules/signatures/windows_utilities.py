@@ -4,119 +4,8 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-
-class UsesWindowsUtilitiesScheduler(Signature):
-    name = "uses_windows_utilities_to_create_scheduled_task"
-    description = "Uses Windows utilities to create a scheduled task"
-    severity = 2
-    confidence = 80
-    categories = ["command", "lateral"]
-    authors = ["Cuckoo Technologies", "Kevin Ross"]
-    minimum = "1.3"
-    ttps = ["T1053"]  # MITRE v6,7,8
-
-    evented = True
-
-    def run(self):
-        utilities = [
-            "at ",
-            "at.exe",
-            "schtasks",
-        ]
-
-        ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
-        for cmdline in cmdlines:
-            lower = cmdline.lower()
-            for utility in utilities:
-                if utility in lower:
-                    self.ttps += ["T1053.005"] if utility == "schtasks" else ["T1053.002"]  # MITRE v7,8
-                    ret = True
-                    self.data.append({"command": cmdline})
-
-        return ret
-
-
-class UsesWindowsUtilities(Signature):
-    name = "uses_windows_utilities"
-    description = "Uses Windows utilities for basic functionality"
-    severity = 2
-    confidence = 80
-    categories = ["command", "lateral"]
-    authors = ["Cuckoo Technologies", "Kevin Ross"]
-    minimum = "1.3"
-    ttps = ["T1202"]  # MITRE v6,7,8
-    mbcs = ["OB0009", "E1203.m06"]
-
-    evented = True
-
-    def run(self):
-        utilities = [
-            "attrib",
-            "copy",
-            "dir ",
-            "dir.exe",
-            "echo" "erase",
-            "fsutil",
-            "getmac",
-            "ipconfig",
-            "md ",
-            "md.exe",
-            "mkdir",
-            "move ",
-            "move.exe",
-            "msdt ",
-            "nbtstat",
-            "net ",
-            "net.exe",
-            "net1.exe",
-            "netsh",
-            "netstat",
-            "nslookup",
-            "ping",
-            "powercfg" "qprocess",
-            "query ",
-            "query.exe",
-            "quser",
-            "qwinsta",
-            "reg ",
-            "reg.exe",
-            "regsrv32",
-            "ren ",
-            "ren.exe",
-            "rename",
-            "route",
-            "runas",
-            "rwinsta",
-            "sc ",
-            "sc.exe",
-            "set ",
-            "set.exe",
-            "shutdown",
-            "systeminfo",
-            "tasklist",
-            "telnet",
-            "tracert",
-            "tree ",
-            "tree.exe",
-            "type",
-            "ver ",
-            "ver.exe",
-            "whoami",
-            "wmic",
-            "wusa",
-        ]
-
-        ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
-        for cmdline in cmdlines:
-            lower = cmdline.lower()
-            for utility in utilities:
-                if utility in lower and "-" + utility not in lower:
-                    ret = True
-                    self.data.append({"command": cmdline})
-
-        return ret
+GENERIC_CMD = '"c:\\windows\\system32\\cmd.exe" /c start /wait "" '
+SUBSEQUENT_GENERIC_CMD = 'c:\\windows\\system32\\cmd.exe  /k '
 
 
 class SuspiciousCommandTools(Signature):
@@ -456,6 +345,184 @@ class DotNETCSCBuild(Signature):
         return ret
 
 
+class SuspiciousMpCmdRunUse(Signature):
+    name = "suspicious_mpcmdrun_use"
+    description = "Suspicious use of MpCmdRun was detected"
+    severity = 3
+    categories = ["command"]
+    authors = ["ditekshen"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1105"]  # MITRE v6,7,8
+    mbcs = ["E1105"]
+
+    def run(self):
+        indicators = [
+            ".*MpCmdRun(\.exe)?.*-url.*",
+        ]
+
+        for indicator in indicators:
+            match = self.check_executed_command(pattern=indicator, regex=True)
+            if match:
+                self.data.append({"command": match})
+                return True
+
+        return False
+
+
+class MultipleExplorerInstances(Signature):
+    name = "multiple_explorer_instances"
+    description = "Spawns another instance of explorer"
+    severity = 2
+    categories = ["command", "evasion"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    evented = True
+    references = ["https://twitter.com/CyberRaiju/status/1273597319322058752"]
+
+    def run(self):
+        indicators = [
+            "explorer.exe /root",
+        ]
+
+        for indicator in indicators:
+            match = self.check_executed_command(pattern=indicator)
+            if match:
+                self.data.append({"command": match})
+                return True
+
+        return False
+
+class UsesWindowsUtilities(Signature):
+    name = "uses_windows_utilities"
+    description = "Uses Windows utilities for basic functionality"
+    # This is an informational signature at best, so should have the lowest severity.
+    severity = 1
+    confidence = 80
+    categories = ["command", "lateral"]
+    authors = ["Cuckoo Technologies", "Kevin Ross"]
+    minimum = "1.3"
+    ttps = ["T1202"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1203.m06"]
+
+    evented = True
+
+    def run(self):
+        utilities = [
+            "attrib",
+            "copy",
+            "dir ",
+            "dir.exe",
+            "echo" "erase",
+            "fsutil",
+            "getmac",
+            "ipconfig",
+            "md ",
+            "md.exe",
+            "mkdir",
+            "move ",
+            "move.exe",
+            "msdt ",
+            "nbtstat",
+            "net ",
+            "net.exe",
+            "net1.exe",
+            "netsh",
+            "netstat",
+            "nslookup",
+            "ping",
+            "powercfg" "qprocess",
+            "query ",
+            "query.exe",
+            "quser",
+            "qwinsta",
+            "reg ",
+            "reg.exe",
+            "regsrv32",
+            "ren ",
+            "ren.exe",
+            "rename",
+            "route",
+            "runas",
+            "rwinsta",
+            "sc ",
+            "sc.exe",
+            "set ",
+            "set.exe",
+            "shutdown",
+            "systeminfo",
+            "tasklist",
+            "telnet",
+            "tracert",
+            "tree ",
+            "tree.exe",
+            "type",
+            "ver ",
+            "ver.exe",
+            "whoami",
+            "wmic",
+            "wusa",
+        ]
+
+        # If the 'generic' package is used to execute the initial process, cmd will run batch files
+        # with '/c start /wait ""' arguments, and then this causes cmd.exe to run the file
+        # with 'cmd.exe /K <filepath>'
+        init_proc = self.get_initial_process()
+        init_cmd = self.get_environ_entry(init_proc, "CommandLine")
+        file_name = None
+        if init_cmd.lower().startswith(GENERIC_CMD):
+            _, _, file_name = init_cmd.lower().partition(GENERIC_CMD)
+
+        ret = False
+        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+
+            if file_name:
+                subsequent_generic_cmd = f"{SUBSEQUENT_GENERIC_CMD}{file_name}"
+                if cmdline.lower() == subsequent_generic_cmd:
+                    continue
+
+            for utility in utilities:
+                if utility in lower and "-" + utility not in lower:
+                    # Edge case for 'net ' and '"C:\\Program Files (x86)\\Internet Explorer\\iexplore.exe" "<some>.html"'
+                    if utility == "net " and init_proc["module_path"].lower().endswith("iexplore.exe"):
+                        continue
+                    ret = True
+                    self.data.append({"command": cmdline})
+
+        return ret
+
+
+class UsesWindowsUtilitiesAppCmd(Signature):
+    name = "uses_windows_utilities_appcmd"
+    description = "Uses the IIS Command Line Tool, likely for installing a service or loading a file"
+    severity = 3
+    categories = ["evasion"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1202"]  # MITRE v6,7,8
+    references = ["https://docs.microsoft.com/en-us/iis/get-started/getting-started-with-iis/getting-started-with-appcmdexe"]
+
+    def run(self):
+        utilities = [
+            "AppCmd ",
+            "AppCmd.exe ",
+        ]
+
+        ret = False
+        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            for utility in utilities:
+                if utility in lower:
+                    ret = True
+                    self.data.append({"command": cmdline})
+
+        return ret
+
+
 class UsesWindowsUtilitiesCipher(Signature):
     name = "uses_windows_utilities_cipher"
     description = "Uses cipher.exe to wipe the free space, as seen in some ransomware"
@@ -514,6 +581,122 @@ class UsesWindowsUtilitiesClickOnce(Signature):
 
         return ret
 
+
+class UsesWindowsUtilitiesCSVDELDFIDE(Signature):
+    name = "uses_windows_utilities_csvde_ldifde"
+    description = "Attempts to Import or Export Active Directory data to a file"
+    severity = 3
+    categories = ["discovery"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1087"]  # MITRE v6,7,8
+    references = ["https://ss64.com/nt/csvde.html"]
+
+    def run(self):
+        utilities = [
+            "CSVDE ",
+            "CSVDE.exe ",
+            "LDIFDE ",
+            "LDIFDE.exe ",
+        ]
+
+        ret = False
+        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            for utility in utilities:
+                if utility in lower:
+                    ret = True
+                    self.data.append({"command": cmdline})
+
+        return ret
+
+
+class UsesWindowsUtilitiesDSQuery(Signature):
+    name = "uses_windows_utilities_dsquery"
+    description = "Searches for an Active Directory object"
+    severity = 3
+    categories = ["discovery"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["S0105"]  # MITRE
+    ttps += ["T1069", "T1087", "T1482"]  # MITRE v6,7,8
+    references = ["https://ss64.com/nt/dsquery.html"]
+
+    def run(self):
+        utilities = [
+            "DSQuery ",
+            "DSQuery.exe ",
+        ]
+
+        ret = False
+        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            for utility in utilities:
+                if utility in lower:
+                    ret = True
+                    self.data.append({"command": cmdline})
+
+        return ret
+
+
+
+class UsesWindowsUtilitiesEsentutl(Signature):
+    name = "uses_windows_utilities_esentutl"
+    description = "Uses esentutl for copying files"
+    severity = 3
+    categories = ["evasion"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    evented = True
+
+    def run(self):
+        utilities = [
+            "esentutl ",
+            "esentutl.exe ",
+        ]
+
+        ret = False
+        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            for utility in utilities:
+                if utility in lower:
+                    ret = True
+                    self.data.append({"command": cmdline})
+
+        return ret
+
+
+class UsesWindowsUtilitiesFinger(Signature):
+    name = "uses_windows_utilities_finger"
+    description = "Uses the TCPIP Finger Command for downloading files or connecting to a remote server"
+    severity = 3
+    categories = ["evasion"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1202"]  # MITRE v6,7,8
+
+    def run(self):
+        utilities = [
+            "finger ",
+            "finger.exe ",
+        ]
+
+        ret = False
+        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            for utility in utilities:
+                if utility in lower:
+                    ret = True
+                    self.data.append({"command": cmdline})
+
+        return ret
 
 class UsesWindowsUtilitiesMode(Signature):
     name = "uses_windows_utilities_mode"
@@ -604,159 +787,23 @@ class UsesWindowsUtilitiesNTDSutil(Signature):
         return ret
 
 
-class UsesWindowsUtilitiesCSVDELDFIDE(Signature):
-    name = "uses_windows_utilities_csvde_ldifde"
-    description = "Attempts to Import or Export Active Directory data to a file"
-    severity = 3
-    categories = ["discovery"]
-    authors = ["bartblaze"]
-    minimum = "1.3"
-    evented = True
-    ttps = ["T1087"]  # MITRE v6,7,8
-    references = ["https://ss64.com/nt/csvde.html"]
-
-    def run(self):
-        utilities = [
-            "CSVDE ",
-            "CSVDE.exe ",
-            "LDIFDE ",
-            "LDIFDE.exe ",
-        ]
-
-        ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
-        for cmdline in cmdlines:
-            lower = cmdline.lower()
-            for utility in utilities:
-                if utility in lower:
-                    ret = True
-                    self.data.append({"command": cmdline})
-
-        return ret
-
-
-class UsesWindowsUtilitiesDSQuery(Signature):
-    name = "uses_windows_utilities_dsquery"
-    description = "Searches for an Active Directory object"
-    severity = 3
-    categories = ["discovery"]
-    authors = ["bartblaze"]
-    minimum = "1.3"
-    evented = True
-    ttps = ["S0105"]  # MITRE
-    ttps += ["T1069", "T1087", "T1482"]  # MITRE v6,7,8
-    references = ["https://ss64.com/nt/dsquery.html"]
-
-    def run(self):
-        utilities = [
-            "DSQuery ",
-            "DSQuery.exe ",
-        ]
-
-        ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
-        for cmdline in cmdlines:
-            lower = cmdline.lower()
-            for utility in utilities:
-                if utility in lower:
-                    ret = True
-                    self.data.append({"command": cmdline})
-
-        return ret
-
-
-class UsesWindowsUtilitiesAppCmd(Signature):
-    name = "uses_windows_utilities_appcmd"
-    description = "Uses the IIS Command Line Tool, likely for installing a service or loading a file"
-    severity = 3
-    categories = ["evasion"]
-    authors = ["bartblaze"]
-    minimum = "1.3"
-    evented = True
-    ttps = ["T1202"]  # MITRE v6,7,8
-    references = ["https://docs.microsoft.com/en-us/iis/get-started/getting-started-with-iis/getting-started-with-appcmdexe"]
-
-    def run(self):
-        utilities = [
-            "AppCmd ",
-            "AppCmd.exe ",
-        ]
-
-        ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
-        for cmdline in cmdlines:
-            lower = cmdline.lower()
-            for utility in utilities:
-                if utility in lower:
-                    ret = True
-                    self.data.append({"command": cmdline})
-
-        return ret
-
-
-class SuspiciousMpCmdRunUse(Signature):
-    name = "suspicious_mpcmdrun_use"
-    description = "Suspicious use of MpCmdRun was detected"
-    severity = 3
-    categories = ["command"]
-    authors = ["ditekshen"]
-    minimum = "1.3"
-    evented = True
-    ttps = ["T1105"]  # MITRE v6,7,8
-    mbcs = ["E1105"]
-
-    def run(self):
-        indicators = [
-            ".*MpCmdRun(\.exe)?.*-url.*",
-        ]
-
-        for indicator in indicators:
-            match = self.check_executed_command(pattern=indicator, regex=True)
-            if match:
-                self.data.append({"command": match})
-                return True
-
-        return False
-
-
-class MultipleExplorerInstances(Signature):
-    name = "multiple_explorer_instances"
-    description = "Spawns another instance of explorer"
+class UsesWindowsUtilitiesScheduler(Signature):
+    name = "uses_windows_utilities_to_create_scheduled_task"
+    description = "Uses Windows utilities to create a scheduled task"
     severity = 2
-    categories = ["command", "evasion"]
-    authors = ["bartblaze"]
+    confidence = 80
+    categories = ["command", "lateral"]
+    authors = ["Cuckoo Technologies", "Kevin Ross"]
     minimum = "1.3"
+    ttps = ["T1053"]  # MITRE v6,7,8
+
     evented = True
-    references = ["https://twitter.com/CyberRaiju/status/1273597319322058752"]
-
-    def run(self):
-        indicators = [
-            "explorer.exe /root",
-        ]
-
-        for indicator in indicators:
-            match = self.check_executed_command(pattern=indicator)
-            if match:
-                self.data.append({"command": match})
-                return True
-
-        return False
-
-
-class UsesWindowsUtilitiesFinger(Signature):
-    name = "uses_windows_utilities_finger"
-    description = "Uses the TCPIP Finger Command for downloading files or connecting to a remote server"
-    severity = 3
-    categories = ["evasion"]
-    authors = ["bartblaze"]
-    minimum = "1.3"
-    evented = True
-    ttps = ["T1202"]  # MITRE v6,7,8
 
     def run(self):
         utilities = [
-            "finger ",
-            "finger.exe ",
+            "at ",
+            "at.exe",
+            "schtasks",
         ]
 
         ret = False
@@ -765,6 +812,7 @@ class UsesWindowsUtilitiesFinger(Signature):
             lower = cmdline.lower()
             for utility in utilities:
                 if utility in lower:
+                    self.ttps += ["T1053.005"] if utility == "schtasks" else ["T1053.002"]  # MITRE v7,8
                     ret = True
                     self.data.append({"command": cmdline})
 
@@ -784,33 +832,6 @@ class UsesWindowsUtilitiesXcopy(Signature):
         utilities = [
             "xcopy ",
             "xcopy.exe ",
-        ]
-
-        ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
-        for cmdline in cmdlines:
-            lower = cmdline.lower()
-            for utility in utilities:
-                if utility in lower:
-                    ret = True
-                    self.data.append({"command": cmdline})
-
-        return ret
-
-
-class UsesWindowsUtilitiesEsentutl(Signature):
-    name = "uses_windows_utilities_esentutl"
-    description = "Uses esentutl for copying files"
-    severity = 3
-    categories = ["evasion"]
-    authors = ["bartblaze"]
-    minimum = "1.3"
-    evented = True
-
-    def run(self):
-        utilities = [
-            "esentutl ",
-            "esentutl.exe ",
         ]
 
         ret = False
