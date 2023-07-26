@@ -5,7 +5,7 @@
 from lib.cuckoo.common.abstracts import Signature
 
 GENERIC_CMD = '"c:\\windows\\system32\\cmd.exe" /c start /wait "" '
-SUBSEQUENT_GENERIC_CMD = 'c:\\windows\\system32\\cmd.exe  /k '
+SUBSEQUENT_GENERIC_CMD = "c:\\windows\\system32\\cmd.exe  /k "
 
 
 class SuspiciousCommandTools(Signature):
@@ -393,6 +393,7 @@ class MultipleExplorerInstances(Signature):
 
         return False
 
+
 class UsesWindowsUtilities(Signature):
     name = "uses_windows_utilities"
     description = "Uses Windows utilities for basic functionality"
@@ -643,7 +644,6 @@ class UsesWindowsUtilitiesDSQuery(Signature):
         return ret
 
 
-
 class UsesWindowsUtilitiesEsentutl(Signature):
     name = "uses_windows_utilities_esentutl"
     description = "Uses esentutl for copying files"
@@ -697,6 +697,7 @@ class UsesWindowsUtilitiesFinger(Signature):
                     self.data.append({"command": cmdline})
 
         return ret
+
 
 class UsesWindowsUtilitiesMode(Signature):
     name = "uses_windows_utilities_mode"
