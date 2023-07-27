@@ -79,6 +79,11 @@ class SuspiciousCommandTools(Signature):
             lower = cmdline.lower()
             for utility in utilities:
                 if utility in lower:
+                    # Edge case for 'net ' and '"C:\\Program Files (x86)\\Internet Explorer\\iexplore.exe" "<some>.html"'
+                    if utility == "net ":
+                        init_proc = self.get_initial_process()
+                        if init_proc["module_path"].lower().endswith("iexplore.exe"):
+                            continue
                     ret = True
                     self.data.append({"command": cmdline})
 
