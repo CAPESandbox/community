@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DomainEnumerationCommands(Signature):
     name = "domain_enumeration_commands"
     description = "Attempts to enumerate domain controller/domain information"
@@ -31,7 +32,14 @@ class DomainEnumerationCommands(Signature):
         for cmdline in cmdlines:
             lower = cmdline.lower()
 
-            if "nltest" in lower and ("domain_trusts" in lower or "all_trusts" in lower or "trusted_domains" in lower or "dclist" in lower or "domain_trusts" in lower or "dsgetdc" in lower):
+            if "nltest" in lower and (
+                "domain_trusts" in lower
+                or "all_trusts" in lower
+                or "trusted_domains" in lower
+                or "dclist" in lower
+                or "domain_trusts" in lower
+                or "dsgetdc" in lower
+            ):
                 ret = True
                 self.data.append({"command": cmdline})
 
@@ -42,13 +50,14 @@ class DomainEnumerationCommands(Signature):
             if "net" in lower and "domain" in lower and ("view" in lower or "group" in lower or "user" in lower):
                 ret = True
                 self.data.append({"command": cmdline})
-                
+
             if "ldapsearch" in lower:
                 ret = True
                 self.data.append({"command": cmdline})
 
         return ret
-        
+
+
 class AdfindDomainEnumeration(Signature):
     name = "adfind_domain_enumeration"
     description = "Uses Adfind tool for domain enumeration"
@@ -68,7 +77,14 @@ class AdfindDomainEnumeration(Signature):
             if "adfind" in lower:
                 ret = True
                 self.data.append({"command": cmdline})
-            elif "-f" in lower and ("(objectcategory=person" in lower or "(objectcategory=computer" in lower or "(objectcategory=organizationalunit" in lower or "(objectcategory=subnet" in lower or "(objectcategory=group" in lower or "trustdmp" in lower):
+            elif "-f" in lower and (
+                "(objectcategory=person" in lower
+                or "(objectcategory=computer" in lower
+                or "(objectcategory=organizationalunit" in lower
+                or "(objectcategory=subnet" in lower
+                or "(objectcategory=group" in lower
+                or "trustdmp" in lower
+            ):
                 ret = True
                 self.data.append({"command": cmdline})
 
