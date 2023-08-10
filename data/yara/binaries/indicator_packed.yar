@@ -754,3 +754,13 @@ rule INDICATOR_EXE_Packed_Yano {
   condition:
       uint16(0) == 0x5a4d and all of them
 }
+
+rule INDICATOR_EXE_Packed_GolangBypassAV {
+    meta:
+        author = "ditekSHen"
+        description = "Detects Go executables using GolangBypassAV"
+    strings:
+        $s1 = "/GolangBypassAV/gen/" ascii
+    condition:
+        (uint16(0) == 0x5a4d or uint16(0) == 0x457f) and 1 of them
+}
