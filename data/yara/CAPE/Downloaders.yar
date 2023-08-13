@@ -436,3 +436,24 @@ rule RookIEDownloader {
     condition:
         uint16(0) == 0x5a4d and 4 of them
 }
+
+rule PackedLoader {
+    meta:
+        author = "ditekShen"
+        description = "Detects unknown loader / packer"
+    strings:
+        $s1 = "Error at hooking API \"%S\"" wide
+        $s2 = "Dumping first %d bytes:" wide
+        $s3 = "Error at initialization of bundled DLL: %s" wide
+        $s4 = "GetMemoryForDLL()" ascii
+        $s5 = "type=activation&code=" ascii
+        $s6 = "activation.php?code=" ascii
+        $s7 = "&hwid=" ascii
+        $s8 = "&hash=" ascii
+        $s9 = "type=deactivation&hash=" ascii
+        $s10 = "deactivation.php?hash=" ascii
+        $s11 = "BANNED" fullword ascii
+        $s12 = "GetAdaptersInfo" ascii
+    condition:
+        uint16(0) == 0x5a4d and 11 of them
+}
