@@ -6,6 +6,7 @@ rule DarkEye {
     strings:
         $c1 = /Prynt(\s)?Stealer/ ascii wide
         $c2 = /WorldWind(\s)?Stealer/ ascii wide
+        $c3 = "ToxicEye" ascii wide
         $x2 = "@FlatLineStealer" ascii wide
         $x3 = "@CashOutGangTalk" ascii wide
         $s1 = "--- Clipper" wide
