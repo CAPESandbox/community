@@ -27,7 +27,7 @@ rule RaccoonV2: raccoon_stealer_v2
 	date = "2022-07-22"
         description = "Detects Raccoon Stealer V2 (unpacked)"
         hash = "022432f770bf0e7c5260100fcde2ec7c49f68716751fd7d8b9e113bf06167e03"
-        cape_type = "RaccoonV2 Payload"
+        cape_type = "Raccoon Infostealer Payload"
 
     strings:
  
