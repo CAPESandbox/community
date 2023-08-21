@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DLLArchiveExecution(Signature):
     name = "dll_archive_execution"
     description = "Executes a DLL from within an archive file"
@@ -37,6 +38,7 @@ class DLLArchiveExecution(Signature):
 
         return ret
 
+
 class LNKArchiveExecution(Signature):
     name = "lnk_archive_execution"
     description = "Executes a LNK file from within an archive file"
@@ -58,7 +60,8 @@ class LNKArchiveExecution(Signature):
                 self.data.append({"command": cmdline})
 
         return ret
-        
+
+
 class ScriptArchiveExecution(Signature):
     name = "script_archive_execution"
     description = "Executes a scipt from within an archive file"
@@ -75,7 +78,9 @@ class ScriptArchiveExecution(Signature):
         cmdlines = self.results["behavior"]["summary"]["executed_commands"]
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if ("wscript" in lower or "jscript" in lower or "cscript" in lower or "mshta" in lower) and (".iso\\" in lower or ".img\\" in lower or ".zip\\" in lower):
+            if ("wscript" in lower or "jscript" in lower or "cscript" in lower or "mshta" in lower) and (
+                ".iso\\" in lower or ".img\\" in lower or ".zip\\" in lower
+            ):
                 ret = True
                 self.data.append({"command": cmdline})
 
