@@ -2,7 +2,7 @@ rule DLAgent01 {
     meta:
       author = "ditekshen"
       description = "Detects downloader agent"
-      cape_type = "DLAgent01 Downloader Payload"
+      cape_type = "DLAgent01 Payload"
     strings:
         $s1 = "Mozilla/5.0 Gecko/41.0 Firefox/41.0" fullword wide
         $s2 = "/Node:localhost /Namespace:\\\\root\\SecurityCenter2 Path AntiVirusProduct Get displayName /Format:List" fullword wide
@@ -17,7 +17,7 @@ rule DLAgent02 {
     meta:
       author = "ditekSHen"
       description = "Detects known downloader agent downloading encoded binaries in patches from paste-like websites, most notably hastebin"
-      cape_type = "DLAgent02 Downloader Payload"
+      cape_type = "DLAgent02 Payload"
     strings:
         $x1 = "/c timeout {0}" fullword wide
         $x2 = "^(https?|ftp):\\/\\/" fullword wide
@@ -42,7 +42,7 @@ rule DLAgent03 {
     meta:
       author = "ditekSHen"
       description = "Detects known Delphi downloader agent downloading second stage payload, notably from discord"
-      cape_type = "DLAgent03 Downloader Payload"
+      cape_type = "DLAgent03 Payload"
     strings:
         $delph1 = "FastMM Borland Edition" fullword ascii
         $delph2 = "SOFTWARE\\Borland\\Delphi" ascii
@@ -65,7 +65,7 @@ rule DLAgent04 {
     meta:
       author = "ditekSHen"
       description = "Detects known downloader agent downloading encoded binaries in patches from paste-like websites, most notably hastebin"
-      cape_type = "DLAgent04 Downloader Payload"
+      cape_type = "DLAgent04 Payload"
     strings:
         $x1 = "@@@http" ascii wide
         $s1 = "HttpWebRequest" fullword ascii
@@ -83,7 +83,7 @@ rule DLAgent05 {
     meta:
         author = "ditekSHen"
         description = "Detects an unknown dropper. Typically exisys as a DLL in base64-encoded gzip-compressed file embedded within another executable"
-        cape_type = "DLAgent05 Downloader Payload"
+        cape_type = "DLAgent05 Payload"
     strings:
         $s1 = "MARCUS.dll" fullword ascii wide
         $s2 = "GZipStream" fullword ascii
@@ -98,7 +98,7 @@ rule DLAgent06 {
     meta:
       author = "ditekSHen"
       description = "Detects known downloader agent downloading encoded binaries in patches"
-      cape_type = "DLAgent06 Downloader Payload"
+      cape_type = "DLAgent06 Payload"
     strings:
         $s1 = "totallist" fullword ascii wide
         $s2 = "LINKS_HERE" fullword wide
@@ -116,7 +116,7 @@ rule DLAgent07 {
     meta:
         author = "ditekSHen"
         description = "Detects delf downloader agent"
-        cape_type = "DLAgent07 Downloader Payload"
+        cape_type = "DLAgent07 Payload"
     strings:
         $s1 = "C:\\Users\\Public\\Libraries\\temp" fullword ascii
         $s2 = "SOFTWARE\\Borland\\Delphi" ascii
@@ -137,7 +137,7 @@ rule DLAgentGo {
     meta:
         author = "ditekSHen"
         description = "Detects Go-based downloader"
-        cape_type = "DLAgentGo Downloader Payload"
+        cape_type = "DLAgentGo Payload"
     strings:
         $s1 = "main.downloadFile" fullword ascii
         $s2 = "main.fetchFiles" fullword ascii
@@ -153,7 +153,7 @@ rule DLAgent09 {
     meta:
         author = "ditekSHen"
         description = "Detects known downloader agent"
-        cape_type = "DLAgent09 Downloader Payload"
+        cape_type = "DLAgent09 Payload"
     strings:
         $h1 = "//:ptth" ascii wide nocase
         $h2 = "//:sptth" ascii wide nocase
@@ -169,7 +169,7 @@ rule DLAgent10 {
     meta:
         author = "ditekSHen"
         description = "Detects known downloader agent"
-        cape_type = "DLAgent10 Downloader Payload"
+        cape_type = "DLAgent10 Payload"
     strings:
         $s1 = "powershell.exe" ascii wide nocase
         $s2 = ".DownloadFile(" ascii wide nocase
@@ -183,7 +183,7 @@ rule DLAgent11 {
     meta:
         author = "ditekSHen"
         description = "Detects downloader agent"
-        cape_type = "DLAgent11 Downloader Payload"
+        cape_type = "DLAgent11 Payload"
     strings:
         $pdb = "\\loader2\\obj\\Debug\\loader2.pdb" ascii
         $s1 = "DownloadFile" fullword ascii
@@ -199,7 +199,7 @@ rule DLAgent12 {
     meta:
         author = "ditekSHen"
         description = "Detects downloader agent"
-        cape_type = "DLAgent12 Downloader Payload"
+        cape_type = "DLAgent12 Payload"
     strings:
         $s1 = "WebClient" fullword ascii
         $s2 = "DownloadData" fullword ascii
@@ -281,7 +281,7 @@ rule Phonzy {
     meta:
         author = "ditekSHen"
         description = "Detects specific downloader agent"
-        cape_type = "Phonzy Downloader Payload"
+        cape_type = "Phonzy Payload"
     strings:
         $ua1 = "User-Agent: Mozilla/5.0 (X11; Linux" wide
         $s1 = "<meta name=\"keywords\" content=\"([\\w\\d ]*)\">" fullword wide
@@ -297,7 +297,7 @@ rule ShellcodeDLEI {
     meta:
         author = "ditekSHen"
         description = "Detects shellcode downloader, executer, injector"
-        cape_type = "Shellcode Downloader Injector Payload"
+        cape_type = "ShellcodeInject Payload"
     strings:
         $s1 = "PPidSpoof" fullword ascii
         $s2 = "ProcHollowing" fullword ascii
