@@ -168,13 +168,9 @@ class SpwansDotNetDevUtiliy(Signature):
     def on_complete(self):
         if len(self.data) > 0:
             if self.executecopy:
-                self.description = "{0} {1}".format(
-                    self.description, "by copying and executing .NET utility in a suspended state"
-                )
+                self.description = "{0} {1}".format(self.description, "by copying and executing .NET utility in a suspended state")
             else:
-                self.description = "{0} {1}".format(
-                    self.description, "by executing .NET utility in a suspended state"
-                )
+                self.description = "{0} {1}".format(self.description, "by executing .NET utility in a suspended state")
             return True
 
         return False
