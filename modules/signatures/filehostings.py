@@ -10,6 +10,7 @@ urls_startswith = [
     "https://anonymousfiles.io/",
 ]
 
+
 class Modiloader_APIs(Signature):
     name = "downloads_from_filehosting"
     description = "Downloads probably next stage from public file hosting"
