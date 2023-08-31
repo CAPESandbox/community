@@ -2,8 +2,8 @@ rule Bandit {
     meta:
         author = "ditekSHen"
         description = "Detects Bandit Infostealer"
-        cape_type = "Bandit Infostealer Payload"
-    strings:  
+        cape_type = "Bandit Payload"
+    strings:
        $x1 = "@Banditshopbot" ascii
        $x2 = "BANDIT STEALER" ascii
        $x3 = "Banditstealer" ascii
