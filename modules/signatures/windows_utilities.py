@@ -476,7 +476,7 @@ class UsesWindowsUtilities(Signature):
         init_proc = self.get_initial_process()
         init_cmd = self.get_environ_entry(init_proc, "CommandLine")
         file_name = None
-        if init_cmd.lower().startswith(GENERIC_CMD):
+        if init_cmd and init_cmd.lower().startswith(GENERIC_CMD):
             _, _, file_name = init_cmd.lower().partition(GENERIC_CMD)
 
         ret = False
