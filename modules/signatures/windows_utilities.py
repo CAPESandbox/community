@@ -619,6 +619,35 @@ class UsesWindowsUtilitiesCSVDELDFIDE(Signature):
         return ret
 
 
+class UsesWindowsUtilitiesCurl(Signature):
+    name = "uses_windows_utilities_curl"
+    description = "Uses the cURL utility, most likely to download a file"
+    severity = 1
+    categories = ["network"]
+    authors = ["@CybercentreCanada"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1202"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1203.m06"]
+
+    def run(self):
+        utilities = [
+            "curl ",
+            "curl.exe ",
+        ]
+
+        ret = False
+        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            for utility in utilities:
+                if utility in lower:
+                    ret = True
+                    self.data.append({"command": cmdline})
+
+        return ret
+
+
 class UsesWindowsUtilitiesDSQuery(Signature):
     name = "uses_windows_utilities_dsquery"
     description = "Searches for an Active Directory object"
