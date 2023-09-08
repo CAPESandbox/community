@@ -67,6 +67,10 @@ class ScriptNetworkActvity(Signature):
             if call["api"] == "InternetCrackUrlW":
                 self.mbcs += ["C0005"]  # micro-behaviour
                 buff = self.get_argument(call, "Url").lower()
+                # InternetCrackUrlW calls made by scripts that start with https? are quite interesting
+                if buff.startswith("http://") or buff.startswith("https://"):
+                    # Increasing the score to be on par with the Cuckoo signature "malicious_document_urls"
+                    self.severity = 4
                 self.ret = True
                 self.data.append({"request": buff})
                 if self.pid:
