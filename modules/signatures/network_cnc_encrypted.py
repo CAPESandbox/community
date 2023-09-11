@@ -921,6 +921,7 @@ class NetworkCnCHTTPSOpenSource(Signature):
             return True
         return False
 
+
 class NetworkCnCHTTPSServiceInterface(Signature):
     name = "network_cnc_https_serviceinterface"
     description = "Establishes an encrypted HTTPS connection to free service interface platform"
