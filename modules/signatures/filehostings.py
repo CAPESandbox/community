@@ -4,11 +4,11 @@ from lib.cuckoo.common.abstracts import Signature
 
 log = logging.getLogger(__name__)
 
-urls_startswith = [
+urls_startswith = (
     "https://files.catbox.moe/",
     "https://cdn.discordapp.com/attachments/",
     "https://anonymousfiles.io/",
-]
+)
 
 
 class Modiloader_APIs(Signature):
