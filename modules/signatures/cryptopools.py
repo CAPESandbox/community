@@ -1,5 +1,7 @@
 from lib.cuckoo.common.abstracts import Signature
+
 from data.cryptopools import pool_domains
+
 
 class MINERS(Signature):
     name = "cryptopool_domains"
@@ -23,7 +25,7 @@ class MINERS(Signature):
     def on_call(self, call, process):
         if call["api"] == "GetAddrInfoW":
             self.extra_domains.append(self.get_argument(call, "NodeName"))
-        
+
     def on_complete(self):
         domains = [domain["domain"] for domain in self.results.get("network", {}).get("domains", [])]
         if not self.extra_domains:
