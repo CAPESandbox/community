@@ -37,6 +37,7 @@ strings:
 	$ = ">>>AUTOIT NO CMDEXECUTE<<<" ascii wide
 	$ = ">>>AUTOIT SCRIPT<<<" ascii wide
 	$ = "This is a third-party compiled AutoIt script." ascii wide
+	$ = "AU3!EA06" ascii wide
 
 condition:
 	uint16(0) != 0x5A4D and any of them
