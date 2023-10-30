@@ -777,11 +777,11 @@ class NetworkCnCSMTPSExfil(Signature):
             return True
         elif self.found_agentteslat1:
             self.description = "{0} {1}".format("AgentTeslaV1", self.description)
-            self.families = ["AgentTeslaV1"]
+            self.families = ["AgentTesla"]
             return True
         elif self.found_agentteslat2:
             self.description = "{0} {1}".format("AgentTeslaV3", self.description)
-            self.families = ["AgentTeslaV3"]
+            self.families = ["AgentTesla"]
             return True
         elif self.found_aspire:
             self.description = "{0} {1}".format("AspireLogger", self.description)
