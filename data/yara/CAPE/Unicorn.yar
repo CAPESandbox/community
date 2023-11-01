@@ -2,7 +2,7 @@ rule Unicorn {
     meta:
         author = "ditekSHen"
         description = "Detects Unicorn infostealer"
-        cape_type = "Unicorn Infostealer Payload"
+        cape_type = "Unicorn Payload"
     strings:
         $x1 = "WinHTTP Downloader/1.0" fullword wide
         $x2 = "[CTRL + %c]" fullword wide

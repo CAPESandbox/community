@@ -2,7 +2,7 @@ rule Mystic {
     meta:
         author = "ditekSHen"
         description = "Hunts for Mystic Infostealer"
-        cape_type = "Mystic Infostealer Payload"
+        cape_type = "Mystic Payload"
     strings:  
         $s1 = "LaStFiLe:)" ascii wide
         $s2 = "LaStPrOcEsS:)" ascii wide

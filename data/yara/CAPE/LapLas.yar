@@ -2,7 +2,7 @@ rule LapLas {
     meta:
         author = "ditekSHen"
         description = "Detects LapLas Infostealer"
-        cape_type = "LapLas Infostealer Payload"
+        cape_type = "LapLas Payload"
     strings:
         // Go variant
         $c1 = "/bot/" ascii

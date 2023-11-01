@@ -2,7 +2,7 @@ rule Prynt {
     meta:
         author = "ditekSHen"
         description = "Detects Prynt infostealer"
-        cape_type = "Prynt Infostealer Payload"
+        cape_type = "Prynt Payload"
     strings:
         $c1 = /Prynt(\s)?Stealer/ ascii wide
         $x2 = "@FlatLineStealer" ascii wide

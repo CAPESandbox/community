@@ -2,7 +2,7 @@ rule GreetingGhoul {
     meta:
         author = "ditekSHen"
         description = "Detects GreetingGhoul Cryptocurrency Infostealer"
-        cape_type = "GreetingGhoul Infostealer Payload"
+        cape_type = "GreetingGhoul Payload"
     strings:
         $s1 = "peer_list" fullword ascii
         $s2 = "seed_hash" fullword ascii

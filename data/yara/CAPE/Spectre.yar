@@ -2,7 +2,7 @@ rule Spectre {
     meta:
         author = "ditekSHen"
         description = "Detects Spectre infostealer"
-        cape_type = "Spectre Infostealer Payload"
+        cape_type = "Spectre Payload"
     strings:
         $s1 = "\\../../../json.h" wide
         $s2 = "static_cast<std::size_t>(index) < kCachedPowers.size()" fullword wide

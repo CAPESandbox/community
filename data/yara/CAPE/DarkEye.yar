@@ -2,7 +2,7 @@ rule DarkEye {
     meta:
         author = "ditekSHen"
         description = "Detects DarkEye infostealer"
-        cape_type = "DarkEye Infostealer Payload"
+        cape_type = "DarkEye Payload"
     strings:
         $c1 = /Prynt(\s)?Stealer/ ascii wide
         $c2 = /WorldWind(\s)?Stealer/ ascii wide

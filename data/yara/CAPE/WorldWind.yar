@@ -2,7 +2,7 @@ rule WorldWind {
     meta:
         author = "ditekSHen"
         description = "Detects WorldWind infostealer"
-        cape_type = "WorldWind Infostealer Payload"
+        cape_type = "WorldWind Payload"
     strings:
         $c1 = /WorldWind(\s)?Stealer/ ascii wide
         $x2 = "@FlatLineStealer" ascii wide

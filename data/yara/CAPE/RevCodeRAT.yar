@@ -1,8 +1,8 @@
 rule RevCodeRAT {
     meta:
         author = "ditekSHen"
-        description = "RevCodeRAT  infostealer payload"
-        cape_type = "RevCodeRAT  Payload"
+        description = "RevCodeRAT infostealer payload"
+        cape_type = "RevCodeRAT Payload"
     strings:
         $x1 = "rev-novm.dat" fullword wide
         $x2 = "WebMonitor-" fullword wide

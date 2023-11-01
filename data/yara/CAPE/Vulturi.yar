@@ -2,7 +2,7 @@ rule Vulturi {
     meta:
         author = "ditekSHen"
         description = "Detects Vulturi infostealer"
-        cape_type = "Vulturi Infostealer Payload"
+        cape_type = "Vulturi Payload"
     strings:
         $x1 = "Vulturi_" ascii wide
         $x2 = "VulturiProject" fullword ascii
