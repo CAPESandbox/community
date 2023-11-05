@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class api_uuidfromstringa(Signature):
     name = "api_uuidfromstringa"
     description = "Potential malicious use of UuidFromStringA"
@@ -34,7 +35,7 @@ class api_uuidfromstringa(Signature):
 
     def on_call(self, call, process):
         if call["api"] == "LdrGetProcedureAddress" and self.get_argument(call, "FunctionName") == "UuidFromStringA":
-            self.dll_loaded = True #RPCRT4.dll
+            self.dll_loaded = True  # RPCRT4.dll
             self.ldr = 1
             if self.pid:
                 self.mark_call()
