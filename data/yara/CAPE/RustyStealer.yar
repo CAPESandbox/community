@@ -14,6 +14,12 @@ rule RustyStealer {
         $s8 = /\\logscx\\(passwords_|cookies_|creditcards_)/ ascii
         $s9 = "VirtualBoxVBoxVMWareVMCountry" ascii
         $s10 = "New Log From ( /  )" ascii
+        $s11 = "BrowserChromeKometaOrbitumSputnikTorchUranuCozMediaVivaldiAtomMail" ascii
+        $s12 = "BrowserBraveSoftwareCentBrowserChedotChrome" ascii
+        $s13 = "ChromeKometaOrbitumSputnikTorchUranuCozMediaVivaldi" ascii
+        $s14 = "hostnameencryptedUsernameencryptedPasswordstruct" ascii
+        $s15 = "encryptedPassword" fullword ascii
+        $s16 = "AutoFill@~" fullword ascii
     condition:
         uint16(0) == 0x5a4d and 6 of them
 }

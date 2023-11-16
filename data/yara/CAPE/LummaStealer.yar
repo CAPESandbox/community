@@ -17,6 +17,8 @@ rule LummaStealer {
         $s9 = "- Screen Resoluton:" ascii
         $s10 = "lid=%s" ascii
         $s11 = "&ver=" ascii
+        $s12 = "769cb9aa22f4ccc412f9cbc81feedd" fullword wide
+        $s13 = "gapi-node.io" fullword ascii
     condition:
         uint16(0) == 0x5a4d and (all of ($x*) or (1 of ($x*) and 2 of ($s*)) or 5 of ($s*) or 7 of them)
-} 
+}
