@@ -156,7 +156,7 @@ class PhysicalDriveAccess(Signature):
 
 class EnumeratesPhysicalDrives(Signature):
     name = "enumerates_physical_drives"
-    description = "Emumerates physical drives"
+    description = "Enumerates physical drives"
     severity = 3
     categories = ["bootkit", "rootkit", "wiper"]
     authors = ["Kevin Ross"]
