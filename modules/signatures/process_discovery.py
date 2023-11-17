@@ -16,7 +16,7 @@
 from lib.cuckoo.common.abstracts import Signature
 
 
-class EmumeratesRunningProcesses(Signature):
+class EnumeratesRunningProcesses(Signature):
     name = "enumerates_running_processes"
     description = "Enumerates running processes"
     severity = 2
