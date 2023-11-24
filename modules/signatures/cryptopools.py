@@ -7,7 +7,6 @@ class MINERS(Signature):
     name = "cryptopool_domains"
     description = "Connects to crypto currency mining pool"
     severity = 1
-    families = ["miner"]
     categories = ["cryptomining"]
     authors = ["doomedraven", "bartblaze"]
     minimum = "1.2"
