@@ -9,7 +9,6 @@ import time
 from threading import Thread
 
 from lib.common.abstracts import Auxiliary
-from lib.common.constants import ROOT
 from lib.common.exceptions import CuckooPackageError
 from lib.common.results import upload_to_host
 
@@ -24,10 +23,10 @@ class Procmon(Auxiliary, Thread):
         self.startupinfo = subprocess.STARTUPINFO()
         self.startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
-        bin_path = os.path.join(ROOT, "bin")
+        bin_path = os.path.join(os.getcwd(), "bin")
         self.procmon_exe = os.path.join(bin_path, "procmon.exe")
         self.procmon_pmc = os.path.join(bin_path, "procmon.pmc")
-        self.procmon_pml = os.path.join(bin_path, "procmon")
+        self.procmon_pml = os.path.join(bin_path, "procmon.PML")
         self.procmon_xml = os.path.join(bin_path, "procmon.xml")
 
     def run(self) -> bool:
@@ -75,7 +74,7 @@ class Procmon(Auxiliary, Thread):
                 (
                     self.procmon_exe,
                     "/OpenLog",
-                    f"{self.procmon_pml}.PML",
+                    self.procmon_pml,
                     "/LoadConfig",
                     self.procmon_pmc,
                     "/SaveAs",
