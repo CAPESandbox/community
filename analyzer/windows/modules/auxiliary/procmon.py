@@ -86,7 +86,7 @@ class Procmon(Auxiliary, Thread):
             )
 
             # Upload the XML file to the host.
-            upload_to_host(self.procmon_xml, "procmon.xml")
+            upload_to_host(self.procmon_xml, "aux/procmon.xml")
             return True
         except Exception as e:
             logging.error(e, exc_info=True)
