@@ -51,10 +51,14 @@ class JS_Phish(Signature):
         self.totalhits = 0
 
     def on_call(self, call, process):
+        buf = False
         if call["api"] == "JsEval":
             buf = self.get_argument(call, "Javascript")
         else:
             buf = self.get_argument(call, "Script")
+
+        if not buf:
+            return
 
         for lure in self.lures:
             if lure[0].lower() in buf.lower():

@@ -36,12 +36,13 @@ class CVE_2016_0189(Signature):
     filter_apinames = set(["JsEval", "COleScript_Compile", "COleScript_ParseScriptText"])
 
     def on_call(self, call, process):
+        buf = False
         if call["api"] == "JsEval":
             buf = self.get_argument(call, "Javascript")
         else:
             buf = self.get_argument(call, "Script")
 
-        if 'valueOf": function' in buf and "triggerBug()" in buf and "exploit(" in buf:
+        if buf and 'valueOf": function' in buf and "triggerBug()" in buf and "exploit(" in buf:
             self.data.append({"cve_2016-0189_poc": "Proof of concept exploit code used. Seen in Sundown & Neutrino exploit kits"})
             if self.pid:
                 self.mark_call()

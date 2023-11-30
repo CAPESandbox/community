@@ -36,12 +36,14 @@ class CVE_2016_7200(Signature):
     filter_apinames = set(["JsEval", "COleScript_Compile", "COleScript_ParseScriptText"])
 
     def on_call(self, call, process):
+
+        buf = False
         if call["api"] == "JsEval":
             buf = self.get_argument(call, "Javascript")
         else:
             buf = self.get_argument(call, "Script")
 
-        if " getPrototypeOf" in buf and "__proto__" in buf and "Array" in buf and "Symbol" in buf:
+        if buf and " getPrototypeOf" in buf and "__proto__" in buf and "Array" in buf and "Symbol" in buf:
             if self.pid:
                 self.mark_call()
             return True
