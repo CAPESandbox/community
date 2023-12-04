@@ -51,8 +51,8 @@ class DeadConnect(Signature):
 
             for deadip in self.connections:
                 ip = deadip.split(":")[0]
-                if "hosts" in self.results["network"]:
-                    hostdata = next((i for i in self.results["network"]["hosts"] if i["ip"] == ip), None)
+                if "hosts" in self.results.get("network", {}):
+                    hostdata = next((i for i in self.results.get("network", {}).get("hosts", {}) if i["ip"] == ip), None)
                     if hostdata:
                         self.data.append({"IP": "{0} ({1})".format(deadip, hostdata["country_name"])})
                     else:
