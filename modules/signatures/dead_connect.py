@@ -54,7 +54,7 @@ class DeadConnect(Signature):
                 if "hosts" in self.results.get("network", {}):
                     hostdata = next((i for i in self.results.get("network", {}).get("hosts", {}) if i["ip"] == ip), None)
                     if hostdata:
-                        self.data.append({"IP": "{0} ({1})".format(deadip, hostdata["country_name"])})
+                        self.data.append({"IP": f"{deadip} ({hostdata['country_name']})"})
                     else:
                         self.data.append({"IP": deadip})
 
