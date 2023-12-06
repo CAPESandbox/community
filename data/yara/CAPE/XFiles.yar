@@ -2,7 +2,7 @@ rule MALWARE_Win_XFiles {
     meta:
         author = "ditekSHen"
         description = "Detects X-Files infostealer (formerly BotSh1zoid)"
-        cape_type = "XFiles Infostealer Payload"
+        cape_type = "XFiles Payload"
     strings:
         $x1 = "\\BotSh1zoid\\" ascii
         $x2 = "\\BuildPacker.pdb" ascii

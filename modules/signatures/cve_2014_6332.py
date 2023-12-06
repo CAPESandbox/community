@@ -34,16 +34,17 @@ class CVE_2014_6332(Signature):
     filter_apinames = set(["JsEval", "COleScript_Compile", "COleScript_ParseScriptText"])
 
     def on_call(self, call, process):
+        buf = False
         if call["api"] == "JsEval":
             buf = self.get_argument(call, "Javascript")
         else:
             buf = self.get_argument(call, "Script")
 
-        if "chrw(01)&chrw(2176)&chrw(01)&chrw(00)" in buf and "chrw(00)&chrw(32767)&chrw(00)&chrw(0)" in buf:
+        if buf and "chrw(01)&chrw(2176)&chrw(01)&chrw(00)" in buf and "chrw(00)&chrw(32767)&chrw(00)&chrw(0)" in buf:
             if self.pid:
                 self.mark_call()
             return True
-        if "function setnotsafemode" in buf and "function runmumaa" in buf:
+        if buf and "function setnotsafemode" in buf and "function runmumaa" in buf:
             if self.pid:
                 self.mark_call()
             return True

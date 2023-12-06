@@ -41,10 +41,14 @@ class EXEDropper_JS(Signature):
     filter_apinames = set(["JsEval"])
 
     def on_call(self, call, process):
+        buf = False
         if call["api"] == "JsEval":
             buf = self.get_argument(call, "Javascript")
         else:
             buf = self.get_argument(call, "Script")
+
+        if not buf:
+            return
 
         if re.search('(Save|Write)ToFile(\(|\/).*?\.exe"', buf, re.IGNORECASE | re.DOTALL):
             self.data.append({"dropper_script": buf})

@@ -205,6 +205,7 @@ dns_indicators = (
     "myiponline.com",
     "mylocation.org",
     "readip.info",
+    "reallyfreegeoip.org",
     "shmyip.com",
     "show-ip.com",
     "show-my-ip.de",

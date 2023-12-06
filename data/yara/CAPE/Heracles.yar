@@ -2,7 +2,7 @@ rule Heracles {
     meta:
         author = "ditekSHen"
         description = "Detects Heracles infostealer"
-        cape_type = "Heracles Infostealer Payload"
+        cape_type = "Heracles Payload"
     strings:
         $x1 = "aHR0cHM6Ly9uYWNrZXIudG9hbnNlY3UuY29tL3VwbG9hZHM/a2V5PX" wide
         $b1 = "XEdvb2dsZVxDaHJvbWVc" wide

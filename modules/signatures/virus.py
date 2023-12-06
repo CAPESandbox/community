@@ -40,6 +40,13 @@ class Virus(Signature):
         self.invalidated_files = set()
         self.saw_virus = False
 
+        self.ignorelist = [
+            # PowerPoint 2010 frequently overwrites itself for whatever reason
+            "powerpnt.exe",
+            # Adobe Acrobat Reader 11.0 also overwrites itself
+            "acrord32.exe",
+        ]
+
     def on_call(self, call, process):
         if process is not self.lastprocess:
             self.handles = dict()
@@ -71,7 +78,7 @@ class Virus(Signature):
             filename = self.get_argument(call, "FileName").lower()
             handle = int(self.get_argument(call, "FileHandle"), 16)
             createdisp = int(self.get_argument(call, "CreateDisposition"), 16)
-            if filename and filename.endswith(".exe"):
+            if filename and filename.endswith(".exe") and not any(filename.endswith(ignore_exe) for ignore_exe in self.ignorelist):
                 if createdisp == 1:
                     if handle not in self.handles and filename not in self.invalidated_files:
                         self.handles[handle] = filename

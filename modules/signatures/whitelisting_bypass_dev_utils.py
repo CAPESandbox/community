@@ -23,7 +23,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class PersistsDotNetDevUtility(Signature):
     name = "persists_dev_util"
-    description = "Attempts to bypass application whitelisting by copying and persisting .NET utility"
+    description = "Attempts to bypass application allowlisting by copying and persisting .NET utility"
     severity = 3
     categories = ["masquerading", "evasion", "execution", "dotnet"]
     authors = ["ditekshen"]
@@ -73,7 +73,7 @@ class PersistsDotNetDevUtility(Signature):
 
 class SpwansDotNetDevUtiliy(Signature):
     name = "spawns_dev_util"
-    description = "Attempts to bypass application whitelisting"
+    description = "Application allowlisting bypass and injection detected"
     severity = 3
     categories = ["masquerading", "evasion", "execution", "dotnet"]
     authors = ["ditekshen", "Zane C. Bowers-Hadley"]
@@ -99,6 +99,9 @@ class SpwansDotNetDevUtiliy(Signature):
             re.compile(
                 "[A-Z]:\\\\\\\\Windows\\\\\\\\Microsoft\.NET\\\\\\\\Framework\\\\\\\\v.*\\\\\\\\MSBuild\.exe", re.IGNORECASE
             ),
+            re.compile("[A-Za-z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\AppLaunch\.exe", re.IGNORECASE),
+            re.compile("[A-Za-z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\aspnet_regbrowsers\.exe", re.IGNORECASE),
+            re.compile("[A-Za-z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\ilasm.exe", re.IGNORECASE),
         ]
         self.sname = str()
         self.dname = str()
@@ -165,13 +168,9 @@ class SpwansDotNetDevUtiliy(Signature):
     def on_complete(self):
         if len(self.data) > 0:
             if self.executecopy:
-                self.description = "{0} {1}".format(
-                    self.description, "by copying and executing .NET utility in a suspended state, potentially for injection"
-                )
+                self.description = "{0} {1}".format(self.description, "by copying and executing .NET utility in a suspended state")
             else:
-                self.description = "{0} {1}".format(
-                    self.description, "by executing .NET utility in a suspended state, potentially for injection"
-                )
+                self.description = "{0} {1}".format(self.description, "by executing .NET utility in a suspended state")
             return True
 
         return False

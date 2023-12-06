@@ -1,3 +1,5 @@
+import "pe"
+
 rule INDICATOR_TOOL_PWS_LaZagne {
     meta:
         description = "Detects LaZagne post-exploitation password stealing tool. It is typically embedded with malware in the binary resources."
@@ -609,9 +611,9 @@ rule INDICATOR_TOOL_PET_DefenderControl {
     strings:
         $s1 = "Windows Defender Control" wide
         $s2 = "www.sordum.org" wide ascii
-        $s3 = "AutoIt" wide
+        $s3 = "dControl" wide
     condition:
-        uint16(0) == 0x5a4d and all of them
+        uint16(0) == 0x5a4d and 2 of them
 }
 
 rule INDICATOR_TOOL_PET_Mulit_VenomAgent {
@@ -1231,4 +1233,523 @@ rule INDICATOR_TOOL_PRI_JuicyPotato {
         $s6 = "Priv Adjust FALSE" fullword ascii
     condition:
         uint16(0) == 0x5a4d and (all of ($x*) or (1 of ($x*) and 3 of ($s*)) or (5 of ($s*)))
+}
+
+rule INDICATOR_TOOL_PWS_LSASS_NanoDump {
+    meta:
+        author = "ditekSHen"
+        description = "Detects NanoDump tool that creates a minidump of the LSASS process"
+    strings:
+        $s1 = "\\Registry\\Machine\\Software\\Microsoft\\Windows\\Windows Error Reporting\\LocalDumps\\" fullword wide
+        $s2 = "\\Registry\\Machine\\Software\\Microsoft\\Windows NT\\CurrentVersion\\SilentProcessExit\\" fullword wide
+        $s3 = "DumpType" fullword wide
+        $s4 = "LocalDumpFolder" fullword wide
+        $s5 = "\\??\\C:\\Windows\\System32\\seclogon.dll" fullword wide
+        $s6 = "minidump %s" ascii
+        $s7 = "--seclogon-" ascii
+        $s8 = "shtinkering" ascii
+        $s9 = "LSASS PID: %ld" ascii
+    condition:
+        uint16(0) == 0x5a4d and 4 of them
+}
+
+rule INDICATOR_TOOL_ENUM_SharpShares {
+    meta:
+        author = "ditekSHen"
+        description = "Detects SharpShares multithreaded C# .NET Assembly to enumerate accessible network shares in a domain"
+    strings:
+        $s1 = "SharpShares." ascii wide
+        $s2 = "GetComputerShares" fullword ascii
+        $s3 = "userAccountControl:1.2.840.113556.1.4.803:=2))(operatingSystem=*server*)(!(userAccountControl:1.2" wide
+        $s4 = "GetAllShares" fullword ascii
+        $s5 = "stealth:" wide
+        $s6 = "(&(objectCategory=computer)(!(userAccountControl:1.2.840.113556.1.4.803:=2))(operatingSystem=*server*))" fullword wide
+        $s7 = /\/targets|ldap|threads/ wide
+        $s8 = "entriesread" fullword ascii
+    condition:
+        uint16(0) == 0x5a4d and 4 of them
+}
+
+rule INDICATOR_TOOL_PROX_revsocks {
+    meta:
+        author = "ditekSHen"
+        description = "Detects revsocks Reverse socks5 tunneler with SSL/TLS and proxy support"
+    strings:
+        $s1 = "main.agentpassword" fullword ascii 
+        $s2 = "main.CommitID" fullword ascii 
+        $s3 = "main.connectForSocks" fullword ascii 
+        $s4 = "main.connectviaproxy" fullword ascii 
+        $s5 = "main.DnsConnectSocks" fullword ascii 
+        $s6 = "main.listenForAgents" fullword ascii 
+        $s7 = "main.listenForClients" fullword ascii
+        $s8 = "main.getPEMs" fullword ascii
+        $s9 = "mygithub/revsocks/main.go" ascii
+    condition:
+        (uint16(0) == 0x5a4d or uint16(0) == 0x457f) and 5 of them
+}
+
+rule INDICATOR_TOOL_PWS_azbelt {
+    meta:
+        author = "ditekSHen"
+        description = "Detects azbelt for enumerating Azure related credentials primarily on AAD joined machines"
+    strings:
+        $s1 = "@http://169.254.169.254/metadata/identity/oauth2/token?api-version=" ascii
+        $s2 = "@Partner Customer Delegated Admin Offline Processor" fullword ascii
+        $s3 = "@TargetName: " fullword ascii
+        $s4 = "httpclient.nim" fullword ascii
+        $s5 = "@DSREG_DEVICE_JOIN" fullword ascii
+        $s6 = "@.azure/msal_token_cache.bin" fullword ascii
+        $s7 = "CredEnumerateW" fullword ascii
+        $s8 = "@http://169.254.169.254/metadata/instance?api-version=" ascii
+    condition:
+        uint16(0) == 0x5a4d and 6 of them
+}
+
+rule INDICATOR_TOOL_DontSleep {
+     meta:
+        author = "ditekShen"
+        description = "Detects Keep Host Unlocked (Don't Sleep)"
+    strings:
+        $s1 = ":Repeat###DEL \"%s\"###if exist \"%s\" goto Repeat###DEL \"%s\"###" wide
+        $s2 = "powrprof.dll,SetSuspendState" wide
+        $s3 = "_selfdestruct.bat" wide
+        $s4 = "please_sleep_block_" ascii
+        $s5 = "Browser-Type: MiniBowserOK" wide
+        $s6 = "m_use_all_rule_no_sleep" ascii
+        $s7 = "BlockbyExecutionState: %d on:%d by_enable:%d" fullword wide
+    condition:
+        uint16(0) == 0x5a4d and 4 of them
+}
+
+rule INDICATOR_TOOL_NSudo {
+     meta:
+        author = "ditekShen"
+        description = "Detects NSudo allowing to run processes as TrustedInstaller or System"
+    strings:
+        $x1 = "cmd /c start \"NSudo." wide
+        $x2 = "*\\shell\\NSudo" fullword wide
+        $x3 = "Projects\\NSudo\\Output\\Release\\x64\\NSudo.pdb" ascii
+        $s1 = "-ShowWindowMode=Hide" wide
+        $s2 = "?what@exception@@UEBAPEBDXZ" fullword ascii
+        $s3 = "NSudo.RunAs." ascii
+    condition:
+        uint16(0) == 0x5a4d and (2 of ($x*) or (1 of ($x*) and 2 of ($s*)) or all of ($s*) or 4 of them)
+}
+
+rule INDICATOR_TOOL_Ligolo {
+    meta:
+        author = "ditekSHen"
+        description = "Detects Ligolo tool for establishing SOCKS5 or TCP tunnels from a reverse connection"
+    strings:
+        $p1 = "/ligolo/main.go" ascii
+        $p2 = "/armon/go-socks5" ascii
+        $s1 = "main.StartLigolo" fullword ascii
+        $s2 = "main.handleRelay" fullword ascii
+        $s3 = "main.startSocksProxy" fullword ascii
+        $s4 = "_main.tlsFingerprint" fullword ascii
+        $s5 = "main.verifyTlsCertificate" fullword ascii
+    condition:
+        (uint16(0) == 0x5a4d or uint16(0) == 0x457f or uint16(0) == 0xfacf) and ((all of ($p*) and 1 of ($s*)) or all of ($s*) or (1 of ($p*) and 4 of ($s*)))
+}
+
+rule INDICATOR_TOOL_ExtPassword {
+    meta:
+        author = "ditekSHen"
+        description = "Detects ExtPassword External Drive Password Recovery"
+    strings:
+        $x1 = "ExtPassword!" fullword wide
+        $s2 = "GReading Chrome password file: %s" fullword wide
+        $s3 = "\\\\?\\GLOBALROOT\\Device\\HarddiskVolumeShadowCopy%d" fullword wide
+        $s4 = "2015-07-27 13:49:41 b8e92227a469de677a66da62e4361f099c0b79d0" ascii
+        $s5 = "metadata WHERE id = 'password'" ascii
+        $s6 = /Scanning\s(Credentials\sfolder|Credentials\sfolder|Firefox\sand\sother\sMozilla\sWeb\sbrowsers|Chromium-based\Web\browsers|Outlook\saccounts|Windows\sVault|dialup\/VPN\sitems|wireless\skeys|Windows\ssecurity\squestions|vault\spasswords)/ wide
+        $s7 = "lhelp32Snapsho" fullword ascii
+        $s8 = "SELECT origin_" fullword ascii
+        $s9 = "password#Ck" fullword ascii
+    condition:
+        uint16(0) == 0x5a4d and (1 of ($x*) and 3 of ($s*)) or 6 of ($s*)
+}
+
+rule INDICATOR_TOOL_Ngrok {
+    meta:
+        author = "ditekSHen"
+        description = "Detects Ngrok"
+    strings:
+        $s1 = "dashboard.ngrok.com" ascii
+        $s2 = "go.ngrok.com/cmd/ngrok/main.go" ascii
+        $s3 = "ngrok agent" ascii
+        $s4 = "*ngrok.clientInfo" ascii
+        $s5 = "'%s'  socket: '%s'  port: %d/edges/https/{{ .EdgeID }}/routes/{{ .ID }}/webhook_" ascii
+        $s6 = "/{{ .ID }}/tunnel_sessions/{{ .ID }}/restart" ascii
+    condition:
+        (uint16(0) == 0x5a4d or uint16(0) == 0x457f or uint16(0) == 0xfacf) and (3 of them)
+}
+
+rule INDICATOR_TOOL_SQLRecon {
+    meta:
+        author = "ditekSHen"
+        description = "Detects SQLRecon C# MS-SQL toolkit designed for offensive reconnaissance and post-exploitation"
+    strings:
+        $s1 = "ConvertDLLToSQLBytes" ascii
+        $s2 = "\\SQLRecon.pdb" ascii
+        $s3 = "GetAllSQLServerInfo" ascii
+        $s4 = "<GetMSSQLSPNs>b__" ascii
+        $s5 = "select 1; exec master..xp_cmdshell" wide
+        $s6 = "-> Command Execution" wide
+        $s7 = ";EXEC dbo.sp_add_jobstep @job_name =" wide
+        $s8 = "EXEC sp_drop_trusted_assembly 0x" wide
+        $s9 = "(&(sAMAccountType=805306368)(servicePrincipalName=MSSQL*))" wide
+    condition:
+        uint16(0) == 0x5a4d and 5 of them
+}
+
+rule INDICATOR_TOOL_AtlasReaper {
+    meta:
+        author = "ditekSHen"
+        description = "Detects AtlasReaper command-line tool for Confluence and Jira reconnaissance, credential farming and social engineering"
+    strings:
+        $s1 = "/((?:A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16})/" fullword wide
+        $s2 = "/rest/api/3/search?jql=" fullword wide
+        $s3 = "attachments+IS+NOT+EMPTY&fields=attachment,summary,status" fullword wide
+        $s4 = "<ParseJira>b__" ascii
+        $s5 = "<Atlas_Doc_Format>k__" ascii
+        $s6 = "<ParseConfluence>b__" ascii
+        $s7 = "AtlasReaper_ProcessedByFody" fullword ascii
+        $s8 = /AtlasReaper\.(Jira|Confluence)/ fullword ascii
+    condition:
+        uint16(0) == 0x5a4d and 4 of them
+}
+
+rule INDICATOR_TOOL_NgrokSharp {
+    meta:
+        author = "ditekSHen"
+        description = "Detects NgrokSharp .NET library for Ngrok"
+    strings:
+        $x1 = "NgrokSharp" fullword wide
+        $x2 = "/entvex/NgrokSharp" ascii
+        $s1 = "start --none -region" wide
+        $s2 = "startTunnelDto" fullword wide
+        $s3 = "/tunnels/" fullword wide
+        $s4 = "<StartNgrok" ascii
+        $s5 = "INgrokManager" ascii
+        $s6 = "_tunnel_name"ascii
+        $s7 = "_ngrokDownloadUrl" ascii
+    condition:
+        uint16(0) == 0x5a4d and (all of ($x*) or (1 of ($x*) and 3 of ($s*)) or 4 of ($*))
+}
+
+rule INDICATOR_TOOL_NgrokGo {
+    meta:
+        author = "ditekSHen"
+        description = "Detects Go implementation variant for Ngrok"
+    strings:
+        $s1 = "/codegangsta/inject" fullword wide
+        $s2 = "go.ngrok.com/" ascii
+        $s3 = "GetIsNgrokDomain" ascii
+        $s4 = "GetNgrokMetering" ascii
+        $s5 = "*cli.ngrokService" ascii
+        $s6 = "GetAllowNgrokLink" ascii
+        $s7 = "ngrok {{.Name}}{{if .Flags}}" ascii
+        $s8 = "github.com/nikolay-ngrok/" ascii
+    condition:
+        uint16(0) == 0x5a4d and 4 of them
+}
+
+rule INDICATOR_Tool_Forensia {
+    meta:
+        author = "ditekSHen"
+        description = "Detects Forensia anti-forensics tool used for erasing footprints"
+    strings:
+        $c1 = "for /F \"tokens=*\" %1 in ('wevtutil.exe el') DO wevtutil.exe cl \"%1\"" ascii
+        $c2 = "del /F /Q C:\\Windows\\Prefetch\\*" ascii
+        $c3 = "del C:\\Windows\\AppCompat\\Programs\\RecentFileCache.bcf" ascii
+        $c4 = "del /F /Q %APPDATA%\\Microsoft\\Windows\\Recent\\*" ascii
+        $c5 = "del /F /Q %APPDATA%\\Microsoft\\Windows\\Recent\\CustomDestinations\\*" ascii
+        $c6 = "del /F /Q %APPDATA%\\Microsoft\\Windows\\Recent\\AutomaticDestinations\\*" ascii
+        $c7 = "fsutil.exe usn deletejournal /D C:" ascii
+        $r1 = "\\Memory Management\\PrefetchParameters" wide
+        $r2 = "\\Explorer\\Advanced" wide
+        $r3 = "\\Services\\EventLog" wide
+        $r4 = "\\Shell\\BagMRU" wide
+        $r5 = "\\Control\\FileSystem" wide
+        $r6 = "\\Setup\\VC" wide
+        $s1 = "[LOG] - %s" wide
+        $s2 = "\\forensia\\regedit.hpp" wide
+        $s3 = "NtfsDisableLastAccessUpdate" wide
+        $s4 = "Melting The Executable" wide
+        $s5 = "Sysmon Unloader" wide
+        $s6 = "Rundll32.exe apphelp.dll,ShimFlushCache" ascii
+        $s7 = "\\Debug\\forensia.pdb" ascii
+        $s8 = { 55 00 00 00 aa 00 00 00 92 49 24 00 49 24 92 00
+                24 92 49 00 00 00 00 00 11 00 00 00 22 00 00 00
+                33 00 00 00 44 00 00 00 66 00 00 00 88 00 00 00
+                99 00 00 00 bb 00 00 00 cc 00 00 00 dd 00 00 00
+                ee 00 00 00 ff 00 00 00 6d b6 db 00 b6 db 6d 00
+                db 6d b6 }
+    condition:
+        uint16(0) == 0x5a4d and ((4 of ($c*) and 2 of ($r*)) or (4 of ($r*) and 2 of ($c*)) or 6 of ($s*) or (3 of ($s*) and 2 of ($r*) and 1 of ($c*)))
+}
+
+rule INDICATOR_TOOL_DWAgentLIB {
+    meta:
+        author = "ditekSHen"
+        description = "Detect DWAgent Remote Administration Tool library"
+    strings:
+        $s1 = "DWAgentLib" fullword wide
+        $s2 = "PYTHONHOME" fullword wide
+        $s3 = "isTaskRunning" fullword ascii
+        $s4 = "isUserInAdminGroup" fullword ascii
+        $s5 = "setFilePermissionEveryone" fullword ascii
+        $s6 = "startProcessInActiveConsole" fullword ascii
+        $s7 = "taskKill" fullword ascii
+    condition:
+        uint16(0) == 0x5a4d and all of them
+}
+
+rule INDICATOR_TOOL_DWAgentSVC {
+    meta:
+        author = "ditekSHen"
+        description = "Detect DWAgent Remote Administration Tool service"
+    strings:
+        $s1 = "\\native\\dwagupd.dll" wide
+        $s2 = "\\native\\dwagsvc.exe\" run" wide
+        $s3 = "CreateServiceW" fullword ascii
+        $s4 = /dwagent\.(pid|start|stop)/ wide
+        $s5 = "Check updating..." wide
+    condition:
+        uint16(0) == 0x5a4d and 4 of them
+}
+
+rule INDICATOR_TOOL_DWAgent_ScreenCapture {
+    meta:
+        author = "ditekSHen"
+        description = "Detect DWAgent Remote Administration Tool Screen Capture Module"
+    strings:
+        $s1 = "DWAgentLib" fullword wide
+        $s2 = "PYTHONHOME" wide
+        $s3 = "VirtualBox" wide
+        $s4 = "VMware" wide
+        $s5 = "ScreenCapture::prepareCursor#" ascii
+        $s6 = "ScreenCapture::getMonitorCount#" ascii
+        $s7 = "ScreenCapture::token" ascii
+        $s8 = "dwascreencapture" ascii
+        $s9 = "inputKeyboard CTRLALTCANC" ascii
+        $s10 = "_Z34ScreenCaptureNativeMonitorEnumProc" ascii
+        $s11 = "_Z41ScreenCaptureNativeCreateWindowThreadProc" ascii
+        $s12 = "_ZN13ScreenCapture" ascii
+        $s13 = "isUserInAdminGroup" ascii
+    condition:
+        uint16(0) == 0x5a4d and 7 of them
+}
+
+rule INDICATOR_TOOL_DWAgent_SoundCapture {
+    meta:
+        author = "ditekSHen"
+        description = "Detect DWAgent Remote Administration Tool Sound Capture Module"
+    strings:
+        $s1 = "DWASoundCapture" ascii
+        $s2 = /_Z\d{2}DWASoundCapture/ ascii
+        $s3 = "_Z6recordPvS_" ascii
+    condition:
+        uint16(0) == 0x5a4d and all of them
+}
+
+rule INDICATOR_TOOL_CelestyBinderLoader {
+    meta:
+        author = "ditekSHen"
+        description = "Detects Celesty Binder loader"
+    strings:
+        $s1 = "\\DarkCoderSc\\Desktop\\Celesty Binder\\Stub\\STATIC\\Stub.pdb" ascii
+        $s2 = "DROPIN" fullword ascii wide
+        $s3 = "EXEC" fullword ascii wide
+        $s4 = "RBIND" fullword ascii wide
+        $s5 = "%LAPPDATA%" fullword ascii wide
+        $s6 = "%USERDIR%" fullword ascii wide
+    condition:
+        uint16(0) == 0x5a4d and all of them
+}
+
+rule INDICATOR_TOOL_DogzProxy {
+    meta:
+        author = "ditekSHen"
+        description = "Detects Dogz proxy tool"
+    strings:
+        $s1 = "LOGONSERVER=" fullword wide
+        $s2 = "DOGZ_E_" ascii
+        $s3 = "got handshake_id=%d" ascii
+        $s4 = "responser send connect ack" ascii
+        $s5 = "dogz " ascii
+    condition:
+        uint16(0) == 0x5a4d and 4 of them
+}
+
+rule INDICATOR_TOOL_FastReverseProxy {
+    meta:
+        author = "ditekSHen"
+        description = "Detects Fast Reverse Proxy (FRP) tool"
+    strings:
+        $x1 = "<title>frp client admin UI</title>" ascii
+        $x2 = "https://github.com/fatedier/frp" ascii
+        $s1 = ").SetLogin" ascii
+        $s2 = ").SetPing" ascii
+        $s3 = ").SetNewWorkConn" ascii
+        $s4 = ").ServeHTTP" ascii
+        $s5 = ").Middleware" ascii
+        $s6 = "frpc proxy config error:" ascii
+        $s7 = "frpc sudp visitor proxy is close" ascii
+    condition:
+        uint16(0) == 0x5a4d and (all of ($x*) or (1 of ($x*) and 4 of ($s*)) or (all of ($s*)))
+}
+
+rule INDICATOR_TOOL_GoGoScan {
+    meta:
+        author = "ditekSHen"
+        description = "Detects GoGo scan tool"
+    strings:
+        $s1 = "(conn) (scan  (scan) MB in  Value>" ascii
+        $s2 = "sweep sysmontargettelnet" ascii
+        $s3 = "%d bytes(?i) (.*SESS.*?ID)([a-z0-9])([A-Z]+)" ascii
+        $s4 = "prepareForSweep" ascii
+        $s5 = "Scanned %s with %d ports, found %d" ascii
+        $s6 = "/chainreactors/gogo/" ascii
+        $s7 = "Starting task %s ,total ports: %d , mod: %s" ascii
+    condition:
+        uint16(0) == 0x5a4d and 6 of them
+}
+
+rule INDICATOR_TOOL_GoGoProcDump {
+    meta:
+        author = "ditekSHen"
+        description = "Detects GoGo (lsass) process dump tool"
+    strings:
+        $s1 = "C:\\temp" ascii
+        $s2 = "gogo" fullword ascii
+        $s3 = "/DumpLsass-master/SilentProcessExit/" ascii
+        $s4 = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Time Zone" ascii
+        $s5 = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SilentProcessExit\\lsass.exe" ascii
+        $s6 = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\lsass.exe" ascii
+    condition:
+        uint16(0) == 0x5a4d and 4 of them
+}
+
+rule INDICATOR_TOOL_FScan {
+    meta:
+        author = "ditekSHen"
+        description = "Detects GoGo scan tool"
+    strings:
+        $s1 = "fscan version:" ascii
+        $s2 = "Citrix-ConfProxyCitrix-MetaframeCitrix-NetScalerCitrix-XenServerCitrix_Netscaler" ascii
+        $s3 = "(AkamaiGHost)(DESCRIPTION=(Typecho</a>)(^.+)([0-9]+)(confluence.)(dotDefender)" ascii
+        $s4 = "/fscan/" ascii
+        $s5 = "WebScan.CheckDatas" ascii
+        $s6 = "'Exploit.Test" ascii
+        $s7 = "rules:" ascii
+    condition:
+        uint16(0) == 0x5a4d and 4 of them
+}
+
+rule INDICATOR_TOOL_BURTNCIGAR {
+    meta:
+        author = "ditekSHen"
+        description = "Detects BURNTCIGAR a utility which terminates processes associated with endpoint security software"
+    strings:
+        $s1 = "Kill PID =" ascii
+        $s2 = "CreateFile Error =" ascii
+        $s3 = "\\KillAV" ascii
+        $s4 = "DeviceIoControl" ascii
+    condition:
+        uint16(0) == 0x5a4d and 3 of them
+}
+
+rule INDICATOR_TOOL_WEDGECUT {
+    meta:
+        author = "ditekSHen"
+        description = "Detects WEDGECUT a reconnaissance tool to checks hosts are online using ICMP packets"
+    strings:
+        $s1 = "-name" fullword ascii
+        $s2 = "-full" fullword ascii
+        $s3 = "\\CheckOnline" ascii
+        $s4 = "IcmpSendEcho" fullword ascii
+        $s5 = "IcmpCloseHandle" fullword ascii
+        $s6 = "IcmpCreateFile" fullword ascii
+    condition:
+        uint16(0) == 0x5a4d and 4 of them
+}
+
+rule INDICATOR_TOOL_PPLBLade {
+    meta:
+        author = "ditekSHen"
+        description = "Detects PPLBlade Protected Process Dumper Tool that support obfuscating memory dump and transferring it on remote workstations without dropping it onto the disk"
+    strings:
+        $x1 = "PPLBlade" ascii
+        $x2 = "/PPLBlade/" ascii
+        $x3 = "PPLBlade.exe --mode" ascii
+        $x4 = "PPLBLADE.SYSPPLBlade.dmp" ascii
+        $s1 = "Dump bytes sent at %s:%d. Protocol: %s" ascii
+        $s2 = "Deobfuscated dump saved in file %s" ascii
+        $m1 = "main.WriteDriverOnDisk" ascii
+        $m2 = "main.ProcExpOpenProc" ascii
+        $m3 = "main.miniDumpCallback" ascii
+        $m4 = "main.copyDumpBytes" ascii
+        $m5 = "main.MiniDumpGetBytes" ascii
+        $m6 = "main.SendBytesRaw" ascii
+        $m7 = "main.SendBytesSMB" ascii
+        $m8 = "main.DeobfuscateDump" ascii
+        $m9 = "main.dumpMutex" ascii
+        $m10 = "main.dbghelpDLL" ascii
+        $m11 = "main.miniDumpWriteDump" ascii
+    condition:
+        uint16(0) == 0x5a4d and (3 of ($x*) or (1 of ($x*) and (1 of ($s*) or 3 of ($m*))) or (all of ($s*) and 3 of ($m*)) or (7 of ($m*)))
+}
+
+rule INDICATOR_TOOL_SharpLDAP {
+    meta:
+        author = "ditekSHen"
+        description = "Detects SharpLDAP tool written in C# that aims to do enumeration via LDAP queries"
+    strings:
+        $x1 = "SharpLDAP" ascii wide
+        $x2 = "SharpLDAP.pdb" ascii
+        $s1 = "(&(objectCategory=computer)(userAccountControl:1.2.840.113556.1.4.803:=8192))" wide
+        $s2 = "(&(servicePrincipalName=*))" wide
+        $s3 = "/Enumerating (Domain|Enterprise|Organizational|Service|Members|Users|Computers)/" wide
+        $s4 = "ListMembers" fullword ascii
+        $s5 = "GroupMembers" fullword ascii
+        $s6 = "get_SamAccountName" fullword ascii
+    condition:
+        uint16(0) == 0x5a4d and ((1 of ($x*) and 4 of ($s*)) or (5 of ($s*)))
+}
+
+rule INDICATOR_TOOL_Pandora {
+    meta:
+        author = "ditekSHen"
+        description = "Detects Pandora tool to extract credentials from password managers"
+    strings:
+        $s1 = "process PID:" fullword wide
+        $s2 = "Dump file created:" fullword wide
+        $s3 = "System.Security.AccessControl.FileSystemAccessRule('Everyone', 'FullControl', 'Allow')" ascii
+        $s4 = "{[math]::Round($_.PrivateMemorySize64" ascii
+        $s5 = "rundll32.exe C:\\Windows\\System32\\comsvcs.dll, MiniDump $" ascii
+        $s6 = "\"payload\":{\"logins\":" ascii
+        $s7 = "\\pandora.pdb" ascii
+    condition:
+        uint16(0) == 0x5a4d and 5 of them
+}
+
+rule INDICATOR_TOOL_Havoc {
+    meta:
+        author = "ditekSHen"
+        description = "Detects Havoc Demon"
+    strings:
+        $x1 = "X-Havoc:" wide
+        $x2 = "X-Havoc-Agent:" wide
+        $s1 = "\\Werfault.exe" wide
+        $s2 = "/funny_cat.gif" wide
+    condition:
+        uint16(0) == 0x5a4d and (all of ($x*) or 3 of them or
+            (
+                pe.number_of_imports == 0 and 
+                pe.number_of_exports == 0 and 
+                2 of them
+            ) 
+        )
 }

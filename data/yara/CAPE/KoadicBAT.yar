@@ -4,8 +4,9 @@ rule KoadicBAT {
         description = "Koadic post-exploitation framework BAT payload"
         cape_type = "KoadicBAT payload"
     strings:
-        $s1 = "&@cls&@set" ascii
-        $s2 = /:~\d+,1%+/ ascii
+        $v1_1 = "&@cls&@set" ascii
+        $v2_1 = { 26 63 6c 73 0d 0a 40 25 }
+        $m1 = /:~\d+,1%+/ ascii
     condition:
-        uint32(0) == 0x4026feff and all of them and #s2 > 100
+        uint16(0) == 0xfeff and ((1 of ($v1*) or 1 of ($v2*)) and #m1 > 100)
 }

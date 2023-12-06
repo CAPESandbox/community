@@ -4,6 +4,12 @@ from lib.cuckoo.common.abstracts import Signature
 
 log = logging.getLogger(__name__)
 
+urls_startswith = (
+    "https://files.catbox.moe/",
+    "https://cdn.discordapp.com/attachments/",
+    "https://anonymousfiles.io/",
+)
+
 
 class Modiloader_APIs(Signature):
     name = "downloads_from_filehosting"
@@ -30,9 +36,10 @@ class Modiloader_APIs(Signature):
             url = self.get_argument(call, "URL")
         elif call["api"] == "WinHttpOpenRequest":
             url = self.get_argument(call, "ObjectName")
-
+        elif call["api"] == "WinHttpGetProxyForUrl":
+            url = self.get_argument(call, "Url")
         if url:
-            if url.startswith("https://cdn.discordapp.com/attachments/"):
+            if url.startswith(urls_startswith):
                 if self.pid:
                     self.mark_call()
                 self.urls.append(url)
@@ -45,10 +52,6 @@ class Modiloader_APIs(Signature):
                     self.mark_call()
                 self.urls.append("https://drive.google.com" + url)
             elif "basecamp.com/p/" in url:
-                if self.pid:
-                    self.mark_call()
-                self.urls.append(url)
-            elif url.startswith("https://anonymousfiles.io/"):
                 if self.pid:
                     self.mark_call()
                 self.urls.append(url)

@@ -18,7 +18,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class CookiesStealer(Signature):
     name = "infostealer_cookies"
-    description = "Harvests cookies for information gathering"
+    description = "Touches a file containing cookies, possibly for information gathering"
     severity = 3
     categories = ["infostealer"]
     authors = ["bartblaze"]
@@ -61,6 +61,7 @@ class CookiesStealer(Signature):
                 match = self.check_argument_call(call, pattern=indicator, api="NtQueryAttributesFile", category="filesystem", regex=True)
                 if match:
                     self.add_match(process, 'file', match)
+
 
     def on_complete(self):
         return self.has_matches()

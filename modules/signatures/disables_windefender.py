@@ -176,3 +176,31 @@ class DisablesWindowsDefenderLogging(Signature):
                 return True
 
         return False
+
+
+class DisablesWindowsDefenderDISM(Signature):
+    name = "disables_windows_defender_dism"
+    description = "Disable Windows Defender via DISM"
+    severity = 2
+    categories = ["anti-av"]
+    authors = ["ditekshen"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1089"]  # MITRE v6
+    ttps += ["T1112"]  # MITRE v6,7,8
+    ttps += ["T1562", "T1562.001"]  # MITRE v7,8
+    mbcs = ["OB0006", "E1112", "F0004"]
+    mbcs += ["OC0008", "C0036"]  # micro-behaviour
+
+    def on_complete(self):
+        indicators = [
+            ".*\/Disable-Feature.*\/FeatureName:Windows-Defender.*",
+        ]
+
+        for indicator in indicators:
+            match = self.check_executed_command(pattern=indicator, regex=True)
+            if match:
+                self.data.append({"command": match})
+                return True
+
+        return False

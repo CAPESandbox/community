@@ -156,7 +156,7 @@ class PhysicalDriveAccess(Signature):
 
 class EnumeratesPhysicalDrives(Signature):
     name = "enumerates_physical_drives"
-    description = "Emumerates physical drives"
+    description = "Enumerates physical drives"
     severity = 3
     categories = ["bootkit", "rootkit", "wiper"]
     authors = ["Kevin Ross"]
@@ -242,6 +242,10 @@ class PotentialOverWriteMBR(Signature):
         if call["api"] == "NtWriteFile":
             filepath = self.get_raw_argument(call, "HandleName")
             writelength = self.get_raw_argument(call, "Length")
+
+            if not filepath:
+                return
+
             if (
                 filepath.lower() == "\\??\\physicaldrive0" or filepath.lower().startswith("\\device\\harddisk")
             ) and writelength == 512:

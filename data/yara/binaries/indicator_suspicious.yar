@@ -673,7 +673,7 @@ rule INDICATOR_SUSPICIOUS_EXE_ClearMyTracksByProcess {
         uint16(0) == 0x5a4d and any of them
 }
 
-rule INDICATOR_SUSPICOIUS_EXE_TelegramChatBot {
+rule INDICATOR_SUSPICIOUS_EXE_TelegramChatBot {
     meta:
         author = "ditekSHen"
         description = "Detects executables using Telegram Chat Bot"
@@ -685,10 +685,11 @@ rule INDICATOR_SUSPICOIUS_EXE_TelegramChatBot {
         $p1 = "/sendMessage" ascii wide
         $p2 = "/sendDocument" ascii wide
         $p3 = "&chat_id=" ascii wide
+        $p4 = "/sendLocation" ascii wide
     condition:
         uint16(0) == 0x5a4d and (2 of ($s*) or (2 of ($p*) and 1 of ($s*)))
 }
-
+  
 rule INDICATOR_SUSPICIOUS_EXE_B64_Artifacts {
     meta:
         author = "ditekSHen"
@@ -1089,4 +1090,307 @@ rule INDICATOR_SUSPICIOUS_EXE_NKN_BCP2P {
         $s6 = ".GetNodeStateContext" ascii
     condition:
         uint16(0) == 0x5a4d and (1 of ($x*) or all of ($s*))
+}
+
+rule INDICATOR_Binary_Embedded_Cryptocurrency_Wallet_Browser_Extension_IDs {
+    meta:
+        author = "ditekSHen"
+        description = "Detect binaries embedding considerable number of cryptocurrency wallet browser extension IDs."
+    strings:
+        $s1 = "Ibnejdfjmmkpcnlpebklmnkoeoihofec" ascii wide nocase // TronLink
+        $s2 = "fhbohimaelbohpjbbldcngcnapndodjp" ascii wide nocase // BinanceChain
+        $s3 = "ffnbelfdoeiohenkjibnmadjiehjhajb" ascii wide nocase // Yoroi
+        $s4 = "jbdaocneiiinmjbjlgalhcelgbejmnid" ascii wide nocase // Nifty Wallet
+        $s5 = "afbcbjpbpfadlkmhmclhkeeodmamcflc" ascii wide nocase // Math Wallet
+        $s6 = "hnfanknocfeofbddgcijnmhnfnkdnaad" ascii wide nocase // Coinbase Wallet
+        $s7 = "hpglfhgfnhbgpjdenjgmdgoeiappafln" ascii wide nocase // Guarda
+        $s8 = "blnieiiffboillknjnepogjhkgnoapac" ascii wide nocase // EQUAL Wallet
+        $s9 = "cjelfplplebdjjenllpjcblmjkfcffne" ascii wide nocase // Jaxx Liberty
+        $s10 = "fihkakfobkmkjojpchpfgcmhfjnmnfpi" ascii wide nocase // BitApp Wallet
+        $s11 = "kncchdigobghenbbaddojjnnaogfppfj" ascii wide nocase // iWallet
+        $s12 = "amkmjjmmflddogmhpjloimipbofnfjih" ascii wide nocase // Wombat
+        $s13 = "nlbmnnijcnlegkjjpcfjclmcfggfefdm" ascii wide nocase // MEW CX
+        $s14 = "nanjmdknhkinifnkgdcggcfnhdaammmj" ascii wide nocase // GuildWallet
+        $s15 = "nkddgncdjgjfcddamfgcmfnlhccnimig" ascii wide nocase // Saturn Wallet
+        $s16 = "fnjhmkhhmkbjkkabndcnnogagogbneec" ascii wide nocase // Ronin Wallet
+        $s17 = "cphhlgmgameodnhkjdmkpanlelnlohao" ascii wide nocase // NeoLine
+        $s18 = "nhnkbkgjikgcigadomkphalanndcapjk" ascii wide nocase // Clover Wallet
+        $s19 = "kpfopkelmapcoipemfendmdcghnegimn" ascii wide nocase // Liquality Wallet
+        $s20 = "aiifbnbfobpmeekipheeijimdpnlpgpp" ascii wide nocase // Terra Station
+        $s21 = "dmkamcknogkgcdfhhbddcghachkejeap" ascii wide nocase // Keplr
+        $s22 = "fhmfendgdocmcbmfikdcogofphimnkno" ascii wide nocase // Sollet
+        $s23 = "cnmamaachppnkjgnildpdmkaakejnhae" ascii wide nocase // Auro Wallet
+        $s24 = "jojhfeoedkpkglbfimdfabpdfjaoolaf" ascii wide nocase // Polymesh Wallet
+        $s25 = "flpiciilemghbmfalicajoolhkkenfel" ascii wide nocase // ICONex
+        $s26 = "nknhiehlklippafakaeklbeglecifhad" ascii wide nocase // Nabox Wallet
+        $s27 = "hcflpincpppdclinealmandijcmnkbgn" ascii wide nocase // KHC
+        $s28 = "ookjlbkiijinhpmnjffcofjonbfbgaoc" ascii wide nocase // Temple
+        $s29 = "mnfifefkajgofkcjkemidiaecocnkjeh" ascii wide nocase // TezBox
+        $s30 = "lodccjjbdhfakaekdiahmedfbieldgik" ascii wide nocase // DAppPlay
+        $s31 = "Ijmpgkjfkbfhoebgogflfebnmejmfbml" ascii wide nocase // BitClip
+        $s32 = "lkcjlnjfpbikmcmbachjpdbijejflpcm" ascii wide nocase // Steem Keychain
+        $s33 = "nkbihfbeogaeaoehlefnkodbefgpgknn" ascii wide nocase // MetaMask
+        $s34 = "bcopgchhojmggmffilplmbdicgaihlkp" ascii wide nocase // Hycon Lite Client
+        $s35 = "klnaejjgbibmhlephnhpmaofohgkpgkd" ascii wide nocase // ZilPay
+        $s36 = "aeachknmefphepccionboohckonoeemg" ascii wide nocase // Coin98 Wallet
+        $s37 = "dkdedlpgdmmkkfjabffeganieamfklkm" ascii wide nocase // Cyano Wallet
+        $s38 = "nlgbhdfgdhgbiamfdfmbikcdghidoadd" ascii wide nocase // Byone
+        $s39 = "onofpnbbkehpmmoabgpcpmigafmmnjhl" ascii wide nocase // Nash Extension
+        $s40 = "cihmoadaighcejopammfbmddcmdekcje" ascii wide nocase // Leaf Wallet
+        $s41 = "cgeeodpfagjceefieflmdfphplkenlfk" ascii wide nocase // EVER Wallet
+        $s42 = "pdadjkfkgcafgbceimcpbkalnfnepbnk" ascii wide nocase // KardiaChain Wallet
+        $s43 = "acmacodkjbdgmoleebolmdjonilkdbch" ascii wide nocase // Rabby Wallet
+        $s44 = "bfnaelmomeimhlpmgjnjophhpkkoljpa" ascii wide nocase // Phantom
+        $s45 = "fhilaheimglignddkjgofkcbgekhenbh" ascii wide nocase // Oxygen - Atomic Crypto Wallet
+        $s46 = "mgffkfbidihjpoaomajlbgchddlicgpn" ascii wide nocase // Pali Wallet
+        $s47 = "hmeobnfnfcmdkdcmlblgagmfpfboieaf" ascii wide nocase // XDEFI Wallet
+        $s48 = "lpfcbjknijpeeillifnkikgncikgfhdo" ascii wide nocase // Nami
+        $s49 = "dngmlblcodfobpdpecaadgfbcggfjfnm" ascii wide nocase // MultiversX DeFi Wallet
+        $s50 = "bhhhlbepdkbapadjdnnojkbgioiodbic" ascii wide nocase // Solflare Wallet
+        $s51 = "jnkelfanjkeadonecabehalmbgpfodjm" ascii wide nocase // Goby
+        $s52 = "jhgnbkkipaallpehbohjmkbjofjdmeid" ascii wide nocase // SteemKeychain
+        $s53 = "jnlgamecbpmbajjfhmmmlhejkemejdma" ascii wide nocase // Braavos Smart Wallet
+        $s54 = "kkpllkodjeloidieedojogacfhpaihoh" ascii wide nocase // Enkrypt: Ethereum, Polkadot & RSK Wallet
+        $s55 = "mcohilncbfahbmgdjkbpemcciiolgcge" ascii wide nocase // OKX Wallet
+        $s56 = "gjagmgiddbbciopjhllkdnddhcglnemk" ascii wide nocase // Hashpack
+        $s57 = "kmhcihpebfmpgmihbkipmjlmmioameka" ascii wide nocase // Eternl
+        $s58 = "phkbamefinggmakgklpkljjmgibohnba" ascii wide nocase // Pontem Aptos Wallet
+        $s59 = "lpilbniiabackdjcionkobglmddfbcjo" ascii wide nocase // Keeper Wallet
+        $s60 = "cjmkndjhnagcfbpiemnkdpomccnjblmj" ascii wide nocase // Finnie
+        $s61 = "aijcbedoijmgnlmjeegjaglmepbmpkpi" ascii wide nocase // Leap Terra Wallet
+        $s62 = "efbglgofoippbgcjepnhiblaibcnclgk" ascii wide nocase // Martian Wallet for Sui & Aptos
+        $s63 = "odbfpeeihdkbihmopkbjmoonfanlbfcl" ascii wide nocase // Brave Wallet
+        $s64 = "fnnegphlobjdpkhecapkijjdkgcjhkib" ascii wide nocase // Harmony
+        $s65 = "aodkkagnadcbobfpggfnjeongemjbjca" ascii wide nocase // BOLT X
+        $s66 = "akoiaibnepcedcplijmiamnaigbepmcb" ascii wide nocase // Edge - Yoroi
+        $s67 = "ejbalbakoplchlghecdalmeeeajnimhm" ascii wide nocase // Edge - MetaMask
+        $s68 = "dfeccadlilpndjjohbjdblepmjeahlmm" ascii wide nocase // Edge - Math Wallet
+        $s69 = "kjmoohlgokccodicjjfebfomlbljgfhk" ascii wide nocase // Edge - Ronin Wallet
+        $s70 = "ajkhoeiiokighlmdnlakpjfoobnjinie" ascii wide nocase // Edge - Station Wallet
+        $s71 = "fplfipmamcjaknpgnipjeaeeidnjooao" ascii wide nocase // Edge - BDLT Wallet
+        $s72 = "niihfokdlimbddhfmngnplgfcgpmlido" ascii wide nocase // Edge - Glow
+        $s73 = "obffkkagpmohennipjokmpllocnlndac" ascii wide nocase // Edge - OneKey
+        $s74 = "kfocnlddfahihoalinnfbnfmopjokmhl" ascii wide nocase // Edge - MetaWallet
+        $s75 = "infeboajgfhgbjpjbeppbkgnabfdkdaf" ascii wide nocase // OneKey
+        $s76 = "{530f7c6c-6077-4703-8f71-cb368c663e35}.xpi" ascii wide nocase // Firefox - Yoroi
+        $s77 = "ronin-wallet@axieinfinity.com.xpi" ascii wide nocase // Firefox - Ronin Wallet
+        $s78 = "webextension@metamask.io.xpi" ascii wide nocase // Firefox - MetaMask
+        $s79 = "{5799d9b6-8343-4c26-9ab6-5d2ad39884ce}.xpi" ascii wide nocase // Firefox - TronLink
+        $s80 = "{aa812bee-9e92-48ba-9570-5faf0cfe2578}.xpi" ascii wide nocase // Firefox - TronLink
+        $s81 = "{59ea5f29-6ea9-40b5-83cd-937249b001e1}.xpi" ascii wide nocase // Firefox - TronLink
+        $s82 = "{d8ddfc2a-97d9-4c60-8b53-5edd299b6674}.xpi" ascii wide nocase // Firefox - TronLink
+        $s83 = "{7c42eea1-b3e4-4be4-a56f-82a5852b12dc}.xpi" ascii wide nocase // Firefox - Phantom
+        $s84 = "{b3e96b5f-b5bf-8b48-846b-52f430365e80}.xpi" ascii wide nocase // Firefox - Phantom
+        $s85 = "{eb1fb57b-ca3d-4624-a841-728fdb28455f}.xpi" ascii wide nocase // Firefox - Phantom
+        $s86 = "{76596e30-ecdb-477a-91fd-c08f2018df1a}.xpi" ascii wide nocase // Firefox - Phantom
+        $s87 = "ejjladinnckdgjemekebdpeokbikhfci" ascii wide nocase // Petra Wallet
+        $s88 = "bgpipimickeadkjlklgciifhnalhdjhe" ascii wide nocase // GeroWallet
+        $s89 = "epapihdplajcdnnkdeiahlgigofloibg" ascii wide nocase // Sender
+        $s90 = "aholpfdialjgjfhomihkjbmgjidlcdno" ascii wide nocase // Exodus Web3 Wallet
+        $s91 = "egjidjbpglichdcondbcbdnbeeppgdph" ascii wide nocase // Trust Wallet
+        $s92 = "pnndplcbkakcplkjnolgbkdgjikjednm" ascii wide nocase // Tronium
+        $s93 = "gojhcdgcpbpfigcaejpfhfegekdgiblk" ascii wide nocase // Opera Wallet
+    condition:
+        (uint16(0) == 0x5a4d and 8 of them) or (12 of them)
+}
+
+rule INDICATOR_Binary_Embedded_MFA_Browser_Extension_IDs {
+    meta:
+        author = "ditekSHen"
+        description = "Detect binaries embedding considerable number of MFA browser extension IDs."
+    strings:
+        $s1 = "bhghoamapcdpbohphigoooaddinpkbai" ascii wide nocase // Authenticator
+        $s2 = "gaedmjdfmmahhbjefcbgaolhhanlaolb" ascii wide nocase // Authy 2FA
+        $s3 = "oeljdldpnmdbchonielidgobddffflal" ascii wide nocase // EOS Authenticator
+        $s4 = "ilgcnhelpchnceeipipijaljkblbcobl" ascii wide nocase // GAuth Authenticator
+        $s5 = "imloifkgjagghnncjkhggdhalmcnfklk" ascii wide nocase // Trezor Password Manager
+        $s6 = "fdjamakpfbbddfjaooikfcpapjohcfmg" ascii wide nocase // Dashlane — Password Manager
+        $s7 = "fooolghllnmhmmndgjiamiiodkpenpbb" ascii wide nocase // NordPass® Password Manager & Digital Vault
+        $s8 = "pnlccmojcmeohlpggmfnbbiapkmbliob" ascii wide nocase // RoboForm Password Manager
+        $s9 = "hdokiejnpimakedhajhdlcegeplioahd" ascii wide nocase // LastPass: Free Password Manager
+        $s10 = "naepdomgkenhinolocfifgehidddafch" ascii wide nocase // Browserpass
+        $s11 = "bmikpgodpkclnkgmnpphehdgcimmided" ascii wide nocase // MYKI Password Manager & Authenticator
+        $s12 = "oboonakemofpalcgghocfoadofidjkkk" ascii wide nocase // KeePassXC-Browser
+        $s13 = "fmhmiaejopepamlcjkncpgpdjichnecm" ascii wide nocase // KeePass Tusk
+        $s14 = "nngceckbapebfimnlniiiahkandclblb" ascii wide nocase // Bitwarden
+        $s15 = "fiedbfgcleddlbcmgdigjgdfcggjcion" ascii wide nocase // Microsoft AutoFill
+    condition:
+        (uint16(0) == 0x5a4d and 5 of them) or (8 of them)
+}
+
+rule INDICATOR_SUSPICOUS_EXE_UNC_Regex {
+    meta:
+        author = "ditekSHen"
+        description = "Detects executables with considerable number of regexes often observed in infostealers"
+    strings:
+        $s1 = "^((8|\\+7|\\+380|\\+375|\\+373)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$" ascii wide
+        $s2 = "(^(1|3)(?=.*[0-9])(?=.*[a-zA-Z])[\\da-zA-Z]{27,34}?[\\d\\- ])|(^(1|3)(?=.*[0-9])(?=.*[a-zA-Z])[\\da-zA-Z]{27,34})$" ascii wide
+        $s3 = "(^L[A-Za-z0-9]{32,34}?[\\d\\- ])|(^L[A-Za-z0-9]{32,34})$" ascii wide
+        $s4 = "(^q[A-Za-z0-9\\:]{32,54}?[\\d\\- ])|(^q[A-Za-z0-9\\:]{32,54})$" ascii wide
+        $s5 = "^(P|p){1}[0-9]?[\\d\\- ]{7,15}|.+@.+\\..+$" ascii wide
+        $s6 = "(^0x[A-Za-z0-9]{40,42}?[\\d\\- ])|(^0x[A-Za-z0-9]{40,42})$" ascii wide
+        $s7 = "(^X[A-Za-z0-9]{32,34}?[\\d\\- ])|(^X[A-Za-z0-9]{32,34})$" ascii wide
+        $s8 = "^41001[0-9]?[\\d\\- ]{7,11}$" ascii wide
+        $s9 = "^R[0-9]?[\\d\\- ]{12,13}$" ascii wide
+        $s10 = "^Z[0-9]?[\\d\\- ]{12,13}$" ascii wide
+        $s11 = "(^(GD|GC)[A-Z0-9]{54,56}?[\\d\\- ])|(^(GD|GC)[A-Z0-9]{54,56})$" ascii wide
+        $s12 = "(^A[A-Za-z0-9]{32,34}?[\\d\\- ])|(^A[A-Za-z0-9]{32,34})$" ascii wide
+        $s13 = "(^t[A-Za-z0-9]{32,36}?[\\d\\- ])|(^t[A-Za-z0-9]{32,36})$" ascii wide
+        $s14 = "(^r[A-Za-z0-9]{32,34}?[\\d\\- ])|(^r[A-Za-z0-9]{32,34})$" ascii wide
+        $s15 = "(^G[A-Za-z0-9]{32,35}?[\\d\\- ])|(^G[A-Za-z0-9]{32,35})$" ascii wide
+        $s16 = "(^D[A-Za-z0-9]{32,35}?[\\d\\- ])|(^D[A-Za-z0-9]{32,35})$" ascii wide
+        $s17 = "(^(T[A-Z])[A-Za-z0-9]{32,35}?[\\d\\- ])|(^(T[A-Z])[A-Za-z0-9]{32,35})$" ascii wide
+        $s18 = "^1[a-km-zA-HJ-NP-Z1-9]{25,34}$" wide // Crypto Wallet Address
+        $s19 = "^3[a-km-zA-HJ-NP-Z1-9]{25,34}$" wide // Crypto Wallet Address
+        $s20 = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$" wide
+        $s21 = "^(?!:\\/\\/)([a-zA-Z0-9-_]+\\.)*[a-zA-Z0-9][a-zA-Z0-9-_]+\\.[a-zA-Z]{2,11}?$" wide
+    condition:
+        uint16(0) == 0x5a4d and 6 of them
+}
+
+rule INDICATOR_SUSPICIOUS_DeleteRecentItems {
+     meta:
+        author = "ditekSHen"
+        description = "Detects executables embedding anti-forensic artifcats of deletiing Windows Recent Items"
+    strings:
+        $s1 = "del C:\\Windows\\AppCompat\\Programs\\RecentFileCache.bcf" ascii wide nocase
+        $s2 = "del /F /Q %APPDATA%\\Microsoft\\Windows\\Recent\\*" ascii wide nocase
+        $s3 = "del /F /Q %APPDATA%\\Microsoft\\Windows\\Recent\\CustomDestinations\\*" ascii wide nocase
+        $s4 = "del /F /Q %APPDATA%\\Microsoft\\Windows\\Recent\\AutomaticDestinations\\*" ascii wide nocase
+    condition:
+        uint16(0) == 0x5a4d and 2 of them
+}
+
+rule INDICATOR_SUSPICIOUS_DeleteWinDefednerQuarantineFiles {
+     meta:
+        author = "ditekSHen"
+        description = "Detects executables embedding anti-forensic artifcats of deletiing Windows defender quarantine files"
+    strings:
+        $s1 = "rmdir C:\\ProgramData\\Microsoft\\Windows Defender\\Quarantine\\Entries /S" ascii wide nocase
+		$s2 = "rmdir C:\\ProgramData\\Microsoft\\Windows Defender\\Quarantine\\Resources /S" ascii wide nocase
+		$s3 = "rmdir C:\\ProgramData\\Microsoft\\Windows Defender\\Quarantine\\ResourceData /S" ascii wide nocase
+        $r1 = "rmdir" ascii wide nocase
+        $p1 = "Microsoft\\Windows Defender\\Quarantine\\Entries /S" ascii wide nocase
+        $p2 = "Microsoft\\Windows Defender\\Quarantine\\Resources /S" ascii wide nocase
+        $p3 = "Microsoft\\Windows Defender\\Quarantine\\ResourceData /S" ascii wide nocase
+    condition:
+        uint16(0) == 0x5a4d and (2 of ($s*) or (1 of ($r*) and 2 of ($p*)))
+}
+
+rule INDICATOR_SUSPICIOUS_DeleteShimCache {
+     meta:
+        author = "ditekSHen"
+        description = "Detects executables embedding anti-forensic artifcats of deletiing shim cache"
+    strings:
+        $s1 = "Rundll32.exe apphelp.dll,ShimFlushCache" ascii wide nocase
+        $s2 = "Rundll32 apphelp.dll,ShimFlushCache" ascii wide nocase
+        $m1 = ".dll,ShimFlushCache" ascii wide nocase
+        $m2 = "rundll32" ascii wide nocase
+    condition:
+        uint16(0) == 0x5a4d and (1 of ($s*) or all of ($m*))
+}
+
+rule INDICATOR_SUSPICIOUS_ShredFileSteps {
+     meta:
+        author = "ditekSHen"
+        description = "Detects executables embedding/copying file shredding steps"
+    strings:
+        $s1 = { 55 00 00 00 aa 00 00 00 92 49 24 00 49 24 92 00
+                24 92 49 00 00 00 00 00 11 00 00 00 22 00 00 00
+                33 00 00 00 44 00 00 00 66 00 00 00 88 00 00 00
+                99 00 00 00 bb 00 00 00 cc 00 00 00 dd 00 00 00
+                ee 00 00 00 ff 00 00 00 6d b6 db 00 b6 db 6d 00
+                db 6d b6 }
+    condition:
+        uint16(0) == 0x5a4d and all of them
+}
+
+rule INDICATOR_SUSPICIOUS_PWS_CaptureScreenshot {
+    meta:
+        author = "ditekSHen"
+        description = "Detects PowerShell script with screenshot capture capability"
+    strings:
+        $encoder = ".ImageCodecInfo]::GetImageEncoders(" ascii nocase
+        $capture1 = ".Sendkeys]::SendWait(\"{PrtSc}\")" ascii nocase
+        $capture2 = ".Sendkeys]::SendWait('{PrtSc}')" ascii nocase
+        $access = ".Clipboard]::GetImage(" ascii nocase
+        $save = ".Save(" ascii nocase
+    condition:
+        $encoder and (1 of ($capture*) and ($access or $save))
+}
+
+rule INDICATOR_SUSPICIOUS_PWS_CaptureBrowserPlugins {
+    meta:
+        author = "ditekSHen"
+        description = "Detects PowerShell script with browser plugins capture capability"
+    strings:
+        $s1 = "$env:APPDATA +" ascii nocase
+        $s2 = "[\\w-]{24}\\.[\\w-]{6}\\.[\\w-]{27}|mfa\\.[\\w-]{84}" ascii nocase
+        $s3 = "\\leveldb" ascii nocase
+        $o1 = ".Match(" ascii nocase
+        $o2 = ".Contains(" ascii nocase
+        $o3 = ".Add(" ascii nocase
+    condition:
+        2 of ($s*) and 2 of ($o*)
+}
+
+rule INDICATOR_SUSPICIOUS_IMG_Embedded_B64_EXE {
+    meta:
+        author = "ditekSHen"
+        description = "Detects images with specific base64 markers and/or embedding (reversed) base64-encoded executables"
+    strings:
+        $m1 = "<<BASE64_START>>" ascii
+        $m2 = "<<BASE64_END>>" ascii
+        $m3 = "BASE64_START" ascii
+        $m4 = "BASE64_END" ascii
+        $m5 = "BASE64-START" ascii
+        $m6 = "BASE64-END" ascii
+        $m7 = "BASE64START" ascii
+        $m8 = "BASE64END" ascii
+        $h1 = "TVqQA" ascii
+        $h2 = "AQqVT" ascii
+    condition:
+        (uint32(0) == 0xd8ff or uint32(0) == 0x474e5089 or uint16(0) == 0x4d42) and ((2 of ($m*)) or (1 of ($h*)))
+}
+
+rule INDICATOR_SUSPICIOUS_EXE_TransferSh_URL {
+    meta:
+        author = "ditekSHen"
+        description = "Detects images embedding based64-encoded executable, and a base64 marker"
+    strings:
+        $s1 = "//transfer.sh/get/" ascii wide nocase
+    condition:
+        uint16(0) == 0x5a4d and 1 of them
+}
+
+rule INDICATOR_SUSPICIOUS_EXE_References_AdsBlocker_Browser_Extension_IDs {
+    meta:
+        author = "ditekSHen"
+        description = "Detect executables referencing considerable number of Ads blocking browser extension IDs"
+    strings:
+        $s1 = "gighmmpiobklfepjocnamgkkbiglidom" ascii wide nocase // AdBlock
+        $s2 = "cfhdojbkjhnklbpkdaibdccddilifddb" ascii wide nocase // Adblock Plus
+        $s3 = "cjpalhdlnbpafiamejdnhcphjbkeiagm" ascii wide nocase // uBlock Origin
+        $s4 = "epcnnfbjfcgphgdmggkamkmgojdagdnn" ascii wide nocase // uBlock
+        $s5 = "kacljcbejojnapnmiifgckbafkojcncf" ascii wide nocase // Ad-Blocker
+        $s6 = "gginmiamniniinhbipmknjiefidjlnob" ascii wide nocase // Easy AdBlocker
+        $s7 = "alplpnakfeabeiebipdmaenpmbgknjce" ascii wide nocase // Adblocker for Chrome - NoAds
+        $s8 = "ohahllgiabjaoigichmmfljhkcfikeof" ascii wide nocase // AdBlocker Ultimate
+        $s9 = "lmiknjkanfacinilblfjegkpajpcpjce" ascii wide nocase // uBlocker
+        $s10 = "lalfpjdbhpmnhfofkckdpkljeilmogfl" ascii wide nocase // Hola ad remover
+    condition:
+        (uint16(0) == 0x5a4d and 5 of them) or (7 of them)
+}
+
+rule INDICATOR_SUSPICIOUS_EXE_References_PublicServiceInterface {
+    meta:
+        author = "ditekSHen"
+        description = "Detect executables referencing public and free service interface testing and dev services as means of CnC"
+    strings:
+        $s1 = "mockbin.org/bin" ascii wide nocase
+        $s2 = "run.mocky.io/v3" ascii wide nocase
+        $s3 = "webhook.site/" ascii wide nocase
+        $s4 = "devtunnels.ms/" ascii wide nocase
+    condition:
+        (uint16(0) == 0x5a4d or uint16(0) == 0x457f or uint16(0) == 0xfacf) and 1 of them
 }

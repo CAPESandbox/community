@@ -34,7 +34,7 @@ class DecoyImage(Signature):
                 path = self.get_argument(call, "FilePath")
                 if path:
                     if path.lower().endswith((".jpg", ".jpeg", ".png", ".bmp", ".tiff")):
-                        self.data.append(path)
+                        self.data.append({"path": path})
                         if self.pid:
                             self.mark_call()
 
@@ -46,7 +46,7 @@ class DecoyImage(Signature):
                     if "image data," in filetype or "PC bitmap," in filetype:
                         for filepath in dropped.get("guest_paths", []) or []:
                             for decoy in self.data:
-                                if filepath == decoy:
+                                if filepath in decoy.get("path", ""):
                                     return True
 
         return False

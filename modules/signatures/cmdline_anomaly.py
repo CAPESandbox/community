@@ -194,7 +194,7 @@ class CommandLineHTTPLink(Signature):
 class CommandLineReversedHTTPLink(Signature):
     name = "cmdline_reversed_http_link"
     description = "A reversed HTTP/S link was seen in a script or command line"
-    severity = 3
+    severity = 4
     categories = ["command"]
     authors = ["Kevin Ross"]
     minimum = "1.3"

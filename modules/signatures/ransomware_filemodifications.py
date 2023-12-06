@@ -43,7 +43,7 @@ class RansomwareFileModifications(Signature):
         self.appendemailcount = 0
         self.modifiedexistingcount = 0
         self.newextensions = []
-        self.handle = []
+        self.handles = []
 
     def on_call(self, call, process):
         if not call["status"]:
@@ -79,14 +79,27 @@ class RansomwareFileModifications(Signature):
             existed = self.get_argument(call, "ExistedBefore")
             if existed == "yes":
                 if self.pid:
-                    self.handle = self.get_argument(call, "FileHandle")
+                    # This is a list of all handles that already existed before being created again
+                    handle = self.get_argument(call, "FileHandle")
+                    if handle and handle not in self.handles:
+                        self.handles.append(handle)
 
         if call["api"] == "NtWriteFile":
-            if self.handle:
-                if self.get_argument(call, "FileHandle") == self.handle:
+            if self.handles:
+                if self.get_argument(call, "FileHandle") in self.handles:
+                    file_name = self.get_argument(call, "HandleName")
+
+                    if "\\inetcache" in file_name.lower():
+                        return None
+
+                    # If a process rewrites the same file over and over again, this is not ransomware...
+                    if {"file": file_name} in self.data:
+                        return None
+
                     if self.modifiedexistingcount <= 10:
                         self.mark_call()
                     self.modifiedexistingcount += 1
+                    self.data.append({"file": file_name})
 
     def on_complete(self):
         ret = False
@@ -98,8 +111,10 @@ class RansomwareFileModifications(Signature):
                 "\\temp\\" not in deletedfile.lower()
                 and "\\temporary internet files\\" not in deletedfile.lower()
                 and "\\cache" not in deletedfile.lower()
+                and "\\inetcache" not in deletedfile.lower()
                 and not deletedfile.lower().endswith(".tmp")
             ):
+                self.data.append({"file": deletedfile})
                 deletedcount += 1
         if deletedcount > 60:
             if ":" in self.description:
@@ -138,6 +153,7 @@ class RansomwareFileModifications(Signature):
                 mimetype = dropped["type"]
                 filename = dropped["name"]
                 if mimetype == "data" and ".tmp" not in filename and "CryptnetUrlCache" not in filename:
+                    self.data.append({"file": filename})
                     droppedunknowncount += 1
             if droppedunknowncount > 50 and self.results["info"]["package"] != "pdf":
                 if ":" in self.description:

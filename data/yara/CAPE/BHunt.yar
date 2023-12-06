@@ -2,7 +2,7 @@ rule BHunt {
     meta:
         author = "ditekSHen"
         description = "Detects BHunt infostealer"
-        cape_type = "BHunt Infostealer Payload"
+        cape_type = "BHunt Payload"
     strings:
         $x1 = "BHUNT.Resources.resources" fullword ascii
         $x2 = "//minecraftsquid.hopto.org/" wide

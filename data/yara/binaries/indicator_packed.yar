@@ -630,6 +630,7 @@ rule INDICATOR_EXE_Packed_DotNetReactor {
     strings:
         $s1 = "is protected by an unregistered version of Eziriz's\".NET Reactor\"!" wide
         $s2 = "is protected by an unregistered version of .NET Reactor!\" );</script>" wide
+        $s3 = "is protected by an unregistered version of Eziriz's \".NET Reactor\"!" wide
     condition:
         uint16(0) == 0x5a4d and 1 of them
 }
@@ -678,6 +679,7 @@ rule INDICATOR_EXE_Packed_KoiVM {
         $s1 = "KoiVM v" ascii wide
         $s2 = "DarksVM " ascii wide
         $s3 = "Koi.NG" ascii wide
+        $s4 = "KoiVM." ascii wide
     condition:
         uint16(0) == 0x5a4d and 1 of them
 }
@@ -698,8 +700,13 @@ rule INDICATOR_EXE_Packed_Babel {
         description = "Detects executables packed with Babel"
     strings:
         $s1 = "BabelObfuscatorAttribute" fullword ascii
+        $m1 = ";babelvm;smoketest" ascii wide
+        $m2 = { 62 00 61 00 62 00 65 00 6c 00 76 00 6d [1-20] 73 00 6d 00 6f 00 6b 00 65 00 74 00 65 00 73 00 74 }
+        $m3 = "babelvm" wide
+        $m4 = "smoketest" wide
+        $m5 = /lic[A-F0-9]{8}/ ascii wide // in particular 'lic70F93782'
     condition:
-        uint16(0) == 0x5a4d and 1 of them
+        ((uint16(0) == 0x5a4d and 1 of ($s*)) or (2 of ($m*)))
 }
 
 rule INDICATOR_EXE_Packed_CryptoObfuscator {
@@ -711,4 +718,54 @@ rule INDICATOR_EXE_Packed_CryptoObfuscator {
         $s2 = "\\CryptoObfuscator_Output\\" ascii wide
     condition:
         uint16(0) == 0x5a4d and 1 of them
+}
+
+rule INDICATOR_EXE_Packed_GEN01 {
+    meta:
+        author = "ditekSHen"
+        description = "Detect packed .NET executables. Mostly AgentTeslaV4."
+    strings:
+        $c1 = "com.apple.Safari" fullword ascii
+        $c2 = "Unable to resolve HTTP prox" fullword ascii
+        $c3 = "rotcetorP rekciP laitnederC swodniW$" fullword ascii
+        $c4 = "laitnederC drowssaP beW swodniW$" fullword ascii
+        $s1 = "Accounts" fullword wide
+        $s2 = "logins" fullword wide
+        $s3 = "sha512" fullword wide
+        $s4 = "credential" fullword wide
+    condition:
+        uint16(0) == 0x5a4d and 2 of ($c*) and all of ($s*)
+}
+
+rule INDICATOR_EXE_Packed_CryptoProtector {
+    meta:
+        author = "ditekSHen"
+        description = "Detects executables packed with CryptoProtector / CryptoObfuscator"
+    strings:
+        $s1 = "CryptoObfuscator" ascii
+        $s2 = "CryptoProtector [{0}]" wide
+        $e1 = /[A-F0-9]{7,8}\.Crypto/ ascii
+    condition:
+        uint16(0) == 0x5a4d and all of ($s*) or (($s1) and #e1 > 10) or all of them
+}
+
+rule INDICATOR_EXE_Packed_Yano {
+  meta:
+      author = "ditekSHen"
+      description = "Detects executables packed with Yano Obfuscator"
+  strings:
+      $s1 = "YanoAttribute" fullword ascii
+      $s2 = "StripAfterObfuscation" fullword ascii
+  condition:
+      uint16(0) == 0x5a4d and all of them
+}
+
+rule INDICATOR_EXE_Packed_GolangBypassAV {
+    meta:
+        author = "ditekSHen"
+        description = "Detects Go executables using GolangBypassAV"
+    strings:
+        $s1 = "/GolangBypassAV/gen/" ascii
+    condition:
+        (uint16(0) == 0x5a4d or uint16(0) == 0x457f) and 1 of them
 }

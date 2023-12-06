@@ -2,7 +2,7 @@ rule Mercurial {
     meta:
         author = "ditekSHen"
         description = "Detects Mercurial infostealer"
-        cape_type = "Mercurial Infostealer Payload"
+        cape_type = "Mercurial Payload"
     strings:
         $x1 = "mercurial grabber" wide nocase
         $x2 = "\"text\":\"Mercurial Grabber |" wide

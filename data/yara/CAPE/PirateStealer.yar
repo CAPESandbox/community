@@ -2,7 +2,7 @@ rule PirateStealer {
     meta:
         author = "ditekSHen"
         description = "Detects PirateStealer"
-        cape_type = "PirateStealer Infostealer Payload"
+        cape_type = "PirateStealer Payload"
     strings:
         $s1 = "PirateStealerBTW" wide
         $s2 = "%WEBHOOK_LINK%" fullword wide

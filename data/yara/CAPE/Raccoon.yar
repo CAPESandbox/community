@@ -2,7 +2,7 @@ rule Raccoon {
     meta:
         author = "ditekSHen"
         description = "Raccoon stealer payload"
-        cape_type = "Raccoon Infostealer Payload"
+        cape_type = "Raccoon Payload"
     strings:
         $s1 = "inetcomm server passwords" fullword wide
         $s2 = "content-disposition: form-data; name=\"file\"; filename=\"data.zip\"" fullword ascii
@@ -27,7 +27,7 @@ rule RaccoonV2: raccoon_stealer_v2
 	date = "2022-07-22"
         description = "Detects Raccoon Stealer V2 (unpacked)"
         hash = "022432f770bf0e7c5260100fcde2ec7c49f68716751fd7d8b9e113bf06167e03"
-        cape_type = "RaccoonV2 Payload"
+        cape_type = "Raccoon Payload"
 
     strings:
  
@@ -150,4 +150,28 @@ rule RaccoonV2: raccoon_stealer_v2
     condition:
         6 of ($s*) or
         ($c2_comms and $decryption_routine)
+}
+
+rule Raccoon_RecordBreaker {
+    meta:
+        author = "ditekSHen"
+        description = "Detects Raccoon Stealer 2.0, also referred to as RecordBreaker"
+        cape_type = "Raccoon Payload"
+    strings:
+        $f1 = "sgnl_" fullword ascii
+        $f2 = "tlgrm_" fullword ascii
+        $f3 = "ews_" fullword ascii
+        $f4 = "grbr_" fullword ascii
+        $f5 = "dscrd_" fullword ascii
+        $f6 = "wlts_" fullword ascii
+        $f7 = "scrnsht_" fullword ascii
+        $f8 = "sstmnfo_" fullword ascii
+        $s1 = "machineId=" fullword ascii
+        $s2 = "&configId=" fullword ascii
+        $s3 = "URL:%s" fullword ascii
+        $s4 = "USR:%s" fullword ascii
+        $s5 = "PASS:%s" fullword ascii
+        $s6 = "Content-Type: application/x-object" fullword ascii
+    condition:
+        (uint16(0) == 0x5a4d and (4 of ($f*) or all of ($s*) or 7 of them)) or (11 of them)
 }
