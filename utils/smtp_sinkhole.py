@@ -4,7 +4,7 @@
 # See the file 'docs/LICENSE' for copying permission.
 
 import argparse
-import asyncore
+# import asyncio
 import logging
 import os
 import smtplib
@@ -16,21 +16,16 @@ from email.mime.multipart import MIMEMultipart
 from pathlib import Path
 from smtpd import SMTPServer
 
-# Cuckoo root
+import aiosmtpd.controller
+
+# CAPE root
 sys.path.append(os.path.join(os.path.abspath(os.path.dirname(__file__)), ".."))
 from lib.cuckoo.common.config import Config
 
 email_config = Config("smtp_sinkhole")
 
-
-class SmtpSink(SMTPServer):
-    """SMTP Sinkhole server."""
-
-    # Where mails should be saved.
-    mail_dir = None
-    forward = None
-
-    def process_message(self, peer, mailfrom, rcpttos, data):
+class CustomSMTPHandler:
+    async def handle_DATA(self, server, session, envelope):
         """Custom mail processing used to save mails to disk."""
         # Save message to disk only if path is passed.
         timestamp = datetime.now()
@@ -43,8 +38,8 @@ class SmtpSink(SMTPServer):
                 i += 1
 
             file_name += str(i)
-            with open(os.path.join(self.mail_dir, file_name), "w") as mail:
-                mail.write(data)
+            with open(os.path.join(self.mail_dir, file_name), "wb") as mail:
+                mail.write(envelope.content)
 
         # Forward message to specific email address
         if self.forward and email_config:
@@ -55,9 +50,9 @@ class SmtpSink(SMTPServer):
                 msg["From"] = email_config.email["from"]
                 msg["To"] = email_config.email["to"]
                 part = MIMEBase("application", "octet-stream")
-                part.set_payload(data)
+                part.set_payload(envelope.content)
                 encoders.encode_base64(part)
-                part.add_header("Content-Disposition", 'attachment; filename="cuckoo.eml"')
+                part.add_header("Content-Disposition", 'attachment; filename="cape.eml"')
                 msg.attach(part)
                 server = smtplib.SMTP_SSL(email_config.email["server"], int(email_config.email["port"]))
                 server.login(email_config.email["user"], email_config.email["password"])
@@ -77,11 +72,10 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    s = SmtpSink((args.host, args.port), None)
-    s.mail_dir = args.dir
-    s.forward = args.forward
-
-    try:
-        asyncore.loop()
-    except KeyboardInterrupt:
-        pass
+    handler = CustomSMTPHandler()
+    handler.mail_dir = args.dir
+    handler.forward = args.forward
+    server = aiosmtpd.controller.Controller(handler, hostname=args.host, port=args.port)
+    server.start()
+    input("Server started. Press Return to quit.")
+    server.stop()
