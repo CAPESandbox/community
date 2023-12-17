@@ -1,3 +1,5 @@
+import "pe"
+
 rule DLAgent01 {
     meta:
       author = "ditekshen"
