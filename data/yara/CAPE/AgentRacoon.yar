@@ -14,5 +14,5 @@ rule AgentRacoon {
         $s8 = ".telemetry." wide
         $s9 = "xn--" wide
     condition:
-      uint16(0) == 0x5a4d and 4 of them
+      uint16(0) == 0x5a4d and 7 of them
 }
