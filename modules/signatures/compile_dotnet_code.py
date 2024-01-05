@@ -91,7 +91,7 @@ class CompilesDotNetCode(Signature):
         if (self.csccmd or self.cvtrescmd) and self.writemz:
             for indicator in indicators:
                 for dropped in self.results.get("dropped", []):
-                    for filename in  dropped.get("name", []):
+                    for filename in dropped.get("name", []):
                         if re.match(indicator, filename, re.IGNORECASE):
                             match = True
                             if filename.endswith(".pdb") or "Logo." in filename:
