@@ -24,10 +24,10 @@ class Machine(NamedTuple):
     hd_path: str
 
 
-def setup_network(machines: List[Machine], is_dry_run: bool = False):
+def setup_network(machines: List[Machine], is_dry_run: bool = False, network_name: str = NETWORK_NAME):
     # dump current network
     print("--- Modifying virsh network ----")
-    network_xml = _run_virsh_command(["net-dumpxml", NETWORK_NAME], capture_output=True)
+    network_xml = _run_virsh_command(["net-dumpxml", network_name], capture_output=True)
     network_doc = parseString(network_xml.stdout)
 
     dhcp_node = network_doc.documentElement.getElementsByTagName("ip")[0].getElementsByTagName("dhcp")[0]
@@ -41,7 +41,7 @@ def setup_network(machines: List[Machine], is_dry_run: bool = False):
         dhcp_node.appendChild(curr_host_node)
 
     print("New network xml definition:")
-    print(network_doc.toxml())
+    print(network_doc.toprettyxml())
 
     if not is_dry_run:
         with tempfile.NamedTemporaryFile(mode="w") as temp_file:
@@ -52,13 +52,13 @@ def setup_network(machines: List[Machine], is_dry_run: bool = False):
             _run_virsh_command(["net-define", temp_file.name])
 
             print("Network defined, restarting it")
-            _run_virsh_command(["net-destroy", NETWORK_NAME])
-            _run_virsh_command(["net-start", NETWORK_NAME])
+            _run_virsh_command(["net-destroy", network_name])
+            _run_virsh_command(["net-start", network_name])
 
 
-def create_machine_snapshot(machine: Machine):
-    print(f"Creating new snapshot for {machine.name}")
-    _run_virsh_command(["snapshot-create-as", machine.name, DEFAULT_SNAPSHOT_NAME])
+def create_machine_snapshot(machine: Machine, snapshot_name: str = DEFAULT_SNAPSHOT_NAME):
+    print(f"Creating new snapshot '{snapshot_name}' for '{machine.name}'")
+    _run_virsh_command(["snapshot-create-as", machine.name, snapshot_name])
 
 
 # region helpers
@@ -79,7 +79,7 @@ def _stop_machine(machine_name: str):
 # endregion helpers
 
 
-def init_machines(machines: List[Machine]):
+def init_machines(machines: List[Machine], snapshot_name: str = DEFAULT_SNAPSHOT_NAME):
     # start all machines
     for machine in machines:
         _start_machine(machine.name)
@@ -89,7 +89,7 @@ def init_machines(machines: List[Machine]):
         sleep(1)
 
     for machine in machines:
-        create_machine_snapshot(machine)
+        create_machine_snapshot(machine, snapshot_name)
         _stop_machine(machine.name)
 
 
@@ -150,7 +150,7 @@ def clone_machines(
     return machines
 
 
-def print_machines_config(machines):
+def print_machines_config(machines: List[Machine], tags: str = "", snapshot_name: str = DEFAULT_SNAPSHOT_NAME):
     print("Please add these new machines to the appropriate config file (also in ./machines.conf):")
 
     with open("machines.conf", "w") as machines_file:
@@ -161,8 +161,8 @@ def print_machines_config(machines):
                     f"label = {machine.name}",
                     "platform = windows",
                     f"ip = {machine.ip}",
-                    "tags = x64",
-                    f"snapshot = {DEFAULT_SNAPSHOT_NAME}",
+                    "tags = x64" if not tags else f"tags = {tags},x64",
+                    f"snapshot = {snapshot_name}",
                     "arch = x64",
                 ]
             )
@@ -196,6 +196,28 @@ if __name__ == "__main__":
     parser.add_argument("--count-offset", type=int, default=1, help="At what number should the count start")
 
     parser.add_argument("--ip", type=str, required=True, help="The base IP address machines should start to be created")
+    parser.add_argument(
+        "--tags",
+        type=str,
+        default="",
+        required=False,
+        help="The tags for each new machine to contain. Must be comma separated if multiple.",
+    )
+    parser.add_argument(
+        "--network-name",
+        type=str,
+        default=NETWORK_NAME,
+        required=False,
+        help="The name of the virtual network to create the machines in.",
+    )
+    parser.add_argument(
+        "--snapshot-name",
+        type=str,
+        default=DEFAULT_SNAPSHOT_NAME,
+        required=False,
+        help="The name of the snapshot to be created per machine.",
+    )
+
     parser.add_argument("--yes", action="store_true", help="Skip confirmation")
     args = parser.parse_args()
 
@@ -231,6 +253,10 @@ if __name__ == "__main__":
     print(f"Start from machine: {start_machine}")
     print("------")
     print(f"Start at IP address: {starting_ip}")
+    if args.tags:
+        print(f"Tags to be set: {args.tags}")
+    print(f"The network name to create the machines in: {args.network_name}")
+    print(f"The name of the snapshot to be created per machine: {args.snapshot_name}")
     print("")
     print("** Not a dry run! **") if not is_dry_run else print("-- dry run --")
 
@@ -254,15 +280,17 @@ if __name__ == "__main__":
         raise RuntimeError("No machines were created...")
 
     print()
-    setup_network(machines, is_dry_run)
+    setup_network(machines, is_dry_run, args.network_name)
 
     print()
     if is_dry_run:
         print("Dry Run: not initalizing machines...")
     else:
-        init_machines(machines)
+        init_machines(machines, args.snapshot_name)
 
+    print("The following machines were created:")
+    print(",".join([machine.name for machine in machines]))
     print()
-    print_machines_config(machines)
+    print_machines_config(machines, args.tags, args.snapshot_name)
 
-# sudo python3 clone-machines.py --dry-run --original win7-v4-clean --original-disk /data/vms/win7-v4-clean.qcow2 --prefix win7-v4 --count 1 --count-offset 10 --ip 192.168.1.186
+# sudo python3 clone-machines.py --dry-run --original win7-v4-clean --original-disk /data/vms/win7-v4-clean.qcow2 --prefix win7-v4 --count 1 --count-offset 10 --ip 192.168.1.186 --network-name internal --tags win10x64 --snapshot-name cleaner
