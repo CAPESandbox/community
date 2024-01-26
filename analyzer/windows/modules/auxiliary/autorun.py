@@ -109,17 +109,19 @@ class Autorun(Auxiliary):
         with open(path_end, mode='r') as f:
             reader = csv.DictReader(f, delimiter=",")
             for row in reader:
+                keys = row.keys()
                 end_elements.append(row)
 
         for element in start_elements:
             if element not in end_elements:
-                diff_elements.append(f"--{element}")
+                diff_elements.append(f"--,{element}")
         for element in end_elements:
             if element not in start_elements:
-                diff_elements.append(f"++{element}")
+                diff_elements.append(f"++,{element}")
         
         with open(path_diff, mode="w") as f:
             if len(diff_elements) > 0:
+                f.write(f"Operation,{keys}\n")
                 f.writelines(f"{diff_elements}\n")
 
         files_to_upload = set()
