@@ -94,7 +94,6 @@ class Autorun(Auxiliary):
         process = subprocess.Popen(run_cmd, startupinfo=self.startupinfo)
         process.wait()
         
-        log.debug("There")
         start_elements = []
         end_elements = []
         diff_elements = []
