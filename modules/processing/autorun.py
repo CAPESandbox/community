@@ -11,7 +11,7 @@ __author__ = "[Canadian Centre for Cyber Security] @CybercentreCanada"
 __version__ = "1.0.0"
 
 
-class Sysmon(Processing):
+class Autorun(Processing):
     def run(self):
         self.key = "autorun"
         autorun_dir = os.path.join(self.analysis_path, "autorun")
@@ -26,12 +26,12 @@ class Sysmon(Processing):
         }
         try:
             with open(autorun_path, "r") as f:
-                #Time,Entry Location,Entry,Enabled,Category,Profile,Description,Company,Image Path,Version,Launch String
+                #Operation,Time,Entry Location,Entry,Enabled,Category,Profile,Description,Company,Image Path,Version,Launch String
                 reader = csv.DictReader(f, delimiter=",")
                 count = 0
                 for row in reader:
                     count += 1
-                    data[str(count)] = row
+                    data[str(count)] = str(row)
 
             if count == 0:
                 data = None

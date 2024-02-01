@@ -57,7 +57,7 @@ class Autorun(Auxiliary):
         autorun = autorun.replace("\\","\\\\")
         run_args = self.options.get("run_args")
         if not run_args:
-            run_args = f"* -c -o {self.output_dir}\\\\{self.output_file_start}"
+            run_args = f"-a * -c -o {self.output_dir}\\\\{self.output_file_start}"
 
         run_cmd = f"{autorun} {run_args}"
         run_cmd = shlex.split(run_cmd)
@@ -84,7 +84,7 @@ class Autorun(Auxiliary):
         autorun = autorun.replace("\\","\\\\")
         run_args = self.options.get("run_args")
         if not run_args:
-            run_args = f"* -c -o {self.output_dir}\\\\{self.output_file_end}"
+            run_args = f"-a * -c -o {self.output_dir}\\\\{self.output_file_end}"
 
         run_cmd = f"{autorun} {run_args}"
         run_cmd = shlex.split(run_cmd)
@@ -121,7 +121,7 @@ class Autorun(Auxiliary):
         with open(path_diff, mode="w") as f:
             if len(diff_elements) > 0:
                 f.write(f"Operation,{keys}\n")
-                f.writelines(f"{diff_elements}\n")
+                f.writelines(f'{s}\n' for s in diff_elements)
 
         files_to_upload = set()
         
