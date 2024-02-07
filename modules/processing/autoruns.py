@@ -15,15 +15,14 @@ class Autoruns(Processing):
     def run(self):
         self.key = "autoruns"
         autoruns_dir = os.path.join(self.analysis_path, "autoruns")
-        autoruns_data_path = os.path.join(autoruns_dir, "autoruns_autoruns.diff")
+        autoruns_data_path = os.path.join(autoruns_dir, "autoruns.diff")
 
         if os.path.exists(autoruns_data_path):
             autoruns_path = autoruns_data_path
         else:
             return
 
-        data = {
-        }
+        data = {}
         try:
             with open(autoruns_path, "r") as f:
                 #Operation,Time,Entry Location,Entry,Enabled,Category,Profile,Description,Company,Image Path,Version,Launch String
@@ -35,8 +34,6 @@ class Autoruns(Processing):
 
             if count == 0:
                 data = None
-                    
-
 
         except Exception as e:
             raise CuckooProcessingError(f"Failed parsing {autoruns_path}: {e}")

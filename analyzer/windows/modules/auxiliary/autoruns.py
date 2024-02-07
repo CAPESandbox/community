@@ -40,10 +40,8 @@ class Autoruns(Auxiliary):
         except OSError as e:
             pass
 
-    def start(self):
-        # First figure out what architecture the system in running (64 or 86)
         bin_path = os.path.join(os.getcwd(), "bin")
-
+        # First figure out what architecture the system in running (64 or 86)
         if "AMD64" in platform.uname():
             autoruns = os.path.join(bin_path, "autorunsc64.exe")
         else:
@@ -52,46 +50,28 @@ class Autoruns(Auxiliary):
         if not os.path.exists(autoruns):
             raise CuckooPackageError(
                 "In order to use the Autorun functionality, it "
-                "is required to have Autorunsc setup with Cape."
+                "is required to have the appropriate Autorunsc executable in the analyzer/windows/bin/ path."
             )
         autoruns = autoruns.replace("\\","\\\\")
+
         run_args = self.options.get("run_args")
         if not run_args:
-            run_args = f"-a * -c -o {self.output_dir}\\\\{self.output_file_start}"
-
-        run_cmd = f"{autoruns} {run_args}"
-        run_cmd = shlex.split(run_cmd)
-        log.debug(run_cmd)
-        #with open(f"{self.output_dir}\\{self.output_file_start}", "w") as f:
-        #    subprocess.Popen(run_cmd, startupinfo=self.startupinfo, stdout=f, stderr=f, text=True)
-        subprocess.Popen(run_cmd, startupinfo=self.startupinfo)
-
-    def stop(self):
-
-        # First figure out what architecture the system in running (64 or 86)
-        bin_path = os.path.join(os.getcwd(), "bin")
-
-        if "AMD64" in platform.uname():
-            autoruns = os.path.join(bin_path, "autorunsc64.exe")
-        else:
-            autoruns = os.path.join(bin_path, "autorunsc.exe")
-
-        if not os.path.exists(autoruns):
-            raise CuckooPackageError(
-                "In order to use the Autorun functionality, it "
-                "is required to have Autorunsc setup with Cape."
-            )
-        autoruns = autoruns.replace("\\","\\\\")
-        run_args = self.options.get("run_args")
-        if not run_args:
+            # -a : entry selection * for all entries 
+            # -c : Print output as csv
+            # -o : Output file path
             run_args = f"-a * -c -o {self.output_dir}\\\\{self.output_file_end}"
 
         run_cmd = f"{autoruns} {run_args}"
-        run_cmd = shlex.split(run_cmd)
-        log.debug(run_cmd)
-        #with open(f"{self.output_dir}\\{self.output_file_end}", "w") as f:
-        #    process = subprocess.Popen(run_cmd, startupinfo=self.startupinfo, stdout=f, text=True)
-        process = subprocess.Popen(run_cmd, startupinfo=self.startupinfo)
+        self.run_cmd = shlex.split(run_cmd)
+
+    def start(self):
+
+        log.debug(self.run_cmd)
+        subprocess.Popen(self.run_cmd, startupinfo=self.startupinfo)
+
+    def stop(self):
+        log.debug(self.run_cmd)
+        process = subprocess.Popen(self.run_cmd, startupinfo=self.startupinfo)
         process.wait()
         
         start_elements = []
@@ -140,6 +120,6 @@ class Autoruns(Auxiliary):
             # Prepend file name with autoruns to indicate autoruns
             file_path_list = f.split("\\")
             file_name = file_path_list[-1]
-            dumppath = os.path.join("autoruns", "autoruns_" + file_name)
+            dumppath = os.path.join("autoruns", file_name)
             log.debug("Autoruns Aux Module is uploading %s" % f)
             upload_to_host(f, dumppath)
