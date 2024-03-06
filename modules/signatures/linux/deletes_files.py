@@ -5,8 +5,8 @@ class LinuxDeletesFiles(Signature):
     name = "deletes_files"
     description = "Deletes files from disk"
     os = "linux"
-    severity = 2
-    categories = ["persistence"]
+    severity = 3
+    categories = ["persistence", "stealth"]
     authors = ["winson0123"]
     minimum = "1.3"
     evented = True
