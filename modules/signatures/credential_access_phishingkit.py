@@ -13,9 +13,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from lib.cuckoo.common.abstracts import Signature
-
 import re
+
+from lib.cuckoo.common.abstracts import Signature
 
 try:
     from chepy import Chepy
@@ -24,18 +24,18 @@ except ImportError:
 
 import base64
 
+
 class HTMLPhisher_0(Signature):
     name = "phishing_kit_detected"
     description = "Phishing Kit Detected, sample is trying to harvest credentials"
     severity = 3
     confidence = 100
-    categories = ["credential_access","evasion","infostealer","phishing", "static"]
-    authors = ["Yasin Tas",  "Eye Security"]
+    categories = ["credential_access", "evasion", "infostealer", "phishing", "static"]
+    authors = ["Yasin Tas", "Eye Security"]
     references = [
         "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
-        "https://socradar.io/what-is-a-phishing-kit/"
-        "https://github.com/SteveD3/kit_hunter/tree/master/tag_files"
-        ]
+        "https://socradar.io/what-is-a-phishing-kit/" "https://github.com/SteveD3/kit_hunter/tree/master/tag_files",
+    ]
     enabled = True
     minimum = "1.2"
     ttps = ["T1111", "T1193", "T1140"]  # MITRE v6
@@ -47,10 +47,10 @@ class HTMLPhisher_0(Signature):
         if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
             if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
                 return False
-            strings =  self.results["target"]["file"]["strings"]
+            strings = self.results["target"]["file"]["strings"]
             regex_decodedURL = r"unescape\( \'([^&]+?)\' \) \);</script>"
-            data = ''.join(strings)
-            decodeString = re.search(regex_decodedURL,data)
+            data = "".join(strings)
+            decodeString = re.search(regex_decodedURL, data)
             if decodeString:
                 self.description = "File obfuscation detected, with url encoding"
                 decodeString = decodeString.group(1)
@@ -58,9 +58,9 @@ class HTMLPhisher_0(Signature):
                 regex_user = r'var encoded_string = "([^&]+?)"'
                 regex_url = r"var url =  window.atob\('([^&]+?)'\)"
                 regex_post_url = r'window\.location\.href="([^&]+.*)";'
-                user = re.search(regex_user,decoded_string)
-                url = re.search(regex_url,decoded_string)
-                post_url = re.search(regex_post_url,decoded_string)
+                user = re.search(regex_user, decoded_string)
+                url = re.search(regex_url, decoded_string)
+                post_url = re.search(regex_post_url, decoded_string)
                 if user and url and post_url:
                     self.weight = 3
                     self.families = ["HTMLPhisher_2023"]
@@ -71,17 +71,17 @@ class HTMLPhisher_0(Signature):
                     return True
         return False
 
+
 class HTMLPhisher_1(Signature):
     name = "phishing_kit_detected"
     description = "Phishing Kit Detected, sample is trying to harvest credentials"
     severity = 3
     confidence = 100
-    categories = ["credential_access","evasion","infostealer","phishing", "static"]
-    authors = ["Yasin Tas",  "Eye Security"]
+    categories = ["credential_access", "evasion", "infostealer", "phishing", "static"]
+    authors = ["Yasin Tas", "Eye Security"]
     references = [
-    "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
-    "https://socradar.io/what-is-a-phishing-kit/"
-    "https://github.com/SteveD3/kit_hunter/tree/master/tag_files"
+        "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
+        "https://socradar.io/what-is-a-phishing-kit/" "https://github.com/SteveD3/kit_hunter/tree/master/tag_files",
     ]
     enabled = True
     minimum = "1.2"
@@ -95,23 +95,23 @@ class HTMLPhisher_1(Signature):
             if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
                 return False
             strings = self.results["target"]["file"]["strings"]
-            data = ''.join(strings)
-            regex_decoded = [ 
+            data = "".join(strings)
+            regex_decoded = [
                 r"unescape\(\'([^&]+?)\'\)\); </script>",
                 r"unescape\( \'([^&]+?)\' \) \);</script>",
                 r"unescape\(\'([^&]+?)\'\) \);</script>",
                 r"unescape\( \'([^&]+?)\'\) \);</script>",
             ]
             for regex in regex_decoded:
-                decodeString = re.search(regex,data)
+                decodeString = re.search(regex, data)
                 if decodeString:
                     decodeString = decodeString.group(1)
                     decoded_string = Chepy(decodeString).url_decode().url_decode().o
                     self.description = "File obfuscation detected, with url encoding"
                     regex_user = r'value="([^&]+?)"'
                     regex_url = r"url: '([^&]+?)',"
-                    user = re.search(regex_user,decoded_string)
-                    url = re.search(regex_url,decoded_string)
+                    user = re.search(regex_user, decoded_string)
+                    url = re.search(regex_url, decoded_string)
                     if user and url:
                         self.weight = 3
                         self.families = ["HTMLPhisher_2023"]
@@ -120,18 +120,18 @@ class HTMLPhisher_1(Signature):
                         self.data.append({"user": user.group(1)})
                         return True
             return False
-        
+
+
 class HTMLPhisher_2(Signature):
     name = "phishing_kit_detected"
     description = "Phishing Kit Detected, sample is trying to harvest credentials"
     severity = 3
     confidence = 100
-    categories = ["credential_access","evasion","infostealer","phishing", "static"]
-    authors = ["Yasin Tas",  "Eye Security"]
+    categories = ["credential_access", "evasion", "infostealer", "phishing", "static"]
+    authors = ["Yasin Tas", "Eye Security"]
     references = [
-    "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
-    "https://socradar.io/what-is-a-phishing-kit/"
-    "https://github.com/SteveD3/kit_hunter/tree/master/tag_files"
+        "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
+        "https://socradar.io/what-is-a-phishing-kit/" "https://github.com/SteveD3/kit_hunter/tree/master/tag_files",
     ]
     enabled = True
     minimum = "1.2"
@@ -145,12 +145,12 @@ class HTMLPhisher_2(Signature):
             if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
                 return False
             strings = self.results["target"]["file"]["strings"]
-            data = ''.join(strings)
-        
+            data = "".join(strings)
+
             regex_user = r"<input  name=\"login\" type=\"email\" value=\"([^&]+?)\" disabled>"
             regex_url = r"<form method=\"post\" action=\"([^&]+?)\">"
-            user = re.search(regex_user,data)
-            url = re.search(regex_url,data)
+            user = re.search(regex_user, data)
+            url = re.search(regex_url, data)
             if user and url:
                 self.weight = 3
                 self.families = ["HTMLPhisher_2023"]

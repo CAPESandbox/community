@@ -46,7 +46,7 @@ class HTTP_Request(Signature):
             host = self.get_argument(call, "ServerName")
             port = self.get_argument(call, "ServerPort")
             self.lasthost = host
-            if any(domain in host for domain in domain_passlist) :
+            if any(domain in host for domain in domain_passlist):
                 return None
             if host not in self.request:
                 self.request[host] = dict()

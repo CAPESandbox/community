@@ -17,6 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 from data.safelist.domains import domain_passlist
 
+
 class NetworkDocumentFile(Signature):
     name = "network_document_file"
     description = "A document or script file initiated network communications indicative of a potential exploit or payload download"

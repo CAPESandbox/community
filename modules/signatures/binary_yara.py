@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class BinaryTriggeredYARA(Signature):
     name = "binary_yara"
     description = "Binary file triggered YARA rule"
@@ -23,7 +24,7 @@ class BinaryTriggeredYARA(Signature):
     weight = 1
     enabled = True
     categories = ["static"]
-    authors = ["Yasin Tas",  "Eye Security"]
+    authors = ["Yasin Tas", "Eye Security"]
     minimum = "1.3"
 
     def run(self):
@@ -37,7 +38,7 @@ class BinaryTriggeredYARA(Signature):
                 if count > 1:
                     self.description = "Binary file triggered multiple YARA rules"
                 elif count > 3:
-                    self.weight = 3    
+                    self.weight = 3
             return True
         else:
             return False

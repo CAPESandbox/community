@@ -13,9 +13,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from lib.cuckoo.common.abstracts import Signature
-    
 import re
+
+from lib.cuckoo.common.abstracts import Signature
+
 
 class suspiciousHRML_Body(Signature):
     name = "suspicious_html_body"
@@ -23,38 +24,36 @@ class suspiciousHRML_Body(Signature):
     severity = 1
     confidence = 100
     categories = ["phishing", "static"]
-    authors = ["Yasin Tas",  "Eye Security"]
+    authors = ["Yasin Tas", "Eye Security"]
     references = [
-    "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
-    "https://socradar.io/what-is-a-phishing-kit/"
-    "https://github.com/SteveD3/kit_hunter/tree/master/tag_files"
+        "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
+        "https://socradar.io/what-is-a-phishing-kit/" "https://github.com/SteveD3/kit_hunter/tree/master/tag_files",
     ]
     enabled = True
     evented = True
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
     mbcs = ["C0029.003"]  # micro-behaviour
-        
+
     def run(self):
-        packages = ['html', 'edge', 'chrome', 'firefox']
+        packages = ["html", "edge", "chrome", "firefox"]
         indicators = [
-                'password',
-                'email',
-                'username',
-                'encoded_string',
-                'url',
-                '// remove email, and put ur mailer code',
-                'headers'
-                'tokenName',
-                'headers',
-            ]
+            "password",
+            "email",
+            "username",
+            "encoded_string",
+            "url",
+            "// remove email, and put ur mailer code",
+            "headers" "tokenName",
+            "headers",
+        ]
         if self.results["info"]["package"] in packages:
             if "strings" in self.results["target"]["file"]:
                 strings = self.results["target"]["file"]["strings"]
-                data = ''.join(strings)
+                data = "".join(strings)
                 for indicator in indicators:
                     if indicator in data:
-                        self.add_match(None, 'string', f'Found {indicator} in HTML body')
+                        self.add_match(None, "string", f"Found {indicator} in HTML body")
         return self.has_matches()
 
 
@@ -64,43 +63,43 @@ class suspiciousHTML_Title(Signature):
     severity = 1
     confidence = 100
     categories = ["phishing", "static"]
-    authors = ["Yasin Tas",  "Eye Security"]
+    authors = ["Yasin Tas", "Eye Security"]
     references = [
-    "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
-    "https://socradar.io/what-is-a-phishing-kit/"
-    "https://github.com/SteveD3/kit_hunter/tree/master/tag_files"
+        "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
+        "https://socradar.io/what-is-a-phishing-kit/" "https://github.com/SteveD3/kit_hunter/tree/master/tag_files",
     ]
     enabled = True
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
     mbcs = ["C0029.003"]  # micro-behaviour
-    
+
     def run(self):
-        
-        packages = ['html', 'edge', 'chrome', 'firefox']
+
+        packages = ["html", "edge", "chrome", "firefox"]
         indicators = [
-            'Please wait',
-            'Sign in',
-            '<title></title>', # Empty title
-            'Redirecting',
-                    ]
-        
-        title_regex = re.compile(r'<\s*title[^>]*>(.*?)<\/\s*title\s*>')
+            "Please wait",
+            "Sign in",
+            "<title></title>",  # Empty title
+            "Redirecting",
+        ]
+
+        title_regex = re.compile(r"<\s*title[^>]*>(.*?)<\/\s*title\s*>")
 
         if self.results["info"]["package"] in packages:
             if "strings" in self.results["target"]["file"]:
                 strings = self.results["target"]["file"]["strings"]
-                data = ''.join(strings)
+                data = "".join(strings)
                 title = title_regex.search(data)
                 if not title:
                     self.description = "Sample contains empty HTML title"
-                    self.add_match(None, 'string', 'Empty HTML title')
+                    self.add_match(None, "string", "Empty HTML title")
                 else:
                     for indicator in indicators:
                         if indicator in title.group(1):
-                            self.add_match(None, 'string', f'Found {indicator} in HTML title')
-                            
+                            self.add_match(None, "string", f"Found {indicator} in HTML title")
+
         return self.has_matches()
+
 
 class suspiciousHTML_Filename(Signature):
     name = "suspicious_html_name"
@@ -108,35 +107,33 @@ class suspiciousHTML_Filename(Signature):
     severity = 1
     confidence = 80
     categories = ["phishing", "static"]
-    authors = ["Yasin Tas",  "Eye Security"]
+    authors = ["Yasin Tas", "Eye Security"]
     references = [
-    "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
-    "https://socradar.io/what-is-a-phishing-kit/"
-    "https://github.com/SteveD3/kit_hunter/tree/master/tag_files"
+        "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
+        "https://socradar.io/what-is-a-phishing-kit/" "https://github.com/SteveD3/kit_hunter/tree/master/tag_files",
     ]
-    enabled = True      
+    enabled = True
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
     mbcs = ["C0029.003"]  # micro-behaviour
-    
+
     def run(self):
-        packages = ['html', 'edge', 'chrome', 'firefox']
+        packages = ["html", "edge", "chrome", "firefox"]
         indicators = [
-            'payment',
-            'remittence',
-            'remmitance '
-            'invoice',
-            'inv',
-            'voicemail',
-            'remit',
-            'voice',
-            'statement',
-                      ]
-        
+            "payment",
+            "remittence",
+            "remmitance " "invoice",
+            "inv",
+            "voicemail",
+            "remit",
+            "voice",
+            "statement",
+        ]
+
         if self.results["info"]["package"] in packages:
             name = self.results["target"]["file"]["name"]
             lower = name.lower()
             for indicator in indicators:
                 if indicator in lower:
-                    self.add_match(None, 'string', f'Found {indicator} in HTML name')
+                    self.add_match(None, "string", f"Found {indicator} in HTML name")
         return self.has_matches()

@@ -17,6 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 from data.safelist.domains import domain_passlist
 
+
 class NetworkDocumentHTTP(Signature):
     name = "network_document_http"
     description = "A document file initiated network communications indicative of a potential exploit or payload download"
@@ -89,10 +90,10 @@ class NetworkDocumentHTTP(Signature):
             len(self.data) == 1
             and "http_request" in self.data[0]
             and self.data[0]["http_request"].startswith("acrord32.exe_WSASend_get /10/rdr/enu/win/nooem/none/message.zip")
-            and self.check_url("http://acroipm.adobe.com/10/rdr/ENU/win/nooem/none/message.zip")    
+            and self.check_url("http://acroipm.adobe.com/10/rdr/ENU/win/nooem/none/message.zip")
         ):
             return False
-        
+
         if self.data:
             return True
 

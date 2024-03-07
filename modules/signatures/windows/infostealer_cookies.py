@@ -44,24 +44,27 @@ class CookiesStealer(Signature):
             ".*\\\\Opera Software\\\\Opera Stable\\\\Cookies$",
             ".*\\\\Brave-Browser\\\\User Data\\\\.*\\\\Cookies$",
         ]
-        self.safe_indicators = ["chrome.exe", 
-                                "firefox.exe",
-                                "opera.exe", 
-                                "msedge.exe", 
-                                "acrobat.exe",
-                                "excel.exe",
-                                "winword.exe",
-                                ]
+        self.safe_indicators = [
+            "chrome.exe",
+            "firefox.exe",
+            "opera.exe",
+            "msedge.exe",
+            "acrobat.exe",
+            "excel.exe",
+            "winword.exe",
+        ]
+
     def on_call(self, call, process):
         pname = process["process_name"].lower()
         if pname in self.safe_indicators:
             return False
         else:
             for indicator in self.indicators:
-                match = self.check_argument_call(call, pattern=indicator, api="NtQueryAttributesFile", category="filesystem", regex=True)
+                match = self.check_argument_call(
+                    call, pattern=indicator, api="NtQueryAttributesFile", category="filesystem", regex=True
+                )
                 if match:
-                    self.add_match(process, 'file', match)
-
+                    self.add_match(process, "file", match)
 
     def on_complete(self):
         return self.has_matches()

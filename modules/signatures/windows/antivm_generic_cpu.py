@@ -29,11 +29,13 @@ class AntiVMCPU(Signature):
     mbcs = ["OB0001", "B0009", "B0009.005", "B0009.024", "OB0007", "E1082"]
     mbcs += ["OC0008", "C0036", "C0036.005"]  # micro-behaviour
 
-    filter_apinames = set([
-        "RegQueryValueExW", 
-        "RegQueryValueExA",
-        "NtQueryValueKey",
-        ])
+    filter_apinames = set(
+        [
+            "RegQueryValueExW",
+            "RegQueryValueExA",
+            "NtQueryValueKey",
+        ]
+    )
     filter_categories = set(["registry"])
 
     def __init__(self, *args, **kwargs):
@@ -58,6 +60,6 @@ class AntiVMCPU(Signature):
             )
             if match:
                 self.add_match(process, "registry", match)
-                            
+
     def on_complete(self):
         return self.has_matches()

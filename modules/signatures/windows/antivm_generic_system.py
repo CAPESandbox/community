@@ -30,9 +30,11 @@ class AntiVMSystem(Signature):
     mbcs += ["OC0008", "C0036", "C0036.005"]  # micro-behaviour
     evented = True
 
-    filter_category = set([
-        "registry",
-    ])
+    filter_category = set(
+        [
+            "registry",
+        ]
+    )
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -45,15 +47,18 @@ class AntiVMSystem(Signature):
             "acrord32.exe",
             "acrord64.exe",
         ]
+
     def on_call(self, call, process):
         pname = process["process_name"].lower()
         if pname in self.office_proc_list:
             return False
         else:
-            match = self.check_argument_call(call, 
-                                             pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\SystemInformation\\\\SystemManufacturer$", 
-                                             category="registry",
-                                             regex=True)    
+            match = self.check_argument_call(
+                call,
+                pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\SystemInformation\\\\SystemManufacturer$",
+                category="registry",
+                regex=True,
+            )
         if match:
             self.add_match(process, "registry", match)
 
