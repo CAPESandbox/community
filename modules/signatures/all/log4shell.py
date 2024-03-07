@@ -32,7 +32,7 @@ class Log4j(Signature):
     categories = ["malware"]
     authors = ["Busra Yenidogan"]
     minimum = "0.5"
-    enabled = False
+    enabled = True
 
     def run(self):
         httpitems = self.results.get("network", {}).get("http", [])

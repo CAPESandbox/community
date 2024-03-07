@@ -32,16 +32,31 @@ class EnumeratesRunningProcesses(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.enumeratedpids = []
+        self.safelist = [
+            "acrobat.exe",
+            "winword.exe",
+            "excel.exe",
+            "powerpnt.exe",
+            "outlook.exe",
+            "acrord32.exe",
+            "acrord64.exe",
+            "wordview.exe",
+            "adobearm.exe",
+            "ai.exe",
+        ]
 
     def on_call(self, call, process):
         procname = self.get_argument(call, "ProcessName")
         procpid = self.get_argument(call, "ProcessId")
-        if procpid and procname:
-            if procpid not in self.enumeratedpids and procpid != "0":
-                self.enumeratedpids.append(procpid)
-                self.data.append({"process": "%s with pid %s" % (procname, procpid)})
-                if self.pid:
-                    self.mark_call()
+        if process["process_name"].lower() in self.safelist:
+            return False
+        else:
+            if procpid and procname:
+                if procpid not in self.enumeratedpids and procpid != "0":
+                    self.enumeratedpids.append(procpid)
+                    self.data.append({"process": "%s with pid %s" % (procname, procpid)})
+                    if self.pid:
+                        self.mark_call()
 
     def on_complete(self):
         if len(self.enumeratedpids) > 5:

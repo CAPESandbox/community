@@ -57,10 +57,10 @@ class Procmem_Yara(Signature):
 
         if hits:
             for pid, rule in hits:
-                if rule.lower() in suspicious and self.severity == 4:
+                if rule.lower() in suspicious and self.severity == 3:
+                    self.severity = 4
+                elif rule.lower() in malicious and self.severity <= 4:
                     self.severity = 5
-                elif rule.lower() in malicious and self.severity <= 5:
-                    self.severity = 6
                 self.data.append({"Hit": "PID %s trigged the Yara rule '%s'" % (pid, rule)})
             return True
 

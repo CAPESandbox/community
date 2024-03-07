@@ -19,8 +19,9 @@ from lib.cuckoo.common.abstracts import Signature
 class StackPivot(Signature):
     name = "stack_pivot"
     description = "Stack pivoting was detected when using a critical API"
-    severity = 3
-    confidence = 100
+    severity = 1
+    confidence = 50
+    enabled = True
     categories = ["exploit"]
     authors = ["Optiv"]
     minimum = "1.3"

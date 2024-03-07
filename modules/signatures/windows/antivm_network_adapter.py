@@ -41,6 +41,9 @@ class NetworkAdapters(Signature):
             "winword.exe",
             "excel.exe",
             "powerpnt.exe",
+            "acrord32.exe",
+            "acrord64.exe",
+            "acrobat.exe",
         ]
 
     def on_call(self, _, process):

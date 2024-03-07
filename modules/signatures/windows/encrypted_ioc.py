@@ -51,6 +51,7 @@ class EncryptedIOC(Signature):
             "v1.1.4322",
             "v2.0.50727",
             "v4.0.30319",
+            "x10www.digicert.com1",
         ]
         dedup = list()
         extracted_data = False

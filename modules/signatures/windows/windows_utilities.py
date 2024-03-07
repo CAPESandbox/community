@@ -1,8 +1,128 @@
 # Copyright (C) 2010-2015 Cuckoo Foundation.
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
+try:
+    import re2 as re
+except ImportError:
+    import re
 
 from lib.cuckoo.common.abstracts import Signature
+
+
+class UsesWindowsUtilitiesScheduler(Signature):
+    name = "uses_windows_utilities_to_create_scheduled_task"
+    description = "Uses Windows utilities to create a scheduled task"
+    severity = 2
+    confidence = 80
+    categories = ["command", "lateral"]
+    authors = ["Cuckoo Technologies", "Kevin Ross"]
+    minimum = "1.3"
+    ttps = ["T1053"]  # MITRE v6,7,8
+
+    evented = True
+
+    filter_processnames = set([
+                "at ",
+                "at.exe",
+                "schtasks",
+                "schtasks.exe",
+            ])
+        
+    def on_call(self, _, process):
+        if process["process_name"].lower() in self.filter_processnames:
+            self.ttps += ["T1053.005"] if process["process_name"].lower() == "schtasks" else ["T1053.002"]  # MITRE v7,8
+            cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+            for cmdline in cmdlines:
+                lower = cmdline.lower()
+                if re.search(process["process_name"].lower(), lower):
+                    self.data.append({"command": cmdline})
+            return True
+        return False
+
+class UsesWindowsUtilities(Signature):
+    name = "uses_windows_utilities"
+    description = "Uses Windows utilities for basic functionality"
+    severity = 2
+    confidence = 80
+    categories = ["command", "lateral"]
+    authors = ["Cuckoo Technologies", "Kevin Ross"]
+    minimum = "1.3"
+    ttps = ["T1202"]  # MITRE v6,7,8
+    mbcs = ["OB0009", "E1203.m06"]
+
+    evented = True
+
+    def run(self):
+        utilities = [
+            "attrib",
+            "copy",
+            "dir ",
+            "dir.exe",
+            "echo" "erase",
+            "fsutil",
+            "getmac",
+            "ipconfig",
+            "md ",
+            "md.exe",
+            "mkdir",
+            "move ",
+            "move.exe",
+            "msdt ",
+            "nbtstat",
+            "net ",
+            "net.exe",
+            "net1.exe",
+            "netsh",
+            "netstat",
+            "nslookup",
+            "ping",
+            "powercfg",
+            "qprocess",
+            "query ",
+            "query.exe",
+            "quser",
+            "qwinsta",
+            "reg ",
+            "reg.exe",
+            "regsrv32",
+            "ren ",
+            "ren.exe",
+            "rename",
+            "route",
+            "runas",
+            "rwinsta",
+            "sc ",
+            "sc.exe",
+            "set ",
+            "set.exe",
+            "shutdown",
+            "systeminfo",
+            "tasklist",
+            "telnet",
+            "tracert",
+            "tree ",
+            "tree.exe",
+            "type",
+            "ver ",
+            "ver.exe",
+            "whoami",
+            "wmic",
+            "wusa",
+        ]
+        whitelist = [
+            r"Internet Explorer",
+        ]
+        ret = False
+        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            for utility in utilities:
+                if re.search(utility, lower):
+                    if utility in lower and "-" + utility not in lower and not any(re.search(whitelist_regex, cmdline) for whitelist_regex in whitelist):
+                        ret = True
+                        self.data.append({"command": cmdline})
+
+        return ret
 
 GENERIC_CMD = '"c:\\windows\\system32\\cmd.exe" /c start /wait "" '
 SUBSEQUENT_GENERIC_CMD = "c:\\windows\\system32\\cmd.exe  /k "
@@ -73,19 +193,19 @@ class SuspiciousCommandTools(Signature):
             "xcacls",
         ]
 
+        whitelist = [
+            r"Internet Explorer",
+        ]
+
         ret = False
         cmdlines = self.results["behavior"]["summary"]["executed_commands"]
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            for utility in utilities:
-                if utility in lower:
-                    # Edge case for 'net ' and '"C:\\Program Files (x86)\\Internet Explorer\\iexplore.exe" "<some>.html"'
-                    if utility == "net ":
-                        init_proc = self.get_initial_process()
-                        if init_proc["module_path"].lower().endswith("iexplore.exe"):
-                            continue
-                    ret = True
-                    self.data.append({"command": cmdline})
+            for utility_regex in utilities:
+                if re.search(utility_regex, lower):
+                    if not any(re.search(whitelist_regex, cmdline) for whitelist_regex in whitelist):
+                        ret = True
+                        self.data.append({"command": cmdline})
 
         return ret
 
@@ -398,106 +518,6 @@ class MultipleExplorerInstances(Signature):
 
         return False
 
-
-class UsesWindowsUtilities(Signature):
-    name = "uses_windows_utilities"
-    description = "Uses Windows utilities for basic functionality"
-    # This is an informational signature at best, so should have the lowest severity.
-    severity = 1
-    confidence = 80
-    categories = ["command", "lateral"]
-    authors = ["Cuckoo Technologies", "Kevin Ross"]
-    minimum = "1.3"
-    ttps = ["T1202"]  # MITRE v6,7,8
-    mbcs = ["OB0009", "E1203.m06"]
-
-    evented = True
-
-    def run(self):
-        utilities = [
-            "attrib",
-            "copy",
-            "dir ",
-            "dir.exe",
-            "echo" "erase",
-            "fsutil",
-            "getmac",
-            "ipconfig",
-            "md ",
-            "md.exe",
-            "mkdir",
-            "move ",
-            "move.exe",
-            "msdt ",
-            "nbtstat",
-            "net ",
-            "net.exe",
-            "net1.exe",
-            "netsh",
-            "netstat",
-            "nslookup",
-            "ping",
-            "powercfg" "qprocess",
-            "query ",
-            "query.exe",
-            "quser",
-            "qwinsta",
-            "reg ",
-            "reg.exe",
-            "regsrv32",
-            "ren ",
-            "ren.exe",
-            "rename",
-            "route",
-            "runas",
-            "rwinsta",
-            "sc ",
-            "sc.exe",
-            "set ",
-            "set.exe",
-            "shutdown",
-            "systeminfo",
-            "tasklist",
-            "telnet",
-            "tracert",
-            "tree ",
-            "tree.exe",
-            "type",
-            "ver ",
-            "ver.exe",
-            "whoami",
-            "wmic",
-            "wusa",
-        ]
-
-        # If the 'generic' package is used to execute the initial process, cmd will run batch files
-        # with '/c start /wait ""' arguments, and then this causes cmd.exe to run the file
-        # with 'cmd.exe /K <filepath>'
-        init_proc = self.get_initial_process()
-        init_cmd = self.get_environ_entry(init_proc, "CommandLine")
-        file_name = None
-        if init_cmd and init_cmd.lower().startswith(GENERIC_CMD):
-            _, _, file_name = init_cmd.lower().partition(GENERIC_CMD)
-
-        ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
-        for cmdline in cmdlines:
-            lower = cmdline.lower()
-
-            if file_name:
-                subsequent_generic_cmd = f"{SUBSEQUENT_GENERIC_CMD}{file_name}"
-                if cmdline.lower() == subsequent_generic_cmd:
-                    continue
-
-            for utility in utilities:
-                if utility in lower and "-" + utility not in lower:
-                    # Edge case for 'net ' and '"C:\\Program Files (x86)\\Internet Explorer\\iexplore.exe" "<some>.html"'
-                    if utility == "net " and init_proc["module_path"].lower().endswith("iexplore.exe"):
-                        continue
-                    ret = True
-                    self.data.append({"command": cmdline})
-
-        return ret
 
 
 class UsesWindowsUtilitiesAppCmd(Signature):
@@ -816,38 +836,6 @@ class UsesWindowsUtilitiesNTDSutil(Signature):
             lower = cmdline.lower()
             for utility in utilities:
                 if utility in lower:
-                    ret = True
-                    self.data.append({"command": cmdline})
-
-        return ret
-
-
-class UsesWindowsUtilitiesScheduler(Signature):
-    name = "uses_windows_utilities_to_create_scheduled_task"
-    description = "Uses Windows utilities to create a scheduled task"
-    severity = 2
-    confidence = 80
-    categories = ["command", "lateral"]
-    authors = ["Cuckoo Technologies", "Kevin Ross"]
-    minimum = "1.3"
-    ttps = ["T1053"]  # MITRE v6,7,8
-
-    evented = True
-
-    def run(self):
-        utilities = [
-            "at ",
-            "at.exe",
-            "schtasks",
-        ]
-
-        ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
-        for cmdline in cmdlines:
-            lower = cmdline.lower()
-            for utility in utilities:
-                if utility in lower:
-                    self.ttps += ["T1053.005"] if utility == "schtasks" else ["T1053.002"]  # MITRE v7,8
                     ret = True
                     self.data.append({"command": cmdline})
 

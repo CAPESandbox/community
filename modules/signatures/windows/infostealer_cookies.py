@@ -23,10 +23,15 @@ class CookiesStealer(Signature):
     categories = ["infostealer"]
     authors = ["bartblaze"]
     minimum = "0.5"
+    evented = True
     ttps = ["T1539"]  # MITRE v6,7,8
 
-    def run(self):
-        indicators = [
+    filter_apinames = set(["NtQueryAttributesFile"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.data = []
+        self.indicators = [
             ".*\\\\Chromium\\\\User Data\\\\.*\\\\Cookies$",
             ".*\\\\Google\\\\Chrome\\\\User Data\\\\.*\\\\Cookies$",
             ".*\\\\Microsoft\\\\Windows\\\\INetCookies$",
@@ -39,15 +44,24 @@ class CookiesStealer(Signature):
             ".*\\\\Opera Software\\\\Opera Stable\\\\Cookies$",
             ".*\\\\Brave-Browser\\\\User Data\\\\.*\\\\Cookies$",
         ]
+        self.safe_indicators = ["chrome.exe", 
+                                "firefox.exe",
+                                "opera.exe", 
+                                "msedge.exe", 
+                                "acrobat.exe",
+                                "excel.exe",
+                                "winword.exe",
+                                ]
+    def on_call(self, call, process):
+        pname = process["process_name"].lower()
+        if pname in self.safe_indicators:
+            return False
+        else:
+            for indicator in self.indicators:
+                match = self.check_argument_call(call, pattern=indicator, api="NtQueryAttributesFile", category="filesystem", regex=True)
+                if match:
+                    self.add_match(process, 'file', match)
 
-        for indicator in indicators:
-            match = self.check_file(pattern=indicator, regex=True)
-            if match:
-                # So many benign files touch this cookie path, that we should reduce the
-                # severity of the signature (or ignore it in the future)
-                if indicator == ".*\\\\Microsoft\\\\Windows\\\\INetCookies$":
-                    self.severity = 1
-                self.data.append({"cookie": match})
-                return True
 
-        return False
+    def on_complete(self):
+        return self.has_matches()

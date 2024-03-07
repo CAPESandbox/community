@@ -37,8 +37,21 @@ class DiskInformation(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.lastprocess = 0
         self.handles = dict()
+        self.office_proc_list = [
+            "wordview.exe",
+            "winword.exe",
+            "excel.exe",
+            "powerpnt.exe",
+            "outlook.exe",
+            "acrord32.exe",
+            "acrord64.exe",
+            "acrobat.exe",
+        ]
 
     def on_call(self, call, process):
+        if process["process_name"].lower() in self.office_proc_list:
+            return False
+        
         ioctls = [
             0x2D1400,  # IOCTL_STORAGE_QUERY_PROPERTY
             0x70000,  # IOCTL_DISK_GET_DRIVE_GEOMETRY

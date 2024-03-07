@@ -9,7 +9,7 @@ class AbuseCH_SSL(Feed):
     # Results dict key value / exception handling / logging name
     name = "Bad_SSL_Certs"
     # Change the below line to enable this feed
-    enabled = False
+    enabled = True
 
     def __init__(self):
         super().__init__(self)

@@ -36,11 +36,12 @@ rule vmdetect
         $vmware17 = "vmicshutdown" nocase
         $vmware18 = "vmicexchange" nocase
         $vmware19 = "vmdebug" nocase
-        $vmware20 = "vmmouse" nocase
+        $vmware20 = "vmmouse.sys" nocase
         $vmware21 = "vmtools" nocase
         $vmware22 = "VMMEMCTL" nocase
         $vmware23 = "vmx86" nocase
         $vmware24 = "vmware" nocase
+        $vmware25 = "VMware Virtual IDE Hard Drive" ascii wide
         $virtualpc1 = "vpcbus" nocase
         $virtualpc2 = "vpc-s3" nocase
         $virtualpc3 = "vpcuhub" nocase
@@ -77,6 +78,12 @@ rule vmdetect
         $virtualbox_mac_1b = "08:00:27"
         $virtualbox_mac_1c = "080027"
 
+        //Drivers 
+        $vbox_driver_1 = "SOFTWARE\\Oracle\\VirtualBox Guest Additions" nocase ascii wide
+		$vbox_driver_2 = "SOFTWARE\\\\Oracle\\\\VirtualBox Guest Additions" nocase ascii wide
+        $miscvm1 = "SYSTEM\\ControlSet001\\Services\\Disk\\Enum" nocase ascii wide
+		$miscvm2 = "SYSTEM\\\\ControlSet001\\\\Services\\\\Disk\\\\Enum" nocase ascii wide
+
     condition:
-        any of them
+        2 of them 
 }

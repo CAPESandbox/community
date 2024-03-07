@@ -10,6 +10,7 @@ false_positives:
    - rule: "shellcode_stack_strings"
    - rule: "shellcode_get_eip"
    - rule: "shellcode_peb_parsing"
+   - rule: "shellcode_patterns"
    - rule: "lsadump"
    - rule: "UPX"
    - rule: "INDICATOR_EXE_Packed_Dotfuscator"
