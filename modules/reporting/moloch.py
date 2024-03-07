@@ -26,7 +26,6 @@ log = logging.getLogger(__name__)
 
 
 class Moloch(Report):
-
     """Moloch processing."""
 
     def cmd_wrapper(self, cmd) -> Tuple[int, bytes, bytes]:
@@ -151,9 +150,9 @@ class Moloch(Report):
                             else:
                                 tmpdict["cproto"] = "tcp"
                                 tmpdict["nproto"] = 6
-                            tmpdict[
-                                "expression"
-                            ] = f'ip=={tmpdict["srcip"]} && ip=={tmpdict["dstip"]} && port=={tmpdict["srcport"]} && port=={tmpdict["dstport"]} && tags=="{self.CUCKOO_INSTANCE_TAG}:{self.task_id}" && ip.protocol=={tmpdict["cproto"]}'
+                            tmpdict["expression"] = (
+                                f'ip=={tmpdict["srcip"]} && ip=={tmpdict["dstip"]} && port=={tmpdict["srcport"]} && port=={tmpdict["dstport"]} && tags=="{self.CUCKOO_INSTANCE_TAG}:{self.task_id}" && ip.protocol=={tmpdict["cproto"]}'
+                            )
                             tmpdict["hash"] = (
                                 tmpdict["nproto"]
                                 + struct.unpack("!L", socket.inet_aton(tmpdict["srcip"]))[0]
