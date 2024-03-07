@@ -130,6 +130,8 @@ class raccoon(Signature):
             return True
         else:
             return False
+
+
 class RaccoonInfoStealerMutex(Signature):
     name = "asyncrat_mutex"
     description = "Creates known Raccoon Infostealer mutex"
