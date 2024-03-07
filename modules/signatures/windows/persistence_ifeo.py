@@ -46,8 +46,8 @@ class PersistenceIFEO(Signature):
 
 
 class PersistenceSilentProcessExit(Signature):
-    name = "persistence_slient_process_exit"
-    description = "Modifies Slient Process Exit Options, indicative of process injection or persistence"
+    name = "persistence_silent_process_exit"
+    description = "Modifies Silent Process Exit Options, indicative of process injection or persistence"
     severity = 3
     categories = ["persistence", "injection", "evasion"]
     authors = ["ditekshen"]
