@@ -130,3 +130,29 @@ class raccoon(Signature):
             return True
         else:
             return False
+
+
+class RaccoonInfoStealerMutex(Signature):
+    name = "asyncrat_mutex"
+    description = "Creates known Raccoon Infostealer mutex"
+    severity = 3
+    categories = ["infostealer", "keylogger", "rat"]
+    families = ["Raccoon"]
+    authors = ["andreiminca"]
+    minimum = "1.3"
+    ttps = ["T1219"]  # MITRE v6,7,8
+    mbcs = ["OC0003", "C0042"]  # micro-behaviour
+
+    def run(self):
+        indicators = [
+            ".*m\\$V1-xV4v$",
+        ]
+
+        for indicator in indicators:
+            match = self.check_mutex(pattern=indicator, regex=True, all=True)
+            if match:
+                for mut in match:
+                    self.data.append({"mutex": mut})
+                return True
+
+        return False
