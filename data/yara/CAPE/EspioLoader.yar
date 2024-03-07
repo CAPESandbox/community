@@ -2,7 +2,7 @@ rule EspioLoader {
     meta:
         author = "ditekSHen"
         description = "Detects Espio shellcode loader and obfuscator"
-        cape_type = "EspioLoader Loader Payload"
+        cape_type = "EspioLoader Payload"
     strings:
         $pdb = /\\loader\\x64\\(Release|Debug)\\Espio\.pdb/ ascii
         $s1 = "obfuscatedPayload" fullword wide

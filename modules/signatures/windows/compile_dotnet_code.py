@@ -90,17 +90,15 @@ class CompilesDotNetCode(Signature):
 
         if (self.csccmd or self.cvtrescmd) and self.writemz:
             for indicator in indicators:
-                if self.results.get("dropped", []):
-                    for dropped in self.results["dropped"]:
-                        filename = dropped["name"]
-                        filetype = dropped["type"]
+                for dropped in self.results.get("dropped", []):
+                    for filename in dropped.get("name", []):
                         if re.match(indicator, filename, re.IGNORECASE):
                             match = True
                             if filename.endswith(".pdb") or "Logo." in filename:
                                 expscore += 1
                             for filepath in dropped["guest_paths"]:
                                 if filename.endswith(".tmp") or filename.endswith(".TMP"):
-                                    if "COFF" in filetype or "MSVC" in filetype:
+                                    if "COFF" in dropped["type"] or "MSVC" in dropped["type"]:
                                         self.data.append({"file": filepath})
                                 else:
                                     self.data.append({"file": filepath})
