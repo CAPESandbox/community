@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiVMChecksAvailableMemory(Signature):
     name = "antivm_checks_available_memory"
     description = "Checks available memory"
@@ -34,6 +35,6 @@ class AntiVMChecksAvailableMemory(Signature):
     def on_call(self, call, process):
         self.mark_call()
         self.ret = True
-    
+
     def on_complete(self):
         return self.ret
