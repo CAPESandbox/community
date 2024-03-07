@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class QueriesKeyboardLayout(Signature):
     name = "queries_keyboard_layout"
     description = "Queries the keyboard layout"
@@ -34,6 +35,6 @@ class QueriesKeyboardLayout(Signature):
     def on_call(self, call, process):
         self.mark_call()
         self.ret = True
-    
+
     def on_complete(self):
         return self.ret
