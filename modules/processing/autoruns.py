@@ -1,6 +1,6 @@
+import csv
 import logging
 import os
-import csv
 
 from lib.cuckoo.common.abstracts import Processing
 from lib.cuckoo.common.exceptions import CuckooProcessingError
@@ -25,7 +25,7 @@ class Autoruns(Processing):
         data = {}
         try:
             with open(autoruns_path, "r") as f:
-                #Operation,Time,Entry Location,Entry,Enabled,Category,Profile,Description,Company,Image Path,Version,Launch String
+                # Operation,Time,Entry Location,Entry,Enabled,Category,Profile,Description,Company,Image Path,Version,Launch String
                 reader = csv.DictReader(f, delimiter=",")
                 count = 0
                 for row in reader:
