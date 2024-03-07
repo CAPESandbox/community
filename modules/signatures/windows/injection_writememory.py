@@ -35,7 +35,7 @@ class InjectionWriteRemoteProcess(Signature):
 
     def on_call(self, call, process):
             prochandle = self.get_argument(call, "ProcessHandle")
-            if prochandle not in ["0x00000000","0x0000000000000000","0xffffffff","0xffffffffffffffff"]:
+            if prochandle not in ("0x00000000","0x0000000000000000","0xffffffff","0xffffffffffffffff"):
                 pname = process["process_name"].lower()
                 processid = process["process_id"]
                 if processid not in self.sourcepids and prochandle not in self.targethandles:
@@ -47,7 +47,7 @@ class InjectionWriteRemoteProcess(Signature):
 
     def on_complete(self):
         return self.ret
-        
+
 class InjectionWriteEXEProcess(Signature):
     name = "injection_write_exe_process"
     description = "Writes an executable to the memory of another process"
@@ -69,7 +69,7 @@ class InjectionWriteEXEProcess(Signature):
 
     def on_call(self, call, process):
             prochandle = self.get_argument(call, "ProcessHandle")
-            if prochandle not in ["0x00000000","0x0000000000000000","0xffffffff","0xffffffffffffffff"]:
+            if prochandle not in ("0x00000000","0x0000000000000000","0xffffffff","0xffffffffffffffff"):
                 if self.get_argument(call, "Buffer").startswith("MZ") or prochandle in self.handles:
                     pname = process["process_name"].lower()
                     processid = process["process_id"]
@@ -78,7 +78,7 @@ class InjectionWriteEXEProcess(Signature):
                     if processid not in self.sourcepids and prochandle not in self.targethandles:
                         self.data.append({"write_exe_memory": "Process %s with process ID %s wrote an executable to the process handle %s" % (pname, processid, prochandle)})
                         self.sourcepids.append(processid)
-                        self.targethandles.append(prochandle)  
+                        self.targethandles.append(prochandle)
                     self.mark_call()
                     self.ret = True
 
