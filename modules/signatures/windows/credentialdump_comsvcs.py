@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ComsvcsCredentialDump(Signature):
     name = "comsvcs_credentialdump"
     description = "Dumps process memory using comsvcs (likely credential dump of LSASS process)"
@@ -24,7 +25,9 @@ class ComsvcsCredentialDump(Signature):
     minimum = "1.3"
     evented = True
     ttps = ["T1003"]  # # MITRE v6,7,8
-    reference = ["www.ired.team/offensive-security/credential-access-and-credential-dumping/dump-credentials-from-lsass-process-without-mimikatz"]
+    reference = [
+        "www.ired.team/offensive-security/credential-access-and-credential-dumping/dump-credentials-from-lsass-process-without-mimikatz"
+    ]
 
     def run(self):
         ret = False
