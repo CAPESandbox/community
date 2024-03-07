@@ -26,7 +26,7 @@ class LinuxDeletesFiles(Signature):
             "unlinkat",
         ]
     )
-    flags = "O_TRUNC" # truncating makes file empty, take as a form of deletion
+    flags = "O_TRUNC"  # truncating makes file empty, take as a form of deletion
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -41,9 +41,7 @@ class LinuxDeletesFiles(Signature):
         # If not, we can start caching it and store a copy converted to a dict.
         if call is not self._current_call_cache:
             self._current_call_cache = call
-            self._current_call_list = [
-                argument["value"] for argument in call["arguments"]
-            ]
+            self._current_call_list = [argument["value"] for argument in call["arguments"]]
 
         # Return the filename from retrieved from the api call.
         if self._current_call_list:
@@ -55,36 +53,24 @@ class LinuxDeletesFiles(Signature):
         if call["api"] in ["truncate", "ftruncate"] and call["return"] == "0":
             self.loadctr += 1
             if call["api"] == "truncate":
-                self.data.append(
-                    {"DeletedFile": self.get_argument(call, "const char *path")}
-                )
+                self.data.append({"DeletedFile": self.get_argument(call, "const char *path")})
             if call["api"] == "ftruncate":
-                self.data.append(
-                    {"DeletedFile": self.get_filename(call)}
-                )
+                self.data.append({"DeletedFile": self.get_filename(call)})
         if call["api"] in ["unlink", "unlinkat"] and call["return"] == "0":
             self.loadctr += 1
-            self.data.append(
-                {"DeletedFile": self.get_argument(call, "const char *pathname")}
-            )
+            self.data.append({"DeletedFile": self.get_argument(call, "const char *pathname")})
         if call["api"] == "open" and call["return"] > "-1":
             if self.flags in self.get_argument(call, "int flags"):
                 self.loadctr += 1
-                self.data.append(
-                    {"DeletedFile": self.get_filename(call)}
-                )
+                self.data.append({"DeletedFile": self.get_filename(call)})
         if call["api"] == "openat" and call["return"] > "-1":
             if self.flags in self.get_argument(call, "int flags"):
                 self.loadctr += 1
-                self.data.append(
-                    {"DeletedFile": self.get_argument(call, "const char *filename")}
-                )
+                self.data.append({"DeletedFile": self.get_argument(call, "const char *filename")})
         if call["api"] == "openat2" and call["return"] > "-1":
             if self.flags in self.get_argument(call, "struct open_how *how"):
                 self.loadctr += 1
-                self.data.append(
-                    {"DeletedFile": self.get_argument(call, "const char *filename")}
-                )
+                self.data.append({"DeletedFile": self.get_argument(call, "const char *filename")})
 
     def on_complete(self):
         if self.loadctr > 0:

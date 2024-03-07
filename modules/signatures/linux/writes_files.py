@@ -36,9 +36,7 @@ class LinuxWritesFiles(Signature):
         # If not, we can start caching it and store a copy converted to a dict.
         if call is not self._current_call_cache:
             self._current_call_cache = call
-            self._current_call_list = [
-                argument["value"] for argument in call["arguments"]
-            ]
+            self._current_call_list = [argument["value"] for argument in call["arguments"]]
 
         # Return the filename from retrieved from the api call.
         if self._current_call_list:
@@ -52,7 +50,6 @@ class LinuxWritesFiles(Signature):
             if data not in self.data:
                 self.loadctr += 1
                 self.data.append(data)
-                
 
     def on_complete(self):
         if self.loadctr > 0:
