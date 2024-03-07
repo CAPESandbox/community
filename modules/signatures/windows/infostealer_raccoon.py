@@ -139,7 +139,7 @@ class RaccoonInfoStealerMutex(Signature):
     authors = ["andreiminca"]
     minimum = "1.3"
     ttps = ["T1219"]  # MITRE v6,7,8
-    mbcs += ["OC0003", "C0042"]  # micro-behaviour
+    mbcs = ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
         indicators = [
