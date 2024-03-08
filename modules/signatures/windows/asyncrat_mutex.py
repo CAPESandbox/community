@@ -18,7 +18,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class AsyncRatMutex(Signature):
     name = "asyncrat_mutex"
-    description = "Creates known AsyncRat mutexe"
+    description = "Creates known AsyncRat mutex"
     severity = 3
     categories = ["infostealer", "keylogger", "rat"]
     families = ["AsyncRat"]

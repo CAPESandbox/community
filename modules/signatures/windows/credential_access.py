@@ -38,3 +38,49 @@ class EnablesWDigest(Signature):
                 ret = True
 
         return ret
+
+
+class VaultCmd(Signature):
+    name = "vaultcmd_credentialaccess"
+    description = "Lists credentials using VaultCmd"
+    severity = 3
+    categories = ["credentials", "credential_access"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1555"]
+    reference = ["https://attack.mitre.org/techniques/T1555/004/"]
+
+    def run(self):
+        ret = False
+        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            if "vaultcmd" in lower and "list" in lower:
+                ret = True
+                self.data.append({"command": cmdline})
+
+        return ret
+
+
+class CredWiz(Signature):
+    name = "credwiz_credentialaccess"
+    description = "Exports credentials using CredWiz"
+    severity = 3
+    categories = ["credentials", "credential_access"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1555"]
+    reference = ["https://attack.mitre.org/techniques/T1555/"]
+
+    def run(self):
+        ret = False
+        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            if "credwiz" in lower and "keymgr" in lower:
+                ret = True
+                self.data.append({"command": cmdline})
+
+        return ret
