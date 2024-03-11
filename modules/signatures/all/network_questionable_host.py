@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from contextlib import suppress
 import dns.resolver
 from lib.cuckoo.common.abstracts import Signature
 
@@ -52,20 +53,18 @@ class NetworkQuestionableHost(Signature):
     filter_analysistypes = set(["file"])
 
     def run(self):
-        checked = {}
+        checked = []
         for key, value in [("hosts", "ip"), ("tcp", "dst"), ("udp", "dst"), ("icmp", "dst"), ("icmp", "src")]:
             for host in self.results.get("network", {}).get(key, []):
                 ip = host[value]
-                checked[ip] = ""
-                if ip.startswith(("10.", "172.16.", "192.168.")):
+                if ip.startswith(("10.", "172.16.", "192.168.")) or ip in checked:
                     continue
                 ipRev = ".".join(ip.split(".")[::-1])
                 for rbl in RBLs:
-                    try:
+                    with suppress(Exception):
                         resolver.query(ipRev + "." + rbl, "A")
                         self.data.append({rbl: ip})
-                    except:
-                        pass
+                        checked.append(ip)
 
         if self.data:
             return True
