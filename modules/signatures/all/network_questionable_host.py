@@ -14,6 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from contextlib import suppress
+
 import dns.resolver
 from lib.cuckoo.common.abstracts import Signature
 
