@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from contextlib import suppress
 import dns.resolver
 from lib.cuckoo.common.abstracts import Signature
 
@@ -60,12 +61,10 @@ class NetworkQuestionableHost(Signature):
                     continue
                 ipRev = ".".join(ip.split(".")[::-1])
                 for rbl in RBLs:
-                    try:
+                    with suppress(Exception):
                         resolver.query(ipRev + "." + rbl, "A")
                         self.data.append({rbl: ip})
                         checked.append(ip)
-                    except:
-                        pass
 
         if self.data:
             return True
