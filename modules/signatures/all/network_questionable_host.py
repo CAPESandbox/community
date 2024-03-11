@@ -52,18 +52,18 @@ class NetworkQuestionableHost(Signature):
     filter_analysistypes = set(["file"])
 
     def run(self):
-        checked = {}
+        checked = []
         for key, value in [("hosts", "ip"), ("tcp", "dst"), ("udp", "dst"), ("icmp", "dst"), ("icmp", "src")]:
             for host in self.results.get("network", {}).get(key, []):
                 ip = host[value]
-                checked[ip] = ""
-                if ip.startswith(("10.", "172.16.", "192.168.")):
+                if ip.startswith(("10.", "172.16.", "192.168.")) or ip in checked:
                     continue
                 ipRev = ".".join(ip.split(".")[::-1])
                 for rbl in RBLs:
                     try:
                         resolver.query(ipRev + "." + rbl, "A")
                         self.data.append({rbl: ip})
+                        checked.append(ip)
                     except:
                         pass
 
