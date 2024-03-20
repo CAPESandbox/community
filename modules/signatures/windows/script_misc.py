@@ -40,10 +40,10 @@ class JavaScriptTimer(Signature):
     def on_call(self, call, process):
         if call["api"] == "JsEval":
             pname = process["process_name"]
-            if pname.lower() in ["cscript.exe", "jscript.exe", "mshta.exe", "wscript.exe"]:
+            if pname.lower() in ("cscript.exe", "jscript.exe", "mshta.exe", "wscript.exe"):
                 javascript = self.get_argument(call, "JavaScript")
                 if javascript:
-                    for javascripttimer in self.javascripttimer:
+                    for timer in self.javascripttimer:
                         if timer in javascript.lower():
                             self.data.append({"process": pname})
                             self.ret = True
@@ -53,7 +53,7 @@ class JavaScriptTimer(Signature):
 
         if call["api"] == "COleScript_ParseScriptText":
             pname = process["process_name"]
-            if pname.lower() in ["cscript.exe", "jscript.exe", "wscript.exe"]:
+            if pname.lower() in ("cscript.exe", "jscript.exe", "wscript.exe"):
                 javascript = self.get_argument(call, "Script")
                 if javascript:
                     for javascripttimer in self.javascripttimer:
