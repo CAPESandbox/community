@@ -25,7 +25,7 @@ class InjectionWriteRemoteProcess(Signature):
     evented = True
     ttps = ["T1055"]  # MITRE v6,7,8
 
-    filter_apinames = set(["NtWow64WriteVirtualMemory64", "WriteProcessMemory"])
+    filter_apinames = set(["NtWow64WriteVirtualMemory64", "WriteProcessMemory", "NtWriteVirtualMemory"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -58,7 +58,7 @@ class InjectionWriteEXEProcess(Signature):
     evented = True
     ttps = ["T1055"]  # MITRE v6,7,8
 
-    filter_apinames = set(["NtWow64WriteVirtualMemory64", "WriteProcessMemory"])
+    filter_apinames = set(["NtWow64WriteVirtualMemory64", "WriteProcessMemory", "NtWriteVirtualMemory"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
