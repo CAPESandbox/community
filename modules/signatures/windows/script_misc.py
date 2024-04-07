@@ -1,4 +1,4 @@
-# Copyright (C) 2024 Kevin Ross 
+# Copyright (C) 2024 Kevin Ross
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,9 +13,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import re
+
 from lib.cuckoo.common.abstracts import Signature
 
-import re
 
 class JavaScriptTimer(Signature):
     name = "javascript_timer"
@@ -26,7 +27,7 @@ class JavaScriptTimer(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
