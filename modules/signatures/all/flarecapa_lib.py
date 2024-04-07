@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class FlareCAPALib(Signature):
     name = "flare_capa_lib"
     description = "CAPA detected interesting code functions"
@@ -26,20 +27,20 @@ class FlareCAPALib(Signature):
 
     def run(self):
         ret = False
-        
+
         target = self.results.get("target", {})
         if target.get("category") in ("file", "static") and target.get("file"):
-            capa = self.results["target"]["file"].get("flare_capa", [])          
+            capa = self.results["target"]["file"].get("flare_capa", [])
             if capa:
                 samplesha256 = capa["sha256"]
                 capabilities = capa["CAPABILITY"]
                 for namespace, capability in capabilities.items():
                     if "lib" in namespace:
                         ret = True
-                        joined = ', '.join(capability)
+                        joined = ", ".join(capability)
                         self.data.append({"target": "SHA256 %s - %s %s" % (samplesha256, namespace, joined)})
-                        
-        for block in self.results.get("CAPE", {}).get("payloads", []) or []:          
+
+        for block in self.results.get("CAPE", {}).get("payloads", []) or []:
             capa = block.get("flare_capa", [])
             if capa:
                 samplesha256 = capa["sha256"]
@@ -47,7 +48,7 @@ class FlareCAPALib(Signature):
                 for namespace, capability in capabilities.items():
                     if "lib" in namespace:
                         ret = True
-                        joined = ', '.join(capability)
+                        joined = ", ".join(capability)
                         self.data.append({"payload": "SHA256 %s - %s %s" % (samplesha256, namespace, joined)})
 
         for keyword in ("procdump", "procmemory", "extracted", "dropped"):
@@ -62,7 +63,7 @@ class FlareCAPALib(Signature):
                         for namespace, capability in capabilities.items():
                             if "lib" in namespace:
                                 ret = True
-                                joined = ', '.join(capability)
+                                joined = ", ".join(capability)
                                 self.data.append({keyword: "SHA256 %s - %s %s" % (samplesha256, namespace, joined)})
-                
+
         return ret
