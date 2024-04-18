@@ -27,8 +27,6 @@ class NetworkExcessiveUDP(Signature):
     ttps = ["T1095"]  # MITRE v6,7,8
     mbcs = ["OC0006", "C0001"]  # micro-behaviour
 
-    filter_analysistypes = set(["file"])
-
     def run(self):
         whitelistports = ["53", "123", "500"]
         uniqueips = 0

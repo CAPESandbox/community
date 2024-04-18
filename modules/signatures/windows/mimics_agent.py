@@ -16,7 +16,7 @@ class MimicsAgent(Signature):
     ttps = ["T1036"]  # MITRE v6,7.8
 
     filter_apinames = set(["ObtainUserAgentString", "InternetOpenA", "InternetOpenW"])
-    filter_analysistypes = set(["file"])
+    
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

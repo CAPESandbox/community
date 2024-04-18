@@ -34,7 +34,7 @@ class EXEDropper_JS(Signature):
     ttps += ["T1059", "T1059.007"]  # MITRE v7,8
     mbcs = ["OB0009", "E1059"]
 
-    filter_analysistypes = set(["file"])
+    
 
     filter_categories = set(["browser"])
     # backward compat

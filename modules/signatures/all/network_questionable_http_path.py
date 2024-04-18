@@ -82,8 +82,6 @@ class NetworkQuestionableHttpsPath(Signature):
     minimum = "1.3"
     enabled = True
 
-    filter_analysistypes = set(["file"])
-
     def run(self):
         for host in self.results.get("network", {}).get("https", []) or []:
             if self.find_dir_n_type(host["path"].lower()):

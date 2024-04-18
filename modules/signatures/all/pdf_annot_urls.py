@@ -24,7 +24,7 @@ class PDF_Annot_URLs(Signature):
     authors = ["Optiv"]
     minimum = "1.3"
 
-    filter_analysistypes = set(["file"])
+    
 
     def run(self):
         found_URLs = False
