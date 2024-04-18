@@ -49,9 +49,9 @@ class NetworkQuestionableHost(Signature):
     authors = ["Zane C. Bowers-Hadley"]
     minimum = "1.3"
     mbcs = ["B0030"]
-    enabled = False
+    enabled = True
 
-    filter_analysistypes = set(["file"])
+    filter_analysistypes = set(["file", "url"])
 
     def run(self):
         checked = []
