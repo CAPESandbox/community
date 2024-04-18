@@ -57,8 +57,6 @@ class NetworkQuestionableHttpPath(Signature):
     minimum = "1.3"
     enabled = True
 
-    filter_analysistypes = set(["file", "url"])
-
     def find_dir_n_type(self, uri):
         if any([uri.find(common_dir) for common_dir in common_dirs]) and uri.endswith(common_extensions):
             return True

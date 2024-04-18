@@ -51,8 +51,6 @@ class NetworkQuestionableHost(Signature):
     mbcs = ["B0030"]
     enabled = True
 
-    filter_analysistypes = set(["file", "url"])
-
     def run(self):
         checked = []
         for key, value in [("hosts", "ip"), ("tcp", "dst"), ("udp", "dst"), ("icmp", "dst"), ("icmp", "src")]:
