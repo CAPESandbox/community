@@ -32,8 +32,6 @@ class NetworkHTTP(Signature):
     ttps = ["T1071", "T1071.001"]  # MITRE v6,7,8
     mbcs = ["OC0006", "C0002"]  # micro-behaviour
 
-    filter_analysistypes = set(["file"])
-
     def run(self):
         urls = []
         whitelist = [
