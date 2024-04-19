@@ -32,7 +32,7 @@ class ModifyProxy(Signature):
     mbcs = ["OB0006", "E1112"]
     mbcs += ["OC0008", "C0036", "C0036.001"]  # micro-behaviour
 
-    
+    filter_analysistypes = set(["file"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

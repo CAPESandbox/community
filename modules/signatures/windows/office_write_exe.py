@@ -23,7 +23,7 @@ class OfficeWriteEXE(Signature):
     mbcs = ["OC0001", "C0016"]  # micro-behaviour
 
     filter_apinames = set(["NtWriteFile"])
-    
+    filter_analysistypes = set(["file"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

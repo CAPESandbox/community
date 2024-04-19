@@ -329,7 +329,7 @@ class PowerShellNetworkConnection(Signature):
             "WSAConnect",
         ]
     )
-    
+    filter_analysistypes = set(["file"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

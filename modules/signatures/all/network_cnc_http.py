@@ -31,6 +31,8 @@ class NetworkHTTPPOST(Signature):
     minimum = "1.2"
     evented = True
 
+    filter_analysistypes = set(["file"])
+
     def on_complete(self):
         safelist = [
             "microsoft.com",
@@ -67,7 +69,7 @@ class NetworkCnCHTTP(Signature):
     mbcs = ["OB0004", "B0033"]
     mbcs += ["OC0006", "C0002"]  # micro-behaviour
 
-    
+    filter_analysistypes = set(["file"])
 
     def run(self):
         whitelist = [

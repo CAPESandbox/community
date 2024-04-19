@@ -77,7 +77,7 @@ class ReadsSelf(Signature):
     evented = True
     mbcs = ["OC0001", "C0051"]
 
-    
+    filter_analysistypes = set(["file"])
     filter_apinames = set(["NtOpenFile", "NtCreateFile", "NtClose", "NtReadFile", "NtSetInformationFile"])
 
     def __init__(self, *args, **kwargs):

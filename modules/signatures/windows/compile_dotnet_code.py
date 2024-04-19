@@ -35,7 +35,7 @@ class CompilesDotNetCode(Signature):
     mbcs = ["OB0002", "E1027"]
 
     filter_apinames = set(["CreateProcessInternalA", "CreateProcessInternalW", "NtWriteFile", "NtCreateUserProcess"])
-    
+    filter_analysistypes = set(["file"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

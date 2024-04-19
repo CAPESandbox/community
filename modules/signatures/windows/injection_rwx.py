@@ -18,7 +18,7 @@ class InjectionRWX(Signature):
     mbcs = ["OB0006", "OB0013", "E1055"]
 
     filter_apinames = set(["NtAllocateVirtualMemory", "NtProtectVirtualMemory", "VirtualProtectEx"])
-    
+    filter_analysistypes = set(["file"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

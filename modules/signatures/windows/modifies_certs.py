@@ -16,7 +16,7 @@ class ModifiesCerts(Signature):
     ttps += ["T1553", "T1553.004"]  # MITRE v7,8
     mbcs = ["OC0008", "C0036", "E1112"]  # micro-behaviour
 
-    
+    filter_analysistypes = set(["file"])
 
     def run(self):
         if self.check_write_key(

@@ -26,6 +26,8 @@ class NetworkP2P(Signature):
     minimum = "1.2"
     evented = True
 
+    filter_analysistypes = set(["file"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ignoreports = [

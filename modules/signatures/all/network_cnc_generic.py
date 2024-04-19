@@ -26,6 +26,8 @@ class NetworkCountryDistribution(Signature):
     minimum = "1.3"
     mbcs = ["B0030"]
 
+    filter_analysistypes = set(["file"])
+
     def run(self):
         countries = []
         if "network" in self.results and "hosts" in self.results["network"]:
@@ -52,6 +54,8 @@ class NetworkMultipleDirectIPConnections(Signature):
     categories = ["network", "c2"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
+
+    filter_analysistypes = set(["file"])
 
     def run(self):
         count = 0

@@ -22,7 +22,7 @@ class EncryptedIOC(Signature):
 
     # May add to this later
     filter_apinames = set(["CryptHashData"])
-    
+    filter_analysistypes = set(["file"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

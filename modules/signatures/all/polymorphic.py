@@ -34,7 +34,7 @@ class Polymorphic(Signature):
     minimum = "1.2"
     mbcs = ["OB0006", "B0029"]
 
-    
+    filter_analysistypes = set(["file"])
 
     def run(self):
         package = self.results["info"]["package"]
