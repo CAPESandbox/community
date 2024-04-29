@@ -61,7 +61,7 @@ class Procmem_Yara(Signature):
                     self.severity = 4
                 elif rule.lower() in malicious and self.severity <= 4:
                     self.severity = 5
-                self.data.append({"Hit": "PID %s trigged the Yara rule '%s'" % (pid, rule, data)})
+                self.data.append({"Hit": "PID %s trigged the Yara rule '%s' with data '%s'" % (pid, rule, data)})
             return True
 
         return False
