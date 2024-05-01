@@ -40,6 +40,7 @@ class Autoruns(Auxiliary):
         except OSError as e:
             pass
 
+        
         bin_path = os.path.join(os.getcwd(), "bin")
         # First figure out what architecture the system in running (64 or 86)
         if "AMD64" in platform.uname():
