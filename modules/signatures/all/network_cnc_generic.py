@@ -37,6 +37,10 @@ def check_ip_in_ranges(ip_address, ip_ranges):
             return True
     return False
 
+msf_ips_file = "extra/msft-public-ips.csv"
+msf_public_ips_list = os.path.join(CUCKOO_ROOT, msf_ips_file)
+ip_ranges = load_ip_ranges_from_csv(msf_public_ips_list)
+
 
 class NetworkCountryDistribution(Signature):
     name = "network_country_distribution"
@@ -82,10 +86,8 @@ class NetworkMultipleDirectIPConnections(Signature):
     def run(self):
         count = 0
         ips = []
-        msf_ips_file = "extra/msft-public-ips.csv"
-        msf_public_ips_list = os.path.join(CUCKOO_ROOT, msf_ips_file)
+        
         if "network" in self.results and "hosts" in self.results["network"]:
-            ip_ranges = load_ip_ranges_from_csv(msf_public_ips_list)
             for host in self.results["network"]["hosts"]:
                 ip = host["ip"]
                 hostname = host["hostname"]
