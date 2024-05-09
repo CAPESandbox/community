@@ -60,7 +60,7 @@ weight = 3
 
     strings:
             $magic = { 25 50 44 46 }
-            $attrib = /\/Filter.*(\/ASCIIHexDecode\W+|\/LZWDecode\W+|\/ASCII85Decode\W+|\/FlateDecode\W+|\/RunLengthDecode){2}/ 
+            $attrib = /\/Filter.{,1024}(\/ASCIIHexDecode\W+|\/LZWDecode\W+|\/ASCII85Decode\W+|\/FlateDecode\W+|\/RunLengthDecode){2}/ 
             // left out: /CCITTFaxDecode, JBIG2Decode, DCTDecode, JPXDecode, Crypt
 
     condition: 
@@ -153,15 +153,11 @@ rule possible_exploit : PDF raw
 		$attrib3 = /\/ASCIIHexDecode/
 		$attrib4 = /\/ASCII85Decode/
 
-		$action0 = /\/Action/
 		$action1 = "Array"
-		$shell = "A"
 		$cond0 = "unescape"
-		$cond1 = "String.fromCharCode"
-		
 		$nop = "%u9090%u9090"
 	condition:
-		$magic in (0..1024) and (2 of ($attrib*)) or ($action0 and #shell > 10 and 1 of ($cond*)) or ($action1 and $cond0 and $nop)
+		$magic in (0..1024) and (2 of ($attrib*)) or ($action1 and $cond0 and $nop)
 }
 
 rule shellcode_blob_metadata : PDF raw
@@ -247,21 +243,6 @@ rule suspicious_embed : PDF raw
 		$magic in (0..1024) and 1 of ($meth*) and 2 of ($attrib*)
 }
 
-rule suspicious_obfuscation : PDF raw
-{
-	meta:
-		author = "Glenn Edwards (@hiddenillusion)"
-		version = "0.1"
-		weight = 2
-		
-	strings:
-		$magic = { 25 50 44 46 }
-		$reg = /\/\w#[a-zA-Z0-9]{2}#[a-zA-Z0-9]{2}/
-		
-	condition:
-		$magic in (0..1024) and #reg > 5
-}
-
 rule invalid_XObject_js : PDF raw
 {
 	meta:
@@ -292,8 +273,8 @@ rule invalid_trailer_structure : PDF raw
         strings:
                 $magic = { 25 50 44 46 }
 				// Required for a valid PDF
-                $reg0 = /trailer\r?\n?.*\/Size.*\r?\n?\.*/
-                $reg1 = /\/Root.*\r?\n?.*startxref\r?\n?.*\r?\n?%%EOF/
+                $reg0 = /trailer\r?\n?.{,8192}\/Size.{,8192}\r?\n?/
+                $reg1 = /\/Root.{,8192}\r?\n?.{,8192}startxref\r?\n?.{,8192}\r?\n?%%EOF/
 
         condition:
                 $magic in (0..1024) and not $reg0 and not $reg1
@@ -399,8 +380,8 @@ rule invalid_xref_numbers : PDF raw
 		
         strings:
                 $magic = { 25 50 44 46 }
-                $reg0 = /xref\r?\n?.*\r?\n?.*65535\sf/
-                $reg1 = /endstream.*\r?\n?endobj.*\r?\n?startxref/
+                $reg0 = /xref\r?\n?.{,8192}\r?\n?.{,8192}65535\sf/
+                $reg1 = /endstream.{,8192}\r?\n?endobj.{,8192}\r?\n?startxref/
         condition:
                 $magic in (0..1024) and not $reg0 and not $reg1
 }
