@@ -34,7 +34,7 @@ try:
     pymisp_logger.setLevel(logging.ERROR)
 except ImportError:
     HAVE_PYMISP = True
-    print("pip3 install pymisp=2.4.144")
+    print("poetry run pip3 install pymisp=2.4.144")
 
 log = logging.getLogger(__name__)
 logging.getLogger("pymisp").setLevel(logging.WARNING)
@@ -217,7 +217,10 @@ class MISP(Report):
         """Run analysis.
         @return: MISP results dict.
         """
-
+        if not HAVE_PYMISP:
+            print("Missed dependency: poetry run pip install pymisp=2.4.144")
+            return
+        
         url = self.options.get("url", "")
         apikey = self.options.get("apikey", "")
 
