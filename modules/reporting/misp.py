@@ -220,7 +220,7 @@ class MISP(Report):
         if not HAVE_PYMISP:
             print("Missed dependency: poetry run pip install pymisp=2.4.144")
             return
-        
+
         url = self.options.get("url", "")
         apikey = self.options.get("apikey", "")
 
