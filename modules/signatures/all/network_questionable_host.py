@@ -33,7 +33,6 @@ RBLs = (
     "noserver.dnsbl.sorbs.net",
     "escalations.dnsbl.sorbs.net",
     "noserver.dnsbl.sorbs.net",
-    "zen.spamhaus.org",
 )
 
 resolver = dns.resolver.Resolver()

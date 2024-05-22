@@ -25,6 +25,7 @@ class QueriesKeyboardLayout(Signature):
     minimum = "1.3"
     evented = True
     ttps = ["T1614"]  # MITRE v6,7,8
+    confidence = 20
 
     filter_apinames = set(["GetKeyboardLayout"])
 

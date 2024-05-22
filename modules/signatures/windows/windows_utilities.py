@@ -140,7 +140,7 @@ class SuspiciousCommandTools(Signature):
     name = "suspicious_command_tools"
     description = "Uses suspicious command line tools or Windows utilities"
     severity = 3
-    confidence = 80
+    confidence = 50
     categories = ["command", "lateral"]
     authors = ["Cuckoo Technologies", "Kevin Ross"]
     minimum = "1.3"
