@@ -25,6 +25,7 @@ class CryptGenKey(Signature):
     authors = ["Kevin Ross", "@CybercentreCanada"]
     minimum = "1.2"
     evented = True
+    confidence = 40
 
     filter_apinames = set(["CryptGenKey", "CryptExportKey"])
 

@@ -66,9 +66,9 @@ class NetworkDocumentFile(Signature):
                     self.url = self.get_argument(call, "Url")
                     if self.url in domain_passlist:
                         return False
-                else:
-                    self.mark_call()
-                    return True
+                    else:
+                        self.mark_call()
+                        return True
 
 
 class NetworkEXE(Signature):
