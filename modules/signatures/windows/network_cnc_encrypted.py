@@ -31,6 +31,7 @@ class NetworkCnCHTTPSGeneric(Signature):
     evented = True
     ttps = ["T1032"]  # MITRE v6
     ttps += ["T1573"]  # MITRE v7,8
+    confidence = 10
 
     filter_apinames = set(["SslEncryptPacket"])
 
