@@ -29,6 +29,7 @@ class NetworkDocumentFile(Signature):
     ttps = ["T1071"]
     mbcs = ["E1105"]
     evented = True
+    confidence = 30
 
     filter_apinames = set(
         [
