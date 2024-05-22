@@ -25,6 +25,7 @@ class AntiVMChecksAvailableMemory(Signature):
     minimum = "1.3"
     evented = True
     ttps = ["T1082"]  # MITRE v6,7,8
+    confidence = 30
 
     filter_apinames = set(["GlobalMemoryStatusEx"])
 

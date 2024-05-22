@@ -29,6 +29,7 @@ class AntiVMSystem(Signature):
     mbcs = ["OB0001", "B0009", "B0009.005", "OB0007", "E1082"]
     mbcs += ["OC0008", "C0036", "C0036.005"]  # micro-behaviour
     evented = True
+    confidence = 20
 
     filter_category = set(
         [
