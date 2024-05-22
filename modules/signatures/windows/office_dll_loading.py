@@ -149,6 +149,7 @@ class OfficeCOMLoad(Signature):
     ttps = ["T1059", "T1137", "T1204"]  # MITRE v6,7,8
     ttps += ["T1059.003", "T1137.001", "T1204.002"]  # MITRE v7,8
     mbcs = ["OB0009", "E1059"]
+    confidence = 20
 
     filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])
 
