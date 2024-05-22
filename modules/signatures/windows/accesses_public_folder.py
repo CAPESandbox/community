@@ -24,6 +24,7 @@ class AccessesPublicFolder(Signature):
     ttps = ["T1548", "T1078", "T1036"]
     mbcs = []
     evented = True
+    confidence = 10
 
     def run(self):
         file_indicator = "C:\\\\Users\\\\Public\\\\.*"

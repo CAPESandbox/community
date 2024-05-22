@@ -26,6 +26,7 @@ class TerminatesRemoteProcess(Signature):
     minimum = "1.2"
     mbcs = ["C0018"]
     evented = True
+    confidence = 60
 
     filter_apinames = set(["NtTerminateProcess"])
 

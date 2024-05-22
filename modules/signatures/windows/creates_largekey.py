@@ -20,7 +20,7 @@ class CreatesLargeKey(Signature):
     name = "creates_largekey"
     description = "Creates or sets a registry key to a long series of bytes, possibly to store a binary or malware config"
     severity = 3
-    confidence = 80
+    confidence = 30
     categories = ["stealth"]
     authors = ["Optiv"]
     minimum = "1.3"
