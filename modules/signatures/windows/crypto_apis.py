@@ -25,6 +25,7 @@ class CryptGenKey(Signature):
     minimum = "1.2"
     evented = True
     mbcs = ["OC0005", "C0028"]
+    confidence = 20
 
     filter_apinames = set(["CryptGenKey", "CryptExportKey"])
 
