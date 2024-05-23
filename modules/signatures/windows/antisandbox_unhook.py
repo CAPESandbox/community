@@ -39,7 +39,8 @@ class Unhook(Signature):
         self.is_url_analysis = False
         if self.results.get("target", {}).get("category", "") == "url":
             self.is_url_analysis = True
-        self.safelistprocs = ["acrord32.exe", "acrobat.exe", "excel.exe", "winword.exe", "powerpnt.exe", "outlook.exe"]
+        self.safelistprocs = ["acrord32.exe", "acrobat.exe", "excel.exe", "winword.exe", "powerpnt.exe", "outlook.exe",
+                              "MicrosoftEdgeUpdate.exe", "explorer.exe"]
 
     def on_call(self, call, process):
         if process["process_name"].lower() in self.safelistprocs:
