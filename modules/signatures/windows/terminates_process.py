@@ -27,14 +27,17 @@ class TerminatesRemoteProcess(Signature):
     mbcs = ["C0018"]
     evented = True
     confidence = 60
+    safelistprocs = ["svchost.exe", "MicrosoftEdgeUpdate.exe"]
 
     filter_apinames = set(["NtTerminateProcess"])
 
     def on_call(self, call, _):
         if self.get_argument(call, "ProcessHandle") not in ["0xffffffff", "0xffffffffffffffff", "0x00000000", "0x0000000000000000"]:
             if self.pid:
-                self.mark_call()
-                self.data.append({"process": self.get_name_from_pid(self.pid)})
+                process_name = self.get_name_from_pid(self.pid)
+                if process_name not in self.safeproclist:
+                    self.mark_call()
+                    self.data.append({"process": self.get_name_from_pid(self.pid)})
 
     def on_complete(self):
         if self.data:

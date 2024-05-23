@@ -20,7 +20,7 @@ class Fingerprint(Signature):
     name = "recon_fingerprint"
     description = "Collects information to fingerprint the system"
     severity = 3
-    confidence = 75
+    confidence = 10
     categories = ["discovery"]
     authors = ["nex", "Optiv"]
     minimum = "1.2"
