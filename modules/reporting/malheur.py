@@ -157,7 +157,7 @@ class Malheur(Report):
         cfgpath = os.path.join(CUCKOO_ROOT, "conf", "malheur.conf")
         reportsdir = os.path.join(basedir, "reports")
         task_id = str(results["info"]["id"])
-        outputfile = os.path.join(basedir, f"malheur.txt.{hashlib.md5(str(random.random())).hexdigest()}")
+        outputfile = os.path.join(basedir, f"malheur.txt.{hashlib.md5(str(random.random()).encode()).hexdigest()}")
         with contextlib.suppress(Exception):
             os.makedirs(reportsdir)
         mist = mist_convert(results)

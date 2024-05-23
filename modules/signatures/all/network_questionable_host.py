@@ -49,7 +49,7 @@ class NetworkQuestionableHost(Signature):
     authors = ["Zane C. Bowers-Hadley"]
     minimum = "1.3"
     mbcs = ["B0030"]
-    enabled = True
+    enabled = False
 
     filter_analysistypes = set(["file"])
 

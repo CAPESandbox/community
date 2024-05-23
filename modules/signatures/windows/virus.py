@@ -8,7 +8,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class Virus(Signature):
     name = "virus"
-    description = "Likely virus infection of existing system binary"
+    description = "Likely virus infection of existing binary"
     severity = 3
     categories = ["virus"]
     authors = ["Optiv"]
