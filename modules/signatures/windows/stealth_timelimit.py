@@ -9,7 +9,7 @@ class StealthTimeout(Signature):
     name = "stealth_timeout"
     description = "Possible date expiration check, exits too soon after checking local time"
     severity = 1
-    confidence = 40
+    confidence = 20
     categories = ["stealth"]
     authors = ["Optiv"]
     minimum = "1.3"
