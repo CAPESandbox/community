@@ -68,7 +68,7 @@ rule DCRat {
 rule dcrat_kingrat {
     meta:
         author = "jeFF0Falltrades"
-		cape_type = "DCRat Payload"
+        cape_type = "DCRat Payload"
 
     strings:
         $venom_1 = "VenomRAT" wide ascii nocase
