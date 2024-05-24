@@ -22,6 +22,7 @@ class HTTP_Request(Signature):
     ttps = ["T1071"]  # MITRE v6,7,8
     ttps += ["T1071.001"]  # MITRE v7,8
     mbcs = ["OC0006", "C0002"]  # micro-behaviour
+    enabled = False
 
     filter_apinames = set(
         [
