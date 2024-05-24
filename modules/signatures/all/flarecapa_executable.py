@@ -24,6 +24,7 @@ class FlareCAPAExecutable(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    confidence = 30
 
     def run(self):
         ret = False

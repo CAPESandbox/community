@@ -25,6 +25,7 @@ class FlareCAPATargeting(Signature):
     minimum = "1.3"
     evented = True
     ttps = ["T1480"]
+    confidence = 50
 
     def run(self):
         ret = False

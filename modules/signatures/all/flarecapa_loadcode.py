@@ -25,6 +25,7 @@ class FlareCAPALoadCode(Signature):
     minimum = "1.3"
     evented = True
     ttps = ["T1027"]
+    confidence = 40
 
     def run(self):
         ret = False

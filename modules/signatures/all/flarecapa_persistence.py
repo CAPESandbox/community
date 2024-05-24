@@ -25,6 +25,7 @@ class FlareCAPAPersistence(Signature):
     minimum = "1.3"
     evented = True
     ttps = ["T1547"]
+    confidence = 40
 
     def run(self):
         ret = False

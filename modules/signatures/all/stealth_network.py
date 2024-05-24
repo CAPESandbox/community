@@ -13,6 +13,7 @@ class StealthNetwork(Signature):
     authors = ["Optiv"]
     minimum = "1.2"
     evented = True
+    confidence = 30
 
     filter_categories = set(["network"])
 

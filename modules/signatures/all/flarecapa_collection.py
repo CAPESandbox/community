@@ -25,6 +25,7 @@ class FlareCAPACollection(Signature):
     minimum = "1.3"
     evented = True
     ttps = ["T0882"]
+    confidence = 60
 
     def run(self):
         ret = False

@@ -25,6 +25,7 @@ class FlareCAPAcommunication(Signature):
     minimum = "1.3"
     evented = True
     ttps = ["T1490", "T1486"]
+    confidence = 60
 
     def run(self):
         ret = False

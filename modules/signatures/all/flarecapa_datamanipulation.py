@@ -25,6 +25,7 @@ class FlareCAPADataManipulation(Signature):
     minimum = "1.3"
     evented = True
     ttps = ["T1132"]
+    confidence = 50
 
     def run(self):
         ret = False

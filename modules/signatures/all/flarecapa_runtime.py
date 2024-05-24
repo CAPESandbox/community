@@ -25,6 +25,7 @@ class FlareCAPARuntime(Signature):
     minimum = "1.3"
     evented = True
     ttps = ["T1565"]
+    confidence = 40
 
     def run(self):
         ret = False

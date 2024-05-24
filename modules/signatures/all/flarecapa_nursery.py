@@ -24,6 +24,7 @@ class FlareCAPANursery(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    confidence = 60
 
     def run(self):
         ret = False

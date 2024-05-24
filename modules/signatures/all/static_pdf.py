@@ -11,6 +11,7 @@ class Static_PDF(Signature):
     minimum = "1.3"
     ttps = ["T1204"]  # MITRE v6,7,8
     ttps += ["T1204.002"]  # MITRE v7,8
+    confidence = 60
 
     def run(self):
         exploit = 0

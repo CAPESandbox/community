@@ -25,6 +25,7 @@ class FlareCAPAAntiAnalysis(Signature):
     minimum = "1.3"
     evented = True
     ttps = ["T1497"]
+    confidence = 60
 
     def run(self):
         ret = False
