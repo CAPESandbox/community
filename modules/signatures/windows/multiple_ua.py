@@ -25,6 +25,7 @@ class Multiple_UA(Signature):
     minimum = "1.2"
     evented = True
     ttps = ["T1071"]  # MITRE v6,7,8
+    confidence = 40
 
     filter_apinames = set(["InternetOpenA", "InternetOpenW"])
 
@@ -39,6 +40,8 @@ class Multiple_UA(Signature):
             "acrord32.exe": ["Mozilla/3.0 (compatible; Acrobat 5.0; Windows)"],
             "iexplore.exe": ["VCSoapClient", "Shockwave Flash"],
             "outlook.exe": ["OutlookSocialConnector/1.0", "Mozilla/5.0 (compatible; IE 11.0; Win32; Trident/7.0)"],
+            "Acrobat.exe": ["Mozilla/3.0 (compatible; Acrobat 5.0; Windows)"],
+            "CRWindowsClientService.exe": ["CRWindowsClient"],
         }
         ua = self.get_argument(call, "Agent")
         proc = process["process_name"].lower()
