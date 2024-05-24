@@ -29,9 +29,13 @@ class antidebug_setunhandledexceptionfilter(Signature):
     ttps = ["T1106"]  # MITRE v6,7,8
     ttps += ["U0108"]  # Unprotect
     mbcs = ["OB0001", "B0001", "B0001.030"]
-    process_safelist = ["microsoftedgeupdate.exe"]
 
     filter_apinames = set(["SetUnhandledExceptionFilter"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
+        self.process_safelist = ["microsoftedgeupdate.exe"]
 
     def on_call(self, call, process):
         if process.get("process_name", "").lower() in self.process_safelist:

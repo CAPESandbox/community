@@ -32,8 +32,11 @@ class QueriesKeyboardLayout(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
+        self.process_safelist = ["microsoftedgeupdate.exe", "winword.exe"]
 
     def on_call(self, call, process):
+        if process.get("process_name", "").lower() in self.process_safelist:
+            return False
         self.mark_call()
         self.ret = True
 

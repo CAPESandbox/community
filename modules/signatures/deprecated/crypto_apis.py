@@ -31,10 +31,10 @@ class CryptGenKey(Signature):
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.process_safelist = ["powershell.exe"]
+        self.process_safelist = ["powershell.exe", "winword.exe"]
 
     def on_call(self, _, process):
-        if process["process_name"] in self.process_safelist:
+        if process.get("process_name", "").lower() in self.process_safelist:
             return False
         if self.pid:
             self.mark_call()

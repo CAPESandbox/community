@@ -35,8 +35,11 @@ class CreatesLargeKey(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.saw_large = False
         self.regkeyvals = set()
+        self.process_safelist = ["microsoftedgeupdate.exe", "winword.exe"]
 
     def on_call(self, call, process):
+        if process.get("process_name", "").lower() in self.process_safelist:
+            return False
         vallen = self.get_argument(call, "BufferLength")
         if vallen:
             length = int(vallen)
