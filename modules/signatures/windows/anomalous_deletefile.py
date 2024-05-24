@@ -28,6 +28,7 @@ class anomalous_deletefile(Signature):
     ttps = ["T1485"]  # MITRE v6,7,8
     mbcs = ["OB0008", "E1485"]
     mbcs += ["OC0001", "C0047"]  # micro-behaviour
+    confidence = 20
 
     filter_apinames = set(["NtDeleteFile", "DeleteFileA", "DeleteFileW"])
 
@@ -40,6 +41,10 @@ class anomalous_deletefile(Signature):
             "excel.exe",
             "powerpnt.exe",
             "acrord32.exe",
+            "acrobat.exe",
+            "microsoftedgeupdate.exe",
+            "microsoftedge_x64_124.0.2478.80.exe",
+            "crwindowsclientservice.exe",
         ]
 
     def on_call(self, call, process):
