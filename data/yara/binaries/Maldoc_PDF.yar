@@ -273,7 +273,7 @@ rule invalid_trailer_structure : PDF raw
 
         strings:
                 $magic = { 25 50 44 46 }
-				// Required for a valid PDF
+		// Required for a valid PDF
                 $reg0 = /trailer\r?\n?.{,8192}\/Size.{,8192}\r?\n?/
                 $reg1 = /\/Root.{,8192}\r?\n?.{,8192}startxref\r?\n?.{,8192}\r?\n?%%EOF/
 
@@ -371,6 +371,7 @@ rule embed_wrong_version : PDF raw
                 $magic in (0..1024) and $embed and not $ver
 }
 
+/* Not compatible with yara-x
 rule invalid_xref_numbers : PDF raw
 {
         meta:
@@ -387,6 +388,7 @@ rule invalid_xref_numbers : PDF raw
         condition:
                 $magic in (0..1024) and not $reg0 and not $reg1
 }
+*/
 
 rule js_splitting : PDF raw
 {
