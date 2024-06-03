@@ -1,3 +1,4 @@
+import re
 from lib.cuckoo.common.abstracts import Signature
 
 from data.cryptopools import pool_domains
@@ -33,7 +34,7 @@ class MINERS(Signature):
             self.extra_domains += domains
 
         for domain in self.extra_domains:
-            if domain in pool_domains or self.check_executed_command(pattern=domain, regex=True):
+            if domain in pool_domains or any([re.match(pool_domain, domain) for pool_domain in pool_domains]) or self.check_executed_command(pattern=domain, regex=True):
                 self.malfamily = "crypto miner"
                 self.results["malfamily"] = "crypto miner"
                 self.results["malfamily_tag"] = "Behavior"
