@@ -753,5 +753,5 @@ pool_domains = [
     "znode2.coinpool.cloud",
     "znode3.coinpool.cloud",
     "zpool.ca",
-    ".*\.nanopool\.org"
+    ".*\.nanopool\.org",
 ]
