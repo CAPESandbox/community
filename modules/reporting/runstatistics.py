@@ -101,7 +101,8 @@ class RunStatistics(Report):
             detail["anti_issues"],
         ) = self.getSignaturesAndAlertCount(results)
         detail["files_written"] = self.getFilesWrittenCount(results)
-        if main_db.add_statistics_to_task(task_id, detail):
-            log.debug("Run statistics sucessed!")
-        else:
-            log.debug("Run statistics failed!")
+        with main_db.session.begin():
+            if main_db.add_statistics_to_task(task_id, detail):
+                log.debug("Run statistics succeeded!")
+            else:
+                log.debug("Run statistics failed!")
