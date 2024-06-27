@@ -1,14 +1,15 @@
+import json
 import logging
 import os
 import re
-import json
+
 from lib.cuckoo.common.abstracts import Processing
 from lib.cuckoo.common.exceptions import CuckooProcessingError
 
 log = logging.getLogger(__name__)
 
 
-class HollowsHunter(Processing):    
+class HollowsHunter(Processing):
     def parse_report(self, data):
         pid = data["pid"]
         if not self.hh_response.get(pid):
@@ -38,4 +39,3 @@ class HollowsHunter(Processing):
                 raise CuckooProcessingError("Failed parsing report %s due to %s" % (report_path, str(e)))
             self.parse_report(report_json)
         return self.hh_response
-

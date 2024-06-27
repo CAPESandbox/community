@@ -1,14 +1,14 @@
-import os
 import json
 import logging
-import subprocess
+import os
 import platform
 import shlex
+import subprocess
 
 from lib.common.abstracts import Auxiliary
-from lib.core.config import Config
 from lib.common.exceptions import CuckooPackageError
 from lib.common.results import upload_to_host
+from lib.core.config import Config
 
 log = logging.getLogger(__name__)
 
@@ -39,19 +39,18 @@ class HollowsHunter(Auxiliary):
 
         if not os.path.exists(hollowshunter):
             raise CuckooPackageError(
-                "In order to use the HollowsHunter functionality, it "
-                "is required to have HollowsHunter setup with Cuckoo."
+                "In order to use the HollowsHunter functionality, it " "is required to have HollowsHunter setup with Cuckoo."
             )
-        hollowshunter = hollowshunter.replace("\\","\\\\")
+        hollowshunter = hollowshunter.replace("\\", "\\\\")
         hh_args = self.options.get("hh_args")
         if not hh_args:
-            hh_args = "/loop /data 0" # Re-add /shellc
+            hh_args = "/loop /data 0"  # Re-add /shellc
 
         hh_cmd = f"{hollowshunter} {hh_args} /dir {self.output_dir} /mignore capemon.dll;capemon_x64.dll"
         hh_cmd = shlex.split(hh_cmd)
         log.debug(hh_cmd)
         # Start HollowsHunter in the background
-#        subprocess.Popen([hollowshunter, "/loop", "/imp", "/shellc", "/dir", self.output_dir], startupinfo=self.startupinfo)
+        #        subprocess.Popen([hollowshunter, "/loop", "/imp", "/shellc", "/dir", self.output_dir], startupinfo=self.startupinfo)
         subprocess.Popen(hh_cmd, startupinfo=self.startupinfo)
 
     def stop(self):
@@ -61,11 +60,27 @@ class HollowsHunter(Auxiliary):
             get_all_files = True
 
         # VirtualQuery and VirtualProtect may be FPs
-        strings_of_interest = [b"This program cannot be run in DOS mode.", b"VirtualFree",b"VirtualAlloc", b"LoadLibrary",
-                               b"LocalFree", b"GetProcAddress", b"GetModuleHandle", b"AdjustTokenPrivileges",
-                               b"CheckRemoteDebuggerPresent", b"CreateMutex", b"EnumProcesses", b"EnumProcessModules",
-                               b"gethostname", b"IsNTAdmin", b"OpenMutex", b"RtlWriteRegistryValue", b"VirtualAllocEx",
-                               b"VirtualProtectEx", b"WinExec"]
+        strings_of_interest = [
+            b"This program cannot be run in DOS mode.",
+            b"VirtualFree",
+            b"VirtualAlloc",
+            b"LoadLibrary",
+            b"LocalFree",
+            b"GetProcAddress",
+            b"GetModuleHandle",
+            b"AdjustTokenPrivileges",
+            b"CheckRemoteDebuggerPresent",
+            b"CreateMutex",
+            b"EnumProcesses",
+            b"EnumProcessModules",
+            b"gethostname",
+            b"IsNTAdmin",
+            b"OpenMutex",
+            b"RtlWriteRegistryValue",
+            b"VirtualAllocEx",
+            b"VirtualProtectEx",
+            b"WinExec",
+        ]
         files_to_upload = set()
         max_upload = 25 if not get_all_files else 100
         upload_count = 0
