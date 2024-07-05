@@ -304,13 +304,13 @@ class MISP(Report):
 
                 if self.options.get("mutexes", False) and "behavior" in results and "summary" in results["behavior"]:
                     if "mutexes" in results.get("behavior", {}).get("summary", {}):
-                        for mutex in results["behavior"]["summary"]["mutexes"]:
+                        for mutex in results.get("behavior", {}).get("summary", {})["mutexes"]:
                             if mutex not in whitelist:
                                 event.add_attribute("mutex", mutex)
 
                 if self.options.get("registry", False) and "behavior" in results and "summary" in results["behavior"]:
                     if "read_keys" in results["behavior"].get("summary", {}):
-                        for regkey in results["behavior"]["summary"]["read_keys"]:
+                        for regkey in results.get("behavior", {}).get("summary", {})["read_keys"]:
                             event.add_attribute("regkey", regkey)
 
                 event.run_expansions()

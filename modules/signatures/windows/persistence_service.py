@@ -29,8 +29,8 @@ class PersistenceService(Signature):
 
     def run(self):
         found = False
-        created_services = set(self.results["behavior"]["summary"]["created_services"])
-        started_services = set(self.results["behavior"]["summary"]["started_services"])
+        created_services = set(self.results.get("behavior", {}).get("summary", {})["created_services"])
+        started_services = set(self.results.get("behavior", {}).get("summary", {})["started_services"])
         missing = created_services.difference(started_services)
         if missing:
             for service in missing:

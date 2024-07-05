@@ -35,7 +35,7 @@ class ADS(Signature):
 
     def run(self):
         result = False
-        for file_path in self.results["behavior"]["summary"]["files"]:
+        for file_path in self.results.get("behavior", {}).get("summary", {})["files"]:
             if len(file_path) <= 3:
                 continue
 

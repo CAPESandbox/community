@@ -116,7 +116,7 @@ class CmdlineProcessDiscovery(Signature):
 
     def run(self):
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {})["executed_commands"]
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "tasklist" in lower or ("powershell" in lower and "get-process" in lower):

@@ -42,7 +42,7 @@ class ClearsLogs(Signature):
         ]
 
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {})["executed_commands"]
         for cmdline in cmdlines:
             if "wevtutil" in cmdline.lower() and "cl" in cmdline.lower():
                 self.data.append({"command": cmdline})

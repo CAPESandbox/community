@@ -82,19 +82,19 @@ def mist_convert(results: dict) -> str:
         )
 
     if "summary" in results.get("behavior", {}):
-        lines.extend(f"file access|{sanitize_file(entry)}" for entry in results["behavior"]["summary"]["files"])
-        lines.extend(f"file write|{sanitize_file(entry)}" for entry in results["behavior"]["summary"]["write_files"])
-        lines.extend(f"file delete|{sanitize_file(entry)}" for entry in results["behavior"]["summary"]["delete_files"])
-        lines.extend(f"file read|{sanitize_file(entry)}" for entry in results["behavior"]["summary"]["read_files"])
-        lines.extend(f"reg access|{sanitize_reg(entry)}" for entry in results["behavior"]["summary"]["keys"])
-        lines.extend(f"reg read|{sanitize_reg(entry)}" for entry in results["behavior"]["summary"]["read_keys"])
-        lines.extend(f"reg write|{sanitize_reg(entry)}" for entry in results["behavior"]["summary"]["write_keys"])
-        lines.extend(f"reg delete|{sanitize_reg(entry)}" for entry in results["behavior"]["summary"]["delete_keys"])
-        lines.extend(f"cmd exec|{sanitize_cmd(entry)}" for entry in results["behavior"]["summary"]["executed_commands"])
-        lines.extend(f"api resolv|{sanitize_generic(entry)}" for entry in results["behavior"]["summary"]["resolved_apis"])
-        lines.extend(f"mutex access|{sanitize_generic(entry)}" for entry in results["behavior"]["summary"]["mutexes"])
-        lines.extend(f"service create|{sanitize_generic(entry)}" for entry in results["behavior"]["summary"]["created_services"])
-        lines.extend(f"service start|{sanitize_generic(entry)}" for entry in results["behavior"]["summary"]["started_services"])
+        lines.extend(f"file access|{sanitize_file(entry)}" for entry in results.get("behavior", {}).get("summary", {})["files"])
+        lines.extend(f"file write|{sanitize_file(entry)}" for entry in results.get("behavior", {}).get("summary", {})["write_files"])
+        lines.extend(f"file delete|{sanitize_file(entry)}" for entry in results.get("behavior", {}).get("summary", {})["delete_files"])
+        lines.extend(f"file read|{sanitize_file(entry)}" for entry in results.get("behavior", {}).get("summary", {})["read_files"])
+        lines.extend(f"reg access|{sanitize_reg(entry)}" for entry in results.get("behavior", {}).get("summary", {})["keys"])
+        lines.extend(f"reg read|{sanitize_reg(entry)}" for entry in results.get("behavior", {}).get("summary", {})["read_keys"])
+        lines.extend(f"reg write|{sanitize_reg(entry)}" for entry in results.get("behavior", {}).get("summary", {})["write_keys"])
+        lines.extend(f"reg delete|{sanitize_reg(entry)}" for entry in results.get("behavior", {}).get("summary", {})["delete_keys"])
+        lines.extend(f"cmd exec|{sanitize_cmd(entry)}" for entry in results.get("behavior", {}).get("summary", {})["executed_commands"])
+        lines.extend(f"api resolv|{sanitize_generic(entry)}" for entry in results.get("behavior", {}).get("summary", {})["resolved_apis"])
+        lines.extend(f"mutex access|{sanitize_generic(entry)}" for entry in results.get("behavior", {}).get("summary", {})["mutexes"])
+        lines.extend(f"service create|{sanitize_generic(entry)}" for entry in results.get("behavior", {}).get("summary", {})["created_services"])
+        lines.extend(f"service start|{sanitize_generic(entry)}" for entry in results.get("behavior", {}).get("summary", {})["started_services"])
 
     if "signatures" in results:
         for entry in results["signatures"]:
