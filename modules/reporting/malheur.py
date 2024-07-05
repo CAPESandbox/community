@@ -90,7 +90,7 @@ def mist_convert(results: dict) -> str:
         lines.extend(f"reg read|{sanitize_reg(entry)}" for entry in results.get("behavior", {}).get("summary", {})["read_keys"])
         lines.extend(f"reg write|{sanitize_reg(entry)}" for entry in results.get("behavior", {}).get("summary", {})["write_keys"])
         lines.extend(f"reg delete|{sanitize_reg(entry)}" for entry in results.get("behavior", {}).get("summary", {})["delete_keys"])
-        lines.extend(f"cmd exec|{sanitize_cmd(entry)}" for entry in results.get("behavior", {}).get("summary", {})["executed_commands"])
+        lines.extend(f"cmd exec|{sanitize_cmd(entry)}" for entry in results.get("behavior", {}).get("summary", {}).get("executed_commands", []))
         lines.extend(f"api resolv|{sanitize_generic(entry)}" for entry in results.get("behavior", {}).get("summary", {})["resolved_apis"])
         lines.extend(f"mutex access|{sanitize_generic(entry)}" for entry in results.get("behavior", {}).get("summary", {})["mutexes"])
         lines.extend(f"service create|{sanitize_generic(entry)}" for entry in results.get("behavior", {}).get("summary", {})["created_services"])

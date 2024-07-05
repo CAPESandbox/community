@@ -75,7 +75,7 @@ class PowershellCommandSuspicious(Signature):
         ]
 
         ret = False
-        cmdlines = self.results.get("behavior", {}).get("summary", {})["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "powershell" in lower:
@@ -166,7 +166,7 @@ class PowershellRenamed(Signature):
         ]
 
         ret = False
-        cmdlines = self.results.get("behavior", {}).get("summary", {})["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "powershell" not in lower:
@@ -262,7 +262,7 @@ class PowershellReversed(Signature):
         ]
 
         ret = False
-        cmdlines = self.results.get("behavior", {}).get("summary", {})["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for command in commands:
@@ -293,7 +293,7 @@ class PowershellVariableObfuscation(Signature):
 
     def run(self):
         ret = False
-        cmdlines = self.results.get("behavior", {}).get("summary", {})["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "powershell" in lower:

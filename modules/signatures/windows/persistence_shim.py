@@ -59,7 +59,7 @@ class PersistenceShimDatabase(Signature):
                 ret = True
                 self.data.append({"file": str(match)})
 
-        cmdlines = self.results.get("behavior", {}).get("summary", {})["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "sdbinst" in lower:

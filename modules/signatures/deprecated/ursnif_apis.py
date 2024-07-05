@@ -48,7 +48,7 @@ class Ursnif_APIs(Signature):
         cmdpat = r"^[A-Za-z]:\\.*\\[0-9A-Fa-f]{2,4}\\[0-9A-Fa-f]{1,4}\.bat\s"
         if self.check_executed_command(pattern=cmdpat, regex=True):
             arg1, arg2 = None, None
-            for command in self.results.get("behavior", {}).get("summary", {})["executed_commands"]:
+            for command in self.results.get("behavior", {}).get("summary", {}).get("executed_commands", []):
                 command = command.lower()
                 if len(command.split()) == 3 and ".bat" in command.split()[0][-5:]:
                     _, arg1, arg2 = command.split()

@@ -100,7 +100,7 @@ class UACBypassDelegateExecuteSdclt(Signature):
                 self.data.append({"regkey": match})
                 regkey = True
 
-        cmdlines = self.results.get("behavior", {}).get("summary", {})["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if regkey and "sdclt" in lower:
@@ -157,7 +157,7 @@ class UACBypassCMSTP(Signature):
                 self.inf = True
 
     def on_complete(self):
-        cmdlines = self.results.get("behavior", {}).get("summary", {})["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if self.inf and "cmstp" in lower and ".inf" in lower:
