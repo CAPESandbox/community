@@ -96,7 +96,7 @@ class Tinba_APIs(Signature):
             autorun = self.check_write_key(pattern=runkey, regex=True)
             malscore += 1
 
-        mutexes = self.results.get("behavior", {}).get("summary", {})["mutexes"]
+        mutexes = self.results.get("behavior", {}).get("summary", {}).get("mutexes", [])
         for mutex in mutexes:
             buf = mutex + "ntf"
             if buf in mutexes:

@@ -304,7 +304,7 @@ class MISP(Report):
 
                 if self.options.get("mutexes", False) and "behavior" in results and "summary" in results["behavior"]:
                     if "mutexes" in results.get("behavior", {}).get("summary", {}):
-                        for mutex in results.get("behavior", {}).get("summary", {})["mutexes"]:
+                        for mutex in results.get("behavior", {}).get("summary", {}).get("mutexes", []):
                             if mutex not in whitelist:
                                 event.add_attribute("mutex", mutex)
 
