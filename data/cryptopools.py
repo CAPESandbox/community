@@ -51,6 +51,7 @@ pool_domains = [
     "asia1.zcash.miningpoolhub.com",
     "autoconfig.cryptominingpool.eu",
     "autodiscover.cryptominingpool.eu",
+    "auto.c3pool.org",
     "b.pool.gq",
     "backu-ool.commonero",
     "backup-pool.com",
