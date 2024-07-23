@@ -19,7 +19,7 @@ rule VenomRAT {
 rule venomrat_kingrat {
     meta:
         author = "jeFF0Falltrades"
-		cape_type = "VenomRat Payload"
+	cape_type = "VenomRat Payload"
 
     strings:
         $str_id_venomrat = "venomrat" wide ascii nocase
