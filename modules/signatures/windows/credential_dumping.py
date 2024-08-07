@@ -128,7 +128,9 @@ class RegistryCredentialStoreAccess(Signature):
             if match:
                 self.data.append({"regkey": match})
                 ret = True
-
+        # Tweak
+        if "PDF" in self.results["target"]["file"].get("type", ""):
+            self.severity = 1
         return ret
 
 
