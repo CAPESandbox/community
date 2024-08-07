@@ -46,8 +46,8 @@ if resp.status_code != 204:
             json_payload = json.loads(payload_text)
             page_content = json_payload.get("payload", {}).get("tree", {}).get("items", [])
         else:
-            dataform = str(response_json).strip("'<>() ").replace('\'', '\"')
-            page_content = json.loads(resp.content).get("payload", {}).get("tree", {}).get("items", [])
+            dataform = str(resp.content).strip("'<>() ").replace('\'', '\"')
+            page_content = json.loads(dataform).get("payload", {}).get("tree", {}).get("items", [])
         for line in page_content:
             if not line:
                 continue
@@ -90,8 +90,8 @@ for d in SERVER_SIDE_YARA_PATH_DIRS:
                 json_payload = json.loads(payload_text)
                 page_content = json_payload.get("payload", {}).get("tree", {}).get("items", [])
             else:
-                dataform = str(response_json).strip("'<>() ").replace('\'', '\"')
-                page_content = json.loads(resp.content).get("payload", {}).get("tree", {}).get("items", [])
+                dataform = str(resp.content).strip("'<>() ").replace('\'', '\"')
+                page_content = json.loads(dataform).get("payload", {}).get("tree", {}).get("items", [])
             for line in page_content:
                 if not line:
                     continue
