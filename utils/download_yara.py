@@ -1,10 +1,11 @@
 import glob
+import json
 import os
 import re
-import json
+
 import requests
-from bs4 import BeautifulSoup
 from bs2json import BS2Json
+from bs4 import BeautifulSoup
 
 ROOT = "/opt/CAPEv2"
 
@@ -42,11 +43,13 @@ if resp.status_code != 204:
         elif resp.headers["content-type"].strip().startswith("text/html"):
             bs2json = BS2Json(resp.text)
             json_obj = bs2json.convert()
-            payload_text = json_obj["html"]["body"]["div"][0]["div"][3]["div"]["main"]["turbo-frame"]["div"]["react-app"]["script"]["text"]
+            payload_text = json_obj["html"]["body"]["div"][0]["div"][3]["div"]["main"]["turbo-frame"]["div"]["react-app"]["script"][
+                "text"
+            ]
             json_payload = json.loads(payload_text)
             page_content = json_payload.get("payload", {}).get("tree", {}).get("items", [])
         else:
-            dataform = str(resp.content).strip("'<>() ").replace('\'', '\"')
+            dataform = str(resp.content).strip("'<>() ").replace("'", '"')
             page_content = json.loads(dataform).get("payload", {}).get("tree", {}).get("items", [])
         for line in page_content:
             if not line:
@@ -86,11 +89,13 @@ for d in SERVER_SIDE_YARA_PATH_DIRS:
             elif resp.headers["content-type"].strip().startswith("text/html"):
                 bs2json = BS2Json(resp.text)
                 json_obj = bs2json.convert()
-                payload_text = json_obj["html"]["body"]["div"][0]["div"][3]["div"]["main"]["turbo-frame"]["div"]["react-app"]["script"]["text"]
+                payload_text = json_obj["html"]["body"]["div"][0]["div"][3]["div"]["main"]["turbo-frame"]["div"]["react-app"][
+                    "script"
+                ]["text"]
                 json_payload = json.loads(payload_text)
                 page_content = json_payload.get("payload", {}).get("tree", {}).get("items", [])
             else:
-                dataform = str(resp.content).strip("'<>() ").replace('\'', '\"')
+                dataform = str(resp.content).strip("'<>() ").replace("'", '"')
                 page_content = json.loads(dataform).get("payload", {}).get("tree", {}).get("items", [])
             for line in page_content:
                 if not line:
