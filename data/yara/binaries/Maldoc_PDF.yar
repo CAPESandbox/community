@@ -9,10 +9,10 @@ rule malicious_author : PDF raw
 		author = "Glenn Edwards (@hiddenillusion)"
 		version = "0.1"
 		weight = 5
-		
+
 	strings:
 		$magic = { 25 50 44 46 }
-		
+
 		$reg0 = /Creator.?\(yen vaw\)/
 		$reg1 = /Title.?\(who cis\)/
 		$reg2 = /Author.?\(ser pes\)/
@@ -26,7 +26,7 @@ rule suspicious_version : PDF raw
 		author = "Glenn Edwards (@hiddenillusion)"
 		version = "0.1"
 		weight = 3
-		
+
 	strings:
 		$magic = { 25 50 44 46 }
 		$ver = /%PDF-1.\d{1}/
@@ -40,11 +40,11 @@ rule suspicious_creation : PDF raw
 		author = "Glenn Edwards (@hiddenillusion)"
 		version = "0.1"
 		weight = 2
-		
+
 	strings:
 		$magic = { 25 50 44 46 }
 		$header = /%PDF-1\.(3|4|6)/
-		
+
 		$create0 = /CreationDate \(D:20101015142358\)/
 		$create1 = /CreationDate \(2008312053854\)/
 	condition:
@@ -53,17 +53,17 @@ rule suspicious_creation : PDF raw
 
 rule multiple_filtering : PDF raw
 {
-meta: 
+meta:
 author = "Glenn Edwards (@hiddenillusion)"
 version = "0.2"
 weight = 3
 
     strings:
             $magic = { 25 50 44 46 }
-            $attrib = /\/Filter.*(\/ASCIIHexDecode\W+|\/LZWDecode\W+|\/ASCII85Decode\W+|\/FlateDecode\W+|\/RunLengthDecode){2}/ 
+            $attrib = /\/Filter.{,1024}(\/ASCIIHexDecode\W+|\/LZWDecode\W+|\/ASCII85Decode\W+|\/FlateDecode\W+|\/RunLengthDecode){2}/
             // left out: /CCITTFaxDecode, JBIG2Decode, DCTDecode, JPXDecode, Crypt
 
-    condition: 
+    condition:
             $magic in (0..1024) and $attrib
 }
 
@@ -73,11 +73,11 @@ rule suspicious_title : PDF raw
 		author = "Glenn Edwards (@hiddenillusion)"
 		version = "0.1"
 		weight = 4
-		
+
 	strings:
 		$magic = { 25 50 44 46 }
 		$header = /%PDF-1\.(3|4|6)/
-		
+
 		$title0 = "who cis"
 		$title1 = "P66N7FF"
 		$title2 = "Fohcirya"
@@ -91,7 +91,7 @@ rule suspicious_author : PDF raw
 		author = "Glenn Edwards (@hiddenillusion)"
 		version = "0.1"
 		weight = 4
-		
+
 	strings:
 		$magic = { 25 50 44 46 }
 		$header = /%PDF-1\.(3|4|6)/
@@ -104,17 +104,17 @@ rule suspicious_author : PDF raw
 		$magic in (0..1024) and $header and 1 of ($author*)
 }
 
-rule suspicious_producer : PDF raw 
+rule suspicious_producer : PDF raw
 {
 	meta:
 		author = "Glenn Edwards (@hiddenillusion)"
 		version = "0.1"
 		weight = 2
-		
+
 	strings:
 		$magic = { 25 50 44 46 }
 		$header = /%PDF-1\.(3|4|6)/
-		
+
 		$producer0 = /Producer \(Scribus PDF Library/
 		$producer1 = "Notepad"
 	condition:
@@ -127,11 +127,11 @@ rule suspicious_creator : PDF raw
 		author = "Glenn Edwards (@hiddenillusion)"
 		version = "0.1"
 		weight = 3
-		
+
 	strings:
 		$magic = { 25 50 44 46 }
 		$header = /%PDF-1\.(3|4|6)/
-		
+
 		$creator0 = "yen vaw"
 		$creator1 = "Scribus"
 		$creator2 = "Viraciregavi"
@@ -145,23 +145,19 @@ rule possible_exploit : PDF raw
 		author = "Glenn Edwards (@hiddenillusion)"
 		version = "0.1"
 		weight = 3
-		
+
 	strings:
 		$magic = { 25 50 44 46 }
-		
+
 		$attrib0 = /\/JavaScript /
 		$attrib3 = /\/ASCIIHexDecode/
 		$attrib4 = /\/ASCII85Decode/
 
-		$action0 = /\/Action/
 		$action1 = "Array"
-		$shell = "A"
 		$cond0 = "unescape"
-		$cond1 = "String.fromCharCode"
-		
 		$nop = "%u9090%u9090"
 	condition:
-		$magic in (0..1024) and (2 of ($attrib*)) or ($action0 and #shell > 10 and 1 of ($cond*)) or ($action1 and $cond0 and $nop)
+		$magic in (0..1024) and (2 of ($attrib*)) or ($action1 and $cond0 and $nop)
 }
 
 rule shellcode_blob_metadata : PDF raw
@@ -191,17 +187,17 @@ rule suspicious_js : PDF raw
 		author = "Glenn Edwards (@hiddenillusion)"
 		version = "0.1"
 		weight = 3
-		
+
 	strings:
 		$magic = { 25 50 44 46 }
-		
+
 		$attrib0 = /\/OpenAction /
 		$attrib1 = /\/JavaScript /
 
 		$js0 = "eval"
 		$js1 = "Array"
 		$js2 = "String.fromCharCode"
-		
+
 	condition:
 		$magic in (0..1024) and all of ($attrib*) and 2 of ($js*)
 }
@@ -212,10 +208,10 @@ rule suspicious_launch_action : PDF raw
 		author = "Glenn Edwards (@hiddenillusion)"
 		version = "0.1"
 		weight = 2
-		
+
 	strings:
 		$magic = { 25 50 44 46 }
-		
+
 		$attrib0 = /\/Launch/
 		$attrib1 = /\/URL /
 		$attrib2 = /\/Action/
@@ -233,33 +229,18 @@ rule suspicious_embed : PDF raw
 		version = "0.1"
 		ref = "https://feliam.wordpress.com/2010/01/13/generic-pdf-exploit-hider-embedpdf-py-and-goodbye-av-detection-012010/"
 		weight = 2
-		
+
 	strings:
 		$magic = { 25 50 44 46 }
-		
+
 		$meth0 = /\/Launch/
 		$meth1 = /\/GoTo(E|R)/ //means go to embedded or remote
 		$attrib0 = /\/URL /
 		$attrib1 = /\/Action/
 		$attrib2 = /\/Filespec/
-		
+
 	condition:
 		$magic in (0..1024) and 1 of ($meth*) and 2 of ($attrib*)
-}
-
-rule suspicious_obfuscation : PDF raw
-{
-	meta:
-		author = "Glenn Edwards (@hiddenillusion)"
-		version = "0.1"
-		weight = 2
-		
-	strings:
-		$magic = { 25 50 44 46 }
-		$reg = /\/\w#[a-zA-Z0-9]{2}#[a-zA-Z0-9]{2}/
-		
-	condition:
-		$magic in (0..1024) and #reg > 5
 }
 
 rule invalid_XObject_js : PDF raw
@@ -270,43 +251,45 @@ rule invalid_XObject_js : PDF raw
 		ref = "https://blogs.adobe.com/ReferenceXObjects/"
 		version = "0.1"
 		weight = 2
-		
+
 	strings:
 		$magic = { 25 50 44 46 }
 		$ver = /%PDF-1\.[4-9]/
-		
+
 		$attrib0 = /\/XObject/
 		$attrib1 = /\/JavaScript/
-		
+
 	condition:
 		$magic in (0..1024) and not $ver and all of ($attrib*)
 }
 
+/* Not compatible with yara-x
 rule invalid_trailer_structure : PDF raw
 {
 	meta:
 		author = "Glenn Edwards (@hiddenillusion)"
 		version = "0.1"
 		weight = 1
-		
+
         strings:
                 $magic = { 25 50 44 46 }
-				// Required for a valid PDF
-                $reg0 = /trailer\r?\n?.*\/Size.*\r?\n?\.*/
-                $reg1 = /\/Root.*\r?\n?.*startxref\r?\n?.*\r?\n?%%EOF/
+		// Required for a valid PDF
+                $reg0 = /trailer\r?\n?.{,8192}\/Size.{,8192}\r?\n?/
+                $reg1 = /\/Root.{,8192}\r?\n?.{,8192}startxref\r?\n?.{,8192}\r?\n?%%EOF/
 
         condition:
                 $magic in (0..1024) and not $reg0 and not $reg1
 }
+*/
 
 rule multiple_versions : PDF raw
 {
 	meta:
 		author = "Glenn Edwards (@hiddenillusion)"
 		version = "0.1"
-        description = "Written very generically and doesn't hold any weight - just something that might be useful to know about to help show incremental updates to the file being analyzed"		
+        description = "Written very generically and doesn't hold any weight - just something that might be useful to know about to help show incremental updates to the file being analyzed"
 		weight = 1
-		
+
         strings:
                 $magic = { 25 50 44 46 }
                 $s0 = "trailer"
@@ -324,7 +307,7 @@ rule js_wrong_version : PDF raw
 		ref = "http://wwwimages.adobe.com/www.adobe.com/content/dam/Adobe/en/devnet/pdf/pdfs/pdf_reference_1-7.pdf"
 		version = "0.1"
 		weight = 2
-		
+
         strings:
                 $magic = { 25 50 44 46 }
 				$js = /\/JavaScript/
@@ -342,7 +325,7 @@ rule JBIG2_wrong_version : PDF raw
 		ref = "http://wwwimages.adobe.com/www.adobe.com/content/dam/Adobe/en/devnet/pdf/pdfs/pdf_reference_1-7.pdf"
 		version = "0.1"
 		weight = 1
-		
+
         strings:
                 $magic = { 25 50 44 46 }
 				$js = /\/JBIG2Decode/
@@ -360,7 +343,7 @@ rule FlateDecode_wrong_version : PDF raw
 		ref = "http://wwwimages.adobe.com/www.adobe.com/content/dam/Adobe/en/devnet/pdf/pdfs/pdf_reference_1-7.pdf"
 		version = "0.1"
 		weight = 1
-		
+
         strings:
                 $magic = { 25 50 44 46 }
 				$js = /\/FlateDecode/
@@ -378,7 +361,7 @@ rule embed_wrong_version : PDF raw
 		ref = "http://wwwimages.adobe.com/www.adobe.com/content/dam/Adobe/en/devnet/pdf/pdfs/pdf_reference_1-7.pdf"
 		version = "0.1"
 		weight = 1
-		
+
         strings:
                 $magic = { 25 50 44 46 }
 				$embed = /\/EmbeddedFiles/
@@ -388,6 +371,7 @@ rule embed_wrong_version : PDF raw
                 $magic in (0..1024) and $embed and not $ver
 }
 
+/* Not compatible with yara-x
 rule invalid_xref_numbers : PDF raw
 {
         meta:
@@ -396,14 +380,15 @@ rule invalid_xref_numbers : PDF raw
 			description = "The first entry in a cross-reference table is always free and has a generation number of 65,535"
 			notes = "This can be also be in a stream..."
 			weight = 1
-		
+
         strings:
                 $magic = { 25 50 44 46 }
-                $reg0 = /xref\r?\n?.*\r?\n?.*65535\sf/
-                $reg1 = /endstream.*\r?\n?endobj.*\r?\n?startxref/
+                $reg0 = /xref\r?\n?.{,8192}\r?\n?.{,8192}65535\sf/
+                $reg1 = /endstream.{,8192}\r?\n?endobj.{,8192}\r?\n?startxref/
         condition:
                 $magic in (0..1024) and not $reg0 and not $reg1
 }
+*/
 
 rule js_splitting : PDF raw
 {
@@ -412,7 +397,7 @@ rule js_splitting : PDF raw
                 version = "0.1"
                 description = "These are commonly used to split up JS code"
                 weight = 2
-                
+
         strings:
                 $magic = { 25 50 44 46 }
 				$js = /\/JavaScript/
@@ -420,7 +405,7 @@ rule js_splitting : PDF raw
                 $s1 = "getPageNumWords"
                 $s2 = "getPageNthWord"
                 $s3 = "this.info"
-                                
+
         condition:
                 $magic in (0..1024) and $js and 1 of ($s*)
 }
@@ -447,11 +432,11 @@ rule BlackHole_v2 : PDF raw
 		version = "0.1"
 		ref = "http://fortknoxnetworks.blogspot.no/2012/10/blackhhole-exploit-kit-v-20-url-pattern.html"
 		weight = 3
-		
+
 	strings:
 		$magic = { 25 50 44 46 }
 		$content = "Index[5 1 7 1 9 4 23 4 50"
-		
+
 	condition:
 		$magic in (0..1024) and $content
 }
@@ -463,7 +448,7 @@ rule XDP_embedded_PDF : PDF raw
 		author = "Glenn Edwards (@hiddenillusion)"
 		version = "0.1"
 		ref = "http://blog.9bplus.com/av-bypass-for-malicious-pdfs-using-xdp"
-        weight = 1		
+        weight = 1
 
 	strings:
 		$s1 = "<pdf xmlns="

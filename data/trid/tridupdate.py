@@ -79,8 +79,8 @@ def main():
     res = get_cmdline()
     trdfilename = res.filename
 
-    url_MD5 = "http://mark0.net/download/triddefs.trd.md5"
-    url_defs = "http://mark0.net/download/triddefs.zip"
+    url_MD5 = "https://mark0.net/download/triddefs.trd.md5"
+    url_defs = "https://mark0.net/download/triddefs.zip"
 
     if os.path.exists(trdfilename):
         curdigest = MD5digest(filename=trdfilename)

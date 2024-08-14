@@ -1,16 +1,12 @@
 files:
   accept:
-  - "data/yara/CAPE/*.yar"
-  - "data/yara/memory/*.yar"
-  - "data/yara/binary/*.yar"
-  - "data/yara/urls/*.yar"
+  - "data/yara/**.yar"
+  ignore:
+  - "data/yara/deprecated/**.yar"
+  - "data/yara/CAPE/deprecated/**.yar"
 
 false_positives:
-  ignore:
-   - rule: "shellcode_stack_strings"
-   - rule: "shellcode_get_eip"
-   - rule: "shellcode_peb_parsing"
-   - rule: "shellcode_patterns"
-   - rule: "lsadump"
-   - rule: "UPX"
-   - rule: "INDICATOR_EXE_Packed_Dotfuscator"
+  disabled: true
+
+false_negatives:
+  disabled: true

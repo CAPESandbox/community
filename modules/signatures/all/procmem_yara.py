@@ -19,7 +19,7 @@ from lib.cuckoo.common.abstracts import Signature
 class Procmem_Yara(Signature):
     name = "procmem_yara"
     description = "Yara detections observed in process dumps, payloads or dropped files"
-    severity = 4
+    severity = 3
     categories = ["malware"]
     authors = ["KillerInstinct"]
     minimum = "0.5"
@@ -46,22 +46,25 @@ class Procmem_Yara(Signature):
                     for sub_keyword in ("yara", "cape_yara"):
                         for rule in process.get(sub_keyword, []):
                             if (pid, rule["name"]) not in hits:
-                                hits.append((pid, rule["name"]))
+                                hits.append((pid, rule["name"], rule["strings"], rule["meta"].get("private")))
 
         for process in self.results.get("CAPE", {}).get("payloads", []) or []:
             pid = process.get("pid", 0)
             for sub_keyword in ("yara", "cape_yara"):
                 for rule in process.get(sub_keyword, []):
                     if (pid, rule["name"]) not in hits:
-                        hits.append((pid, rule["name"]))
+                        hits.append((pid, rule["name"], rule["strings"], rule["meta"].get("private")))
 
         if hits:
-            for pid, rule in hits:
+            for pid, rule, data, private in hits:
                 if rule.lower() in suspicious and self.severity == 3:
                     self.severity = 4
                 elif rule.lower() in malicious and self.severity <= 4:
                     self.severity = 5
-                self.data.append({"Hit": "PID %s trigged the Yara rule '%s'" % (pid, rule)})
+                if private:
+                    self.data.append({"Hit": "PID %s triggered the Yara rule '%s'" % (pid, rule)})
+                else:
+                    self.data.append({"Hit": "PID %s triggered the Yara rule '%s' with data '%s'" % (pid, rule, data)})
             return True
 
         return False
