@@ -19,7 +19,7 @@ class LegitDomainAbuse(Signature):
     name = "legitimate_domain_abuse"
     description = "Connection to a legitimate domain from an unexpected process"
     severity = 2
-    categories = ["living-off-trusted-sites"]
+    categories = ["network", "living-off-trusted-sites"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
