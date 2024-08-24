@@ -40,6 +40,7 @@ class LegitDomainAbuse(Signature):
             "discord.exe",
             "excel.exe",
             "firefox.exe",
+            "iexplore.exe",
             "msedge.exe",
             "onedrive.exe",
             "onenote.exe",
