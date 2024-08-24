@@ -14,7 +14,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from lib.cuckoo.common.abstracts import Signature
-       
+
+
 class ThreadManipulationRemoteProcess(Signature):
     name = "resumethread_remote_process"
     description = "Resumed a thread in another process"
@@ -34,16 +35,21 @@ class ThreadManipulationRemoteProcess(Signature):
         self.targetpid = []
 
     def on_call(self, call, process):
-            procid = self.get_argument(call, "ProcessId")
-            processid = process["process_id"]
-            if procid != processid:
-                if processid not in self.sourcepid and procid not in self.targetpid:
-                    pname = process["process_name"].lower()
-                    self.sourcepid.append(processid)
-                    self.targetpid.append(procid)
-                    self.data.append({"thread_resumed": "Process %s with process ID %s resumed a thread in another process with the process ID %s" % (pname, processid, procid)})
-                self.mark_call()
-                self.ret = True
+        procid = self.get_argument(call, "ProcessId")
+        processid = process["process_id"]
+        if procid != processid:
+            if processid not in self.sourcepid and procid not in self.targetpid:
+                pname = process["process_name"].lower()
+                self.sourcepid.append(processid)
+                self.targetpid.append(procid)
+                self.data.append(
+                    {
+                        "thread_resumed": "Process %s with process ID %s resumed a thread in another process with the process ID %s"
+                        % (pname, processid, procid)
+                    }
+                )
+            self.mark_call()
+            self.ret = True
 
     def on_complete(self):
         return self.ret
