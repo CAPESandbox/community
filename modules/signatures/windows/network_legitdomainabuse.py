@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class LegitDomainAbuse(Signature):
     name = "legitimate_domain_abuse"
     description = "Connection to a legitimate domain from an unexpected process"
@@ -31,7 +32,7 @@ class LegitDomainAbuse(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
-        
+
         self.ignoreprocs = [
             "acrobat.exe",
             "acrord32.exe",
@@ -52,13 +53,13 @@ class LegitDomainAbuse(Signature):
             "telegram.exe",
             "winword.exe",
         ]
-        
+
         self.legitdomains = [
             "1drv.com",
             "apimocha.com",
             "api.telegram.org",
             "azurewebsites.net",
-            "beeceptor.com",      
+            "beeceptor.com",
             "bitbucket.io",
             "bitbucket.org",
             "bit.ly",
@@ -105,32 +106,32 @@ class LegitDomainAbuse(Signature):
         ]
 
     def on_call(self, call, process):
-            if call["api"] == "GetAddrInfoExW":
-                pname = process["process_name"]
-                if pname.lower() not in self.ignoreprocs:
-                    server = self.get_argument(call, "Name")
-                    for domain in self.legitdomains:
-                        if domain in server:
-                            self.mark_call()
-                            self.ret = True
+        if call["api"] == "GetAddrInfoExW":
+            pname = process["process_name"]
+            if pname.lower() not in self.ignoreprocs:
+                server = self.get_argument(call, "Name")
+                for domain in self.legitdomains:
+                    if domain in server:
+                        self.mark_call()
+                        self.ret = True
 
-            if call["api"].startswith("InternetConnect") or call["api"] == "WinHttpConnect":
-                pname = process["process_name"]
-                if pname.lower() not in self.ignoreprocs:
-                    server = self.get_argument(call, "ServerName")
-                    for domain in self.legitdomains:
-                        if domain in server:
-                            self.mark_call()
-                            self.ret = True
-                            
-            if call["api"] == "UrlDownloadToFile":
-                pname = process["process_name"]
-                if pname.lower() not in self.ignoreprocs:
-                    server = self.get_argument(call, "Url")
-                    for domain in self.legitdomains:
-                        if domain in server:
-                            self.mark_call()
-                            self.ret = True
+        if call["api"].startswith("InternetConnect") or call["api"] == "WinHttpConnect":
+            pname = process["process_name"]
+            if pname.lower() not in self.ignoreprocs:
+                server = self.get_argument(call, "ServerName")
+                for domain in self.legitdomains:
+                    if domain in server:
+                        self.mark_call()
+                        self.ret = True
+
+        if call["api"] == "UrlDownloadToFile":
+            pname = process["process_name"]
+            if pname.lower() not in self.ignoreprocs:
+                server = self.get_argument(call, "Url")
+                for domain in self.legitdomains:
+                    if domain in server:
+                        self.mark_call()
+                        self.ret = True
 
     def on_complete(self):
         return self.ret
