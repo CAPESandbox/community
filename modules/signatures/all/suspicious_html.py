@@ -30,7 +30,6 @@ class suspiciousHRML_Body(Signature):
         "https://socradar.io/what-is-a-phishing-kit/" "https://github.com/SteveD3/kit_hunter/tree/master/tag_files",
     ]
     enabled = True
-    evented = True
     minimum = "1.2"
     ttps = ["T1566.001"]  # MITRE v6,7,8
     mbcs = ["C0029.003"]  # micro-behaviour
@@ -44,7 +43,8 @@ class suspiciousHRML_Body(Signature):
             "encoded_string",
             "url",
             "// remove email, and put ur mailer code",
-            "headers" "tokenName",
+            "headers",
+            "tokenName",
             "headers",
         ]
         if self.results["info"]["package"] in packages:
@@ -122,12 +122,14 @@ class suspiciousHTML_Filename(Signature):
         indicators = [
             "payment",
             "remittence",
-            "remmitance " "invoice",
+            "remmitance ",
+            "invoice",
             "inv",
             "voicemail",
             "remit",
             "voice",
             "statement",
+            "RECEIPT"
         ]
 
         if self.results["info"]["package"] in packages:
