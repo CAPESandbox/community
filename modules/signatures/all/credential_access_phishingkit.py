@@ -42,9 +42,10 @@ class HTMLPhisher_0(Signature):
     ttps += ["T1566.001"]  # MITRE v6,7,8
     ttps += ["T1606"]  # MITRE v7,8
     mbcs = ["C0029.003"]  # micro-behaviour
+    packages = ["html", "edge", "chrome", "firefox"]
 
     def run(self):
-        if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
+        if self.results["info"]["package"] in self.packages:
             if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
                 return False
             strings = self.results["target"]["file"]["strings"]
@@ -89,9 +90,10 @@ class HTMLPhisher_1(Signature):
     ttps += ["T1566.001"]  # MITRE v6,7,8
     ttps += ["T1606"]  # MITRE v7,8
     mbcs = ["C0029.003"]  # micro-behaviour
+    packages = ["html", "edge", "chrome", "firefox"]
 
     def run(self):
-        if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
+        if self.results["info"]["package"] in self.packages:
             if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
                 return False
             strings = self.results["target"]["file"]["strings"]
@@ -139,9 +141,10 @@ class HTMLPhisher_2(Signature):
     ttps += ["T1566.001"]  # MITRE v6,7,8
     ttps += ["T1606"]  # MITRE v7,8
     mbcs = ["C0029.003"]  # micro-behaviour
+    packages = ["html", "edge", "chrome", "firefox"]
 
     def run(self):
-        if self.results["info"]["package"] == "edge" or self.results["info"]["package"] == "html":
+        if self.results["info"]["package"] in self.packages:
             if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
                 return False
             strings = self.results["target"]["file"]["strings"]
