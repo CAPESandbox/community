@@ -50,7 +50,7 @@ class suspiciousHRML_Body(Signature):
         if self.results["info"]["package"] in packages:
             if "strings" in self.results["target"]["file"]:
                 strings = self.results["target"]["file"]["strings"]
-                data = "".join(strings)
+                data = "".join(strings) if strings else self.results["target"]["file"]["data"]
                 for indicator in indicators:
                     if indicator in data:
                         self.add_match(None, "string", f"Found {indicator} in HTML body")
@@ -88,10 +88,9 @@ class suspiciousHTML_Title(Signature):
         if self.results["info"]["package"] in packages:
             if "strings" in self.results["target"]["file"]:
                 strings = self.results["target"]["file"]["strings"]
-                data = "".join(strings)
+                data = "".join(strings) if strings else self.results["target"]["file"]["data"]
                 title = title_regex.search(data)
                 if not title:
-                    self.description = "Sample contains empty HTML title"
                     self.add_match(None, "string", "Empty HTML title")
                 else:
                     for indicator in indicators:

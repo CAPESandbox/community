@@ -50,7 +50,7 @@ class HTMLPhisher_0(Signature):
                 return False
             strings = self.results["target"]["file"]["strings"]
             regex_decodedURL = r"unescape\( \'([^&]+?)\' \) \);</script>"
-            data = "".join(strings)
+            data = "".join(strings) if strings else self.results["target"]["file"]["data"]
             decodeString = re.search(regex_decodedURL, data)
             if decodeString:
                 self.description = "File obfuscation detected, with url encoding"
@@ -97,7 +97,7 @@ class HTMLPhisher_1(Signature):
             if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
                 return False
             strings = self.results["target"]["file"]["strings"]
-            data = "".join(strings)
+            data = "".join(strings) if strings else self.results["target"]["file"]["data"]
             regex_decoded = [
                 r"unescape\(\'([^&]+?)\'\)\); </script>",
                 r"unescape\( \'([^&]+?)\' \) \);</script>",
@@ -148,7 +148,7 @@ class HTMLPhisher_2(Signature):
             if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
                 return False
             strings = self.results["target"]["file"]["strings"]
-            data = "".join(strings)
+            data = "".join(strings) if strings else self.results["target"]["file"]["data"]
 
             regex_user = r"<input  name=\"login\" type=\"email\" value=\"([^&]+?)\" disabled>"
             regex_url = r"<form method=\"post\" action=\"([^&]+?)\">"
