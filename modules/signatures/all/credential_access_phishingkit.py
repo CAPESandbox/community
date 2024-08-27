@@ -55,7 +55,7 @@ class HTMLPhisher_0(Signature):
             if decodeString:
                 self.description = "File obfuscation detected, with url encoding"
                 decodeString = decodeString.group(1)
-                decoded_string = Chepy(decodeString).url_decode().url_decode().o
+                decoded_string = Chepy(decodeString).from_url_encoding().o.decode("utf-8")
                 regex_user = r'var encoded_string = "([^&]+?)"'
                 regex_url = r"var url =  window.atob\('([^&]+?)'\)"
                 regex_post_url = r'window\.location\.href="([^&]+.*)";'
@@ -108,7 +108,7 @@ class HTMLPhisher_1(Signature):
                 decodeString = re.search(regex, data)
                 if decodeString:
                     decodeString = decodeString.group(1)
-                    decoded_string = Chepy(decodeString).url_decode().url_decode().o
+                    decoded_string = Chepy(decodeString).from_url_encoding().o.decode("utf-8")
                     self.description = "File obfuscation detected, with url encoding"
                     regex_user = r'value="([^&]+?)"'
                     regex_url = r"url: '([^&]+?)',"
