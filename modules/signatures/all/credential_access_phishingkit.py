@@ -46,7 +46,7 @@ class HTMLPhisher_0(Signature):
 
     def run(self):
         if self.results["info"]["package"] in self.packages:
-            if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
+            if "strings" not in self.results["target"]["file"] and 'data' not in self.results["target"]["file"]:
                 return False
             strings = self.results["target"]["file"]["strings"]
             regex_decodedURL = r"unescape\( \'([^&]+?)\' \) \);</script>"
@@ -94,7 +94,7 @@ class HTMLPhisher_1(Signature):
 
     def run(self):
         if self.results["info"]["package"] in self.packages:
-            if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
+            if "strings" not in self.results["target"]["file"] and 'data' not in self.results["target"]["file"]:
                 return False
             strings = self.results["target"]["file"]["strings"]
             data = "".join(strings) if strings else self.results["target"]["file"]["data"]
@@ -145,7 +145,7 @@ class HTMLPhisher_2(Signature):
 
     def run(self):
         if self.results["info"]["package"] in self.packages:
-            if "strings" not in self.results["target"]["file"] or self.results["target"]["file"]["strings"] == []:
+            if "strings" not in self.results["target"]["file"] and 'data' not in self.results["target"]["file"]:
                 return False
             strings = self.results["target"]["file"]["strings"]
             data = "".join(strings) if strings else self.results["target"]["file"]["data"]
