@@ -45,6 +45,7 @@ class HTMLPhisher_0(Signature):
     packages = ["html", "edge", "chrome", "firefox"]
 
     def run(self):
+        has_match = False
         if self.results["info"]["package"] in self.packages:
             if "strings" not in self.results["target"]["file"] and 'data' not in self.results["target"]["file"]:
                 return False
@@ -53,6 +54,7 @@ class HTMLPhisher_0(Signature):
             data = "".join(strings) if strings else self.results["target"]["file"]["data"]
             decodeString = re.search(regex_decodedURL, data)
             if decodeString:
+                has_match = True
                 self.description = "File obfuscation detected, with url encoding"
                 decodeString = decodeString.group(1)
                 decoded_string = Chepy(decodeString).from_url_encoding().o.decode("utf-8")
@@ -62,15 +64,17 @@ class HTMLPhisher_0(Signature):
                 user = re.search(regex_user, decoded_string)
                 url = re.search(regex_url, decoded_string)
                 post_url = re.search(regex_post_url, decoded_string)
-                if user and url and post_url:
+                if user or url or post_url:
                     self.weight = 3
                     self.families = ["HTMLPhisher_2023"]
                     self.description = "Phishing kit detected, extracted config from sample"
-                    self.data.append({"url": base64.b64decode(url.group(1)).decode("utf-8")})
-                    self.data.append({"user": user.group(1)})
-                    self.data.append({"post_url": post_url.group(1)})
-                    return True
-        return False
+                    if url:
+                        self.data.append({"url": base64.b64decode(url.group(1)).decode("utf-8")})
+                    if user:
+                        self.data.append({"user": user.group(1)})
+                    if post_url:
+                        self.data.append({"post_url": post_url.group(1)})
+        return has_match
 
 
 class HTMLPhisher_1(Signature):
@@ -93,6 +97,7 @@ class HTMLPhisher_1(Signature):
     packages = ["html", "edge", "chrome", "firefox"]
 
     def run(self):
+        has_match = False
         if self.results["info"]["package"] in self.packages:
             if "strings" not in self.results["target"]["file"] and 'data' not in self.results["target"]["file"]:
                 return False
@@ -107,6 +112,7 @@ class HTMLPhisher_1(Signature):
             for regex in regex_decoded:
                 decodeString = re.search(regex, data)
                 if decodeString:
+                    has_match = True
                     decodeString = decodeString.group(1)
                     decoded_string = Chepy(decodeString).from_url_encoding().o.decode("utf-8")
                     self.description = "File obfuscation detected, with url encoding"
@@ -114,14 +120,15 @@ class HTMLPhisher_1(Signature):
                     regex_url = r"url: '([^&]+?)',"
                     user = re.search(regex_user, decoded_string)
                     url = re.search(regex_url, decoded_string)
-                    if user and url:
+                    if user or url:
                         self.weight = 3
                         self.families = ["HTMLPhisher_2023"]
                         self.description = "Phishing kit detected, extracted config from sample"
-                        self.data.append({"url": url.group(1)})
-                        self.data.append({"user": user.group(1)})
-                        return True
-            return False
+                        if url:
+                            self.data.append({"url": url.group(1)})
+                        if user:
+                            self.data.append({"user": user.group(1)})
+        return has_match
 
 
 class HTMLPhisher_2(Signature):
@@ -144,6 +151,7 @@ class HTMLPhisher_2(Signature):
     packages = ["html", "edge", "chrome", "firefox"]
 
     def run(self):
+        has_match = False
         if self.results["info"]["package"] in self.packages:
             if "strings" not in self.results["target"]["file"] and 'data' not in self.results["target"]["file"]:
                 return False
@@ -154,11 +162,13 @@ class HTMLPhisher_2(Signature):
             regex_url = r"<form method=\"post\" action=\"([^&]+?)\">"
             user = re.search(regex_user, data)
             url = re.search(regex_url, data)
-            if user and url:
+            if user or url:
+                has_match = True
                 self.weight = 3
                 self.families = ["HTMLPhisher_2023"]
                 self.description = "Phishing kit detected, extracted config from sample"
-                self.data.append({"url": url.group(1)})
-                self.data.append({"user": user.group(1)})
-                return True
-            return False
+                if url:
+                    self.data.append({"url": url.group(1)})
+                if user:
+                    self.data.append({"user": user.group(1)})
+        return has_match

@@ -47,14 +47,16 @@ class suspiciousHRML_Body(Signature):
             "tokenName",
             "headers",
         ]
+        has_match = False
         if self.results["info"]["package"] in packages:
             if "strings" in self.results["target"]["file"]:
                 strings = self.results["target"]["file"]["strings"]
                 data = "".join(strings) if strings else self.results["target"]["file"]["data"]
                 for indicator in indicators:
                     if indicator in data:
-                        self.add_match(None, "string", f"Found {indicator} in HTML body")
-        return self.has_matches()
+                        self.data.append({"indicator": indicator, "location": "body"})
+                        has_match = True
+        return has_match
 
 
 class suspiciousHTML_Title(Signature):
@@ -84,6 +86,7 @@ class suspiciousHTML_Title(Signature):
         ]
 
         title_regex = re.compile(r"<\s*title[^>]*>(.*?)<\/\s*title\s*>")
+        has_match = False
 
         if self.results["info"]["package"] in packages:
             if "strings" in self.results["target"]["file"]:
@@ -91,13 +94,15 @@ class suspiciousHTML_Title(Signature):
                 data = "".join(strings) if strings else self.results["target"]["file"]["data"]
                 title = title_regex.search(data)
                 if not title:
-                    self.add_match(None, "string", "Empty HTML title")
+                    self.data.append({"indicator": "empty", "location": "title"})
+                    has_match = True
                 else:
                     for indicator in indicators:
                         if indicator in title.group(1):
-                            self.add_match(None, "string", f"Found {indicator} in HTML title")
+                            self.data.append({"indicator": indicator, "location": "title"})
+                            has_match = True
 
-        return self.has_matches()
+        return has_match
 
 
 class suspiciousHTML_Filename(Signature):
@@ -130,11 +135,13 @@ class suspiciousHTML_Filename(Signature):
             "statement",
             "RECEIPT"
         ]
+        has_match = False
 
         if self.results["info"]["package"] in packages:
             name = self.results["target"]["file"]["name"]
             lower = name.lower()
             for indicator in indicators:
                 if indicator in lower:
-                    self.add_match(None, "string", f"Found {indicator} in HTML name")
-        return self.has_matches()
+                    self.data.append({"indicator": indicator, 'location': 'filename'})
+                    has_match = True
+        return has_match
