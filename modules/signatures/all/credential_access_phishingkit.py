@@ -42,11 +42,12 @@ class HTMLPhisher_0(Signature):
     ttps += ["T1566.001"]  # MITRE v6,7,8
     ttps += ["T1606"]  # MITRE v7,8
     mbcs = ["C0029.003"]  # micro-behaviour
-    packages = ["html", "edge", "chrome", "firefox"]
 
     def run(self):
         has_match = False
-        if self.results["info"]["package"] in self.packages:
+        packages = ["html", "edge", "chrome", "firefox"]
+
+        if self.results["info"]["package"] in packages:
             strings = self.results["target"]["file"]["strings"]
             regex_decodedURL = r"unescape\( \'([^&]+?)\' \) \);</script>"
             data = "".join(strings) if strings else self.results["target"]["file"]["data"]
@@ -92,11 +93,12 @@ class HTMLPhisher_1(Signature):
     ttps += ["T1566.001"]  # MITRE v6,7,8
     ttps += ["T1606"]  # MITRE v7,8
     mbcs = ["C0029.003"]  # micro-behaviour
-    packages = ["html", "edge", "chrome", "firefox"]
 
     def run(self):
         has_match = False
-        if self.results["info"]["package"] in self.packages:
+        packages = ["html", "edge", "chrome", "firefox"]
+
+        if self.results["info"]["package"] in packages:
             strings = self.results["target"]["file"]["strings"]
             data = "".join(strings) if strings else self.results["target"]["file"]["data"]
             regex_decoded = [
@@ -144,11 +146,12 @@ class HTMLPhisher_2(Signature):
     ttps += ["T1566.001"]  # MITRE v6,7,8
     ttps += ["T1606"]  # MITRE v7,8
     mbcs = ["C0029.003"]  # micro-behaviour
-    packages = ["html", "edge", "chrome", "firefox"]
 
     def run(self):
         has_match = False
-        if self.results["info"]["package"] in self.packages:
+        packages = ["html", "edge", "chrome", "firefox"]
+
+        if self.results["info"]["package"] in packages:
             strings = self.results["target"]["file"]["strings"]
             data = "".join(strings) if strings else self.results["target"]["file"]["data"]
 
@@ -166,27 +169,3 @@ class HTMLPhisher_2(Signature):
                 if user:
                     self.data.append({"user": user.group(1)})
         return has_match
-
-
-class HTMLPhisher_3(Signature):
-    name = "phishing_kit_detected_test"
-    description = "Phishing Kit Detected, sample is trying to harvest credentials"
-    severity = 3
-    confidence = 100
-    categories = ["credential_access", "evasion", "infostealer", "phishing", "static"]
-    authors = ["Michael Bradford", "PolySwarm"]
-    references = [
-        "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
-        "https://socradar.io/what-is-a-phishing-kit/" "https://github.com/SteveD3/kit_hunter/tree/master/tag_files",
-    ]
-    enabled = True
-    minimum = "1.2"
-    ttps = ["T1111", "T1193", "T1140"]  # MITRE v6
-    ttps += ["T1566.001"]  # MITRE v6,7,8
-    ttps += ["T1606"]  # MITRE v7,8
-    mbcs = ["C0029.003"]  # micro-behaviour
-    packages = ["html", "edge", "chrome", "firefox"]
-
-    def run(self):
-        self.data.append({'test': 'data'})
-        return True
