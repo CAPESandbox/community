@@ -43,7 +43,7 @@ class HTMLPhisher_0(Signature):
         has_match = False
         if self.results["info"]["package"] in self.packages:
             strings = self.results["target"]["file"]["strings"]
-            regex_decodedURL = r"unescape\( \'([^&]+?)\' \) \)"
+            regex_decodedURL = r"unescape\(\s*\"([^&]+?)\"\s*\)"
             data = "".join(strings) if strings else self.results["target"]["file"]["data"]
             decodeString = re.search(regex_decodedURL, data)
             if decodeString:
@@ -99,6 +99,7 @@ class HTMLPhisher_1(Signature):
                 r"unescape\( \'([^&]+?)\' \) \);",
                 r"unescape\(\'([^&]+?)\'\) \);",
                 r"unescape\( \'([^&]+?)\'\) \);",
+                r"unescape\(\s*\"([^&]+?)\"\s*\)"
             ]
             for regex in regex_decoded:
                 decodeString = re.search(regex, data)
