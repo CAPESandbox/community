@@ -49,11 +49,11 @@ class HTMLPhisher_0(Signature):
             if decodeString:
                 has_match = True
                 self.description = "File obfuscation detected, with url encoding"
-                decodeString = decodeString.group(1)
-                decoded_string = unquote(decodeString, "utf-8")
+                decoded = decodeString.group(1)
+                decoded_string = unquote(decoded, "utf-8")
                 regex_user = r'var encoded_string = "([^&]+?)"'
                 regex_url = r"window.atob\('([^&]+?)'\)"
-                regex_post_url = r'window\.location\.href="([^&]+.*)";'
+                regex_post_url = r'window\.location\.href="([^&]+.*)"'
                 user = re.search(regex_user, decoded_string)
                 url = re.search(regex_url, decoded_string)
                 post_url = re.search(regex_post_url, decoded_string)
