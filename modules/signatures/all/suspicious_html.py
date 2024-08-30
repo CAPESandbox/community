@@ -27,7 +27,8 @@ class suspiciousHRML_Body(Signature):
     authors = ["Yasin Tas", "Eye Security"]
     references = [
         "https://securelist.com/phishing-kit-market-whats-inside-off-the-shelf-phishing-packages/106149/",
-        "https://socradar.io/what-is-a-phishing-kit/" "https://github.com/SteveD3/kit_hunter/tree/master/tag_files",
+        "https://github.com/0xDanielLopez/phishing_kits", "https://socradar.io/what-is-a-phishing-kit/",
+        "https://github.com/SteveD3/kit_hunter/tree/master/tag_files",
     ]
     enabled = True
     minimum = "1.2"
@@ -37,15 +38,21 @@ class suspiciousHRML_Body(Signature):
     def run(self):
         packages = ["html", "edge", "chrome", "firefox"]
         indicators = [
-            "password",
-            "email",
-            "username",
             "encoded_string",
-            "url",
             "// remove email, and put ur mailer code",
-            "headers",
-            "tokenName",
-            "headers",
+            "eval",
+            "atob",
+            "btoa",
+            "decodeURIComponent",
+            "cardnumber",
+            "expirationdate",
+            "securitycode",
+            "api.telegram.org",
+            "YOUR_BOT_TOKEN",
+            "YOUR_CHANNEL_ID",
+            "telegramApiUrl",
+            "1TAO UY1 EMPR3",
+            "createElement(\"script\")"
         ]
         has_match = False
         if self.results["info"]["package"] in packages:
@@ -54,7 +61,7 @@ class suspiciousHRML_Body(Signature):
                 data = "".join(strings) if strings else self.results["target"]["file"]["data"]
                 for indicator in indicators:
                     if indicator in data:
-                        self.data.append({"indicator": indicator, "location": "body"})
+                        self.data.append({"indicator": indicator})
                         has_match = True
         return has_match
 

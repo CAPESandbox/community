@@ -51,9 +51,9 @@ class HTMLPhisher_0(Signature):
                 self.description = "File obfuscation detected, with url encoding"
                 decoded = decodeString.group(1)
                 decoded_string = unquote(decoded, "utf-8")
-                regex_user = r'var encoded_string = "([^&]+?)"'
-                regex_url = r"window.atob\('([^&]+?)'\)"
-                regex_post_url = r'window\.location\.href="([^&]+.*)"'
+                regex_user = r"var\s*encoded_string\s*=\s*['\"]([^&]+?)\['\"]"
+                regex_url = r"window.atob\(['\"]([^&]+?)['\"]\)"
+                regex_post_url = r'window\.location\.href\s*=\s*"([^&]+.*)"'
                 user = re.search(regex_user, decoded_string)
                 url = re.search(regex_url, decoded_string)
                 post_url = re.search(regex_post_url, decoded_string)
@@ -99,7 +99,7 @@ class HTMLPhisher_1(Signature):
                 r"unescape\( \'([^&]+?)\' \) \);",
                 r"unescape\(\'([^&]+?)\'\) \);",
                 r"unescape\( \'([^&]+?)\'\) \);",
-                r"unescape\(\s*\"([^&]+?)\"\s*\)"
+                r"unescape\(\s*\['\"]([^&]+?)\['\"]\s*\)",
             ]
             for regex in regex_decoded:
                 decodeString = re.search(regex, data)
@@ -108,8 +108,8 @@ class HTMLPhisher_1(Signature):
                     decodeString = decodeString.group(1)
                     decoded_string = unquote(decodeString, "utf-8")
                     self.description = "File obfuscation detected, with url encoding"
-                    regex_user = r'value="([^&]+?)"'
-                    regex_url = r"url: '([^&]+?)',"
+                    regex_user = r"value\s*=\s*['\"]\s*([^&]+?)['\"]"
+                    regex_url = r"url\s*:\s*['\"]([^&]+?)['\"]"
                     user = re.search(regex_user, decoded_string)
                     url = re.search(regex_url, decoded_string)
                     if user or url:
@@ -120,6 +120,9 @@ class HTMLPhisher_1(Signature):
                             self.data.append({"url": url.group(1)})
                         if user:
                             self.data.append({"user": user.group(1)})
+                    else:
+                        self.weight = 2
+                        self.data.append({"obfuscated_value": decoded_string})
         return has_match
 
 
