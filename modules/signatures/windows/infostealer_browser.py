@@ -40,6 +40,8 @@ class BrowserStealer(Signature):
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
+        self.MALICIOUS_ARTIFACTS_THRESHOLD = 3
+        self.artifacts_counter = 0
         self.filematches = set()
         self.saw_stealer = False
         self.indicators = [
@@ -98,6 +100,8 @@ class BrowserStealer(Signature):
         ]
 
     def on_call(self, call, process):
+        
+
         # If the current process appears to be a browser, continue.
         # TODO: implement better checks here -- the malware can be named whatever it wants or can
         # inject into browser processes
@@ -116,8 +120,11 @@ class BrowserStealer(Signature):
                 if self.pid:
                     self.mark_call()
                 self.saw_stealer = True
+                self.artifacts_counter += 1
 
     def on_complete(self):
-        for file in self.filematches:
-            self.data.append({"file": file})
-        return self.saw_stealer
+        if self.artifacts_counter >= self.MALICIOUS_ARTIFACTS_THRESHOLD:
+            for file in self.filematches:
+                self.data.append({"file": file})
+            return self.saw_stealer
+        return False
