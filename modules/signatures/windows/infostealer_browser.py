@@ -62,26 +62,26 @@ class BrowserStealer(Signature):
             re.compile(".*\\\\Microsoft\\\\Edge\\\\User\\ Data\\\\Default\\\\.*", re.I),
 
             # Google Chrome
-            re.compile(".*\\\\Application Data\\\\Google\\\\Chrome\\\\.*", re.I),
+            re.compile(".*\\\\Application\\ Data Data\\\\Google\\\\Chrome\\\\.*", re.I),
             re.compile(".*\\\\Local\\\\Google\\\\Chrome\\\\User\\ Data\\\\Default\\\\.*", re.I),
             re.compile(".*\\\\AppData\\\\Local\\\\Google\\\\Chrome\\\\User\\ Data\\\\Default\\\\.*", re.I),
 
             # Chromium-based Browsers
-            re.compile(".*\\\\Application Data\\\\Chromium\\\\.*", re.I),
+            re.compile(".*\\\\Application\\ Data Data\\\\Chromium\\\\.*", re.I),
             re.compile(".*\\\\AppData\\\\Local\\\\Chromium\\\\.*", re.I),
-            re.compile(".*\\\\Application Data\\\\ChromePlus\\\\.*", re.I),
+            re.compile(".*\\\\Application\\ Data Data\\\\ChromePlus\\\\.*", re.I),
             re.compile(".*\\\\AppData\\\\Local\\\\MapleStudio\\\\ChromePlus\\\\.*", re.I),
-            re.compile(".*\\\\Application Data\\\\Nichrome\\\\.*", re.I),
-            re.compile(".*\\\\Application Data\\\\Bromium\\\\.*", re.I),
-            re.compile(".*\\\\Application Data\\\\RockMelt\\\\.*", re.I),
-            re.compile(".*\\\\Application Data\\\\Flock\\\\.*", re.I),
+            re.compile(".*\\\\Application\\ Data Data\\\\Nichrome\\\\.*", re.I),
+            re.compile(".*\\\\Application\\ Data Data\\\\Bromium\\\\.*", re.I),
+            re.compile(".*\\\\Application\\ Data Data\\\\RockMelt\\\\.*", re.I),
+            re.compile(".*\\\\Application\\ Data Data\\\\Flock\\\\.*", re.I),
             re.compile(".*\\\\AppData\\\\Local\\\\Flock\\\\.*", re.I),
-            re.compile(".*\\\\Application Data\\\\Comodo\\\\Dragon\\\\.*", re.I),
+            re.compile(".*\\\\Application\\ Data Data\\\\Comodo\\\\Dragon\\\\.*", re.I),
             re.compile(".*\\\\AppData\\\\Local\\\\Comodo\\\\Dragon\\\\.*", re.I),
             re.compile(".*\\\\BraveSoftware\\\\Brave-Browser\\\\User\\ Data\\\\Default\\\\.*", re.I),
 
             # Opera
-            re.compile(".*\\\\Application Data\\\\Opera\\\\.*", re.I),
+            re.compile(".*\\\\Application\\ Data Data\\\\Opera\\\\.*", re.I),
             re.compile(".*\\\\AppData\\\\Roaming\\\\Opera\\\\Opera\\\\.*", re.I),
             re.compile(".*\\\\AppData\\\\Roaming\\\\Opera Software\\\\Opera Stable\\\\.*", re.I),
 
