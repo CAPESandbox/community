@@ -36,37 +36,65 @@ class BrowserStealer(Signature):
     mbcs = ["OB0005"]
     mbcs += ["OC0001", "C0051"]  # micro-behaviour
 
-    filter_apinames = set(["NtReadFile", "CopyFileA", "CopyFileW", "CopyFileExW"])
+    filter_apinames = set(["NtReadFile", "CopyFileA", "CopyFileW", "CopyFileExW", "NtQueryAttributesFile"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.filematches = set()
         self.saw_stealer = False
         self.indicators = [
+            # Firefox
             re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\signons\.sqlite$", re.I),
+            re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\cookies\.sqlite$", re.I),
             re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\secmod\.db$", re.I),
             re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\cert8\.db$", re.I),
             re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\key3\.db$", re.I),
-            re.compile(".*\\\\History\\\\History\.IE5\\\\index\.dat$", re.I),
+            re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\places\.sqlite$", re.I),
+            re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\logins\.json$", re.I),
+            re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\formhistory\.sqlite$", re.I),
+
+            # Internet Explorer/Edge
+            re.compile(".*\\\\History\\\\History.IE5\\\\index\.dat$", re.I),
             re.compile(".*\\\\Cookies\\\\.*", re.I),
-            re.compile(".*\\\\Temporary\\ Internet\\ Files\\\\Content\.IE5\\\\index\.dat$", re.I),
-            re.compile(".*\\\\Application\\ Data\\\\Google\\\\Chrome\\\\.*", re.I),
+            re.compile(".*\\\\Temporary Internet Files\\\\Content.IE5\\\\index\.dat$", re.I),
+            re.compile(".*\\\\Microsoft\\\\Edge\\\\User\\ Data\\\\Default\\\\.*", re.I),
+
+            # Google Chrome
+            re.compile(".*\\\\Application Data\\\\Google\\\\Chrome\\\\.*", re.I),
             re.compile(".*\\\\Local\\\\Google\\\\Chrome\\\\User\\ Data\\\\Default\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data\\\\Mozilla\\\\Firefox\\\\.*", re.I),
-            re.compile(".*\\\\AppData\\\\Roaming\\\\Mozilla\\\\Firefox\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data\\\\Opera\\\\.*", re.I),
-            re.compile(".*\\\\AppData\\\\Roaming\\\\Opera\\\\Opera\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data\\\\Chromium\\\\.*", re.I),
+            re.compile(".*\\\\AppData\\\\Local\\\\Google\\\\Chrome\\\\User\\ Data\\\\Default\\\\.*", re.I),
+
+            # Chromium-based Browsers
+            re.compile(".*\\\\Application Data\\\\Chromium\\\\.*", re.I),
             re.compile(".*\\\\AppData\\\\Local\\\\Chromium\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data\\\\ChromePlus\\\\.*", re.I),
+            re.compile(".*\\\\Application Data\\\\ChromePlus\\\\.*", re.I),
             re.compile(".*\\\\AppData\\\\Local\\\\MapleStudio\\\\ChromePlus\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data\\\\Nichrome\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data\\\\Bromium\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data\\\\RockMelt\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data\\\\Flock\\\\.*", re.I),
+            re.compile(".*\\\\Application Data\\\\Nichrome\\\\.*", re.I),
+            re.compile(".*\\\\Application Data\\\\Bromium\\\\.*", re.I),
+            re.compile(".*\\\\Application Data\\\\RockMelt\\\\.*", re.I),
+            re.compile(".*\\\\Application Data\\\\Flock\\\\.*", re.I),
             re.compile(".*\\\\AppData\\\\Local\\\\Flock\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data\\\\Comodo\\\\Dragon\\\\.*", re.I),
+            re.compile(".*\\\\Application Data\\\\Comodo\\\\Dragon\\\\.*", re.I),
             re.compile(".*\\\\AppData\\\\Local\\\\Comodo\\\\Dragon\\\\.*", re.I),
+            re.compile(".*\\\\BraveSoftware\\\\Brave-Browser\\\\User\\ Data\\\\Default\\\\.*", re.I),
+
+            # Opera
+            re.compile(".*\\\\Application Data\\\\Opera\\\\.*", re.I),
+            re.compile(".*\\\\AppData\\\\Roaming\\\\Opera\\\\Opera\\\\.*", re.I),
+            re.compile(".*\\\\AppData\\\\Roaming\\\\Opera Software\\\\Opera Stable\\\\.*", re.I),
+
+            # Safari
+            re.compile(".*\\\\Apple Computer\\\\Safari\\\\WebpageIcons\.db$", re.I),
+            re.compile(".*\\\\Apple Computer\\\\Safari\\\\History\.db$", re.I),
+            re.compile(".*\\\\Apple Computer\\\\Safari\\\\LastSession\.plist$", re.I),
+
+            # Others
+            re.compile(".*\\\\AppData\\\\Local\\\\Spark\\\\User\\ Data\\\\Default\\\\.*", re.I),
+            re.compile(".*\\\\AppData\\\\Local\\\\Nichrome\\\\User\\ Data\\\\Default\\\\.*", re.I),
+            re.compile(".*\\\\AppData\\\\Local\\\\Titan Browser\\\\User\\ Data\\\\Default\\\\.*", re.I),
+            re.compile(".*\\\\AppData\\\\Local\\\\Rockmelt\\\\User\\ Data\\\\Default\\\\.*", re.I),
+            re.compile(".*\\\\AppData\\\\Local\\\\Torch\\\\User\\ Data\\\\Default\\\\.*", re.I),
+            re.compile(".*\\\\AppData\\\\Local\\\\.*\\\\YandexBrowser\\\\User\\ Data\\\\Default\\\\.*", re.I),
         ]
 
     def on_call(self, call, process):
@@ -77,10 +105,8 @@ class BrowserStealer(Signature):
             return None
 
         filename = None
-        if call["api"] == "NtReadFile":
-            filename = self.get_argument(call, "HandleName")
-        else:
-            filename = self.get_argument(call, "ExistingFileName")
+        if call["api"] == "NtQueryAttributesFile":
+            filename = self.get_argument(call, "FileName")
         if not filename:
             return None
 
