@@ -36,7 +36,7 @@ class BrowserStealer(Signature):
     mbcs = ["OB0005"]
     mbcs += ["OC0001", "C0051"]  # micro-behaviour
 
-    filter_apinames = set(["NtReadFile", "CopyFileA", "CopyFileW", "CopyFileExW", "NtQueryAttributesFile"])
+    filter_apinames = set(["NtQueryAttributesFile", "CopyFileA", "CopyFileW", "CopyFileExW"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
