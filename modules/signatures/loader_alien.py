@@ -32,7 +32,7 @@ class AlienLoaderAPIs(Signature):
         # Defense Evasion
         "T1497.003",  # Virtualization/Sandbox Evasion – Time Based Evasion
         "T1564"  # Hide Artefacts – Hidden Window
-        # Command and Control 
+        # Command and Control
         "T1071.001",  # Application Layer Protocol – Web Protocols
     ]
     evented = True
@@ -98,7 +98,7 @@ class AlienLoaderAPIs(Signature):
         # executes file
         elif self.state == 4 and call["api"] == "CreateProcessInternalW":
             command_line = self.get_argument(call, "CommandLine")
-            if command_line and self.file_name.lower() in command_line.lower(): 
+            if command_line and self.file_name.lower() in command_line.lower():
                 if self.pid:
                     self.mark_call()
                     self.hit = True
@@ -115,4 +115,3 @@ class AlienLoaderAPIs(Signature):
 
     def on_complete(self):
         return self.hit
-
