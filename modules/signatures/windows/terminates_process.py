@@ -35,7 +35,7 @@ class TerminatesRemoteProcess(Signature):
         if self.get_argument(call, "ProcessHandle") not in ["0xffffffff", "0xffffffffffffffff", "0x00000000", "0x0000000000000000"]:
             if self.pid:
                 process_name = self.get_name_from_pid(self.pid)
-                if process_name not in self.safeproclist:
+                if process_name not in self.safelistprocs:
                     self.mark_call()
                     self.data.append({"process": self.get_name_from_pid(self.pid)})
 
