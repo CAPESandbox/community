@@ -27,7 +27,7 @@ class TerminatesRemoteProcess(Signature):
     mbcs = ["C0018"]
     evented = True
     confidence = 60
-    safelistprocs = ["svchost.exe", "MicrosoftEdgeUpdate.exe"]
+    safelistprocs = ["svchost.exe", "MicrosoftEdgeUpdate.exe", "Acrobat.exe"]
 
     filter_apinames = set(["NtTerminateProcess"])
 
