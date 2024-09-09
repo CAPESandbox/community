@@ -175,6 +175,7 @@ class Autorun(Signature):
         ]
         whitelists = [
             ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\{CAFEEFAC-0017-0000-FFFF-ABCDEFFEDCBA}\\\\InprocServer32\\\\.*",
+            ".*\\\\Software\\\\Classes\\\\CLSID\\\\{38142727-3008-9161-1521-349515000000}\\\\LocalServer32\\\\.*",
             # ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\[^\\\\]*\\\\InprocServer32\\\\ThreadingModel$",
         ]
 

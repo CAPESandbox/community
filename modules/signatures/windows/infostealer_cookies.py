@@ -52,6 +52,7 @@ class CookiesStealer(Signature):
             "acrobat.exe",
             "excel.exe",
             "winword.exe",
+            "crwindowsclientservice.exe",
         ]
 
     def on_call(self, call, process):
