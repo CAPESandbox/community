@@ -53,6 +53,9 @@ class CookiesStealer(Signature):
             "excel.exe",
             "winword.exe",
             "crwindowsclientservice.exe",
+            "adnotificationmanager.exe",
+            "mousocoreworker.exe",
+            "adobe crash processor.exe"
         ]
 
     def on_call(self, call, process):
