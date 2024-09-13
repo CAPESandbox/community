@@ -53,6 +53,6 @@ class ClearsLogs(Signature):
             if match_file:
                 for match in match_file:
                     self.data.append({"file": match})
-                ret = True
+                    ret = True
 
         return ret

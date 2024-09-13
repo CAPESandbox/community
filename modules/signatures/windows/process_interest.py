@@ -60,7 +60,7 @@ class ProcessInterest(Signature):
             self.interested_processes.add(self.lastprocessname)
         if len(self.interested_processes):
             for proc in self.interested_processes:
-                if proc not in whitelist:
+                if proc.lower() not in whitelist:
                     self.data.append({"process": proc})
                     ret = True
         return ret

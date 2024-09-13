@@ -43,6 +43,12 @@ class EnumeratesRunningProcesses(Signature):
             "wordview.exe",
             "adobearm.exe",
             "ai.exe",
+            "svchost.exe",
+            "microsoftedgeupdate.exe",
+            "adobecollabsync.exe",
+            "wmiprvse.exe",
+            "adobe crash processor.exe",
+            "tiworker.exe",
         ]
 
     def on_call(self, call, process):
