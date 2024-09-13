@@ -51,10 +51,16 @@ class ProcessInterest(Signature):
                     self.mark_call()
 
     def on_complete(self):
+        whitelist = [
+            "adobe crash processor.exe",
+            "microsoftedgeupdate.exe"
+        ]
+        ret = False
         if self.lastprocessname:
             self.interested_processes.add(self.lastprocessname)
         if len(self.interested_processes):
             for proc in self.interested_processes:
-                self.data.append({"process": proc})
-            return True
-        return False
+                if proc not in whitelist:
+                    self.data.append({"process": proc})
+                    ret = True
+        return ret

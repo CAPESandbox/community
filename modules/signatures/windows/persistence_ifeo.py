@@ -36,12 +36,20 @@ class PersistenceIFEO(Signature):
             "HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\sNT\\\\CurrentVersion\\\\Image\sFile\sExecution\sOptions\\\\.*",
         ]
 
+        whitelist = [
+            "MicrosoftEdgeUpdate.exe"
+        ]
+
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)
             if match:
-                self.data.append({"regkey": match})
-                return True
-
+                safe = False
+                for safe_indicator in whitelist:
+                    if safe_indicator in indicator:
+                        safe = True
+                if not safe:
+                    self.data.append({"regkey": match})
+                    return True
         return False
 
 
