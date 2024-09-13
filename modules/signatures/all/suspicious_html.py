@@ -21,7 +21,7 @@ from lib.cuckoo.common.abstracts import Signature
 class suspiciousHRML_Body(Signature):
     name = "suspicious_html_body"
     description = "Sample contains suspicious HTML body"
-    severity = 2
+    severity = 3
     confidence = 100
     categories = ["phishing", "static"]
     authors = ["Yasin Tas", "Eye Security"]
@@ -69,7 +69,7 @@ class suspiciousHRML_Body(Signature):
 class suspiciousHTML_Title(Signature):
     name = "suspicious_html_title"
     description = "Sample contains suspicious HTML title"
-    severity = 2
+    severity = 3
     confidence = 100
     categories = ["phishing", "static"]
     authors = ["Yasin Tas", "Eye Security"]
@@ -115,7 +115,7 @@ class suspiciousHTML_Title(Signature):
 class suspiciousHTML_Filename(Signature):
     name = "suspicious_html_name"
     description = "Sample contains suspicious HTML name"
-    severity = 2
+    severity = 3
     confidence = 80
     categories = ["phishing", "static"]
     authors = ["Yasin Tas", "Eye Security"]
