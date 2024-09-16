@@ -81,7 +81,7 @@ class CreateToolhelp32SnapshotProcessModuleEnumeration(Signature):
     mbcs = ["OB0007"]
 
     filter_apinames = set(["CreateToolhelp32Snapshot", "Module32NextA", "Module32NextW"])
-    process_safelist = ["acrobat.exe"]
+    process_safelist = ["acrobat.exe", "svchost.exe"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
