@@ -29,20 +29,32 @@ class MINERS(Signature):
 
     def on_complete(self):
         domains = [domain["domain"] for domain in self.results.get("network", {}).get("domains", [])]
+        ret = False
         if not self.extra_domains:
             self.extra_domains = domains
         else:
             self.extra_domains += domains
 
         for domain in self.extra_domains:
-            if (
-                domain in pool_domains
-                or any([re.match(pool_domain, domain) for pool_domain in pool_domains])
-                or self.check_executed_command(pattern=domain, regex=True)
-            ):
+            if domain in pool_domains:
                 self.malfamily = "crypto miner"
                 self.results["malfamily"] = "crypto miner"
                 self.results["malfamily_tag"] = "Behavior"
+                self.data.append({"domain": domain})
+                ret = True
 
-                return True
-        return False
+            matches = [re.match(pool_domain, domain) for pool_domain in pool_domains]
+            for match in matches:
+                self.malfamily = "crypto miner"
+                self.results["malfamily"] = "crypto miner"
+                self.results["malfamily_tag"] = "Behavior"
+                self.data.append({"domain": match})
+                ret = True
+
+            if self.check_executed_command(pattern=domain, regex=True):
+                self.malfamily = "crypto miner"
+                self.results["malfamily"] = "crypto miner"
+                self.results["malfamily_tag"] = "Behavior"
+                self.data.append({"domain": domain, "executed_command": True})
+                ret = True
+        return ret

@@ -81,6 +81,7 @@ class CreateToolhelp32SnapshotProcessModuleEnumeration(Signature):
     mbcs = ["OB0007"]
 
     filter_apinames = set(["CreateToolhelp32Snapshot", "Module32NextA", "Module32NextW"])
+    process_safelist = ["acrobat.exe"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -88,6 +89,8 @@ class CreateToolhelp32SnapshotProcessModuleEnumeration(Signature):
         self.snapshotpids = []
 
     def on_call(self, call, process):
+        if process.get("process_name", "").lower() in self.process_safelist:
+            return False
         if call["api"] == "CreateToolhelp32Snapshot":
             procpid = self.get_argument(call, "ProcessId")
             if procpid:
