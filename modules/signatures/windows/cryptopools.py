@@ -36,7 +36,7 @@ class MINERS(Signature):
             self.extra_domains += domains
 
         for domain in self.extra_domains:
-            if domain in pool_domains:
+            if domain and domain in pool_domains:
                 self.malfamily = "crypto miner"
                 self.results["malfamily"] = "crypto miner"
                 self.results["malfamily_tag"] = "Behavior"
@@ -45,16 +45,18 @@ class MINERS(Signature):
 
             matches = [re.match(pool_domain, domain) for pool_domain in pool_domains]
             for match in matches:
-                self.malfamily = "crypto miner"
-                self.results["malfamily"] = "crypto miner"
-                self.results["malfamily_tag"] = "Behavior"
-                self.data.append({"domain": match})
-                ret = True
+                if match:
+                    self.malfamily = "crypto miner"
+                    self.results["malfamily"] = "crypto miner"
+                    self.results["malfamily_tag"] = "Behavior"
+                    self.data.append({"domain": match})
+                    ret = True
 
             if self.check_executed_command(pattern=domain, regex=True):
-                self.malfamily = "crypto miner"
-                self.results["malfamily"] = "crypto miner"
-                self.results["malfamily_tag"] = "Behavior"
-                self.data.append({"domain": domain, "executed_command": True})
-                ret = True
+                if domain:
+                    self.malfamily = "crypto miner"
+                    self.results["malfamily"] = "crypto miner"
+                    self.results["malfamily_tag"] = "Behavior"
+                    self.data.append({"domain": domain, "executed_command": True})
+                    ret = True
         return ret
