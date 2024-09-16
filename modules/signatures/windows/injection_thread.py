@@ -27,6 +27,7 @@ class ThreadManipulationRemoteProcess(Signature):
     ttps = ["T1055"]  # MITRE v6,7,8
 
     filter_apinames = set(["NtResumeThread"])
+    whitelist = ["svchost.exe"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -40,16 +41,17 @@ class ThreadManipulationRemoteProcess(Signature):
         if procid != processid:
             if processid not in self.sourcepid and procid not in self.targetpid:
                 pname = process["process_name"].lower()
-                self.sourcepid.append(processid)
-                self.targetpid.append(procid)
-                self.data.append(
-                    {
-                        "thread_resumed": "Process %s with process ID %s resumed a thread in another process with the process ID %s"
-                        % (pname, processid, procid)
-                    }
-                )
-            self.mark_call()
-            self.ret = True
+                if pname.lower() not in self.whitelist:
+                    self.sourcepid.append(processid)
+                    self.targetpid.append(procid)
+                    self.data.append(
+                        {
+                            "thread_resumed": "Process %s with process ID %s resumed a thread in another process with the process ID %s"
+                            % (pname, processid, procid)
+                        }
+                    )
+                    self.mark_call()
+                    self.ret = True
 
     def on_complete(self):
         return self.ret
