@@ -70,7 +70,7 @@ class CookiesStealer(Signature):
                 )
                 if match:
                     self.ret = True
-                    self.data.append({"file": match})
+                    self.data.append({"file": match, "process": pname})
 
     def on_complete(self):
         return self.ret
