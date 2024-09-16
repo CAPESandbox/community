@@ -45,7 +45,7 @@ class PersistenceIFEO(Signature):
             if match:
                 safe = False
                 for safe_indicator in whitelist:
-                    if safe_indicator in indicator:
+                    if safe_indicator in match:
                         safe = True
                 if not safe:
                     self.data.append({"regkey": match})
