@@ -57,6 +57,7 @@ class CookiesStealer(Signature):
             "mousocoreworker.exe",
             "adobe crash processor.exe"
         ]
+        self.ret = False
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()
@@ -68,7 +69,8 @@ class CookiesStealer(Signature):
                     call, pattern=indicator, api="NtQueryAttributesFile", category="filesystem", regex=True
                 )
                 if match:
+                    self.ret = True
                     self.add_match(process, "file", match)
 
     def on_complete(self):
-        return self.has_matches()
+        return self.ret
