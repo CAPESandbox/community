@@ -27,6 +27,7 @@ class IPC_NamedPipe(Signature):
     mbcs = ["OC0006", "C0003", "C0003.001"]  # micro-behaviour
 
     filter_apinames = set(["NtCreateNamedPipeFile", "NtReadFile", "NtWriteFile"])
+    whitelist = ["acrobat.exe", "crwindowsclientservice.exe"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -36,6 +37,8 @@ class IPC_NamedPipe(Signature):
 
     def on_call(self, call, process):
         # We only need to process "good" returns.
+        if process["process_name"].lower() in self.whitelist:
+            return
         if call["status"]:
             if call["api"] == "NtCreateNamedPipeFile":
                 name = self.get_argument(call, "PipeName").split("\\")[-1]
