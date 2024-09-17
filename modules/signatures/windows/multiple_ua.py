@@ -44,6 +44,7 @@ class Multiple_UA(Signature):
             "CRWindowsClientService.exe": ["CRWindowsClient"],
             "AdobeCollabSync.exe": ["Mozilla/3.0 (compatible; Adobe Synchronizer 23.8.20533)"],
             "Adobe Crash Processor.exe": ["CRWindowsClient"],
+            "AdobeARM.exe": ["ARM WinINet Downloader"],
         }
         ua = self.get_argument(call, "Agent")
         proc = process["process_name"].lower()
