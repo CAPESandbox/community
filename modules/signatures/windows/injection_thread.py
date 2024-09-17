@@ -27,7 +27,15 @@ class ThreadManipulationRemoteProcess(Signature):
     ttps = ["T1055"]  # MITRE v6,7,8
 
     filter_apinames = set(["NtResumeThread"])
-    whitelist = ["svchost.exe", "services.exe", "acrobat.exe", "explorer.exe"]
+    whitelist = [
+        "svchost.exe",
+        "services.exe",
+        "acrobat.exe",
+        "explorer.exe",
+        "microsoftedgeupdate.exe",
+        "werfault.exe",
+        "taskhostw.exe"
+    ]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
