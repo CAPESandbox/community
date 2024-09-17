@@ -114,6 +114,8 @@ class UsesWindowsUtilities(Signature):
         ]
         whitelist = [
             r"Internet Explorer",
+            r"Adobe",
+            r"Acrobat"
         ]
         ret = False
         cmdlines = self.results["behavior"]["summary"]["executed_commands"]

@@ -36,6 +36,7 @@ class ThreadManipulationRemoteProcess(Signature):
         "werfault.exe",
         "taskhostw.exe",
         "mousocoreworker.exe",
+        "adobecollabsync.exe",
     ]
 
     def __init__(self, *args, **kwargs):
