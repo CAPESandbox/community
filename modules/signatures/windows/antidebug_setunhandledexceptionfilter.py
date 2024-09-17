@@ -35,7 +35,7 @@ class antidebug_setunhandledexceptionfilter(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
-        self.process_safelist = ["microsoftedgeupdate.exe"]
+        self.process_safelist = ["microsoftedgeupdate.exe", "acrobat.exe"]
 
     def on_call(self, call, process):
         if process.get("process_name", "").lower() in self.process_safelist:
