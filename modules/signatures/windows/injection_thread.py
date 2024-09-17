@@ -34,7 +34,8 @@ class ThreadManipulationRemoteProcess(Signature):
         "explorer.exe",
         "microsoftedgeupdate.exe",
         "werfault.exe",
-        "taskhostw.exe"
+        "taskhostw.exe",
+        "mousocoreworker.exe",
     ]
 
     def __init__(self, *args, **kwargs):
