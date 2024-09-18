@@ -40,11 +40,11 @@ class Multiple_UA(Signature):
             "acrord32.exe": ["Mozilla/3.0 (compatible; Acrobat 5.0; Windows)"],
             "iexplore.exe": ["VCSoapClient", "Shockwave Flash"],
             "outlook.exe": ["OutlookSocialConnector/1.0", "Mozilla/5.0 (compatible; IE 11.0; Win32; Trident/7.0)"],
-            "Acrobat.exe": ["Mozilla/3.0 (compatible; Acrobat 5.0; Windows)"],
-            "CRWindowsClientService.exe": ["CRWindowsClient"],
-            "AdobeCollabSync.exe": ["Mozilla/3.0 (compatible; Adobe Synchronizer 23.8.20533)"],
-            "Adobe Crash Processor.exe": ["CRWindowsClient"],
-            "AdobeARM.exe": ["ARM WinINet Downloader"],
+            "acrobat.exe": ["Mozilla/3.0 (compatible; Acrobat 5.0; Windows)"],
+            "crwindowsclientservice.exe": ["CRWindowsClient"],
+            "adobecollabsync.exe": ["Mozilla/3.0 (compatible; Adobe Synchronizer 23.8.20533)"],
+            "adobe crash processor.exe": ["CRWindowsClient"],
+            "adobearm.exe": ["ARM WinINet Downloader"],
         }
         ua = self.get_argument(call, "Agent")
         proc = process["process_name"].lower()
