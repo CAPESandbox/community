@@ -154,6 +154,7 @@ class suspiciousHTML_Filename(Signature):
             "funds",
             "coin",
             "play",
+            "recording",
         ]
         has_match = False
 
