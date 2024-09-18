@@ -38,6 +38,7 @@ class ThreadManipulationRemoteProcess(Signature):
         "mousocoreworker.exe",
         "adobecollabsync.exe",
         "trustedinstaller.exe",
+        "adobe crash processor.exe"
     ]
 
     def __init__(self, *args, **kwargs):

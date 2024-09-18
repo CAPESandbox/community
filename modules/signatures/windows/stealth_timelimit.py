@@ -17,6 +17,19 @@ class StealthTimeout(Signature):
     ttps = ["T1497"]  # MITRE v6,7,8
     ttps += ["T1497.003"]  # MITRE v7,8
     mbcs = ["OB0001", "B0003", "B0003.003"]
+    whitelist = [
+        "svchost.exe",
+        "services.exe",
+        "acrobat.exe",
+        "explorer.exe",
+        "microsoftedgeupdate.exe",
+        "werfault.exe",
+        "taskhostw.exe",
+        "mousocoreworker.exe",
+        "adobecollabsync.exe",
+        "trustedinstaller.exe",
+        "adobe crash processor.exe"
+    ]
 
     filter_apinames = set(
         [
@@ -39,6 +52,9 @@ class StealthTimeout(Signature):
         self.curidx = 0
 
     def on_call(self, call, process):
+        pname = process["process_name"].lower()
+        if pname.lower() in self.whitelist:
+            return
         if process is not self.lastprocess:
             self.lastprocess = process
             self.systimeidx = 0

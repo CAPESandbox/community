@@ -35,7 +35,19 @@ class CreatesLargeKey(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.saw_large = False
         self.regkeyvals = set()
-        self.process_safelist = ["microsoftedgeupdate.exe", "winword.exe"]
+        self.process_safelist = [
+            "svchost.exe",
+            "services.exe",
+            "acrobat.exe",
+            "explorer.exe",
+            "microsoftedgeupdate.exe",
+            "werfault.exe",
+            "taskhostw.exe",
+            "mousocoreworker.exe",
+            "adobecollabsync.exe",
+            "trustedinstaller.exe",
+            "adobe crash processor.exe"
+        ]
 
     def on_call(self, call, process):
         if process.get("process_name", "").lower() in self.process_safelist:

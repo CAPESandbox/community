@@ -143,6 +143,7 @@ class StealthFile(Signature):
             r"^[A-Z]?:\\Windows\\Temp\\.*\.tmp$",
             r"^[A-Z]?:\\ProgramData\\Microsoft\\ClickToRun\\ProductReleases\\.*\.tmp$",
             r"^[A-Z]?:\\Program Files\\Microsoft Office\\root\\.*\.(xls|xlsx|doc|docx|ppt|pttx|tmp|dotx)",
+            r"^[A-Z]?:\\Windows\\ServiceProfiles\\LocalService\\AppData\\.*",
         ]
         url_whitelist = [
             r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\Recent\\CustomDestinations\\.*\.customDestinations.*\.TMP$",

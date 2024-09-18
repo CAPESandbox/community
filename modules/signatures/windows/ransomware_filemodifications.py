@@ -35,6 +35,19 @@ class RansomwareFileModifications(Signature):
     mbcs = ["OB0008", "E1486"]
 
     filter_apinames = set(["MoveFileWithProgressW", "MoveFileWithProgressTransactedW", "NtCreateFile", "NtWriteFile"])
+    whitelist = [
+        "svchost.exe",
+        "services.exe",
+        "acrobat.exe",
+        "explorer.exe",
+        "microsoftedgeupdate.exe",
+        "werfault.exe",
+        "taskhostw.exe",
+        "mousocoreworker.exe",
+        "adobecollabsync.exe",
+        "trustedinstaller.exe",
+        "adobe crash processor.exe"
+    ]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -46,6 +59,9 @@ class RansomwareFileModifications(Signature):
         self.handles = []
 
     def on_call(self, call, process):
+        pname = process["process_name"].lower()
+        if pname.lower() in self.whitelist:
+            return
         if not call["status"]:
             return None
         if call["api"].startswith("MoveFileWithProgress"):
