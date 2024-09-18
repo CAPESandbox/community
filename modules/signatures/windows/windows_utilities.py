@@ -117,6 +117,7 @@ class UsesWindowsUtilities(Signature):
             r"Adobe",
             r"Acrobat",
             r"Edge",
+            r"system32",
         ]
         ret = False
         cmdlines = self.results["behavior"]["summary"]["executed_commands"]
