@@ -24,7 +24,7 @@ class PDF_Annot_URLs_Checker(Signature):
     authors = ["Wassime BATTA"]
     minimum = "0.5"
 
-    filter_analysistypes = set(["file","static"])
+    filter_analysistypes = set(["file", "static"])
 
     malicious_tlds_file = "/opt/CAPEv2/data/malicioustlds.txt"
 
@@ -52,8 +52,9 @@ class PDF_Annot_URLs_Checker(Signature):
                 for entry in self.results["target"]["file"]["pdf"]["Annot_URLs"]:
                     entry_lower = entry.lower()
                     self.data.append({"url": entry})
-                    if entry_lower.endswith((".exe", ".php", ".bat", ".cmd", ".js", ".jse", ".vbs", ".vbe", ".ps1", ".psm1", ".sh")) \
-                            and not entry_lower.startswith("mailto:"):
+                    if entry_lower.endswith(
+                        (".exe", ".php", ".bat", ".cmd", ".js", ".jse", ".vbs", ".vbe", ".ps1", ".psm1", ".sh")
+                    ) and not entry_lower.startswith("mailto:"):
                         found_malicious_extension = True
 
                     if entry_lower.startswith("http://") or entry_lower.startswith("https://"):
