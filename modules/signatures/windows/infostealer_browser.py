@@ -109,8 +109,12 @@ class BrowserStealer(Signature):
             return None
 
         filename = None
-        if call["api"] == "NtQueryAttributesFile":
+        if call["api"] == "NtReadFile":
+            filename = self.get_argument(call, "HandleName")
+        elif call["api"] == "NtQueryAttributesFile":
             filename = self.get_argument(call, "FileName")
+        else:
+            filename = self.get_argument(call, "ExistingFileName")
         if not filename:
             return None
 
