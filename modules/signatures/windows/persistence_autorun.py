@@ -168,7 +168,7 @@ class Autorun(Signature):
             r".*\\Microsoft\\Windows NT\\CurrentVersion\\Windows\\load$",
             r".*\\Microsoft\\Windows\\CurrentVersion\\ShellServiceObjectDelayLoad\\.*",
             r".*\\System\\(CurrentControlSet|ControlSet001)\\Control\\Session\\ Manager\\AppCertDlls\\.*",
-            r# ".*\\Software\\(Wow6432Node\\)?Classes\\clsid\\[^\\]*\\InprocServer32\\.*",
+            # ".*\\Software\\(Wow6432Node\\)?Classes\\clsid\\[^\\]*\\InprocServer32\\.*",
             r".*\\Software\\(Wow6432Node\\)?Classes\\clsid\\[^\\]*\\LocalServer32\\.*",
             r".*\\Microsoft\\Command\\ Processor\\AutoRun$",
             r".*\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User\ Shell\ Folders\\Startup$",
