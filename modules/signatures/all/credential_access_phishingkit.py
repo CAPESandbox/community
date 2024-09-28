@@ -20,7 +20,7 @@ from lib.cuckoo.common.abstracts import Signature
 try:
     from chepy import Chepy
 except ImportError:
-    raise ImportError("Please install chepy")
+    raise ImportError("Optional! Missed dependency. Run: poetry run pip install chepy")
 
 import base64
 
