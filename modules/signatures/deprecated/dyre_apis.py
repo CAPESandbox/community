@@ -94,8 +94,8 @@ class Dyre_APIs(Signature):
         extract_c2s = True
 
         mutexs = [
-            "^(Global|Local)\\\\pen3j3832h$",
-            "^(Global|Local)\\\\u1nyj3rt20",
+            r"^(Global|Local)\\pen3j3832h$",
+            r"^(Global|Local)\\u1nyj3rt20",
         ]
         for mutex in mutexs:
             if self.check_mutex(pattern=mutex, regex=True):

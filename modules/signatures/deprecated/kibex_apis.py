@@ -60,9 +60,9 @@ class Kibex_APIs(Signature):
     def on_complete(self):
         bad_score = self.keylog_inits
         file_iocs = [
-            ".*\\\\ProgramData\\\\Browsers\.txt$",
-            ".*\\\\ProgramData\\\\Mails\.txt$",
-            ".*\\\\Temp\\\\\d{9,10}\.xml$",
+            r".*\\ProgramData\\Browsers\.txt$",
+            r".*\\ProgramData\\Mails\.txt$",
+            r".*\\Temp\\\d{9,10}\.xml$",
         ]
         for ioc in file_iocs:
             match = self.check_file(pattern=ioc, regex=True)
@@ -70,9 +70,9 @@ class Kibex_APIs(Signature):
                 bad_score += 3
 
         stealer_regkeys = [
-            ".*\\\\Google\\\\Google\\ Talk\\\\Accounts$",
-            ".*\\\\Google\\\\Google\\ Desktop\\\\Mailboxes$",
-            ".*\\\\Microsoft\\\\Internet\\ Account\\ Manager\\\\Accounts$",
+            r".*\\Google\\Google\\ Talk\\Accounts$",
+            r".*\\Google\\Google\\ Desktop\\Mailboxes$",
+            r".*\\Microsoft\\Internet\\ Account\\ Manager\\Accounts$",
         ]
         for ioc in stealer_regkeys:
             match = self.check_key(pattern=ioc, regex=True)
