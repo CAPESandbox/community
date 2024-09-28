@@ -62,26 +62,26 @@ class BrowserStealer(Signature):
             re.compile(r".*\\Microsoft\\Edge\\User\\ Data\\Default\\.*", re.I),
 
             # Google Chrome
-            re.compile(r".*\\Application\\ Data Data\\Google\\Chrome\\.*", re.I),
+            re.compile(r".*\\Application\\ Data\\Google\\Chrome\\.*", re.I),
             re.compile(r".*\\Local\\Google\\Chrome\\User\\ Data\\Default\\.*", re.I),
             re.compile(r".*\\AppData\\Local\\Google\\Chrome\\User\\ Data\\Default\\.*", re.I),
 
             # Chromium-based Browsers
-            re.compile(r".*\\Application\\ Data Data\\Chromium\\.*", re.I),
+            re.compile(r".*\\Application\\ Data\\Chromium\\.*", re.I),
             re.compile(r".*\\AppData\\Local\\Chromium\\.*", re.I),
-            re.compile(r".*\\Application\\ Data Data\\ChromePlus\\.*", re.I),
+            re.compile(r".*\\Application\\ Data\\ChromePlus\\.*", re.I),
             re.compile(r".*\\AppData\\Local\\MapleStudio\\ChromePlus\\.*", re.I),
-            re.compile(r".*\\Application\\ Data Data\\Nichrome\\.*", re.I),
-            re.compile(r".*\\Application\\ Data Data\\Bromium\\.*", re.I),
-            re.compile(r".*\\Application\\ Data Data\\RockMelt\\.*", re.I),
-            re.compile(r".*\\Application\\ Data Data\\Flock\\.*", re.I),
+            re.compile(r".*\\Application\\ Data\\Nichrome\\.*", re.I),
+            re.compile(r".*\\Application\\ Data\\Bromium\\.*", re.I),
+            re.compile(r".*\\Application\\ Data\\RockMelt\\.*", re.I),
+            re.compile(r".*\\Application\\ Data\\Flock\\.*", re.I),
             re.compile(r".*\\AppData\\Local\\Flock\\.*", re.I),
-            re.compile(r".*\\Application\\ Data Data\\Comodo\\Dragon\\.*", re.I),
+            re.compile(r".*\\Application\\ Data\\Comodo\\Dragon\\.*", re.I),
             re.compile(r".*\\AppData\\Local\\Comodo\\Dragon\\.*", re.I),
             re.compile(r".*\\BraveSoftware\\Brave-Browser\\User\\ Data\\Default\\.*", re.I),
 
             # Opera
-            re.compile(r".*\\Application\\ Data Data\\Opera\\.*", re.I),
+            re.compile(r".*\\Application\\ Data\\Opera\\.*", re.I),
             re.compile(r".*\\AppData\\Roaming\\Opera\\Opera\\.*", re.I),
             re.compile(r".*\\AppData\\Roaming\\Opera Software\\Opera Stable\\.*", re.I),
 
