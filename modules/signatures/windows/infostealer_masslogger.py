@@ -36,7 +36,7 @@ class MassLoggerVersion(Signature):
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.pathpat = "[A-Z]:\\\\.*\\\\AppData\\\\Local\\\\Temp\\\\[A-F0-9]{10}\\\\Log\.txt$"
+        self.pathpat = r"[A-Z]:\\.*\\AppData\\Local\\Temp\\[A-F0-9]{10}\\Log\.txt$"
         self.verpats = [
             "MassLogger\sv\d+\.\d+\.\d+\.\d+",
             "<\|\|\s(v)?\d+\.\d+\.\d+\.\d+\s\|\|>",
@@ -72,10 +72,10 @@ class MassLoggerArtifacts(Signature):
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.artifacts = [
-            "[A-Z]:\\\\Windows\\\\assembly\\\\NativeImages_v.*\\\\MassBin.*",
-            "[A-Z]:\\\\Windows\\\\assembly\\\\NativeImages_v.*\\\\MassLoggerBin.*",
-        ]
+        self.artifacts = (
+            r"[A-Z]:\\Windows\\assembly\\NativeImages_v.*\\MassBin.*",
+            r"[A-Z]:\\Windows\\assembly\\NativeImages_v.*\\MassLoggerBin.*",
+        )
 
     def on_call(self, call, process):
         if call["api"] == "FindFirstFileExW":
@@ -110,18 +110,16 @@ class MassLoggerFiles(Signature):
 
     def run(self):
         user = self.get_environ_entry(self.get_initial_process(), "UserName")
-        indicators = [
-            ".*\\\\AppData\\\\Local\\\\Temp\\\\[A-F0-9]{10}\\\\Log\.txt$",
-            ".*\\\\AppData\\\\Local\\\\Temp\\\\[A-F0-9]{10}\\\\Screenshot\.jpeg$",
-            ".*\\\\AppData\\\\Local\\\\Temp\\\\[A-F0-9]{10}\\\\DotNetZip-.*\.tmp$",
-        ]
+        indicators = (
+            r".*\\AppData\\Local\\Temp\\[A-F0-9]{10}\\Log\.txt$",
+            r".*\\AppData\\Local\\Temp\\[A-F0-9]{10}\\Screenshot\.jpeg$",
+            r".*\\AppData\\Local\\Temp\\[A-F0-9]{10}\\DotNetZip-.*\.tmp$",
+        )
         score = 0
 
         try:
             indicators.append(
-                ".*\\\\AppData\\\\Local\\\\Temp\\\\[A-F0-9]{10}\\\\"
-                + user.decode("utf-8")
-                + "_.*_[A-F0-9]{10}_\d{2}-\d{2}-\d{4}\s.*.zip"
+                ".*\\AppData\\Local\\Temp\\[A-F0-9]{10}\\" + user.decode("utf-8") + "_.*_[A-F0-9]{10}_\d{2}-\d{2}-\d{4}\s.*.zip"
             )
         except Exception:
             return False

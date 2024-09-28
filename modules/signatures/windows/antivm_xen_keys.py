@@ -30,9 +30,9 @@ class XenDetectKeys(Signature):
 
     def run(self):
         indicators = [
-            ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\ACPI\\\\XEN0000.*",
-            ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\XEN.*",
-            ".*\\\\HARDWARE\\\\ACPI\\\\(DSDT|FADT|RSDT)\\\\Xen.*",
+            r".*\\SYSTEM\\(CurrentControlSet|ControlSet001)\\Enum\\ACPI\\XEN0000.*",
+            r".*\\SYSTEM\\(CurrentControlSet|ControlSet001)\\Enum\\XEN.*",
+            r".*\\HARDWARE\\ACPI\\(DSDT|FADT|RSDT)\\Xen.*",
         ]
         for indicator in indicators:
             if self.check_key(pattern=indicator, regex=True):

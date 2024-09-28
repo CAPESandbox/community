@@ -31,7 +31,7 @@ class DisableTaskMgr(Signature):
 
     def run(self):
         if self.check_write_key(
-            pattern=".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\DisableTaskMgr$",
+            pattern=r".*\\SOFTWARE\\(Wow6432Node\\)?\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\DisableTaskMgr$",
             regex=True,
         ):
             return True

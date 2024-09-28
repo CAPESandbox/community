@@ -31,7 +31,7 @@ class TampersPowerShellLogging(Signature):
 
     def run(self):
         indicators = [
-            "HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Policies\\\\Microsoft\\\\Windows\\\\PowerShell\\\\.*",
+            r"HKEY_LOCAL_MACHINE\\SOFTWARE\\(Wow6432Node\\)?Policies\\Microsoft\\Windows\\PowerShell\\.*",
         ]
 
         for indicator in indicators:

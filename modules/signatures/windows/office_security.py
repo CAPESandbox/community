@@ -34,10 +34,10 @@ class OfficeSecurity(Signature):
         if any(e in self.results["info"]["package"] for e in office_pkgs):
             return False
 
-        reg_indicators = [
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Office\\\\.*\\\\Security\\\\.*",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Policies\\\\Microsoft\\\\Office\\\\.*\\\\Security\\\\.*",
-        ]
+        reg_indicators = (
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Office\\.*\\Security\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Policies\\Microsoft\\Office\\.*\\Security\\.*",
+        )
 
         for indicator in reg_indicators:
             if self.check_write_key(pattern=indicator, regex=True):

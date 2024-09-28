@@ -118,10 +118,10 @@ class RegistryCredentialStoreAccess(Signature):
 
     def run(self):
         ret = False
-        reg_indicators = [
-            "HKEY_LOCAL_MACHINE\\\\SAM$",
-            "HKEY_LOCAL_MACHINE\\\\SYSTEM$",
-        ]
+        reg_indicators = (
+            r"HKEY_LOCAL_MACHINE\\SAM$",
+            r"HKEY_LOCAL_MACHINE\\SYSTEM$",
+        )
 
         for indicator in reg_indicators:
             match = self.check_key(pattern=indicator, regex=True)
@@ -148,7 +148,7 @@ class RegistryLSASecretsAccess(Signature):
 
     def run(self):
         indicators = [
-            "HKEY_LOCAL_MACHINE\\\\SECURITY\\\\Policy\\\\Secrets$",
+            r"HKEY_LOCAL_MACHINE\\SECURITY\\Policy\\Secrets$",
         ]
 
         for indicator in indicators:
@@ -174,9 +174,9 @@ class FileCredentialStoreAccess(Signature):
 
     def run(self):
         indicators = [
-            ".*\\\\Windows\\\\repair\\\\sam",
-            ".*\\\\Windows\\\\System32\\\\config\\\\RegBack\\\\SAM",
-            ".*\\\\Windows\\\\system32\\\\config\\\\SAM",
+            r".*\\Windows\\repair\\sam",
+            r".*\\Windows\\System32\\config\\RegBack\\SAM",
+            r".*\\Windows\\system32\\config\\SAM",
         ]
 
         for indicator in indicators:
@@ -202,9 +202,9 @@ class FileCredentialStoreWrite(Signature):
 
     def run(self):
         indicators = [
-            ".*\\\\Windows\\\\repair\\\\sam",
-            ".*\\\\Windows\\\\System32\\\\config\\\\RegBack\\\\SAM",
-            ".*\\\\Windows\\\\system32\\\\config\\\\SAM",
+            r".*\\Windows\\repair\\sam",
+            r".*\\Windows\\System32\\config\\RegBack\\SAM",
+            r".*\\Windows\\system32\\config\\SAM",
         ]
 
         for indicator in indicators:

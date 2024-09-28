@@ -32,11 +32,11 @@ class DisablesSmartScreen(Signature):
     def run(self):
         re_match = False
         cmd_match = False
-        indicators = [
-            ".*\\\\Windows\\\\CurrentVersion\\\\explorer\\\\SmartScreenEnabled$",
-            ".*\\\\Windows\\\\CurrentVersion\\\\AppHost\\\\SmartScreenEnabled$",
-            ".*\\\\MicrosoftEdge\\\\PhishingFilter$",
-        ]
+        indicators = (
+            r".*\\\\Windows\\\\CurrentVersion\\\\explorer\\\\SmartScreenEnabled$",
+            r".*\\\\Windows\\\\CurrentVersion\\\\AppHost\\\\SmartScreenEnabled$",
+            r".*\\\\MicrosoftEdge\\\\PhishingFilter$",
+        )
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)

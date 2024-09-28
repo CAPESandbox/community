@@ -29,8 +29,8 @@ class SandboxJoeAnubisDetectFiles(Signature):
 
     def run(self):
         indicators = [
-            "C\:\\\\sample\.exe$",
-            "C\:\\\\InsideTm\\\\.*",
+            r"C\:\\sample\.exe$",
+            r"C\:\\InsideTm\\.*",
         ]
 
         for indicator in indicators:

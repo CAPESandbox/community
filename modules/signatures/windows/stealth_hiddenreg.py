@@ -19,11 +19,11 @@ class StealthHiddenReg(Signature):
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        reg_indicators = [
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Advanced\\\\Hidden$",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Advanced\\\\ShowSuperHidden$",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Advanced\\\\SuperHidden$",
-        ]
+        reg_indicators = (
+            r".*\\Software\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\Hidden$",
+            r".*\\Software\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\ShowSuperHidden$",
+            r".*\\Software\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\SuperHidden$",
+        )
 
         for indicator in reg_indicators:
             reg_match = self.check_write_key(pattern=indicator, regex=True, all=True)

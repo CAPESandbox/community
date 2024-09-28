@@ -90,9 +90,7 @@ class UACBypassDelegateExecuteSdclt(Signature):
         regkey = False
         ret = False
 
-        keys = [
-            ".*\\\\Software\\\\Classes\\\\Folder\\\\shell\\\\open\\\\command\\\\DelegateExecute$",
-        ]
+        keys = (r".*\\Software\\Classes\\Folder\\shell\\open\\command\\DelegateExecute$",)
 
         for check in keys:
             match = self.check_write_key(pattern=check, regex=True)
@@ -182,7 +180,7 @@ class UACBypassFodhelper(Signature):
 
     def run(self):
         ret = False
-        reg_indicators = ["HKEY_CURRENT_USER\\\\Software\\\\Classes\\\\ms-settings\\\\shell \\\\open\\\\command\\\\*."]
+        reg_indicators = (r"HKEY_CURRENT_USER\\Software\\Classes\\ms-settings\\shell \\open\\command\\*.",)
 
         for indicator in reg_indicators:
             match = self.check_write_key(pattern=indicator, regex=True)
@@ -205,11 +203,11 @@ class UACBypassCMSTPCOM(Signature):
 
     def run(self):
         # CMSTPLUA, CMLUAUTIL, Connection Manager LUA Host Object
-        indicators = [
-            ".*\\\\Windows\\\\(SysWOW64|System32)\\\\DllHost\.exe.*\/Processid:(\{)?3E5FC7F9-9A51-4367-9063-A120244FBEC7(\})?",
-            ".*\\\\Windows\\\\(SysWOW64|System32)\\\\DllHost\.exe.*\/Processid:(\{)?3E000D72-A845-4CD9-BD83-80C07C3B881F(\})?",
-            ".*\\\\Windows\\\\(SysWOW64|System32)\\\\DllHost\.exe.*\/Processid:(\{)?BA126F01-2166-11D1-B1D0-00805FC1270E(\})?",
-        ]
+        indicators = (
+            r".*\\Windows\\(SysWOW64|System32)\\DllHost\.exe.*\/Processid:(\{)?3E5FC7F9-9A51-4367-9063-A120244FBEC7(\})?",
+            r".*\\Windows\\(SysWOW64|System32)\\DllHost\.exe.*\/Processid:(\{)?3E000D72-A845-4CD9-BD83-80C07C3B881F(\})?",
+            r".*\\Windows\\(SysWOW64|System32)\\DllHost\.exe.*\/Processid:(\{)?BA126F01-2166-11D1-B1D0-00805FC1270E(\})?",
+        )
 
         for indicator in indicators:
             match = self.check_executed_command(pattern=indicator, regex=True)

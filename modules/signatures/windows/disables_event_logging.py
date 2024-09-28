@@ -30,9 +30,7 @@ class DisablesEventLogging(Signature):
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        indicators = [
-            ".*\\\\System\\\\CurrentControlSet\\\\Control\\\\WMI\\\\Autologger\\\\EventLog-.*",
-        ]
+        indicators = (r".*\\System\\CurrentControlSet\\Control\\WMI\\Autologger\\EventLog-.*",)
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)

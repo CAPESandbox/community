@@ -42,32 +42,32 @@ class BrowserStealer(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.filematches = set()
         self.saw_stealer = False
-        self.indicators = [
-            re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\signons\.sqlite$", re.I),
-            re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\secmod\.db$", re.I),
-            re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\cert8\.db$", re.I),
-            re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\key3\.db$", re.I),
-            re.compile(".*\\\\History\\\\History\.IE5\\\\index\.dat$", re.I),
-            re.compile(".*\\\\Cookies\\\\.*", re.I),
-            re.compile(".*\\\\Temporary\\ Internet\\ Files\\\\Content\.IE5\\\\index\.dat$", re.I),
-            re.compile(".*\\\\Application\\ Data\\\\Google\\\\Chrome\\\\.*", re.I),
-            re.compile(".*\\\\Local\\\\Google\\\\Chrome\\\\User\\ Data\\\\Default\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data\\\\Mozilla\\\\Firefox\\\\.*", re.I),
-            re.compile(".*\\\\AppData\\\\Roaming\\\\Mozilla\\\\Firefox\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data\\\\Opera\\\\.*", re.I),
-            re.compile(".*\\\\AppData\\\\Roaming\\\\Opera\\\\Opera\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data\\\\Chromium\\\\.*", re.I),
-            re.compile(".*\\\\AppData\\\\Local\\\\Chromium\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data\\\\ChromePlus\\\\.*", re.I),
-            re.compile(".*\\\\AppData\\\\Local\\\\MapleStudio\\\\ChromePlus\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data\\\\Nichrome\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data\\\\Bromium\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data\\\\RockMelt\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data\\\\Flock\\\\.*", re.I),
-            re.compile(".*\\\\AppData\\\\Local\\\\Flock\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data\\\\Comodo\\\\Dragon\\\\.*", re.I),
-            re.compile(".*\\\\AppData\\\\Local\\\\Comodo\\\\Dragon\\\\.*", re.I),
-        ]
+        self.indicators = (
+            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\signons\.sqlite$", re.I),
+            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\secmod\.db$", re.I),
+            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\cert8\.db$", re.I),
+            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\key3\.db$", re.I),
+            re.compile(r".*\\History\\History\.IE5\\index\.dat$", re.I),
+            re.compile(r".*\\Cookies\\.*", re.I),
+            re.compile(r".*\\Temporary\\ Internet\\ Files\\Content\.IE5\\index\.dat$", re.I),
+            re.compile(r".*\\Application\\ Data\\Google\\Chrome\\.*", re.I),
+            re.compile(r".*\\Local\\Google\\Chrome\\User\\ Data\\Default\\.*", re.I),
+            re.compile(r".*\\Application\\ Data\\Mozilla\\Firefox\\.*", re.I),
+            re.compile(r".*\\AppData\\Roaming\\Mozilla\\Firefox\\.*", re.I),
+            re.compile(r".*\\Application\\ Data\\Opera\\.*", re.I),
+            re.compile(r".*\\AppData\\Roaming\\Opera\\Opera\\.*", re.I),
+            re.compile(r".*\\Application\\ Data\\Chromium\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\Chromium\\.*", re.I),
+            re.compile(r".*\\Application\\ Data\\ChromePlus\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\MapleStudio\\ChromePlus\\.*", re.I),
+            re.compile(r".*\\Application\\ Data\\Nichrome\\.*", re.I),
+            re.compile(r".*\\Application\\ Data\\Bromium\\.*", re.I),
+            re.compile(r".*\\Application\\ Data\\RockMelt\\.*", re.I),
+            re.compile(r".*\\Application\\ Data\\Flock\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\Flock\\.*", re.I),
+            re.compile(r".*\\Application\\ Data\\Comodo\\Dragon\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\Comodo\\Dragon\\.*", re.I),
+        )
 
     def on_call(self, call, process):
         # If the current process appears to be a browser, continue.

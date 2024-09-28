@@ -29,19 +29,19 @@ class DisablesBackups(Signature):
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        indicators = [
-            ".*\\\\Software\\\\Policies\\\\Microsoft\\\\Windows\\\\Backup\\\\Client\\\\DisableBackupToDisk",
-            ".*\\\\Software\\\\Policies\\\\Microsoft\\\\Windows\\\\Backup\\\\Client\\\\DisableBackupToNetwork",
-            ".*\\\\Software\\\\Policies\\\\Microsoft\\\\Windows\\\\Backup\\\\Client\\\\DisableBackupToOptical",
-            ".*\\\\Software\\\\Policies\\\\Microsoft\\\\Windows\\\\Backup\\\\Client\\\\DisableBackupLauncher",
-            ".*\\\\Software\\\\Policies\\\\Microsoft\\\\Windows\\\\Backup\\\\Client\\\\DisableRestoreUI",
-            ".*\\\\Software\\\\Policies\\\\Microsoft\\\\Windows\\\\Backup\\\\Client\\\\DisableBackupUI",
-            ".*\\\\Software\\\\Policies\\\\Microsoft\\\\Windows\\\\Backup\\\\Client\\\\DisableSystemBackupUI",
-            ".*\\\\Software\\\\Policies\\\\Microsoft\\\\Windows\\\\Backup\\\\Client\\\\NoBackupToDisk",
-            ".*\\\\Software\\\\Policies\\\\Microsoft\\\\Windows\\\\Backup\\\\Client\\\\NoBackupToNetwork",
-            ".*\\\\Software\\\\Policies\\\\Microsoft\\\\Windows\\\\Backup\\\\Client\\\\NoBackupToOptical",
-            ".*\\\\Software\\\\Policies\\\\Microsoft\\\\Windows\\\\Backup\\\\Client\\\\NoRunNowBackup",
-        ]
+        indicators = (
+            r".*\\Software\\Policies\\Microsoft\\Windows\\Backup\\Client\\DisableBackupToDisk",
+            r".*\\Software\\Policies\\Microsoft\\Windows\\Backup\\Client\\DisableBackupToNetwork",
+            r".*\\Software\\Policies\\Microsoft\\Windows\\Backup\\Client\\DisableBackupToOptical",
+            r".*\\Software\\Policies\\Microsoft\\Windows\\Backup\\Client\\DisableBackupLauncher",
+            r".*\\Software\\Policies\\Microsoft\\Windows\\Backup\\Client\\DisableRestoreUI",
+            r".*\\Software\\Policies\\Microsoft\\Windows\\Backup\\Client\\DisableBackupUI",
+            r".*\\Software\\Policies\\Microsoft\\Windows\\Backup\\Client\\DisableSystemBackupUI",
+            r".*\\Software\\Policies\\Microsoft\\Windows\\Backup\\Client\\NoBackupToDisk",
+            r".*\\Software\\Policies\\Microsoft\\Windows\\Backup\\Client\\NoBackupToNetwork",
+            r".*\\Software\\Policies\\Microsoft\\Windows\\Backup\\Client\\NoBackupToOptical",
+            r".*\\Software\\Policies\\Microsoft\\Windows\\Backup\\Client\\NoRunNowBackup",
+        )
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)

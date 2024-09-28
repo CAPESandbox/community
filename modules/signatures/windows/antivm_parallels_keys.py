@@ -31,9 +31,9 @@ class ParallelsDetectKeys(Signature):
 
     def run(self):
         indicators = [
-            ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\PCI\\\\VEN_1AB8&DEV_4000&SUBSYS_04001AB8&REV_00$",
-            ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\PCI\\\\VEN_1AB8&DEV_4005&SUBSYS_04001AB8&REV_00$",
-            ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\PCI\\\\VEN_1AB8&DEV_4006&SUBSYS_04061AB8&REV_00$",
+            r".*\\SYSTEM\\(CurrentControlSet|ControlSet001)\\Enum\\PCI\\VEN_1AB8&DEV_4000&SUBSYS_04001AB8&REV_00$",
+            r".*\\SYSTEM\\(CurrentControlSet|ControlSet001)\\Enum\\PCI\\VEN_1AB8&DEV_4005&SUBSYS_04001AB8&REV_00$",
+            r".*\\SYSTEM\\(CurrentControlSet|ControlSet001)\\Enum\\PCI\\VEN_1AB8&DEV_4006&SUBSYS_04061AB8&REV_00$",
         ]
         for indicator in indicators:
             if self.check_key(pattern=indicator, regex=True):

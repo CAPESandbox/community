@@ -29,7 +29,7 @@ class BrowserHelperObject(Signature):
 
     def run(self):
         if self.check_write_key(
-            pattern=".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Browser\\ Helper\\ Objects\\\\.*",
+            pattern=r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Explorer\\Browser\\ Helper\\ Objects\\.*",
             regex=True,
         ):
             return True

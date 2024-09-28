@@ -38,7 +38,7 @@ class Flame(Signature):
                 self.mbcs += ["OC0003", "C0042"]  # micro-behaviour
                 return True
 
-        indicators = [".*\\\\Microsoft Shared\\\\MSSecurityMgr\\\\.*", ".*\\\\Ef_trace\.log$"]
+        indicators = (r".*\\Microsoft Shared\\MSSecurityMgr\\.*", r".*\\Ef_trace\.log$")
 
         for indicator in indicators:
             if self.check_file(pattern=indicator, regex=True):

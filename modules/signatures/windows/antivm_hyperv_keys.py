@@ -31,7 +31,7 @@ class HyperVDetectKeys(Signature):
 
     def run(self):
         indicators = [
-            ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\ACPI\\\\Hyper_V_Gen_Counter_V1$",
+            r".*\\SYSTEM\\(CurrentControlSet|ControlSet001)\\Enum\\ACPI\\Hyper_V_Gen_Counter_V1$",
         ]
 
         for indicator in indicators:

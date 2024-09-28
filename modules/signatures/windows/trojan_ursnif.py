@@ -31,23 +31,21 @@ class UrsnifBehavior(Signature):
 
     def run(self):
         score = 0
-        guid = "[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}"
-        regpath = "HKEY_CURRENT_USER\\\\Software\\\\AppDataLow\\\\Software\\\\Microsoft"
+        guid = r"[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}"
+        regpath = r"HKEY_CURRENT_USER\\Software\\AppDataLow\\Software\\Microsoft"
         regkeys = [
             "Client",
             "Client32",
             "Client64",
         ]
         registry_indicators = []
-        file_indicators = [".*\\\\mailslot\\\\[a-z]?(sl)[a-z0-9]{1,}$", ".*\\\\AppData\\\\Roaming\\\\Microsoft\\\\.*\\\\.*.dll$"]
-        mutex_indicators = "^Local\\\\\{[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}\}$"
+        file_indicators = (r".*\\mailslot\\[a-z]?(sl)[a-z0-9]{1,}$", r".*\\AppData\\Roaming\\Microsoft\\.*\\.*.dll$")
+        mutex_indicators = r"^Local\\\{[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}\}$"
 
         for rkey in regkeys:
-            registry_indicators.append(regpath + "\\\\" + guid + "\\\\" + rkey + "$")
+            registry_indicators.append(regpath + "\\" + guid + "\\" + rkey + "$")
 
-        registry_indicators.append(
-            ".*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet Settings\\\\EnableSPDY3_0$"
-        )
+        registry_indicators.append(r".*\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\EnableSPDY3_0$")
 
         for rindicator in registry_indicators:
             match = self.check_write_key(pattern=rindicator, regex=True)

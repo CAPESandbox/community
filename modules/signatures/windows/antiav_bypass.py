@@ -35,7 +35,7 @@ class ModifiesAttachmentManager(Signature):
 
     def run(self):
         reg_indicators = [
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Attachments\\\\SaveZoneInformation$",
+            r".*\\Software\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Policies\\Attachments\\SaveZoneInformation$",
         ]
 
         for indicator in reg_indicators:

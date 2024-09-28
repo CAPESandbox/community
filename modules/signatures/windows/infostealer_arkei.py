@@ -27,9 +27,7 @@ class ArkeiFiles(Signature):
     mbcs = ["OC0001", "C0016", "C0046"]  # micro-behaviour
 
     def run(self):
-        indicators = [
-            ".*\\\\ProgramData\\\\Arkei-.*",
-        ]
+        indicators = (r".*\\ProgramData\\Arkei-.*",)
 
         for indicator in indicators:
             match = self.check_file(pattern=indicator, regex=True)

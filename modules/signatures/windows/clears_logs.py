@@ -33,9 +33,9 @@ class ClearsLogs(Signature):
 
     def run(self):
         file_indicators = [
-            ".*\\\\Windows\\\\Logs.*",
-            ".*\\\\inetpub\\\\logs\\\\LogFiles.*",
-            ".*\\\\Windows\\\\System32\\\\Winevt.*",
+            r".*\\Windows\\Logs.*",
+            r".*\\inetpub\\logs\\LogFiles.*",
+            r".*\\Windows\\System32\\Winevt.*",
             ".*\.etl$",
             ".*\.evt$",
             ".*\.evtx$",

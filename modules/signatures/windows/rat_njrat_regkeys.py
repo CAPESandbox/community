@@ -31,10 +31,10 @@ class NjratRegkeys(Signature):
     def run(self):
         njrat_keys = False
 
-        indicators = [
-            "HKEY_CURRENT_USER\\\\di$",
-            "HKEY_CURRENT_USER\\\\.*\\\\\[kl\]$",
-        ]
+        indicators = (
+            r"HKEY_CURRENT_USER\\di$",
+            r"HKEY_CURRENT_USER\\.*\\\[kl\]$",
+        )
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)

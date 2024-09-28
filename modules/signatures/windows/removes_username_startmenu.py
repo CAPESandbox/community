@@ -30,7 +30,7 @@ class RemovesUsernameStartMenu(Signature):
 
     def run(self):
         indicators = [
-            "HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoUserNameInStartMenu",
+            r"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\NoUserNameInStartMenu",
         ]
 
         for indicator in indicators:
