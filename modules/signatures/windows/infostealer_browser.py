@@ -46,61 +46,61 @@ class BrowserStealer(Signature):
         self.saw_stealer = False
         self.indicators = [
             # Firefox
-            re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\signons\.sqlite$", re.I),
-            re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\cookies\.sqlite$", re.I),
-            re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\secmod\.db$", re.I),
-            re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\cert8\.db$", re.I),
-            re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\key3\.db$", re.I),
-            re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\places\.sqlite$", re.I),
-            re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\logins\.json$", re.I),
-            re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\formhistory\.sqlite$", re.I),
+            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\signons\.sqlite$", re.I),
+            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\cookies\.sqlite$", re.I),
+            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\secmod\.db$", re.I),
+            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\cert8\.db$", re.I),
+            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\key3\.db$", re.I),
+            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\places\.sqlite$", re.I),
+            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\logins\.json$", re.I),
+            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\formhistory\.sqlite$", re.I),
 
             # Internet Explorer/Edge
-            re.compile(".*\\\\History\\\\History.IE5\\\\index\.dat$", re.I),
-            re.compile(".*\\\\Cookies\\\\.*", re.I),
-            re.compile(".*\\\\Temporary Internet Files\\\\Content.IE5\\\\index\.dat$", re.I),
-            re.compile(".*\\\\Microsoft\\\\Edge\\\\User\\ Data\\\\Default\\\\.*", re.I),
+            re.compile(r".*\\History\\History.IE5\\index\.dat$", re.I),
+            re.compile(r".*\\Cookies\\.*", re.I),
+            re.compile(r".*\\Temporary Internet Files\\Content.IE5\\index\.dat$", re.I),
+            re.compile(r".*\\Microsoft\\Edge\\User\\ Data\\Default\\.*", re.I),
 
             # Google Chrome
-            re.compile(".*\\\\Application\\ Data Data\\\\Google\\\\Chrome\\\\.*", re.I),
-            re.compile(".*\\\\Local\\\\Google\\\\Chrome\\\\User\\ Data\\\\Default\\\\.*", re.I),
-            re.compile(".*\\\\AppData\\\\Local\\\\Google\\\\Chrome\\\\User\\ Data\\\\Default\\\\.*", re.I),
+            re.compile(r".*\\Application\\ Data Data\\Google\\Chrome\\.*", re.I),
+            re.compile(r".*\\Local\\Google\\Chrome\\User\\ Data\\Default\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\Google\\Chrome\\User\\ Data\\Default\\.*", re.I),
 
             # Chromium-based Browsers
-            re.compile(".*\\\\Application\\ Data Data\\\\Chromium\\\\.*", re.I),
-            re.compile(".*\\\\AppData\\\\Local\\\\Chromium\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data Data\\\\ChromePlus\\\\.*", re.I),
-            re.compile(".*\\\\AppData\\\\Local\\\\MapleStudio\\\\ChromePlus\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data Data\\\\Nichrome\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data Data\\\\Bromium\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data Data\\\\RockMelt\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data Data\\\\Flock\\\\.*", re.I),
-            re.compile(".*\\\\AppData\\\\Local\\\\Flock\\\\.*", re.I),
-            re.compile(".*\\\\Application\\ Data Data\\\\Comodo\\\\Dragon\\\\.*", re.I),
-            re.compile(".*\\\\AppData\\\\Local\\\\Comodo\\\\Dragon\\\\.*", re.I),
-            re.compile(".*\\\\BraveSoftware\\\\Brave-Browser\\\\User\\ Data\\\\Default\\\\.*", re.I),
+            re.compile(r".*\\Application\\ Data Data\\Chromium\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\Chromium\\.*", re.I),
+            re.compile(r".*\\Application\\ Data Data\\ChromePlus\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\MapleStudio\\ChromePlus\\.*", re.I),
+            re.compile(r".*\\Application\\ Data Data\\Nichrome\\.*", re.I),
+            re.compile(r".*\\Application\\ Data Data\\Bromium\\.*", re.I),
+            re.compile(r".*\\Application\\ Data Data\\RockMelt\\.*", re.I),
+            re.compile(r".*\\Application\\ Data Data\\Flock\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\Flock\\.*", re.I),
+            re.compile(r".*\\Application\\ Data Data\\Comodo\\Dragon\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\Comodo\\Dragon\\.*", re.I),
+            re.compile(r".*\\BraveSoftware\\Brave-Browser\\User\\ Data\\Default\\.*", re.I),
 
             # Opera
-            re.compile(".*\\\\Application\\ Data Data\\\\Opera\\\\.*", re.I),
-            re.compile(".*\\\\AppData\\\\Roaming\\\\Opera\\\\Opera\\\\.*", re.I),
-            re.compile(".*\\\\AppData\\\\Roaming\\\\Opera Software\\\\Opera Stable\\\\.*", re.I),
+            re.compile(r".*\\Application\\ Data Data\\Opera\\.*", re.I),
+            re.compile(r".*\\AppData\\Roaming\\Opera\\Opera\\.*", re.I),
+            re.compile(r".*\\AppData\\Roaming\\Opera Software\\Opera Stable\\.*", re.I),
 
             # Safari
-            re.compile(".*\\\\Apple Computer\\\\Safari\\\\WebpageIcons\.db$", re.I),
-            re.compile(".*\\\\Apple Computer\\\\Safari\\\\History\.db$", re.I),
-            re.compile(".*\\\\Apple Computer\\\\Safari\\\\LastSession\.plist$", re.I),
+            re.compile(r".*\\Apple Computer\\Safari\\WebpageIcons\.db$", re.I),
+            re.compile(r".*\\Apple Computer\\Safari\\History\.db$", re.I),
+            re.compile(r".*\\Apple Computer\\Safari\\LastSession\.plist$", re.I),
 
             # Others
-            re.compile(".*\\\\AppData\\\\Local\\\\Spark\\\\User\\ Data\\\\Default\\\\.*", re.I),
-            re.compile(".*\\\\AppData\\\\Local\\\\Nichrome\\\\User\\ Data\\\\Default\\\\.*", re.I),
-            re.compile(".*\\\\AppData\\\\Local\\\\Titan Browser\\\\User\\ Data\\\\Default\\\\.*", re.I),
-            re.compile(".*\\\\AppData\\\\Local\\\\Rockmelt\\\\User\\ Data\\\\Default\\\\.*", re.I),
-            re.compile(".*\\\\AppData\\\\Local\\\\Torch\\\\User\\ Data\\\\Default\\\\.*", re.I),
-            re.compile(".*\\\\AppData\\\\Local\\\\.*\\\\YandexBrowser\\\\User\\ Data\\\\Default\\\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\Spark\\User\\ Data\\Default\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\Nichrome\\User\\ Data\\Default\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\Titan Browser\\User\\ Data\\Default\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\Rockmelt\\User\\ Data\\Default\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\Torch\\User\\ Data\\Default\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\.*\\YandexBrowser\\User\\ Data\\Default\\.*", re.I),
         ]
 
     def on_call(self, call, process):
-        
+
 
         # If the current process appears to be a browser, continue.
         # TODO: implement better checks here -- the malware can be named whatever it wants or can
