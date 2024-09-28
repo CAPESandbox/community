@@ -54,18 +54,15 @@ class BrowserStealer(Signature):
             re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\places\.sqlite$", re.I),
             re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\logins\.json$", re.I),
             re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\formhistory\.sqlite$", re.I),
-
             # Internet Explorer/Edge
             re.compile(r".*\\History\\History.IE5\\index\.dat$", re.I),
             re.compile(r".*\\Cookies\\.*", re.I),
             re.compile(r".*\\Temporary Internet Files\\Content.IE5\\index\.dat$", re.I),
             re.compile(r".*\\Microsoft\\Edge\\User Data\\Default\\.*", re.I),
-
             # Google Chrome
             re.compile(r".*\\Application\\User Data\\Google\\Chrome\\.*", re.I),
             re.compile(r".*\\Local\\Google\\Chrome\\User Data\\Default\\.*", re.I),
             re.compile(r".*\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\.*", re.I),
-
             # Chromium-based Browsers
             re.compile(r".*\\Application\\User Data\\Chromium\\.*", re.I),
             re.compile(r".*\\AppData\\Local\\Chromium\\.*", re.I),
@@ -82,17 +79,14 @@ class BrowserStealer(Signature):
             re.compile(r".*\\Application\\User Data\\Comodo\\Dragon\\.*", re.I),
             re.compile(r".*\\AppData\\Local\\Comodo\\Dragon\\.*", re.I),
             re.compile(r".*\\BraveSoftware\\Brave-Browser\\User Data\\Default\\.*", re.I),
-
             # Opera
             re.compile(r".*\\Application\\User Data\\Opera\\.*", re.I),
             re.compile(r".*\\AppData\\Roaming\\Opera\\Opera\\.*", re.I),
             re.compile(r".*\\AppData\\Roaming\\Opera Software\\Opera Stable\\.*", re.I),
-
             # Safari
             re.compile(r".*\\Apple Computer\\Safari\\WebpageIcons\.db$", re.I),
             re.compile(r".*\\Apple Computer\\Safari\\History\.db$", re.I),
             re.compile(r".*\\Apple Computer\\Safari\\LastSession\.plist$", re.I),
-
             # Others
             re.compile(r".*\\AppData\\Local\\Spark\\User Data\\Default\\.*", re.I),
             re.compile(r".*\\AppData\\Local\\Nichrome\\User Data\\Default\\.*", re.I),
