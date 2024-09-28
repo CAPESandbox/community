@@ -59,29 +59,32 @@ class BrowserStealer(Signature):
             re.compile(r".*\\History\\History.IE5\\index\.dat$", re.I),
             re.compile(r".*\\Cookies\\.*", re.I),
             re.compile(r".*\\Temporary Internet Files\\Content.IE5\\index\.dat$", re.I),
-            re.compile(r".*\\Microsoft\\Edge\\User\\ Data\\Default\\.*", re.I),
+            re.compile(r".*\\Microsoft\\Edge\\User Data\\Default\\.*", re.I),
 
             # Google Chrome
-            re.compile(r".*\\Application\\ Data\\Google\\Chrome\\.*", re.I),
-            re.compile(r".*\\Local\\Google\\Chrome\\User\\ Data\\Default\\.*", re.I),
-            re.compile(r".*\\AppData\\Local\\Google\\Chrome\\User\\ Data\\Default\\.*", re.I),
+            re.compile(r".*\\Application\\User Data\\Google\\Chrome\\.*", re.I),
+            re.compile(r".*\\Local\\Google\\Chrome\\User Data\\Default\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\.*", re.I),
 
             # Chromium-based Browsers
-            re.compile(r".*\\Application\\ Data\\Chromium\\.*", re.I),
+            re.compile(r".*\\Application\\User Data\\Chromium\\.*", re.I),
             re.compile(r".*\\AppData\\Local\\Chromium\\.*", re.I),
-            re.compile(r".*\\Application\\ Data\\ChromePlus\\.*", re.I),
+            re.compile(r".*\\Application\\User Data\\ChromePlus\\.*", re.I),
             re.compile(r".*\\AppData\\Local\\MapleStudio\\ChromePlus\\.*", re.I),
-            re.compile(r".*\\Application\\ Data\\Nichrome\\.*", re.I),
-            re.compile(r".*\\Application\\ Data\\Bromium\\.*", re.I),
-            re.compile(r".*\\Application\\ Data\\RockMelt\\.*", re.I),
-            re.compile(r".*\\Application\\ Data\\Flock\\.*", re.I),
+            re.compile(r".*\\Application\\User Data\\Nichrome\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\Nichrome\\User Data\\Default\\.*", re.I),
+            re.compile(r".*\\Application\\User Data\\Bromium\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\Bromium\\User Data\\Default\\.*", re.I),
+            re.compile(r".*\\Application\\User Data\\RockMelt\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\RockMelt\\User Data\\Default\\.*", re.I),
+            re.compile(r".*\\Application\\User Data\\Flock\\.*", re.I),
             re.compile(r".*\\AppData\\Local\\Flock\\.*", re.I),
-            re.compile(r".*\\Application\\ Data\\Comodo\\Dragon\\.*", re.I),
+            re.compile(r".*\\Application\\User Data\\Comodo\\Dragon\\.*", re.I),
             re.compile(r".*\\AppData\\Local\\Comodo\\Dragon\\.*", re.I),
-            re.compile(r".*\\BraveSoftware\\Brave-Browser\\User\\ Data\\Default\\.*", re.I),
+            re.compile(r".*\\BraveSoftware\\Brave-Browser\\User Data\\Default\\.*", re.I),
 
             # Opera
-            re.compile(r".*\\Application\\ Data\\Opera\\.*", re.I),
+            re.compile(r".*\\Application\\User Data\\Opera\\.*", re.I),
             re.compile(r".*\\AppData\\Roaming\\Opera\\Opera\\.*", re.I),
             re.compile(r".*\\AppData\\Roaming\\Opera Software\\Opera Stable\\.*", re.I),
 
@@ -91,17 +94,15 @@ class BrowserStealer(Signature):
             re.compile(r".*\\Apple Computer\\Safari\\LastSession\.plist$", re.I),
 
             # Others
-            re.compile(r".*\\AppData\\Local\\Spark\\User\\ Data\\Default\\.*", re.I),
-            re.compile(r".*\\AppData\\Local\\Nichrome\\User\\ Data\\Default\\.*", re.I),
-            re.compile(r".*\\AppData\\Local\\Titan Browser\\User\\ Data\\Default\\.*", re.I),
-            re.compile(r".*\\AppData\\Local\\Rockmelt\\User\\ Data\\Default\\.*", re.I),
-            re.compile(r".*\\AppData\\Local\\Torch\\User\\ Data\\Default\\.*", re.I),
-            re.compile(r".*\\AppData\\Local\\.*\\YandexBrowser\\User\\ Data\\Default\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\Spark\\User Data\\Default\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\Nichrome\\User Data\\Default\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\Titan Browser\\User Data\\Default\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\Rockmelt\\User Data\\Default\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\Torch\\User Data\\Default\\.*", re.I),
+            re.compile(r".*\\AppData\\Local\\.*\\YandexBrowser\\User Data\\Default\\.*", re.I),
         ]
 
     def on_call(self, call, process):
-
-
         # If the current process appears to be a browser, continue.
         # TODO: implement better checks here -- the malware can be named whatever it wants or can
         # inject into browser processes
