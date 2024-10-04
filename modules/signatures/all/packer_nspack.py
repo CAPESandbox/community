@@ -28,6 +28,8 @@ class NsPacked(Signature):
     mbcs = ["OB0001", "OB0002", "OB0006", "F0001"]
 
     def run(self):
+        ret = False
+        
         target = self.results.get("target", {})
         if target.get("category") in ("file", "static") and target.get("file"):
             pe = self.results["target"]["file"].get("pe", [])
