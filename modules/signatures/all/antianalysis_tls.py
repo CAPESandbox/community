@@ -36,8 +36,8 @@ class AntiAnalysisTLSSection(Signature):
             pe = self.results["target"]["file"].get("pe", [])
             if pe:
                 for section in pe["sections"]:
-                    if section["name"].lower() == ".tls":
-                        self.data.append({"thread local storage": section})
+                    if section["name"].lower().startswith(".tls"):
+                        self.data.append({"section": section})
                         ret = True         
 
         return ret
