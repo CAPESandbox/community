@@ -37,6 +37,6 @@ class VMPPacked(Signature):
                 for section in pe["sections"]:
                     if section["name"].lower().startswith(".vmp"):
                         self.data.append({"section": section})
-                        ret= True         
+                        ret = True         
 
         return ret
