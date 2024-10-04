@@ -15,7 +15,6 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-
 class NsPacked(Signature):
     name = "packer_nspack"
     description = "Executable file is packed/obfuscated with NsPack"
