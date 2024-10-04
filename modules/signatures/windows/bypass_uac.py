@@ -218,3 +218,27 @@ class UACBypassCMSTPCOM(Signature):
                 return True
 
         return False
+
+
+class ChecksUACStatus(Signature):
+    name = "checks_uac_status"
+    description = "Checks if UAC (User Access Control) is enabled"
+    severity = 2
+    categories = ["uac"]
+    authors = ["Kevin Ross"]
+    minimum = "0.5"
+    ttps = ["T1548"]  # MITRE v6,7,8
+
+    def run(self):
+        indicators = [
+            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\EnableLUA$",
+
+        ]
+ 
+        for indicator in indicators:
+            match = self.check_key(pattern=indicator, regex=True)
+            if match:
+                self.data.append({"regkey": match})
+                return True
+
+        return False
