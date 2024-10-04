@@ -38,6 +38,6 @@ class AntiAnalysisTLSSection(Signature):
                 for section in pe["sections"]:
                     if section["name"].lower() == ".tls":
                         self.data.append({"thread local storage": section})
-                        ret= True         
+                        ret = True         
 
         return ret
