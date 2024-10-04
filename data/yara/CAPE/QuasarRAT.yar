@@ -24,8 +24,7 @@ rule QuasarRAT {
 rule quasarrat_kingrat {
     meta:
         author = "jeFF0Falltrades"
-        cape_type = "Quasarrat Payload"
-
+        cape_type = "QuasarRAT Payload"
     strings:
         $str_quasar = "Quasar." wide ascii
         $str_hidden = "set_Hidden" wide ascii

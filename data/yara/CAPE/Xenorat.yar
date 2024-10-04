@@ -1,7 +1,7 @@
- rule xenorat {
+rule XenoRAT {
     meta:
         author = "jeFF0Falltrades"
-        cape_type = "Xenorat payload"
+        cape_type = "XenoRAT payload"
     strings:
         $str_xeno_rat_1 = "xeno rat" wide ascii nocase
         $str_xeno_rat_2 = "xeno_rat" wide ascii nocase

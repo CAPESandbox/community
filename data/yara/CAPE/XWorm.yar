@@ -29,7 +29,7 @@ rule XWorm {
 rule xworm_kingrat {
     meta:
         author = "jeFF0Falltrades"
-        cape_type = "Xworm payload"
+        cape_type = "XWorm payload"
     strings:
         $str_xworm = "xworm" wide ascii nocase
         $str_xwormmm = "Xwormmm" wide ascii
