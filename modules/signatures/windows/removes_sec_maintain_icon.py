@@ -30,7 +30,7 @@ class RemovesSecurityAndMaintenanceIcon(Signature):
 
     def run(self):
         indicators = [
-            "HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\HideSCAHealth",
+            r"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\HideSCAHealth",
         ]
 
         for indicator in indicators:

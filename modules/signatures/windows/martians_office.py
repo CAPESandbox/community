@@ -20,6 +20,28 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+# run through re.escape()
+#############################################
+# YOU MAY HAVE TO CUSTOMIZE THIS FOR YOUR ENV#
+#############################################
+white_list_re = (
+    r"C\\:\\Program Files(?:\s\\(x86\\))?\\Adobe\\Reader\\ \\d+\\.\\d+\\Reader\\AcroRd32\\.exe$",
+    r"C\\:\\Program Files(?:\s\\(x86\\))?\\Java\\jre\\d+\\bin\\j(?:avaw?|p2launcher)\\.exe$",
+    r"C\\:\\Program Files(?:\s\\(x86\\))?\\Microsoft SilverLight\\(?:\\d+\\.)+\\d\\agcp\\.exe$",
+    r"C\\:\\Windows\\System32\\ntvdm\\.exe$",
+    r"C\\:\\Windows\\System32\\svchost\\.exe$",
+    r"C\\:\\Program Files(?:\s\\(x86\\))?\\internet explorer\\iexplore\.exe$",
+    # remove this one at some point
+    r"C\\:\\Windows\\System32\\rundll32\\.exe$",
+    r"C\\:\\Windows\\System32\\drwtsn32\\.exe$",
+    r"C\\:\\Windows\\splwow64\\.exe$",
+    r"C\\:\\Program Files(?:\s\\(x86\\))?\\Common Files\\Microsoft Shared\\office1[1-6]\\off(?:lb|diag)\\.exe$",
+    r"C\\:\\Program Files(?:\s\\(x86\\))?\\Common Files\\Microsoft Shared\\dw\\dw(?:20)?\\.exe$",
+    r"C\\:\\Windows\\system32\\dwwin\\.exe$",
+    r"C\\:\\Windows\\system32\\WerFault\\.exe$",
+    r"C\\:\\Windows\\syswow64\\WerFault\\.exe$",
+)
+
 
 class MartiansOffice(Signature):
     name = "office_martian_children"
@@ -65,30 +87,10 @@ class MartiansOffice(Signature):
             r"^[A-Z]\:\\Program Files(?:\s\(x86\))?\\Microsoft Office\\(?:Office1[1-5]\\)?(?:WINWORD|OUTLOOK|POWERPNT|EXCEL|WORDVIEW)\.EXE$",
             re.I,
         )
-        # run through re.escape()
-        #############################################
-        # YOU MAY HAVE TO CUSTOMIZE THIS FOR YOUR ENV#
-        #############################################
-        self.white_list_re = [
-            "C\\:\\\\Program Files(?:\s\\(x86\\))?\\\\Adobe\\\\Reader\\ \\d+\\.\\d+\\\\Reader\\\\AcroRd32\\.exe$",
-            "C\\:\\\\Program Files(?:\s\\(x86\\))?\\\\Java\\\\jre\\d+\\\\bin\\\\j(?:avaw?|p2launcher)\\.exe$",
-            "C\\:\\\\Program Files(?:\s\\(x86\\))?\\\\Microsoft SilverLight\\\\(?:\\d+\\.)+\\d\\\\agcp\\.exe$",
-            "C\\:\\\\Windows\\\\System32\\\\ntvdm\\.exe$",
-            "C\\:\\\\Windows\\\\System32\\\\svchost\\.exe$",
-            "C\\:\\\\Program Files(?:\s\\(x86\\))?\\\\internet explorer\\\\iexplore\.exe$",
-            # remove this one at some point
-            "C\\:\\\\Windows\\\\System32\\\\rundll32\\.exe$",
-            "C\\:\\\\Windows\\\\System32\\\\drwtsn32\\.exe$",
-            "C\\:\\\\Windows\\\\splwow64\\.exe$",
-            "C\\:\\\\Program Files(?:\s\\(x86\\))?\\\\Common Files\\\\Microsoft Shared\\\\office1[1-6]\\\\off(?:lb|diag)\\.exe$",
-            "C\\:\\\\Program Files(?:\s\\(x86\\))?\\\\Common Files\\\\Microsoft Shared\\\\dw\\\\dw(?:20)?\\.exe$",
-            "C\\:\\\\Windows\\\\system32\\\\dwwin\\.exe$",
-            "C\\:\\\\Windows\\\\system32\\\\WerFault\\.exe$",
-            "C\\:\\\\Windows\\\\syswow64\\\\WerFault\\.exe$",
-        ]
+
         # means we can be evaded but also means we can have relatively tight paths between 32-bit and 64-bit
         self.white_list_re_compiled = []
-        for entry in self.white_list_re:
+        for entry in white_list_re:
             try:
                 self.white_list_re_compiled.append(re.compile(entry, re.I))
             except Exception as e:

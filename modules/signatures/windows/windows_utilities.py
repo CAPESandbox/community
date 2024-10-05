@@ -132,8 +132,8 @@ class UsesWindowsUtilities(Signature):
         return ret
 
 
-GENERIC_CMD = '"c:\\windows\\system32\\cmd.exe" /c start /wait "" '
-SUBSEQUENT_GENERIC_CMD = "c:\\windows\\system32\\cmd.exe  /k "
+GENERIC_CMD = r'"c:\\windows\system32\cmd.exe" /c start /wait "" '
+SUBSEQUENT_GENERIC_CMD = r"c:\windows\system32\cmd.exe  /k "
 
 
 class SuspiciousCommandTools(Signature):
@@ -491,7 +491,7 @@ class SuspiciousMpCmdRunUse(Signature):
 
     def run(self):
         indicators = [
-            ".*MpCmdRun(\.exe)?.*-url.*",
+            r".*MpCmdRun(\.exe)?.*-url.*",
         ]
 
         for indicator in indicators:

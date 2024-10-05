@@ -38,7 +38,7 @@ class RansomwareDMALocker(Signature):
 
     def on_call(self, call, process):
         if call["api"] == "RegSetValueExA" and call["status"]:
-            key = re.compile(".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\cryptedinfo$")
+            key = re.compile(r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Run\\cryptedinfo$")
             buff = self.get_argument(call, "Buffer").lower()
             fullname = self.get_argument(call, "FullName")
             if buff == "notepad c:\programdata\cryptinfo.txt" and key.match(fullname):

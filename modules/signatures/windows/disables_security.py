@@ -20,60 +20,60 @@ class DisablesSecurity(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.regkeys_re = [
             (
-                "HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\EnableLUA",
+                r"HKEY_LOCAL_MACHINE\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Policies\\System\\EnableLUA",
                 "attempts to disable user access control",
             ),
             (
-                "HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Security\\ Center\\\\AntiVirusOverride",
+                r"HKEY_LOCAL_MACHINE\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Security\\ Center\\AntiVirusOverride",
                 "attempts to disable antivirus notifications",
             ),
             (
-                "HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Security\\ Center\\\\AntiVirusDisableNotify",
+                r"HKEY_LOCAL_MACHINE\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Security\\ Center\\AntiVirusDisableNotify",
                 "attempts to disable antivirus notifications",
             ),
             (
-                "HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Security\\ Center\\\\FirewallDisableNotify",
+                r"HKEY_LOCAL_MACHINE\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Security\\ Center\\FirewallDisableNotify",
                 "attempts to disable firewall notifications",
             ),
             (
-                "HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Security\\ Center\\\\FirewallOverride",
+                r"HKEY_LOCAL_MACHINE\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Security\\ Center\\FirewallOverride",
                 "attempts to disable firewall notifications",
             ),
             (
-                "HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Security\\ Center\\\\UpdatesDisableNotify",
+                r"HKEY_LOCAL_MACHINE\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Security\\ Center\\UpdatesDisableNotify",
                 "attempts to disable windows update notifications",
             ),
             (
-                "HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Security\\ Center\\\\UacDisableNotify",
+                r"HKEY_LOCAL_MACHINE\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Security\\ Center\\UacDisableNotify",
                 "disables user access control notifications",
             ),
             (
-                "HKEY_LOCAL_MACHINE\\\\SYSTEM\\\\ControlSet001\\\\services\\\\SharedAccess\\\\Parameters\\\\FirewallPolicy\\\\StandardProfile\\\\EnableFirewall",
+                r"HKEY_LOCAL_MACHINE\\SYSTEM\\ControlSet001\\services\\SharedAccess\\Parameters\\FirewallPolicy\\StandardProfile\\EnableFirewall",
                 "attempts to disable windows firewall",
             ),
             (
-                "HKEY_LOCAL_MACHINE\\\\SYSTEM\\\\ControlSet001\\\\services\\\\SharedAccess\\\\Parameters\\\\FirewallPolicy\\\\StandardProfile\\\\DoNotAllowExceptions",
+                r"HKEY_LOCAL_MACHINE\\SYSTEM\\ControlSet001\\services\\SharedAccess\\Parameters\\FirewallPolicy\\StandardProfile\\DoNotAllowExceptions",
                 "attempts to disable firewall exceptions",
             ),
             (
-                "HKEY_LOCAL_MACHINE\\\\SYSTEM\\\\ControlSet001\\\\services\\\\SharedAccess\\\\Parameters\\\\FirewallPolicy\\\\StandardProfile\\\\DisableNotifications",
+                r"HKEY_LOCAL_MACHINE\\SYSTEM\\ControlSet001\\services\\SharedAccess\\Parameters\\FirewallPolicy\\StandardProfile\\DisableNotifications",
                 "attempts to disable firewall notifications",
             ),
-            (".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Windows\\ Defender\\\\.*", "attempts to disable windows defender"),
+            (r".*\\SOFTWARE\\(Wow6432Node\\)?Windows\\ Defender\\.*", "attempts to disable windows defender"),
             (
-                ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Policies\\\\Microsoft\\\\Windows\\ Defender\\\\.*",
+                r".*\\SOFTWARE\\(Wow6432Node\\)?Policies\\Microsoft\\Windows\\ Defender\\.*",
                 "attempts to modify windows defender policies",
             ),
             (
-                ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\services\\\\WinDefend\\\\.*",
+                r".*\\SYSTEM\\(CurrentControlSet|ControlSet001)\\services\\WinDefend\\.*",
                 "attempts to disable windows defender",
             ),
             (
-                ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Notifications\\\\Settings\\\\Windows\\.Defender\\.SecurityCenter\\\\.*",
+                r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings\\Windows\\.Defender\\.SecurityCenter\\.*",
                 "attempts to modify windows defender notifications",
             ),
             (
-                ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Policies\\\\Microsoft\\\\Windows\\\\System\\\\EnableSmartScreen",
+                r".*\\SOFTWARE\\(Wow6432Node\\)?Policies\\Microsoft\\Windows\\System\\EnableSmartScreen",
                 "attempts to modify windows system-level smart-screen",
             ),
         ]

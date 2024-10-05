@@ -29,8 +29,8 @@ class VPCDetectFiles(Signature):
 
     def run(self):
         indicators = [
-            ".*\\\\drivers\\\\vpc-s3\.sys$",
-            ".*\\\\drivers\\\\vpcubus\.sys$",
+            r".*\\drivers\\vpc-s3\.sys$",
+            r".*\\drivers\\vpcubus\.sys$",
         ]
 
         for indicator in indicators:

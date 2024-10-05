@@ -22,28 +22,27 @@ class EmailStealer(Signature):
         if any(e in self.results["info"]["package"] for e in office_pkgs):
             return False
 
-        file_indicators = [
+        file_indicators = (
             ".*\.pst$",
-            ".*\\\\Microsoft\\\\Windows\\ Live\\ Mail.*",
-            ".*\\\\Microsoft\\\\Address\\ Book\\\\.*\.wab$",
-            ".*\\\\Microsoft\\\\Outlook\\ Express\\\\.*\.dbx$",
-            ".*\\\\Foxmail\\\\mail\\\\.*\\\\Account\.stg$",
-            ".*\\\\Foxmail.*\\\\Accounts\.tdat$",
-            ".*\\\\Thunderbird\\\\Profiles\\\\.*\.default$",
-            ".*\\\\AppData\\\\Roaming\\\\Thunderbird\\\\profiles.ini$",
-        ]
-        registry_indicators = [
-            ".*\\\\Microsoft\\\\Windows\\ Messaging\\ Subsystem\\\\MSMapiApps.*",
-            ".*\\\\Microsoft\\\\Windows\\ Messaging\\ Subsystem\\\\Profiles.*",
-            ".*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Windows\\ Messaging\\ Subsystem\\\\Profiles.*",
-            ".*\\\\Microsoft\\\\Office\\\\.*\\\\Outlook\\\\Profiles\\\\Outlook.*",
-            ".*\\\\Microsoft\\\\Office\\\\Outlook\\\\OMI\\ Account\\ Manager\\\\Accounts.*",
-            ".*\\\\Microsoft\\\\Internet\\ Account\\ Manager\\\\Accounts.*",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?IncrediMail.*"
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\ Live\\ Mail.*",
-        ]
+            r".*\\Microsoft\\Windows\\ Live\\ Mail.*",
+            r".*\\Microsoft\\Address\\ Book\\.*\.wab$",
+            r".*\\Microsoft\\Outlook\\ Express\\.*\.dbx$",
+            r".*\\Foxmail\\mail\\.*\\Account\.stg$",
+            r".*\\Foxmail.*\\Accounts\.tdat$",
+            r".*\\Thunderbird\\Profiles\\.*\.default$",
+            r".*\\AppData\\Roaming\\Thunderbird\\profiles.ini$",
+        )
+        registry_indicators = (
+            r".*\\Microsoft\\Windows\\ Messaging\\ Subsystem\\MSMapiApps.*",
+            r".*\\Microsoft\\Windows\\ Messaging\\ Subsystem\\Profiles.*",
+            r".*\\Microsoft\\Windows\\ NT\\CurrentVersion\\Windows\\ Messaging\\ Subsystem\\Profiles.*",
+            r".*\\Microsoft\\Office\\.*\\Outlook\\Profiles\\Outlook.*",
+            r".*\\Microsoft\\Office\\Outlook\\OMI\\ Account\\ Manager\\Accounts.*",
+            r".*\\Microsoft\\Internet\\ Account\\ Manager\\Accounts.*",
+            r".*\\Software\\(Wow6432Node\\)?IncrediMail.*" r".*\\Software\\(Wow6432Node\\)?Microsoft\\Windows\\ Live\\ Mail.*",
+        )
         if self.results.get("target", {}).get("category", "") == "file":
-            registry_indicators.append(".*\\\\Software\\\\(Wow6432Node\\\\)?Clients\\\\Mail.*")
+            registry_indicators.append(".*\\Software\\(Wow6432Node\\)?Clients\\Mail.*")
 
         found_stealer = False
         for indicator in file_indicators:

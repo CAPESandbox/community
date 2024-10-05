@@ -31,7 +31,7 @@ class StealthHiddenExtension(Signature):
 
     def run(self):
         if self.check_write_key(
-            pattern=".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Advanced\\\\HideFileExt$",
+            pattern=r".*\\Software\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\HideFileExt$",
             regex=True,
             all=True,
         ):

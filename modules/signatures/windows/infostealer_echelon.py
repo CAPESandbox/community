@@ -33,20 +33,20 @@ class EchelonFiles(Signature):
 
     def run(self):
         score = 0
-        fpath = ".*\\\\AppData\\\\Roaming\\\\.*\\\\"
-        flist = [
-            "Processes\.txt",
-            "Computer\.txt",
-            "Clipboard\.txt",
-            "Screenshot\.jpeg",
-            "Browsers\\\\Cards\\\\Cards_Google\.txt",
-            "Browsers\\\\Cookies\\\\Cookies_Google\.txt",
-            "Browsers\\\\Passwords\\\\Passwords_Google\.txt",
-            "Browsers\\\\Autofills\\\\Autofills_Google\.txt",
-            "Browsers\\\\Downloads\\\\Downloads_Google\.txt",
-            "Browsers\\\\History\\\\History_Google\.txt",
-            "Browsers\\\\Passwords\\\\Passwords_Edge\.txt",
-        ]
+        fpath = r".*\\AppData\\Roaming\\.*\\"
+        flist = (
+            r"Processes\.txt",
+            r"Computer\.txt",
+            r"Clipboard\.txt",
+            r"Screenshot\.jpeg",
+            r"Browsers\\Cards\\Cards_Google\.txt",
+            r"Browsers\\Cookies\\Cookies_Google\.txt",
+            r"Browsers\\Passwords\\Passwords_Google\.txt",
+            r"Browsers\\Autofills\\Autofills_Google\.txt",
+            r"Browsers\\Downloads\\Downloads_Google\.txt",
+            r"Browsers\\History\\History_Google\.txt",
+            r"Browsers\\Passwords\\Passwords_Edge\.txt",
+        )
 
         for lfile in flist:
             indicator = fpath + lfile

@@ -30,9 +30,7 @@ class DisablesCrashdumps(Signature):
     def run(self):
         ret = False
 
-        keys = [
-            ".*\\\\SYSTEM\\\\(Wow6432Node\\\\)?ControlSet001\\\\Control\\\\CrashControl\\\\CrashDumpEnabled$",
-        ]
+        keys = (r".*\\SYSTEM\\(Wow6432Node\\)?ControlSet001\\Control\\CrashControl\\CrashDumpEnabled$",)
 
         for check in keys:
             match = self.check_write_key(pattern=check, regex=True)

@@ -20,7 +20,7 @@ class DisablesUAC(Signature):
 
     def run(self):
         if self.check_write_key(
-            pattern=".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\EnableLUA$",
+            pattern=r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Policies\\System\\EnableLUA$",
             regex=True,
         ):
             return True

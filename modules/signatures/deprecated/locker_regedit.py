@@ -31,7 +31,7 @@ class DisableRegedit(Signature):
 
     def run(self):
         if self.check_write_key(
-            pattern=".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\DisableRegistryTools$",
+            pattern=r".*\\SOFTWARE\\(Wow6432Node\\)?\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\DisableRegistryTools$",
             regex=True,
         ):
             return True

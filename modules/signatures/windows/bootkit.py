@@ -99,7 +99,7 @@ class DirectHDDAccess(Signature):
 
     def run(self):
         ret = False
-        match = self.check_write_file(pattern="^\\\\Device\\\\HarddiskVolume.*", regex=True)
+        match = self.check_write_file(pattern=r"^\\Device\\HarddiskVolume.*", regex=True)
         if match:
             self.data.append({"file": match})
             ret = True
@@ -122,7 +122,7 @@ class AccessesPrimaryPartition(Signature):
 
     def run(self):
         ret = False
-        match = self.check_write_file(pattern="^\\\\Device\\\\HarddiskVolume0\\\\DR0$", regex=True)
+        match = self.check_write_file(pattern="^\\Device\\HarddiskVolume0\\DR0$", regex=True)
         if match:
             self.data.append({"file": match})
             ret = True
@@ -145,7 +145,7 @@ class PhysicalDriveAccess(Signature):
 
     def run(self):
         ret = False
-        matches = self.check_write_file(pattern="^\\\\\?\?\\\\PhysicalDrive.*", regex=True, all=True)
+        matches = self.check_write_file(pattern=r"^\\\?\?\\PhysicalDrive.*", regex=True, all=True)
         if matches:
             for match in matches:
                 self.data.append({"physical drive write attempt": match})
@@ -170,7 +170,7 @@ class EnumeratesPhysicalDrives(Signature):
     def run(self):
         enumerateddrives = 0
         ret = False
-        matches = self.check_file(pattern="^\\\\\?\?\\\\PhysicalDrive.*", regex=True, all=True)
+        matches = self.check_file(pattern=r"^\\\?\?\\PhysicalDrive.*", regex=True, all=True)
         if matches:
             for match in matches:
                 self.data.append({"physical drive access": match})

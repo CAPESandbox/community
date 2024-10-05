@@ -27,7 +27,7 @@ class DatopLoader(Signature):
     evented = True
 
     def run(self):
-        indicators = ["[A-Z]:\\\\Datop\\\\.*"]
+        indicators = (r"[A-Z]:\\Datop\\.*",)
 
         for indicator in indicators:
             match = self.check_write_file(pattern=indicator, regex=True)

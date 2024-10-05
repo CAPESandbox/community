@@ -28,7 +28,7 @@ class CarberpMutexes(Signature):
     mbcs = ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
-        if self.check_mutex(pattern="^(Global\\\\)?(UAC|INS|BD)NTFS\d+$", regex=True):
+        if self.check_mutex(pattern=r"^(Global\\)?(UAC|INS|BD)NTFS\d+$", regex=True):
             return True
 
         return False

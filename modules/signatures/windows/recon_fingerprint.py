@@ -29,13 +29,13 @@ class Fingerprint(Signature):
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        indicators = [
-            ".*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\DigitalProductId$",
-            ".*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\ProductId$",
-            ".*\\\\Microsoft\\\\Internet\\ Explorer\\\\Registration\\\\ProductId$",
-            ".*\\\\Microsoft\\\\Cryptography\\\\MachineGuid$",
-            ".*\\\\HARDWARE\\\\DESCRIPTION\\\\System\\\\SystemBIOSDate$",
-        ]
+        indicators = (
+            r".*\\Microsoft\\Windows\\ NT\\CurrentVersion\\DigitalProductId$",
+            r".*\\Microsoft\\Windows\\ NT\\CurrentVersion\\ProductId$",
+            r".*\\Microsoft\\Internet\\ Explorer\\Registration\\ProductId$",
+            r".*\\Microsoft\\Cryptography\\MachineGuid$",
+            r".*\\HARDWARE\\DESCRIPTION\\System\\SystemBIOSDate$",
+        )
 
         for indicator in indicators:
             match = self.check_read_key(pattern=indicator, regex=True)

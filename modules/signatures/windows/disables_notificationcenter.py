@@ -30,9 +30,7 @@ class DisablesNotificationCenter(Signature):
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        indicators = [
-            ".*\\\\Explorer\\\\DisableNotificationCenter$",
-        ]
+        indicators = (r".*\\Explorer\\DisableNotificationCenter$",)
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)

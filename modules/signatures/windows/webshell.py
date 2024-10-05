@@ -60,7 +60,7 @@ class WebShellFiles(Signature):
     ttps += ["T1505.003"]  # MITRE v7,8
 
     def run(self):
-        indicators = [".*\\\\inetpub\\\\wwwroot\\\\.*", ".*\\\\System32\\\\inetsrv\\\\.*"]
+        indicators = [r".*\inetpub\wwwroot\.*", ".*\System32\inetsrv\.*"]
 
         for indicator in indicators:
             match = self.check_write_file(pattern=indicator, regex=True)
@@ -83,7 +83,7 @@ class OWAWebShellFiles(Signature):
 
     def run(self):
         indicators = [
-            "C:\\\\Program Files\\\\Microsoft\\\\Exchange Server\\\\V[0-9]{2}\\\\FrontEnd\\\\HttpProxy\\\\owa\\\\.*",
+            r"C:\\Program Files\Microsoft\Exchange Server\V[0-9]{2}\FrontEnd\HttpProxy\owa\.*",
         ]
 
         for indicator in indicators:

@@ -33,7 +33,7 @@ class LSATampering(Signature):
         ret = False
 
         keys = [
-            ".*\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\Lsa\\\\.*",
+            r".*\\SYSTEM\\CurrentControlSet\\Control\\Lsa\\.*",
         ]
 
         for check in keys:

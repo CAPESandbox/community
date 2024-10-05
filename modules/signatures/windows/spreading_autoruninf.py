@@ -27,4 +27,4 @@ class CreatesAutorunInf(Signature):
     mbcs = ["OC0001", "C0016"]  # micro-behaviour
 
     def run(self):
-        return self.check_file(pattern=".*\\\\autorun\.inf$", regex=True)
+        return self.check_file(pattern=r".*\\autorun\.inf$", regex=True)

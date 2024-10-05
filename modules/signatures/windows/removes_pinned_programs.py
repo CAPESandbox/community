@@ -29,10 +29,10 @@ class RemovesPinnedPrograms(Signature):
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        indicators = [
-            "HKEY_CURRENT_USER\\\\Software\\\\Policies\\\\Microsoft\\\\Windows\\\\Explorer\\\\TaskbarNoPinnedList",
-            "HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoStartMenuPinnedList",
-        ]
+        indicators = (
+            r"HKEY_CURRENT_USER\\Software\\Policies\\Microsoft\\Windows\\Explorer\\TaskbarNoPinnedList",
+            r"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\NoStartMenuPinnedList",
+        )
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)

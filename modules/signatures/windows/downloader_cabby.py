@@ -37,7 +37,7 @@ class DownloaderCabby(Signature):
         else:
             return False
 
-        match_cab_file = self.check_file(pattern=".*\\\\Temp\\\\temp_cab_[0-9]*\.cab", regex=True)
+        match_cab_file = self.check_file(pattern=r".*\\Temp\\temp_cab_[0-9]*\.cab", regex=True)
 
         if match_cab_file:
             self.data.append({"cab_file": match_cab_file})

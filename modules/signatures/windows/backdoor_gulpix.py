@@ -38,7 +38,7 @@ class GulpixBehavior(Signature):
                 return True
 
         indicators = [
-            ".*\\\\AppData\\\\Roaming\\\\NvSmartMax\.(dat|dll)",
+            r".*\\AppData\\Roaming\\NvSmartMax\.(dat|dll)",
         ]
 
         for indicator in indicators:

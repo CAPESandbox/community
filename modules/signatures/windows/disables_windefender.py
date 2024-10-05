@@ -21,11 +21,11 @@ class DisablesWindowsDefender(Signature):
     def run(self):
         ret = False
 
-        keys = [
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Windows\\ Defender\\\\.*",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Policies\\\\Microsoft\\\\Windows\\ Defender\\\\.*",
-            ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\services\\\\WinDefend\\\\.*",
-        ]
+        keys = (
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Windows\\ Defender\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Policies\\Microsoft\\Windows\\ Defender\\.*",
+            r".*\\SYSTEM\\(CurrentControlSet|ControlSet001)\\services\\WinDefend\\.*",
+        )
 
         cmds = [
             "disableantispyware",
@@ -122,12 +122,12 @@ class RemovesWindowsDefenderContextMenu(Signature):
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        indicators = [
-            "HKEY_CLASSES_ROOT\\\\\*\\\\shellex\\\\ContextMenuHandlers\\\\EPP$",
-            "HKEY_CLASSES_ROOT\\\\Directory\\\\shellex\\\\ContextMenuHandlers\\\\EPP$",
-            "HKEY_CLASSES_ROOT\\\\Drive\\\\shellex\\\\ContextMenuHandlers\\\\EPP$",
-        ]
-        pat = re.compile(".*\\\\shellex\\\\contextmenuhandlers\\\\epp")
+        indicators = (
+            r"HKEY_CLASSES_ROOT\\\*\\shellex\\ContextMenuHandlers\\EPP$",
+            r"HKEY_CLASSES_ROOT\\Directory\\shellex\\ContextMenuHandlers\\EPP$",
+            r"HKEY_CLASSES_ROOT\\Drive\\shellex\\ContextMenuHandlers\\EPP$",
+        )
+        pat = re.compile(".*\\shellex\\contextmenuhandlers\\epp")
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)
@@ -158,10 +158,8 @@ class DisablesWindowsDefenderLogging(Signature):
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        indicators = [
-            ".*\\\\System\\\\CurrentControlSet\\\\Control\\\\WMI\\\\Autologger\\\\Defender(Api|Audit)Logger",
-        ]
-        pat = re.compile(".*\\\\system\\\\currentcontrolset\\\\control\\\\wmi\\\\autologger\\\\defender(api|audit)logger")
+        indicators = (r".*\\System\\CurrentControlSet\\Control\\WMI\\Autologger\\Defender(Api|Audit)Logger",)
+        pat = re.compile(r".*\\system\\currentcontrolset\\control\\wmi\\autologger\\defender(api|audit)logger")
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)

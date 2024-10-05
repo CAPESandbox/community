@@ -31,11 +31,11 @@ class PersistenceRDPRegistry(Signature):
 
     def run(self):
         ret = False
-        reg_indicators = [
-            ".*\\\\Control\\\\Terminal Server\\\\fSingleSessionPerUser$",
-            ".*\\\\Control\\\\Terminal Server\\\\fDenyTSConnections$",
-            ".*\\\\Control\\\\Terminal Server\\\\fAllowToGetHelp$",
-        ]
+        reg_indicators = (
+            r".*\\Control\\Terminal Server\\fSingleSessionPerUser$",
+            r".*\\Control\\Terminal Server\\fDenyTSConnections$",
+            r".*\\Control\\Terminal Server\\fAllowToGetHelp$",
+        )
 
         for indicator in reg_indicators:
             match = self.check_write_key(pattern=indicator, regex=True)
@@ -59,9 +59,7 @@ class PersistenceRDPShadowing(Signature):
 
     def run(self):
         ret = False
-        reg_indicators = [
-            ".*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows NT\\\\Terminal Services$",
-        ]
+        reg_indicators = (r".*\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services$",)
 
         for indicator in reg_indicators:
             match = self.check_write_key(pattern=indicator, regex=True)

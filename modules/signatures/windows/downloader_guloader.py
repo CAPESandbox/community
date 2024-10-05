@@ -38,11 +38,11 @@ class GuLoaderAPIs(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.regpattern = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VBA\Monitors"
-        self.filepatterns = [
-            "^[A-Z]:\\\\ProgramData\\\\qemu-ga\\\\qga.state$",
-            "^[A-Z]:\\\\Program\sFiles(\s\(x86\))?\\\\Qemu-ga\\\\qemu-ga.exe$",
-            "^[A-Z]:\\\\Program\sFiles(\s\(x86\))?\\\\qga\\\\qga.exe$",
-        ]
+        self.filepatterns = (
+            r"^[A-Z]:\\ProgramData\\qemu-ga\\qga.state$",
+            r"^[A-Z]:\\Program\sFiles(\s\(x86\))?\\Qemu-ga\\qemu-ga.exe$",
+            r"^[A-Z]:\\Program\sFiles(\s\(x86\))?\\qga\\qga.exe$",
+        )
         self.uapattern = "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko"
         self.useragent = str()
         self.regmatch = False

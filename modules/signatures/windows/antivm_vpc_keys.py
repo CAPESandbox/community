@@ -30,8 +30,8 @@ class VPCDetectKeys(Signature):
 
     def run(self):
         indicators = [
-            ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\PCI\\\\VEN_5333&DEV_8811&SUBSYS_00000000&REV_00$",
-            ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Services\\\\vpc-s3$",
+            r".*\\SYSTEM\\(CurrentControlSet|ControlSet001)\\Enum\\PCI\\VEN_5333&DEV_8811&SUBSYS_00000000&REV_00$",
+            r".*\\SYSTEM\\(CurrentControlSet|ControlSet001)\\Services\\vpc-s3$",
         ]
         for indicator in indicators:
             if self.check_key(pattern=indicator, regex=True):

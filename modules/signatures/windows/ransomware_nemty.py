@@ -53,7 +53,7 @@ class NemtyRegkeys(Signature):
 
     def run(self):
         indicators = [
-            "HKEY_CURRENT_USER\\\\Software\\\\NEMTY.*",
+            r"HKEY_CURRENT_USER\\Software\\NEMTY.*",
         ]
 
         for indicator in indicators:

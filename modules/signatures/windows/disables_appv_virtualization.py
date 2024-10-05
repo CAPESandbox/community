@@ -29,9 +29,9 @@ class DisablesAppVirtualiztion(Signature):
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        indicators = [
-            "HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\AppV\\\\Client\\\\Virtualization\\\\EnableDynamicVirtualization",
-        ]
+        indicators = (
+            r"HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\AppV\\Client\\Virtualization\\EnableDynamicVirtualization",
+        )
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)

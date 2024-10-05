@@ -26,9 +26,9 @@ class MappedDrivesUAC(Signature):
     mbcs = ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        indicators = [
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\EnableLinkedConnections$",
-        ]
+        indicators = (
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Policies\\System\\EnableLinkedConnections$",
+        )
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)

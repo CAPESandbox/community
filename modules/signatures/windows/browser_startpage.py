@@ -29,7 +29,7 @@ class browser_startpage(Signature):
 
     def run(self):
         if self.check_write_key(
-            pattern=".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\Main\\\\Start\\ Page$", regex=True
+            pattern=r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet\\ Explorer\\Main\\Start\\ Page$", regex=True
         ):
             return True
 
