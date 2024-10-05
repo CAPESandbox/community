@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PackerUnknownPESectionName(Signature):
     name = "packer_unknown_pe_section_name"
     description = "The binary contains an unknown PE section name indicative of packing"

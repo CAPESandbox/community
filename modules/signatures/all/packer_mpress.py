@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class MPressPacked(Signature):
     name = "packer_mpress"
     description = "Executable file is packed/obfuscated with MPRESS"
@@ -37,6 +38,6 @@ class MPressPacked(Signature):
                 for section in pe["sections"]:
                     if section["name"].lower().startswith(".mpress"):
                         self.data.append({"section": section})
-                        ret = True         
+                        ret = True
 
         return ret

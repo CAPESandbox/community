@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class NatePacked(Signature):
     name = "packer_nate"
     description = "Executable file is packed/obfuscated with Nate"
@@ -37,6 +38,6 @@ class NatePacked(Signature):
                 for section in pe["sections"]:
                     if section["name"].lower().startswith(".nate"):
                         self.data.append({"section": section})
-                        ret = True         
+                        ret = True
 
         return ret
