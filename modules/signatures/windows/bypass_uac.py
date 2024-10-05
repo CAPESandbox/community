@@ -230,15 +230,9 @@ class ChecksUACStatus(Signature):
     ttps = ["T1548"]  # MITRE v6,7,8
 
     def run(self):
-        indicators = [
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\EnableLUA$",
-
-        ]
- 
-        for indicator in indicators:
-            match = self.check_key(pattern=indicator, regex=True)
-            if match:
-                self.data.append({"regkey": match})
-                return True
+        match = self.check_key(pattern=r".*\SOFTWARE\(Wow6432Node\)?Microsoft\Windows\CurrentVersion\Policies\System\EnableLUA$", regex=True)
+        if match:
+            self.data.append({"regkey": match})
+            return True
 
         return False
