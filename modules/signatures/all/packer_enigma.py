@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class EnigmaPacked(Signature):
     name = "packer_enigma"
     description = "Executable file is packed/obfuscated with Enigma"
@@ -37,6 +38,6 @@ class EnigmaPacked(Signature):
                 for section in pe["sections"]:
                     if section["name"].lower().startswith(".enigma"):
                         self.data.append({"section": section})
-                        ret = True         
+                        ret = True
 
         return ret

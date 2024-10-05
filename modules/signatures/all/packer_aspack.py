@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ASPackPacked(Signature):
     name = "packer_aspack"
     description = "Executable file is packed/obfuscated with ASPack"
@@ -37,6 +38,6 @@ class ASPackPacked(Signature):
                 for section in pe["sections"]:
                     if section["name"].lower().startswith("aspack"):
                         self.data.append({"section": section})
-                        ret = True         
+                        ret = True
 
         return ret
