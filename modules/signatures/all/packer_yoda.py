@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class YodaPacked(Signature):
     name = "packer_yoda"
     description = "Executable file is packed/obfuscated with Y0da"
@@ -37,6 +38,6 @@ class YodaPacked(Signature):
                 for section in pe["sections"]:
                     if section["name"].startswith(".yP") or section["name"].startswith(".y0da"):
                         self.data.append({"section": section})
-                        ret = True         
+                        ret = True
 
         return ret

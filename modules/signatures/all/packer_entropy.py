@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PackerEntropy(Signature):
     name = "packer_entropy"
     description = "The binary likely contains encrypted or compressed data"
@@ -30,7 +31,7 @@ class PackerEntropy(Signature):
         "http://www.forensickb.com/2013/03/file-entropy-explained.html",
         "http://virii.es/U/Using%20Entropy%20Analysis%20to%20Find%20Encrypted%20and%20Packed%20Malware.pdf",
     ]
-    
+
     def run(self):
         ret = False
 
@@ -47,7 +48,7 @@ class PackerEntropy(Signature):
                     if float(section["entropy"]) > 6.8:
                         self.data.append({"section": section})
                         total_compressed += int(section["size_of_data"], 16)
-         
+
                 if total_pe_data and ((1.0 * total_compressed) / total_pe_data) > 0.2:
                     ret = True
 
