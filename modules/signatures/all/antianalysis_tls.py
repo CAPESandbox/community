@@ -38,6 +38,6 @@ class AntiAnalysisTLSSection(Signature):
                 for section in pe["sections"]:
                     if section["name"].lower().startswith(".tls"):
                         self.data.append({"section": section})
-                        ret = True         
+                        ret = True
 
         return ret
