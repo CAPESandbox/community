@@ -15,7 +15,6 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-
 class NsPacked(Signature):
     name = "packer_nspack"
     description = "Executable file is packed/obfuscated with NsPack"
@@ -29,9 +28,15 @@ class NsPacked(Signature):
     mbcs = ["OB0001", "OB0002", "OB0006", "F0001"]
 
     def run(self):
-        for section in self.results.get("static", {}).get("pe", {}).get("sections", []):
-            if section["name"].lower().startswith(".nsp"):
-                self.data.append({"section": section})
-                return True
+        ret = False
+        
+        target = self.results.get("target", {})
+        if target.get("category") in ("file", "static") and target.get("file"):
+            pe = self.results["target"]["file"].get("pe", [])
+            if pe:
+                for section in pe["sections"]:
+                    if section["name"].lower().startswith(".nsp"):
+                        self.data.append({"section": section})
+                        ret = True         
 
-        return False
+        return ret
