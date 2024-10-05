@@ -15,10 +15,9 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-
 class PackerEntropy(Signature):
     name = "packer_entropy"
-    description = "The binary likely contains encrypted or compressed data."
+    description = "The binary likely contains encrypted or compressed data"
     severity = 2
     categories = ["packer"]
     authors = ["Robby Zeitfuchs", "nex", "Optiv"]
@@ -31,28 +30,25 @@ class PackerEntropy(Signature):
         "http://www.forensickb.com/2013/03/file-entropy-explained.html",
         "http://virii.es/U/Using%20Entropy%20Analysis%20to%20Find%20Encrypted%20and%20Packed%20Malware.pdf",
     ]
-
+    
     def run(self):
-        if "static" in self.results and "pe" in self.results["static"]:
-            if "sections" in self.results["static"]["pe"]:
+        ret = False
+
+        target = self.results.get("target", {})
+        if target.get("category") in ("file", "static") and target.get("file"):
+            pe = self.results["target"]["file"].get("pe", [])
+            if pe:
                 total_compressed = 0
                 total_pe_data = 0
 
-                for section in self.results["static"]["pe"]["sections"]:
+                for section in pe["sections"]:
                     total_pe_data += int(section["size_of_data"], 16)
 
                     if float(section["entropy"]) > 6.8:
-                        descmsg = "name: {0}, entropy: {1}, characteristics: {2}, raw_size: {3}, virtual_size: {4}".format(
-                            section["name"],
-                            section["entropy"],
-                            section["characteristics"],
-                            section["size_of_data"],
-                            section["virtual_size"],
-                        )
-                        self.data.append({"section": descmsg})
+                        self.data.append({"section": section})
                         total_compressed += int(section["size_of_data"], 16)
-
+         
                 if total_pe_data and ((1.0 * total_compressed) / total_pe_data) > 0.2:
-                    return True
+                    ret = True
 
-        return False
+        return ret
