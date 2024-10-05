@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class VMPPacked(Signature):
     name = "packer_vmprotect"
     description = "The executable is likely packed with VMProtect"
@@ -37,6 +38,6 @@ class VMPPacked(Signature):
                 for section in pe["sections"]:
                     if section["name"].lower().startswith(".vmp"):
                         self.data.append({"section": section})
-                        ret = True         
+                        ret = True
 
         return ret
