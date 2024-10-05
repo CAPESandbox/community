@@ -66,6 +66,7 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "action@github.com"
           if output=$(git status --porcelain) && [ ! -z "$output" ]; then
+            git pull
             git commit -m "style: Automatic code formatting" -a
             git push
           fi

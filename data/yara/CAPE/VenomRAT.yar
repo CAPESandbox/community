@@ -15,12 +15,10 @@ rule VenomRAT {
         uint16(0) == 0x5a4d and (1 of ($x*) and 2 of ($s*))
 }
 
-
 rule venomrat_kingrat {
     meta:
         author = "jeFF0Falltrades"
-	cape_type = "VenomRat Payload"
-
+        cape_type = "VenomRAT Payload"
     strings:
         $str_id_venomrat = "venomrat" wide ascii nocase
         $str_hvnc = "HVNC_REPLY_MESSAGE" wide ascii

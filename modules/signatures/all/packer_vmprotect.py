@@ -29,11 +29,15 @@ class VMPPacked(Signature):
     mbcs = ["OB0001", "OB0002", "OB0006", "F0001", "F0001.010"]
 
     def run(self):
-        if "static" in self.results and "pe" in self.results["static"]:
-            if "sections" in self.results["static"]["pe"]:
-                for section in self.results["static"]["pe"]["sections"]:
+        ret = False
+
+        target = self.results.get("target", {})
+        if target.get("category") in ("file", "static") and target.get("file"):
+            pe = self.results["target"]["file"].get("pe", [])
+            if pe:
+                for section in pe["sections"]:
                     if section["name"].lower().startswith(".vmp"):
                         self.data.append({"section": section})
-                        return True
+                        ret = True
 
-        return False
+        return ret

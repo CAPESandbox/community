@@ -29,18 +29,15 @@ class UPXCompressed(Signature):
     mbcs = ["OB0001", "OB0002", "OB0006", "F0001", "F0001.008"]
 
     def run(self):
-        if "static" in self.results and "pe" in self.results["static"]:
-            if "sections" in self.results["static"]["pe"]:
-                for section in self.results["static"]["pe"]["sections"]:
-                    if section["name"].startswith("UPX"):
-                        descmsg = "name: {0}, entropy: {1}, characteristics: {2}, raw_size: {3}, virtual_size: {4}".format(
-                            section["name"],
-                            section["entropy"],
-                            section["characteristics"],
-                            section["size_of_data"],
-                            section["virtual_size"],
-                        )
-                        self.data.append({"section": descmsg})
-                        return True
+        ret = False
 
-        return False
+        target = self.results.get("target", {})
+        if target.get("category") in ("file", "static") and target.get("file"):
+            pe = self.results["target"]["file"].get("pe", [])
+            if pe:
+                for section in pe["sections"]:
+                    if section["name"].lower().startswith(".upx"):
+                        self.data.append({"section": section})
+                        ret = True
+
+        return ret

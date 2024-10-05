@@ -1,4 +1,4 @@
-# Copyright (C) 2014,2015 Robby Zeitfuchs (@robbyFux), Optiv, Inc. (brad.spengler@optiv.com)
+# Copyright (C) 2024 Kevin Ross
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,21 +16,17 @@
 from lib.cuckoo.common.abstracts import Signature
 
 
-class PackerEntropy(Signature):
-    name = "packer_entropy"
-    description = "The binary likely contains encrypted or compressed data"
+class AntiAnalysisTLSSection(Signature):
+    name = "antianalysis_tls_section"
+    description = "Contains .tls (Thread Local Storage) section"
     severity = 2
-    categories = ["packer"]
-    authors = ["Robby Zeitfuchs", "nex", "Optiv"]
+    categories = ["anti-analysis"]
+    authors = ["Kevin Ross"]
     minimum = "1.3"
-    ttps = ["T1045"]  # MITRE v6
-    ttps += ["T1027"]  # MITRE v6,7,8
-    ttps += ["T1027.002"]  # MITRE v7,8
-    mbcs = ["OB0001", "OB0002", "OB0006", "F0001"]
-    references = [
-        "http://www.forensickb.com/2013/03/file-entropy-explained.html",
-        "http://virii.es/U/Using%20Entropy%20Analysis%20to%20Find%20Encrypted%20and%20Packed%20Malware.pdf",
-    ]
+    ttps = ["T1055"]  # MITRE v6
+    ttps += ["T1055"]  # MITRE v6,7,8
+    ttps += ["T1055.005"]  # MITRE v7,8
+    mbcs = ["B0002", "B0003", "E1055"]
 
     def run(self):
         ret = False
@@ -39,17 +35,9 @@ class PackerEntropy(Signature):
         if target.get("category") in ("file", "static") and target.get("file"):
             pe = self.results["target"]["file"].get("pe", [])
             if pe:
-                total_compressed = 0
-                total_pe_data = 0
-
                 for section in pe["sections"]:
-                    total_pe_data += int(section["size_of_data"], 16)
-
-                    if float(section["entropy"]) > 6.8:
+                    if section["name"].lower().startswith(".tls"):
                         self.data.append({"section": section})
-                        total_compressed += int(section["size_of_data"], 16)
-
-                if total_pe_data and ((1.0 * total_compressed) / total_pe_data) > 0.2:
-                    ret = True
+                        ret = True
 
         return ret
