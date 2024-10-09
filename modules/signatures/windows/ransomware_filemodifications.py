@@ -46,7 +46,8 @@ class RansomwareFileModifications(Signature):
         "mousocoreworker.exe",
         "adobecollabsync.exe",
         "trustedinstaller.exe",
-        "adobe crash processor.exe"
+        "adobe crash processor.exe",
+        "microsoftedgeupdatesetup_x86_1.3.195.21.exe",
     ]
 
     def __init__(self, *args, **kwargs):
