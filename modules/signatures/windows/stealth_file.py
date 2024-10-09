@@ -141,6 +141,7 @@ class StealthFile(Signature):
             r"^[A-Z]?:\\Users\\[^\\]+\\AppData\\Roaming\\Microsoft\\Windows\\Recent\\",
             r"^[A-Z]?:\\Windows\\SoftwareDistribution\\Download\\.*\.tmp$",
             r"^[A-Z]?:\\Windows\\Temp\\.*\.tmp$",
+            r"^[A-Z]?:\\Windows\\Tasks\\.*\.DAT$",
             r"^[A-Z]?:\\ProgramData\\Microsoft\\ClickToRun\\ProductReleases\\.*\.tmp$",
             r"^[A-Z]?:\\Program Files\\Microsoft Office\\root\\.*\.(xls|xlsx|doc|docx|ppt|pttx|tmp|dotx)",
             r"^[A-Z]?:\\Windows\\ServiceProfiles\\LocalService\\AppData\\.*",
