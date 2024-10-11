@@ -47,7 +47,9 @@ class RansomwareFileModifications(Signature):
         "adobecollabsync.exe",
         "trustedinstaller.exe",
         "adobe crash processor.exe",
-        "microsoftedgeupdatesetup_x86_1.3.195.21.exe",
+    ]
+    whitelist_regex = [
+        r"microsoftedgeupdatesetup_x86"
     ]
 
     def __init__(self, *args, **kwargs):
@@ -63,6 +65,9 @@ class RansomwareFileModifications(Signature):
         pname = process["process_name"].lower()
         if pname.lower() in self.whitelist:
             return
+        for entry in self.whitelist_regex:
+            if re.match(entry, pname, re.IGNORECASE):
+                return
         if not call["status"]:
             return None
         if call["api"].startswith("MoveFileWithProgress"):
