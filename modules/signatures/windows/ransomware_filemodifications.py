@@ -134,6 +134,8 @@ class RansomwareFileModifications(Signature):
                 and "\\temporary internet files\\" not in deletedfile.lower()
                 and "\\cache" not in deletedfile.lower()
                 and "\\inetcache" not in deletedfile.lower()
+                and "\\tasks" not in deletedfile.lower()
+                and "edgeupdate" not in deletedfile.lower()
                 and not deletedfile.lower().endswith(".tmp")
             ):
                 self.data.append({"file": deletedfile})
