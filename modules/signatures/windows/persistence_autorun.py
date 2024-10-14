@@ -62,13 +62,13 @@ class Autorun_scheduler(Signature):
                 self.mark_call()
 
     def on_complete(self):
-        indicators = [
-            ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\SharedTaskScheduler\\\\.*",
-        ]
-        whitelists = [
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\{CAFEEFAC-0017-0000-FFFF-ABCDEFFEDCBA}\\\\InprocServer32\\\\.*",
-            # ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\[^\\\\]*\\\\InprocServer32\\\\ThreadingModel$",
-        ]
+        indicators = (
+            r".*\\Microsoft\\Windows\\CurrentVersion\\Explorer\\SharedTaskScheduler\\.*",
+        )
+        whitelists = (
+            r".*\\Software\\(Wow6432Node\\)?Classes\\clsid\\{CAFEEFAC-0017-0000-FFFF-ABCDEFFEDCBA}\\InprocServer32\\.*",
+            # ".*\\Software\\(Wow6432Node\\)?Classes\\clsid\\[^\\]*\\InprocServer32\\ThreadingModel$",
+        )
 
         for indicator in indicators:
             match_key = self.check_write_key(pattern=indicator, regex=True, all=True)
@@ -87,7 +87,7 @@ class Autorun_scheduler(Signature):
                             self.data.append({"data": data})
                             self.found_autorun = True
 
-        indicators = [".*\\\\WINDOWS\\\\Tasks\\\\.*"]
+        indicators = [r".*\\WINDOWS\\Tasks\\.*"]
 
         for indicator in indicators:
             if "dropped" in self.results and len(self.results.get("dropped", [])):
@@ -149,33 +149,33 @@ class Autorun(Signature):
                 self.mark_call()
 
     def on_complete(self):
-        indicators = [
-            ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\.*",
-            ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnce\\\\.*",
-            ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunServices\\\\.*",
-            ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnceEx\\\\.*",
-            ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunServicesOnce\\\\.*",
-            ".*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Winlogon\\\\Notify\\\\.*",
-            ".*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Winlogon\\\\Userinit$",
-            ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run\\\\.*",
-            ".*\\\\Microsoft\\\\Active\\ Setup\\\\Installed Components\\\\.*",
-            ".*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Windows\\\\AppInit_DLLs$",
-            ".*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Image\\ File\\ Execution\\ Options\\\\[^\\\\]*\\\\\Debugger$",
-            ".*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Winlogon\\\\Shell$",
-            ".*\\\\System\\\\(CurrentControlSet|ControlSet001)\\\\Services\\\\[^\\\\]*\\\\ImagePath$",
-            ".*\\\\System\\\\(CurrentControlSet|ControlSet001)\\\\Services\\\\[^\\\\]*\\\\Parameters\\\\ServiceDLL$",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\Exefile\\\\Shell\\\\Open\\\\Command\\\\\(Default\)$",
-            ".*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Windows\\\\load$",
-            ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\ShellServiceObjectDelayLoad\\\\.*",
-            ".*\\\\System\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\Session\\ Manager\\\\AppCertDlls\\\\.*",
-            # ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\[^\\\\]*\\\\InprocServer32\\\\.*",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\[^\\\\]*\\\\LocalServer32\\\\.*",
-            ".*\\\\Microsoft\\\\Command\\ Processor\\\\AutoRun$",
-            ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User\ Shell\ Folders\\\\Startup$",
-        ]
+        indicators = (
+            r".*\\Microsoft\\Windows\\CurrentVersion\\Run\\.*",
+            r".*\\Microsoft\\Windows\\CurrentVersion\\RunOnce\\.*",
+            r".*\\Microsoft\\Windows\\CurrentVersion\\RunServices\\.*",
+            r".*\\Microsoft\\Windows\\CurrentVersion\\RunOnceEx\\.*",
+            r".*\\Microsoft\\Windows\\CurrentVersion\\RunServicesOnce\\.*",
+            r".*\\Microsoft\\Windows\\ NT\\CurrentVersion\\Winlogon\\Notify\\.*",
+            r".*\\Microsoft\\Windows\\ NT\\CurrentVersion\\Winlogon\\Userinit$",
+            r".*\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run\\.*",
+            r".*\\Microsoft\\Active\\ Setup\\Installed Components\\.*",
+            r".*\\Microsoft\\Windows\\ NT\\CurrentVersion\\Windows\\AppInit_DLLs$",
+            r".*\\Microsoft\\Windows\\ NT\\CurrentVersion\\Image\\ File\\ Execution\\ Options\\[^\\]*\\\Debugger$",
+            r".*\\Microsoft\\Windows\\ NT\\CurrentVersion\\Winlogon\\Shell$",
+            r".*\\System\\(CurrentControlSet|ControlSet001)\\Services\\[^\\]*\\ImagePath$",
+            r".*\\System\\(CurrentControlSet|ControlSet001)\\Services\\[^\\]*\\Parameters\\ServiceDLL$",
+            r".*\\Software\\(Wow6432Node\\)?Classes\\Exefile\\Shell\\Open\\Command\\\(Default\)$",
+            r".*\\Microsoft\\Windows NT\\CurrentVersion\\Windows\\load$",
+            r".*\\Microsoft\\Windows\\CurrentVersion\\ShellServiceObjectDelayLoad\\.*",
+            r".*\\System\\(CurrentControlSet|ControlSet001)\\Control\\Session\\ Manager\\AppCertDlls\\.*",
+            # ".*\\Software\\(Wow6432Node\\)?Classes\\clsid\\[^\\]*\\InprocServer32\\.*",
+            r".*\\Software\\(Wow6432Node\\)?Classes\\clsid\\[^\\]*\\LocalServer32\\.*",
+            r".*\\Microsoft\\Command\\ Processor\\AutoRun$",
+            r".*\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User\ Shell\ Folders\\Startup$",
+        )
         whitelists = [
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\{CAFEEFAC-0017-0000-FFFF-ABCDEFFEDCBA}\\\\InprocServer32\\\\.*",
-            # ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\[^\\\\]*\\\\InprocServer32\\\\ThreadingModel$",
+            r".*\\Software\\(Wow6432Node\\)?Classes\\clsid\\{CAFEEFAC-0017-0000-FFFF-ABCDEFFEDCBA}\\InprocServer32\\.*",
+            # r".*\\Software\\(Wow6432Node\\)?Classes\\clsid\\[^\\]*\\InprocServer32\\ThreadingModel$",
         ]
 
         for indicator in indicators:
@@ -196,9 +196,9 @@ class Autorun(Signature):
                             self.found_autorun = True
 
         indicators = [
-            ".*\\\\win\.ini$",
-            ".*\\\\system\.ini$",
-            ".*\\\\Start Menu\\\\Programs\\\\Startup\\\\.*",
+            r".*\\win\.ini$",
+            r".*\\system\.ini$",
+            r".*\\Start Menu\\Programs\\Startup\\.*",
         ]
 
         for indicator in indicators:
@@ -232,7 +232,7 @@ class PersistenceSafeBoot(Signature):
 
     def run(self):
         indicators = [
-            ".*\\\\System\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\SafeBoot\\\\Minimal\\\\.*",
+            r".*\\System\\(CurrentControlSet|ControlSet001)\\Control\\SafeBoot\\Minimal\\.*",
         ]
 
         for indicator in indicators:

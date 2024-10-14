@@ -17,6 +17,6 @@ class RansomwareRecyclebin(Signature):
     mbcs += ["OC0001", "C0047"]  # micro-behaviour
 
     def run(self):
-        if self.check_delete_file(pattern="C:\\\\RECYCLER\\\\.*", regex=True):
+        if self.check_delete_file(pattern=r"C:\\RECYCLER\\.*", regex=True):
             return True
         return False

@@ -51,12 +51,12 @@ class QulabFiles(Signature):
     mbcs = ["OC0001", "C0016"]  # micro-behaviour
 
     def run(self):
-        indicators = [
-            ".*\\\\(x86|amd6)_microsoft-windows-.*\\\\(Screen\.jpg|Information\.txt|ShortInformation\.txt)$",
-            ".*\\\\(x86|amd6)_microsoft-windows-.*\\\\Desktop\sTXT\sFiles\\\\.*",
-            ".*\\\\(x86|amd6)microsoft-windows-.*\\\\.*sqlite3\.module\.dll$",
-            ".*\\\\(x86|amd6)microsoft-windows-.*\\\\ENU_[A-F0-9]{20}$",
-        ]
+        indicators = (
+            r".*\\\\(x86|amd6)_microsoft-windows-.*\\\\(Screen\.jpg|Information\.txt|ShortInformation\.txt)$",
+            r".*\\\\(x86|amd6)_microsoft-windows-.*\\\\Desktop\sTXT\sFiles\\\\.*",
+            r".*\\\\(x86|amd6)microsoft-windows-.*\\\\.*sqlite3\.module\.dll$",
+            r".*\\\\(x86|amd6)microsoft-windows-.*\\\\ENU_[A-F0-9]{20}$",
+        )
         score = 0
 
         for indicator in indicators:

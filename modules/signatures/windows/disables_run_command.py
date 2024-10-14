@@ -30,9 +30,7 @@ class DisableRunCommand(Signature):
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        indicators = [
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoRun.*",
-        ]
+        indicators = (r".*\\Software\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\NoRun.*",)
 
         for indicator in indicators:
             reg_match = self.check_write_key(pattern=indicator, regex=True)

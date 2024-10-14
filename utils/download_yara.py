@@ -5,7 +5,6 @@ import re
 
 import requests
 from bs2json import BS2Json
-from bs4 import BeautifulSoup
 
 ROOT = "/opt/CAPEv2"
 

@@ -28,7 +28,7 @@ class Modifies_HostFile(Signature):
 
     def run(self):
         ret = False
-        match = self.check_write_file(pattern=".*\\\\Windows\\\\(System32|SysWow64)\\\\drivers\\\\etc\\\\hosts$", regex=True)
+        match = self.check_write_file(pattern=r".*\\Windows\\(System32|SysWow64)\\drivers\\etc\\hosts$", regex=True)
         if match:
             ret = True
             hfile = match.lower()

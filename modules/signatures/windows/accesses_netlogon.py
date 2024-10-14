@@ -31,7 +31,7 @@ class AccessesMailslot(Signature):
 
     def run(self):
         indicators = [
-            "\\\\MAILSLOT\\\\NET\\\\NETLOGON$",
+            r"\\MAILSLOT\\NET\\NETLOGON$",
         ]
 
         for indicator in indicators:
@@ -57,7 +57,7 @@ class AccessesNetlogonRegkey(Signature):
     references = ["https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nrpc/ff8f970f-3e37-40f7-bd4b-af7336e4792f"]
 
     def run(self):
-        indicators = ["HKEY_LOCAL_MACHINE\\\\SYSTEM\\\\CurrentControlSet\\\\Services\\\\Netlogon\\\\.*"]
+        indicators = [r"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Netlogon\\.*"]
 
         for indicator in indicators:
             match = self.check_key(pattern=indicator, regex=True)

@@ -27,18 +27,18 @@ class ModiRATBehavior(Signature):
     minimum = "1.3"
 
     def run(self):
-        reg_indicators = [
-            "HKEY_CURRENT_USER\\\\Software\\\\FFMPEG_URL.*",
-            "HKEY_CURRENT_USER\\\\Software\\\\Telegram_Notifier.*",
-        ]
-        file_indicators = [
-            "[A-Z]:\\\\ProgramData\\\\ffmpeg\.exe$",
-            "[A-Z]:\\\\.*\\\\AppData\\\\Roaming\\\\WindowsCodecs\.dll$",
-            "[A-Z]:\\\\.*\\\\AppData\\\\Roaming\\\\Lanceur\.vbs$",
-            "[A-Z]:\\\\.*\\\\AppData\\\\Roaming\\\\LeFichier\.txt$",
-            "[A-Z]:\\\\.*\\\\AppData\\\\Roaming\\\\txt\.txt$",
-            "[A-Z]:\\\\.*\\\\AppData\\\\Roaming\\\\MSBuild\.exe$",
-        ]
+        reg_indicators = (
+            "HKEY_CURRENT_USER\\Software\\FFMPEG_URL.*",
+            "HKEY_CURRENT_USER\\Software\\Telegram_Notifier.*",
+        )
+        file_indicators = (
+            r"[A-Z]:\\ProgramData\\ffmpeg\.exe$",
+            r"[A-Z]:\\.*\\AppData\\Roaming\\WindowsCodecs\.dll$",
+            r"[A-Z]:\\.*\\AppData\\Roaming\\Lanceur\.vbs$",
+            r"[A-Z]:\\.*\\AppData\\Roaming\\LeFichier\.txt$",
+            r"[A-Z]:\\.*\\AppData\\Roaming\\txt\.txt$",
+            r"[A-Z]:\\.*\\AppData\\Roaming\\MSBuild\.exe$",
+        )
         score = int()
 
         for rindicator in reg_indicators:

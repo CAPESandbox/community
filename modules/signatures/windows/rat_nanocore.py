@@ -54,19 +54,19 @@ class NanocoreRAT(Signature):
     def on_complete(self):
         badness = 0
         guid = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}" "-[0-9a-fA-F]{12}"
-        fileiocs = [
-            ".*\\\\" + guid + "\\\\run\.dat$",
-            ".*\\\\" + guid + "\\\\task\.dat$",
-            ".*\\\\" + guid + "\\\\catelog\.dat$",
-            ".*\\\\" + guid + "\\\\storage\.dat$",
-            ".*\\\\" + guid + "\\\\settings\.bin$",
-        ]
+        fileiocs = (
+            r".*\\" + guid + "\\run\.dat$",
+            r".*\\" + guid + "\\task\.dat$",
+            r".*\\" + guid + "\\catelog\.dat$",
+            r".*\\" + guid + "\\storage\.dat$",
+            r".*\\" + guid + "\\settings\.bin$",
+        )
         for ioc in fileiocs:
             if self.check_write_file(pattern=ioc, regex=True):
                 self.mbcs += ["OC0001", "C0016"]  # micro-behaviour
                 badness += 1
 
-        mutex = "(Global|Local)\\\\\{" + guid + "\}$"
+        mutex = r"(Global|Local)\\\{" + guid + r"\}$"
         if self.check_mutex(pattern=mutex, regex=True):
             self.mbcs += ["OC0003", "C0042"]  # micro-behaviour
             badness += 1

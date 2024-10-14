@@ -29,10 +29,10 @@ class WarzoneRATRegkeys(Signature):
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        indicators = [
-            "HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\[A-Z0-9]{10}\\\\[a-z]{4}$",
-            "HKEY_CURRENT_USER\\\\Software\\\\_rptls\\\\Install$",
-        ]
+        indicators = (
+            r"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\[A-Z0-9]{10}\\[a-z]{4}$",
+            r"HKEY_CURRENT_USER\\Software\\_rptls\\Install$",
+        )
 
         for indicator in indicators:
             match = self.check_key(pattern=indicator, regex=True)
@@ -57,8 +57,8 @@ class WarzoneRATFiles(Signature):
 
     def run(self):
         indicators = [
-            ".*\\\\Program Files\\\\Microsoft DN1.*",
-            ".*\\\\AppData\\\\Local\\\\Microsoft Vision\\\\",
+            r".*\\Program Files\\Microsoft DN1.*",
+            r".*\\AppData\\Local\\Microsoft Vision\\",
         ]
 
         for indicator in indicators:

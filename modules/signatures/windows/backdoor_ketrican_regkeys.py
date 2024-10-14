@@ -29,9 +29,9 @@ class KetricanRegkeys(Signature):
     def run(self):
         score = 0
         indicators = [
-            ".*\\\\Software\\\\Microsoft\\\\Internet\ Explorer\\\\Main\\\\Check_Associations",
-            ".*\\\\Software\\\\Microsoft\\\\Internet\ Explorer\\\\Main\\\\DisableFirstRunCustomize",
-            ".*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\ Settings\\\\ZoneMap\\\\IE[Hh]arden",
+            r".*\\Software\\Microsoft\\Internet\ Explorer\\Main\\Check_Associations",
+            r".*\\Software\\Microsoft\\Internet\ Explorer\\Main\\DisableFirstRunCustomize",
+            r".*\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet\ Settings\\ZoneMap\\IE[Hh]arden",
         ]
 
         for indicator in indicators:

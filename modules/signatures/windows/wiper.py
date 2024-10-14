@@ -48,7 +48,7 @@ class WiperZeroedBytes(Signature):
                 return
 
             buff = buff.lower()
-            regex = re.compile("^[\\x00\.]+$")
+            regex = re.compile(r"^[\x00\.]+$")
             if len(buff) > 30 and regex.match(buff):
                 self.lastfile = filepath
                 self.wipecount += 1

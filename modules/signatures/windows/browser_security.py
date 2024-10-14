@@ -34,19 +34,19 @@ class BrowserSecurity(Signature):
 
         safelist = ["zoom.exe"]
 
-        reg_indicators = [
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\Privacy\\\\EnableInPrivateMode$",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\PhishingFilter\\\\.*",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\Zones\\\\[0-4]\\\\.*",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\ZoneMap\\\\Domains\\\\.*",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\ZoneMap\\\\EscDomains\\\\.*",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\ZoneMap\\\\EscRanges\\\\.*",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\ZoneMap\\\\IEHarden$",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\CertificateRevocation$",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\Main\\\\NoUpdateCheck$",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\Security\\\\.*",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\Main\\\\FeatureControl\\\\.*",
-        ]
+        reg_indicators = (
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet\\ Explorer\\Privacy\\EnableInPrivateMode$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet\\ Explorer\\PhishingFilter\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\Zones\\[0-4]\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\ZoneMap\\Domains\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\ZoneMap\\EscDomains\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\ZoneMap\\EscRanges\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\ZoneMap\\IEHarden$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\CertificateRevocation$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet\\ Explorer\\Main\\NoUpdateCheck$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet\\ Explorer\\Security\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet\\ Explorer\\Main\\FeatureControl\\.*",
+        )
 
         for indicator in reg_indicators:
             regkeys = self.check_write_key(pattern=indicator, regex=True, all=True)

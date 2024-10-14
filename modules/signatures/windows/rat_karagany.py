@@ -66,13 +66,13 @@ class KaraganyFiles(Signature):
     mbcs += ["OC0001", "C0016"]  # micro-behaviour
 
     def on_complete(self):
-        indicators = [
-            ".*\\\\up_stat.txt$",
-            ".*\\\\stat_ag.txt$",
-            ".*\\\\serv_stat.txt$",
-            ".*\\\\svchost\d+\.txt$",
-            ".*\\\\Update\\\\Tmp\\\\.*",
-        ]
+        indicators = (
+            r".*\\up_stat.txt$",
+            r".*\\stat_ag.txt$",
+            r".*\\serv_stat.txt$",
+            r".*\\svchost\d+\.txt$",
+            r".*\\Update\\Tmp\\.*",
+        )
 
         for indicator in indicators:
             match = self.check_write_file(patten=indicator, regex=True, all=True)

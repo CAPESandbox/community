@@ -29,10 +29,10 @@ class DisablesContextMenus(Signature):
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        indicators = [
-            "HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoTrayContextMenu",
-            "HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\DisableContextMenusInStart",
-        ]
+        indicators = (
+            r"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\NoTrayContextMenu",
+            r"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\DisableContextMenusInStart",
+        )
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)

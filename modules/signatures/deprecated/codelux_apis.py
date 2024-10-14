@@ -27,10 +27,10 @@ class CodeLux_APIs(Signature):
 
     def run(self):
         queryattribs = [
-            ".*\\\\CodeluxRunPE.resources.dll$",
-            ".*\\\\CodeluxRunPE.resources.exe$",
-            ".*\\\\CodeluxVisionStub.resources.exe$",
-            ".*\\\\CodeluxVisionStub.resources.dll$",
+            r".*\\CodeluxRunPE.resources.dll$",
+            r".*\\CodeluxRunPE.resources.exe$",
+            r".*\\CodeluxVisionStub.resources.exe$",
+            r".*\\CodeluxVisionStub.resources.dll$",
         ]
 
         for ioc in queryattribs:

@@ -30,7 +30,7 @@ class RemovesNetworkingIcon(Signature):
 
     def run(self):
         indicators = [
-            "HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\HideSCANetwork",
+            r"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\HideSCANetwork",
         ]
 
         for indicator in indicators:

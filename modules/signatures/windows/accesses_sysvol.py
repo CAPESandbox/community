@@ -30,7 +30,7 @@ class AccessesSysvol(Signature):
     mbcs += ["OC0001", "C0051"]  # micro-behaviour
 
     def run(self):
-        indicators = [".*\\\\Windows\\\\SYSVOL\\\\.*", "\\\\sysvol\\\\.*\\\\policies\\\\.*", "\\\\sysvol\\\\.*\\\\scripts\\\\.*"]
+        indicators = [r".*\\Windows\\SYSVOL\\.*", r"\\sysvol\\.*\\policies\\.*", r"\\sysvol\\.*\\scripts\\.*"]
 
         for indicator in indicators:
             match = self.check_file(pattern=indicator, regex=True)
@@ -53,7 +53,7 @@ class WritesSysvol(Signature):
     mbcs = ["OC0001", "C0052"]  # micro-behaviour
 
     def run(self):
-        indicators = [".*\\\\Windows\\\\SYSVOL\\\\.*", "\\\\sysvol\\\\.*\\\\policies\\\\.*", "\\\\sysvol\\\\.*\\\\scripts\\\\.*"]
+        indicators = [r".*\\Windows\\SYSVOL\\.*", r"\\sysvol\\.*\\policies\\.*", r"\\sysvol\\.*\\scripts\\.*"]
 
         for indicator in indicators:
             match = self.check_write_file(pattern=indicator, regex=True)

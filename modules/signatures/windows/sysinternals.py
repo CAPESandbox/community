@@ -29,7 +29,7 @@ class sysinternals_tools(Signature):
 
     def run(self):
         reg_indicators = [
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Sysinternals\\\\.*",
+            r".*\\Software\\(Wow6432Node\\)?Sysinternals\\.*",
         ]
 
         for indicator in reg_indicators:
@@ -54,7 +54,7 @@ class sysinternals_psexec(Signature):
 
     def run(self):
         reg_indicators = [
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Sysinternals\\\\PsExec\\\\.*",
+            r".*\\Software\\(Wow6432Node\\)?Sysinternals\\PsExec\\.*",
         ]
 
         for indicator in reg_indicators:

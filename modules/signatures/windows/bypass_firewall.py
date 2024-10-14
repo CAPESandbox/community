@@ -33,6 +33,6 @@ class BypassFirewall(Signature):
 
     def run(self):
         return self.check_key(
-            pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Services\\\\SharedAccess\\\\Parameters\\\\FirewallPolicy\\\\.*",
+            pattern=r".*\\SYSTEM\\(CurrentControlSet|ControlSet001)\\Services\\SharedAccess\\Parameters\\FirewallPolicy\\.*",
             regex=True,
         )

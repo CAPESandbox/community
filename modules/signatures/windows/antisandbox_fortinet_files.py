@@ -29,9 +29,9 @@ class FortinetDetectFiles(Signature):
 
     def run(self):
         indicators = [
-            "^C:\\\\tracer\\\\mdare32_0\.sys$",
-            "^C:\\\\tracer\\\\fortitracer\.exe$",
-            "^C:\\\\manual\\\\sunbox\.exe$",
+            r"^C:\\tracer\\mdare32_0\.sys$",
+            r"^C:\\tracer\\fortitracer\.exe$",
+            r"^C:\\manual\\sunbox\.exe$",
         ]
 
         for indicator in indicators:

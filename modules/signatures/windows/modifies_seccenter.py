@@ -18,11 +18,11 @@ class ModifySecurityCenterWarnings(Signature):
     mbcs = ["OB0006", "E1112", "F0004", "F0011"]
 
     def run(self):
-        indicators = [
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Security\\ Center\\\\.*",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Policies\\\\Microsoft\\\\Windows\\ NT\\\\Security\\ Center\\\\.*",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\explorer\\\\ShellServiceObjects\\\\{FD6905CE-952F-41F1-9A6F-135D9C6622CC}$",
-        ]
+        indicators = (
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Security\\ Center\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Policies\\Microsoft\\Windows\\ NT\\Security\\ Center\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\explorer\\ShellServiceObjects\\{FD6905CE-952F-41F1-9A6F-135D9C6622CC}$",
+        )
         for indicator in indicators:
             if self.check_write_key(pattern=indicator, regex=True):
                 return True

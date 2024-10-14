@@ -55,10 +55,10 @@ class SpynetRat(Signature):
                 return True
 
         keys = [
-            ".*\\\\SpyNet\\\\.*",
+            r".*\\SpyNet\\.*",
         ]
         whitelist = [
-            ".*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows Defender\\\\.*",
+            r".*\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\.*",
         ]
         for key in keys:
             keymatch = self.check_write_key(pattern=key, regex=True)

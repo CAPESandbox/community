@@ -13,7 +13,7 @@ class TrickBotMutexes(Signature):
     mbcs = ["OC0003", "C0042"]  # micro-behaviour
 
     def run(self):
-        if self.check_mutex("Global\\TrickBot") or self.check_mutex("Global\\MGlob"):
+        if self.check_mutex(r"Global\TrickBot") or self.check_mutex(r"Global\MGlob"):
             return True
 
         return False

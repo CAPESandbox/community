@@ -38,7 +38,7 @@ class ZeusP2P(Signature):
     def run(self):
         # Check zeus synchronization-mutex.
         count = 0
-        mutexes = self.check_mutex("^(Global|Local)\\\\\{[A-Z0-9]{8}-([A-Z0-9]{4}-){3}[A-Z0-9]{12}\}", regex=True, all=True)
+        mutexes = self.check_mutex(r"^(Global|Local)\\\{[A-Z0-9]{8}-([A-Z0-9]{4}-){3}[A-Z0-9]{12}\}", regex=True, all=True)
         if mutexes:
             count += len(mutexes)
 

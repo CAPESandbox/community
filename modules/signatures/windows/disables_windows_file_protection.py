@@ -28,10 +28,10 @@ class DisablesWindowsFileProtection(Signature):
     def run(self):
         ret = False
 
-        keys = [
-            ".*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Winlogon\\\\SFCDisable$",
-            ".*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Winlogon\\\\SFCScan$",
-        ]
+        keys = (
+            r".*\\Microsoft\\Windows\\ NT\\CurrentVersion\\Winlogon\\SFCDisable$",
+            r".*\\Microsoft\\Windows\\ NT\\CurrentVersion\\Winlogon\\SFCScan$",
+        )
 
         for check in keys:
             match = self.check_write_key(pattern=check, regex=True)

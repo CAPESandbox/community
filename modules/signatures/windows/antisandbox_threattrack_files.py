@@ -29,9 +29,9 @@ class ThreatTrackDetectFiles(Signature):
 
     def run(self):
         indicators = [
-            "^C:\\\\cwsandbox",
-            "^C:\\\\gfisandbox",
-            "^C:\\\\sandbox\\\\starter\.exe$",
+            r"^C:\\cwsandbox",
+            r"^C:\\gfisandbox",
+            r"^C:\\sandbox\\starter\.exe$",
         ]
 
         for indicator in indicators:

@@ -29,7 +29,7 @@ class LodaRATFileBehavior(Signature):
 
     def run(self):
         file_indicators = [
-            ".*\\\\AppData\\\\Roaming\\\\Windata\\\\([A-Za-z]{6}|svchost)\.exe$",
+            r".*\\AppData\\Roaming\\Windata\\([A-Za-z]{6}|svchost)\.exe$",
         ]
 
         for indicator in file_indicators:

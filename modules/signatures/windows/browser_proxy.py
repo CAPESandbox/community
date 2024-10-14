@@ -49,18 +49,18 @@ class ModifyProxy(Signature):
             "ai.exe",
         ]
         self.indicators = [
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\ProxyEnable$",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\ProxyServer$",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\ZoneMap\\\\ProxyBypass$",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\ProxyOverride$",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\Wpad\\\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\ProxyEnable$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\ProxyServer$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\ZoneMap\\ProxyBypass$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\ProxyOverride$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\Wpad\\.*",
         ]
         self.whitelist = [
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\Wpad\\\\WpadLastNetwork$",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\Wpad\\\\[^\\\\]*\\\\WpadDecisionReason$",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\Wpad\\\\[^\\\\]*\\\\WpadDecisionTime$",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\Wpad\\\\[^\\\\]*\\\\WpadDecision$",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\Wpad\\\\[^\\\\]*\\\\WpadNetworkName$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\Wpad\\WpadLastNetwork$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\Wpad\\[^\\]*\\WpadDecisionReason$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\Wpad\\[^\\]*\\WpadDecisionTime$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\Wpad\\[^\\]*\\WpadDecision$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\Wpad\\[^\\]*\\WpadNetworkName$",
         ]
 
     def on_call(self, call, process):

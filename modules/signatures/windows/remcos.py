@@ -30,8 +30,8 @@ class RemcosFiles(Signature):
 
     def run(self):
         indicators = [
-            ".*\\\\AppData\\\\Roaming\\\\[Ll]ogs\\\\.*\.dat$",
-            ".*\\\\AppData\\\\Roaming\\\\remcos.*",
+            r".*\\AppData\\Roaming\\[Ll]ogs\\.*\.dat$",
+            r".*\\AppData\\Roaming\\remcos.*",
         ]
 
         for indicator in indicators:
@@ -86,8 +86,8 @@ class RemcosRegkeys(Signature):
 
     def run(self):
         indicators = [
-            ".*\\\\Software\\\\Remcos-[A-Z0-9]{6}.*",
-            ".*\\\\Software\\\\remcos[-_].*",
+            r".*\\Software\\Remcos-[A-Z0-9]{6}.*",
+            r".*\\Software\\remcos[-_].*",
         ]
 
         for indicator in indicators:

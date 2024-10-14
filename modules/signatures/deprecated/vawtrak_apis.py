@@ -15,7 +15,7 @@
 
 try:
     import re2 as re
-except:
+except ImportError:
     import re
 
 from lib.cuckoo.common.abstracts import Signature

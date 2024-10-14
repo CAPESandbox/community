@@ -30,10 +30,10 @@ class VMwareDetectKeys(Signature):
 
     def run(self):
         indicators = [
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?VMWare,\\ Inc\..*",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Clients\\\\StartMenuInternet\\\\VMWAREHOSTOPEN.EXE$",
-            ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?\\\\Microsoft\\\\ESENT\\\\Process\\\\vmtoolsd$",
-            ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\CriticalDeviceDatabase\\\\root#vmwvmcihostdev$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?VMWare,\\ Inc\..*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Clients\\StartMenuInternet\\VMWAREHOSTOPEN.EXE$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?\\Microsoft\\ESENT\\Process\\vmtoolsd$",
+            r".*\\SYSTEM\\(CurrentControlSet|ControlSet001)\\Control\\CriticalDeviceDatabase\\root#vmwvmcihostdev$",
         ]
 
         for indicator in indicators:

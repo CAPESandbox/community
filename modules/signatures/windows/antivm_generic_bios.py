@@ -30,8 +30,6 @@ class AntiVMBios(Signature):
     mbcs += ["OC0008", "C0036", "C0036.005"]  # micro-behaviour
 
     def run(self):
-        if self.check_read_key(
-            pattern=".*\\\\HARDWARE\\\\DESCRIPTION\\\\System\\\\(SystemBiosVersion|VideoBiosVersion)$", regex=True
-        ):
+        if self.check_read_key(pattern=r".*\\HARDWARE\\DESCRIPTION\\System\\(SystemBiosVersion|VideoBiosVersion)$", regex=True):
             return True
         return False

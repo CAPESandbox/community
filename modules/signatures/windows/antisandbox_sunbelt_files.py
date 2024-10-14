@@ -29,8 +29,8 @@ class SunbeltDetectFiles(Signature):
 
     def run(self):
         indicators = [
-            ".*\\\\SandboxStarter\.exe$",
-            "^C\:\\\\analysis\\\\.*",
+            r".*\\SandboxStarter\.exe$",
+            r"^C\:\\analysis\\.*",
         ]
 
         for indicator in indicators:

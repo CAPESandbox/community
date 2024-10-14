@@ -4,6 +4,7 @@ import os
 import platform
 import shlex
 import subprocess
+from contextlib import suppress
 from winreg import HKEY_CURRENT_USER, KEY_ALL_ACCESS, REG_DWORD, CreateKeyEx, SetValueEx
 
 from lib.common.abstracts import Auxiliary
@@ -34,11 +35,9 @@ class Autoruns(Auxiliary):
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
             # reg.exe ADD "HKCU\Software\Sysinternals\Autoruns" /v EulaAccepted /t REG_DWORD /d 1 /f
-        try:
+        with suppress(OSError):
             with CreateKeyEx(HKEY_CURRENT_USER, "Software\Sysinternals\Autoruns", 0, KEY_ALL_ACCESS) as key:
                 SetValueEx(key, "EulaAccepted", 0, REG_DWORD, 1)
-        except OSError as e:
-            pass
 
         bin_path = os.path.join(os.getcwd(), "bin")
         # First figure out what architecture the system in running (64 or 86)
@@ -112,7 +111,7 @@ class Autoruns(Auxiliary):
                 else:
                     log.debug("Diff file is empty")
             except Exception as e:
-                log.debug("Diff file doesn't seem to exist")
+                log.debug("Diff file doesn't seem to exist: %s", str(e))
 
         # Upload the autoruns diff file to the host.
         log.debug(files_to_upload)

@@ -40,10 +40,10 @@ class PcClientMutexes(Signature):
                 return True
 
         indicators = [
-            ".*\\\\syslog.dat",
-            ".*\\\\.*_lang.ini",
-            ".*\\\\[0-9]+_lang.dll",
-            ".*\\\\[0-9]+_res.tmp",
+            r".*\\syslog.dat",
+            r".*\\.*_lang.ini",
+            r".*\\[0-9]+_lang.dll",
+            r".*\\[0-9]+_res.tmp",
         ]
 
         for indicator in indicators:

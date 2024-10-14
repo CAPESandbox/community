@@ -33,11 +33,11 @@ class ApocalypseStealerFileBehavior(Signature):
 
     def run(self):
         score = 0
-        file_indicators = [
-            ".*\\\\AppData\\\\Local\\\\Temp\\\\browser(Passwords|Cookies|CreditCards)$",
-            ".*\\\\AppData\\\\Roaming\\\\(Google|Firefox)\\\\(Passwords|Cookies)\.txt$",
-            ".*\\\\AppData\\\\Roaming\\\\Clipboard.txt$",
-        ]
+        file_indicators = (
+            r".*\\AppData\\Local\\Temp\\browser(Passwords|Cookies|CreditCards)$",
+            r".*\\AppData\\Roaming\\(Google|Firefox)\\(Passwords|Cookies)\.txt$",
+            r".*\\AppData\\Roaming\\Clipboard.txt$",
+        )
 
         for indicator in file_indicators:
             match = self.check_write_file(pattern=indicator, regex=True)
