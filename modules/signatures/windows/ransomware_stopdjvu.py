@@ -17,6 +17,6 @@ class RansomwareSTOPDJVU(Signature):
         cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands")
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if all([pattern in lower for pattern in ("--admin" , "isnottask", "isnotautostart")])
+            if all([pattern in lower for pattern in ("--admin" , "isnottask", "isnotautostart")]):
                 return True
         return False
