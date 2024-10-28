@@ -118,10 +118,10 @@ class RegistryCredentialStoreAccess(Signature):
 
     def run(self):
         ret = False
-        reg_indicators = [
-            "HKEY_LOCAL_MACHINE\\\\SAM$",
-            "HKEY_LOCAL_MACHINE\\\\SYSTEM$",
-        ]
+        reg_indicators = (
+            r"HKEY_LOCAL_MACHINE\\SAM$",
+            r"HKEY_LOCAL_MACHINE\\SYSTEM$",
+        )
 
         for indicator in reg_indicators:
             match = self.check_key(pattern=indicator, regex=True)
@@ -147,9 +147,9 @@ class RegistryLSASecretsAccess(Signature):
     mbcs = ["OB0005"]
 
     def run(self):
-        indicators = [
-            "HKEY_LOCAL_MACHINE\\\\SECURITY\\\\Policy\\\\Secrets$",
-        ]
+        indicators = (
+            r"HKEY_LOCAL_MACHINE\\SECURITY\\Policy\\Secrets$",
+        )
 
         for indicator in indicators:
             match = self.check_key(pattern=indicator, regex=True)
@@ -173,11 +173,11 @@ class FileCredentialStoreAccess(Signature):
     mbcs = ["OB0005"]
 
     def run(self):
-        indicators = [
-            ".*\\\\Windows\\\\repair\\\\sam",
-            ".*\\\\Windows\\\\System32\\\\config\\\\RegBack\\\\SAM",
-            ".*\\\\Windows\\\\system32\\\\config\\\\SAM",
-        ]
+        indicators = (
+            r".*\\Windows\\repair\\sam",
+            r".*\\Windows\\System32\\config\\RegBack\\SAM",
+            r".*\\Windows\\system32\\config\\SAM",
+        )
 
         for indicator in indicators:
             match = self.check_file(pattern=indicator, regex=True)
@@ -201,11 +201,11 @@ class FileCredentialStoreWrite(Signature):
     mbcs = ["OB0005"]
 
     def run(self):
-        indicators = [
-            ".*\\\\Windows\\\\repair\\\\sam",
-            ".*\\\\Windows\\\\System32\\\\config\\\\RegBack\\\\SAM",
-            ".*\\\\Windows\\\\system32\\\\config\\\\SAM",
-        ]
+        indicators = (
+            r".*\\Windows\\repair\\sam",
+            r".*\\Windows\\System32\\config\\RegBack\\SAM",
+            r".*\\Windows\\system32\\config\\SAM",
+        )
 
         for indicator in indicators:
             match = self.check_write_file(pattern=indicator, regex=True)
@@ -232,14 +232,11 @@ class DumpLSAViaWindowsErrorReporting(Signature):
     filter_apinames = set(["NtCreateFile"])
 
     def on_call(self, call, process):
-        pname = process["process_name"].lower()
-
         # Checking parent process for false positives.
-        if pname in ["WerFaultSecure.exe", "WerFault.exe"]:
-            if call["api"] == "NtCreateFile":
-                filename = self.get_argument(call, "FileName")
-                if filename.endswith(".dmp") and "lsass_" in filename:
-                    return True
+        if process["process_name"].lower() in ("WerFaultSecure.exe", "WerFault.exe") and call["api"] == "NtCreateFile":
+            filename = self.get_argument(call, "FileName")
+            if filename.endswith(".dmp") and "lsass_" in filename:
+                return True
 
 
 class KerberosCredentialAccessViaRubeus(Signature):
@@ -256,12 +253,11 @@ class KerberosCredentialAccessViaRubeus(Signature):
     ]
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
-        for cmdline in cmdlines:
+        for cmdline in self.results.get("behavior", {}).get("summary", {}).get("executed_commands", []):
             lower = cmdline.lower()
             if "rebeus" in lower and any(
                 arg in lower
-                for arg in [
+                for arg in (
                     "asreproast",
                     "dump /service:krbtgt",
                     "dump /luid",
@@ -283,7 +279,7 @@ class KerberosCredentialAccessViaRubeus(Signature):
                     "golden /aes128",
                     "golden /aes256",
                     "changpw /ticket",
-                ]
+                )
             ):
                 return True
         return False

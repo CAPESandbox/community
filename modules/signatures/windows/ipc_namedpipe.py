@@ -117,17 +117,17 @@ class EscalatePrivilegeViaNamedPipe(Signature):
         pname = process["process_name"].lower()
 
         # Checking parent process for false positives.
-        if pname in ["chrome.exe", "msedge.exe"] and call["api"] == "CreateProcessInternalW":
+        if pname in ("chrome.exe", "msedge.exe") and call["api"] == "CreateProcessInternalW":
             cmdline = self.get_argument(call, "CommandLine")
             lower = cmdline.lower()
             if (
-                any(process in lower for process in ["cmd.exe", "powershell.exe", "sc.exe", "schtasks.exe"])
+                any(process in lower for process in ("cmd.exe", "powershell.exe", "sc.exe", "schtasks.exe"))
                 and "\\\\.\\pipe\\" in lower
             ):
                 return False
 
     def on_complete(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if (

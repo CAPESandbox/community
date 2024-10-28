@@ -109,13 +109,12 @@ class AccessWindowsPasswordsVault(Signature):
             if call["api"] == "CreateProcessInternalW":
                 cmdline = self.get_argument(call, "CommandLine")
                 lower = cmdline.lower()
-                if any(arg in lower for arg in ["passwordvault", "retrievepassword", "retrieveall"]):
+                if any(arg in lower for arg in ("passwordvault", "retrievepassword", "retrieveall")):
                     return False
 
     def on_complete(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
-        for cmdline in cmdlines:
+        for cmdline in self.results.get("behavior", {}).get("summary", {}).get("executed_commands", []):
             lower = cmdline.lower()
-            if "powershell" in lower and any(arg in lower for arg in ["passwordvault", "retrievepassword", "retrieveall"]):
+            if "powershell" in lower and any(arg in lower for arg in ("passwordvault", "retrievepassword", "retrieveall")):
                 return True
         return False

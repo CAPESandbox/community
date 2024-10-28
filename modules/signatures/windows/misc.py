@@ -23,27 +23,25 @@ class SuspiciousExecutionViaMicrosoftExchangeTransportAgent(Signature):
         self.detected = False
 
     def on_call(self, call, process):
-        pname = process["process_name"].lower()
-        if pname in ["msexchangetransport.exe", "edgetransport.exe"]:
-            if call["api"] == "CreateProcessInternalW":
-                cmdline = self.get_argument(call, "CommandLine")
-                lower = cmdline.lower()
-                if any(
-                    process in lower
-                    for process in [
-                        "wscript.exe",
-                        "cscript.exe",
-                        "mshta.exe",
-                        "certutil.exe",
-                        "certreq.exe",
-                        "bitsadmin.exe",
-                        "curl.exe",
-                        "reg.exe",
-                        "net.exe",
-                    ]
-                ):
-                    self.detected = True
-                    return
+        if process["process_name"].lower() in ("msexchangetransport.exe", "edgetransport.exe") and call["api"] == "CreateProcessInternalW":
+            cmdline = self.get_argument(call, "CommandLine")
+            lower = cmdline.lower()
+            if any(
+                process in lower
+                for process in (
+                    "wscript.exe",
+                    "cscript.exe",
+                    "mshta.exe",
+                    "certutil.exe",
+                    "certreq.exe",
+                    "bitsadmin.exe",
+                    "curl.exe",
+                    "reg.exe",
+                    "net.exe",
+                )
+            ):
+                self.detected = True
+                return
 
     def on_complete(self):
         if self.detected:
@@ -70,7 +68,7 @@ class SuspiciousScheduledTaskCreationviaMasqueradedXMLFile(Signature):
         pname = process["process_name"].lower()
 
         # Checking parent process for false positives.
-        if pname in [
+        if pname in (
             "setup_msi.exe",
             "setupactions.exe",
             "admsetupactions.exe",
@@ -79,28 +77,25 @@ class SuspiciousScheduledTaskCreationviaMasqueradedXMLFile(Signature):
             "setupactions.exe",
             "setupactions.exe",
             "wincompose.exe",
-        ]:
-            if call["api"] == "CreateProcessInternalW":
-                cmdline = self.get_argument(call, "CommandLine")
-                lower = cmdline.lower()
-                if "schtasks.exe" in lower:
-                    return False
+        ) and call["api"] == "CreateProcessInternalW":
+            cmdline = self.get_argument(call, "CommandLine")
+            lower = cmdline.lower()
+            if "schtasks.exe" in lower:
+                return False
 
-        if pname == "rundll32.exe":
-            if call["api"] == "CreateProcessInternalW":
+        if pname == "rundll32.exe" and call["api"] == "CreateProcessInternalW":
                 cmdline = self.get_argument(call, "CommandLine")
                 lower = cmdline.lower()
                 if "tmp,zzzzinvokemanagedcustomactionoutofproc" in lower:
                     return False
 
     def on_complete(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
-        for cmdline in cmdlines:
+        for cmdline in self.results.get("behavior", {}).get("summary", {}).get("executed_commands", []):
             lower = cmdline.lower()
             if (
                 "schtasks.exe" in lower
-                and any(arg in lower for arg in ["/create", "-create"])
-                and any(arg in lower for arg in ["/xml", "-xml"])
+                and any(arg in lower for arg in ("/create", "-create"))
+                and any(arg in lower for arg in ("/xml", "-xml"))
             ):
                 return True
         return False
@@ -125,11 +120,11 @@ class PotentialProtocolTunnelingViaLegitUtilities(Signature):
             lower = cmdline.lower()
             if (
                 "3389" in lower
-                and any(arg in lower for arg in ["-L", "-P", "-R", "-pw", "-ssh"])
+                and any(arg in lower for arg in ("-L", "-P", "-R", "-pw", "-ssh"))
                 or "ssh.exe" in lower
-                and any(arg in lower for arg in ["127.0.0", "localhost"])
+                and any(arg in lower for arg in ("127.0.0", "localhost"))
                 or "ngrok" in lower
-                and any(arg in lower for arg in ["http", "tcp", "tunnel", "tls", "start", "3389"])
+                and any(arg in lower for arg in ("http", "tcp", "tunnel", "tls", "start", "3389"))
             ):
                 return True
 
@@ -150,8 +145,7 @@ class PotentialProtocolTunnelingViaQEMU(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
-        for cmdline in cmdlines:
+        for cmdline in self.results.get("behavior", {}).get("summary", {}).get("executed_commands", []):
             lower = cmdline.lower()
             if "qemu" in lower and "netdev" in lower and "nographic" in lower and "restrict=off" in lower:
                 return True
@@ -184,15 +178,14 @@ class PotentialLocationDiscoveryViaUnusualProcess(Signature):
             not "\\aemagent\\rmm.advancedthreatdetection\\dattoav\\endpoint protection sdk\\endpointprotection.exe" in pnameFullPath
         ):
             if call["api"] == "CreateProcessInternalW":
-                if call["api"] == "CreateProcessInternalW":
-                    cmdline = self.get_argument(call, "CommandLine")
-                    lower = cmdline.lower()
-                    if (
-                        any(process in lower for process in ["chrome.exe", "msedge.exe", "brave.exe", "browser.exe", "dragon.exe"])
-                        and "--dump-dom" in lower
-                        and "http" in lower
-                    ):
-                        self.detected = True
+                cmdline = self.get_argument(call, "CommandLine")
+                lower = cmdline.lower()
+                if (
+                    any(process in lower for process in ("chrome.exe", "msedge.exe", "brave.exe", "browser.exe", "dragon.exe"))
+                    and "--dump-dom" in lower
+                    and "http" in lower
+                ):
+                    self.detected = True
 
     def on_complete(self):
         if self.detected:
@@ -228,7 +221,7 @@ class ExecutionFromSelfExtractingArchive(Signature):
 
     def on_complete(self):
         if self.detected:
-            cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+            cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
             for cmdline in cmdlines:
                 lower = cmdline.lower()
                 if "sfx.exe" in lower and "-p" in lower and "-d" in lower:
@@ -257,18 +250,15 @@ class SuspiciousJavaExecutionViaWinScripts(Signature):
         self.detected = False
 
     def on_call(self, call, process):
-        pname = process["name"]
-        if pname in ["wscript.exe", "cscript.exe"]:
-            if call["api"] == "CreateProcessInternalW":
-                if call["api"] == "CreateProcessInternalW":
-                    cmdline = self.get_argument(call, "CommandLine")
-                    lower = cmdline.lower()
-                    if (
-                        "jave.exe" in lower
-                        and "-jar" in lower
-                        and any(arg in lower for arg in ["\\appdata\\", "\\public\\", "\\programdata\\"])
-                    ):
-                        self.detected = True
+        if process["name"] in ("wscript.exe", "cscript.exe") and call["api"] == "CreateProcessInternalW":
+            cmdline = self.get_argument(call, "CommandLine")
+            lower = cmdline.lower()
+            if (
+                "jave.exe" in lower
+                and "-jar" in lower
+                and any(arg in lower for arg in ("\\appdata\\", "\\public\\", "\\programdata\\"))
+            ):
+                self.detected = True
 
     def on_complete(self):
         if self.detected:

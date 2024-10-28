@@ -13,7 +13,7 @@ class LOLBAS_ExecuteBinaryViaPesterPSModule(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "pester" in lower and not "http" in lower:
@@ -35,7 +35,7 @@ class LOLBAS_ExecuteBinaryViaOpenSSH(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "ssh" in lower and (
@@ -61,7 +61,7 @@ class LOLBAS_ExecuteBinaryVisualStudioLiveShare(Signature):
 
     def run(self):
 
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             # False-Positives
@@ -87,7 +87,7 @@ class LOLBAS_EvadeExecutionViaDeviceCredentialDeployment(Signature):
 
     def run(self):
 
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if ("cmd" in lower or "powershell" in lower) and "devicecredentialdeployment" in lower:
@@ -108,7 +108,7 @@ class LOLBAS_IndirectCommandExecutionViaConsoleWindowHost(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if any(process in lower for process in ["cmd /c", "powershell", "script", "mshta", "curl"]):
@@ -129,7 +129,7 @@ class LOLBAS_EvadeExecutionViaFilterManagerControl(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "fltmc" in lower and "unload" in lower and any(arg in lower for arg in ["security", "sysmon", "esensor", "Elastic"]):
@@ -153,7 +153,7 @@ class LOLBAS_EvadeExecutionViaASPNetCompiler(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "aspnet_compiler.exe" in lower and "-v" in lower and "-f" in lower and "-u" in lower and not "-d" in lower:
@@ -177,7 +177,7 @@ class LOLBAS_EvadeExecutionViaIntelGFXDownloadWrapper(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "gfxdownloadwrapper.exe" in lower and (
@@ -202,7 +202,7 @@ class LOLBAS_ScriptletProxyExecutionViaPubprn(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if ("wscript" in lower or "cscript" in lower) and "pubprn" in lower and "script:http" in lower:
@@ -223,7 +223,7 @@ class LOLBAS_RegisterDLLViaMSIEXEC(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if (
@@ -249,7 +249,7 @@ class LOLBAS_RegisterDLLViaOdbcconf(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
 
@@ -278,7 +278,7 @@ class LOLBAS_RegisterDLLViaCertOC(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "certoc" in lower and (("-loaddll" in lower and ".dll" in lower) or ("-getcacaps" in lower and "http" in lower)):
@@ -299,7 +299,7 @@ class LOLBAS_ExecuteBinaryViaScriptRunner(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
 
@@ -325,7 +325,7 @@ class LOLBAS_ExecuteMsiexecViaExplorer(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if (
@@ -351,7 +351,7 @@ class LOLBAS_PerformMaliciousActivitiesViaHeadlessBrowser(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
 
@@ -384,10 +384,8 @@ class LOLBAS_ExecuteBinaryViaRunExeHelperUtility(Signature):
     filter_apinames = set(["CreateProcessInternalW"])
 
     def on_call(self, call, process):
-        pname = process["process_name"].lower()
-
         # Checking parent process for false positives.
-        if pname in [
+        if process["process_name"].lower() in [
             "conhost.exe",
             "powercfg.exe",
             "wevtutil.exe",
@@ -399,15 +397,14 @@ class LOLBAS_ExecuteBinaryViaRunExeHelperUtility(Signature):
             "dxdiag.exe",
             "logman.exe",
             "licensingdiag.exe",
-        ]:
-            if call["api"] == "CreateProcessInternalW":
-                cmdline = self.get_argument(call, "CommandLine")
-                lower = cmdline.lower()
-                if "runexehelper.exe" in lower:
-                    return False
+        ] and call["api"] == "CreateProcessInternalW":
+            cmdline = self.get_argument(call, "CommandLine")
+            lower = cmdline.lower()
+            if "runexehelper.exe" in lower:
+                return False
 
     def on_complete(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "runexehelper.exe" in lower and lower.endswith(".exe"):
@@ -428,7 +425,7 @@ class LOLBAS_ExecuteBinaryViaTTDinject(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "ttdinject.exe" in lower and "/launch" in lower and not "\\ttdinject.exe" in lower:
@@ -453,7 +450,7 @@ class LOLBAS_ExecuteBinaryViaAppVLP(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "appvlp.exe" in lower and not (
@@ -501,7 +498,7 @@ class LOLBAS_ExecuteBinaryViaInternetExplorerExporter(Signature):
 
     def on_complete(self):
         if self.detected:
-            cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+            cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
             for cmdline in cmdlines:
                 lower = cmdline.lower()
                 if "extexport.exe" in lower:
@@ -522,12 +519,12 @@ class LOLBAS_ExecuteSuspiciousPowerShellViaSQLPS(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if any(process in lower for process in ["sqltoolsps.exe", "sqlps.exe"]) and any(
                 arg in lower
-                for arg in [
+                for arg in (
                     "-e",
                     "-enc",
                     "-ep",
@@ -539,7 +536,7 @@ class LOLBAS_ExecuteSuspiciousPowerShellViaSQLPS(Signature):
                     "downloadstring",
                     "bitstransfer",
                     "reflection.assembly",
-                ]
+                )
             ):
                 self.data.append({"command": cmdline})
                 return True
@@ -559,7 +556,7 @@ class LOLBAS_ExecuteSuspiciousPowerShellViaRunscripthelper(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             argumentCount = lower.split()

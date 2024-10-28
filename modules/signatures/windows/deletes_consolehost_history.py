@@ -19,7 +19,7 @@ class DeletesExecutedFiles(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.isDeleted = False
-        self.blacklistedApps = [
+        self.blacklistedApps = (
             "powershell.exe",
             "rundll32.exe",
             "regsvr32.exe",
@@ -29,11 +29,11 @@ class DeletesExecutedFiles(Signature):
             "mshta.exe",
             "winword.exe",
             "excel.exe",
-        ]
+        )
         self.blacklistedPaths = ["\\users\\", "\\windows\\temp\\", "\\programdata\\", "\\windows\\microsoft.net\\"]
 
     def on_call(self, call, process):
-        if call["api"] == "NtDeleteFile" or call["api"] == "DeleteFileA" or call["api"] == "DeleteFileW":
+        if call["api"] in ("NtDeleteFile", "DeleteFileA", "DeleteFileW"):
             if "ConsoleHost_history.txt" in self.get_argument(call, "FileName"):
                 self.isDeleted = True
                 if self.pid:
@@ -44,7 +44,7 @@ class DeletesExecutedFiles(Signature):
 
         # Verify True Positives
         if self.isDeleted:
-            for proc in self.results.get("behavior").get("processtree"):
+            for proc in self.results.get("behavior", {}).get("processtree", []):
                 if proc.get("name") in self.blacklistedApps or proc["module_path"].lower() in self.blacklistedPaths:
                     return True
         return False

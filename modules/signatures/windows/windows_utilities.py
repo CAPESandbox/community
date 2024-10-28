@@ -859,10 +859,10 @@ class UsesWindowsUtilitiesXcopy(Signature):
     evented = True
 
     def run(self):
-        utilities = [
+        utilities = (
             "xcopy ",
             "xcopy.exe ",
-        ]
+        )
 
         ret = False
         cmdlines = self.results["behavior"]["summary"]["executed_commands"]
@@ -918,8 +918,7 @@ class UsesMicrosoftHTMLHelpExecutable(Signature):
         self.detected = False
 
     def on_call(self, call, process):
-        pname = process["process_name"].lower()
-        if pname == "hh.exe":
+        if process["process_name"].lower() == "hh.exe":
             if call["api"] == "NtCreateFile":
                 fileName = self.get_argument(call, "FileName")
                 if ".exe" in fileName:
@@ -959,13 +958,12 @@ class PotentialWebShellViaScreenConnectServer(Signature):
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()
-        if pname == "screenConnect.service.exe":
-            if call["api"] == "CreateProcessInternalW":
-                cmdline = self.get_argument(call, "CommandLine")
-                lower = cmdline.lower()
-                if any(process in lower for process in ["cmd.exe", "powershell.exe", "pwsh.exe", "powershell_ise.exe", "csc.exe"]):
-                    self.detected = True
-                    return
+        if pname == "screenConnect.service.exe" and call["api"] == "CreateProcessInternalW":
+            cmdline = self.get_argument(call, "CommandLine")
+            lower = cmdline.lower()
+            if any(process in lower for process in ("cmd.exe", "powershell.exe", "pwsh.exe", "powershell_ise.exe", "csc.exe")):
+                self.detected = True
+                return
 
     def on_complete(self):
         if self.detected:
@@ -993,14 +991,12 @@ class PotentialLateralMovementViaSMBEXEC(Signature):
         self.detected = False
 
     def on_call(self, call, process):
-        pname = process["process_name"].lower()
-        if pname == "services.exe":
-            if call["api"] == "CreateProcessInternalW":
-                cmdline = self.get_argument(call, "CommandLine")
-                lower = cmdline.lower()
-                if any(process in lower for process in ["cmd.exe"]) and any(arg in lower for arg in ["/q", "echo", ".bat", "del"]):
-                    self.detected = True
-                    return
+        if process["process_name"].lower() == "services.exe" and call["api"] == "CreateProcessInternalW":
+            cmdline = self.get_argument(call, "CommandLine")
+            lower = cmdline.lower()
+            if any(process in lower for process in ["cmd.exe"]) and any(arg in lower for arg in ("/q", "echo", ".bat", "del")):
+                self.detected = True
+                return
 
     def on_complete(self):
         if self.detected:
