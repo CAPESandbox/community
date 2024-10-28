@@ -1,5 +1,6 @@
 from lib.cuckoo.common.abstracts import Signature
 
+
 class LOLBAS_ExecuteBinaryViaPesterPSModule(Signature):
     name = "Execute_Binary_Via_PesterPSModule"
     description = "Attempts to execute a binary through a legitimate PowerShell Module (Pester)"
@@ -21,6 +22,7 @@ class LOLBAS_ExecuteBinaryViaPesterPSModule(Signature):
 
         return False
 
+
 class LOLBAS_ExecuteBinaryViaOpenSSH(Signature):
     name = "Execute_Binary_Via_OpenSSH"
     description = "Attempts to execute a binary through a Windows OpenSSH Client"
@@ -36,12 +38,15 @@ class LOLBAS_ExecuteBinaryViaOpenSSH(Signature):
         cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if "ssh" in lower and (("-o" in lower and ("proxycommand=" in lower or "localcommand=" in lower))
-                                   or ("localhost" in lower and ".exe" in lower)):
+            if "ssh" in lower and (
+                ("-o" in lower and ("proxycommand=" in lower or "localcommand=" in lower))
+                or ("localhost" in lower and ".exe" in lower)
+            ):
                 self.data.append({"command": cmdline})
                 return True
 
         return False
+
 
 class LOLBAS_ExecuteBinaryVisualStudioLiveShare(Signature):
     name = "Execute_Binary_Via_VisualStudioLiveShare"
@@ -68,6 +73,7 @@ class LOLBAS_ExecuteBinaryVisualStudioLiveShare(Signature):
                 self.data.append({"command": cmdline})
                 return True
 
+
 class LOLBAS_EvadeExecutionViaDeviceCredentialDeployment(Signature):
     name = "Evade_Execute_Via_DeviceCredentialDeployment"
     description = "Attempts to hide Windows Command Console Window via DeviceCredentialDeployment"
@@ -89,6 +95,7 @@ class LOLBAS_EvadeExecutionViaDeviceCredentialDeployment(Signature):
                 return True
         return False
 
+
 class LOLBAS_IndirectCommandExecutionViaConsoleWindowHost(Signature):
     name = "Indirect_Command_Execution_Via_ConsoleWindowHost"
     description = "Abuses conhost.exe to execute an arbitrary executable"
@@ -109,6 +116,7 @@ class LOLBAS_IndirectCommandExecutionViaConsoleWindowHost(Signature):
                 return True
         return False
 
+
 class LOLBAS_EvadeExecutionViaFilterManagerControl(Signature):
     name = "Evade_Execution_Via_Filter_Manager_Control"
     description = "Attempts to unload a security driver via Filter Manager Control"
@@ -124,11 +132,11 @@ class LOLBAS_EvadeExecutionViaFilterManagerControl(Signature):
         cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if "fltmc" in lower and "unload" in lower and \
-                    any(arg in lower for arg in ["security", "sysmon", "esensor", "Elastic"]):
+            if "fltmc" in lower and "unload" in lower and any(arg in lower for arg in ["security", "sysmon", "esensor", "Elastic"]):
                 self.data.append({"command": cmdline})
                 return True
         return False
+
 
 class LOLBAS_EvadeExecutionViaASPNetCompiler(Signature):
     name = "Evade_Execution_Via_ASPNet_Compiler"
@@ -138,8 +146,10 @@ class LOLBAS_EvadeExecutionViaASPNetCompiler(Signature):
     authors = ["@para0x0dise"]
     minimum = "1.2"
     ttps = ["T1218.004"]
-    references = ["https://lolbas-project.github.io/lolbas/Binaries/Aspnet_Compiler/",
-                  "https://ijustwannared.team/2020/08/01/the-curious-case-of-aspnet_compiler-exe/"]
+    references = [
+        "https://lolbas-project.github.io/lolbas/Binaries/Aspnet_Compiler/",
+        "https://ijustwannared.team/2020/08/01/the-curious-case-of-aspnet_compiler-exe/",
+    ]
     evented = True
 
     def run(self):
@@ -151,6 +161,7 @@ class LOLBAS_EvadeExecutionViaASPNetCompiler(Signature):
                 return True
         return False
 
+
 class LOLBAS_EvadeExecutionViaIntelGFXDownloadWrapper(Signature):
     name = "Evade_Execution_Via_Intel_GFXDownloadWrapper"
     description = "Attempts to load a DLL or download remote file using legitimate application shipped by Intel"
@@ -159,19 +170,25 @@ class LOLBAS_EvadeExecutionViaIntelGFXDownloadWrapper(Signature):
     authors = ["@para0x0dise"]
     minimum = "1.2"
     ttps = ["T1218"]
-    references = ["https://lolbas-project.github.io/lolbas/Binaries/GfxDownloadWrapper/",
-                  "https://twitter.com/bohops/status/1318767376175976449"]
+    references = [
+        "https://lolbas-project.github.io/lolbas/Binaries/GfxDownloadWrapper/",
+        "https://twitter.com/bohops/status/1318767376175976449",
+    ]
     evented = True
 
     def run(self):
         cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if "gfxdownloadwrapper.exe" in lower and ("run" in lower and any(arg in lower for arg in ["0", "2"])
-                                                                         or ("http" in lower and not "https://gameplayapi.intel.com" in lower)):
+            if "gfxdownloadwrapper.exe" in lower and (
+                "run" in lower
+                and any(arg in lower for arg in ["0", "2"])
+                or ("http" in lower and not "https://gameplayapi.intel.com" in lower)
+            ):
                 self.data.append({"command": cmdline})
                 return True
         return False
+
 
 class LOLBAS_ScriptletProxyExecutionViaPubprn(Signature):
     name = "Scriptlet_Proxy_Execution_Via_Pubprn"
@@ -193,6 +210,7 @@ class LOLBAS_ScriptletProxyExecutionViaPubprn(Signature):
                 return True
         return False
 
+
 class LOLBAS_RegisterDLLViaMSIEXEC(Signature):
     name = "Register_DLL_Via_MSIEXEC"
     description = "Attempts to load suspicious DLL via Msiexec"
@@ -208,11 +226,16 @@ class LOLBAS_RegisterDLLViaMSIEXEC(Signature):
         cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if "msiexec" in lower and any(arg in lower for arg in ["/z", "/y", "-y", "-z"]) and ".dll" in lower and not \
-                    any(arg in lower for arg in ["\\Program Files\\", "\\Program Files %(x86%)\\"]):
+            if (
+                "msiexec" in lower
+                and any(arg in lower for arg in ["/z", "/y", "-y", "-z"])
+                and ".dll" in lower
+                and not any(arg in lower for arg in ["\\Program Files\\", "\\Program Files %(x86%)\\"])
+            ):
                 self.data.append({"command": cmdline})
                 return True
         return False
+
 
 class LOLBAS_RegisterDLLViaOdbcconf(Signature):
     name = "Register_DLL_Via_Odbcconf"
@@ -232,14 +255,16 @@ class LOLBAS_RegisterDLLViaOdbcconf(Signature):
 
             # Falses:
             # REF: https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/defense_evasion_suspicious_imageload_via_odbc_driver_configuration_program.toml
-            if ("installmanager.exe" in lower and "\\windows\\syswow64\\odbcconf.rsp" in lower) or \
-                    ("{configsysdsn" in lower and "sql server" in lower):
+            if ("installmanager.exe" in lower and "\\windows\\syswow64\\odbcconf.rsp" in lower) or (
+                "{configsysdsn" in lower and "sql server" in lower
+            ):
                 return False
 
             if "odbcconf" in lower and any(arg in lower for arg in ["-a", "-f", "/a", "/f"]) and ".dll" in lower:
                 self.data.append({"command": cmdline})
                 return True
         return False
+
 
 class LOLBAS_RegisterDLLViaCertOC(Signature):
     name = "Register_DLL_Via_CertOC"
@@ -256,11 +281,11 @@ class LOLBAS_RegisterDLLViaCertOC(Signature):
         cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if "certoc" in lower and (("-loaddll" in lower and ".dll" in lower) or
-                                      ("-getcacaps" in lower and "http" in lower)):
+            if "certoc" in lower and (("-loaddll" in lower and ".dll" in lower) or ("-getcacaps" in lower and "http" in lower)):
                 self.data.append({"command": cmdline})
                 return True
         return False
+
 
 class LOLBAS_ExecuteBinaryViaScriptRunner(Signature):
     name = "Execute_Binary_Via_ScriptRunner"
@@ -280,11 +305,11 @@ class LOLBAS_ExecuteBinaryViaScriptRunner(Signature):
 
             # Exclude conhost.exe (False-postive):
             # REF: https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/defense_evasion_system_binary_proxy_execution_via_scriptrunner.toml
-            if "scriptrunner" in lower and "-appvscript" in lower and not \
-                    ("conhost" in lower and "0xffffffff" in lower):
+            if "scriptrunner" in lower and "-appvscript" in lower and not ("conhost" in lower and "0xffffffff" in lower):
                 self.data.append({"command": cmdline})
                 return True
         return False
+
 
 class LOLBAS_ExecuteMsiexecViaExplorer(Signature):
     name = "Execute_Msiexec_Via_Explorer"
@@ -294,18 +319,25 @@ class LOLBAS_ExecuteMsiexecViaExplorer(Signature):
     authors = ["@para0x0dise"]
     minimum = "1.2"
     ttps = ["T1218"]
-    references = ["https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/defense_evasion_windows_installer_execution_via_explorer.toml"]
+    references = [
+        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/defense_evasion_windows_installer_execution_via_explorer.toml"
+    ]
     evented = True
 
     def run(self):
         cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if "explorer" in lower and "msiexec" in lower and any(arg in lower for arg in ["/i", "-i"]) and \
-                    any(arg in lower for arg in ["/qn", "-qn", "-q", "/q", "/quiet"]):
+            if (
+                "explorer" in lower
+                and "msiexec" in lower
+                and any(arg in lower for arg in ["/i", "-i"])
+                and any(arg in lower for arg in ["/qn", "-qn", "-q", "/q", "/quiet"])
+            ):
                 self.data.append({"command": cmdline})
                 return True
         return False
+
 
 class LOLBAS_PerformMaliciousActivitiesViaHeadlessBrowser(Signature):
     name = "Perform_Malicious_Activities_Via_Headless_Browser"
@@ -324,15 +356,18 @@ class LOLBAS_PerformMaliciousActivitiesViaHeadlessBrowser(Signature):
             lower = cmdline.lower()
 
             # I have tried it on other browsers
-            if any(process in lower for process in ["chrome.exe", "msedge.exe", "brave.exe",
-                                                    "browser.exe", "dragon.exe", "vivaldi.exe"]) and \
-                    (
-                        any(spawn in lower for spawn in ["cmd", "powershell", "wscript", "cscript"]) or
-                        ("headless" in lower and "http" in lower and not "http://localhost/allure#graph" in lower)
-                    ):
+            if any(
+                process in lower
+                for process in ["chrome.exe", "msedge.exe", "brave.exe", "browser.exe", "dragon.exe", "vivaldi.exe"]
+            ) and (
+                any(spawn in lower for spawn in ["cmd", "powershell", "wscript", "cscript"])
+                or ("headless" in lower and "http" in lower and not "http://localhost/allure#graph" in lower)
+            ):
                 self.data.append({"command": cmdline})
                 return True
         return False
+
+
 class LOLBAS_ExecuteBinaryViaRunExeHelperUtility(Signature):
     name = "execute_binary_via_run_exe_helper_utility"
     description = "Attempts to execute malicious binaries via RunExeHelper utility"
@@ -343,7 +378,8 @@ class LOLBAS_ExecuteBinaryViaRunExeHelperUtility(Signature):
     evented = True
     ttps = ["T1218"]
     references = [
-        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/defense_evasion_binary_proxy_execution_via_runexehelper.toml"]
+        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/defense_evasion_binary_proxy_execution_via_runexehelper.toml"
+    ]
 
     filter_apinames = set(["CreateProcessInternalW"])
 
@@ -351,12 +387,25 @@ class LOLBAS_ExecuteBinaryViaRunExeHelperUtility(Signature):
         pname = process["process_name"].lower()
 
         # Checking parent process for false positives.
-        if pname in ["conhost.exe", "powercfg.exe", "wevtutil.exe", "wscollect.exe", "tpmtool.exe", "mdmdiagnosticstool.exe", "dsregcmd.exe", "stordiag.exe", "dxdiag.exe", "logman.exe", "licensingdiag.exe"]:
+        if pname in [
+            "conhost.exe",
+            "powercfg.exe",
+            "wevtutil.exe",
+            "wscollect.exe",
+            "tpmtool.exe",
+            "mdmdiagnosticstool.exe",
+            "dsregcmd.exe",
+            "stordiag.exe",
+            "dxdiag.exe",
+            "logman.exe",
+            "licensingdiag.exe",
+        ]:
             if call["api"] == "CreateProcessInternalW":
                 cmdline = self.get_argument(call, "CommandLine")
                 lower = cmdline.lower()
                 if "runexehelper.exe" in lower:
                     return False
+
     def on_complete(self):
         cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
         for cmdline in cmdlines:
@@ -365,6 +414,7 @@ class LOLBAS_ExecuteBinaryViaRunExeHelperUtility(Signature):
                 self.data.append({"command": cmdline})
                 return True
         return False
+
 
 class LOLBAS_ExecuteBinaryViaTTDinject(Signature):
     name = "execute_binary_via_ttdinject"
@@ -387,6 +437,7 @@ class LOLBAS_ExecuteBinaryViaTTDinject(Signature):
 
         return False
 
+
 class LOLBAS_ExecuteBinaryViaAppVLP(Signature):
     name = "execute_binary_via_appvlp"
     description = "Attempts to execute a binary via the Application Virtualization Utility"
@@ -395,20 +446,24 @@ class LOLBAS_ExecuteBinaryViaAppVLP(Signature):
     authors = ["@para0x0dise"]
     minimum = "1.2"
     ttps = ["T1218"]
-    references = ["https://lolbas-project.github.io/lolbas/OtherMSBinaries/Appvlp/",
-                  "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/defense_evasion_binary_proxy_execution_via_appvlp.toml"]
+    references = [
+        "https://lolbas-project.github.io/lolbas/OtherMSBinaries/Appvlp/",
+        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/defense_evasion_binary_proxy_execution_via_appvlp.toml",
+    ]
     evented = True
 
     def run(self):
         cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if "appvlp.exe" in lower and not ("\\program files\\" in lower or "\\program files (x86)\\" in lower
-            or "rundll32.exe" in lower):
+            if "appvlp.exe" in lower and not (
+                "\\program files\\" in lower or "\\program files (x86)\\" in lower or "rundll32.exe" in lower
+            ):
                 self.data.append({"command": cmdline})
                 return True
 
         return False
+
 
 class LOLBAS_ExecuteBinaryViaInternetExplorerExporter(Signature):
     name = "execute_binary_via_internet_explorer_exporter"
@@ -422,28 +477,28 @@ class LOLBAS_ExecuteBinaryViaInternetExplorerExporter(Signature):
     evented = True
 
     filter_apinames = set(["NtCreateFile"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.detected = False
-        self.blacklistedNames = [
-            "mozcrt19.dll",
-            "mozsqlite3.dll",
-            "sqlite3.dll"
-        ]
+        self.blacklistedNames = ["mozcrt19.dll", "mozsqlite3.dll", "sqlite3.dll"]
         self.whitelistedDirectories = [
             "\\program files (x86)\\",
             "\\program files\\",
             "\\windows\\system32\\",
-            "\\windows\\syswow64\\"
+            "\\windows\\syswow64\\",
         ]
+
     def on_call(self, call, _):
         if call["api"] == "NtCreateFile":
             filename = self.get_argument(call, "FileName").lower()
             handle = int(self.get_argument(call, "FileHandle"), 16)
             if handle:
-                if (any(dllName in filename for dllName in self.blacklistedNames)
-                        and not any(Dir in filename for Dir in self.whitelistedDirectories)):
+                if any(dllName in filename for dllName in self.blacklistedNames) and not any(
+                    Dir in filename for Dir in self.whitelistedDirectories
+                ):
                     self.detected = True
+
     def on_complete(self):
         if self.detected:
             cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
@@ -453,6 +508,7 @@ class LOLBAS_ExecuteBinaryViaInternetExplorerExporter(Signature):
                     self.data.append({"command": cmdline})
                     return True
         return False
+
 
 class LOLBAS_ExecuteSuspiciousPowerShellViaSQLPS(Signature):
     name = "execute_suspicious_powershell_via_sqlps"
@@ -469,13 +525,27 @@ class LOLBAS_ExecuteSuspiciousPowerShellViaSQLPS(Signature):
         cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if (any(process in lower for process in ["sqltoolsps.exe", "sqlps.exe"]) and
-                    any(arg in lower for arg in ["-e", "-enc", "-ep", "-encoded", ";iex", "start-process", "webclient",
-                                "downloadfile", "downloadstring", "bitstransfer", "reflection.assembly"])):
+            if any(process in lower for process in ["sqltoolsps.exe", "sqlps.exe"]) and any(
+                arg in lower
+                for arg in [
+                    "-e",
+                    "-enc",
+                    "-ep",
+                    "-encoded",
+                    ";iex",
+                    "start-process",
+                    "webclient",
+                    "downloadfile",
+                    "downloadstring",
+                    "bitstransfer",
+                    "reflection.assembly",
+                ]
+            ):
                 self.data.append({"command": cmdline})
                 return True
 
         return False
+
 
 class LOLBAS_ExecuteSuspiciousPowerShellViaRunscripthelper(Signature):
     name = "execute_suspicious_powershell_via_runscripthelper"

@@ -218,6 +218,8 @@ class UACBypassCMSTPCOM(Signature):
                 return True
 
         return False
+
+
 class UACBypassWindowsBackup(Signature):
     name = "uac_bypass_windows_Backup"
     description = "Attempts to use Windows Backup and Restore (sdclt.exe) to bypass UAC"
@@ -227,8 +229,10 @@ class UACBypassWindowsBackup(Signature):
     minimum = "0.5"
     evented = True
     ttps = ["T1548", "T1548.002"]
-    references = ["https://github.com/hfiref0x/UACME",
-                  "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/privilege_escalation_uac_bypass_via_sdclt.toml"]
+    references = [
+        "https://github.com/hfiref0x/UACME",
+        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/privilege_escalation_uac_bypass_via_sdclt.toml",
+    ]
 
     filter_apinames = set(["CreateProcessInternalW"])
 

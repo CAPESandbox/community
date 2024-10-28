@@ -896,6 +896,7 @@ class UsesPowerShellCopyItem(Signature):
 
         return False
 
+
 class UsesMicrosoftHTMLHelpExecutable(Signature):
     name = "uses_Microsoft_HTML_Help_Executable"
     description = "Uses Microsoft HTML Help Executable for executing PE files"
@@ -905,10 +906,13 @@ class UsesMicrosoftHTMLHelpExecutable(Signature):
     minimum = "0.5"
     evented = True
     ttps = ["T1566", "T1218.001"]
-    references = ["https://www.ptsecurity.com/ww-en/analytics/pt-esc-threat-intelligence/higaisa-or-winnti-apt-41-backdoors-old-and-new/",
-                  "https://oddvar.moe/2017/08/13/bypassing-device-guard-umci-using-chm-cve-2017-8625/"]
+    references = [
+        "https://www.ptsecurity.com/ww-en/analytics/pt-esc-threat-intelligence/higaisa-or-winnti-apt-41-backdoors-old-and-new/",
+        "https://oddvar.moe/2017/08/13/bypassing-device-guard-umci-using-chm-cve-2017-8625/",
+    ]
 
     filter_apinames = set(["NtCreateFile", "CreateProcessInternalW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.detected = False
@@ -933,6 +937,7 @@ class UsesMicrosoftHTMLHelpExecutable(Signature):
             return True
         return False
 
+
 class PotentialWebShellViaScreenConnectServer(Signature):
     name = "potential_WebShell_Via_ScreenConnectServer"
     description = "Uses ScreenConnect for executing scripts"
@@ -942,9 +947,12 @@ class PotentialWebShellViaScreenConnectServer(Signature):
     minimum = "0.5"
     evented = True
     ttps = ["T1566", "T1218.001"]
-    references = ["https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/initial_access_potential_webshell_via_screenconnect_server.toml"]
+    references = [
+        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/initial_access_potential_webshell_via_screenconnect_server.toml"
+    ]
 
     filter_apinames = set(["CreateProcessInternalW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.detected = False
@@ -964,6 +972,7 @@ class PotentialWebShellViaScreenConnectServer(Signature):
             return True
         return False
 
+
 class PotentialLateralMovementViaSMBEXEC(Signature):
     name = "Potential_Lateral_Movement_Via_SMBEXEC"
     description = "Attempts to execute a service via Windows Command Shell which may indicate lateral movement attempt"
@@ -973,9 +982,12 @@ class PotentialLateralMovementViaSMBEXEC(Signature):
     minimum = "0.5"
     evented = True
     ttps = ["T1059"]
-    references = ["https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows\lateral_movement_potential_lateral_movement_via_smbexec.toml"]
+    references = [
+        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows\lateral_movement_potential_lateral_movement_via_smbexec.toml"
+    ]
 
     filter_apinames = set(["CreateProcessInternalW"])
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.detected = False

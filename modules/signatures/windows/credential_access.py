@@ -85,6 +85,7 @@ class CredWiz(Signature):
 
         return ret
 
+
 class AccessWindowsPasswordsVault(Signature):
     name = "access_windows_passwords_vault"
     description = "Attempts to access Vault passwords via PowerShell"
@@ -95,7 +96,8 @@ class AccessWindowsPasswordsVault(Signature):
     evented = True
     ttps = ["T1059"]
     references = [
-        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/credential_access_access_to_windows_passwords_vault_via_powershell.toml"]
+        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/credential_access_access_to_windows_passwords_vault_via_powershell.toml"
+    ]
 
     filter_apinames = set(["CreateProcessInternalW"])
 

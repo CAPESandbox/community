@@ -1,5 +1,6 @@
 from lib.cuckoo.common.abstracts import Signature
 
+
 class RansomwareSTOPDJVU(Signature):
     name = "ransomware_stopdjvu"
     description = "Exhibits behavior characteristic of STOP/DJVU ransomware"
