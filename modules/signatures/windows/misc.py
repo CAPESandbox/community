@@ -23,7 +23,10 @@ class SuspiciousExecutionViaMicrosoftExchangeTransportAgent(Signature):
         self.detected = False
 
     def on_call(self, call, process):
-        if process["process_name"].lower() in ("msexchangetransport.exe", "edgetransport.exe") and call["api"] == "CreateProcessInternalW":
+        if (
+            process["process_name"].lower() in ("msexchangetransport.exe", "edgetransport.exe")
+            and call["api"] == "CreateProcessInternalW"
+        ):
             cmdline = self.get_argument(call, "CommandLine")
             lower = cmdline.lower()
             if any(
@@ -68,26 +71,30 @@ class SuspiciousScheduledTaskCreationviaMasqueradedXMLFile(Signature):
         pname = process["process_name"].lower()
 
         # Checking parent process for false positives.
-        if pname in (
-            "setup_msi.exe",
-            "setupactions.exe",
-            "admsetupactions.exe",
-            "antimalware.exe",
-            "pcdrcui.exe",
-            "setupactions.exe",
-            "setupactions.exe",
-            "wincompose.exe",
-        ) and call["api"] == "CreateProcessInternalW":
+        if (
+            pname
+            in (
+                "setup_msi.exe",
+                "setupactions.exe",
+                "admsetupactions.exe",
+                "antimalware.exe",
+                "pcdrcui.exe",
+                "setupactions.exe",
+                "setupactions.exe",
+                "wincompose.exe",
+            )
+            and call["api"] == "CreateProcessInternalW"
+        ):
             cmdline = self.get_argument(call, "CommandLine")
             lower = cmdline.lower()
             if "schtasks.exe" in lower:
                 return False
 
         if pname == "rundll32.exe" and call["api"] == "CreateProcessInternalW":
-                cmdline = self.get_argument(call, "CommandLine")
-                lower = cmdline.lower()
-                if "tmp,zzzzinvokemanagedcustomactionoutofproc" in lower:
-                    return False
+            cmdline = self.get_argument(call, "CommandLine")
+            lower = cmdline.lower()
+            if "tmp,zzzzinvokemanagedcustomactionoutofproc" in lower:
+                return False
 
     def on_complete(self):
         for cmdline in self.results.get("behavior", {}).get("summary", {}).get("executed_commands", []):

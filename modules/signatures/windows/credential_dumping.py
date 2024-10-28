@@ -147,9 +147,7 @@ class RegistryLSASecretsAccess(Signature):
     mbcs = ["OB0005"]
 
     def run(self):
-        indicators = (
-            r"HKEY_LOCAL_MACHINE\\SECURITY\\Policy\\Secrets$",
-        )
+        indicators = (r"HKEY_LOCAL_MACHINE\\SECURITY\\Policy\\Secrets$",)
 
         for indicator in indicators:
             match = self.check_key(pattern=indicator, regex=True)

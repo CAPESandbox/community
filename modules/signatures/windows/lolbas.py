@@ -385,19 +385,23 @@ class LOLBAS_ExecuteBinaryViaRunExeHelperUtility(Signature):
 
     def on_call(self, call, process):
         # Checking parent process for false positives.
-        if process["process_name"].lower() in [
-            "conhost.exe",
-            "powercfg.exe",
-            "wevtutil.exe",
-            "wscollect.exe",
-            "tpmtool.exe",
-            "mdmdiagnosticstool.exe",
-            "dsregcmd.exe",
-            "stordiag.exe",
-            "dxdiag.exe",
-            "logman.exe",
-            "licensingdiag.exe",
-        ] and call["api"] == "CreateProcessInternalW":
+        if (
+            process["process_name"].lower()
+            in [
+                "conhost.exe",
+                "powercfg.exe",
+                "wevtutil.exe",
+                "wscollect.exe",
+                "tpmtool.exe",
+                "mdmdiagnosticstool.exe",
+                "dsregcmd.exe",
+                "stordiag.exe",
+                "dxdiag.exe",
+                "logman.exe",
+                "licensingdiag.exe",
+            ]
+            and call["api"] == "CreateProcessInternalW"
+        ):
             cmdline = self.get_argument(call, "CommandLine")
             lower = cmdline.lower()
             if "runexehelper.exe" in lower:
