@@ -214,3 +214,52 @@ class FileCredentialStoreWrite(Signature):
                 return True
 
         return False
+
+class DumpLSAViaWindowsErrorReporting(Signature):
+    name = "dump_lsa_via_windows_error_reporting"
+    description = "Attempts to create LSASS crash dump via Windows Error Reporting process"
+    severity = 3
+    categories = ["credential_access", "credential_dumping"]
+    authors = ["@para0x0dise"]
+    minimum = "0.5"
+    evented = True
+    ttps = ["T1003"]
+    references = [
+        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/credential_access_lsa_dump_via_windows_error_reporting.toml"]
+
+    filter_apinames = set(["NtCreateFile"])
+
+    def on_call(self, call, process):
+        pname = process["process_name"].lower()
+
+        # Checking parent process for false positives.
+        if pname in ["WerFaultSecure.exe", "WerFault.exe"]:
+            if call["api"] == "NtCreateFile":
+                filename = self.get_argument(call, "FileName")
+                if filename.endswith(".dmp") and "lsass_" in filename:
+                    return True
+
+class KerberosCredentialAccessViaRubeus(Signature):
+    name = "kerberos_credential_access_via_rubeus"
+    description = "Attempts to manipulate/abuse Kerberos Ticketing System via Rubeus toolset"
+    severity = 3
+    categories = ["credential_access", "credential_dumping"]
+    authors = ["@para0x0dise"]
+    minimum = "0.5"
+    evented = True
+    ttps = ["T1003"]
+    references = [
+        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/credential_access_potential_credential_access_via_rubeus.toml"]
+
+    def run(self):
+        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            if "rebeus" in lower and any(arg in lower for arg in ["asreproast", "dump /service:krbtgt", "dump /luid",
+                                    "kerberoast", "createnetonly /program", "ptt /ticket",
+                                    "/impersonateuser", "renew /ticket", "asktgt /user",
+                                    "asktgs /ticket", "harvest /interval", "s4u /user",
+                                    "s4u /ticket", "hash /password", "tgtdeleg", "tgtdeleg /target",
+                                    "golden /des", "golden /rc4", "golden /aes128", "golden /aes256", "changpw /ticket"]):
+                return True
+        return False

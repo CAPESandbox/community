@@ -218,3 +218,35 @@ class UACBypassCMSTPCOM(Signature):
                 return True
 
         return False
+class UACBypassWindowsBackup(Signature):
+    name = "uac_bypass_windows_Backup"
+    description = "Attempts to use Windows Backup and Restore (sdclt.exe) to bypass UAC"
+    severity = 3
+    categories = ["bypass"]
+    authors = ["@para0x0dise"]
+    minimum = "0.5"
+    evented = True
+    ttps = ["T1548", "T1548.002"]
+    references = ["https://github.com/hfiref0x/UACME",
+                  "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/privilege_escalation_uac_bypass_via_sdclt.toml"]
+
+    filter_apinames = set(["CreateProcessInternalW"])
+
+    def on_call(self, call, process):
+        pname = process["process_name"].lower()
+
+        # Checking parent process for false positives.
+        if pname == "sdclt.exe":
+            if call["api"] == "CreateProcessInternalW":
+                cmdline = self.get_argument(call, "CommandLine")
+                lower = cmdline.lower()
+                if any(process in lower for process in ["control.exe", "werfault.exe", "wermgr.exe", "sdclt.exe"]):
+                    return False
+
+    def on_complete(self):
+        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            if "sdclt.exe" in lower and "/kickoffelev" in lower:
+                return True
+        return False
