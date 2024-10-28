@@ -4,7 +4,9 @@
 
 import re
 from datetime import datetime
+
 from lib.cuckoo.common.abstracts import Signature
+
 
 class PEAnomaly(Signature):
     name = "static_pe_anomaly"
@@ -40,7 +42,9 @@ class PEAnomaly(Signature):
                 osver = pe["osversion"]
                 osmajor = int(osver.split(".")[0], 10)
                 if osmajor < 4 and compiletime.year >= 2000:
-                    self.data.append({"anomaly": "Minimum OS version is older than NT4 yet the PE timestamp year is newer than 2000"})
+                    self.data.append(
+                        {"anomaly": "Minimum OS version is older than NT4 yet the PE timestamp year is newer than 2000"}
+                    )
                     self.ttps += ["T1099"]  # MITRE v6
                     self.ttps += ["T1070"]  # MITRE v6,7,8
                     self.ttps += ["T1070.006"]  # MITRE v7,8
@@ -53,7 +57,9 @@ class PEAnomaly(Signature):
                             compiletime.year == bad_date_map[osver][0] and compiletime.month < bad_date_map[osver][1]
                         ):
                             self.data.append(
-                                {"anomaly": "Timestamp on binary predates the release date of the OS version it requires by at least a year"}
+                                {
+                                    "anomaly": "Timestamp on binary predates the release date of the OS version it requires by at least a year"
+                                }
                             )
                             self.ttps += ["T1099"]  # MITRE v6
                             self.ttps += ["T1070", "T1070.006"]  # MITRE v7,8
@@ -123,8 +129,8 @@ class PEAnomaly(Signature):
                             and "DLL" not in self.results.get("target", {})["file"].get("type", "")
                         ):
                             self.data.append(
-                            {"anomaly": "OriginalFilename version info claims file is a DLL but binary is a main executable"}
-                        )
+                                {"anomaly": "OriginalFilename version info claims file is a DLL but binary is a main executable"}
+                            )
                             self.weight += 1
 
                 if "reported_checksum" in pe and "actual_checksum" in pe:
@@ -137,6 +143,7 @@ class PEAnomaly(Signature):
         if self.weight:
             return True
         return False
+
 
 class StaticPEPDBPath(Signature):
     name = "static_pe_pdbpath"
@@ -191,7 +198,7 @@ class StaticPEPDBPath(Signature):
             pe = self.results["target"]["file"].get("pe", [])
             if pe:
                 pdbpath = pe["pdbpath"]
-                if pdbpath:                 
+                if pdbpath:
                     for suspiciousname in suspiciousnames:
                         if suspiciousname in pdbpath.lower():
                             if self.severity != 3:
@@ -224,6 +231,7 @@ class StaticPEPDBPath(Signature):
 
         return ret
 
+
 class PECompileTimeStomping(Signature):
     name = "pe_compile_timestomping"
     description = "Binary compilation timestomping detected"
@@ -240,7 +248,7 @@ class PECompileTimeStomping(Signature):
         target = self.results.get("target", {})
         if target.get("category") in ("file", "static") and target.get("file"):
             pe = self.results["target"]["file"].get("pe", [])
-            if pe:              
+            if pe:
                 rawcompiletime = pe["timestamp"]
                 if rawcompiletime:
                     compiletime = datetime.strptime(rawcompiletime, "%Y-%m-%d %H:%M:%S")
