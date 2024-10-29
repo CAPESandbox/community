@@ -1,5 +1,6 @@
 from lib.cuckoo.common.abstracts import Signature
 
+
 class RansomwareSTOPDJVU(Signature):
     name = "ransomware_stopdjvu"
     description = "Exhibits behavior characteristic of STOP/DJVU ransomware"
@@ -13,10 +14,9 @@ class RansomwareSTOPDJVU(Signature):
     ttps = ["T1486"]
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands")
         for cmdline in cmdlines:
             lower = cmdline.lower()
-
-            if "--admin" in lower and "isnottask" in lower and "isnotautostart" in lower:
+            if all([pattern in lower for pattern in ("--admin", "isnottask", "isnotautostart")]):
                 return True
         return False

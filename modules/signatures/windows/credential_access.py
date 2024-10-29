@@ -85,6 +85,7 @@ class CredWiz(Signature):
 
         return ret
 
+
 class AccessWindowsPasswordsVault(Signature):
     name = "access_windows_passwords_vault"
     description = "Attempts to access Vault passwords via PowerShell"
@@ -95,7 +96,8 @@ class AccessWindowsPasswordsVault(Signature):
     evented = True
     ttps = ["T1059"]
     references = [
-        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/credential_access_access_to_windows_passwords_vault_via_powershell.toml"]
+        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/credential_access_access_to_windows_passwords_vault_via_powershell.toml"
+    ]
 
     filter_apinames = set(["CreateProcessInternalW"])
 
@@ -111,8 +113,7 @@ class AccessWindowsPasswordsVault(Signature):
                     return False
 
     def on_complete(self):
-        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands")
-        for cmdline in cmdlines:
+        for cmdline in self.results.get("behavior", {}).get("summary", {}).get("executed_commands", []):
             lower = cmdline.lower()
             if "powershell" in lower and any(arg in lower for arg in ("passwordvault", "retrievepassword", "retrieveall")):
                 return True

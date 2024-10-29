@@ -40,7 +40,7 @@ class UACBypassEventvwr(Signature):
     def on_call(self, call, process):
         if call["api"].startswith("RegQueryValueEx"):
             pname = process["process_name"]
-            if pname.lower() == "eventvwr.exe":
+            if process["process_name"].lower() == "eventvwr.exe":
                 fullname = self.get_argument(call, "FullName")
                 data = self.get_argument(call, "Data")
                 if "\classes\mscfile\shell\open\command" in fullname.lower():
@@ -91,7 +91,7 @@ class UACBypassDelegateExecuteSdclt(Signature):
         ret = False
 
         keys = [
-            ".*\\\\Software\\\\Classes\\\\Folder\\\\shell\\\\open\\\\command\\\\DelegateExecute$",
+            r".*\\Software\\Classes\\Folder\\shell\\open\\command\\DelegateExecute$",
         ]
 
         for check in keys:
@@ -157,7 +157,7 @@ class UACBypassCMSTP(Signature):
                 self.inf = True
 
     def on_complete(self):
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if self.inf and "cmstp" in lower and ".inf" in lower:
@@ -182,7 +182,7 @@ class UACBypassFodhelper(Signature):
 
     def run(self):
         ret = False
-        reg_indicators = ["HKEY_CURRENT_USER\\\\Software\\\\Classes\\\\ms-settings\\\\shell \\\\open\\\\command\\\\*."]
+        reg_indicators = [r"HKEY_CURRENT_USER\\Software\\Classes\\ms-settings\\shell \\open\\command\\*."]
 
         for indicator in reg_indicators:
             match = self.check_write_key(pattern=indicator, regex=True)
@@ -206,9 +206,9 @@ class UACBypassCMSTPCOM(Signature):
     def run(self):
         # CMSTPLUA, CMLUAUTIL, Connection Manager LUA Host Object
         indicators = [
-            ".*\\\\Windows\\\\(SysWOW64|System32)\\\\DllHost\.exe.*\/Processid:(\{)?3E5FC7F9-9A51-4367-9063-A120244FBEC7(\})?",
-            ".*\\\\Windows\\\\(SysWOW64|System32)\\\\DllHost\.exe.*\/Processid:(\{)?3E000D72-A845-4CD9-BD83-80C07C3B881F(\})?",
-            ".*\\\\Windows\\\\(SysWOW64|System32)\\\\DllHost\.exe.*\/Processid:(\{)?BA126F01-2166-11D1-B1D0-00805FC1270E(\})?",
+            ".*\\Windows\\(SysWOW64|System32)\\DllHost\.exe.*\/Processid:(\{)?3E5FC7F9-9A51-4367-9063-A120244FBEC7(\})?",
+            ".*\\Windows\\(SysWOW64|System32)\\DllHost\.exe.*\/Processid:(\{)?3E000D72-A845-4CD9-BD83-80C07C3B881F(\})?",
+            ".*\\Windows\\(SysWOW64|System32)\\DllHost\.exe.*\/Processid:(\{)?BA126F01-2166-11D1-B1D0-00805FC1270E(\})?",
         ]
 
         for indicator in indicators:
@@ -218,6 +218,8 @@ class UACBypassCMSTPCOM(Signature):
                 return True
 
         return False
+
+
 class UACBypassWindowsBackup(Signature):
     name = "uac_bypass_windows_Backup"
     description = "Attempts to use Windows Backup and Restore (sdclt.exe) to bypass UAC"
@@ -227,8 +229,10 @@ class UACBypassWindowsBackup(Signature):
     minimum = "0.5"
     evented = True
     ttps = ["T1548", "T1548.002"]
-    references = ["https://github.com/hfiref0x/UACME",
-                  "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/privilege_escalation_uac_bypass_via_sdclt.toml"]
+    references = [
+        "https://github.com/hfiref0x/UACME",
+        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/privilege_escalation_uac_bypass_via_sdclt.toml",
+    ]
 
     filter_apinames = set(["CreateProcessInternalW"])
 
@@ -236,12 +240,11 @@ class UACBypassWindowsBackup(Signature):
         pname = process["process_name"].lower()
 
         # Checking parent process for false positives.
-        if pname == "sdclt.exe":
-            if call["api"] == "CreateProcessInternalW":
-                cmdline = self.get_argument(call, "CommandLine")
-                lower = cmdline.lower()
-                if any(process in lower for process in ("control.exe", "werfault.exe", "wermgr.exe", "sdclt.exe")):
-                    return False
+        if process["process_name"].lower() == "sdclt.exe" and call["api"] == "CreateProcessInternalW":
+            cmdline = self.get_argument(call, "CommandLine")
+            lower = cmdline.lower()
+            if any(process in lower for process in ("control.exe", "werfault.exe", "wermgr.exe", "sdclt.exe")):
+                return False
 
     def on_complete(self):
         cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands")
