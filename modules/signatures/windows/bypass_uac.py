@@ -247,7 +247,7 @@ class UACBypassWindowsBackup(Signature):
                 return False
 
     def on_complete(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands")
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "sdclt.exe" in lower and "/kickoffelev" in lower:

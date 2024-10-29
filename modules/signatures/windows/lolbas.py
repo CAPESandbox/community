@@ -111,7 +111,7 @@ class LOLBAS_IndirectCommandExecutionViaConsoleWindowHost(Signature):
         cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if any(process in lower for process in ["cmd /c", "powershell", "script", "mshta", "curl"]):
+            if any(process in lower for process in ("cmd /c", "powershell", "script", "mshta", "curl")):
                 self.data.append({"command": cmdline})
                 return True
         return False
@@ -129,10 +129,10 @@ class LOLBAS_EvadeExecutionViaFilterManagerControl(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
-        for cmdline in cmdlines:
+        for cmdline in self.results.get("behavior", {}).get("summary", {}).get("executed_commands", []):
             lower = cmdline.lower()
-            if "fltmc" in lower and "unload" in lower and any(arg in lower for arg in ["security", "sysmon", "esensor", "Elastic"]):
+            if "fltmc" in lower and "unload" in lower and \
+                    any(arg in lower for arg in ("security", "sysmon", "esensor", "Elastic")):
                 self.data.append({"command": cmdline})
                 return True
         return False
@@ -180,11 +180,8 @@ class LOLBAS_EvadeExecutionViaIntelGFXDownloadWrapper(Signature):
         cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if "gfxdownloadwrapper.exe" in lower and (
-                "run" in lower
-                and any(arg in lower for arg in ["0", "2"])
-                or ("http" in lower and not "https://gameplayapi.intel.com" in lower)
-            ):
+            if "gfxdownloadwrapper.exe" in lower and ("run" in lower and any(arg in lower for arg in ("0", "2"))
+                                                                         or ("http" in lower and not "https://gameplayapi.intel.com" in lower)):
                 self.data.append({"command": cmdline})
                 return True
         return False
@@ -226,12 +223,8 @@ class LOLBAS_RegisterDLLViaMSIEXEC(Signature):
         cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if (
-                "msiexec" in lower
-                and any(arg in lower for arg in ["/z", "/y", "-y", "-z"])
-                and ".dll" in lower
-                and not any(arg in lower for arg in ["\\Program Files\\", "\\Program Files %(x86%)\\"])
-            ):
+            if "msiexec" in lower and any(arg in lower for arg in ("/z", "/y", "-y", "-z")) and ".dll" in lower and not \
+                    any(arg in lower for arg in ("\\Program Files\\", "\\Program Files %(x86%)\\")):
                 self.data.append({"command": cmdline})
                 return True
         return False
@@ -260,7 +253,7 @@ class LOLBAS_RegisterDLLViaOdbcconf(Signature):
             ):
                 return False
 
-            if "odbcconf" in lower and any(arg in lower for arg in ["-a", "-f", "/a", "/f"]) and ".dll" in lower:
+            if "odbcconf" in lower and any(arg in lower for arg in ("-a", "-f", "/a", "/f")) and ".dll" in lower:
                 self.data.append({"command": cmdline})
                 return True
         return False
@@ -356,13 +349,12 @@ class LOLBAS_PerformMaliciousActivitiesViaHeadlessBrowser(Signature):
             lower = cmdline.lower()
 
             # I have tried it on other browsers
-            if any(
-                process in lower
-                for process in ["chrome.exe", "msedge.exe", "brave.exe", "browser.exe", "dragon.exe", "vivaldi.exe"]
-            ) and (
-                any(spawn in lower for spawn in ["cmd", "powershell", "wscript", "cscript"])
-                or ("headless" in lower and "http" in lower and not "http://localhost/allure#graph" in lower)
-            ):
+            if any(process in lower for process in ("chrome.exe", "msedge.exe", "brave.exe",
+                                                    "browser.exe", "dragon.exe", "vivaldi.exe")) and \
+                    (
+                        any(spawn in lower for spawn in ("cmd", "powershell", "wscript", "cscript")) or
+                        ("headless" in lower and "http" in lower and not "http://localhost/allure#graph" in lower)
+                    ):
                 self.data.append({"command": cmdline})
                 return True
         return False
@@ -526,22 +518,9 @@ class LOLBAS_ExecuteSuspiciousPowerShellViaSQLPS(Signature):
         cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if any(process in lower for process in ["sqltoolsps.exe", "sqlps.exe"]) and any(
-                arg in lower
-                for arg in (
-                    "-e",
-                    "-enc",
-                    "-ep",
-                    "-encoded",
-                    ";iex",
-                    "start-process",
-                    "webclient",
-                    "downloadfile",
-                    "downloadstring",
-                    "bitstransfer",
-                    "reflection.assembly",
-                )
-            ):
+            if (any(process in lower for process in ("sqltoolsps.exe", "sqlps.exe")) and
+                    any(arg in lower for arg in ("-e", "-enc", "-ep", "-encoded", ";iex", "start-process", "webclient",
+                                "downloadfile", "downloadstring", "bitstransfer", "reflection.assembly"))):
                 self.data.append({"command": cmdline})
                 return True
 
