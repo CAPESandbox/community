@@ -515,7 +515,7 @@ class LOLBAS_ExecuteSuspiciousPowerShellViaSQLPS(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if (any(process in lower for process in ("sqltoolsps.exe", "sqlps.exe")) and
