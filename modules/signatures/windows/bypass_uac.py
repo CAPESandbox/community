@@ -240,11 +240,11 @@ class UACBypassWindowsBackup(Signature):
             if call["api"] == "CreateProcessInternalW":
                 cmdline = self.get_argument(call, "CommandLine")
                 lower = cmdline.lower()
-                if any(process in lower for process in ["control.exe", "werfault.exe", "wermgr.exe", "sdclt.exe"]):
+                if any(process in lower for process in ("control.exe", "werfault.exe", "wermgr.exe", "sdclt.exe")):
                     return False
 
     def on_complete(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands")
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "sdclt.exe" in lower and "/kickoffelev" in lower:

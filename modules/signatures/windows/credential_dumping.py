@@ -252,14 +252,14 @@ class KerberosCredentialAccessViaRubeus(Signature):
         "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/credential_access_potential_credential_access_via_rubeus.toml"]
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands")
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if "rebeus" in lower and any(arg in lower for arg in ["asreproast", "dump /service:krbtgt", "dump /luid",
+            if "rebeus" in lower and any(arg in lower for arg in ("asreproast", "dump /service:krbtgt", "dump /luid",
                                     "kerberoast", "createnetonly /program", "ptt /ticket",
                                     "/impersonateuser", "renew /ticket", "asktgt /user",
                                     "asktgs /ticket", "harvest /interval", "s4u /user",
                                     "s4u /ticket", "hash /password", "tgtdeleg", "tgtdeleg /target",
-                                    "golden /des", "golden /rc4", "golden /aes128", "golden /aes256", "changpw /ticket"]):
+                                    "golden /des", "golden /rc4", "golden /aes128", "golden /aes256", "changpw /ticket")):
                 return True
         return False

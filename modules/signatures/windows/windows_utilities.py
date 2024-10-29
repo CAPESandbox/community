@@ -955,7 +955,7 @@ class PotentialWebShellViaScreenConnectServer(Signature):
             if call["api"] == "CreateProcessInternalW":
                 cmdline = self.get_argument(call, "CommandLine")
                 lower = cmdline.lower()
-                if any(process in lower for process in ["cmd.exe", "powershell.exe", "pwsh.exe", "powershell_ise.exe", "csc.exe"]):
+                if any(process in lower for process in ("cmd.exe", "powershell.exe", "pwsh.exe", "powershell_ise.exe", "csc.exe")):
                     self.detected = True
                     return
 
@@ -986,7 +986,7 @@ class PotentialLateralMovementViaSMBEXEC(Signature):
             if call["api"] == "CreateProcessInternalW":
                 cmdline = self.get_argument(call, "CommandLine")
                 lower = cmdline.lower()
-                if any(process in lower for process in ["cmd.exe"]) and any(arg in lower for arg in ["/q", "echo", ".bat", "del"]):
+                if "cmd.exe" in lower and any(arg in lower for arg in ("/q", "echo", ".bat", "del")):
                     self.detected = True
                     return
 

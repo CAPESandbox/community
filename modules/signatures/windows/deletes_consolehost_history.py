@@ -32,7 +32,7 @@ class DeletesExecutedFiles(Signature):
 
         # Verify True Positives
         if self.isDeleted:
-            for proc in self.results.get("behavior").get("processtree"):
+            for proc in self.results.get("behavior", {}).get("processtree"):
                 if proc.get("name") in self.blacklistedApps or proc["module_path"].lower() in self.blacklistedPaths:
                     return True
         return False

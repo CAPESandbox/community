@@ -203,7 +203,7 @@ class SuspiciousJavaExecutionViaWinScripts(Signature):
                     cmdline = self.get_argument(call, "CommandLine")
                     lower = cmdline.lower()
                     if ("jave.exe" in lower and "-jar" in lower and
-                            any(arg in lower for arg in ["\\appdata\\", "\\public\\", "\\programdata\\"])):
+                            any(arg in lower for arg in ("\\appdata\\", "\\public\\", "\\programdata\\"))):
                         self.detected = True
 
     def on_complete(self):
