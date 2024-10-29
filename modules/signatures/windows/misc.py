@@ -196,7 +196,7 @@ class SuspiciousJavaExecutionViaWinScripts(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.detected = False
     def on_call(self, call, process):
-        pname = process["name"]
+        pname = process["process_name"]
         if pname in ["wscript.exe", "cscript.exe"]:
             if call["api"] == "CreateProcessInternalW":
                 if call["api"] == "CreateProcessInternalW":
