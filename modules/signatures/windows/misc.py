@@ -257,17 +257,17 @@ class SuspiciousJavaExecutionViaWinScripts(Signature):
         self.detected = False
 
     def on_call(self, call, process):
-        if process["name"] in ("wscript.exe", "cscript.exe") and call["api"] == "CreateProcessInternalW":
+        if process["process_name"] in ("wscript.exe", "cscript.exe") and call["api"] == "CreateProcessInternalW":
             cmdline = self.get_argument(call, "CommandLine")
             lower = cmdline.lower()
             if (
-                "jave.exe" in lower
+                "java.exe" in lower
                 and "-jar" in lower
                 and any(arg in lower for arg in ("\\appdata\\", "\\public\\", "\\programdata\\"))
             ):
                 self.detected = True
 
     def on_complete(self):
-        if self.detected:
-            return True
-        return False
+        return self.detected
+
+
