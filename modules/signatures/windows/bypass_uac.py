@@ -253,4 +253,3 @@ class UACBypassWindowsBackup(Signature):
             if "sdclt.exe" in lower and "/kickoffelev" in lower:
                 return True
         return False
-

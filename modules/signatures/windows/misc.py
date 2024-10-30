@@ -269,5 +269,3 @@ class SuspiciousJavaExecutionViaWinScripts(Signature):
 
     def on_complete(self):
         return self.detected
-
-
