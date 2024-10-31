@@ -1,5 +1,6 @@
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DetectVirtualizationViaRecentFiles(Signature):
     name = "detect_virtualization_via_recent_files"
     description = "Detects virtualization via checking the last access time of recent files"
@@ -23,7 +24,7 @@ class DetectVirtualizationViaRecentFiles(Signature):
     def on_call(self, call, _):
         if call["api"] == "SHGetFolderPathW":
             folder = self.get_argument(call, "Folder")
-            if folder == '0x00000008':   # CSIDL_RECENT
+            if folder == "0x00000008":  # CSIDL_RECENT
                 if self.pid:
                     self.mark_call()
                 self.recents = True
