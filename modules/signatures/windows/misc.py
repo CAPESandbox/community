@@ -272,6 +272,7 @@ class SuspiciousJavaExecutionViaWinScripts(Signature):
             return True
         return False
 
+
 class AMSIBypassViaCOMRegistry(Signature):
     name = "amsi_bypass_via_com_registry"
     description = "Attempts to disable the Microsoft Antimalware Scan Interface via registry"
@@ -283,7 +284,7 @@ class AMSIBypassViaCOMRegistry(Signature):
     ttps = ["T1562"]
     references = [
         "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/defense_evasion_amsi_bypass_via_com_registry_modification.toml",
-        "https://blog.sonicwall.com/en-us/2023/03/asyncrat-variant-includes-cryptostealer-capabilites/"
+        "https://blog.sonicwall.com/en-us/2023/03/asyncrat-variant-includes-cryptostealer-capabilites/",
     ]
 
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW"])
@@ -305,6 +306,7 @@ class AMSIBypassViaCOMRegistry(Signature):
             return True
         return False
 
+
 class LoadDLLViaControlPanel(Signature):
     name = "load_dll_via_control_panel"
     description = "Attempt to load malicious DLL when Control Panel is executed"
@@ -323,20 +325,30 @@ class LoadDLLViaControlPanel(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.detected = False
-        self.falseProcess = (
-            "svchost.exe", "drvinst.exe", "msiexec.exe"
-        )
+        self.falseProcess = ("svchost.exe", "drvinst.exe", "msiexec.exe")
 
     def on_call(self, call, process):
-        if not (process["process_name"].lower in self.falseProcess or
-                "windows\\system32\\driverstore\\filerepository" in process["module_path"].lower):
+        if not (
+            process["process_name"].lower in self.falseProcess
+            or "windows\\system32\\driverstore\\filerepository" in process["module_path"].lower
+        ):
 
             if call["api"] in ("RegSetValueExA", "RegSetValueExW"):
                 regKeyPath = self.get_argument(call, "FullName").lower()
                 buf = self.get_argument(call, "Buffer")
                 type = self.get_argument(call, "Type")
 
-                if any(key in regKeyPath for key in ("software\\microsoft\\windows\\currentversion\\control panel\\cpls","software\\microsoft\\windows\\currentversion\\control panel\\cpls\\")) and not buf != '' and not type != '4':
+                if (
+                    any(
+                        key in regKeyPath
+                        for key in (
+                            "software\\microsoft\\windows\\currentversion\\control panel\\cpls",
+                            "software\\microsoft\\windows\\currentversion\\control panel\\cpls\\",
+                        )
+                    )
+                    and not buf != ""
+                    and not type != "4"
+                ):
                     self.data.append({"regkey": regKeyPath})
                     self.detected = True
 
@@ -344,6 +356,7 @@ class LoadDLLViaControlPanel(Signature):
         if self.detected:
             return True
         return False
+
 
 class DLLHijackingViaWaaSMedicSvcCOMTypeLib(Signature):
     name = "dll_hijacking_via_waas_medic_svc_com_typelib"
@@ -356,8 +369,7 @@ class DLLHijackingViaWaaSMedicSvcCOMTypeLib(Signature):
     ttps = ["T1546"]
     references = [
         "https://blog.scrt.ch/2023/03/17/bypassing-ppl-in-userland-again/",
-        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/defense_evasion_waasmedicsvc_com_type_lib_hijack.toml"
-
+        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/defense_evasion_waasmedicsvc_com_type_lib_hijack.toml",
     ]
 
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW"])
@@ -371,8 +383,9 @@ class DLLHijackingViaWaaSMedicSvcCOMTypeLib(Signature):
             if call["api"] in ("RegSetValueExA", "RegSetValueExW"):
                 regKeyPath = self.get_argument(call, "FullName").lower()
                 buf = self.get_argument(call, "Buffer")
-                if ("\\software\\classes\\typelib\\{3ff1aab8-f3d8-11d4-825d-00104b3646c0}\\" in regKeyPath and
-                        buf.endswith(".dll")) and not buf.endswith("WaaSMedicPS.dll"):
+                if (
+                    "\\software\\classes\\typelib\\{3ff1aab8-f3d8-11d4-825d-00104b3646c0}\\" in regKeyPath and buf.endswith(".dll")
+                ) and not buf.endswith("WaaSMedicPS.dll"):
                     self.data.append({"Value": buf})
                     self.detected = True
 

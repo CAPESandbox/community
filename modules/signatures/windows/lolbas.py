@@ -569,6 +569,7 @@ class LOLBAS_ExecuteSuspiciousPowerShellViaRunscripthelper(Signature):
 
         return False
 
+
 class LOLBAS_ExecuteBinaryViaPcalua(Signature):
     name = "execute_binary_via_pcalua"
     description = "Attempts to execute a binary using Microsoft Program Compatibility Assistant binary"
@@ -589,6 +590,7 @@ class LOLBAS_ExecuteBinaryViaPcalua(Signature):
                 return True
 
         return False
+
 
 class LOLBAS_ExecuteBinaryViaCDB(Signature):
     name = "execute_binary_via_pcalua"
