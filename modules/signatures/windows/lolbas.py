@@ -481,7 +481,7 @@ class LOLBAS_ExecuteBinaryViaInternetExplorerExporter(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.detected = False
-        self.blacklistedNames = ["mozcrt19.dll", "mozsqlite3.dll", "sqlite3.dll"]
+        self.blacklistedNames = ("mozcrt19.dll", "mozsqlite3.dll", "sqlite3.dll")
         self.whitelistedDirectories = [
             "\\program files (x86)\\",
             "\\program files\\",
@@ -564,6 +564,48 @@ class LOLBAS_ExecuteSuspiciousPowerShellViaRunscripthelper(Signature):
             lower = cmdline.lower()
             argumentCount = lower.split()
             if "runscripthelper.exe" in lower and "surfacecheck" and (len(argumentCount) - 1) > 3:
+                self.data.append({"command": cmdline})
+                return True
+
+        return False
+
+class LOLBAS_ExecuteBinaryViaPcalua(Signature):
+    name = "execute_binary_via_pcalua"
+    description = "Attempts to execute a binary using Microsoft Program Compatibility Assistant binary"
+    severity = 3
+    categories = ["bypass", "execution"]
+    authors = ["@para0x0dise"]
+    minimum = "1.2"
+    ttps = ["T1218"]
+    references = ["https://lolbas-project.github.io/lolbas/Binaries/Pcalua/"]
+    evented = True
+
+    def run(self):
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            if "pcalua.exe" in lower and "-a" in lower and not "-d" in lower:
+                self.data.append({"command": cmdline})
+                return True
+
+        return False
+
+class LOLBAS_ExecuteBinaryViaCDB(Signature):
+    name = "execute_binary_via_pcalua"
+    description = "Attempts to execute a binary using Microsoft Windows Debugging utility cdb.exe"
+    severity = 3
+    categories = ["bypass", "execution"]
+    authors = ["@para0x0dise"]
+    minimum = "1.2"
+    ttps = ["T1218"]
+    references = ["https://lolbas-project.github.io/lolbas/OtherMSBinaries/Cdb/"]
+    evented = True
+
+    def run(self):
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            if "cdb.exe" in lower and any(arg in lower for arg in ("-cf", "-c", "-pd")):
                 self.data.append({"command": cmdline})
                 return True
 
