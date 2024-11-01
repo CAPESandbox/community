@@ -4,6 +4,7 @@ from copy import deepcopy
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
 from cape_parsers.CAPE.community.Pandora import extract_config
+from modules.parsers.utils import get_YARA_rule
 
 
 def convert_to_MACO(raw_config: dict):
@@ -16,16 +17,29 @@ def convert_to_MACO(raw_config: dict):
         mutex=[config_copy.pop("Mutex")],
         campaign_id=[config_copy.pop("Campaign ID")],
         version=config_copy.pop("Version"),
-        http=[dict(hostname=config_copy.pop("Domain"), port=config_copy.pop("Port"), password=config_copy.pop("Password"))],
+        http=[
+            dict(
+                hostname=config_copy.pop("Domain"),
+                port=config_copy.pop("Port"),
+                password=config_copy.pop("Password"),
+            )
+        ],
         other=raw_config,
     )
 
     parsed_result.paths.append(
-        MACOModel.Path(path=os.path.join(config_copy.pop("Install Path"), config_copy.pop("Install Name")), usage="install")
+        MACOModel.Path(
+            path=os.path.join(
+                config_copy.pop("Install Path"), config_copy.pop("Install Name")
+            ),
+            usage="install",
+        )
     )
 
     parsed_result.registry.append(MACOModel.Registry(key=config_copy.pop("HKCU Key")))
-    parsed_result.registry.append(MACOModel.Registry(key=config_copy.pop("ActiveX Key")))
+    parsed_result.registry.append(
+        MACOModel.Registry(key=config_copy.pop("ActiveX Key"))
+    )
 
     for field in list(config_copy.keys()):
         # TODO: Unsure what's the value of the remaining fields
@@ -44,6 +58,7 @@ class Pandora(Extractor):
     family = "Pandora"
     last_modified = "2024-10-26"
     sharing = "TLP:CLEAR"
+    yara_rule = get_YARA_rule(family)
 
     def run(self, stream, matches):
         return convert_to_MACO(extract_config(stream.read()))

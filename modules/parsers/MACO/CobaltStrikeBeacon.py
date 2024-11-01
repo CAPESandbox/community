@@ -1,8 +1,8 @@
-import os
 
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
 from cape_parsers.CAPE.community.CobaltStrikeBeacon import extract_config
+from modules.parsers.utils import get_YARA_rule
 
 
 def convert_to_MACO(raw_config: dict):
@@ -12,7 +12,11 @@ def convert_to_MACO(raw_config: dict):
     parsed_result = MACOModel(family="CobaltStrikeBeacon", other=raw_config)
 
     clean_config = {k: v for k, v in raw_config.items() if v != "Not Found"}
-    capabilities = {k[1:]: clean_config.pop(k) for k in list(clean_config.keys()) if clean_config[k] in ["True", "False"]}
+    capabilities = {
+        k[1:]: clean_config.pop(k)
+        for k in list(clean_config.keys())
+        if clean_config[k] in ["True", "False"]
+    }
 
     for capability, enabled in capabilities.items():
         if enabled.lower() == "true":
@@ -23,9 +27,19 @@ def convert_to_MACO(raw_config: dict):
     if "C2Server" in clean_config:
         host, get_path = clean_config.pop("C2Server").split(",")
         port = clean_config.pop("Port")
-        parsed_result.http.append(MACOModel.Http(hostname=host, port=port, method="GET", path=get_path, usage="c2"))
         parsed_result.http.append(
-            MACOModel.Http(hostname=host, port=port, method="POST", path=clean_config.pop("HttpPostUri"), usage="c2")
+            MACOModel.Http(
+                hostname=host, port=port, method="GET", path=get_path, usage="c2"
+            )
+        )
+        parsed_result.http.append(
+            MACOModel.Http(
+                hostname=host,
+                port=port,
+                method="POST",
+                path=clean_config.pop("HttpPostUri"),
+                usage="c2",
+            )
         )
 
     parsed_result.sleep_delay = clean_config.pop("SleepTime")
@@ -43,7 +57,7 @@ class CobaltStrikeBeacon(Extractor):
     family = "CobaltStrikeBeacon"
     last_modified = "2024-10-26"
     sharing = "TLP:CLEAR"
-    yara_rule = open(os.path.join(os.path.dirname(__file__).split("/modules", 1)[0], f"data/yara/CAPE/{family}.yar")).read()
+    yara_rule = get_YARA_rule(family)
 
     def run(self, stream, matches):
         return convert_to_MACO(extract_config(stream.read()))

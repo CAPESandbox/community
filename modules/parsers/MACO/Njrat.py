@@ -1,6 +1,7 @@
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
 from cape_parsers.CAPE.community.Njrat import extract_config
+from modules.parsers.utils import get_YARA_rule
 
 
 def convert_to_MACO(raw_config: dict):
@@ -27,6 +28,7 @@ class Njrat(Extractor):
     family = "Njrat"
     last_modified = "2024-10-26"
     sharing = "TLP:CLEAR"
+    yara_rule = get_YARA_rule(family)
 
     def run(self, stream, matches):
         return convert_to_MACO(extract_config(stream.read()))

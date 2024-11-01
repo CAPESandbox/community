@@ -1,8 +1,8 @@
-import os
 
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
 from cape_parsers.CAPE.core.Latrodectus import extract_config
+from modules.parsers.utils import get_YARA_rule
 
 
 def convert_to_MACO(raw_config: dict):
@@ -24,7 +24,9 @@ def convert_to_MACO(raw_config: dict):
         parsed_result.version = raw_config["Version"]
 
     if "RC4 key" in raw_config:
-        parsed_result.encryption.append(MACOModel.Encryption(algorithm="RC4", key=raw_config["RC4 key"]))
+        parsed_result.encryption.append(
+            MACOModel.Encryption(algorithm="RC4", key=raw_config["RC4 key"])
+        )
 
     if "Strings" in raw_config:
         parsed_result.decoded_strings = raw_config["Strings"]
@@ -37,7 +39,7 @@ class Latrodectus(Extractor):
     family = "Latrodectus"
     last_modified = "2024-10-26"
     sharing = "TLP:CLEAR"
-    yara_rule = open(os.path.join(os.path.dirname(__file__).split("/modules", 1)[0], f"data/yara/CAPE/{family}.yar")).read()
+    yara_rule = get_YARA_rule(family)
 
     def run(self, stream, matches):
         return convert_to_MACO(extract_config(stream.read()))
