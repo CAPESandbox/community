@@ -3,7 +3,7 @@ import requests
 
 # Raw file download template (default to Github-based raw download URL)
 CAPE_RAW_DOWNLOAD_TEMPLATE=os.environ.get("CAPE_RAW_DOWNLOAD_TEMPLATE",
-                                          "https://raw.githubusercontent.com/kevoreilly/CAPE/refs/heads/master/data/yara/CAPE/{family}.yar")
+                                          "https://raw.githubusercontent.com/kevoreilly/CAPEv2/refs/heads/master/data/yara/CAPE/{family}.yar")
 
 def get_YARA_rule(family: str) -> str | None:
     root = os.path.join(os.path.dirname(__file__))
