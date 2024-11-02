@@ -1,9 +1,9 @@
 import os
 from copy import deepcopy
 
+from cape_parsers.CAPE.community.Punisher import extract_config
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
-from cape_parsers.CAPE.community.Punisher import extract_config
 
 
 def convert_to_MACO(raw_config: dict):
