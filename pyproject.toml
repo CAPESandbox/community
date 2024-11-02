@@ -1,7 +1,7 @@
 [project]
 name = "CAPESandbox_community"
 version = "1.0"
-optional-dependencies.maco = ["CAPE-parsers", "maco"]
+optional-dependencies.maco = ["CAPE-parsers", "maco", "requests"]
 
 [tool.black]
 line-length = 132
