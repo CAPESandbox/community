@@ -330,7 +330,7 @@ class LoadDLLViaControlPanel(Signature):
     def on_call(self, call, process):
         if not (
             process["process_name"].lower in self.falseProcess
-            or "windows\\system32\\driverstore\\filerepository" in process["module_path"].lower
+            or "windows\\system32\\driverstore\\filerepository" in process["module_path"].lower()
         ):
 
             if call["api"] in ("RegSetValueExA", "RegSetValueExW"):
@@ -379,7 +379,7 @@ class DLLHijackingViaWaaSMedicSvcCOMTypeLib(Signature):
         self.detected = False
 
     def on_call(self, call, process):
-        if not "\\Windows\\System32\\svchost.exe" in process["module_name"]:
+        if not "\\Windows\\System32\\svchost.exe" in process["module_path"]:
             if call["api"] in ("RegSetValueExA", "RegSetValueExW"):
                 regKeyPath = self.get_argument(call, "FullName").lower()
                 buf = self.get_argument(call, "Buffer")

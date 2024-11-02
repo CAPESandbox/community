@@ -111,7 +111,8 @@ class LOLBAS_IndirectCommandExecutionViaConsoleWindowHost(Signature):
         cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if any(process in lower for process in ("cmd /c", "powershell", "script", "mshta", "curl")):
+            if ("conhost.exe" in lower and
+                    any(process in lower for process in ("cmd /c", "powershell", "script", "mshta", "curl"))):
                 self.data.append({"command": cmdline})
                 return True
         return False
