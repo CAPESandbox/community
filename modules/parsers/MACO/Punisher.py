@@ -1,9 +1,10 @@
 import os
 from copy import deepcopy
 
-from cape_parsers.CAPE.community.Punisher import extract_config
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
+from cape_parsers.CAPE.community.Punisher import extract_config
+from modules.parsers.utils import get_YARA_rule
 
 
 def convert_to_MACO(raw_config: dict):
@@ -16,7 +17,13 @@ def convert_to_MACO(raw_config: dict):
         campaign_id=config_copy["Campaign Name"],
         password=[config_copy["Password"]],
         registry=[MACOModel.Registry(key=config_copy["Registry Key"])],
-        paths=[MACOModel.Path(path=os.path.join(config_copy["Install Path"], config_copy["Install Name"]))],
+        paths=[
+            MACOModel.Path(
+                path=os.path.join(
+                    config_copy["Install Path"], config_copy["Install Name"]
+                )
+            )
+        ],
         http=[MACOModel.Http(hostname=config_copy["Domain"], port=config_copy["Port"])],
         other=raw_config,
     )
@@ -38,6 +45,7 @@ class Punisher(Extractor):
     family = "Punisher"
     last_modified = "2024-10-26"
     sharing = "TLP:CLEAR"
+    yara_rule = get_YARA_rule(family)
 
     def run(self, stream, matches):
         output = extract_config(stream.read())

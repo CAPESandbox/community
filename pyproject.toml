@@ -1,3 +1,8 @@
+[project]
+name = "CAPESandbox_community"
+version = "1.0"
+optional-dependencies.maco = ["CAPE-parsers", "maco", "requests"]
+
 [tool.black]
 line-length = 132
 include = "\\.py(_disabled)?$"
@@ -6,3 +11,6 @@ include = "\\.py(_disabled)?$"
 profile = "black"
 no_lines_before = ["FUTURE", "STDLIB"]
 line_length = 132
+
+[tool.setuptools]
+packages = []

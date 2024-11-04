@@ -1,6 +1,7 @@
-from cape_parsers.CAPE.core.RedLeaf import extract_config, rule_source
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
+from cape_parsers.CAPE.core.RedLeaf import extract_config, rule_source
+from modules.parsers.utils import get_YARA_rule
 
 
 def convert_to_MACO(raw_config: dict):
@@ -29,6 +30,8 @@ class RedLeaf(Extractor):
     family = "RedLeaf"
     last_modified = "2024-10-26"
     sharing = "TLP:CLEAR"
+    yara_rule = get_YARA_rule(family)
+
     yara_rule = rule_source
 
     def run(self, stream, matches):

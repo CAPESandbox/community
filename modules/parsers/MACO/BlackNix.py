@@ -1,8 +1,9 @@
 import os
 
-from cape_parsers.CAPE.community.BlackNix import extract_config
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
+from cape_parsers.CAPE.community.BlackNix import extract_config
+from modules.parsers.utils import get_YARA_rule
 
 
 def convert_to_MACO(raw_config: dict):
@@ -47,11 +48,17 @@ def convert_to_MACO(raw_config: dict):
 
     # Install Path
     parsed_result.paths.append(
-        MACOModel.Path(path=os.path.join(raw_config["Install Path"], raw_config["Install Name"]), usage="install")
+        MACOModel.Path(
+            path=os.path.join(raw_config["Install Path"], raw_config["Install Name"]),
+            usage="install",
+        )
     )
 
     # Campaign Group/Name
-    parsed_result.campaign_id = [raw_config["Campaign Name"], raw_config["Campaign Group"]]
+    parsed_result.campaign_id = [
+        raw_config["Campaign Name"],
+        raw_config["Campaign Group"],
+    ]
     return parsed_result
 
 
@@ -60,6 +67,7 @@ class BlackNix(Extractor):
     family = "BlackNix"
     last_modified = "2024-10-26"
     sharing = "TLP:CLEAR"
+    yara_rule = get_YARA_rule(family)
 
     def run(self, stream, matches):
         return convert_to_MACO(extract_config(stream.read()))

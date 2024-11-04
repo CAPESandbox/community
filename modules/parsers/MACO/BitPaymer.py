@@ -1,6 +1,7 @@
-from cape_parsers.CAPE.core.BitPaymer import extract_config, rule_source
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
+from cape_parsers.CAPE.core.BitPaymer import extract_config, rule_source
+from modules.parsers.utils import get_YARA_rule
 
 
 def convert_to_MACO(raw_config: dict):
@@ -13,7 +14,9 @@ def convert_to_MACO(raw_config: dict):
     parsed_result.decoded_strings = raw_config["strings"]
 
     # Encryption details
-    parsed_result.encryption.append(MACOModel.Encryption(algorithm="rsa", public_key=raw_config["RSA public key"]))
+    parsed_result.encryption.append(
+        MACOModel.Encryption(algorithm="rsa", public_key=raw_config["RSA public key"])
+    )
     return parsed_result
 
 
@@ -22,6 +25,8 @@ class BitPaymer(Extractor):
     family = "BitPaymer"
     last_modified = "2024-10-26"
     sharing = "TLP:CLEAR"
+    yara_rule = get_YARA_rule(family)
+
     yara_rule = rule_source
 
     def run(self, stream, matches):

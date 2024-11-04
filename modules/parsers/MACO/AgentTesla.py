@@ -1,8 +1,7 @@
-import os
-
-from cape_parsers.CAPE.community.AgentTesla import extract_config
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
+from cape_parsers.CAPE.community.AgentTesla import extract_config
+from modules.parsers.utils import get_YARA_rule
 
 
 def convert_to_MACO(raw_config: dict) -> MACOModel:
@@ -15,7 +14,11 @@ def convert_to_MACO(raw_config: dict) -> MACOModel:
 
     parsed_result = MACOModel(family="AgentTesla", other=raw_config)
     if protocol == "Telegram":
-        parsed_result.http.append(MACOModel.Http(uri=raw_config["C2"], password=raw_config["Password"], usage="c2"))
+        parsed_result.http.append(
+            MACOModel.Http(
+                uri=raw_config["C2"], password=raw_config["Password"], usage="c2"
+            )
+        )
 
     elif protocol in ["HTTP(S)", "Discord"]:
         parsed_result.http.append(MACOModel.Http(uri=raw_config["C2"], usage="c2"))
@@ -43,7 +46,9 @@ def convert_to_MACO(raw_config: dict) -> MACOModel:
         parsed_result.smtp.append(MACOModel.SMTP(**smtp))
 
     if "Persistence_Filename" in raw_config:
-        parsed_result.paths.append(MACOModel.Path(path=raw_config["Persistence_Filename"], usage="storage"))
+        parsed_result.paths.append(
+            MACOModel.Path(path=raw_config["Persistence_Filename"], usage="storage")
+        )
 
     if "ExternalIPCheckServices" in raw_config:
         for service in raw_config["ExternalIPCheckServices"]:
@@ -57,7 +62,7 @@ class AgentTesla(Extractor):
     family = "AgentTesla"
     last_modified = "2024-10-20"
     sharing = "TLP:CLEAR"
-    yara_rule = open(os.path.join(os.path.dirname(__file__).split("/modules", 1)[0], f"data/yara/CAPE/{family}.yar")).read()
+    yara_rule = get_YARA_rule(family)
 
     def run(self, stream, matches):
         return convert_to_MACO(extract_config(stream.read()))
