@@ -1,8 +1,9 @@
 import os
 
-from cape_parsers.CAPE.core.GuLoader import extract_config
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
+from cape_parsers.CAPE.core.GuLoader import extract_config
+from modules.parsers.utils import get_YARA_rule
 
 
 def convert_to_MACO(raw_config: dict):
@@ -22,7 +23,7 @@ class GuLoader(Extractor):
     family = "GuLoader"
     last_modified = "2024-10-26"
     sharing = "TLP:CLEAR"
-    yara_rule = open(os.path.join(os.path.dirname(__file__).split("/modules", 1)[0], "data/yara/CAPE/Guloader.yar")).read()
+    yara_rule = get_YARA_rule("Guloader")
 
     def run(self, stream, matches):
         return convert_to_MACO(extract_config(stream.read()))

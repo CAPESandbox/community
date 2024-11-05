@@ -1,8 +1,9 @@
 from copy import deepcopy
 
-from cape_parsers.CAPE.community.NanoCore import extract_config
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
+from cape_parsers.CAPE.community.NanoCore import extract_config
+from modules.parsers.utils import get_YARA_rule
 
 
 def convert_to_MACO(raw_config: dict):
@@ -12,7 +13,11 @@ def convert_to_MACO(raw_config: dict):
     parsed_result = MACOModel(family="NanoCore", other=raw_config)
 
     config_copy = deepcopy(raw_config)
-    capabilities = {k: config_copy.pop(k) for k in list(config_copy.keys()) if config_copy[k] in ["True", "False"]}
+    capabilities = {
+        k: config_copy.pop(k)
+        for k in list(config_copy.keys())
+        if config_copy[k] in ["True", "False"]
+    }
 
     if "Version" in config_copy:
         parsed_result.version = config_copy.pop("Version")
@@ -38,6 +43,7 @@ class NanoCore(Extractor):
     family = "NanoCore"
     last_modified = "2024-10-26"
     sharing = "TLP:CLEAR"
+    yara_rule = get_YARA_rule(family)
 
     def run(self, stream, matches):
         return convert_to_MACO(extract_config(stream.read()))

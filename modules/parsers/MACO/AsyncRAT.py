@@ -1,8 +1,9 @@
 import os
 
-from cape_parsers.CAPE.community.AsyncRAT import extract_config
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
+from cape_parsers.CAPE.community.AsyncRAT import extract_config
+from modules.parsers.utils import get_YARA_rule
 
 
 def convert_to_MACO(raw_config: dict) -> MACOModel:
@@ -25,16 +26,29 @@ def convert_to_MACO(raw_config: dict) -> MACOModel:
 
     # Installation Path
     if raw_config.get("Folder"):
-        parsed_result.paths.append(MACOModel.Path(path=os.path.join(raw_config["Folder"], raw_config["Filename"]), usage="install"))
+        parsed_result.paths.append(
+            MACOModel.Path(
+                path=os.path.join(raw_config["Folder"], raw_config["Filename"]),
+                usage="install",
+            )
+        )
 
     # C2s
     for i in range(len(raw_config.get("C2s", []))):
-        parsed_result.http.append(MACOModel.Http(hostname=raw_config["C2s"][i], port=int(raw_config["Ports"][i]), usage="c2"))
+        parsed_result.http.append(
+            MACOModel.Http(
+                hostname=raw_config["C2s"][i],
+                port=int(raw_config["Ports"][i]),
+                usage="c2",
+            )
+        )
     # Pastebin
     if raw_config.get("Pastebin") not in ["null", None]:
         # TODO: Is it used to download the C2 information if not embedded?
         # Ref: https://www.netskope.com/blog/asyncrat-using-fully-undetected-downloader
-        parsed_result.http.append(MACOModel.Http(uri=raw_config["Pastebin"], usage="download"))
+        parsed_result.http.append(
+            MACOModel.Http(uri=raw_config["Pastebin"], usage="download")
+        )
 
     return parsed_result
 
@@ -44,7 +58,7 @@ class AsyncRAT(Extractor):
     family = "AsyncRAT"
     last_modified = "2024-10-26"
     sharing = "TLP:CLEAR"
-    yara_rule = open(os.path.join(os.path.dirname(__file__).split("/modules", 1)[0], f"data/yara/CAPE/{family}.yar")).read()
+    yara_rule = get_YARA_rule(family)
 
     def run(self, stream, matches):
         return convert_to_MACO(extract_config(stream.read()))

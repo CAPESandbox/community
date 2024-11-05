@@ -1,8 +1,8 @@
-import os
 
-from cape_parsers.CAPE.community.SparkRAT import extract_config
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
+from cape_parsers.CAPE.community.SparkRAT import extract_config
+from modules.parsers.utils import get_YARA_rule
 
 
 def convert_to_MACO(raw_config: dict):
@@ -14,7 +14,12 @@ def convert_to_MACO(raw_config: dict):
     url = f"http{'s' if raw_config['secure'] else ''}://{raw_config['host']}:{raw_config['port']}{raw_config['path']}"
 
     parsed_result.http.append(
-        MACOModel.Http(uri=url, hostname=raw_config["host"], port=raw_config["port"], path=raw_config["path"])
+        MACOModel.Http(
+            uri=url,
+            hostname=raw_config["host"],
+            port=raw_config["port"],
+            path=raw_config["path"],
+        )
     )
 
     parsed_result.identifier.append(raw_config["uuid"])
@@ -27,7 +32,7 @@ class SparkRAT(Extractor):
     family = "SparkRAT"
     last_modified = "2024-10-26"
     sharing = "TLP:CLEAR"
-    yara_rule = open(os.path.join(os.path.dirname(__file__).split("/modules", 1)[0], f"data/yara/CAPE/{family}.yar")).read()
+    yara_rule = get_YARA_rule(family)
 
     def run(self, stream, matches):
         return convert_to_MACO(extract_config(stream.read()))

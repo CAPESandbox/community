@@ -1,6 +1,7 @@
-from cape_parsers.CAPE.core.RCSession import extract_config, rule_source
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
+from cape_parsers.CAPE.core.RCSession import extract_config, rule_source
+from modules.parsers.utils import get_YARA_rule
 
 
 def convert_to_MACO(raw_config: dict):
@@ -13,7 +14,9 @@ def convert_to_MACO(raw_config: dict):
         parsed_result.http.append(MACOModel.Http(hostname=address, usage="c2"))
 
     if "directory" in raw_config:
-        parsed_result.paths.append(MACOModel.Path(path=raw_config["directory"], usage="install"))
+        parsed_result.paths.append(
+            MACOModel.Path(path=raw_config["directory"], usage="install")
+        )
 
     service = {}
 
@@ -37,6 +40,8 @@ class RCSession(Extractor):
     family = "RCSession"
     last_modified = "2024-10-26"
     sharing = "TLP:CLEAR"
+    yara_rule = get_YARA_rule(family)
+
     yara_rule = rule_source
 
     def run(self, stream, matches):

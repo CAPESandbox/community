@@ -1,6 +1,7 @@
-from cape_parsers.CAPE.core.PikaBot import extract_config, rule_source
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
+from cape_parsers.CAPE.core.PikaBot import extract_config, rule_source
+from modules.parsers.utils import get_YARA_rule
 
 
 def convert_to_MACO(raw_config: dict):
@@ -10,15 +11,26 @@ def convert_to_MACO(raw_config: dict):
     parsed_result = MACOModel(family="PikaBot", other=raw_config)
 
     if "C2" in raw_config:
-        [parsed_result.http.append(MACOModel.Http(uri=c2, usage="c2")) for c2 in raw_config["C2"]]
-        parsed_result.binaries.append(MACOModel.Binary(datatype="payload", data=raw_config["Powershell"]))
+        [
+            parsed_result.http.append(MACOModel.Http(uri=c2, usage="c2"))
+            for c2 in raw_config["C2"]
+        ]
+        parsed_result.binaries.append(
+            MACOModel.Binary(datatype="payload", data=raw_config["Powershell"])
+        )
     elif "C2s" in raw_config:
         parsed_result.version = raw_config["Version"]
         parsed_result.campaign_id.append(raw_config["Campaign Name"])
-        parsed_result.registry.append(MACOModel.Registry(key=raw_config["Registry Key"]))
+        parsed_result.registry.append(
+            MACOModel.Registry(key=raw_config["Registry Key"])
+        )
         for c2 in raw_config["C2s"]:
             host, port = c2.split(":")
-            parsed_result.http.append(MACOModel.Http(hostname=host, port=port, user_agent=raw_config["User Agent"]))
+            parsed_result.http.append(
+                MACOModel.Http(
+                    hostname=host, port=port, user_agent=raw_config["User Agent"]
+                )
+            )
 
     return parsed_result
 
@@ -28,6 +40,8 @@ class PikaBot(Extractor):
     family = "PikaBot"
     last_modified = "2024-10-26"
     sharing = "TLP:CLEAR"
+    yara_rule = get_YARA_rule(family)
+
     yara_rule = rule_source
 
     def run(self, stream, matches):
