@@ -1,6 +1,7 @@
+from cape_parsers.CAPE.community.Carbanak import extract_config, rule_source
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
-from cape_parsers.CAPE.community.Carbanak import extract_config, rule_source
+
 from modules.parsers.utils import get_YARA_rule
 
 
@@ -22,9 +23,7 @@ def convert_to_MACO(raw_config: dict):
     # C2
     if raw_config.get("C2"):
         if isinstance(raw_config["C2"], str):
-            parsed_result.http.append(
-                MACOModel.Http(hostname=raw_config["C2"], usage="c2")
-            )
+            parsed_result.http.append(MACOModel.Http(hostname=raw_config["C2"], usage="c2"))
         else:
             for c2 in raw_config["C2"]:
                 parsed_result.http.append(MACOModel.Http(hostname=c2, usage="c2"))

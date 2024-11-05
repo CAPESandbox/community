@@ -1,6 +1,7 @@
+from cape_parsers.CAPE.core.DridexLoader import extract_config, rule_source
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
-from cape_parsers.CAPE.core.DridexLoader import extract_config, rule_source
+
 from modules.parsers.utils import get_YARA_rule
 
 
@@ -14,9 +15,7 @@ def convert_to_MACO(raw_config: dict):
         parsed_result.http.append(MACOModel.Http(uri=c2_address, usage="c2"))
 
     if "RC4 key" in raw_config:
-        parsed_result.encryption.append(
-            MACOModel.Encryption(algorithm="RC4", key=raw_config["RC4 key"])
-        )
+        parsed_result.encryption.append(MACOModel.Encryption(algorithm="RC4", key=raw_config["RC4 key"]))
 
     if "Botnet ID" in raw_config:
         parsed_result.identifier.append(raw_config["Botnet ID"])

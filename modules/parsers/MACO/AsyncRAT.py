@@ -1,8 +1,9 @@
 import os
 
+from cape_parsers.CAPE.community.AsyncRAT import extract_config
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
-from cape_parsers.CAPE.community.AsyncRAT import extract_config
+
 from modules.parsers.utils import get_YARA_rule
 
 
@@ -46,9 +47,7 @@ def convert_to_MACO(raw_config: dict) -> MACOModel:
     if raw_config.get("Pastebin") not in ["null", None]:
         # TODO: Is it used to download the C2 information if not embedded?
         # Ref: https://www.netskope.com/blog/asyncrat-using-fully-undetected-downloader
-        parsed_result.http.append(
-            MACOModel.Http(uri=raw_config["Pastebin"], usage="download")
-        )
+        parsed_result.http.append(MACOModel.Http(uri=raw_config["Pastebin"], usage="download"))
 
     return parsed_result
 

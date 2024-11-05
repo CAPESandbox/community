@@ -1,7 +1,7 @@
-
+from cape_parsers.CAPE.core.BumbleBee import extract_config
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
-from cape_parsers.CAPE.core.BumbleBee import extract_config
+
 from modules.parsers.utils import get_YARA_rule
 
 
@@ -29,9 +29,7 @@ def convert_to_MACO(raw_config: dict):
 
     # RC4 Key
     if raw_config.get("RC4 Key"):
-        parsed_result.encryption.append(
-            MACOModel.Encryption(algorithm="rc4", key=raw_config["RC4 Key"])
-        )
+        parsed_result.encryption.append(MACOModel.Encryption(algorithm="rc4", key=raw_config["RC4 Key"]))
 
     return parsed_result
 

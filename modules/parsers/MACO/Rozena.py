@@ -1,7 +1,7 @@
-
+from cape_parsers.CAPE.community.Rozena import extract_config
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
-from cape_parsers.CAPE.community.Rozena import extract_config
+
 from modules.parsers.utils import get_YARA_rule
 
 
@@ -10,9 +10,7 @@ def convert_to_MACO(raw_config: dict):
         return None
 
     parsed_result = MACOModel(family="Rozena", other=raw_config)
-    parsed_result.http = [
-        MACOModel.Http(hostname=raw_config["C2"], port=raw_config["Port"], usage="c2")
-    ]
+    parsed_result.http = [MACOModel.Http(hostname=raw_config["C2"], port=raw_config["Port"], usage="c2")]
 
     return parsed_result
 

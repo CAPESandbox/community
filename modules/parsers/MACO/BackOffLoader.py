@@ -1,6 +1,7 @@
+from cape_parsers.CAPE.community.BackOffLoader import extract_config
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
-from cape_parsers.CAPE.community.BackOffLoader import extract_config
+
 from modules.parsers.utils import get_YARA_rule
 
 
@@ -15,9 +16,7 @@ def convert_to_MACO(raw_config: dict):
 
     # Encryption details
     parsed_result.encryption.append(
-        MACOModel.Encryption(
-            algorithm="rc4", key=raw_config["EncryptionKey"], seed=raw_config["RC4Seed"]
-        )
+        MACOModel.Encryption(algorithm="rc4", key=raw_config["EncryptionKey"], seed=raw_config["RC4Seed"])
     )
     for url in raw_config["URLs"]:
         parsed_result.http.append(MACOModel.Http(url=url))

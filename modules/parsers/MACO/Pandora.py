@@ -1,9 +1,10 @@
 import os
 from copy import deepcopy
 
+from cape_parsers.CAPE.community.Pandora import extract_config
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
-from cape_parsers.CAPE.community.Pandora import extract_config
+
 from modules.parsers.utils import get_YARA_rule
 
 
@@ -29,17 +30,13 @@ def convert_to_MACO(raw_config: dict):
 
     parsed_result.paths.append(
         MACOModel.Path(
-            path=os.path.join(
-                config_copy.pop("Install Path"), config_copy.pop("Install Name")
-            ),
+            path=os.path.join(config_copy.pop("Install Path"), config_copy.pop("Install Name")),
             usage="install",
         )
     )
 
     parsed_result.registry.append(MACOModel.Registry(key=config_copy.pop("HKCU Key")))
-    parsed_result.registry.append(
-        MACOModel.Registry(key=config_copy.pop("ActiveX Key"))
-    )
+    parsed_result.registry.append(MACOModel.Registry(key=config_copy.pop("ActiveX Key")))
 
     for field in list(config_copy.keys()):
         # TODO: Unsure what's the value of the remaining fields

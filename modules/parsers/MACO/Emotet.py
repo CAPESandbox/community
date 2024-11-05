@@ -1,6 +1,7 @@
+from cape_parsers.CAPE.core.Emotet import extract_config, rule_source
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
-from cape_parsers.CAPE.core.Emotet import extract_config, rule_source
+
 from modules.parsers.utils import get_YARA_rule
 
 
@@ -14,17 +15,9 @@ def convert_to_MACO(raw_config: dict):
         parsed_result.http.append(MACOModel.Http(uri=c2_address, usage="c2"))
 
     if "RC4 public key" in raw_config:
-        parsed_result.encryption.append(
-            MACOModel.Encryption(
-                algorithm="RC4", public_key=raw_config["RSA public key"]
-            )
-        )
+        parsed_result.encryption.append(MACOModel.Encryption(algorithm="RC4", public_key=raw_config["RSA public key"]))
 
-    parsed_result.other = {
-        k: raw_config[k]
-        for k in raw_config.keys()
-        if k not in ["address", "RSA public key"]
-    }
+    parsed_result.other = {k: raw_config[k] for k in raw_config.keys() if k not in ["address", "RSA public key"]}
 
     return parsed_result
 

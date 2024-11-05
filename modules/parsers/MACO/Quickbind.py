@@ -1,7 +1,7 @@
-
+from cape_parsers.CAPE.core.Quickbind import extract_config
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
-from cape_parsers.CAPE.core.Quickbind import extract_config
+
 from modules.parsers.utils import get_YARA_rule
 
 
@@ -18,9 +18,7 @@ def convert_to_MACO(raw_config: dict):
         parsed_result.http.append(MACOModel.Http(hostname=c2, usage="c2"))
 
     if "Encryption Key" in raw_config:
-        parsed_result.encryption.append(
-            MACOModel.Encryption(key=raw_config["Encryption Key"])
-        )
+        parsed_result.encryption.append(MACOModel.Encryption(key=raw_config["Encryption Key"]))
 
     return parsed_result
 

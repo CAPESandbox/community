@@ -1,9 +1,13 @@
 import os
+
 import requests
 
 # Raw file download template (default to Github-based raw download URL)
-CAPE_RAW_DOWNLOAD_TEMPLATE=os.environ.get("CAPE_RAW_DOWNLOAD_TEMPLATE",
-                                          "https://raw.githubusercontent.com/kevoreilly/CAPEv2/refs/heads/master/data/yara/CAPE/{family}.yar")
+CAPE_RAW_DOWNLOAD_TEMPLATE = os.environ.get(
+    "CAPE_RAW_DOWNLOAD_TEMPLATE",
+    "https://raw.githubusercontent.com/kevoreilly/CAPEv2/refs/heads/master/data/yara/CAPE/{family}.yar",
+)
+
 
 def get_YARA_rule(family: str) -> str | None:
     root = os.path.join(os.path.dirname(__file__))
@@ -32,7 +36,7 @@ def get_YARA_rule(family: str) -> str | None:
         resp = requests.get(CAPE_RAW_DOWNLOAD_TEMPLATE.format(family=family), timeout=10)
         if resp.ok:
             # Cache the rule on disk
-            with open(maco_yara_path, 'w') as f:
+            with open(maco_yara_path, "w") as f:
                 f.write(resp.text)
             return resp.text
     except Exception as e:

@@ -1,6 +1,7 @@
+from cape_parsers.CAPE.core.DoppelPaymer import extract_config, rule_source
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
-from cape_parsers.CAPE.core.DoppelPaymer import extract_config, rule_source
+
 from modules.parsers.utils import get_YARA_rule
 
 
@@ -14,11 +15,7 @@ def convert_to_MACO(raw_config: dict):
         parsed_result.decoded_strings = raw_config["strings"]
 
     if "RSA public key" in raw_config:
-        parsed_result.encryption.append(
-            MACOModel.Encryption(
-                algorithm="RSA", public_key=raw_config["RSA public key"]
-            )
-        )
+        parsed_result.encryption.append(MACOModel.Encryption(algorithm="RSA", public_key=raw_config["RSA public key"]))
 
     return parsed_result
 

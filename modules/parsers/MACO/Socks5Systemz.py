@@ -1,7 +1,7 @@
-
+from cape_parsers.CAPE.core.Socks5Systemz import extract_config
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
-from cape_parsers.CAPE.core.Socks5Systemz import extract_config
+
 from modules.parsers.utils import get_YARA_rule
 
 
@@ -12,13 +12,8 @@ def convert_to_MACO(raw_config: dict):
     parsed_result = MACOModel(
         family="Socks5Systemz",
         other=raw_config,
-        http=[
-            MACOModel.Http(hostname=c2, usage="c2") for c2 in raw_config.get("C2s", [])
-        ]
-        + [
-            MACOModel.Http(hostname=decoy, usage="decoy")
-            for decoy in raw_config.get("Dummy domain", [])
-        ],
+        http=[MACOModel.Http(hostname=c2, usage="c2") for c2 in raw_config.get("C2s", [])]
+        + [MACOModel.Http(hostname=decoy, usage="decoy") for decoy in raw_config.get("Dummy domain", [])],
     )
 
     return parsed_result

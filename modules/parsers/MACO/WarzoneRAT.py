@@ -1,6 +1,7 @@
+from cape_parsers.CAPE.core.WarzoneRAT import extract_config
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
-from cape_parsers.CAPE.core.WarzoneRAT import extract_config
+
 from modules.parsers.utils import get_YARA_rule
 
 
