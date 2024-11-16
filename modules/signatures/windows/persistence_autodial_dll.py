@@ -1,5 +1,6 @@
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PersistenceViaAutodialDLLRegistry(Signature):
     name = "persistence_via_autodial_dll_registry"
     description = "Attempt to load malicious DLL when Winsock library (ws2_32.dll) is loaded"
@@ -10,8 +11,8 @@ class PersistenceViaAutodialDLLRegistry(Signature):
     evented = True
     ttps = ["T1112", "T1547"]
     references = [
-    "https://www.hexacorn.com/blog/2015/01/13/beyond-good-ol-run-key-part-24/",
-    "https://decoded.avast.io/luigicamastra/operation-dragon-castling-apt-group-targeting-betting-companies/",
+        "https://www.hexacorn.com/blog/2015/01/13/beyond-good-ol-run-key-part-24/",
+        "https://decoded.avast.io/luigicamastra/operation-dragon-castling-apt-group-targeting-betting-companies/",
     ]
 
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW"])

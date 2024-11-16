@@ -395,6 +395,7 @@ class DLLHijackingViaWaaSMedicSvcCOMTypeLib(Signature):
             return True
         return False
 
+
 class MSOfficeCMDRCE(Signature):
     name = "ms_office_cmd_rce"
     description = "Attempts to execute arbitrary code via Microsoft OfficeCmd URL Handler"
@@ -403,16 +404,20 @@ class MSOfficeCMDRCE(Signature):
     authors = ["@para0x0dise"]
     minimum = "0.5"
     ttps = ["T1189"]
-    references = ["https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/initial_access_suspicious_execution_via_microsoft_officecmd_url_handler.toml"]
+    references = [
+        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/initial_access_suspicious_execution_via_microsoft_officecmd_url_handler.toml"
+    ]
 
     def run(self):
         for cmdline in self.results.get("behavior", {}).get("summary", {}).get("executed_commands", []):
             lower = cmdline.lower()
-            if "localbridge" in lower and any(arg in lower for arg in ("ms-officecmd", "launchofficeappforresult",
-                                                                       "--gpu-launcher")):
+            if "localbridge" in lower and any(
+                arg in lower for arg in ("ms-officecmd", "launchofficeappforresult", "--gpu-launcher")
+            ):
                 self.data.append({"command": cmdline})
                 return True
         return False
+
 
 class StoreExecutableRegistry(Signature):
     name = "store_executable_registry"
@@ -439,9 +444,11 @@ class StoreExecutableRegistry(Signature):
             valueName = self.get_argument(call, "ValueName")
             bufLen = self.get_argument(call, "BufferLength")
 
-            if not ("\\Program Files (x86)\\Schneider Electric\\Software Update\\SoftwareUpdate.exe" in process[
-                "module_path"] and valueName == "FusTMP"):
-                if buf.startswith('MZ\\x90\\x00') and int(bufLen) >= 100:
+            if not (
+                "\\Program Files (x86)\\Schneider Electric\\Software Update\\SoftwareUpdate.exe" in process["module_path"]
+                and valueName == "FusTMP"
+            ):
+                if buf.startswith("MZ\\x90\\x00") and int(bufLen) >= 100:
                     if self.pid:
                         self.mark_call()
                     self.detected = True
@@ -450,6 +457,7 @@ class StoreExecutableRegistry(Signature):
         if self.detected:
             return True
         return False
+
 
 class DLLHijackingViaMicrosoftExchange(Signature):
     name = "dll_hijacking_via_microsoft_exchange"
@@ -504,49 +512,68 @@ class IPAddressDiscoveryViaTrustedProgram(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.detected = False
         self.domains = (
-          "ip-api.com",
-          "checkip.dyndns.org",
-          "api.ipify.org",
-          "api.ipify.com",
-          "whatismyip.akamai.com",
-          "bot.whatismyipaddress.com",
-          "ifcfg.me",
-          "ident.me",
-          "ipof.in",
-          "ip.tyk.nu",
-          "icanhazip.com",
-          "curlmyip.com",
-          "wgetip.com",
-          "eth0.me",
-          "ipecho.net",
-          "ip.appspot.com",
-          "api.myip.com",
-          "geoiptool.com",
-          "api.2ip.ua",
-          "api.ip.sb",
-          "ipinfo.io",
-          "checkip.amazonaws.com",
-          "wtfismyip.com",
-          "iplogger.*",
-          "freegeoip.net",
-          "freegeoip.app",
-          "ipinfo.io",
-          "geoplugin.net",
-          "myip.dnsomatic.com",
-          "www.geoplugin.net",
-          "api64.ipify.org",
-          "ip4.seeip.org",
-          "*.geojs.io",
-          "*portmap.io",
-          "api.2ip.ua",
-          "api.db-ip.com",
-          "geolocation-db.com",
-          "httpbin.org",
-          "myip.opendns.com"
-         )
-        self.trustedNames = ("wscript.exe", "cscript.exe", "regsvr32.exe", "mshta.exe", "rundll32.exe", "vbc.exe",
-                     "powershell.exe", "pwsh.exe", "msbuild.exe", "wmic.exe", "cmstp.exe", "regasm.exe","installutil.exe"
-                             ,"regsvcs.exe", "msxsl.exe", "xwizard.exe", "csc.exe", "curl.exe", "java.exe", "javaw.exe")
+            "ip-api.com",
+            "checkip.dyndns.org",
+            "api.ipify.org",
+            "api.ipify.com",
+            "whatismyip.akamai.com",
+            "bot.whatismyipaddress.com",
+            "ifcfg.me",
+            "ident.me",
+            "ipof.in",
+            "ip.tyk.nu",
+            "icanhazip.com",
+            "curlmyip.com",
+            "wgetip.com",
+            "eth0.me",
+            "ipecho.net",
+            "ip.appspot.com",
+            "api.myip.com",
+            "geoiptool.com",
+            "api.2ip.ua",
+            "api.ip.sb",
+            "ipinfo.io",
+            "checkip.amazonaws.com",
+            "wtfismyip.com",
+            "iplogger.*",
+            "freegeoip.net",
+            "freegeoip.app",
+            "ipinfo.io",
+            "geoplugin.net",
+            "myip.dnsomatic.com",
+            "www.geoplugin.net",
+            "api64.ipify.org",
+            "ip4.seeip.org",
+            "*.geojs.io",
+            "*portmap.io",
+            "api.2ip.ua",
+            "api.db-ip.com",
+            "geolocation-db.com",
+            "httpbin.org",
+            "myip.opendns.com",
+        )
+        self.trustedNames = (
+            "wscript.exe",
+            "cscript.exe",
+            "regsvr32.exe",
+            "mshta.exe",
+            "rundll32.exe",
+            "vbc.exe",
+            "powershell.exe",
+            "pwsh.exe",
+            "msbuild.exe",
+            "wmic.exe",
+            "cmstp.exe",
+            "regasm.exe",
+            "installutil.exe",
+            "regsvcs.exe",
+            "msxsl.exe",
+            "xwizard.exe",
+            "csc.exe",
+            "curl.exe",
+            "java.exe",
+            "javaw.exe",
+        )
 
     def on_call(self, call, process):
         if any(proc in process["process_name"].lower() for proc in self.trusted):
@@ -563,6 +590,7 @@ class IPAddressDiscoveryViaTrustedProgram(Signature):
         if self.detected:
             return True
         return False
+
 
 class MountCopyToWebDavShare(Signature):
     name = "mount_copy_to_webdav_share"
@@ -581,22 +609,31 @@ class MountCopyToWebDavShare(Signature):
         cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if (
-                    "rundll32.exe" in lower and "\\program files\\microsoft office\\root\\office16\\mlcfg32.cpl" in lower) or \
-                    (any(proc in lower for proc in ("c:\\program files\\microsoft office\\root\\office16\\winproj.exe",
-                                                    "d:\\sf-deploy\\console\\console.exe",
-                                                    "c:\\program files\\windowsapps\\mycaseinc.mycasefilesync_*\\app\\mycase desktop.exe"))):
+            if ("rundll32.exe" in lower and "\\program files\\microsoft office\\root\\office16\\mlcfg32.cpl" in lower) or (
+                any(
+                    proc in lower
+                    for proc in (
+                        "c:\\program files\\microsoft office\\root\\office16\\winproj.exe",
+                        "d:\\sf-deploy\\console\\console.exe",
+                        "c:\\program files\\windowsapps\\mycaseinc.mycasefilesync_*\\app\\mycase desktop.exe",
+                    )
+                )
+            ):
                 return False
 
-            if ("explorer.exe" in lower and "\\" in lower and "@" in lower) or \
-                    ("net.exe" in lower and "use" in lower) or \
-                    (any(arg in lower for arg in
-                         ("http", "webdav")) and "/user" in lower and not "//localhost" in lower) or \
-                    (any(proc in lower for proc in ("expand.exe", "xcopy.exe", "cmd.exe")) and
-                     any(arg in lower for arg in ("\\\\webdav", "davwwwroot"))):
+            if (
+                ("explorer.exe" in lower and "\\" in lower and "@" in lower)
+                or ("net.exe" in lower and "use" in lower)
+                or (any(arg in lower for arg in ("http", "webdav")) and "/user" in lower and not "//localhost" in lower)
+                or (
+                    any(proc in lower for proc in ("expand.exe", "xcopy.exe", "cmd.exe"))
+                    and any(arg in lower for arg in ("\\\\webdav", "davwwwroot"))
+                )
+            ):
                 return True
 
         return False
+
 
 class ExecuteFileDownloadedViaOpenSSH(Signature):
     name = "execute_file_downloaded_via_openssh"
@@ -621,9 +658,26 @@ class ExecuteFileDownloadedViaOpenSSH(Signature):
         if process["process_name"].lower() == "scp.exe" or process["process_name"].lower() == "ssh.exe":
             if call["api"] == "NtCreateFile":
                 filename = self.get_argument(call, "FileName").lower()
-                if any(filename.endswith("." + ext) for ext in
-                       ("exe", "pif", "scr", "js", "vbs", "wsh", "hta", "cpl", "jse", "vbe", "bat", "cmd", "dll", "msi",
-                        "ps1")):
+                if any(
+                    filename.endswith("." + ext)
+                    for ext in (
+                        "exe",
+                        "pif",
+                        "scr",
+                        "js",
+                        "vbs",
+                        "wsh",
+                        "hta",
+                        "cpl",
+                        "jse",
+                        "vbe",
+                        "bat",
+                        "cmd",
+                        "dll",
+                        "msi",
+                        "ps1",
+                    )
+                ):
                     if self.pid:
                         self.mark_call()
                     self.detected = True
@@ -632,6 +686,7 @@ class ExecuteFileDownloadedViaOpenSSH(Signature):
         if self.detected:
             return True
         return False
+
 
 class ExecuteScriptsViaMicrosoftManagementConsole(Signature):
     name = "execute_scripts_via_microsoft_management_console"
@@ -644,7 +699,7 @@ class ExecuteScriptsViaMicrosoftManagementConsole(Signature):
     ttps = ["T1059", "T1059.005", "T1059.007"]
     references = [
         "https://www.elastic.co/security-labs/grimresource",
-        "https://medium.com/@knownsec404team/from-http-domain-to-res-domain-xss-by-using-ie-adobes-pdf-activex-plugin-ba4f082c8199"
+        "https://medium.com/@knownsec404team/from-http-domain-to-res-domain-xss-by-using-ie-adobes-pdf-activex-plugin-ba4f082c8199",
     ]
 
     filter_apinames = set(["NtCreateFile"])
@@ -666,6 +721,7 @@ class ExecuteScriptsViaMicrosoftManagementConsole(Signature):
         if self.detected:
             return True
         return False
+
 
 class ExecuteSuspiciousProcessesViaWindowsMSSQLService(Signature):
     name = "execute_suspicious_processes_via_windows_mssql_service"
@@ -706,7 +762,9 @@ class ExecuteSuspiciousProcessesViaWindowsMSSQLService(Signature):
                         self.mark_call()
                     self.detected = True
 
-                elif "bitsadmin.exe" in lower and any(arg in lower for arg in ("download", "transfer", "create", "addfile", "setnotifycmdline")):
+                elif "bitsadmin.exe" in lower and any(
+                    arg in lower for arg in ("download", "transfer", "create", "addfile", "setnotifycmdline")
+                ):
                     if self.pid:
                         self.mark_call()
                     self.detected = True
@@ -736,28 +794,28 @@ class CreateSuspiciousLNKFiles(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.detected = False
         self.badExtensions = (
-              "pdf.lnk",
-              "doc.lnk",
-              "docx.lnk",
-              "ppt.lnk",
-              "pptx.lnk",
-              "xls.lnk",
-              "xlsx.lnk",
-              "rtf.lnk",
-              "jpg.lnk",
-              "png.lnk",
-              "html.lnk",
-              "htm.lnk",
-              "txt.lnk",
-              "exe.lnk",
-              "mp4.lnk",
-              "avi.lnk",
-              "bat.lnk",
-              "rar.lnk",
-              "zip.lnk",
-              "img.lnk",
-              "iso.lnk"
-      )
+            "pdf.lnk",
+            "doc.lnk",
+            "docx.lnk",
+            "ppt.lnk",
+            "pptx.lnk",
+            "xls.lnk",
+            "xlsx.lnk",
+            "rtf.lnk",
+            "jpg.lnk",
+            "png.lnk",
+            "html.lnk",
+            "htm.lnk",
+            "txt.lnk",
+            "exe.lnk",
+            "mp4.lnk",
+            "avi.lnk",
+            "bat.lnk",
+            "rar.lnk",
+            "zip.lnk",
+            "img.lnk",
+            "iso.lnk",
+        )
 
     def on_call(self, call, process):
         if process["process_name"] in ("winrar.exe", "7zFM.exe"):
@@ -774,6 +832,7 @@ class CreateSuspiciousLNKFiles(Signature):
         if self.detected:
             return True
         return False
+
 
 class ExecuteSafeModeFromSuspiciousProcess(Signature):
     name = "execute_safe_mode_from_suspicious_process"
@@ -793,10 +852,24 @@ class ExecuteSafeModeFromSuspiciousProcess(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.detected = False
-        self.blacklistedProcesses = ("winword.exe", "excel.exe", "powerpnt.exe", "msaccess.exe", "mspub.exe",
-                         "outlook.exe", "fltldr.exe", "cscript.exe", "powershell.exe", "pwsh.exe",
-                         "wscript.exe", "cmd.exe", "rundll32.exe", "regsvr32.exe", "mshta.exe",
-                         "msbuild.exe")
+        self.blacklistedProcesses = (
+            "winword.exe",
+            "excel.exe",
+            "powerpnt.exe",
+            "msaccess.exe",
+            "mspub.exe",
+            "outlook.exe",
+            "fltldr.exe",
+            "cscript.exe",
+            "powershell.exe",
+            "pwsh.exe",
+            "wscript.exe",
+            "cmd.exe",
+            "rundll32.exe",
+            "regsvr32.exe",
+            "mshta.exe",
+            "msbuild.exe",
+        )
 
     def on_call(self, call, process):
         if process["process_name"].lower() in self.blacklistedProcesses:
@@ -812,6 +885,7 @@ class ExecuteSafeModeFromSuspiciousProcess(Signature):
         if self.detected:
             return True
         return False
+
 
 class AccessAutoLogonsViaRegistry(Signature):
     name = "access_auto_logons_via_registry"
@@ -832,25 +906,25 @@ class AccessAutoLogonsViaRegistry(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.detected = False
         self.whitelistProcessPaths = (
-            '\\windows\\system32\\logonui.exe',
-            '\\sources\\setuphost.exe',
-            '\\sources\\setupplatform.exe',
-            '\\sources\\windowsupdatebox.exe',
-            '\\windows\\system32\\svchost.exe',
-            '\\windows\\system32\\wbem\\wmiprvse.exe',
-            '\\windows\\syswow64\\wbem\\wmiprvse.exe',
-            '\\windows\\system32\\musnotification.exe',
-            '\\windows\\syswow64\\musnotification.exe',
-            '\\windows\\system32\\wsmprovhost.exe',
-            '\\windows\\system32\\conhost.exe',
-            '\\windows\\system32\\securityhealthsystray.exe',
-            '\\windows\\regedit.exe',
-            '\\program files\\',
-            '\\program files (x86)\\',
-            '\\windows\\system32\\cmd.exe',
-            '\\windows\\system32\\windowspowershell\\',
-            '\\programdata\\microsoft\\windows defender\\platform\\',
-            '\\users\\*\\appdata\\local\\microsoft\\onedrive\\onedrive.exe'
+            "\\windows\\system32\\logonui.exe",
+            "\\sources\\setuphost.exe",
+            "\\sources\\setupplatform.exe",
+            "\\sources\\windowsupdatebox.exe",
+            "\\windows\\system32\\svchost.exe",
+            "\\windows\\system32\\wbem\\wmiprvse.exe",
+            "\\windows\\syswow64\\wbem\\wmiprvse.exe",
+            "\\windows\\system32\\musnotification.exe",
+            "\\windows\\syswow64\\musnotification.exe",
+            "\\windows\\system32\\wsmprovhost.exe",
+            "\\windows\\system32\\conhost.exe",
+            "\\windows\\system32\\securityhealthsystray.exe",
+            "\\windows\\regedit.exe",
+            "\\program files\\",
+            "\\program files (x86)\\",
+            "\\windows\\system32\\cmd.exe",
+            "\\windows\\system32\\windowspowershell\\",
+            "\\programdata\\microsoft\\windows defender\\platform\\",
+            "\\users\\*\\appdata\\local\\microsoft\\onedrive\\onedrive.exe",
         )
 
     def on_call(self, call, process):
@@ -866,6 +940,7 @@ class AccessAutoLogonsViaRegistry(Signature):
         if self.detected:
             return True
         return False
+
 
 class CredentialAccessViaWindowsCredentialHistory(Signature):
     name = "credential_access_via_windows_credential_history"
@@ -886,21 +961,21 @@ class CredentialAccessViaWindowsCredentialHistory(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.detected = False
         self.whitelistProcessPaths = (
-            '\\program files\\',
-            '\\program files (x86)\\',
-            '\\windows\\system32\\lsass.exe',
-            '\\windows\\system32\\svchost.exe',
-            '\\windows\\system32\\robocopy.exe',
-            '\\windows\\ccmcache\\',
-            '\\windows\\ccm\\',
-            '\\windows\\explorer.exe',
-            '\\programdata\\microsoft\\windows defender\\',
-            '\\windows\\system32\\werfault.exe',
-            '\\windows\\syswow64\\werfault.exe',
-            '\\windows\\system32\\dllhost.exe',
-            '\\windows\\system32\\sdclt.exe',
-            '\\windows\\system32\\pickerhost.exe',
-            '\\windows\\system32\\mrt.exe'
+            "\\program files\\",
+            "\\program files (x86)\\",
+            "\\windows\\system32\\lsass.exe",
+            "\\windows\\system32\\svchost.exe",
+            "\\windows\\system32\\robocopy.exe",
+            "\\windows\\ccmcache\\",
+            "\\windows\\ccm\\",
+            "\\windows\\explorer.exe",
+            "\\programdata\\microsoft\\windows defender\\",
+            "\\windows\\system32\\werfault.exe",
+            "\\windows\\syswow64\\werfault.exe",
+            "\\windows\\system32\\dllhost.exe",
+            "\\windows\\system32\\sdclt.exe",
+            "\\windows\\system32\\pickerhost.exe",
+            "\\windows\\system32\\mrt.exe",
         )
 
     def on_call(self, call, process):
@@ -918,9 +993,12 @@ class CredentialAccessViaWindowsCredentialHistory(Signature):
             return True
         return False
 
+
 class AccessBootKeyViaRegistry(Signature):
     name = "access_boot_key_via_registry"
-    description = "Attempts to to read the registry values used to calculate the System BootKey to recover passwords and other secrets"
+    description = (
+        "Attempts to to read the registry values used to calculate the System BootKey to recover passwords and other secrets"
+    )
     severity = 3
     categories = ["credentials"]
     authors = ["@para0x0dise"]
@@ -936,15 +1014,8 @@ class AccessBootKeyViaRegistry(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.detected = False
-        self.whitelistProcessPaths = (
-            "\\windows\\system32\\lsass.exe",
-            "\\windows\\system32\\svchost.exe"
-        )
-        self.regKeys = (
-            "\\control\\lsa\\skew1",
-            "\\control\\lsa\\jd",
-            "\\control\\lsa\\jdlsa\\gbg"
-        )
+        self.whitelistProcessPaths = ("\\windows\\system32\\lsass.exe", "\\windows\\system32\\svchost.exe")
+        self.regKeys = ("\\control\\lsa\\skew1", "\\control\\lsa\\jd", "\\control\\lsa\\jdlsa\\gbg")
 
     def on_call(self, call, process):
         if not any(path in process["module_path"].lower() for path in self.whitelistProcessPaths):
@@ -959,6 +1030,7 @@ class AccessBootKeyViaRegistry(Signature):
         if self.detected:
             return True
         return False
+
 
 class NetworkConnectionViaSuspiciousProcess(Signature):
     name = "network_connection_via_suspicious_process"
@@ -979,40 +1051,40 @@ class NetworkConnectionViaSuspiciousProcess(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.detected = False
         self.blacklisterProcesses = (
-          "addinprocess.exe",
-          "addinprocess32.exe",
-          "addinutil.exe",
-          "applaunch.exe",
-          "aspnet_compiler.exe",
-          "aspnet_regbrowsers.exe",
-          "aspnet_regiis.exe",
-          "aspnet_regsql.exe",
-          "aspnet_state.exe",
-          "aspnet_wp.exe",
-          "caspol.exe",
-          "comsvcconfig.exe",
-          "csc.exe",
-          "cvtres.exe",
-          "datasvcutil.exe",
-          "edmgen.exe",
-          "ilasm.exe",
-          "installutil.exe",
-          "jsc.exe",
-          "microsoft.workflow.compiler.exe",
-          "msbuild.exe",
-          "mscorsvw.exe",
-          "ngen.exe",
-          "ngentask.exe",
-          "regasm.exe",
-          "regsvcs.exe",
-          "servicemodelreg.exe",
-          "vbc.exe",
-          "wsatconfig.exe",
-          "dllhost.exe",
-          "regsvr32.exe",
-          "gpupdate.exe",
-          "searchprotocolhost.exe",
-          "msiexec.exe"
+            "addinprocess.exe",
+            "addinprocess32.exe",
+            "addinutil.exe",
+            "applaunch.exe",
+            "aspnet_compiler.exe",
+            "aspnet_regbrowsers.exe",
+            "aspnet_regiis.exe",
+            "aspnet_regsql.exe",
+            "aspnet_state.exe",
+            "aspnet_wp.exe",
+            "caspol.exe",
+            "comsvcconfig.exe",
+            "csc.exe",
+            "cvtres.exe",
+            "datasvcutil.exe",
+            "edmgen.exe",
+            "ilasm.exe",
+            "installutil.exe",
+            "jsc.exe",
+            "microsoft.workflow.compiler.exe",
+            "msbuild.exe",
+            "mscorsvw.exe",
+            "ngen.exe",
+            "ngentask.exe",
+            "regasm.exe",
+            "regsvcs.exe",
+            "servicemodelreg.exe",
+            "vbc.exe",
+            "wsatconfig.exe",
+            "dllhost.exe",
+            "regsvr32.exe",
+            "gpupdate.exe",
+            "searchprotocolhost.exe",
+            "msiexec.exe",
         )
 
     def on_call(self, call, process):
@@ -1024,6 +1096,7 @@ class NetworkConnectionViaSuspiciousProcess(Signature):
             return True
         return False
 
+
 class SuspiciousExecutionViaDotnetRemoting(Signature):
     name = "suspicious_execution_via_dotnet_remoting"
     description = "Attempts to execute via DotNet system runtime remoting to execute malicious assembly via named pipes"
@@ -1032,8 +1105,10 @@ class SuspiciousExecutionViaDotnetRemoting(Signature):
     authors = ["@para0x0dise"]
     minimum = "1.2"
     ttps = ["T1218"]
-    references = ["https://github.com/nettitude/Aladdin",
-                  "https://www.tiraniddo.dev/2017/07/dg-on-windows-10-s-executing-arbitrary.html"]
+    references = [
+        "https://github.com/nettitude/Aladdin",
+        "https://www.tiraniddo.dev/2017/07/dg-on-windows-10-s-executing-arbitrary.html",
+    ]
     evented = True
 
     def run(self):
@@ -1046,6 +1121,7 @@ class SuspiciousExecutionViaDotnetRemoting(Signature):
 
         return False
 
+
 class UsesRestartManagerForSuspiciousActivities(Signature):
     name = "uses_restart_manager_for_suspicious_activities"
     description = "Uses Restart Manager Sessions for either process discovery or file encryption"
@@ -1055,9 +1131,7 @@ class UsesRestartManagerForSuspiciousActivities(Signature):
     minimum = "0.5"
     evented = True
     ttps = ["T1057", "T1486"]
-    references = [
-        "https://www.crowdstrike.com/en-us/blog/windows-restart-manager-part-2/"
-    ]
+    references = ["https://www.crowdstrike.com/en-us/blog/windows-restart-manager-part-2/"]
 
     filter_apinames = set(["RmStartSession"])
 

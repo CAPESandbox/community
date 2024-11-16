@@ -111,8 +111,7 @@ class LOLBAS_IndirectCommandExecutionViaConsoleWindowHost(Signature):
         cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if ("conhost.exe" in lower and
-                    any(process in lower for process in ("cmd /c", "powershell", "script", "mshta", "curl"))):
+            if "conhost.exe" in lower and any(process in lower for process in ("cmd /c", "powershell", "script", "mshta", "curl")):
                 self.data.append({"command": cmdline})
                 return True
         return False
@@ -614,6 +613,7 @@ class LOLBAS_ExecuteBinaryViaCDB(Signature):
 
         return False
 
+
 class LOLBAS_ExecutePSViaSyncappvpublishingserver(Signature):
     name = "execute_ps_via_syncappvpublishingserver"
     description = "Attempts to execute a PowerShell commands via Microsoft signed Visual Basic script (Syncappvpublishingserver)"
@@ -650,6 +650,7 @@ class LOLBAS_ExecutePSViaSyncappvpublishingserver(Signature):
         if self.mal and self.sus:
             return True
         return False
+
 
 class LOLBAS_ExecuteRemoteMSIViaDevinit(Signature):
     name = "execute_remote_msi"

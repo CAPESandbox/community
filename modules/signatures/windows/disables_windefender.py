@@ -205,6 +205,7 @@ class DisablesWindowsDefenderDISM(Signature):
 
         return False
 
+
 class AddWindowsDefenderExclusions(Signature):
     name = "add_windows_defender_exclusions"
     description = "Attempts to add Windows Defender Exclusions for specific file types by extension"
@@ -213,8 +214,9 @@ class AddWindowsDefenderExclusions(Signature):
     authors = ["@para0x0dise"]
     minimum = "1.2"
     ttps = ["T1562.001"]
-    references = ["https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/defense_evasion_windows_defender_exclusions_by_extension.toml",
-]
+    references = [
+        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/defense_evasion_windows_defender_exclusions_by_extension.toml",
+    ]
     evented = True
 
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey"])
@@ -228,10 +230,28 @@ class AddWindowsDefenderExclusions(Signature):
             regKeyPath = self.get_argument(call, "FullName").lower()
             valueName = self.get_argument(call, "ValueName")
             buf = self.get_argument(call, "Buffer")
-            if buf == '0' and ("software\\policies\\microsoft\\windows defender\\exclusions\\extensions\\" in regKeyPath and
-                    any(extension in valueName for extension in ("exe", "pif", "scr", "js", "vbs",
-                                                                 "wsh", "hta", "cpl", "jse", "vbe",
-                                                                 "bat", "cmd", "dll", "ps1"))):
+            if buf == "0" and (
+                "software\\policies\\microsoft\\windows defender\\exclusions\\extensions\\" in regKeyPath
+                and any(
+                    extension in valueName
+                    for extension in (
+                        "exe",
+                        "pif",
+                        "scr",
+                        "js",
+                        "vbs",
+                        "wsh",
+                        "hta",
+                        "cpl",
+                        "jse",
+                        "vbe",
+                        "bat",
+                        "cmd",
+                        "dll",
+                        "ps1",
+                    )
+                )
+            ):
                 self.data.append({"regkey": regKeyPath})
                 self.detected = True
 
