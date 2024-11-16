@@ -204,3 +204,38 @@ class DisablesWindowsDefenderDISM(Signature):
                 return True
 
         return False
+
+class AddWindowsDefenderExclusions(Signature):
+    name = "add_windows_defender_exclusions"
+    description = "Attempts to add Windows Defender Exclusions for specific file types by extension"
+    severity = 3
+    categories = ["bypass", "stealth", "anti-av"]
+    authors = ["@para0x0dise"]
+    minimum = "1.2"
+    ttps = ["T1562.001"]
+    references = ["https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/defense_evasion_windows_defender_exclusions_by_extension.toml",
+]
+    evented = True
+
+    filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.detected = False
+
+    def on_call(self, call, process):
+        if not "\\windows\\microsoft.net" in process["module_path"].lower():
+            regKeyPath = self.get_argument(call, "FullName").lower()
+            valueName = self.get_argument(call, "ValueName")
+            buf = self.get_argument(call, "Buffer")
+            if buf == '0' and ("software\\policies\\microsoft\\windows defender\\exclusions\\extensions\\" in regKeyPath and
+                    any(extension in valueName for extension in ("exe", "pif", "scr", "js", "vbs",
+                                                                 "wsh", "hta", "cpl", "jse", "vbe",
+                                                                 "bat", "cmd", "dll", "ps1"))):
+                self.data.append({"regkey": regKeyPath})
+                self.detected = True
+
+    def on_complete(self):
+        if self.detected:
+            return True
+        return False
