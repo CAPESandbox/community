@@ -13,23 +13,31 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from lib.cuckoo.common.abstracts import Signature
+
 import os
-from lib.cuckoo.common.constants import CUCKOO_ROOT
+import logging
 import ipaddress
 import csv
 
+from lib.cuckoo.common.constants import CUCKOO_ROOT
+from lib.cuckoo.common.abstracts import Signature
 
-def load_ip_ranges_from_csv(csv_file):
-    ip_ranges = []
-    with open(csv_file, 'r') as file:
+log = logging.getLogger()
+
+ip_ranges = []
+HAVE_MSFT_PUB_IPS = False
+msf_public_ips_list = os.path.join(CUCKOO_ROOT, "extra", "msft-public-ips.csv")
+if os.path.exists(msf_public_ips_list):
+    with open(msf_public_ips_list, 'r') as file:
         reader = csv.DictReader(file)
         for row in reader:
             ip_ranges.append(row['Prefix'])
-    return ip_ranges
+    HAVE_MSFT_PUB_IPS = True
+else:
+    log.debug("Missed file extra/msft-public-ips.csv. Get a fresh copy from https://www.microsoft.com/en-us/download/details.aspx?id=53602")
 
 
-def check_ip_in_ranges(ip_address, ip_ranges):
+def check_ip_in_ranges(ip_address):
     ip = ipaddress.ip_address(ip_address)
     for ip_range in ip_ranges:
         network = ipaddress.ip_network(ip_range)
@@ -52,11 +60,10 @@ class NetworkCountryDistribution(Signature):
 
     def run(self):
         countries = []
-        if "network" in self.results and "hosts" in self.results["network"]:
-            for host in self.results["network"]["hosts"]:
-                country = host["country_name"]
-                if country and country not in countries:
-                    countries.append(country)
+        for host in self.results.get("network", {}).get("hosts", []):
+            country = host["country_name"]
+            if country and country not in countries:
+                countries.append(country)
 
         if len(countries) > 5:
             for uniq in countries:
@@ -70,30 +77,28 @@ class NetworkCountryDistribution(Signature):
 
 class NetworkMultipleDirectIPConnections(Signature):
     name = "network_multiple_direct_ip_connections"
-    description = "Multiple direct IP connections"
+    description = "Muliple direct IP connections"
     severity = 2
     confidence = 30
     categories = ["network", "c2"]
     authors = ["Kevin Ross","Wassime BATTA"]
     minimum = "1.3"
+    enabled = False
 
     filter_analysistypes = set(["file"])
 
     def run(self):
+        if not HAVE_MSFT_PUB_IPS or not ip_ranges:
+            return False
+
         count = 0
         ips = []
-        msf_ips_file = "extra/msft-public-ips.csv"
-        msf_public_ips_list = os.path.join(CUCKOO_ROOT, msf_ips_file)
-        if "network" in self.results and "hosts" in self.results["network"]:
-            ip_ranges = load_ip_ranges_from_csv(msf_public_ips_list)
-            for host in self.results["network"]["hosts"]:
-                ip = host["ip"]
-                hostname = host["hostname"]
-                if ip not in ips and not hostname and not ip.startswith(("10.", "172.16.", "192.168.")):
-                    # Verify whether they are not part of the MICROSOFT-CORP-MSN-AS-BLOCK.
-                    if not check_ip_in_ranges(ip, ip_ranges):
-                        ips.append(ip)
-                        count += 1
+        for host in self.results.ge("network", {}).get("hosts", []):
+            if host["ip"] not in ips and not host["hostname"] and not host["ip"].startswith(("10.", "172.16.", "192.168.")):
+                # Verify whether they are not part of the MICROSOFT-CORP-MSN-AS-BLOCK.
+                if not check_ip_in_ranges(host["ip"]):
+                    ips.append(host["ip"])
+                    count += 1
 
         if count > 5:
             self.data.append({"direct_ip_connections": "Made direct connections to %s unique IP addresses" % (count)})

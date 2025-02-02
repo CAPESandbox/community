@@ -13,24 +13,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import socket, os, asyncio
+import os
 from urllib.parse import urlparse, parse_qs
-from lib.cuckoo.common.abstracts import Signature, CUCKOO_ROOT
-import threading
 
-def is_blacklisted(target, dnsbl_servers):
-    try:
-        ip_address = socket.gethostbyname(target)
-        for server in dnsbl_servers:
-            query = '.'.join(reversed(str(ip_address).split("."))) + "." + server
-            try:
-                threading.Thread(target=socket.gethostbyname, args=(query,)).start()
-                return True, server  # Found blacklisted server
-            except socket.error:
-                pass
-        return False, None  # No blacklisted server found
-    except socket.gaierror:
-        return "Invalid domain or IP address.", None
+from lib.cuckoo.common.abstracts import Signature, CUCKOO_ROOT
 
 
 def extract_domains(url):
@@ -45,7 +31,7 @@ def extract_domains(url):
             if param_url.netloc:
                 domains.add(param_url.netloc)
     return domains
-    
+
 
 class PDF_Annot_URLs_Checker(Signature):
     name = "pdf_annot_urls_checker"
@@ -54,56 +40,17 @@ class PDF_Annot_URLs_Checker(Signature):
     categories = ["static"]
     authors = ["Wassime BATTA"]
     minimum = "0.5"
+    enaled = False
 
     filter_analysistypes = set(["file","static"])
 
-    malicious_tlds_file = os.path.join(CUCKOO_ROOT, "data/malicioustlds.txt")
+    malicious_tlds_file = os.path.join(CUCKOO_ROOT, "data", "malicioustlds.txt")
 
-    dnsbl_servers = [
-        "zen.spamhaus.org",
-        "dnsbl.sorbs.net",
-        "bl.spamcop.net",
-        "cbl.abuseat.org",
-        "b.barracudacentral.org",
-        "dnsbl-1.uceprotect.net",
-        "dnsbl-2.uceprotect.net",
-        "dnsbl-3.uceprotect.net",
-        "dnsbl.dronebl.org",
-        "noptr.spamrats.com",
-        "multi.surbl.org",
-        "psbl.surriel.com",
-        "dnsbl.invaluement.com",
-        "dyna.spamrats.com",
-        "spam.spamrats.com",
-        "dul.dnsbl.sorbs.net",
-        "dynip.rothen.com",
-        "spamsources.fabel.dk",
-        "truncate.gbudb.net",
-        "db.wpbl.info",
-        "dnsbl.zapbl.net",
-        "combined.rbl.msrbl.net",
-        "tor.dan.me.uk",
-        "relays.nether.net",
-        "rbl.efnetrbl.org",
-        "bl.kundenserver.de",
-        "rbl.interserver.net",
-        "rbl.rbldns.ru",
-        "all.rbl.jp",
-        "sbl.spamhaus.org",
-        "xbl.spamhaus.org",
-        "pbl.spamhaus.org",
-        "dnsbl-4.uceprotect.net",
-        "dnsbl-5.uceprotect.net",
-        "dnsbl-6.uceprotect.net",
-        "spamrbl.imp.ch",
-        "bogons.cymru.com",
-        "rbl.realtimeblacklist.com",
-        "http.dnsbl.sorbs.net",
-    ]
-    
     def __init__(self, *args, **kwargs):
         super(PDF_Annot_URLs_Checker, self).__init__(*args, **kwargs)
-        self.malicious_tlds = self.load_malicious_tlds()
+        self.malicious_tlds = set()
+        if os.path.exists(self.malicious_tlds_file):
+            self.malicious_tlds = self.load_malicious_tlds()
 
     def load_malicious_tlds(self):
         malicious_tlds = set()
@@ -121,7 +68,7 @@ class PDF_Annot_URLs_Checker(Signature):
         found_blacklist_ip = False
         suspect = False
 
-        if "PDF" in self.results["target"]["file"].get("type", ""):
+        if "PDF" in self.results.get("target", {}).get("file", {}).get("type"):
             if "Annot_URLs" in self.results["target"]["file"]["pdf"]:
                 for entry in self.results["target"]["file"]["pdf"]["Annot_URLs"]:
                     entry_lower = entry.lower()
@@ -146,15 +93,14 @@ class PDF_Annot_URLs_Checker(Signature):
                             # If no malicious TLDs detected, set found_domain_only to True
                             targets = extract_domains(entry_lower)
                             for target in targets:
-                                blacklisted_server, server = is_blacklisted(target, self.dnsbl_servers)
+                                blacklisted_server, server = self.check_dnsbbl(target)
                                 if blacklisted_server:
                                     found_blacklist_ip = True
                                     self.data.append({"blacklisted": f"The domain or IP address {target} is blacklisted on the following server: {server}  "})
-                                    #break # Stop checking once blacklisted IP is found                                    
+                                    #break # Stop checking once blacklisted IP is found
                                     #print ( blacklisted_server)
                                 #else:
                                 #    print(f"The domain or IP address {target} is not blacklisted.")
-                            
 
             if found_malicious_domain or found_malicious_extension or found_blacklist_ip :
                 self.severity = 6
