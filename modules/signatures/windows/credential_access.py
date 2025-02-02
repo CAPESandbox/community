@@ -84,3 +84,37 @@ class CredWiz(Signature):
                 self.data.append({"command": cmdline})
 
         return ret
+
+
+class AccessWindowsPasswordsVault(Signature):
+    name = "access_windows_passwords_vault"
+    description = "Attempts to access Vault passwords via PowerShell"
+    severity = 3
+    categories = ["credential_access"]
+    authors = ["@para0x0dise"]
+    minimum = "0.5"
+    evented = True
+    ttps = ["T1059"]
+    references = [
+        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/credential_access_access_to_windows_passwords_vault_via_powershell.toml"
+    ]
+
+    filter_apinames = set(["CreateProcessInternalW"])
+
+    def on_call(self, call, process):
+        pname = process["process_name"].lower()
+
+        # Checking parent process for false positives.
+        if pname == "keeperpasswordmanager.exe":
+            if call["api"] == "CreateProcessInternalW":
+                cmdline = self.get_argument(call, "CommandLine")
+                lower = cmdline.lower()
+                if any(arg in lower for arg in ("passwordvault", "retrievepassword", "retrieveall")):
+                    return False
+
+    def on_complete(self):
+        for cmdline in self.results.get("behavior", {}).get("summary", {}).get("executed_commands", []):
+            lower = cmdline.lower()
+            if "powershell" in lower and any(arg in lower for arg in ("passwordvault", "retrievepassword", "retrieveall")):
+                return True
+        return False

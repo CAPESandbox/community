@@ -21,7 +21,7 @@ class AsyncRatMutex(Signature):
     description = "Creates known AsyncRat mutex"
     severity = 3
     categories = ["infostealer", "keylogger", "rat"]
-    families = ["AsyncRat"]
+    families = ["AsyncRAT"]
     authors = ["andreiminca"]
     minimum = "1.3"
     ttps = ["T1219"]  # MITRE v6,7,8

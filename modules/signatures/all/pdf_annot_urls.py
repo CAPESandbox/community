@@ -13,6 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os.path
+
 from lib.cuckoo.common.abstracts import Signature
 
 
@@ -26,7 +28,10 @@ class PDF_Annot_URLs_Checker(Signature):
 
     filter_analysistypes = set(["file", "static"])
 
-    malicious_tlds_file = "/opt/CAPEv2/data/malicioustlds.txt"
+    malicious_tlds_files = (
+        "/opt/CAPEv2/custom/data/malicioustlds.txt",
+        "/opt/CAPEv2/data/malicioustlds.txt",
+    )
 
     def __init__(self, *args, **kwargs):
         super(PDF_Annot_URLs_Checker, self).__init__(*args, **kwargs)
@@ -34,7 +39,13 @@ class PDF_Annot_URLs_Checker(Signature):
 
     def load_malicious_tlds(self):
         malicious_tlds = set()
-        with open(self.malicious_tlds_file, "r") as f:
+        for malicious_tlds_file in self.malicious_tlds_files:
+            if os.path.exists(malicious_tlds_file):
+                break
+        else:
+            raise FileNotFoundError(malicious_tlds_file)
+
+        with open(malicious_tlds_file, "r") as f:
             for line in f:
                 line = line.strip()
                 if line.startswith("."):
