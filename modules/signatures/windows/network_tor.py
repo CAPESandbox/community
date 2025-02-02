@@ -36,15 +36,15 @@ class Tor(Signature):
             return True
 
     def on_complete(self):
-        indicators = [
-            ".*\\\\tor\\\\cached-certs$",
-            ".*\\\\tor\\\\cached-consensus$",
-            ".*\\\\tor\\\\cached-descriptors$",
-            ".*\\\\tor\\\\geoip$",
-            ".*\\\\tor\\\\lock$",
-            ".*\\\\tor\\\\state$",
-            ".*\\\\tor\\\\torrc$",
-        ]
+        indicators = (
+            r".*\\tor\\cached-certs$",
+            r".*\\tor\\cached-consensus$",
+            r".*\\tor\\cached-descriptors$",
+            r".*\\tor\\geoip$",
+            r".*\\tor\\lock$",
+            r".*\\tor\\state$",
+            r".*\\tor\\torrc$",
+        )
 
         for indicator in indicators:
             if self.check_file(pattern=indicator, regex=True):

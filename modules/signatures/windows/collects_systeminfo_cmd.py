@@ -29,9 +29,9 @@ class SystemInfoDiscoveryCMD(Signature):
 
     def on_complete(self):
         indicators = [
-            "([A-Za-z]:\\\\Windows\\\\System32\\\\)?hostname(.exe)?.*",
-            "([A-Za-z]:\\\\Windows\\\\System32\\\\)?systeminfo(.exe)?.*",
-            "([A-Za-z]:\\\\Windows\\\\System32\\\\)?net(.exe)?\sconfig(Server|Workstation)",
+            r"([A-Za-z]:\\Windows\\System32\\)?hostname(.exe)?.*",
+            r"([A-Za-z]:\\Windows\\System32\\)?systeminfo(.exe)?.*",
+            r"([A-Za-z]:\\Windows\\System32\\)?net(.exe)?\sconfig(Server|Workstation)",
         ]
 
         for indicator in indicators:
@@ -56,7 +56,7 @@ class SystemUserDiscoveryCMD(Signature):
 
     def on_complete(self):
         indicators = [
-            "([A-Za-z]:\\\\Windows\\\\System32\\\\)?whoami(.exe)?.*",
+            r"([A-Za-z]:\\Windows\\System32\\)?whoami(.exe)?.*",
         ]
 
         for indicator in indicators:
@@ -107,11 +107,11 @@ class SystemNetworkDiscoveryCMD(Signature):
 
     def on_complete(self):
         indicators = [
-            "([A-Za-z]:\\\\Windows\\\\System32\\\\)?route(.exe)?.*",
-            '.*netsh(")?\swlan\sshow\s(profile|networks).*',
-            "([A-Za-z]:\\\\Windows\\\\System32\\\\)?ipconfig(.exe)?.*",
-            "([A-Za-z]:\\\\Windows\\\\System32\\\\)?nltest(.exe)?.*",
-            ".*net\sview.*",
+            r"([A-Za-z]:\\Windows\\System32\\)?route(.exe)?.*",
+            r'.*netsh(")?\swlan\sshow\s(profile|networks).*',
+            r"([A-Za-z]:\\Windows\\System32\\)?ipconfig(.exe)?.*",
+            r"([A-Za-z]:\\Windows\\System32\\)?nltest(.exe)?.*",
+            r".*net\sview.*",
         ]
 
         for indicator in indicators:

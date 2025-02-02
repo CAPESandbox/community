@@ -17,8 +17,6 @@ class PreventsSafeboot(Signature):
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        if self.check_delete_key(
-            pattern=".*\\\\System\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\SafeBoot\\\\.*", regex=True
-        ):
+        if self.check_delete_key(pattern=r".*\\System\\(CurrentControlSet|ControlSet001)\\Control\\SafeBoot\\.*", regex=True):
             return True
         return False

@@ -27,9 +27,7 @@ class DisablesVBATrustAccess(Signature):
     def run(self):
         ret = False
 
-        keys = [
-            ".*\\\\Microsoft\\\\Office\\\\.*\\\\Security\\\\Access\\\\VBOM$",
-        ]
+        keys = (r".*\\Microsoft\\Office\\.*\\Security\\Access\\VBOM$",)
 
         for check in keys:
             match = self.check_write_key(pattern=check, regex=True)
@@ -51,9 +49,7 @@ class ChangesTrustCenter_settings(Signature):
     def run(self):
         ret = False
 
-        keys = [
-            ".*\\\\Microsoft\\\\Office\\\\.*\\\\Security\\\\Trusted Documents\\\\TrustRecords$",
-        ]
+        keys = (r".*\\Microsoft\\Office\\.*\\Security\\Trusted Documents\\TrustRecords$",)
 
         for check in keys:
             match = self.check_write_key(pattern=check, regex=True)

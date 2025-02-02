@@ -90,9 +90,7 @@ class UACBypassDelegateExecuteSdclt(Signature):
         regkey = False
         ret = False
 
-        keys = [
-            r".*\\Software\\Classes\\Folder\\shell\\open\\command\\DelegateExecute$",
-        ]
+        keys = (r".*\\Software\\Classes\\Folder\\shell\\open\\command\\DelegateExecute$",)
 
         for check in keys:
             match = self.check_write_key(pattern=check, regex=True)
@@ -182,7 +180,7 @@ class UACBypassFodhelper(Signature):
 
     def run(self):
         ret = False
-        reg_indicators = [r"HKEY_CURRENT_USER\\Software\\Classes\\ms-settings\\shell \\open\\command\\*."]
+        reg_indicators = (r"HKEY_CURRENT_USER\\Software\\Classes\\ms-settings\\shell \\open\\command\\*.",)
 
         for indicator in reg_indicators:
             match = self.check_write_key(pattern=indicator, regex=True)
@@ -218,6 +216,22 @@ class UACBypassCMSTPCOM(Signature):
                 return True
 
         return False
+
+
+class ChecksUACStatus(Signature):
+    name = "checks_uac_status"
+    description = "Checks if UAC (User Access Control) is enabled"
+    severity = 2
+    categories = ["uac"]
+    authors = ["Kevin Ross"]
+    minimum = "0.5"
+    ttps = ["T1548"]  # MITRE v6,7,8
+
+    def run(self):
+        match = self.check_key(pattern=r".*\SOFTWARE\(Wow6432Node\)?Microsoft\Windows\CurrentVersion\Policies\System\EnableLUA$", regex=True)
+        if match:
+            self.data.append({"regkey": match})
+            return True
 
 
 class UACBypassWindowsBackup(Signature):

@@ -56,10 +56,10 @@ class MedusaLockerRegkeys(Signature):
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        indicators = [
-            "HKEY_CURRENT_USER\\\\Software\\\\Medusa",
-            "HKEY_CURRENT_USER\\\\Software\\\\Medusa\\\\.*",
-        ]
+        indicators = (
+            r"HKEY_CURRENT_USER\\Software\\Medusa",
+            r"HKEY_CURRENT_USER\\Software\\Medusa\\.*",
+        )
 
         for indicator in indicators:
             match = self.check_key(pattern=indicator, regex=True)

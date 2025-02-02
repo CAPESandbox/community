@@ -58,10 +58,10 @@ class KazyBot_APIs(Signature):
 
     def on_complete(self):
         module_paths = [
-            ".*\\\\SharedCode\\\\SharedCode.dll$",
-            ".*\\\\SharedCode\\\\SharedCode.exe$",
-            ".*\\\\PluginServer\\\\PluginServer.dll$",
-            ".*\\\\PluginServer\\\\PluginServer.exe$",
+            r".*\\SharedCode\\SharedCode.dll$",
+            r".*\\SharedCode\\SharedCode.exe$",
+            r".*\\PluginServer\\PluginServer.dll$",
+            r".*\\PluginServer\\PluginServer.exe$",
         ]
         for indicator in module_paths:
             if self.check_file(pattern=indicator, regex=True):

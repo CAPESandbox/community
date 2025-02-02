@@ -29,7 +29,7 @@ class ArmadilloRegKey(Signature):
     mbcs = ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        indicators = [".*\\\\The\\ Silicon\\ Realms\\ Toolworks\\\\Armadillo$"]
+        indicators = (r".*\\The\\ Silicon\\ Realms\\ Toolworks\\Armadillo$",)
 
         for indicator in indicators:
             match = self.check_key(pattern=indicator, regex=True)

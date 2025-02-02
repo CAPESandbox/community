@@ -38,10 +38,10 @@ class PersistsDotNetDevUtility(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.devtools = [
-            re.compile("[A-Za-z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\RegAsm\.exe", re.IGNORECASE),
-            re.compile("[A-Za-z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\MSBuild\.exe", re.IGNORECASE),
-            re.compile("[A-Za-z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\RegSvcs\.exe", re.IGNORECASE),
-            re.compile("[A-Za-z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\InstallUtil\.exe", re.IGNORECASE),
+            re.compile(r"[A-Za-z]:\\Windows\\Microsoft\\\\\.NET\\Framework\\v.*\\RegAsm\.exe", re.IGNORECASE),
+            re.compile(r"[A-Za-z]:\\Windows\\Microsoft\\\\\.NET\\Framework\\v.*\\MSBuild\.exe", re.IGNORECASE),
+            re.compile(r"[A-Za-z]:\\Windows\\Microsoft\\\\\.NET\\Framework\\v.*\\RegSvcs\.exe", re.IGNORECASE),
+            re.compile(r"[A-Za-z]:\\Windows\\Microsoft\\\\\.NET\\Framework\\v.*\\InstallUtil\.exe", re.IGNORECASE),
         ]
         self.sname = str()
         self.dname = str()
@@ -90,18 +90,16 @@ class SpwansDotNetDevUtiliy(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.devtools = [
-            re.compile("[A-Za-z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\RegAsm\.exe", re.IGNORECASE),
-            re.compile("[A-Za-z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\MSBuild\.exe", re.IGNORECASE),
-            re.compile("[A-Za-z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\RegSvcs\.exe", re.IGNORECASE),
-            re.compile("[A-Za-z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\InstallUtil\.exe", re.IGNORECASE),
-            re.compile("[A-Za-z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\mscorsvw\.exe", re.IGNORECASE),
-            re.compile("[A-Z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\CasPol\.exe", re.IGNORECASE),
-            re.compile(
-                "[A-Z]:\\\\\\\\Windows\\\\\\\\Microsoft\.NET\\\\\\\\Framework\\\\\\\\v.*\\\\\\\\MSBuild\.exe", re.IGNORECASE
-            ),
-            re.compile("[A-Za-z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\AppLaunch\.exe", re.IGNORECASE),
-            re.compile("[A-Za-z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\aspnet_regbrowsers\.exe", re.IGNORECASE),
-            re.compile("[A-Za-z]:\\\\Windows\\\\Microsoft\.NET\\\\Framework\\\\v.*\\\\ilasm.exe", re.IGNORECASE),
+            re.compile(r"[A-Za-z]:\\Windows\\Microsoft\\\.NET\\Framework\\v.*\\RegAsm\.exe", re.IGNORECASE),
+            re.compile(r"[A-Za-z]:\\Windows\\Microsoft\\\.NET\\Framework\\v.*\\MSBuild\.exe", re.IGNORECASE),
+            re.compile(r"[A-Za-z]:\\Windows\\Microsoft\\\.NET\\Framework\\v.*\\RegSvcs\.exe", re.IGNORECASE),
+            re.compile(r"[A-Za-z]:\\Windows\\Microsoft\\\.NET\\Framework\\v.*\\InstallUtil\.exe", re.IGNORECASE),
+            re.compile(r"[A-Za-z]:\\Windows\\Microsoft\\\.NET\\Framework\\v.*\\mscorsvw\.exe", re.IGNORECASE),
+            re.compile(r"[A-Z]:\\Windows\\Microsoft\\\.NET\\Framework\\v.*\\CasPol\.exe", re.IGNORECASE),
+            re.compile(r"[A-Z]:\\Windows\\Microsoft\\\.NET\\Framework\\v.*\\MSBuild\.exe", re.IGNORECASE),
+            re.compile(r"[A-Za-z]:\\Windows\\Microsoft\\\.NET\\Framework\\v.*\\AppLaunch\.exe", re.IGNORECASE),
+            re.compile(r"[A-Za-z]:\\Windows\\Microsoft\\\.NET\\Framework\\v.*\\aspnet_regbrowsers\.exe", re.IGNORECASE),
+            re.compile(r"[A-Za-z]:\\Windows\\Microsoft\\\.NET\\Framework\\v.*\\ilasm.exe", re.IGNORECASE),
         ]
         self.sname = str()
         self.dname = str()

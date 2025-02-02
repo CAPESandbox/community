@@ -89,7 +89,7 @@ class RDPTCPKey(Signature):
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        indicators = [".*\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\Terminal Server\\\\WinStations\\\\RDP-Tcp"]
+        indicators = [r".*\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\WinStations\\RDP-Tcp"]
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)

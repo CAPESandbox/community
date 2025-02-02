@@ -29,9 +29,9 @@ class HidesRecycleBinIcon(Signature):
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        indicators = [
-            "HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\NonEnum\\\\\{645FF040-5081-101B-9F08-00AA002F954E\}",
-        ]
+        indicators = (
+            r"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\NonEnum\\\{645FF040-5081-101B-9F08-00AA002F954E\}",
+        )
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)

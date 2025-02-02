@@ -29,9 +29,7 @@ class DisablesCPLDisplay(Signature):
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        indicators = [
-            "HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\NoDispCPL",
-        ]
+        indicators = (r"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\NoDispCPL",)
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)

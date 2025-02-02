@@ -21,7 +21,7 @@ class AntiAVSRP(Signature):
 
     def run(self):
         match_key = self.check_write_key(
-            ".*\\\\Policies\\\\Microsoft\\\\Windows\\\\Safer\\\\CodeIdentifiers\\\\0\\\\Paths\\\\.*", regex=True, all=True
+            r".*\\Policies\\Microsoft\\Windows\\Safer\\CodeIdentifiers\\0\\Paths\\.*", regex=True, all=True
         )
         if match_key:
             for match in match_key:

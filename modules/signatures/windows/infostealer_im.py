@@ -18,33 +18,33 @@ class IMStealer(Signature):
     mbcs = ["OB0003", "OB0005"]
 
     def run(self):
-        file_indicators = [
-            ".*\\\\AIM\\\\aimx\.bin$",
-            ".*\\\\Digsby\\\\loginfo\.yaml$",
-            ".*\\\\Digsby\\\\Digsby\.dat$",
-            ".*\\\\Meebo\\\\MeeboAccounts\.txt$",
-            ".*\\\\Miranda\\\\.*\.dat$",
-            ".*\\\\MySpace\\\\IM\\\\users\.txt$",
-            ".*\\\\\.purple\\\\Accounts\.xml$",
-            ".*\\\\Application\\ Data\\\\Miranda\\\\.*",
-            ".*\\\\AppData\\\\Roaming\\\\Miranda\\\\.*",
-            ".*\\\\Skype\\\\.*\\\\config\.xml$",
-            ".*\\\\Tencent\\ Files\\\\.*\\\\QQ\\\\Registry\.db$",
-            ".*\\\\Trillian\\\\users\\\\global\\\\accounts\.ini$",
-            ".*\\\\Xfire\\\\XfireUser\.ini$",
-        ]
-        registry_indicators = [
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?America\\ Online\\\\AIM6\\\\Passwords.*",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?AIM\\\\AIMPRO\\\\.*",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Beyluxe\\ Messenger\\\\.*",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?BigAntSoft\\\\BigAntMessenger\\\\.*",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Camfrog\\\\Client\\\\.*",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Google\\\\Google\\ Talk\\\\Accounts.*",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?IMVU\\\\.*",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Nimbuzz\\\\PCClient\\\\Application\\\\.*",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Paltalk.*",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Yahoo\\\\Pager\\\\.*",
-        ]
+        file_indicators = (
+            r".*\\AIM\\aimx\.bin$",
+            r".*\\Digsby\\loginfo\.yaml$",
+            r".*\\Digsby\\Digsby\.dat$",
+            r".*\\Meebo\\MeeboAccounts\.txt$",
+            r".*\\Miranda\\.*\.dat$",
+            r".*\\MySpace\\IM\\users\.txt$",
+            r".*\\\.purple\\Accounts\.xml$",
+            r".*\\Application\\ Data\\Miranda\\.*",
+            r".*\\AppData\\Roaming\\Miranda\\.*",
+            r".*\\Skype\\.*\\config\.xml$",
+            r".*\\Tencent\\ Files\\.*\\QQ\\Registry\.db$",
+            r".*\\Trillian\\users\\global\\accounts\.ini$",
+            r".*\\Xfire\\XfireUser\.ini$",
+        )
+        registry_indicators = (
+            r".*\\Software\\(Wow6432Node\\)?America\\ Online\\AIM6\\Passwords.*",
+            r".*\\Software\\(Wow6432Node\\)?AIM\\AIMPRO\\.*",
+            r".*\\Software\\(Wow6432Node\\)?Beyluxe\\ Messenger\\.*",
+            r".*\\Software\\(Wow6432Node\\)?BigAntSoft\\BigAntMessenger\\.*",
+            r".*\\Software\\(Wow6432Node\\)?Camfrog\\Client\\.*",
+            r".*\\Software\\(Wow6432Node\\)?Google\\Google\\ Talk\\Accounts.*",
+            r".*\\Software\\(Wow6432Node\\)?IMVU\\.*",
+            r".*\\Software\\(Wow6432Node\\)?Nimbuzz\\PCClient\\Application\\.*",
+            r".*\\Software\\(Wow6432Node\\)?Paltalk.*",
+            r".*\\Software\\(Wow6432Node\\)?Yahoo\\Pager\\.*",
+        )
         found_stealer = False
         for indicator in file_indicators:
             file_match = self.check_file(pattern=indicator, regex=True, all=True)

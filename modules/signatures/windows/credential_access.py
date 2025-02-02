@@ -29,7 +29,7 @@ class EnablesWDigest(Signature):
 
     def run(self):
         ret = False
-        reg_indicators = [".*\\\\Control\\\\SecurityProviders\\\\Wdigest\\\\UseLogonCredential$"]
+        reg_indicators = [r".*\\Control\\SecurityProviders\\Wdigest\\UseLogonCredential$"]
 
         for indicator in reg_indicators:
             match = self.check_write_key(pattern=indicator, regex=True)

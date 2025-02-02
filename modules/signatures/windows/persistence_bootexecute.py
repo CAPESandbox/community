@@ -44,7 +44,7 @@ class PersistenceBootexecute(Signature):
 
     def on_complete(self):
         match_key = self.check_write_key(
-            pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\Session\\ Manager\\\\(BootExecute|SetupExecute|Execute|S0InitialCommand)$",
+            pattern=r".*\\SYSTEM\\(CurrentControlSet|ControlSet001)\\Control\\Session\\ Manager\\(BootExecute|SetupExecute|Execute|S0InitialCommand)$",
             regex=True,
             all=True,
         )

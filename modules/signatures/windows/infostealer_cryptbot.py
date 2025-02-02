@@ -28,14 +28,14 @@ class CryptBotFiles(Signature):
 
     def run(self):
         score = 0
-        indicators = [
-            ".*AppData\\\\Local\\\\Temp\\\\.*\\\\(_Files|files_)\\\\_AllForms_list\.txt$",
-            ".*AppData\\\\Local\\\\Temp\\\\.*\\\\(_Files|files_)\\\\_Screen_Desktop\.jpeg$",
-            ".*AppData\\\\Local\\\\Temp\\\\.*\\\\(_Files|files_)\\\\_Information\.txt$",
-            ".*AppData\\\\Local\\\\Temp\\\\.*\\\\(_Files|files_)\\\\screenshot\.jpg$",
-            ".*AppData\\\\Local\\\\Temp\\\\.*\\\\(_Files|files_)\\\\system_info\.txt$",
-            ".*AppData\\\\Local\\\\Temp\\\\.*\\\\(_Files|files_)\\\\forms\.txt$",
-        ]
+        indicators = (
+            r".*AppData\\Local\\Temp\\.*\\(_Files|files_)\\_AllForms_list\.txt$",
+            r".*AppData\\Local\\Temp\\.*\\(_Files|files_)\\_Screen_Desktop\.jpeg$",
+            r".*AppData\\Local\\Temp\\.*\\(_Files|files_)\\_Information\.txt$",
+            r".*AppData\\Local\\Temp\\.*\\(_Files|files_)\\screenshot\.jpg$",
+            r".*AppData\\Local\\Temp\\.*\\(_Files|files_)\\system_info\.txt$",
+            r".*AppData\\Local\\Temp\\.*\\(_Files|files_)\\forms\.txt$",
+        )
 
         for indicator in indicators:
             match = self.check_write_file(pattern=indicator, regex=True)

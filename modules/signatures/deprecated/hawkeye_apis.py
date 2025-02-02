@@ -15,7 +15,7 @@
 
 try:
     import re2 as re
-except:
+except ImportError:
     import re
 
 from lib.cuckoo.common.abstracts import Signature
@@ -119,13 +119,13 @@ class HawkEye_APIs(Signature):
         self.lastcall = call["api"]
 
     def on_complete(self):
-        if self.check_file(pattern=".*\\\\pid.txt$", regex=True):
+        if self.check_file(pattern=r".*\\pid.txt$", regex=True):
             self.badness += 2
-        if self.check_file(pattern=".*\\\\pidloc.txt$", regex=True):
+        if self.check_file(pattern=r".*\\pidloc.txt$", regex=True):
             self.badness += 2
-        if self.check_file(pattern=".*\\\\holdermail.txt$", regex=True):
+        if self.check_file(pattern=r".*\\holdermail.txt$", regex=True):
             self.badness += 4
-        if self.check_file(pattern=".*\\\\holderwb.txt$", regex=True):
+        if self.check_file(pattern=r".*\\holderwb.txt$", regex=True):
             self.badness += 4
         if self.evmatch:
             self.badness += 5

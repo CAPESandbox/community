@@ -56,12 +56,12 @@ class LimeRATRegkeys(Signature):
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        indicators = [
-            "HKEY_CURRENT_USER\\\\Software\\\\3862E8D73699\\\\Flood$",
-            "HKEY_CURRENT_USER\\\\Software\\\\3862E8D73699\\\\Rans-Status$",
-            "HKEY_CURRENT_USER\\\\Software\\\\0E1513CB5D0B\\\\Flood$",
-            "HKEY_CURRENT_USER\\\\Software\\\\0E1513CB5D0B\\\\Rans-Status$",
-        ]
+        indicators = (
+            r"HKEY_CURRENT_USER\\Software\\3862E8D73699\\Flood$",
+            r"HKEY_CURRENT_USER\\Software\\3862E8D73699\\Rans-Status$",
+            r"HKEY_CURRENT_USER\\Software\\0E1513CB5D0B\\Flood$",
+            r"HKEY_CURRENT_USER\\Software\\0E1513CB5D0B\\Rans-Status$",
+        )
 
         for indicator in indicators:
             match = self.check_key(pattern=indicator, regex=True)

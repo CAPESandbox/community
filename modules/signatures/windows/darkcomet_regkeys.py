@@ -28,11 +28,11 @@ class DarkCometRegkeys(Signature):
 
     def run(self):
         dc_keys = False
-        indicators = [
-            ".*\\\\Software\\\\DC3_FEXEC$",
-            ".*\\\\Software\\\\DC3_FEXEC\\\\.*",
-            ".*\\\\Software\\\\DC2_USERS$",
-        ]
+        indicators = (
+            r".*\\\\Software\\\\DC3_FEXEC$",
+            r".*\\\\Software\\\\DC3_FEXEC\\\\.*",
+            r".*\\\\Software\\\\DC2_USERS$",
+        )
         for indicator in indicators:
             match = self.check_key(pattern=indicator, regex=True)
             if match:

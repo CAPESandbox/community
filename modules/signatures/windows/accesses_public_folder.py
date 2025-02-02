@@ -26,9 +26,8 @@ class AccessesPublicFolder(Signature):
     evented = True
 
     def run(self):
-        file_indicator = "C:\\\\Users\\\\Public\\\\.*"
         found = False
-        file_match = self.check_file(pattern=file_indicator, regex=True, all=True)
+        file_match = self.check_file(pattern=r"C:\\Users\\Public\\.*", regex=True, all=True)
         if file_match:
             for match in file_match:
                 self.data.append({"file": match})

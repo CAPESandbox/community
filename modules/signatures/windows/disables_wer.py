@@ -20,7 +20,7 @@ class DisablesWER(Signature):
 
     def run(self):
         if self.check_write_key(
-            pattern=".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\Windows\\ Error\\ Reporting\\\\Disabled$",
+            pattern=r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\Windows\\ Error\\ Reporting\\Disabled$",
             regex=True,
         ):
             return True

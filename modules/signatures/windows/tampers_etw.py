@@ -30,13 +30,13 @@ class TampersETW(Signature):
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        reg_indicators = [
-            "HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\Microsoft\\\\Microsoft\.NETFramework\\\\ETWEnabled",
-            "HKEY_CURRENT_USER\\\\Environment\\\\COMPlus_ETWEnabled",
-            "HKEY_LOCAL_MACHINE\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\Session Manager\\\\Environment\\\\COMPlus_ETWEnabled",
-        ]
+        reg_indicators = (
+            r"HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Microsoft\.NETFramework\\ETWEnabled",
+            r"HKEY_CURRENT_USER\\Environment\\COMPlus_ETWEnabled",
+            r"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment\\COMPlus_ETWEnabled",
+        )
 
-        cmd_indicators = [".*set\scomplus_etwenabled.*", ".*env:complus_etwenabled.*", ".*etwenabled.*(value|\/d)\s0.*"]
+        cmd_indicators = (r".*set\scomplus_etwenabled.*", ".*env:complus_etwenabled.*", r".*etwenabled.*(value|\/d)\s0.*")
 
         for rindicator in reg_indicators:
             match = self.check_write_key(pattern=rindicator, regex=True)

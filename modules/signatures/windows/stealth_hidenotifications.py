@@ -20,8 +20,8 @@ class StealthHideNotifications(Signature):
 
     def run(self):
         reg_indicators = [
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\HideSCAHealth$",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Advanced\\\\TaskbarNoNotification$",
+            r".*\\Software\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\HideSCAHealth$",
+            r".*\\Software\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Advanced\\TaskbarNoNotification$",
         ]
 
         for indicator in reg_indicators:

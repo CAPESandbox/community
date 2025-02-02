@@ -58,7 +58,7 @@ class AntiDBGWindows(Signature):
             "C:\\Program Files\\Wireshark\\dumpcap.exe",
             "C:\\wireshark\\dumpcap.exe",
             "C:\\SandCastle\\tools\\FakeServer.exe",
-            "C:\\\\Python27\\\\python.exe",
+            r"C:\\Python27\\python.exe",
             "start.bat - C:\Manual\auto.bat",
             "Fortinet Sunbox",
             "PEiD v0.95",

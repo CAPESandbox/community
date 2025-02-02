@@ -30,10 +30,10 @@ class AlienLoaderAPIs(Signature):
     # the downloaded payload in a new process after a sleeping time.
     ttps = [
         # Defense Evasion
-        "T1497.003",  # Virtualization/Sandbox Evasion – Time Based Evasion
-        "T1564"  # Hide Artefacts – Hidden Window
+        "T1497.003",  # Virtualization/Sandbox Evasion - Time Based Evasion
+        "T1564"  # Hide Artefacts - Hidden Window
         # Command and Control
-        "T1071.001",  # Application Layer Protocol – Web Protocols
+        "T1071.001",  # Application Layer Protocol - Web Protocols
     ]
     evented = True
 

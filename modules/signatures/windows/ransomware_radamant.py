@@ -40,16 +40,16 @@ class RansomwareRadamant(Signature):
 
         # Check for creation of Autorun
         if self.check_write_key(
-            pattern=".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\(svchost|DirectX)$",
+            pattern=r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Run\\(svchost|DirectX)$",
             regex=True,
-        ) and self.check_write_file(pattern=".*\\\\Windows\\\\dirextx.exe$", regex=True):
+        ) and self.check_write_file(pattern=r".*\\Windows\\dirextx.exe$", regex=True):
             self.ttps += ["T1112"]  # MITRE v6,7,8
             self.mbcs += ["E1112"]
             self.mbcs += ["OC0008", "C0036"]  # micro-behaviour
             return True
 
         # Check for creation of ransom message file
-        if self.check_write_file(pattern=".*\\\\YOUR_FILES.url$", regex=True):
+        if self.check_write_file(pattern=r".*\\YOUR_FILES.url$", regex=True):
             self.mbcs += ["OC0001", "C0016"]  # micro-behaviour
             return True
 

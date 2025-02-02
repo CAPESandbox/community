@@ -30,7 +30,7 @@ class BochsDetectKeys(Signature):
 
     def run(self):
         indicators = [
-            ".*\\\\HARDWARE\\\\ACPI\\\\(DSDT|FADT|RSDT)\\\\BOCHS_.*",
+            r".*\\HARDWARE\\ACPI\\(DSDT|FADT|RSDT)\\BOCHS_.*",
         ]
         for indicator in indicators:
             if self.check_key(pattern=indicator, regex=True):
