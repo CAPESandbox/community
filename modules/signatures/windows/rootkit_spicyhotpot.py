@@ -38,10 +38,10 @@ class SpicyHotPotBehavior(Signature):
                 score += 1
                 self.data.append({"mutex": match})
 
-        indicators = [
-            ".*\\\\Microsoft\\\\(WindowsApps|Media\sPlayer)\\\\(KMDF_LOOK|KMDF_Protect)\.sys",
-            ".*\\\\Microsoft\\\\Event\sViewer\\\\(wccenter|wdlogin|wrme|wuhost)\.exe",
-        ]
+        indicators = (
+            r".*\\Microsoft\\(WindowsApps|Media\sPlayer)\\(KMDF_LOOK|KMDF_Protect)\.sys",
+            r".*\\Microsoft\\Event\sViewer\\(wccenter|wdlogin|wrme|wuhost)\.exe",
+        )
 
         for indicator in indicators:
             match = self.check_write_file(pattern=indicator, regex=True)

@@ -31,10 +31,10 @@ class AntiEmuWinDefend(Signature):
 
     def run(self):
         indicators = [
-            "C:\\\\aaa_TouchMeNot_.txt$",
-            "C:\\\\Mirc\\\\mirc.ini$",
-            "C:\\\\Mirc\\\\script.ini$",
-            "C:\\\\Windows\\\\msdfmap.ini$",
+            r"C:\\aaa_TouchMeNot_.txt$",
+            r"C:\\Mirc\\mirc.ini$",
+            r"C:\\Mirc\\script.ini$",
+            r"C:\\Windows\\msdfmap.ini$",
         ]
 
         for indicator in indicators:

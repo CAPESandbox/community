@@ -557,18 +557,18 @@ class Suspicious_TLD(Signature):
 
     def run(self):
         domains_re = [
-            (".*\\.by$", "Belarus domain TLD"),
-            (".*\\.cc$", "Cocos Islands domain TLD"),
-            (".*\\.onion$", "TOR hidden services domain TLD"),
-            (".*\\.pw$", "Palau domain TLD"),
-            (".*\\.ru$", "Russian Federation domain TLD"),
-            (".*\\.su$", "Soviet Union domain TLD"),
-            (".*\\.top$", "Generic top level domain TLD"),
-            (".*\\.tk$", "Tokelau domain TLD"),
-            (".*\\.ua$", "Ukraine domain TLD"),
-            (".*\\.xyz$", "Generic top level domain TLD"),
-            (".*\\.za$", "South Africa domain TLD"),
-            (".*\\.ng$", "Nigeria domain TLD"),
+            (r".*\.by$", "Belarus domain TLD"),
+            (r".*\.cc$", "Cocos Islands domain TLD"),
+            (r".*\.onion$", "TOR hidden services domain TLD"),
+            (r".*\.pw$", "Palau domain TLD"),
+            (r".*\.ru$", "Russian Federation domain TLD"),
+            (r".*\.su$", "Soviet Union domain TLD"),
+            (r".*\.top$", "Generic top level domain TLD"),
+            (r".*\.tk$", "Tokelau domain TLD"),
+            (r".*\.ua$", "Ukraine domain TLD"),
+            (r".*\.xyz$", "Generic top level domain TLD"),
+            (r".*\.za$", "South Africa domain TLD"),
+            (r".*\.ng$", "Nigeria domain TLD"),
         ]
         queried_domains = []
 

@@ -118,17 +118,19 @@ class RegistryCredentialStoreAccess(Signature):
 
     def run(self):
         ret = False
-        reg_indicators = [
-            "HKEY_LOCAL_MACHINE\\\\SAM$",
-            "HKEY_LOCAL_MACHINE\\\\SYSTEM$",
-        ]
+        reg_indicators = (
+            r"HKEY_LOCAL_MACHINE\\SAM$",
+            r"HKEY_LOCAL_MACHINE\\SYSTEM$",
+        )
 
         for indicator in reg_indicators:
             match = self.check_key(pattern=indicator, regex=True)
             if match:
                 self.data.append({"regkey": match})
                 ret = True
-
+        # Tweak
+        if "PDF" in self.results["target"]["file"].get("type", ""):
+            self.severity = 1
         return ret
 
 
@@ -145,9 +147,7 @@ class RegistryLSASecretsAccess(Signature):
     mbcs = ["OB0005"]
 
     def run(self):
-        indicators = [
-            "HKEY_LOCAL_MACHINE\\\\SECURITY\\\\Policy\\\\Secrets$",
-        ]
+        indicators = (r"HKEY_LOCAL_MACHINE\\SECURITY\\Policy\\Secrets$",)
 
         for indicator in indicators:
             match = self.check_key(pattern=indicator, regex=True)
@@ -171,11 +171,11 @@ class FileCredentialStoreAccess(Signature):
     mbcs = ["OB0005"]
 
     def run(self):
-        indicators = [
-            ".*\\\\Windows\\\\repair\\\\sam",
-            ".*\\\\Windows\\\\System32\\\\config\\\\RegBack\\\\SAM",
-            ".*\\\\Windows\\\\system32\\\\config\\\\SAM",
-        ]
+        indicators = (
+            r".*\\Windows\\repair\\sam",
+            r".*\\Windows\\System32\\config\\RegBack\\SAM",
+            r".*\\Windows\\system32\\config\\SAM",
+        )
 
         for indicator in indicators:
             match = self.check_file(pattern=indicator, regex=True)
@@ -199,11 +199,11 @@ class FileCredentialStoreWrite(Signature):
     mbcs = ["OB0005"]
 
     def run(self):
-        indicators = [
-            ".*\\\\Windows\\\\repair\\\\sam",
-            ".*\\\\Windows\\\\System32\\\\config\\\\RegBack\\\\SAM",
-            ".*\\\\Windows\\\\system32\\\\config\\\\SAM",
-        ]
+        indicators = (
+            r".*\\Windows\\repair\\sam",
+            r".*\\Windows\\System32\\config\\RegBack\\SAM",
+            r".*\\Windows\\system32\\config\\SAM",
+        )
 
         for indicator in indicators:
             match = self.check_write_file(pattern=indicator, regex=True)
@@ -211,4 +211,73 @@ class FileCredentialStoreWrite(Signature):
                 self.data.append({"file": match})
                 return True
 
+        return False
+
+
+class DumpLSAViaWindowsErrorReporting(Signature):
+    name = "dump_lsa_via_windows_error_reporting"
+    description = "Attempts to create LSASS crash dump via Windows Error Reporting process"
+    severity = 3
+    categories = ["credential_access", "credential_dumping"]
+    authors = ["@para0x0dise"]
+    minimum = "0.5"
+    evented = True
+    ttps = ["T1003"]
+    references = [
+        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/credential_access_lsa_dump_via_windows_error_reporting.toml"
+    ]
+
+    filter_apinames = set(["NtCreateFile"])
+
+    def on_call(self, call, process):
+        # Checking parent process for false positives.
+        if process["process_name"].lower() in ("WerFaultSecure.exe", "WerFault.exe") and call["api"] == "NtCreateFile":
+            filename = self.get_argument(call, "FileName")
+            if filename.endswith(".dmp") and "lsass_" in filename:
+                return True
+
+
+class KerberosCredentialAccessViaRubeus(Signature):
+    name = "kerberos_credential_access_via_rubeus"
+    description = "Attempts to manipulate/abuse Kerberos Ticketing System via Rubeus toolset"
+    severity = 3
+    categories = ["credential_access", "credential_dumping"]
+    authors = ["@para0x0dise"]
+    minimum = "0.5"
+    evented = True
+    ttps = ["T1003"]
+    references = [
+        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/credential_access_potential_credential_access_via_rubeus.toml"
+    ]
+
+    def run(self):
+        for cmdline in self.results.get("behavior", {}).get("summary", {}).get("executed_commands", []):
+            lower = cmdline.lower()
+            if "rebeus" in lower and any(
+                arg in lower
+                for arg in (
+                    "asreproast",
+                    "dump /service:krbtgt",
+                    "dump /luid",
+                    "kerberoast",
+                    "createnetonly /program",
+                    "ptt /ticket",
+                    "/impersonateuser",
+                    "renew /ticket",
+                    "asktgt /user",
+                    "asktgs /ticket",
+                    "harvest /interval",
+                    "s4u /user",
+                    "s4u /ticket",
+                    "hash /password",
+                    "tgtdeleg",
+                    "tgtdeleg /target",
+                    "golden /des",
+                    "golden /rc4",
+                    "golden /aes128",
+                    "golden /aes256",
+                    "changpw /ticket",
+                )
+            ):
+                return True
         return False

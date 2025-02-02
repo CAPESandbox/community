@@ -28,7 +28,7 @@ class InstallsWinpcap(Signature):
     mbcs = ["OB0009", "B0023"]
 
     def run(self):
-        indicators = [".*\\\\packet\.dll$", ".*\\\\npf\.sys$", ".*\\\\wpcap\.dll$"]
+        indicators = (r".*\\packet\.dll$", r".*\\npf\.sys$", r".*\\wpcap\.dll$")
 
         for indicator in indicators:
             file_path = self.check_file(pattern=indicator, regex=True)

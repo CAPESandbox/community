@@ -132,8 +132,8 @@ class UsesWindowsUtilities(Signature):
         return ret
 
 
-GENERIC_CMD = '"c:\\windows\\system32\\cmd.exe" /c start /wait "" '
-SUBSEQUENT_GENERIC_CMD = "c:\\windows\\system32\\cmd.exe  /k "
+GENERIC_CMD = r'"c:\\windows\\system32\\cmd.exe" /c start /wait "" '
+SUBSEQUENT_GENERIC_CMD = r"c:\\windows\\system32\\cmd.exe  /k "
 
 
 class SuspiciousCommandTools(Signature):
@@ -491,7 +491,7 @@ class SuspiciousMpCmdRunUse(Signature):
 
     def run(self):
         indicators = [
-            ".*MpCmdRun(\.exe)?.*-url.*",
+            r".*MpCmdRun(\.exe)?.*-url.*",
         ]
 
         for indicator in indicators:
@@ -859,10 +859,10 @@ class UsesWindowsUtilitiesXcopy(Signature):
     evented = True
 
     def run(self):
-        utilities = [
+        utilities = (
             "xcopy ",
             "xcopy.exe ",
-        ]
+        )
 
         ret = False
         cmdlines = self.results["behavior"]["summary"]["executed_commands"]
@@ -894,4 +894,111 @@ class UsesPowerShellCopyItem(Signature):
                 self.data.append({"command": match})
                 return True
 
+        return False
+
+
+class UsesMicrosoftHTMLHelpExecutable(Signature):
+    name = "uses_Microsoft_HTML_Help_Executable"
+    description = "Uses Microsoft HTML Help Executable for executing PE files"
+    severity = 3
+    categories = ["evasion", "execution"]
+    authors = ["@para0x0dise"]
+    minimum = "0.5"
+    evented = True
+    ttps = ["T1566", "T1218.001"]
+    references = [
+        "https://www.ptsecurity.com/ww-en/analytics/pt-esc-threat-intelligence/higaisa-or-winnti-apt-41-backdoors-old-and-new/",
+        "https://oddvar.moe/2017/08/13/bypassing-device-guard-umci-using-chm-cve-2017-8625/",
+    ]
+
+    filter_apinames = set(["NtCreateFile", "CreateProcessInternalW"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.detected = False
+
+    def on_call(self, call, process):
+        if process["process_name"].lower() == "hh.exe":
+            if call["api"] == "NtCreateFile":
+                fileName = self.get_argument(call, "FileName")
+                if ".exe" in fileName:
+                    self.detected = True
+                    return
+            if call["api"] == "CreateProcessInternalW":
+                cmdline = self.get_argument(call, "CommandLine")
+                lower = cmdline.lower()
+                if ".exe" in lower:
+                    self.detected = True
+                    return
+
+    def on_complete(self):
+        if self.detected:
+            return True
+        return False
+
+
+class PotentialWebShellViaScreenConnectServer(Signature):
+    name = "potential_WebShell_Via_ScreenConnectServer"
+    description = "Uses ScreenConnect for executing scripts"
+    severity = 3
+    categories = ["evasion", "execution"]
+    authors = ["@para0x0dise"]
+    minimum = "0.5"
+    evented = True
+    ttps = ["T1566", "T1218.001"]
+    references = [
+        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/initial_access_potential_webshell_via_screenconnect_server.toml"
+    ]
+
+    filter_apinames = set(["CreateProcessInternalW"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.detected = False
+
+    def on_call(self, call, process):
+        pname = process["process_name"].lower()
+        if pname == "screenConnect.service.exe" and call["api"] == "CreateProcessInternalW":
+            cmdline = self.get_argument(call, "CommandLine")
+            lower = cmdline.lower()
+            if any(process in lower for process in ("cmd.exe", "powershell.exe", "pwsh.exe", "powershell_ise.exe", "csc.exe")):
+                self.detected = True
+                return
+
+    def on_complete(self):
+        if self.detected:
+            return True
+        return False
+
+
+class PotentialLateralMovementViaSMBEXEC(Signature):
+    name = "Potential_Lateral_Movement_Via_SMBEXEC"
+    description = "Attempts to execute a service via Windows Command Shell which may indicate lateral movement attempt"
+    severity = 3
+    categories = ["evasion", "execution"]
+    authors = ["@para0x0dise"]
+    minimum = "0.5"
+    evented = True
+    ttps = ["T1059"]
+    references = [
+        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows\lateral_movement_potential_lateral_movement_via_smbexec.toml"
+    ]
+
+    filter_apinames = set(["CreateProcessInternalW"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.detected = False
+
+    def on_call(self, call, process):
+        if process["process_name"].lower() == "services.exe" and call["api"] == "CreateProcessInternalW":
+            cmdline = self.get_argument(call, "CommandLine")
+            lower = cmdline.lower()
+            if any(process in lower for process in ["cmd.exe"]) and any(arg in lower for arg in ("/q", "echo", ".bat", "del")):
+                self.detected = True
+                return
+
+    def on_complete(self):
+        if self.detected:
+            return True
         return False

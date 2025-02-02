@@ -29,9 +29,7 @@ class DisablesRestoreDefaultState(Signature):
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        indicators = [
-            "HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\WinRE\\\\DisableSetup",
-        ]
+        indicators = (r"HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\WinRE\\DisableSetup",)
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)

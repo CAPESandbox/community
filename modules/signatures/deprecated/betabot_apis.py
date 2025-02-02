@@ -59,8 +59,8 @@ class BetaBot_APIs(Signature):
         # Check for ADS deletion path (Always in hidden ProgramData)
         # TODO: make this use environ info
         ads_paths = [
-            "C:\\\\ProgramData\\\\.*:Zone\.Identifier$",
-            "C:\\\\Program\\ Files\\\\Common\\ Files\\\\Microsoft\\\\.*:Zone\.Identifier$",
+            r"C:\\ProgramData\\.*:Zone\.Identifier$",
+            r"C:\\Program\\ Files\\Common\\ Files\\Microsoft\\.*:Zone\.Identifier$",
         ]
         for indicator in ads_paths:
             if self.check_delete_file(pattern=indicator, regex=True):
@@ -69,10 +69,10 @@ class BetaBot_APIs(Signature):
         # Check for known filesystem behavior
         # TODO: make these use environ info
         file_paths = [
-            ".*\\\\jagexcache$",
-            ".*\\\\AppData\\\\Roaming\\\\\.minecraft$",
-            ".*\\\\Application\\ Data\\\\\.minecraft$",
-            ".*\\\\League\\ of\\ Legends$",
+            r".*\\jagexcache$",
+            r".*\\AppData\\Roaming\\\.minecraft$",
+            r".*\\Application\\ Data\\\.minecraft$",
+            r".*\\League\\ of\\ Legends$",
         ]
         for indicator in file_paths:
             if self.check_file(pattern=indicator, regex=True):
@@ -80,8 +80,8 @@ class BetaBot_APIs(Signature):
 
         # Check for known registry behavior
         reg_paths = [
-            ".*\\\\SOFTWARE\\\\Classes\\\\origin$",
-            ".*\\\\SOFTWARE\\\\Blizzard\\ Entertainment$",
+            r".*\\SOFTWARE\\Classes\\origin$",
+            r".*\\SOFTWARE\\Blizzard\\ Entertainment$",
         ]
         for indicator in reg_paths:
             if self.check_key(pattern=indicator, regex=True):

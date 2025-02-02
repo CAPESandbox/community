@@ -29,7 +29,7 @@ class TorHiddenService(Signature):
     ttps += ["U0903"]  # Unprotect
 
     def run(self):
-        indicators = [".*\\\\tor\\\\hidden_service\\\\private_key$", ".*\\\\tor\\\\hidden_service\\\\hostname$"]
+        indicators = (r".*\\tor\\hidden_service\\private_key$", r".*\\tor\\hidden_service\\hostname$")
 
         for indicator in indicators:
             if self.check_file(pattern=indicator, regex=True):

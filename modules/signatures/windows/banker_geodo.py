@@ -20,18 +20,18 @@ class Geodo(Signature):
 
     def run(self):
         match_file = self.check_file(
-            pattern=".*\\\\Application\\ Data\\\\Microsoft\\\\[a-z]{3}(api32|audio|bios|boot|cap32|common|config|crypt|edit32|error|mgr32|serial|setup|share|sock|system|update|video|windows)\.exe$",
+            pattern=r".*\\Application\\ Data\\Microsoft\\[a-z]{3}(api32|audio|bios|boot|cap32|common|config|crypt|edit32|error|mgr32|serial|setup|share|sock|system|update|video|windows)\.exe$",
             regex=True,
             all=True,
         )
-        match_batch_file = self.check_file(pattern=".*\\\\Application\\ Data\\\\\d{1,10}\.bat$", regex=True, all=True)
+        match_batch_file = self.check_file(pattern=r".*\\Application\\ Data\\\d{1,10}\.bat$", regex=True, all=True)
         match_runkey = self.check_key(
-            pattern=".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\[a-z]{3}(api32|audio|bios|boot|cap32|common|config|crypt|edit32|error|mgr32|serial|setup|share|sock|system|update|video|windows)\.exe$",
+            pattern=r".*\\Microsoft\\Windows\\CurrentVersion\\Run\\[a-z]{3}(api32|audio|bios|boot|cap32|common|config|crypt|edit32|error|mgr32|serial|setup|share|sock|system|update|video|windows)\.exe$",
             regex=True,
             all=True,
         )
         match_otherkey = self.check_key(
-            pattern=".*\\\\Microsoft\\\\Office\\\\Common\\\\(?P<hex>[A-F0-9]+)\\\\(?P=hex)(CS|PS|SS|RS)", regex=True, all=True
+            pattern=r".*\\Microsoft\\Office\\Common\\(?P<hex>[A-F0-9]+)\\(?P=hex)(CS|PS|SS|RS)", regex=True, all=True
         )
         match_mutex = self.check_mutex(pattern="^[A-F0-9]{1,8}(I|M|RM)$", regex=True, all=True)
         if match_file:

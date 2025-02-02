@@ -96,8 +96,10 @@ class Virus(Signature):
             if handle in self.handles:
                 key = self.handles[handle]
                 if key in self.copydests:
-                    while key in self.readcopyfiles:
+                    key_max_depth = 3
+                    while key_max_depth and key in self.readcopyfiles:
                         key = self.readcopyfiles[key]
+                        key_max_depth -= 1
                 self.infected_files.add(key)
                 self.saw_virus = True
                 if self.pid:

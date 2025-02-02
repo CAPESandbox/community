@@ -69,7 +69,7 @@ class Polymorphic(Signature):
                         for path in drop["guest_paths"]:
                             self.data.append({"file": path})
                         self.data.append({"percent_match": percent})
-                except:
+                except Exception:
                     continue
 
         return found_polymorphic

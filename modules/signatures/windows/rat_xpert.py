@@ -68,12 +68,12 @@ class XpertRATFiles(Signature):
         guid = "[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}"
 
         try:
-            indicators.append(".*\\\\AppData\\\\Local\\\\Temp\\\\" + user.decode("utf-8") + "\.bmp")
+            indicators.append(r".*\\AppData\\Local\\Temp\\" + user.decode("utf-8") + "\.bmp")
         except Exception:
             return False
 
-        indicators.append(".*\\\\AppData\\\\Roaming\\\\" + guid + "\\\\ut$")
-        indicators.append(".*\\\\AppData\\\\Roaming\\\\" + guid + "\\\\" + guid + "\.(exe|pas)")
+        indicators.append(r".*\\AppData\\Roaming\\" + guid + "\\ut$")
+        indicators.append(r".*\\AppData\\Roaming\\" + guid + "\\" + guid + "\.(exe|pas)")
 
         for indicator in indicators:
             match = self.check_write_file(pattern=indicator, regex=True)

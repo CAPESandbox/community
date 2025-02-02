@@ -55,11 +55,11 @@ class ObliquekRATFiles(Signature):
     mbcs += ["OC0001", "C0016"]  # micro-behaviour
 
     def run(self):
-        indicators = [
-            ".*\\\\ProgramData\\\\System\\\\Dump.*",
-            ".*\\\\ProgramData\\\\auto.txt$",
-            ".*\\\\ProgramData\\\\a.txt$",
-        ]
+        indicators = (
+            r".*\\ProgramData\\System\\Dump.*",
+            r".*\\ProgramData\\auto.txt$",
+            r".*\\ProgramData\\a.txt$",
+        )
 
         for indicator in indicators:
             match = self.check_file(pattern=indicator, regex=True)

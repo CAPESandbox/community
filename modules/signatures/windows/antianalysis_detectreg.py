@@ -21,17 +21,17 @@ class AntiAnalysisDetectReg(Signature):
 
     def run(self):
         reg_indicators = [
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\App\\ Paths\\\\Wireshark\.exe$",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall\\\\Wireshark$",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\App\\ Paths\\\\Fiddler\.exe$",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\App\\ Paths\\\\Fiddler2\.exe$",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall\\\\Fiddler2$",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Fiddler2$",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\SOFTWARE\\\\IEInspectorSoft.*",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\IEHTTPAnalyzer\.HTTPAnalyzerAddon$",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\IEHTTPAnalyzerStd\.HTTPAnalyzerStandAlone$",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\Charles\.AMF\.Document$",
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?XK72\\ Ltd\\ folder$",
+            r".*\\Software\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\App\\ Paths\\Wireshark\.exe$",
+            r".*\\Software\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Uninstall\\Wireshark$",
+            r".*\\Software\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\App\\ Paths\\Fiddler\.exe$",
+            r".*\\Software\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\App\\ Paths\\Fiddler2\.exe$",
+            r".*\\Software\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Uninstall\\Fiddler2$",
+            r".*\\Software\\(Wow6432Node\\)?Microsoft\\Fiddler2$",
+            r".*\\Software\\(Wow6432Node\\)?Classes\\SOFTWARE\\IEInspectorSoft.*",
+            r".*\\Software\\(Wow6432Node\\)?Classes\\IEHTTPAnalyzer\.HTTPAnalyzerAddon$",
+            r".*\\Software\\(Wow6432Node\\)?Classes\\IEHTTPAnalyzerStd\.HTTPAnalyzerStandAlone$",
+            r".*\\Software\\(Wow6432Node\\)?Classes\\Charles\.AMF\.Document$",
+            r".*\\Software\\(Wow6432Node\\)?XK72\\ Ltd\\ folder$",
         ]
         found = False
         for indicator in reg_indicators:

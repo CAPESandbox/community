@@ -31,18 +31,18 @@ class PoullightFiles(Signature):
 
     def run(self):
         score = 0
-        fpath = ".*\\\\AppData\\\\Local\\\\[a-z0-9]{8}\\\\"
+        fpath = r".*\\AppData\\Local\\[a-z0-9]{8}\\"
         flist = [
             "system\.txt",
             "processlist\.txt",
             "copyboard\.txt",
             "screenshot\.png",
-            "Grabber\\\\.*",
-            "FileZilla\\\\data\.txt",
-            "Pidgin\\\\data\.txt",
-            "Discord\\\\data\.txt",
-            "Telegram\\\\data\.txt",
-            "Steam\\\\data\.txt",
+            r"Grabber\\.*",
+            r"FileZilla\\data\.txt",
+            r"Pidgin\\data\.txt",
+            r"Discord\\data\.txt",
+            r"Telegram\\data\.txt",
+            r"Steam\\data\.txt",
             "webcam\.jpg",
             "accountlogin\.txt",
         ]

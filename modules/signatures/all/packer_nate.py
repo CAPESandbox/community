@@ -29,9 +29,15 @@ class NatePacked(Signature):
     mbcs = ["OB0001", "OB0002", "OB0006", "F0001"]
 
     def run(self):
-        for section in self.results.get("static", {}).get("pe", {}).get("sections", []):
-            if ".nate" in section["name"].lower():
-                self.data.append({"section": section})
-                return True
+        ret = False
 
-        return False
+        target = self.results.get("target", {})
+        if target.get("category") in ("file", "static") and target.get("file"):
+            pe = self.results["target"]["file"].get("pe", [])
+            if pe:
+                for section in pe["sections"]:
+                    if section["name"].lower().startswith(".nate"):
+                        self.data.append({"section": section})
+                        ret = True
+
+        return ret

@@ -55,7 +55,7 @@ class AntiVMSystem(Signature):
         else:
             match = self.check_argument_call(
                 call,
-                pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\SystemInformation\\\\SystemManufacturer$",
+                pattern=r".*\\SYSTEM\\(CurrentControlSet|ControlSet001)\\Control\\SystemInformation\\SystemManufacturer$",
                 category="registry",
                 regex=True,
             )

@@ -30,7 +30,7 @@ class GandCrabMutexes(Signature):
     def run(self):
         indicators = [
             "AversSucksForever$",
-            "\\\\Sessions\\\\1\\\\BaseNamedObjects\\\\AversSucksForever$",
+            r"\\Sessions\\1\\BaseNamedObjects\\AversSucksForever$",
         ]
 
         for indicator in indicators:

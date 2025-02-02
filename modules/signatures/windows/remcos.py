@@ -30,8 +30,8 @@ class RemcosFiles(Signature):
 
     def run(self):
         indicators = [
-            ".*\\\\AppData\\\\Roaming\\\\[Ll]ogs\\\\.*\.dat$",
-            ".*\\\\AppData\\\\Roaming\\\\remcos.*",
+            r".*\\AppData\\Roaming\\[Ll]ogs\\.*\.dat$",
+            r".*\\AppData\\Roaming\\remcos.*",
         ]
 
         for indicator in indicators:
@@ -86,8 +86,8 @@ class RemcosRegkeys(Signature):
 
     def run(self):
         indicators = [
-            ".*\\\\Software\\\\Remcos-[A-Z0-9]{6}.*",
-            ".*\\\\Software\\\\remcos[-_].*",
+            r".*\\Software\\Remcos-[A-Z0-9]{6}.*",
+            r".*\\Software\\remcos[-_].*",
         ]
 
         for indicator in indicators:
@@ -96,4 +96,43 @@ class RemcosRegkeys(Signature):
                 self.data.append({"regkey": match})
                 return True
 
+        return False
+
+
+class RemcosShellCodeDynamicWrapperX(Signature):
+    name = "remcos_shell_code_dynamic_wrapper_x"
+    description = "Attempts to load dynwrapx.dll to inject a shellcode"
+    severity = 3
+    categories = ["rat"]
+    families = ["Remcos"]
+    authors = ["@para0x0dise"]
+    minimum = "1.2"
+    ttps = ["T1059.005", "T1059.007"]
+    references = [
+        "https://www.splunk.com/en_us/blog/security/detecting-malware-script-loaders-using-remcos-threat-research-release-december-2021.html",
+        "https://web.archive.org/web/20221016125721/https://gist.github.com/code-scrap/d7f152ffcdb3e0b02f7f394f5187f008",
+    ]
+    evented = True
+
+    filter_apinames = set(["CreateProcessInternalW"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.detected = False
+
+    def on_call(self, call, process):
+        if any(
+            proc in process["process_name"]
+            for proc in ("wscript.exe", "cscript.exe", "mshta.exe", "wmic.exe", "cmstp.exe", "msxsl.exe")
+        ):
+            if call["api"] == "CreateProcessInternalW":
+                cmdline = self.get_argument(call, "CommandLine").lower()
+                if "regsvr32.exe" in cmdline and "\\appdata\\" in cmdline and cmdline.endswith(".dll"):
+                    if self.pid:
+                        self.mark_call()
+                    self.detected = True
+
+    def on_complete(self):
+        if self.detected:
+            return True
         return False

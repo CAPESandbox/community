@@ -58,16 +58,13 @@ class PackerUnknownPESectionName(Signature):
             ".xdata",
         ]
 
-        for section in self.results.get("static", {}).get("pe", {}).get("sections", []):
-            if section["name"].lower() not in knownsections:
-                ret = True
-                descmsg = "name: {0}, entropy: {1}, characteristics: {2}, raw_size: {3}, virtual_size: {4}".format(
-                    section["name"],
-                    section["entropy"],
-                    section["characteristics"],
-                    section["size_of_data"],
-                    section["virtual_size"],
-                )
-                self.data.append({"unknown section": descmsg})
+        target = self.results.get("target", {})
+        if target.get("category") in ("file", "static") and target.get("file"):
+            pe = self.results["target"]["file"].get("pe", [])
+            if pe:
+                for section in pe["sections"]:
+                    if section["name"].lower() not in knownsections:
+                        ret = True
+                        self.data.append({"unknown section": section})
 
         return ret

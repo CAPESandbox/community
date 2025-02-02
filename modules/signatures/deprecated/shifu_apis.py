@@ -68,10 +68,10 @@ class Shifu_APIs(Signature):
 
     def on_complete(self):
         file_iocs = [
-            "^[A-Za-z]:\\\\sample\\\\pos.exe$",
-            "^[A-Za-z]:\\\\ProgramData\\\\ELBA5\\\\ELBA_data$",
-            "^[A-Za-z]:\\\\analysis$",
-            "^[A-Za-z]:\\\\tmp\\\\debug.txt$",
+            r"^[A-Za-z]:\\sample\\pos.exe$",
+            r"^[A-Za-z]:\\ProgramData\\ELBA5\\ELBA_data$",
+            r"^[A-Za-z]:\\analysis$",
+            r"^[A-Za-z]:\\tmp\\debug.txt$",
         ]
         for ioc in file_iocs:
             if self.check_file(pattern=ioc, regex=True):
@@ -79,7 +79,7 @@ class Shifu_APIs(Signature):
                 self.malscore += 1
 
         mutex_iocs = [
-            "^(Global|Local)\\\\\{[0-9a-f]{20}\}$",
+            r"^(Global|Local)\\\{[0-9a-f]{20}\}$",
             "^[0-9a-f]{16}$",
         ]
         for ioc in mutex_iocs:

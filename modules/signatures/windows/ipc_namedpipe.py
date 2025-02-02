@@ -96,3 +96,43 @@ class IPC_NamedPipe(Signature):
                         self.data.append({"Interacts": desc})
 
         return ret
+
+
+class EscalatePrivilegeViaNamedPipe(Signature):
+    name = "escalate_privilege_via_named_pipe"
+    description = "Attempts to escalate privilege via named pipe"
+    severity = 3
+    categories = ["bypass"]
+    authors = ["@para0x0dise"]
+    minimum = "0.5"
+    evented = True
+    ttps = ["T1134"]
+    references = [
+        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/privilege_escalation_privilege_escalation_via_named_pipe_impersonation.toml"
+    ]
+
+    filter_apinames = set(["CreateProcessInternalW"])
+
+    def on_call(self, call, process):
+        pname = process["process_name"].lower()
+
+        # Checking parent process for false positives.
+        if pname in ("chrome.exe", "msedge.exe") and call["api"] == "CreateProcessInternalW":
+            cmdline = self.get_argument(call, "CommandLine")
+            lower = cmdline.lower()
+            if (
+                any(process in lower for process in ("cmd.exe", "powershell.exe", "sc.exe", "schtasks.exe"))
+                and "\\\\.\\pipe\\" in lower
+            ):
+                return False
+
+    def on_complete(self):
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            if (
+                any(process in lower for process in ["cmd.exe", "powershell.exe", "sc.exe", "schtasks.exe"])
+                and "\\\\.\\pipe\\" in lower
+            ):
+                return True
+        return False

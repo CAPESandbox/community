@@ -1,8 +1,10 @@
 import glob
+import json
 import os
 import re
 
 import requests
+from bs2json import BS2Json
 
 ROOT = "/opt/CAPEv2"
 
@@ -32,14 +34,30 @@ yara_file_names = set()
 
 # First, grab all of the YARA rules available at the analyzer subpath on GitHub
 resp = requests.get(ANALYZER_YARA_URL)
-page_content = resp.json().get("payload", {}).get("tree", {}).get("items", [])
-for line in page_content:
-    if not line:
-        continue
-    match = re.search(YARA_REGEX, line["name"])
-    if match:
-        yara_file_names.add(match.group(0))
-
+resp.raise_for_status()  # raises exception when not a 2xx response
+if resp.status_code != 204:
+    try:
+        if resp.headers["content-type"].strip().startswith("application/json"):
+            page_content = json.loads(resp.content).get("payload", {}).get("tree", {}).get("items", [])
+        elif resp.headers["content-type"].strip().startswith("text/html"):
+            bs2json = BS2Json(resp.text)
+            json_obj = bs2json.convert()
+            payload_text = json_obj["html"]["body"]["div"][0]["div"][3]["div"]["main"]["turbo-frame"]["div"]["react-app"]["script"][
+                "text"
+            ]
+            json_payload = json.loads(payload_text)
+            page_content = json_payload.get("payload", {}).get("tree", {}).get("items", [])
+        else:
+            dataform = str(resp.content).strip("'<>() ").replace("'", '"')
+            page_content = json.loads(dataform).get("payload", {}).get("tree", {}).get("items", [])
+        for line in page_content:
+            if not line:
+                continue
+            match = re.search(YARA_REGEX, line["name"])
+            if match:
+                yara_file_names.add(match.group(0))
+    except Exception as e:
+        print(e)
 
 # Delete current yara files to make sure to remove old rules
 yara_files = glob.glob("%s/*" % ANALYZER_YARA_PATH)
@@ -62,7 +80,31 @@ yara_file_names = set()
 # Next, grab all of the YARA rules available at the server side subpaths on GitHub
 for d in SERVER_SIDE_YARA_PATH_DIRS:
     resp = requests.get(SERVER_SIDE_YARA_URL % d)
-    page_content = resp.json().get("payload", {}).get("tree", {}).get("items", [])
+    resp.raise_for_status()  # raises exception when not a 2xx response
+    if resp.status_code != 204:
+        try:
+            if resp.headers["content-type"].strip().startswith("application/json"):
+                page_content = json.loads(resp.content).get("payload", {}).get("tree", {}).get("items", [])
+            elif resp.headers["content-type"].strip().startswith("text/html"):
+                bs2json = BS2Json(resp.text)
+                json_obj = bs2json.convert()
+                payload_text = json_obj["html"]["body"]["div"][0]["div"][3]["div"]["main"]["turbo-frame"]["div"]["react-app"][
+                    "script"
+                ]["text"]
+                json_payload = json.loads(payload_text)
+                page_content = json_payload.get("payload", {}).get("tree", {}).get("items", [])
+            else:
+                dataform = str(resp.content).strip("'<>() ").replace("'", '"')
+                page_content = json.loads(dataform).get("payload", {}).get("tree", {}).get("items", [])
+            for line in page_content:
+                if not line:
+                    continue
+                match = re.search(YARA_REGEX, line["name"])
+                if match:
+                    yara_file_names.add(match.group(0))
+        except Exception as e:
+            print(e)
+
     for line in page_content:
         if not line:
             continue

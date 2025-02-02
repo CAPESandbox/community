@@ -99,7 +99,7 @@ class MimicsFiletime(Signature):
             try:
                 self.old_handles.append(self.handles[handle])
                 del self.handles[handle]
-            except:
+            except Exception:
                 pass
         elif call["api"] == "NtQueryInformationFile":
             handle = int(self.get_argument(call, "FileHandle"), 16)
@@ -108,7 +108,7 @@ class MimicsFiletime(Signature):
                 try:
                     obj = self.handles[handle]
                     obj.set_file_times(self.get_raw_argument(call, "FileInformation"))
-                except:
+                except Exception:
                     pass
         elif call["api"] == "NtSetInformationFile":
             handle = int(self.get_argument(call, "FileHandle"), 16)
@@ -118,7 +118,7 @@ class MimicsFiletime(Signature):
             try:
                 obj = self.handles[handle]
                 obj.set_file_times(self.get_raw_argument(call, "FileInformation"))
-            except:
+            except Exception:
                 return None
             for val in self.handles.itervalues():
                 filename = obj.check_file_times(val)

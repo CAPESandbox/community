@@ -31,19 +31,19 @@ class CookiesStealer(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.data = []
-        self.indicators = [
-            ".*\\\\Chromium\\\\User Data\\\\.*\\\\Cookies$",
-            ".*\\\\Google\\\\Chrome\\\\User Data\\\\.*\\\\Cookies$",
-            ".*\\\\Microsoft\\\\Windows\\\\INetCookies$",
-            ".*\\\\Packages\\\\.*\\\\AC\\\\.*\\\\MicrosoftEdge\\\\Cookies$",
-            ".*\\\\UCBrowser\\\\User Data_i18n\\\\.*\\\\Cookies.9$",
-            ".*\\\\Yandex\\\\YandexBrowser\\\\User Data\\\\.*\\\\Cookies$",
-            ".*\\\\Apple Computer\\\\Safari\\\\Cookies\\\\Cookies.binarycookies$",
-            ".*\\\\Microsoft\\\\Windows\\\\Cookies$",
-            ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\cookies.sqlite$",
-            ".*\\\\Opera Software\\\\Opera Stable\\\\Cookies$",
-            ".*\\\\Brave-Browser\\\\User Data\\\\.*\\\\Cookies$",
-        ]
+        self.indicators = (
+            r".*\\Chromium\\User Data\\.*\\Cookies$",
+            r".*\\Google\\Chrome\\User Data\\.*\\Cookies$",
+            r".*\\Microsoft\\Windows\\INetCookies$",
+            r".*\\Packages\\.*\\AC\\.*\\MicrosoftEdge\\Cookies$",
+            r".*\\UCBrowser\\User Data_i18n\\.*\\Cookies.9$",
+            r".*\\Yandex\\YandexBrowser\\User Data\\.*\\Cookies$",
+            r".*\\Apple Computer\\Safari\\Cookies\\Cookies.binarycookies$",
+            r".*\\Microsoft\\Windows\\Cookies$",
+            r".*\\Mozilla\\Firefox\\Profiles\\.*\\cookies.sqlite$",
+            r".*\\Opera Software\\Opera Stable\\Cookies$",
+            r".*\\Brave-Browser\\User Data\\.*\\Cookies$",
+        )
         self.safe_indicators = [
             "chrome.exe",
             "firefox.exe",

@@ -53,7 +53,7 @@ class IEDisablesProcessPerTab(Signature):
 
     def run(self):
         indicators = [
-            ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet Explorer\\\\Main\\\\TabProcGrowth$",
+            r".*\\Software\\(Wow6432Node\\)?Microsoft\\Internet Explorer\\Main\\TabProcGrowth$",
         ]
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)

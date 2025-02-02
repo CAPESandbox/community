@@ -28,9 +28,7 @@ class DotNetCLRUsageLogKnob(Signature):
     references = ["https://bohops.com/2021/03/16/investigating-net-clr-usage-log-tampering-techniques-for-edr-evasion/"]
 
     def run(self):
-        indicators = [
-            "(HKEY_CURRENT_USER|HKEY_LOCAL_MACHINE)\\\\SOFTWARE\\\\\.NETFramework\\\\NGenAssemblyUsageLog",
-        ]
+        indicators = (r"(HKEY_CURRENT_USER|HKEY_LOCAL_MACHINE)\\SOFTWARE\\\.NETFramework\\NGenAssemblyUsageLog",)
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True, all=True)

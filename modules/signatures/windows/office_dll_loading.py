@@ -61,7 +61,7 @@ class OfficePerfKey(Signature):
     mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
     def run(self):
-        indicators = ["HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Office test\\\\Special\\\\Perf$"]
+        indicators = ["HKEY_CURRENT_USER\\Software\\Microsoft\\Office test\\Special\\Perf$"]
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)
@@ -70,9 +70,6 @@ class OfficePerfKey(Signature):
                 return True
 
         return False
-
-
-from lib.cuckoo.common.abstracts import Signature
 
 
 class OfficeVBLLoad(Signature):
@@ -186,8 +183,8 @@ class OfficeDotNetLoad(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.officeprocs = ["winword.exe", "excel.exe", "powerpnt.exe"]
         self.dotnetpaths = [
-            "[A-Z]:\\\\Windows\\\\assembly\\\\.*",
-            "[A-Z]:\\\\Windows\\\\Microsoft.NET\\\\assembly\\\\GAC_MSIL.*",
+            r"[A-Z]:\\Windows\\assembly\\.*",
+            r"[A-Z]:\\Windows\\Microsoft.NET\\assembly\\GAC_MSIL.*",
         ]
 
     def on_call(self, call, process):

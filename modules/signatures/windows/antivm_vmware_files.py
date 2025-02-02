@@ -29,12 +29,12 @@ class VMwareDetectFiles(Signature):
 
     def run(self):
         indicators = [
-            ".*\\\\drivers\\\\vmmouse\.sys$",
-            ".*\\\\drivers\\\\vmhgfs\.sys$",
-            ".*\\\\vmguestlib\.dll$",
-            ".*\\\\VMware\\ Tools\\\\TPAutoConnSvc\.exe$",
-            ".*\\\\VMware\\ Tools\\\\TPAutoConnSvc\.exe\.dll$",
-            ".*\\\\Program\\ Files(\\ \(x86\))?\\\\VMware\\\\VMware\\ Tools.*",
+            r".*\\drivers\\vmmouse\.sys$",
+            r".*\\drivers\\vmhgfs\.sys$",
+            r".*\\vmguestlib\.dll$",
+            r".*\\VMware\\ Tools\\TPAutoConnSvc\.exe$",
+            r".*\\VMware\\ Tools\\TPAutoConnSvc\.exe\.dll$",
+            r".*\\Program\\ Files(\\ \(x86\))?\\VMware\\VMware\\ Tools.*",
         ]
 
         for indicator in indicators:

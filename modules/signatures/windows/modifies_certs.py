@@ -20,7 +20,7 @@ class ModifiesCerts(Signature):
 
     def run(self):
         if self.check_write_key(
-            pattern=".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\SystemCertificates\\\\.*\\\\Certificates\\\\.*", regex=True
+            pattern=r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\SystemCertificates\\.*\\Certificates\\.*", regex=True
         ):
             return True
 

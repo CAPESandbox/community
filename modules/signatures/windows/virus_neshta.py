@@ -66,7 +66,7 @@ class NeshtaRegKeys(Signature):
     def on_call(self, call, process):
         if call["api"] == "RegSetValueExA":
             key = self.get_argument(call, "FullName").lower()
-            if ".*\\software\\classes\\exefile\\shell\\open\\command.*" in key:
+            if ".*\\software\classes\\exefile\\shell\\open\\command.*" in key:
                 buf = self.get_argument(call, "Buffer").lower()
                 if re.match(r"^c:\\windows\\svchost.com\ \"%1\"\ %\*$", buf):
                     self.match = True
