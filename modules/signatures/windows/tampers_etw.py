@@ -36,7 +36,7 @@ class TampersETW(Signature):
             r"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment\\COMPlus_ETWEnabled",
         )
 
-        cmd_indicators = (".*set\scomplus_etwenabled.*", ".*env:complus_etwenabled.*", ".*etwenabled.*(value|\/d)\s0.*")
+        cmd_indicators = (r".*set\scomplus_etwenabled.*", ".*env:complus_etwenabled.*", r".*etwenabled.*(value|\/d)\s0.*")
 
         for rindicator in reg_indicators:
             match = self.check_write_key(pattern=rindicator, regex=True)

@@ -57,8 +57,8 @@ class MedusaLockerRegkeys(Signature):
 
     def run(self):
         indicators = (
-            r"HKEY_CURRENT_USER\\\\Software\\\\Medusa",
-            r"HKEY_CURRENT_USER\\\\Software\\\\Medusa\\\\.*",
+            r"HKEY_CURRENT_USER\\Software\\Medusa",
+            r"HKEY_CURRENT_USER\\Software\\Medusa\\.*",
         )
 
         for indicator in indicators:

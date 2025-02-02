@@ -56,9 +56,9 @@ class ObliquekRATFiles(Signature):
 
     def run(self):
         indicators = (
-            r".*\\\\ProgramData\\\\System\\\\Dump.*",
-            r".*\\\\ProgramData\\\\auto.txt$",
-            r".*\\\\ProgramData\\\\a.txt$",
+            r".*\\ProgramData\\System\\Dump.*",
+            r".*\\ProgramData\\auto.txt$",
+            r".*\\ProgramData\\a.txt$",
         )
 
         for indicator in indicators:
