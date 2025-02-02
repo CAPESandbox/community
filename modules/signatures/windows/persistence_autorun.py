@@ -62,9 +62,7 @@ class Autorun_scheduler(Signature):
                 self.mark_call()
 
     def on_complete(self):
-        indicators = (
-            r".*\\Microsoft\\Windows\\CurrentVersion\\Explorer\\SharedTaskScheduler\\.*",
-        )
+        indicators = (r".*\\Microsoft\\Windows\\CurrentVersion\\Explorer\\SharedTaskScheduler\\.*",)
         whitelists = (
             r".*\\Software\\(Wow6432Node\\)?Classes\\clsid\\{CAFEEFAC-0017-0000-FFFF-ABCDEFFEDCBA}\\InprocServer32\\.*",
             # ".*\\Software\\(Wow6432Node\\)?Classes\\clsid\\[^\\]*\\InprocServer32\\ThreadingModel$",
