@@ -14,13 +14,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import os
-import logging
-import ipaddress
 import csv
+import ipaddress
+import logging
+import os
 
-from lib.cuckoo.common.constants import CUCKOO_ROOT
 from lib.cuckoo.common.abstracts import Signature
+from lib.cuckoo.common.constants import CUCKOO_ROOT
 
 log = logging.getLogger()
 
@@ -28,13 +28,15 @@ ip_ranges = []
 HAVE_MSFT_PUB_IPS = False
 msf_public_ips_list = os.path.join(CUCKOO_ROOT, "extra", "msft-public-ips.csv")
 if os.path.exists(msf_public_ips_list):
-    with open(msf_public_ips_list, 'r') as file:
+    with open(msf_public_ips_list, "r") as file:
         reader = csv.DictReader(file)
         for row in reader:
-            ip_ranges.append(row['Prefix'])
+            ip_ranges.append(row["Prefix"])
     HAVE_MSFT_PUB_IPS = True
 else:
-    log.debug("Missed file extra/msft-public-ips.csv. Get a fresh copy from https://www.microsoft.com/en-us/download/details.aspx?id=53602")
+    log.debug(
+        "Missed file extra/msft-public-ips.csv. Get a fresh copy from https://www.microsoft.com/en-us/download/details.aspx?id=53602"
+    )
 
 
 def check_ip_in_ranges(ip_address):
@@ -81,7 +83,7 @@ class NetworkMultipleDirectIPConnections(Signature):
     severity = 2
     confidence = 30
     categories = ["network", "c2"]
-    authors = ["Kevin Ross","Wassime BATTA"]
+    authors = ["Kevin Ross", "Wassime BATTA"]
     minimum = "1.3"
     enabled = False
 

@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import parse_qs, urlparse
 
 from lib.cuckoo.common.abstracts import Signature
 from lib.cuckoo.common.constants import CUCKOO_ROOT
@@ -46,7 +46,7 @@ class PDF_Annot_URLs_Checker(Signature):
     minimum = "0.5"
     enaled = False
 
-    filter_analysistypes = set(["file","static"])
+    filter_analysistypes = set(["file", "static"])
 
     malicious_tlds_files = (
         "custom/data/malicioustlds.txt",
@@ -87,8 +87,9 @@ class PDF_Annot_URLs_Checker(Signature):
             for entry in self.results.get("target").get("file", {}).get("pdf", {}).get("Annot_URLs", []):
                 entry_lower = entry.lower()
                 self.data.append({"url": entry})
-                if entry_lower.endswith((".exe", ".zip", ".rar", ".bat", ".cmd", ".js", ".jse", ".vbs", ".vbe", ".ps1", ".psm1", ".sh")) \
-                        and not entry_lower.startswith("mailto:"):
+                if entry_lower.endswith(
+                    (".exe", ".zip", ".rar", ".bat", ".cmd", ".js", ".jse", ".vbs", ".vbe", ".ps1", ".psm1", ".sh")
+                ) and not entry_lower.startswith("mailto:"):
                     found_malicious_extension = True
                 if entry_lower.startswith(("http://", "https://")):
                     domain_start = entry_lower.find("//") + 2
@@ -108,12 +109,16 @@ class PDF_Annot_URLs_Checker(Signature):
                             blacklisted_server, server = self.check_dnsbbl(target)
                             if blacklisted_server:
                                 found_blacklist_ip = True
-                                self.data.append({"blacklisted": f"The domain or IP address {target} is blacklisted on the following server: {server}  "})
-                                #break # Stop checking once blacklisted IP is found
-                                #print ( blacklisted_server)
-                            #else:
+                                self.data.append(
+                                    {
+                                        "blacklisted": f"The domain or IP address {target} is blacklisted on the following server: {server}  "
+                                    }
+                                )
+                                # break # Stop checking once blacklisted IP is found
+                                # print ( blacklisted_server)
+                            # else:
                             #    print(f"The domain or IP address {target} is not blacklisted.")
-        if found_malicious_domain or found_malicious_extension or found_blacklist_ip :
+        if found_malicious_domain or found_malicious_extension or found_blacklist_ip:
             self.severity = 6
             self.description = "The PDF contains a Malicious Link Annotation"
             suspect = True
