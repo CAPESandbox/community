@@ -66,7 +66,7 @@ class BlackRATRegistryKeys(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.match = False
         self.score = int()
-        self.regpat = re.compile("^HKEY_CURRENT_USER\\\\[\x00-\xFF]{0,500}[^\x00-\x7F]{1,}", re.UNICODE)
+        self.regpat = re.compile("^HKEY_CURRENT_USER\\\\[\x00-\xff]{0,500}[^\x00-\x7f]{1,}", re.UNICODE)
 
     def on_call(self, call, process):
         if call["api"] == "RegSetValueExW":
