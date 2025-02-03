@@ -122,7 +122,7 @@ class AccessesPrimaryPartition(Signature):
 
     def run(self):
         ret = False
-        match = self.check_write_file(pattern="^\\Device\\HarddiskVolume0\\DR0$", regex=True)
+        match = self.check_write_file(pattern=r"^\\Device\\HarddiskVolume0\\DR0$", regex=True)
         if match:
             self.data.append({"file": match})
             ret = True

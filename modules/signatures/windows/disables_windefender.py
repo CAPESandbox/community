@@ -127,7 +127,7 @@ class RemovesWindowsDefenderContextMenu(Signature):
             r"HKEY_CLASSES_ROOT\\Directory\\shellex\\ContextMenuHandlers\\EPP$",
             r"HKEY_CLASSES_ROOT\\Drive\\shellex\\ContextMenuHandlers\\EPP$",
         )
-        pat = re.compile(".*\\shellex\\contextmenuhandlers\\epp")
+        pat = re.compile(r".*\\shellex\\contextmenuhandlers\\epp")
 
         for indicator in indicators:
             match = self.check_write_key(pattern=indicator, regex=True)

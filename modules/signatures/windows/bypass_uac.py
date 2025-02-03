@@ -229,7 +229,7 @@ class ChecksUACStatus(Signature):
 
     def run(self):
         match = self.check_key(
-            pattern=r".*\SOFTWARE\(Wow6432Node\)?Microsoft\Windows\CurrentVersion\Policies\System\EnableLUA$", regex=True
+            pattern=r".*\\SOFTWARE\(Wow6432Node\)?Microsoft\\Windows\\CurrentVersion\\Policies\\System\\EnableLUA$", regex=True
         )
         if match:
             self.data.append({"regkey": match})
@@ -253,8 +253,6 @@ class UACBypassWindowsBackup(Signature):
     filter_apinames = set(["CreateProcessInternalW"])
 
     def on_call(self, call, process):
-        pname = process["process_name"].lower()
-
         # Checking parent process for false positives.
         if process["process_name"].lower() == "sdclt.exe" and call["api"] == "CreateProcessInternalW":
             cmdline = self.get_argument(call, "CommandLine")

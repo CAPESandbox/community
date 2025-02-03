@@ -20,7 +20,7 @@ class StealthWebHistory(Signature):
             r".*\\Temporary\\ Internet\\ Files\\Content\.IE5\\.*",
         ]
         if self.results.get("target", {}).get("category", "") == "file":
-            file_indicators.append(".*\\Cookies\\.*")
+            file_indicators.append(r".*\\Cookies\\.*")
         found_cleaner = False
         for indicator in file_indicators:
             file_match = self.check_delete_file(pattern=indicator, regex=True, all=True)

@@ -53,13 +53,13 @@ class NanocoreRAT(Signature):
 
     def on_complete(self):
         badness = 0
-        guid = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}" "-[0-9a-fA-F]{12}"
+        guid = r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}" "-[0-9a-fA-F]{12}"
         fileiocs = (
-            r".*\\" + guid + "\\run\.dat$",
-            r".*\\" + guid + "\\task\.dat$",
-            r".*\\" + guid + "\\catelog\.dat$",
-            r".*\\" + guid + "\\storage\.dat$",
-            r".*\\" + guid + "\\settings\.bin$",
+            r".*\\" + guid + r"\\run\.dat$",
+            r".*\\" + guid + r"\\task\.dat$",
+            r".*\\" + guid + r"\\catelog\.dat$",
+            r".*\\" + guid + r"\\storage\.dat$",
+            r".*\\" + guid + r"\\settings\.bin$",
         )
         for ioc in fileiocs:
             if self.check_write_file(pattern=ioc, regex=True):

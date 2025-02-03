@@ -28,8 +28,8 @@ class ModiRATBehavior(Signature):
 
     def run(self):
         reg_indicators = (
-            "HKEY_CURRENT_USER\\Software\\FFMPEG_URL.*",
-            "HKEY_CURRENT_USER\\Software\\Telegram_Notifier.*",
+            r"HKEY_CURRENT_USER\\Software\\FFMPEG_URL.*",
+            r"HKEY_CURRENT_USER\\Software\\Telegram_Notifier.*",
         )
         file_indicators = (
             r"[A-Z]:\\ProgramData\\ffmpeg\.exe$",

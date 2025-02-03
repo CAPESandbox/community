@@ -43,7 +43,7 @@ class UrsnifBehavior(Signature):
         mutex_indicators = r"^Local\\\{[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}\}$"
 
         for rkey in regkeys:
-            registry_indicators.append(regpath + "\\" + guid + "\\" + rkey + "$")
+            registry_indicators.append(regpath + r"\\" + guid + r"\\" + rkey + "$")
 
         registry_indicators.append(r".*\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\EnableSPDY3_0$")
 
