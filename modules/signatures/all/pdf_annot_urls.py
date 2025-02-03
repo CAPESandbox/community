@@ -55,9 +55,7 @@ class PDF_Annot_URLs_Checker(Signature):
 
     def __init__(self, *args, **kwargs):
         super(PDF_Annot_URLs_Checker, self).__init__(*args, **kwargs)
-        self.malicious_tlds = set()
-        if os.path.exists(self.malicious_tlds_file):
-            self.malicious_tlds = self.load_malicious_tlds()
+        self.malicious_tlds = self.load_malicious_tlds()
 
     def load_malicious_tlds(self):
         malicious_tlds = set()
