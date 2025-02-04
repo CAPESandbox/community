@@ -8,7 +8,7 @@ from modules.parsers.utils import get_YARA_rule
 
 
 def convert_to_MACO(raw_config: dict) -> MACOModel:
-    if not raw_config:
+    if not (raw_config and isinstance(raw_config, dict)):
         return
 
     parsed_result = MACOModel(family="AsyncRAT", other=raw_config)
