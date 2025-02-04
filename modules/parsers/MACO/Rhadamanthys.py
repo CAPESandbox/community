@@ -6,7 +6,7 @@ from modules.parsers.utils import get_YARA_rule
 
 
 def convert_to_MACO(raw_config: dict):
-    if not raw_config:
+    if not (raw_config and isinstance(raw_config, dict)):
         return None
 
     parsed_result = MACOModel(family="Rhadamanthys", other=raw_config)
