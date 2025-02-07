@@ -123,8 +123,7 @@ class PotentialProtocolTunnelingViaLegitUtilities(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
-        for cmdline in cmdlines:
+        for cmdline in self.results.get("behavior", {}).get("summary", {}).get("executed_commands", []):
             lower = cmdline.lower()
             if (
                 "3389" in lower
@@ -606,8 +605,7 @@ class MountCopyToWebDavShare(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results.get("behavior").get("summary").get("executed_commands")
-        for cmdline in cmdlines:
+        for cmdline in self.results.get("behavior", {}).get("summary", {}).get("executed_commands", []):
             lower = cmdline.lower()
             if ("rundll32.exe" in lower and "\\program files\\microsoft office\\root\\office16\\mlcfg32.cpl" in lower) or (
                 any(
@@ -624,7 +622,7 @@ class MountCopyToWebDavShare(Signature):
             if (
                 ("explorer.exe" in lower and "\\" in lower and "@" in lower)
                 or ("net.exe" in lower and "use" in lower)
-                or (any(arg in lower for arg in ("http", "webdav")) and "/user" in lower and not "//localhost" in lower)
+                or (any(arg in lower for arg in ("http", "webdav")) and "/user" in lower and "//localhost" not in lower)
                 or (
                     any(proc in lower for proc in ("expand.exe", "xcopy.exe", "cmd.exe"))
                     and any(arg in lower for arg in ("\\\\webdav", "davwwwroot"))
