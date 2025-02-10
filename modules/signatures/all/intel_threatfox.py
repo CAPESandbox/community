@@ -61,10 +61,7 @@ class ThreatFox(Signature):
                     # Parse JSON and extract matches           
                     jsondata = json.dumps(response.json())
                     jsondict = json.loads(jsondata)
-                
-                    # Example returned JSON data section (jsondict['data'][0])
-                    # {'id': '1409315', 'ioc': '47.92.211.202:80', 'threat_type': 'botnet_cc', 'threat_type_desc': 'Indicator that identifies a botnet command&control server (C&C)', 'ioc_type': 'ip:port', 'ioc_type_desc': 'ip:port combination that is used for botnet Command&control (C&C)', 'malware': 'win.cobalt_strike', 'malware_printable': 'Cobalt Strike', 'malware_alias': 'Agentemis,BEACON,CobaltStrike,cobeacon', 'malware_malpedia': 'https://malpedia.caad.fkie.fraunhofer.de/details/win.cobalt_strike', 'confidence_level': 50, 'first_seen': '2025-02-10 15:13:25 UTC', 'last_seen': None, 'reference': 'https://www.shodan.io/host/47.92.211.202#80', 'reporter': 'juroots', 'tags': ['c2', 'CobaltStrike', 'cs-watermark-987654321', 'shodan'], 'malware_samples': []}
-
+                    
                     iocdata = jsondict['data'][0]
                     if iocdata and iocdata != "Y":
                         self.data.append({"ioc_match": iocdata })
