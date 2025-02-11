@@ -29,7 +29,6 @@ class ThreatFox(Signature):
     ttps = []
 
     def run(self):
-        apikey = ""
         ret = False
   
         #for host in self.results.get("network", {}).get("hosts", []):
@@ -38,41 +37,24 @@ class ThreatFox(Signature):
         #       searchterm = ipaddress             
 
         # Perform ThreatFox lookup for DNS results
-
-        if apikey:        
-            for dns in self.results.get("network", {}).get("domains", []):
-                query = dns["domain"]
-
-                if query:
-                    searchterm = query
+     
+        for dns in self.results.get("network", {}).get("domains", []):
+            searchterm = dns["domain"]
+            if not searchterm:
+                continue
   
-                if searchterm:
-                    headers = {"Auth-Key" : apikey}
-                    data = {
-                       'query':            'search_ioc',
-                       'search_term':      searchterm
-                    }
-
-                    pool = urllib3.HTTPSConnectionPool('threatfox-api.abuse.ch', port=443, maxsize=50, headers=headers)
-
-                    json_data = json.dumps(data)
-                    response = pool.request("POST", "/api/v1/", body=json_data)
-
-                    # Parse JSON and extract matches           
-                    jsondata = json.dumps(response.json())
-                    jsondict = json.loads(jsondata)
-                    
-                    iocdata = jsondict['data'][0]
-                    if iocdata and iocdata != "Y":
-                        self.data.append({"ioc_match": iocdata })
-                                 
-                        if iocdata['threat_type'] == "botnet_cc" and "Unknown malware" != iocdata['malware_printable']:                 
-                            self.families.append(iocdata['malware_printable'])
-                        ret = True
-
-                        if iocdata['threat_type'] == "botnet_cc":
-                            self.ttps.append("TA0011")
-                        if iocdata['threat_type'] == "payload_delivery":
-                            self.ttps.append("T1189")
-
+            jsondict = self.check_threatfox(searchterm)
+            if not jsondict:
+                continue
+                
+            iocdata = jsondict['data'][0]
+            if iocdata and iocdata != "Y":
+                self.data.append({"ioc_match": iocdata })         
+                if iocdata['threat_type'] == "botnet_cc" and "Unknown malware" != iocdata['malware_printable']:                 
+                    self.families.append(iocdata['malware_printable'])
+                ret = True
+                if iocdata['threat_type'] == "botnet_cc":
+                    self.ttps.append("TA0011")
+                if iocdata['threat_type'] == "payload_delivery":
+                    self.ttps.append("T1189")
         return ret
