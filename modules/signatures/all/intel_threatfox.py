@@ -14,6 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from lib.cuckoo.common.abstracts import Signature
+from lib.cuckoo.common.utils import add_family_detection
 
 class ThreatFox(Signature):
     name = "threatfox"
@@ -24,7 +25,7 @@ class ThreatFox(Signature):
     minimum = "1.3"
     ttps = []
 
-    def ioc_lookup(searchterm):
+    def ioc_lookup(self, searchterm):
         jsondict = self.check_threatfox(searchterm)
         if not jsondict:
             return
@@ -33,7 +34,7 @@ class ThreatFox(Signature):
         if iocdata and iocdata != "Y":
             self.data.append({"ioc_match": iocdata })         
             if iocdata['threat_type'] == "botnet_cc" and "Unknown malware" != iocdata['malware_printable']:                 
-                self.families.append(iocdata['malware_printable'])
+                add_family_detection(self.results, iocdata['malware_printable'], "Behavior", searchterm)
             self.ret = True
             if iocdata['threat_type'] == "botnet_cc":
                 self.ttps.append("TA0011")
