@@ -31,7 +31,7 @@ class ComsvcsCredentialDump(Signature):
 
     def run(self):
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "comsvcs" in lower and "minidump" in lower:

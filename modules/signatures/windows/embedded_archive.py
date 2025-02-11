@@ -29,7 +29,7 @@ class DLLArchiveExecution(Signature):
 
     def run(self):
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if ("rundll32" in lower or "regsvr32" in lower) and (".iso\\" in lower or ".img\\" in lower or ".zip\\" in lower):
@@ -52,7 +52,7 @@ class LNKArchiveExecution(Signature):
 
     def run(self):
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if (".iso\\" in lower or ".img\\" in lower or ".zip\\" in lower) and ".lnk" in lower:
@@ -75,7 +75,7 @@ class ScriptArchiveExecution(Signature):
 
     def run(self):
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if ("wscript" in lower or "jscript" in lower or "cscript" in lower or "mshta" in lower) and (

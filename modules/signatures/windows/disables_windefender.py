@@ -65,7 +65,7 @@ class DisablesWindowsDefender(Signature):
                 self.mbcs += ["OB0006", "E1112"]
                 self.mbcs += ["OC0008", "C0036"]  # micro-behaviour
 
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for cmd in cmds:
@@ -95,7 +95,7 @@ class WindowsDefenderPowerShell(Signature):
 
     def run(self):
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "set-mppreference" in lower:
@@ -134,7 +134,7 @@ class RemovesWindowsDefenderContextMenu(Signature):
             if match:
                 return True
 
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if re.search(pat, lower):
@@ -166,7 +166,7 @@ class DisablesWindowsDefenderLogging(Signature):
             if match:
                 return True
 
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if re.search(pat, lower):

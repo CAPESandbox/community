@@ -33,7 +33,7 @@ class UsesWindowsUtilitiesScheduler(Signature):
     def on_call(self, _, process):
         if process["process_name"].lower() in self.filter_processnames:
             self.ttps += ["T1053.005"] if process["process_name"].lower() == "schtasks" else ["T1053.002"]  # MITRE v7,8
-            cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+            cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
             for cmdline in cmdlines:
                 lower = cmdline.lower()
                 if re.search(process["process_name"].lower(), lower):
@@ -116,7 +116,7 @@ class UsesWindowsUtilities(Signature):
             r"Internet Explorer",
         ]
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for utility in utilities:
@@ -206,7 +206,7 @@ class SuspiciousCommandTools(Signature):
         ]
 
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for utility_regex in utilities:
@@ -239,7 +239,7 @@ class ScriptToolExecuted(Signature):
         ]
 
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for utility in utilities:
@@ -265,7 +265,7 @@ class SuspiciousPingUse(Signature):
 
     def run(self):
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "ping" in lower and ("-n" in lower or "/n" in lower):
@@ -313,7 +313,7 @@ class WMICCommandSuspicious(Signature):
         ]
 
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "wmic" in lower:
@@ -397,7 +397,7 @@ class SuspiciousCertutilUse(Signature):
 
     def run(self):
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "certutil" in lower and ("urlcache" in lower or "encode" in lower or "decode" in lower or "addstore" in lower):
@@ -468,7 +468,7 @@ class DotNETCSCBuild(Signature):
 
     def run(self):
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "csc " in lower or "csc.exe" in lower:
@@ -545,7 +545,7 @@ class UsesWindowsUtilitiesAppCmd(Signature):
         ]
 
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for utility in utilities:
@@ -574,7 +574,7 @@ class UsesWindowsUtilitiesCipher(Signature):
         ]
 
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for utility in utilities:
@@ -604,7 +604,7 @@ class UsesWindowsUtilitiesClickOnce(Signature):
         ]
 
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for utility in utilities:
@@ -635,7 +635,7 @@ class UsesWindowsUtilitiesCSVDELDFIDE(Signature):
         ]
 
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for utility in utilities:
@@ -664,7 +664,7 @@ class UsesWindowsUtilitiesCurl(Signature):
         ]
 
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for utility in utilities:
@@ -694,7 +694,7 @@ class UsesWindowsUtilitiesDSQuery(Signature):
         ]
 
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for utility in utilities:
@@ -721,7 +721,7 @@ class UsesWindowsUtilitiesEsentutl(Signature):
         ]
 
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for utility in utilities:
@@ -749,7 +749,7 @@ class UsesWindowsUtilitiesFinger(Signature):
         ]
 
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for utility in utilities:
@@ -778,7 +778,7 @@ class UsesWindowsUtilitiesMode(Signature):
         ]
 
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for utility in utilities:
@@ -809,7 +809,7 @@ class UsesWindowsUtilitiesNltest(Signature):
         ]
 
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for utility in utilities:
@@ -838,7 +838,7 @@ class UsesWindowsUtilitiesNTDSutil(Signature):
         ]
 
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for utility in utilities:
@@ -865,7 +865,7 @@ class UsesWindowsUtilitiesXcopy(Signature):
         )
 
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for utility in utilities:

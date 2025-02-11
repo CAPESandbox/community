@@ -35,7 +35,7 @@ class CmdlineObfuscation(Signature):
 
     def run(self):
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             # using cmd.exe via comspec
             if "%comspec" in cmdline.lower():
@@ -89,7 +89,7 @@ class CmdlineSwitches(Signature):
 
     def run(self):
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             if "cmd" in cmdline.lower() and ("/V" in cmdline or "\V" in cmdline):
                 ret = True
@@ -111,7 +111,7 @@ class CmdlineTerminate(Signature):
 
     def run(self):
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             if "cmd" in cmdline.lower() and ("/C" in cmdline or "\C" in cmdline or "/R" in cmdline or "\R" in cmdline):
                 ret = True
@@ -144,7 +144,7 @@ class LongCommandline(Signature):
         ]
 
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for utility in utilities:
@@ -179,7 +179,7 @@ class CommandLineHTTPLink(Signature):
             "msiexec",
         ]
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for utility in utilities:
@@ -216,7 +216,7 @@ class CommandLineReversedHTTPLink(Signature):
             "msiexec",
         ]
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for utility in utilities:
@@ -241,7 +241,7 @@ class PowershellRenamedCommandLine(Signature):
 
     def run(self):
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             if "powershell" in cmdline.lower() and not cmdline.lower().startswith("powershell"):
                 if re.findall("=\W+powershell", cmdline.lower()):
@@ -273,7 +273,7 @@ class CommandLineLongString(Signature):
             "wscript",
         ]
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             for utility in utilities:
                 if utility in cmdline.lower():
@@ -300,7 +300,7 @@ class CommandLineForFilesWildCard(Signature):
 
     def run(self):
         ret = False
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             if "forfiles" in cmdline.lower() and "@file" in cmdline.lower() and "*" in cmdline:
                 ret = True

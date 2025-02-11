@@ -39,7 +39,7 @@ class CryptominingStratumCommand(Signature):
         xmr_strings = ["stratum+tcp://", "xmrig", "xmr-stak", "supportxmr.com:", "dwarfpool.com:", "minergate", "xmr.", "monero."]
 
         ret = False
-        for cmdline in self.results["behavior"]["summary"]["executed_commands"]:
+        for cmdline in self.results.get("behavior", {}).get("summary", {}).get("executed_commands", []):
             if re.search(xmr_address_re, cmdline):
                 self.data.append({"command": cmdline})
                 ret = True

@@ -104,7 +104,7 @@ class RansomwareFileModifications(Signature):
     def on_complete(self):
         ret = False
 
-        deletedfiles = self.results["behavior"]["summary"]["delete_files"]
+        deletedfiles = self.results.get("behavior", {}).get("summary", {}).get("delete_files", [])
         deletedcount = 0
         for deletedfile in deletedfiles:
             if (

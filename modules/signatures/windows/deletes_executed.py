@@ -29,10 +29,10 @@ class DeletesExecutedFiles(Signature):
     evented = True
 
     def run(self):
-        cmdlines = self.results["behavior"]["summary"]["executed_commands"]
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
 
         if cmdlines:
-            for deletedfile in self.results["behavior"]["summary"]["delete_files"]:
+            for deletedfile in self.results.get("behavior", {}).get("summary", {}).get("delete_files", []):
                 if any(deletedfile in cmdline for cmdline in cmdlines):
                     self.data.append({"file": deletedfile})
 
