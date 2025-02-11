@@ -24,33 +24,36 @@ class ThreatFox(Signature):
     minimum = "1.3"
     ttps = []
 
-    def run(self):
-        ret = False
-  
-        #for host in self.results.get("network", {}).get("hosts", []):
-        #   ipaddress = host["ip"]
-        #    if ipaddress:
-        #       searchterm = ipaddress             
-
-        # Perform ThreatFox lookup for DNS results
-     
-        for dns in self.results.get("network", {}).get("domains", []):
-            searchterm = dns["domain"]
-            if not searchterm:
-                continue
-  
-            jsondict = self.check_threatfox(searchterm)
-            if not jsondict:
-                continue
+    def ioc_lookup(searchterm):
+        jsondict = self.check_threatfox(searchterm)
+        if not jsondict:
+            return
                 
-            iocdata = jsondict['data'][0]
-            if iocdata and iocdata != "Y":
-                self.data.append({"ioc_match": iocdata })         
-                if iocdata['threat_type'] == "botnet_cc" and "Unknown malware" != iocdata['malware_printable']:                 
-                    self.families.append(iocdata['malware_printable'])
-                ret = True
-                if iocdata['threat_type'] == "botnet_cc":
-                    self.ttps.append("TA0011")
-                if iocdata['threat_type'] == "payload_delivery":
-                    self.ttps.append("T1189")
-        return ret
+        iocdata = jsondict['data'][0]
+        if iocdata and iocdata != "Y":
+            self.data.append({"ioc_match": iocdata })         
+            if iocdata['threat_type'] == "botnet_cc" and "Unknown malware" != iocdata['malware_printable']:                 
+                self.families.append(iocdata['malware_printable'])
+            self.ret = True
+            if iocdata['threat_type'] == "botnet_cc":
+                self.ttps.append("TA0011")
+            if iocdata['threat_type'] == "payload_delivery":
+                self.ttps.append("T1189")
+    
+    def run(self):
+        self.ret = False
+  
+        for host in self.results.get("network", {}).get("hosts", []):
+            ip = host["ip"]
+            if  host.get("ports", []):
+                for port in host.get("ports", []):
+                    searchterm = f"{ip}:{port}"
+                    self.ioc_lookup(searchterm)
+            else:
+                self.ioc_lookup(ip)
+
+            # ToDo do we want to check ports here too?
+            if host.get("hostname"): 
+                self.ioc_lookup(host["hostname"])
+            
+        return self.ret
