@@ -13,10 +13,10 @@ strings:
 	$bmp = {42 4D}
 
 	$s1 = "<%@ Page Language=" ascii wide
-	$s2 = "<?php" ascii wide
-	$s3 = "eval(" ascii wide
-	$s4 = "<eval" ascii wide nocase
-	$s5 = "<%eval" ascii wide nocase
+        $s2 = /<\?php[ -~]{30,}/ ascii wide nocase
+        $s3 = /eval\([ -~]{30,}/ ascii wide nocase
+        $s4 = /<eval[ -~]{30,}/ ascii wide nocase
+        $s5 = /<%eval[ -~]{30,}/ ascii wide nocase
 
 condition:
 	( $gif at 0 and any of ($s*) ) or
