@@ -51,8 +51,8 @@ class LanguageCheckReg(Signature):
     def run(self):
         ret = False
         indicators = [
-            ".*\\\\SYSTEM\\\\ControlSet001\\\\Control\\\\Nls\\\\CustomLocale\\\\.*",
-            ".*\\\\SYSTEM\\\\ControlSet001\\\\Control\\\\Nls\\\\ExtendedLocale\\\\.*",
+            r".*\\SYSTEM\\ControlSet001\\Control\\Nls\\CustomLocale\\.*",
+            r".*\\SYSTEM\\ControlSet001\\Control\\Nls\\ExtendedLocale\\.*",
         ]
         for indicator in indicators:
             match = self.check_key(pattern=indicator, regex=True)
@@ -61,7 +61,7 @@ class LanguageCheckReg(Signature):
                 ret = True
 
         return ret
-        
+
 class QueriesLocaleAPI(Signature):
     name = "queries_locale_api"
     description = "Queries the computer locale (possible geofencing)"
