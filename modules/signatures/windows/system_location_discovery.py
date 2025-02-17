@@ -39,6 +39,7 @@ class QueriesKeyboardLayout(Signature):
     def on_complete(self):
         return self.ret
 
+
 class LanguageCheckReg(Signature):
     name = "language_check_registry"
     description = "Checks system language via registry key (possible geofencing)"
@@ -61,6 +62,7 @@ class LanguageCheckReg(Signature):
                 ret = True
 
         return ret
+
 
 class QueriesLocaleAPI(Signature):
     name = "queries_locale_api"
