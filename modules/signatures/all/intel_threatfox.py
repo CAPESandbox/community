@@ -16,6 +16,7 @@
 from lib.cuckoo.common.abstracts import Signature
 from lib.cuckoo.common.utils import add_family_detection
 
+
 class ThreatFox(Signature):
     name = "threatfox"
     description = "Threatfox indicator matched"
@@ -29,24 +30,24 @@ class ThreatFox(Signature):
         jsondict = self.check_threatfox(searchterm)
         if not jsondict:
             return
-                
-        iocdata = jsondict['data'][0]
+
+        iocdata = jsondict["data"][0]
         if iocdata and iocdata != "Y":
-            self.data.append({"ioc_match": iocdata })         
-            if iocdata['threat_type'] == "botnet_cc" and "Unknown malware" != iocdata['malware_printable']:                 
-                add_family_detection(self.results, iocdata['malware_printable'], "Behavior", searchterm)
+            self.data.append({"ioc_match": iocdata})
+            if iocdata["threat_type"] == "botnet_cc" and "Unknown malware" != iocdata["malware_printable"]:
+                add_family_detection(self.results, iocdata["malware_printable"], "Behavior", searchterm)
             self.ret = True
-            if iocdata['threat_type'] == "botnet_cc":
+            if iocdata["threat_type"] == "botnet_cc":
                 self.ttps.append("TA0011")
-            if iocdata['threat_type'] == "payload_delivery":
+            if iocdata["threat_type"] == "payload_delivery":
                 self.ttps.append("T1189")
-    
+
     def run(self):
         self.ret = False
-  
+
         for host in self.results.get("network", {}).get("hosts", []):
             ip = host["ip"]
-            if  host.get("ports", []):
+            if host.get("ports", []):
                 for port in host.get("ports", []):
                     searchterm = f"{ip}:{port}"
                     self.ioc_lookup(searchterm)
@@ -54,7 +55,7 @@ class ThreatFox(Signature):
                 self.ioc_lookup(ip)
 
             # ToDo do we want to check ports here too?
-            if host.get("hostname"): 
+            if host.get("hostname"):
                 self.ioc_lookup(host["hostname"])
-            
+
         return self.ret

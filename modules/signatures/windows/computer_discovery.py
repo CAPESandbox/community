@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class QueriesComputerName(Signature):
     name = "queries_computer_name"
     description = "Queries computer hostname"
@@ -34,10 +35,11 @@ class QueriesComputerName(Signature):
     def on_call(self, call, process):
         self.mark_call()
         self.ret = True
-    
+
     def on_complete(self):
         return self.ret
-        
+
+
 class QueriesUserName(Signature):
     name = "queries_user_name"
     description = "Queries the username"
@@ -57,6 +59,6 @@ class QueriesUserName(Signature):
     def on_call(self, call, process):
         self.mark_call()
         self.ret = True
-    
+
     def on_complete(self):
         return self.ret
