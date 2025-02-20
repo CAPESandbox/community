@@ -1,4 +1,4 @@
-from cape_parsers.CAPE.core.Azorult import extract_config, rule_source
+from cape_parsers.CAPE.core.Azorult import extract_config, YARA_RULES
 from maco.extractor import Extractor
 from maco.model import ExtractorModel as MACOModel
 
