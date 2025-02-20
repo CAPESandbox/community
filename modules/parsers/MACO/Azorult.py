@@ -21,7 +21,7 @@ class Azorult(Extractor):
     family = "Azorult"
     last_modified = "2024-10-26"
     sharing = "TLP:CLEAR"
-    yara_rule = get_YARA_rule(family) or rule_source
+    yara_rule = get_YARA_rule(family) or YARA_RULES
 
     def run(self, stream, matches):
         return convert_to_MACO(extract_config(stream.read()))
