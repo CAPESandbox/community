@@ -1002,3 +1002,24 @@ class PotentialLateralMovementViaSMBEXEC(Signature):
         if self.detected:
             return True
         return False
+
+class MavInjectLolbin(Signature):
+    name = "mavinject_lolbin"
+    description = "Uses mavinject to inject code"
+    severity = 3
+    categories = ["injection", "anti-av", "lolbin"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps += ["T1218.013"]
+    
+    def run(self):
+        ret = False
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            if "mavinject.exe" in lower and ("injectrunning" in lower or "hmodule" in lower):
+                ret = True
+                self.data.append({"command": cmdline})
+
+        return ret
