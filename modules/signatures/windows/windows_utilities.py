@@ -1018,7 +1018,7 @@ class MavInjectLolbin(Signature):
         cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if "mavinject.exe" in lower and ("injectrunning" in lower or "hmodule" in lower):
+            if "mavinject" in lower and ("injectrunning" in lower or "hmodule" in lower):
                 ret = True
                 self.data.append({"command": cmdline})
 
