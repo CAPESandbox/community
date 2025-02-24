@@ -1011,7 +1011,7 @@ class MavInjectLolbin(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps += ["T1218.013"]
+    ttps = ["T1218.013"]
     
     def run(self):
         ret = False
