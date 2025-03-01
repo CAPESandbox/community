@@ -272,16 +272,14 @@ class ContainsPEOverlay(Signature):
     minimum = "1.3"
 
     def run(self):
-        target = self.results.get("target", {})
-        if target.get("category") in ("file", "static") and target.get("file"):
-            pe = self.results["target"]["file"].get("pe", [])
-            if pe:
-                overlay = pe["overlay"]
-                if overlay:
-                    offset = overlay["offset"]
-                    size = int(overlay["size"], 16)
-                    self.data.append({"overlay": "Contains overlay at offset %s with size %s bytes" % (offset, size)})
-                    return True
+        if self.results.get("info", {}).get("category", "") in ("file", "static"):
+            overlay = self.results.get("target", {}).get("file", {}).get("pe", {}).get("overlay", {})
+            if not overlay:
+                return False
 
-        return False
+            offset = overlay["offset"]
+            size = int(overlay["size"], 16)
+            self.data.append({"overlay": f"Contains overlay at offset {offset} with size: {size} bytes"})
+            return True
+
         return False
