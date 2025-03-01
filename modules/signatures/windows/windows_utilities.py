@@ -985,6 +985,7 @@ class PotentialLateralMovementViaSMBEXEC(Signature):
             return True
         return False
 
+
 class MavInjectLolbin(Signature):
     name = "mavinject_lolbin"
     description = "Uses mavinject to inject code"
