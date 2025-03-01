@@ -646,20 +646,18 @@ class UsesWindowsUtilitiesCurl(Signature):
     mbcs = ["OB0009", "E1203.m06"]
 
     def run(self):
-        utilities = [
+        utilities = (
             "curl ",
             "curl.exe ",
-        ]
+        )
 
         ret = False
-        cmdlines =
         for cmdline in self.results.get("behavior", {}).get("summary", {}).get("executed_commands", []):
             lower = cmdline.lower()
             for utility in utilities:
                 if utility in lower:
                     ret = True
                     self.data.append({"command": cmdline})
-
         return ret
 
 
