@@ -261,4 +261,25 @@ class PECompileTimeStomping(Signature):
                         self.data.append({"anomaly": "Compilation timestamp is in the future"})
                         return True
 
+class ContainsPEOverlay(Signature):
+    name = "contains_pe_overlay"
+    description = "The PE file contains an overlay"
+    severity = 2
+    confidence = 100
+    weight = 1
+    categories = ["static"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+
+    def run(self):
+        if self.results.get("info", {}).get("category", "") in ("file", "static"):
+            overlay = self.results.get("target", {}).get("file", {}).get("pe", {}).get("overlay", {})
+            if not overlay:
+                return False
+
+            offset = overlay["offset"]
+            size = int(overlay["size"], 16)
+            self.data.append({"overlay": f"Contains overlay at offset {offset} with size: {size} bytes"})
+            return True
+
         return False
