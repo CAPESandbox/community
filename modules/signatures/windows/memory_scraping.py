@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ReadsMemoryRemoteProcess(Signature):
     name = "reads_memory_remote_process"
     description = "Reads from the memory of another process"
@@ -34,18 +35,23 @@ class ReadsMemoryRemoteProcess(Signature):
         self.targethandles = []
 
     def on_call(self, call, process):
-            prochandle = self.get_argument(call, "ProcessHandle")
-            if prochandle not in ["0x00000000","0x0000000000000000","0xffffffff","0xffffffffffffffff"]:
-                buf = self.get_argument(call, "Buffer")
-                if len(buf) > 0:
-                    pname = process["process_name"].lower()
-                    processid = process["process_id"]
-                    if processid not in self.sourcepids and prochandle not in self.targethandles:
-                        self.data.append({"read_memory": "Process %s with process ID %s read from the memory of process handle %s" % (pname, processid, prochandle)})
-                        self.sourcepids.append(processid)
-                        self.targethandles.append(prochandle)
-                    self.mark_call()
-                    self.ret = True
+        prochandle = self.get_argument(call, "ProcessHandle")
+        if prochandle not in ["0x00000000", "0x0000000000000000", "0xffffffff", "0xffffffffffffffff"]:
+            buf = self.get_argument(call, "Buffer")
+            if len(buf) > 0:
+                pname = process["process_name"].lower()
+                processid = process["process_id"]
+                if processid not in self.sourcepids and prochandle not in self.targethandles:
+                    self.data.append(
+                        {
+                            "read_memory": "Process %s with process ID %s read from the memory of process handle %s"
+                            % (pname, processid, prochandle)
+                        }
+                    )
+                    self.sourcepids.append(processid)
+                    self.targethandles.append(prochandle)
+                self.mark_call()
+                self.ret = True
 
     def on_complete(self):
         return self.ret
