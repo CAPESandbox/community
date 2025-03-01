@@ -261,6 +261,7 @@ class PECompileTimeStomping(Signature):
                         self.data.append({"anomaly": "Compilation timestamp is in the future"})
                         return True
 
+
 class ContainsPEOverlay(Signature):
     name = "contains_pe_overlay"
     description = "The PE file contains an overlay"
