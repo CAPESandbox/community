@@ -43,7 +43,7 @@ class ReadsMemoryRemoteProcess(Signature):
                     if processid not in self.sourcepids and prochandle not in self.targethandles:
                         self.data.append({"read_memory": "Process %s with process ID %s read from the memory of process handle %s" % (pname, processid, prochandle)})
                         self.sourcepids.append(processid)
-                        self.targethandles.append(prochandle)  
+                        self.targethandles.append(prochandle)
                     self.mark_call()
                     self.ret = True
 
