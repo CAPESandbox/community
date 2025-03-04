@@ -575,7 +575,7 @@ class IPAddressDiscoveryViaTrustedProgram(Signature):
         )
 
     def on_call(self, call, process):
-        if any(proc in process["process_name"].lower() for proc in self.trusted):
+        if any(proc in process["process_name"].lower() for proc in self.trustedNames):
             if call["api"] == "InternetOpenUrlA":
                 url = self.get_argument(call, "URL")
                 if url:
