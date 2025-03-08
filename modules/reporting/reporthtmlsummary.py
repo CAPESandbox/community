@@ -7,6 +7,7 @@ import codecs
 import os
 from contextlib import suppress
 from io import BytesIO
+import logging
 
 import PIL
 from lib.cuckoo.common.abstracts import Report
@@ -20,13 +21,14 @@ from web.analysis.templatetags.key_tags import dict2list, getkey, parentfixup, s
 from web.analysis.templatetags.pdf_tags import datefmt
 
 try:
-    from jinja2 import TemplateAssertionError, TemplateNotFound, TemplateSyntaxError, UndefinedError
     from jinja2.environment import Environment
     from jinja2.loaders import FileSystemLoader
 
     HAVE_JINJA2 = True
 except ImportError:
     HAVE_JINJA2 = False
+
+log = logging.getLogger(__name__)
 
 
 class ReportHTMLSummary(Report):
@@ -91,16 +93,9 @@ class ReportHTMLSummary(Report):
         try:
             tpl = env.get_template("report.html")
             html = tpl.render({"results": results, "summary_report": True})
-        except UndefinedError as e:
-            raise CuckooReportError(f"Failed to generate summary HTML report: {e}")
-        except TemplateNotFound as e:
-            raise CuckooReportError(f"Failed to generate summary HTML report: {e} on {e.name}")
-        except (TemplateSyntaxError, TemplateAssertionError) as e:
-            raise CuckooReportError(f"Failed to generate summary HTML report: {e} on {e.name}, line {e.lineno}")
-        try:
             with codecs.open(os.path.join(self.reports_path, "summary-report.html"), "w", encoding="utf-8") as report:
                 report.write(html)
-        except (TypeError, IOError) as e:
-            raise CuckooReportError(f"Failed to write summary HTML report: {e}")
+        except Exception as e:
+            log.exception("Failed to generate summary HTML report: %s", str(e))
 
         return True
