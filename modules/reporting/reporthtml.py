@@ -4,8 +4,9 @@
 
 import base64
 import codecs
-import os
 import logging
+import os
+
 from lib.cuckoo.common.abstracts import Report
 from lib.cuckoo.common.constants import CUCKOO_ROOT
 from lib.cuckoo.common.exceptions import CuckooReportError

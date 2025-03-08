@@ -4,10 +4,10 @@
 
 import base64
 import codecs
+import logging
 import os
 from contextlib import suppress
 from io import BytesIO
-import logging
 
 import PIL
 from lib.cuckoo.common.abstracts import Report
