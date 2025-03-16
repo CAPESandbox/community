@@ -23,6 +23,7 @@ class MouseMovementDetect(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
+    ttps = ["T1497"]  # MITRE v6,7,8
 
     filter_apinames = set(["GetCursorPos"])
 
