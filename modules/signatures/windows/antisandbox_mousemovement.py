@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class MouseMovementDetect(Signature):
     name = "mouse_movement_detect"
     description = "Checks for mouse movement"
@@ -34,7 +35,7 @@ class MouseMovementDetect(Signature):
         self.last_y = 0
         self.nomovement_count = 0
         self.movement_count = 0
-        
+
         self.ignoreprocs = [
             "acrobat.exe",
             "acrord32.exe",
@@ -60,9 +61,9 @@ class MouseMovementDetect(Signature):
                 y = int(ypos, 16)
 
                 if self.last_x == 0 and self.last_y == 0:
-                        self.last_x = x
-                        self.last_y = y
-                        self.mark_call()
+                    self.last_x = x
+                    self.last_y = y
+                    self.mark_call()
                 elif x == self.last_x and y == self.last_y:
                     self.nomovement_count += 1
                     self.mark_call()
@@ -75,7 +76,11 @@ class MouseMovementDetect(Signature):
 
     def on_complete(self):
         if self.nomovement_count > 15 and self.movement_count < 2:
-            self.data.append({"mouse_movement": "Checks for mouse movement (no mouse movement observed in sandbox during many of the samplings)."})
+            self.data.append(
+                {
+                    "mouse_movement": "Checks for mouse movement (no mouse movement observed in sandbox during many of the samplings)."
+                }
+            )
             self.ret = True
         elif self.movement_count > 5:
             self.data.append({"mouse_movement": "Checks for mouse movement (mouse movement observed in sandbox during sampling)."})
