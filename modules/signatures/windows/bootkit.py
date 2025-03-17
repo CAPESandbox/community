@@ -256,3 +256,37 @@ class PotentialOverWriteMBR(Signature):
 
     def on_complete(self):
         return self.ret
+
+class SuspiciusIOControlCodes(Signature):
+    name = "suspicious_iocontrol_codes"
+    description = "Uses suspicious IO control codes"
+    severity = 3
+    categories = ["bootkit", "rootkit"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1067"]
+
+    filter_apinames = set(["DeviceIoControl"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
+        self.suspiciouscontrolcodes = [
+            "0x00070000", # IOCTL_DISK_GET_DRIVE_GEOMETRY - Used to retrieve disk geometry, often used by malware to identify the disk
+            "0x00560000", # IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS - Used to get disk extents, can be used to map physical disk layout
+            "0x00222408",  # IOCTL_SCSI_MINIPORT - Used for direct SCSI commands, potentially for malicious drive manipulation
+            "0x002D1080",  # IOCTL_STORAGE_QUERY_PROPERTY - Used to query storage properties, can reveal sensitive information
+            "0x002D1400",  # IOCTL_STORAGE_MANAGE_DATA_SET_ATTRIBUTES - Used to manage data set attributes, potentially for data manipulation
+            "0x00220400",  # IOCTL_DISK_GET_DRIVE_LAYOUT_EX - Used to get drive layout, can be used to understand disk partitioning
+            "0x00220C00",  # IOCTL_DISK_SET_DRIVE_LAYOUT_EX - Used to set drive layout, potentially for malicious partitioning
+        ]
+
+    def on_call(self, call, process):
+        controlcode = self.get_argument(call, "IoControlCode")
+        if controlcode in self.suspiciouscontrolcodes:
+            self.mark_call()
+            self.ret = True
+
+    def on_complete(self):
+        return self.ret
