@@ -257,6 +257,7 @@ class PotentialOverWriteMBR(Signature):
     def on_complete(self):
         return self.ret
 
+
 class SuspiciusIOControlCodes(Signature):
     name = "suspicious_iocontrol_codes"
     description = "Uses suspicious IO control codes"
@@ -273,8 +274,8 @@ class SuspiciusIOControlCodes(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
         self.suspiciouscontrolcodes = [
-            "0x00070000", # IOCTL_DISK_GET_DRIVE_GEOMETRY - Used to retrieve disk geometry, often used by malware to identify the disk
-            "0x00560000", # IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS - Used to get disk extents, can be used to map physical disk layout
+            "0x00070000",  # IOCTL_DISK_GET_DRIVE_GEOMETRY - Used to retrieve disk geometry, often used by malware to identify the disk
+            "0x00560000",  # IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS - Used to get disk extents, can be used to map physical disk layout
             "0x00222408",  # IOCTL_SCSI_MINIPORT - Used for direct SCSI commands, potentially for malicious drive manipulation
             "0x002D1080",  # IOCTL_STORAGE_QUERY_PROPERTY - Used to query storage properties, can reveal sensitive information
             "0x002D1400",  # IOCTL_STORAGE_MANAGE_DATA_SET_ATTRIBUTES - Used to manage data set attributes, potentially for data manipulation
