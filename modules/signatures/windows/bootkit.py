@@ -256,3 +256,37 @@ class PotentialOverWriteMBR(Signature):
 
     def on_complete(self):
         return self.ret
+
+class SuspiciusIOControlCodes(Signature):
+    name = "suspicious_iocontrol_codes"
+    description = "Uses suspicious IO control codes"
+    severity = 3
+    categories = ["bootkit", "rootkit"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1067"]
+
+    filter_apinames = set(["DeviceIoControl"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
+        self.suspiciouscontrolcodes = [
+            "0x00070000", # IOCTL_DISK_GET_DRIVE_GEOMETRY
+            "0x00560000", # IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS
+            "0x00222408",  # IOCTL_SCSI_MINIPORT
+            "0x002D1080",  # IOCTL_STORAGE_QUERY_PROPERTY
+            "0x002D1400",  # IOCTL_STORAGE_MANAGE_DATA_SET_ATTRIBUTES
+            "0x00220400",  # IOCTL_DISK_GET_DRIVE_LAYOUT_EX
+            "0x00220C00",  # IOCTL_DISK_SET_DRIVE_LAYOUT_EX
+        ]
+
+    def on_call(self, call, process):
+        controlcode = self.get_argument(call, "IoControlCode")
+        if controlcode in self.suspiciouscontrolcodes:
+            self.mark_call()
+            self.ret = True
+
+    def on_complete(self):
+        return self.ret
