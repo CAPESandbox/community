@@ -93,6 +93,7 @@ class LegitDomainAbuse(Signature):
             "pastebin.",
             "paste.ee",
             "pastetext.net",
+            "pastes.io",
             "pcloud.com",
             "reddit.com",
             "sendspace.com",
