@@ -67,7 +67,7 @@ class MouseMovementDetect(Signature):
                 elif x == self.last_x and y == self.last_y:
                     self.nomovement_count += 1
                     self.mark_call()
-                    self.call_count += 1
+                    # self.call_count += 1
                 elif x != self.last_x or y != self.last_y:
                     self.movement_count += 1
                     self.last_x = x
