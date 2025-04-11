@@ -844,6 +844,8 @@ class NetworkCnCHTTPSArchive(Signature):
         self.domains = [
             "archive.org",
             "archive.is",
+            "archive.ph",
+            "archive.today",
         ]
         self.urls = []
 
