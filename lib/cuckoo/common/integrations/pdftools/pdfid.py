@@ -1,102 +1,251 @@
 #!/usr/bin/env python
-__description__ = "Tool to test a PDF file"
-__author__ = "Didier Stevens"
-__version__ = "0.2.7"
-__date__ = "2019/11/05"
 
-"""
-
-Tool to test a PDF file
-
-Source code put in public domain by Didier Stevens, no Copyright
-https://DidierStevens.com
-Use at your own risk
-
-History:
-  2009/03/27: start
-  2009/03/28: scan option
-  2009/03/29: V0.0.2: xml output
-  2009/03/31: V0.0.3: /ObjStm suggested by Dion
-  2009/04/02: V0.0.4: added ErrorMessage
-  2009/04/20: V0.0.5: added Dates
-  2009/04/21: V0.0.6: added entropy
-  2009/04/22: added disarm
-  2009/04/29: finished disarm
-  2009/05/13: V0.0.7: added cPDFEOF
-  2009/07/24: V0.0.8: added /AcroForm and /RichMedia, simplified %PDF header regex, extra date format (without TZ)
-  2009/07/25: added input redirection, option --force
-  2009/10/13: V0.0.9: added detection for CVE-2009-3459; added /RichMedia to disarm
-  2010/01/11: V0.0.10: relaxed %PDF header checking
-  2010/04/28: V0.0.11: added /Launch
-  2010/09/21: V0.0.12: fixed cntCharsAfterLastEOF bug; fix by Russell Holloway
-  2011/12/29: updated for Python 3, added keyword /EmbeddedFile
-  2012/03/03: added PDFiD2JSON; coded by Brandon Dixon
-  2013/02/10: V0.1.0: added http/https support; added support for ZIP file with password 'infected'
-  2013/03/11: V0.1.1: fixes for Python 3
-  2013/03/13: V0.1.2: Added error handling for files; added /XFA
-  2013/11/01: V0.2.0: Added @file & plugins
-  2013/11/02: continue
-  2013/11/04: added options -c, -m, -v
-  2013/11/06: added option -S
-  2013/11/08: continue
-  2013/11/09: added option -o
-  2013/11/15: refactoring
-  2014/09/30: added CSV header
-  2014/10/16: V0.2.1: added output when plugin & file not pdf
-  2014/10/18: some fixes for Python 3
-  2015/08/12: V0.2.2: added option pluginoptions
-  2015/08/13: added plugin Instructions method
-  2016/04/12: added option literal
-  2017/10/29: added pdfid.ini support
-  2017/11/05: V0.2.3: added option -n
-  2018/01/03: V0.2.4: bugfix entropy calculation for PDFs without streams; sample 28cb208d976466b295ee879d2d233c8a https://twitter.com/DubinRan/status/947783629123416069
-  2018/01/15: bugfix ConfigParser privately reported
-  2018/01/29: bugfix oPDFEOF.cntCharsAfterLastEOF when no %%EOF
-  2018/07/05: V0.2.5 introduced cExpandFilenameArguments; renamed option literal to literalfilenames
-  2019/09/30: V0.2.6 color bugfix, thanks to Leo
-  2019/11/05: V0.2.7 fixed plugin path when compiled with pyinstaller
-
-Todo:
-  - update XML example (entropy, EOF)
-  - code review, cleanup
-"""
-
+import random
 import binascii
-import collections
-import configparser as ConfigParser
-import fnmatch
-import glob
-import json
-import math
-import operator
 import optparse
 import os
-import os.path
-import random
-import sys
-import traceback
-import urllib.request as urllib23
 import xml.dom.minidom
-import zipfile
+import traceback
+import math
+import operator
+import os.path
+import sys
+import json
+import collections
+import glob
+import fnmatch
+import urllib.request as urllib23
+import configparser as ConfigParser
+from io import BytesIO as DataIO
 
-# Convert 2 Bytes If Python 3
+try:
+    import pyzipper as zipfile
+except ImportError:
+    import zipfile
+
+
+__description__ = "Tool to test a PDF file"
+__author__ = "Didier Stevens"
+__version__ = "0.2.10"
+__date__ = "2025/03/05"
+
 
 FCH_FILENAME = 0
 FCH_DATA = 1
 FCH_ERROR = 2
 
+STATE_START = 0
+STATE_IDENTIFIER = 1
+STATE_STRING = 2
+STATE_SPECIAL_CHAR = 3
+STATE_ERROR = 4
+
+FUNCTIONNAME_REPEAT = "repeat"
+FUNCTIONNAME_RANDOM = "random"
+FUNCTIONNAME_CHR = "chr"
+FUNCTIONNAME_LOREMIPSUM = "loremipsum"
+
 
 def C2BIP3(string):
-    return bytes([ord(x) for x in string])
+    return string
 
 
-def Hex2Bytes(hexadecimal):
-    if len(hexadecimal) % 2 == 1:
-        hexadecimal = "0" + hexadecimal
-    try:
-        return binascii.a2b_hex(hexadecimal)
-    except Exception:
+def CreateZipFileObject(arg1, arg2):
+    if "AESZipFile" in dir(zipfile):
+        return zipfile.AESZipFile(arg1, arg2)
+    else:
+        return zipfile.ZipFile(arg1, arg2)
+
+
+def InterpretBytes(token):
+    if token[0] == STATE_STRING:
+        return token[1]
+    if token[0] != STATE_IDENTIFIER:
         return None
+    if not token[1].startswith("0x"):
+        return None
+    return Hex2Bytes(token[1][2:])
+
+
+def CheckFunction(functionname, arguments, countarguments, maxcountarguments=None):
+    if maxcountarguments is None:
+        if countarguments == 0 and len(arguments) != 0:
+            print("Error: function %s takes no arguments, %d are given" % (functionname, len(arguments)))
+            return True
+        if countarguments == 1 and len(arguments) != 1:
+            print("Error: function %s takes 1 argument, %d are given" % (functionname, len(arguments)))
+            return True
+        if countarguments != len(arguments):
+            print("Error: function %s takes %d arguments, %d are given" % (functionname, countarguments, len(arguments)))
+            return True
+    else:
+        if len(arguments) < countarguments or len(arguments) > maxcountarguments:
+            print(
+                "Error: function %s takes between %d and %d arguments, %d are given"
+                % (functionname, countarguments, maxcountarguments, len(arguments))
+            )
+            return True
+    return False
+
+
+def InterpretInteger(token):
+    if token[0] != STATE_IDENTIFIER:
+        return None
+    try:
+        return int(token[1])
+    except Exception as e:
+        print("pdfid InterpretInteger:", e)
+        return None
+
+
+def InterpretHexInteger(token):
+    if token[0] != STATE_IDENTIFIER:
+        return None
+    if not token[1].startswith("0x"):
+        return None
+    bytes = Hex2Bytes(token[1][2:])
+    if bytes is None:
+        return None
+    integer = 0
+    for byte in bytes:
+        integer = integer * 0x100 + byte
+    return integer
+
+
+def InterpretNumber(token):
+    number = InterpretInteger(token)
+    if number is None:
+        return InterpretHexInteger(token)
+    else:
+        return number
+
+
+def CheckNumber(argument, minimum=None, maximum=None):
+    number = InterpretNumber(argument)
+    if number is None:
+        print("Error: argument should be a number: %s" % argument[1])
+        return None
+    if minimum is not None and number < minimum:
+        print("Error: argument should be minimum %d: %d" % (minimum, number))
+        return None
+    if maximum is not None and number > maximum:
+        print("Error: argument should be maximum %d: %d" % (maximum, number))
+        return None
+    return number
+
+
+def ParseFunction(tokens):
+    if len(tokens) == 0:
+        print("Parsing error")
+        return None, tokens
+    if tokens[0][0] == STATE_STRING or tokens[0][0] == STATE_IDENTIFIER and tokens[0][1].startswith("0x"):
+        return [[FUNCTIONNAME_REPEAT, [[STATE_IDENTIFIER, "1"], tokens[0]]], tokens[1:]]
+    if tokens[0][0] != STATE_IDENTIFIER:
+        print("Parsing error")
+        return None, tokens
+    function = tokens[0][1]
+    tokens = tokens[1:]
+    if len(tokens) == 0:
+        print("Parsing error")
+        return None, tokens
+    if tokens[0][0] != STATE_SPECIAL_CHAR or tokens[0][1] != "(":
+        print("Parsing error")
+        return None, tokens
+    tokens = tokens[1:]
+    if len(tokens) == 0:
+        print("Parsing error")
+        return None, tokens
+    arguments = []
+    while True:
+        if tokens[0][0] != STATE_IDENTIFIER and tokens[0][0] != STATE_STRING:
+            print("Parsing error")
+            return None, tokens
+        arguments.append(tokens[0])
+        tokens = tokens[1:]
+        if len(tokens) == 0:
+            print("Parsing error")
+            return None, tokens
+        if tokens[0][0] != STATE_SPECIAL_CHAR or (tokens[0][1] != "," and tokens[0][1] != ")"):
+            print("Parsing error")
+            return None, tokens
+        if tokens[0][0] == STATE_SPECIAL_CHAR and tokens[0][1] == ")":
+            tokens = tokens[1:]
+            break
+        tokens = tokens[1:]
+        if len(tokens) == 0:
+            print("Parsing error")
+            return None, tokens
+    return [[function, arguments], tokens]
+
+
+def Tokenize(expression):
+    result = []
+    token = ""
+    state = STATE_START
+    while expression != "":
+        char = expression[0]
+        expression = expression[1:]
+        if char == "'":
+            if state == STATE_START:
+                state = STATE_STRING
+            elif state == STATE_IDENTIFIER:
+                result.append([STATE_IDENTIFIER, token])
+                state = STATE_STRING
+                token = ""
+            elif state == STATE_STRING:
+                result.append([STATE_STRING, token])
+                state = STATE_START
+                token = ""
+        elif char >= "0" and char <= "9" or char.lower() >= "a" and char.lower() <= "z":
+            if state == STATE_START:
+                token = char
+                state = STATE_IDENTIFIER
+            else:
+                token += char
+        elif char == " ":
+            if state == STATE_IDENTIFIER:
+                result.append([STATE_IDENTIFIER, token])
+                token = ""
+                state = STATE_START
+            elif state == STATE_STRING:
+                token += char
+        else:
+            if state == STATE_IDENTIFIER:
+                result.append([STATE_IDENTIFIER, token])
+                token = ""
+                state = STATE_START
+                result.append([STATE_SPECIAL_CHAR, char])
+            elif state == STATE_STRING:
+                token += char
+            else:
+                result.append([STATE_SPECIAL_CHAR, char])
+                token = ""
+    if state == STATE_IDENTIFIER:
+        result.append([state, token])
+
+
+def Parse(expression):
+    tokens = Tokenize(expression)
+    if len(tokens) == 0:
+        print("Parsing error")
+        return None
+    if tokens[0][0] == STATE_ERROR:
+        print(tokens[0][1])
+        print(tokens[0][2])
+        print(expression)
+        return None
+    functioncalls = []
+    while True:
+        functioncall, tokens = ParseFunction(tokens)
+        if functioncall is None:
+            return None
+        functioncalls.append(functioncall)
+        if len(tokens) == 0:
+            return functioncalls
+        if tokens[0][0] != STATE_SPECIAL_CHAR or tokens[0][1] != "+":
+            print("Parsing error")
+            return None
+        tokens = tokens[1:]
 
 
 def LoremIpsumSentence(minimum, maximum):
@@ -293,211 +442,6 @@ def LoremIpsum(sentences):
     return " ".join([LoremIpsumSentence(15, 30) for i in range(sentences)])
 
 
-STATE_START = 0
-STATE_IDENTIFIER = 1
-STATE_STRING = 2
-STATE_SPECIAL_CHAR = 3
-STATE_ERROR = 4
-
-FUNCTIONNAME_REPEAT = "repeat"
-FUNCTIONNAME_RANDOM = "random"
-FUNCTIONNAME_CHR = "chr"
-FUNCTIONNAME_LOREMIPSUM = "loremipsum"
-
-
-def Tokenize(expression):
-    result = []
-    token = ""
-    state = STATE_START
-    while expression != "":
-        char = expression[0]
-        expression = expression[1:]
-        if char == "'":
-            if state == STATE_START:
-                state = STATE_STRING
-            elif state == STATE_IDENTIFIER:
-                result.append([STATE_IDENTIFIER, token])
-                state = STATE_STRING
-                token = ""
-            elif state == STATE_STRING:
-                result.append([STATE_STRING, token])
-                state = STATE_START
-                token = ""
-        elif char >= "0" and char <= "9" or char.lower() >= "a" and char.lower() <= "z":
-            if state == STATE_START:
-                token = char
-                state = STATE_IDENTIFIER
-            else:
-                token += char
-        elif char == " ":
-            if state == STATE_IDENTIFIER:
-                result.append([STATE_IDENTIFIER, token])
-                token = ""
-                state = STATE_START
-            elif state == STATE_STRING:
-                token += char
-        else:
-            if state == STATE_IDENTIFIER:
-                result.append([STATE_IDENTIFIER, token])
-                token = ""
-                state = STATE_START
-                result.append([STATE_SPECIAL_CHAR, char])
-            elif state == STATE_STRING:
-                token += char
-            else:
-                result.append([STATE_SPECIAL_CHAR, char])
-                token = ""
-    if state == STATE_IDENTIFIER:
-        result.append([state, token])
-    elif state == STATE_STRING:
-        result = [[STATE_ERROR, "Error: string not closed", token]]
-    return result
-
-
-def InterpretBytes(token):
-    if token[0] == STATE_STRING:
-        return token[1]
-    if token[0] != STATE_IDENTIFIER:
-        return None
-    if not token[1].startswith("0x"):
-        return None
-    return Hex2Bytes(token[1][2:])
-
-
-def CheckFunction(functionname, arguments, countarguments, maxcountarguments=None):
-    if maxcountarguments is None:
-        if countarguments == 0 and len(arguments) != 0:
-            print("Error: function %s takes no arguments, %d are given" % (functionname, len(arguments)))
-            return True
-        if countarguments == 1 and len(arguments) != 1:
-            print("Error: function %s takes 1 argument, %d are given" % (functionname, len(arguments)))
-            return True
-        if countarguments != len(arguments):
-            print("Error: function %s takes %d arguments, %d are given" % (functionname, countarguments, len(arguments)))
-            return True
-    else:
-        if len(arguments) < countarguments or len(arguments) > maxcountarguments:
-            print(
-                "Error: function %s takes between %d and %d arguments, %d are given"
-                % (functionname, countarguments, maxcountarguments, len(arguments))
-            )
-            return True
-    return False
-
-
-def InterpretInteger(token):
-    if token[0] != STATE_IDENTIFIER:
-        return None
-    try:
-        return int(token[1])
-    except Exception:
-        return None
-
-
-def InterpretHexInteger(token):
-    if token[0] != STATE_IDENTIFIER:
-        return None
-    if not token[1].startswith("0x"):
-        return None
-    bytes = Hex2Bytes(token[1][2:])
-    if bytes is None:
-        return None
-    integer = 0
-    for byte in bytes:
-        integer = integer * 0x100 + byte
-    return integer
-
-
-def InterpretNumber(token):
-    number = InterpretInteger(token)
-    if number is None:
-        return InterpretHexInteger(token)
-    else:
-        return number
-
-
-def CheckNumber(argument, minimum=None, maximum=None):
-    number = InterpretNumber(argument)
-    if number is None:
-        print("Error: argument should be a number: %s" % argument[1])
-        return None
-    if minimum is not None and number < minimum:
-        print("Error: argument should be minimum %d: %d" % (minimum, number))
-        return None
-    if maximum is not None and number > maximum:
-        print("Error: argument should be maximum %d: %d" % (maximum, number))
-        return None
-    return number
-
-
-def ParseFunction(tokens):
-    if len(tokens) == 0:
-        print("Parsing error")
-        return None, tokens
-    if tokens[0][0] == STATE_STRING or tokens[0][0] == STATE_IDENTIFIER and tokens[0][1].startswith("0x"):
-        return [[FUNCTIONNAME_REPEAT, [[STATE_IDENTIFIER, "1"], tokens[0]]], tokens[1:]]
-    if tokens[0][0] != STATE_IDENTIFIER:
-        print("Parsing error")
-        return None, tokens
-    function = tokens[0][1]
-    tokens = tokens[1:]
-    if len(tokens) == 0:
-        print("Parsing error")
-        return None, tokens
-    if tokens[0][0] != STATE_SPECIAL_CHAR or tokens[0][1] != "(":
-        print("Parsing error")
-        return None, tokens
-    tokens = tokens[1:]
-    if len(tokens) == 0:
-        print("Parsing error")
-        return None, tokens
-    arguments = []
-    while True:
-        if tokens[0][0] != STATE_IDENTIFIER and tokens[0][0] != STATE_STRING:
-            print("Parsing error")
-            return None, tokens
-        arguments.append(tokens[0])
-        tokens = tokens[1:]
-        if len(tokens) == 0:
-            print("Parsing error")
-            return None, tokens
-        if tokens[0][0] != STATE_SPECIAL_CHAR or (tokens[0][1] != "," and tokens[0][1] != ")"):
-            print("Parsing error")
-            return None, tokens
-        if tokens[0][0] == STATE_SPECIAL_CHAR and tokens[0][1] == ")":
-            tokens = tokens[1:]
-            break
-        tokens = tokens[1:]
-        if len(tokens) == 0:
-            print("Parsing error")
-            return None, tokens
-    return [[function, arguments], tokens]
-
-
-def Parse(expression):
-    tokens = Tokenize(expression)
-    if len(tokens) == 0:
-        print("Parsing error")
-        return None
-    if tokens[0][0] == STATE_ERROR:
-        print(tokens[0][1])
-        print(tokens[0][2])
-        print(expression)
-        return None
-    functioncalls = []
-    while True:
-        functioncall, tokens = ParseFunction(tokens)
-        if functioncall is None:
-            return None
-        functioncalls.append(functioncall)
-        if len(tokens) == 0:
-            return functioncalls
-        if tokens[0][0] != STATE_SPECIAL_CHAR or tokens[0][1] != "+":
-            print("Parsing error")
-            return None
-        tokens = tokens[1:]
-
-
 def Interpret(expression):
     functioncalls = Parse(expression)
     if functioncalls is None:
@@ -552,36 +496,12 @@ def Interpret(expression):
     return decoded
 
 
-def FilenameCheckHash(filename, literalfilename):
-    if literalfilename:
-        return FCH_FILENAME, filename
-    elif filename.startswith("#h#"):
-        result = Hex2Bytes(filename[3:])
-        if result is None:
-            return FCH_ERROR, "hexadecimal"
-        else:
-            return FCH_DATA, result
-    elif filename.startswith("#b#"):
-        try:
-            return FCH_DATA, binascii.a2b_base64(filename[3:])
-        except Exception:
-            return FCH_ERROR, "base64"
-    elif filename.startswith("#e#"):
-        result = Interpret(filename[3:])
-        if result is None:
-            return FCH_ERROR, "expression"
-        else:
-            return FCH_DATA, result
-    elif filename.startswith("#"):
-        return FCH_DATA, C2BIP3(filename[1:])
-    else:
-        return FCH_FILENAME, filename
-
-
 class cBinaryFile:
-    def __init__(self, file):
+    def __init__(self, file, data=None):
         self.file = file
-        if file == "":
+        if data is not None:
+            self.infile = DataIO(data)
+        elif file == "":
             self.infile = sys.stdin
         elif file.lower().startswith("http://") or file.lower().startswith("https://"):
             try:
@@ -595,7 +515,7 @@ class cBinaryFile:
                 sys.exit()
         elif file.lower().endswith(".zip"):
             try:
-                self.zipfile = zipfile.ZipFile(file, "r")
+                self.zipfile = CreateZipFileObject(file, "r")
                 self.infile = self.zipfile.open(self.zipfile.infolist()[0], "r", C2BIP3("infected"))
             except Exception:
                 print("Error opening file %s" % file)
@@ -720,8 +640,8 @@ def fEntropy(countByte, countTotal):
 
 class cEntropy:
     def __init__(self):
-        self.allBucket = [0 for i in range(256)]
-        self.streamBucket = [0 for i in range(256)]
+        self.allBucket = [0 for i in range(0, 256)]
+        self.streamBucket = [0 for i in range(0, 256)]
 
     def add(self, byte, insideStream):
         self.allBucket[byte] += 1
@@ -733,7 +653,7 @@ class cEntropy:
             self.streamBucket[byte] -= 1
 
     def calc(self):
-        self.nonStreamBucket = map(operator.sub, self.allBucket, self.streamBucket)
+        self.nonStreamBucket = list(map(operator.sub, self.allBucket, self.streamBucket))
         allCount = sum(self.allBucket)
         streamCount = sum(self.streamBucket)
         nonStreamCount = sum(self.nonStreamBucket)
@@ -847,7 +767,7 @@ def UpdateWords(word, wordExact, slash, words, hexcode, allNames, lastName, insi
             if word == "stream":
                 insideStream = True
             if word == "endstream":
-                if insideStream and oEntropy is not None:
+                if insideStream is True and oEntropy is not None:
                     for char in "endstream":
                         oEntropy.removeInsideStream(ord(char))
                 insideStream = False
@@ -866,8 +786,9 @@ class cCVE_2009_3459:
         self.count = 0
 
     def Check(self, lastName, word):
-        # decided to alert when the number of colors is expressed with more than 3 bytes
-        if lastName == "/Colors" and word.isdigit() and int(word) > 2**24:
+        if (
+            lastName == "/Colors" and word.isdigit() and int(word) > 2**24
+        ):  # decided to alert when the number of colors is expressed with more than 3 bytes
             self.count += 1
 
 
@@ -898,7 +819,41 @@ def ParseINIFile():
     return keywords
 
 
-def PDFiD(file, allNames=False, extraData=False, disarm=False, force=False):
+def Hex2Bytes(hexadecimal):
+    if len(hexadecimal) % 2 == 1:
+        hexadecimal = "0" + hexadecimal
+    try:
+        return binascii.a2b_hex(hexadecimal)
+    except Exception:
+        return None
+
+
+def FilenameCheckHash(filename, literalfilename):
+    if literalfilename:
+        return FCH_FILENAME, filename
+    elif filename.startswith("#h#"):
+        result = Hex2Bytes(filename[3:])
+        if result is None:
+            return FCH_ERROR, "hexadecimal"
+        else:
+            return FCH_DATA, result
+    elif filename.startswith("#b#"):
+        try:
+            return FCH_DATA, binascii.a2b_base64(filename[3:])
+        except Exception as e:
+            print("pdfid FilenameCheckHash:", e)
+            return FCH_ERROR, "base64"
+    elif filename.startswith("#e#"):
+        result = Interpret(filename[3:])
+        if result is None:
+            return FCH_ERROR, "expression"
+        else:
+            return FCH_DATA, result
+    elif filename.startswith("#"):
+        return FCH_DATA, C2BIP3(filename[1:])
+
+
+def PDFiD(file, allNames=False, extraData=False, disarm=False, force=False, data=None):
     """Example of XML output:
     <PDFiD ErrorOccured="False" ErrorMessage="" Filename="test.pdf" Header="%PDF-1.1" IsPDF="True" Version="0.0.4" Entropy="4.28">
             <Keywords>
@@ -971,7 +926,7 @@ def PDFiD(file, allNames=False, extraData=False, disarm=False, force=False):
     try:
         attIsPDF = xmlDoc.createAttribute("IsPDF")
         xmlDoc.documentElement.setAttributeNode(attIsPDF)
-        oBinaryFile = cBinaryFile(file)
+        oBinaryFile = cBinaryFile(file, data)
         if extraData:
             oPDFDate = cPDFDate()
             oEntropy = cEntropy()
@@ -1002,8 +957,8 @@ def PDFiD(file, allNames=False, extraData=False, disarm=False, force=False):
         byte = oBinaryFile.byte()
         while byte is not None:
             char = chr(byte)
-            charUpper = char.upper()
-            if charUpper >= "A" and charUpper <= "Z" or charUpper >= "0" and charUpper <= "9":
+            charLower = char.lower()
+            if charLower >= "a" and charLower <= "z" or charLower >= "0" and charLower <= "9":
                 word += char
                 wordExact.append(char)
             elif slash == "/" and char == "#":
@@ -1012,8 +967,8 @@ def PDFiD(file, allNames=False, extraData=False, disarm=False, force=False):
                     d2 = oBinaryFile.byte()
                     if (
                         d2 is not None
-                        and (chr(d1) >= "0" and chr(d1) <= "9" or chr(d1).upper() >= "A" and chr(d1).upper() <= "F")
-                        and (chr(d2) >= "0" and chr(d2) <= "9" or chr(d2).upper() >= "A" and chr(d2).upper() <= "F")
+                        and (chr(d1) >= "0" and chr(d1) <= "9" or chr(d1).lower() >= "a" and chr(d1).lower() <= "f")
+                        and (chr(d2) >= "0" and chr(d2) <= "9" or chr(d2).lower() >= "a" and chr(d2).lower() <= "f")
                     ):
                         word += chr(int(chr(d1) + chr(d2), 16))
                         wordExact.append(int(chr(d1) + chr(d2), 16))
@@ -1368,9 +1323,8 @@ def Scan(directory, options, plugins):
 #        print(sys.exc_info()[2])
 #        print traceback.format_exc()
 
+
 # function derived from: http://blog.9bplus.com/pdfidpy-output-to-json
-
-
 def PDFiD2JSON(xmlDoc, force):
     # Get Top Layer Data
     errorOccured = xmlDoc.documentElement.getAttribute("ErrorOccured")
@@ -1454,10 +1408,12 @@ def ProcessAt(argument):
         return [argument]
 
 
+"""
 def AddPlugin(cClass):
     global plugins
 
     plugins.append(cClass)
+"""
 
 
 class cExpandFilenameArguments:
@@ -1522,13 +1478,10 @@ class cExpandFilenameArguments:
         isnotafile = []
         for filename, expression in self.filenameexpressions:
             hashfile = False
-            # Not declared ROFL
-
             try:
                 hashfile = FilenameCheckHash(filename, self.literalfilenames)[0] == FCH_DATA
             except Exception as e:
                 print(e)
-
             if filename == "" or hashfile:
                 valid.append([filename, expression])
             elif not os.path.exists(filename):
