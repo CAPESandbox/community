@@ -1,21 +1,21 @@
 #!/usr/bin/env python
 
-import random
 import binascii
-import optparse
-import os
-import xml.dom.minidom
-import traceback
+import collections
+import configparser as ConfigParser
+import fnmatch
+import glob
+import json
 import math
 import operator
+import optparse
+import os
 import os.path
+import random
 import sys
-import json
-import collections
-import glob
-import fnmatch
+import traceback
 import urllib.request as urllib23
-import configparser as ConfigParser
+import xml.dom.minidom
 from io import BytesIO as DataIO
 
 try:
