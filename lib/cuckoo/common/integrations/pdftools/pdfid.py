@@ -50,6 +50,13 @@ def C2BIP3(string):
     return string
 
 
+def CreateZipFileObject(arg1, arg2):
+    if "AESZipFile" in dir(zipfile):
+        return zipfile.AESZipFile(arg1, arg2)
+    else:
+        return zipfile.ZipFile(arg1, arg2)
+
+
 def InterpretBytes(token):
     if token[0] == STATE_STRING:
         return token[1]
@@ -86,7 +93,8 @@ def InterpretInteger(token):
         return None
     try:
         return int(token[1])
-    except Exception:
+    except Exception as e:
+        print("pdfid InterpretInteger:", e)
         return None
 
 
@@ -488,13 +496,6 @@ def Interpret(expression):
     return decoded
 
 
-def CreateZipFileObject(arg1, arg2):
-    if "AESZipFile" in dir(zipfile):
-        return zipfile.AESZipFile(arg1, arg2)
-    else:
-        return zipfile.ZipFile(arg1, arg2)
-
-
 class cBinaryFile:
     def __init__(self, file, data=None):
         self.file = file
@@ -839,7 +840,8 @@ def FilenameCheckHash(filename, literalfilename):
     elif filename.startswith("#b#"):
         try:
             return FCH_DATA, binascii.a2b_base64(filename[3:])
-        except Exception:
+        except Exception as e:
+            print("pdfid FilenameCheckHash:", e)
             return FCH_ERROR, "base64"
     elif filename.startswith("#e#"):
         result = Interpret(filename[3:])
@@ -1405,12 +1407,14 @@ def ProcessAt(argument):
     else:
         return [argument]
 
+
 """
 def AddPlugin(cClass):
     global plugins
 
     plugins.append(cClass)
 """
+
 
 class cExpandFilenameArguments:
     def __init__(self, filenames, literalfilenames=False, recursedir=False, checkfilenames=False, expressionprefix=None):
@@ -1476,8 +1480,8 @@ class cExpandFilenameArguments:
             hashfile = False
             try:
                 hashfile = FilenameCheckHash(filename, self.literalfilenames)[0] == FCH_DATA
-            except Exception:
-                pass
+            except Exception as e:
+                print(e)
             if filename == "" or hashfile:
                 valid.append([filename, expression])
             elif not os.path.exists(filename):
