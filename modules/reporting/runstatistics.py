@@ -22,8 +22,8 @@ class RunStatistics(Report):
         """Count running processes.
         @return int value.
         """
-        if results.get("behavior").get("processtree"):
-            return len(results.get("behavior").get("processtree"))
+        if results.get("behavior", {}).get("processtree"):
+            return len(results["behavior"]["processtree"])
 
     def getApiCallsAndRegistryCount(self, results):
         """Count api calss and registry modified.
@@ -32,9 +32,9 @@ class RunStatistics(Report):
         calls_count = 0
         registry_keys_count = 0
         try:
-            processes = results.get("behavior").get("processes")
+            processes = results.get("behavior", {}).get("processes")
             for process in processes:
-                calls_count += len(process.get("calls"))
+                calls_count += len(process.get("calls", []))
                 for call in process.get("calls"):
                     if call.get("api") in ("RegSetValueEx", "RegCreateKey", "RegDeleteKey"):
                         registry_keys_count += 1
@@ -53,7 +53,7 @@ class RunStatistics(Report):
         @return four int values.
         """
         try:
-            signature_count = len(results.get("signatures"))
+            signature_count = len(results.get("signatures", []))
             signature_alert_count = 0
             crash_issues = 0
             anti_issues = 0
@@ -73,7 +73,7 @@ class RunStatistics(Report):
         """Count fileswirtten.
         @return int value.
         """
-        return len(results.get("behavior").get("summary").get("write_files"))
+        return len(results.get("behavior", {}).get("summary", {}).get("write_files", []))
 
     def run(self, results):
         task_id = int(results.get("info", {}).get("id"))
