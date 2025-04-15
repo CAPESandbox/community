@@ -1405,12 +1405,12 @@ def ProcessAt(argument):
     else:
         return [argument]
 
-
+"""
 def AddPlugin(cClass):
     global plugins
 
     plugins.append(cClass)
-
+"""
 
 class cExpandFilenameArguments:
     def __init__(self, filenames, literalfilenames=False, recursedir=False, checkfilenames=False, expressionprefix=None):
