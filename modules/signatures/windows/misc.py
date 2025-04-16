@@ -1088,11 +1088,10 @@ class NetworkConnectionViaSuspiciousProcess(Signature):
     def on_call(self, call, process):
         if call["status"] and any(proc in process["process_name"] for proc in self.blacklisterProcesses):
             self.detected = True
+            self.data.append({"suspicious_process": process["process_name"]})
 
     def on_complete(self):
-        if self.detected:
-            return True
-        return False
+        return self.detected
 
 
 class SuspiciousExecutionViaDotnetRemoting(Signature):
