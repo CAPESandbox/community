@@ -755,4 +755,5 @@ pool_domains = [
     "znode3.coinpool.cloud",
     "zpool.ca",
     ".*\.nanopool\.org",
+    "xmr.kryptex.network",
 ]
