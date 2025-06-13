@@ -135,6 +135,8 @@ class RansomwareExtensions(Signature):
             (".*\.blackbyte$", ["BlackByte"]),
             (".*\.basta$", ["BlackBasta"]),
             (".*\.inc$", ["INC"]),
+            (".*\.FOG$", ["FOG"]),
+            (".*\.FLOCKED$", ["FOG"]),
         ]
 
         for indicator in indicators:
