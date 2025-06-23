@@ -2,7 +2,7 @@ rule PCRat {
     meta:
         author = "ditekSHen"
         description = "Detects PCRat / Gh0st"
-        cape_type = "PCRat / Gh0st Payload"
+        cape_type = "PCRat Payload"
     strings:
         $s1 = "ClearEventLogA" fullword ascii
         $s2 = "NetUserAdd" fullword ascii
