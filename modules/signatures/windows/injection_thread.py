@@ -35,8 +35,9 @@ class ThreadManipulationRemoteProcess(Signature):
         self.targetpid = []
 
     def on_call(self, call, process):
-        procid = self.get_argument(call, "ProcessId")
+        procid = int(self.get_argument(call, "ProcessId"))
         processid = process["process_id"]
+
         if procid != processid:
             if processid not in self.sourcepid and procid not in self.targetpid:
                 pname = process["process_name"].lower()
