@@ -417,7 +417,7 @@ class PowershellDownload(Signature):
     authors = ["FDD", "Cuckoo Technologies", "@CybercentreCanada"]
     minimum = "1.2"
     ttps = ["T1064", "T1086"] # MITRE v6
-    ttps += ["T1059", "T1059.001"]  # MITRE v17
+    ttps += ["T1059", "T1059.001"]  # MITRE v7
     mbcs = ["OB0009", "E1059"]
     evented = True
 
