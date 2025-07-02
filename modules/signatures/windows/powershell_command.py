@@ -416,7 +416,9 @@ class PowershellDownload(Signature):
     # Migrated by @CybercentreCanada
     authors = ["FDD", "Cuckoo Technologies", "@CybercentreCanada"]
     minimum = "1.2"
-    ttps = ["T1112", "T1086"]
+    ttps = ["T1064", "T1086"] # MITRE v6
+    ttps += ["T1059", "T1059.001"]  # MITRE v7
+    mbcs = ["OB0009", "E1059"]
     evented = True
 
     filter_apinames = set(["recv"])
