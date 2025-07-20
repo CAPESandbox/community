@@ -13,11 +13,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import base64
 import re
 
 from lib.cuckoo.common.abstracts import Signature
-
-import base64
 
 """ Chepy doesnt provide anymore url_decode. if you need it, search a replacement and PR update.
 class HTMLPhisher_0(Signature):
@@ -116,6 +115,7 @@ class HTMLPhisher_1(Signature):
                         return True
             return False
 """
+
 
 class HTMLPhisher_2(Signature):
     name = "phishing_kit_detected"
