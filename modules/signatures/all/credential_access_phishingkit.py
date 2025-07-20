@@ -17,14 +17,9 @@ import re
 
 from lib.cuckoo.common.abstracts import Signature
 
-try:
-    from chepy import Chepy
-except ImportError:
-    raise ImportError("Optional! Missed dependency. Run: poetry run pip install chepy")
-
 import base64
 
-
+""" Chepy doesnt provide anymore url_decode. if you need it, search a replacement and PR update.
 class HTMLPhisher_0(Signature):
     name = "phishing_kit_detected"
     description = "Phishing Kit Detected, sample is trying to harvest credentials"
@@ -120,7 +115,7 @@ class HTMLPhisher_1(Signature):
                         self.data.append({"user": user.group(1)})
                         return True
             return False
-
+"""
 
 class HTMLPhisher_2(Signature):
     name = "phishing_kit_detected"
