@@ -8,7 +8,10 @@ CAPE_RAW_DOWNLOAD_TEMPLATE = os.environ.get(
     "https://raw.githubusercontent.com/kevoreilly/CAPEv2/refs/heads/master/data/yara/CAPE/{family}.yar",
 )
 
-CAPE_HTTP_TIMEOUT = int(os.environ.get("CAPE_HTTP_TIMEOUT", 10))
+try:
+    CAPE_HTTP_TIMEOUT = int(os.environ.get("CAPE_HTTP_TIMEOUT", "10"))
+except ValueError:
+    CAPE_HTTP_TIMEOUT = 10
 
 def get_YARA_rule(family: str) -> str | None:
     root = os.path.join(os.path.dirname(__file__))
