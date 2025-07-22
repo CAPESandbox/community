@@ -8,6 +8,7 @@ CAPE_RAW_DOWNLOAD_TEMPLATE = os.environ.get(
     "https://raw.githubusercontent.com/kevoreilly/CAPEv2/refs/heads/master/data/yara/CAPE/{family}.yar",
 )
 
+CAPE_HTTP_TIMEOUT = int(os.environ.get("CAPE_HTTP_TIMEOUT", 10))
 
 def get_YARA_rule(family: str) -> str | None:
     root = os.path.join(os.path.dirname(__file__))
@@ -33,12 +34,13 @@ def get_YARA_rule(family: str) -> str | None:
     try:
         # Local rule doesn't exist, but maybe we can retrieve the corresponding core rule from CAPEv2
         # NOTE: This won't work in an air-gapped environment unless a mirror exists
-        resp = requests.get(CAPE_RAW_DOWNLOAD_TEMPLATE.format(family=family), timeout=10)
-        if resp.ok:
-            # Cache the rule on disk
-            with open(maco_yara_path, "w") as f:
-                f.write(resp.text)
-            return resp.text
+        if CAPE_HTTP_TIMEOUT:
+            resp = requests.get(CAPE_RAW_DOWNLOAD_TEMPLATE.format(family=family), timeout=CAPE_HTTP_TIMEOUT)
+            if resp.ok:
+                # Cache the rule on disk
+                with open(maco_yara_path, "w") as f:
+                    f.write(resp.text)
+                return resp.text
     except Exception as e:
         # No rule to be found, assume that extractor has proper exception handling or the rule is embedded
         return
