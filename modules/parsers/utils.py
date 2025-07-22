@@ -13,6 +13,7 @@ try:
 except ValueError:
     CAPE_HTTP_TIMEOUT = 10
 
+
 def get_YARA_rule(family: str) -> str | None:
     root = os.path.join(os.path.dirname(__file__))
     maco_yara_folder = os.path.join(root, "yara")
