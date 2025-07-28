@@ -7,8 +7,11 @@ from time import sleep
 from typing import List, NamedTuple
 from xml.dom.minidom import parseString
 
-import randmac
-import tqdm
+try:
+    import randmac
+    import tqdm
+except ImportError:
+    print("Run: poetry run pip install randmac tqdm")
 
 NETWORK_NAME = "default"
 DEFAULT_STORAGE = "/data/vms/"
