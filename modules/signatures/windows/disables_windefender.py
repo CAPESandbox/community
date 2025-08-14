@@ -257,3 +257,25 @@ class AddWindowsDefenderExclusions(Signature):
         if self.detected:
             return True
         return False
+
+class RemovesWindowsDefenderUpdates(Signature):
+    name = "removes_windows_defender_updates"
+    description = "RemovesWindowsDefenderUpdates"
+    severity = 3
+    categories = ["anti-av"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1562", "T1562.001"] 
+    reference = ["https://www.microsoft.com/en-us/wdsi/defenderupdates"]
+
+    def run(self):
+        ret = False
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            if "MpCmdRun" in lower and "removedefinitions" in lower:
+                ret = True
+                self.data.append({"command": cmdline})
+
+        return ret
