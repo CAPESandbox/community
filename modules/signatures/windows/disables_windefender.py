@@ -270,12 +270,10 @@ class RemovesWindowsDefenderUpdates(Signature):
     reference = ["https://www.microsoft.com/en-us/wdsi/defenderupdates"]
 
     def run(self):
-        ret = False
-        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
-        for cmdline in cmdlines:
+        for cmdline in self.results.get("behavior", {}).get("summary", {}).get("executed_commands", []):
             lower = cmdline.lower()
-            if "MpCmdRun" in lower and "removedefinitions" in lower:
-                ret = True
+            if "mpcmdrun" in lower and "removedefinitions" in lower:
                 self.data.append({"command": cmdline})
+                return True
 
-        return ret
+        return False
