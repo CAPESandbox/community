@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class RecentDocsDetect(Signature):
     name = "antivm_recentdocs"
     description = "Queries the RecentDocs registry key."
