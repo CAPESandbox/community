@@ -27,4 +27,4 @@ class RecentDocsDetect(Signature):
     reference = ["https://unit42.paloaltonetworks.com/snipbot-romcom-malware-variant/"]
 
     def run(self):
-        return self.check_key(pattern="HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RecentDocs")
+        return self.check_key(pattern=r"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs")
