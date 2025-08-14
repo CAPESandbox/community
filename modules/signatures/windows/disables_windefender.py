@@ -260,7 +260,7 @@ class AddWindowsDefenderExclusions(Signature):
 
 class RemovesWindowsDefenderUpdates(Signature):
     name = "removes_windows_defender_updates"
-    description = "RemovesWindowsDefenderUpdates"
+    description = "Attempts to remove Windows Defender definition updates"
     severity = 3
     categories = ["anti-av"]
     authors = ["bartblaze"]
