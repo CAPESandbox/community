@@ -18,7 +18,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class AntiVMDirectoryObjects(Signature):
     name = "antivm_directory_objects"
-    description = "The sample enumerated directory objects, possibly probing for Virtual Machine objects."
+    description = "Enumerates directory objects, possibly probing for Virtual Machine objects."
     severity = 2
     confidence = 80
     categories = ["anti-vm"]
