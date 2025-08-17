@@ -552,35 +552,40 @@ class Suspicious_TLD(Signature):
     severity = 2
     categories = ["network"]
     # Migrated by @CybercentreCanada
-    authors = ["RedSocks", "Kevin Ross", "@CybercentreCanada"]
+    # @bartblaze: Moved the TLDs to data/malicioustlds.txt and upd class
+    authors = ["RedSocks", "Kevin Ross", "@CybercentreCanada", "bartblaze"]
     minimum = "1.2"
 
     def run(self):
-        domains_re = [
-            (r".*\.by$", "Belarus domain TLD"),
-            (r".*\.cc$", "Cocos Islands domain TLD"),
-            (r".*\.onion$", "TOR hidden services domain TLD"),
-            (r".*\.pw$", "Palau domain TLD"),
-            (r".*\.ru$", "Russian Federation domain TLD"),
-            (r".*\.su$", "Soviet Union domain TLD"),
-            (r".*\.top$", "Generic top level domain TLD"),
-            (r".*\.tk$", "Tokelau domain TLD"),
-            (r".*\.ua$", "Ukraine domain TLD"),
-            (r".*\.xyz$", "Generic top level domain TLD"),
-            (r".*\.za$", "South Africa domain TLD"),
-            (r".*\.ng$", "Nigeria domain TLD"),
-        ]
+        import os
+        from lib.cuckoo.common.constants import CUCKOO_ROOT
+
+        tlds_re = []
+        tld_path = os.path.join(CUCKOO_ROOT, "data", "malicioustlds.txt")
+        if not os.path.exists(tld_path):
+            return False
+
+        with open(tld_path) as f:
+            for line in f:
+                line = line.strip()
+                if line and line.startswith('.'):
+                    tld = line.lstrip('.')
+                    # The file already imports `re`, so we can use it.
+                    # Escape dots for regex, e.g., 'co.ua' -> 'co\.ua'
+                    escaped_tld = re.escape(tld)
+                    tlds_re.append(r".*\.{0}$".format(escaped_tld))
+        
+        if not tlds_re:
+            return False
+
         queried_domains = []
 
-        for indicator in domains_re:
-            matches = self.check_domain(pattern=indicator[0], regex=True, all=True)
+        for indicator in tlds_re:
+            matches = self.check_domain(pattern=indicator, regex=True, all=True)
             if matches:
-                for tld in matches:
-                    if tld not in queried_domains:
-                        queried_domains.append(tld)
-                        self.data.append({"domain": tld})
+                for tld_match in matches:
+                    if tld_match not in queried_domains:
+                        queried_domains.append(tld_match)
+                        self.data.append({"domain": tld_match})
 
-        if len(self.data) > 0:
-            return True
-        else:
-            return False
+        return len(self.data) > 0
