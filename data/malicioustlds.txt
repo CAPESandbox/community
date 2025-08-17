@@ -17,6 +17,7 @@
 .boutique
 .br
 .buzz
+.by
 .cam
 .camera
 .cc
@@ -79,10 +80,12 @@
 .motorcycles
 .name
 .news
+.ng
 .ninja
 .nyc
 .okinawa
 .online
+.onion
 .party
 .photography
 .promo
@@ -118,6 +121,7 @@
 .top
 .tr
 .trade
+.ua
 .uno
 .us
 .vn
@@ -131,5 +135,6 @@
 .xyz
 .yachts
 .you
+.za
 .zip
 .zw
