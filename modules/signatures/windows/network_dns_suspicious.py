@@ -20,8 +20,8 @@ try:
 except ImportError:
     import re
 
-from lib.cuckoo.common.constants import CUCKOO_ROOT
 from lib.cuckoo.common.abstracts import Signature
+from lib.cuckoo.common.constants import CUCKOO_ROOT
 
 tlds_re = []
 tld_path = os.path.join(CUCKOO_ROOT, "data", "malicioustlds.txt")
@@ -30,8 +30,8 @@ if os.path.exists(tld_path):
     with open(tld_path) as f:
         for line in f:
             line = line.strip()
-            if line and line.startswith('.'):
-                tld = line.lstrip('.')
+            if line and line.startswith("."):
+                tld = line.lstrip(".")
                 # The file already imports `re`, so we can use it.
                 # Escape dots for regex, e.g., 'co.ua' -> 'co\.ua'
                 escaped_tld = re.escape(tld)
