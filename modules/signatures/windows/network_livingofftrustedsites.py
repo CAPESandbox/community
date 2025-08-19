@@ -34,7 +34,7 @@ class SuspiciousCommsTrustedSites(Signature):
         self.ret = False
         self.currenthandle = ""
         
-        self.ignoreprocs = [
+        self.ignoreprocs = {
             "chrome.exe",
             "discord.exe",
             "dropbox.exe",
@@ -50,7 +50,7 @@ class SuspiciousCommsTrustedSites(Signature):
             "steam.exe",
             "telegram.exe",
             "winword.exe",
-        ]
+        }
         
         self.lotsdomains = [
             "archive.ph",
