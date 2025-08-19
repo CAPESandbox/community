@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class InjectionWriteRemoteProcess(Signature):
     name = "injection_write_process"
     description = "Writes to the memory another process"
@@ -34,19 +35,25 @@ class InjectionWriteRemoteProcess(Signature):
         self.targethandles = []
 
     def on_call(self, call, process):
-            prochandle = self.get_argument(call, "ProcessHandle")
-            if prochandle not in ("0x00000000","0x0000000000000000","0xffffffff","0xffffffffffffffff"):
-                pname = process["process_name"].lower()
-                processid = process["process_id"]
-                if processid not in self.sourcepids and prochandle not in self.targethandles:
-                    self.data.append({"write_memory": "Process %s with process ID %s wrote to the memory of process handle %s" % (pname, processid, prochandle)})
-                    self.sourcepids.append(processid)
-                    self.targethandles.append(prochandle)
-                self.mark_call()
-                self.ret = True
+        prochandle = self.get_argument(call, "ProcessHandle")
+        if prochandle not in ("0x00000000", "0x0000000000000000", "0xffffffff", "0xffffffffffffffff"):
+            pname = process["process_name"].lower()
+            processid = process["process_id"]
+            if processid not in self.sourcepids and prochandle not in self.targethandles:
+                self.data.append(
+                    {
+                        "write_memory": "Process %s with process ID %s wrote to the memory of process handle %s"
+                        % (pname, processid, prochandle)
+                    }
+                )
+                self.sourcepids.append(processid)
+                self.targethandles.append(prochandle)
+            self.mark_call()
+            self.ret = True
 
     def on_complete(self):
         return self.ret
+
 
 class InjectionWriteEXEProcess(Signature):
     name = "injection_write_exe_process"
@@ -68,19 +75,24 @@ class InjectionWriteEXEProcess(Signature):
         self.targethandles = []
 
     def on_call(self, call, process):
-            prochandle = self.get_argument(call, "ProcessHandle")
-            if prochandle not in ("0x00000000","0x0000000000000000","0xffffffff","0xffffffffffffffff"):
-                if self.get_argument(call, "Buffer").startswith("MZ") or prochandle in self.handles:
-                    pname = process["process_name"].lower()
-                    processid = process["process_id"]
-                    if prochandle not in self.handles:
-                        self.handles.append(prochandle)
-                    if processid not in self.sourcepids and prochandle not in self.targethandles:
-                        self.data.append({"write_exe_memory": "Process %s with process ID %s wrote an executable to the process handle %s" % (pname, processid, prochandle)})
-                        self.sourcepids.append(processid)
-                        self.targethandles.append(prochandle)
-                    self.mark_call()
-                    self.ret = True
+        prochandle = self.get_argument(call, "ProcessHandle")
+        if prochandle not in ("0x00000000", "0x0000000000000000", "0xffffffff", "0xffffffffffffffff"):
+            if self.get_argument(call, "Buffer").startswith("MZ") or prochandle in self.handles:
+                pname = process["process_name"].lower()
+                processid = process["process_id"]
+                if prochandle not in self.handles:
+                    self.handles.append(prochandle)
+                if processid not in self.sourcepids and prochandle not in self.targethandles:
+                    self.data.append(
+                        {
+                            "write_exe_memory": "Process %s with process ID %s wrote an executable to the process handle %s"
+                            % (pname, processid, prochandle)
+                        }
+                    )
+                    self.sourcepids.append(processid)
+                    self.targethandles.append(prochandle)
+                self.mark_call()
+                self.ret = True
 
     def on_complete(self):
         return self.ret
