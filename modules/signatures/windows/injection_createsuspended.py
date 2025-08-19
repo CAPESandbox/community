@@ -28,16 +28,16 @@ class CreatesSuspendedProcess(Signature):
 
     filter_apinames = set(["CreateProcessInternalA", "CreateProcessInternalW"])
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.ret = False
-
     def on_call(self, call, process):
-        if call["api"].startswith("CreateProcessInternal"):
-            flags = int(self.get_argument(call, "CreationFlags"), 16)
-            if flags & 0x4:
-                self.mark_call()
-                self.ret = True
-                
+        CREATE_SUSPENDED = 0x4
+        creation_flags_str = self.get_argument(call, "CreationFlags")
+        if creation_flags_str:
+            try:
+                flags = int(creation_flags_str, 16)
+                if flags & CREATE_SUSPENDED:
+                    self.mark_call()
+            except ValueError:
+                # Ignore if the argument is not a valid integer.
+                pass
     def on_complete(self):
-        return self.ret
+        return self.has_marks()
