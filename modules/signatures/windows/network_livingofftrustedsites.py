@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class SuspiciousCommsTrustedSites(Signature):
     name = "suspicious_communication_trusted_site"
     description = "Suspicious communication with abused trusted site"
