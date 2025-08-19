@@ -33,7 +33,7 @@ class SuspiciousCommsTrustedSites(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
         self.currenthandle = ""
-        
+
         self.ignoreprocs = {
             "chrome.exe",
             "discord.exe",
@@ -51,7 +51,7 @@ class SuspiciousCommsTrustedSites(Signature):
             "telegram.exe",
             "winword.exe",
         }
-        
+
         self.lotsdomains = [
             "archive.ph",
             "discord.com",
@@ -85,13 +85,17 @@ class SuspiciousCommsTrustedSites(Signature):
         ]
 
     def on_call(self, call, process):
+        pname = process["process_name"].lower()
+        if pname in self.ignoreprocs:
+            return
+
         if call["api"].startswith("GetAddrInfoEx"):
             servername = self.get_argument(call, "Name")
             for lotdomain in self.lotsdomains:
                 if lotdomain in servername:
                     self.mark_call()
                     self.ret = True
-                    
+
         if call["api"].startswith("WinHttpConnect"):
             servername = self.get_argument(call, "ServerName")
             for lotdomain in self.lotsdomains:
@@ -99,13 +103,19 @@ class SuspiciousCommsTrustedSites(Signature):
                     self.mark_call()
                     self.ret = True
                     self.currenthandle = str(call["return"])
-                    
-        if call["api"] in ["WinHttpOpenRequest", "WinHttpSendRequest"]:
-            if self.currenthandle and self.currenthandle not in ["0x00000000"]:
+
+        if call["api"] == "WinHttpOpenRequest":
+            if self.currenthandle and self.currenthandle != "0x00000000":
                 handle = self.get_argument(call, "InternetHandle")
                 if handle == self.currenthandle:
                     self.mark_call()
                     self.currenthandle = str(call["return"])
-              
+
+        if call["api"] == "WinHttpSendRequest":
+            if self.currenthandle and self.currenthandle != "0x00000000":
+                handle = self.get_argument(call, "InternetHandle")
+                if handle == self.currenthandle:
+                    self.mark_call()
+
     def on_complete(self):
         return self.ret
