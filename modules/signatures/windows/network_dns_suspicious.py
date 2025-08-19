@@ -13,12 +13,31 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
+
 try:
     import re2 as re
 except ImportError:
     import re
 
+from lib.cuckoo.common.constants import CUCKOO_ROOT
 from lib.cuckoo.common.abstracts import Signature
+
+tlds_re = []
+tld_path = os.path.join(CUCKOO_ROOT, "data", "malicioustlds.txt")
+HAVE_MALTDS = False
+if os.path.exists(tld_path):
+    with open(tld_path) as f:
+        for line in f:
+            line = line.strip()
+            if line and line.startswith('.'):
+                tld = line.lstrip('.')
+                # The file already imports `re`, so we can use it.
+                # Escape dots for regex, e.g., 'co.ua' -> 'co\.ua'
+                escaped_tld = re.escape(tld)
+                tlds_re.append(r".*\.{0}$".format(escaped_tld))
+if tlds_re:
+    HAVE_MALTDS = True
 
 
 class NetworkDNSTunnelingRequest(Signature):
@@ -557,27 +576,6 @@ class Suspicious_TLD(Signature):
     minimum = "1.2"
 
     def run(self):
-        import os
-        from lib.cuckoo.common.constants import CUCKOO_ROOT
-
-        tlds_re = []
-        tld_path = os.path.join(CUCKOO_ROOT, "data", "malicioustlds.txt")
-        if not os.path.exists(tld_path):
-            return False
-
-        with open(tld_path) as f:
-            for line in f:
-                line = line.strip()
-                if line and line.startswith('.'):
-                    tld = line.lstrip('.')
-                    # The file already imports `re`, so we can use it.
-                    # Escape dots for regex, e.g., 'co.ua' -> 'co\.ua'
-                    escaped_tld = re.escape(tld)
-                    tlds_re.append(r".*\.{0}$".format(escaped_tld))
-        
-        if not tlds_re:
-            return False
-
         queried_domains = []
 
         for indicator in tlds_re:
