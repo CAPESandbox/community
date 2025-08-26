@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class CreatesSuspendedProcess(Signature):
     name = "creates_suspended_process"
     description = "Creates a process in a suspended state, likely for injection"
@@ -39,5 +40,6 @@ class CreatesSuspendedProcess(Signature):
             except ValueError:
                 # Ignore if the argument is not a valid integer.
                 pass
+
     def on_complete(self):
         return self.has_marks()
