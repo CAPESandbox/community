@@ -26,7 +26,7 @@ class CreatesSuspendedProcess(Signature):
     evented = True
     ttps = ["T1055"]  # MITRE v6,7,8
 
-    filter_apinames = set(["CreateProcessInternalA", "CreateProcessInternalW"])
+    filter_apinames = set(["CreateProcessA", "CreateProcessW", "CreateProcessInternalA", "CreateProcessInternalW"])
 
     def on_call(self, call, process):
         CREATE_SUSPENDED = 0x4
