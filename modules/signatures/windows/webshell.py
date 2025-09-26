@@ -35,6 +35,7 @@ class WebShellProcesses(Signature):
             "nginx.exe",
             "php-cgi.exe",
             "tomcat.exe",
+            "aspnet_wp.exe",
         ]
 
         ret = False
