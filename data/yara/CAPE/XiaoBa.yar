@@ -15,5 +15,5 @@ strings:
 	$ = "I am very sorry that all your files have been encrypted" ascii wide
 
 condition:
-	any of them
+	2 of them
 }
