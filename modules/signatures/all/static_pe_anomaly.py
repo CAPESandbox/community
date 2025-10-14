@@ -73,8 +73,7 @@ class PEAnomaly(Signature):
                     foundcodesec = False
                     foundnamedupe = False
                     lowrva = 0xFFFFFFFF
-                    imagebase = int(pe["imagebase"], 16)
-                    eprva = int(pe["entrypoint"], 16) - imagebase
+                    eprva = int(pe["entrypoint"], 16)
                     seennames = set()
                     for section in pe["sections"]:
                         if section["name"] in seennames:
