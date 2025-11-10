@@ -14,9 +14,5 @@ strings:
 	$x2 = "window.resizeTo(" ascii wide nocase
 
 condition:
-	(
-	all of ($s*) or
-	all of ($x*)
-	) and
-	filesize <50KB
+	filesize <50KB and ( all of ($s*) or all of ($x*) )
 }
