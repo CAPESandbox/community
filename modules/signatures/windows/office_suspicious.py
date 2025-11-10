@@ -159,12 +159,10 @@ class AccessesOfficeUsername(Signature):
     references = ["https://bartblaze.blogspot.com/2024/08/microsoft-word-and-sandboxes.html"]
 
     def run(self):
-        indicators = [r"HKEY_CURRENT_USER\\Software\\Microsoft\\Office\\Common\\UserInfo\\.*"]
-
-        for indicator in indicators:
-            match = self.check_key(pattern=indicator, regex=True)
-            if match:
-                self.data.append({"regkey": match})
-                return True
-
+        indicator = r"HKEY_CURRENT_USER\\Software\\Microsoft\\Office\\Common\\UserInfo\\.*"
+        match = self.check_key(pattern=indicator, regex=True)
+        if match:
+            self.data.append({"regkey": match})
+            return True
+            
         return False
