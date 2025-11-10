@@ -150,7 +150,7 @@ class OfficeDDECommand(Signature):
 
 class AccessesOfficeUsername(Signature):
     name = "accesses_office_username"
-    description = "Acceses the UserInfo registry key, potentially used for discovery"
+    description = "Accesses the UserInfo registry key, potentially used for discovery"
     severity = 1
     categories = ["discovery"]
     authors = ["bartblaze"]
