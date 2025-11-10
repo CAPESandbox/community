@@ -45,7 +45,7 @@ class AccessesMailslot(Signature):
 
 class AccessesNetlogonRegkey(Signature):
     name = "accesses_netlogon_regkey"
-    description = "Access the NetLogon registry key, potentially used for discovery or tampering"
+    description = "Accesses the NetLogon registry key, potentially used for discovery or tampering"
     severity = 2
     categories = ["discovery"]
     authors = ["bartblaze"]
