@@ -50,7 +50,7 @@ class UIAutomationCoreLoad(Signature):
             return
 
         dllname = (self.get_argument(call, "FileName") or "").lower()
-        if dllname and self.target in dllname:
+        if self.target in dllname:
             if self.pid:
                 self.mark_call()
             return True
