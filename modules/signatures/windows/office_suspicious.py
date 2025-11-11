@@ -146,3 +146,23 @@ class OfficeDDECommand(Signature):
             self.data.append({"command": dde})
             ret = True
         return ret
+
+
+class AccessesOfficeUsername(Signature):
+    name = "accesses_office_username"
+    description = "Accesses the UserInfo registry key, potentially used for discovery"
+    severity = 1
+    categories = ["discovery"]
+    authors = ["bartblaze"]
+    minimum = "1.2"
+    evented = True
+    references = ["https://bartblaze.blogspot.com/2024/08/microsoft-word-and-sandboxes.html"]
+
+    def run(self):
+        indicator = r"HKEY_CURRENT_USER\\Software\\Microsoft\\Office\\Common\\UserInfo\\.*"
+        match = self.check_key(pattern=indicator, regex=True)
+        if match:
+            self.data.append({"regkey": match})
+            return True
+            
+        return False
