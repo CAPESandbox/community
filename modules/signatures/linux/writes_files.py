@@ -4,6 +4,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 log = logging.getLogger(__name__)
 
+
 class LinuxWritesFiles(Signature):
     name = "writes_files"
     description = "Writes to files on disk"

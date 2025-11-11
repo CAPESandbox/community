@@ -4,6 +4,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 log = logging.getLogger(__name__)
 
+
 class LinuxDeletesFiles(Signature):
     name = "deletes_files"
     description = "Deletes files from disk"

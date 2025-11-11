@@ -4,6 +4,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 log = logging.getLogger(__name__)
 
+
 class LinuxReadsFiles(Signature):
     name = "reads_files"
     description = "Reads files from disk"
