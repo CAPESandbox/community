@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class UIAutomationCoreLoad(Signature):
     name = "uiautomationcore_load"
     description = "Process loads UIAutomationCore.dll, potentially for evasion or execution."
@@ -23,26 +24,28 @@ class UIAutomationCoreLoad(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True
-    reference = "https://www.akamai.com/blog/security-research/windows-ui-automation-attack-technique-evades-edr#abusing" 
+    reference = "https://www.akamai.com/blog/security-research/windows-ui-automation-attack-technique-evades-edr#abusing"
 
     filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.target = "uiautomationcore.dll"
-        self.fp_excluded_procs = set([
-            "explorer.exe",
-            "winword.exe",
-            "excel.exe",
-            "powerpnt.exe",
-            "outlook.exe",
-            "chrome.exe",
-            "msedge.exe",
-            "firefox.exe",
-            "dwm.exe",
-            "services.exe",
-            "sihost.exe",
-        ])
+        self.fp_excluded_procs = set(
+            [
+                "explorer.exe",
+                "winword.exe",
+                "excel.exe",
+                "powerpnt.exe",
+                "outlook.exe",
+                "chrome.exe",
+                "msedge.exe",
+                "firefox.exe",
+                "dwm.exe",
+                "services.exe",
+                "sihost.exe",
+            ]
+        )
 
     def on_call(self, call, process):
         pname = (process.get("process_name") or "").lower()

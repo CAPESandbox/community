@@ -164,5 +164,5 @@ class AccessesOfficeUsername(Signature):
         if match:
             self.data.append({"regkey": match})
             return True
-            
+
         return False

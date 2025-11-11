@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class BypassChromiumProtection(Signature):
     name = "bypass_chromium_protection"
     description = "Attempts to bypass Chromium's cookie data protection"
