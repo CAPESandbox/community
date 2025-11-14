@@ -478,9 +478,7 @@ class PowershellHistorySaveMod(Signature):
         cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if "powershell" not in lower:
-                continue
-            if "historysavestyle" in lower:
+            if "powershell" in lower and "historysavestyle" in lower:
                 ret = True
                 self.data.append({"command": cmdline})
 
