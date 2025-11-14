@@ -33,7 +33,7 @@ strings:
 	$ = "-decode" ascii wide nocase
 	$ = "bypass" ascii wide nocase
 condition:
-	isLNK and any of them
+	isLNK and 2 of them
 }
 
 rule Script_in_LNK
@@ -226,3 +226,4 @@ strings:
 condition:
 	isLNK and any of them
 }
+

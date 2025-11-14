@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 
 class BullguardDetectLibs(Signature):
-    name = "antiav_bullgaurd_libs"
+    name = "antiav_bullguard_libs"
     description = "Detects BullGuard Antivirus through the presence of a library"
     severity = 3
     categories = ["anti-av"]
@@ -38,3 +38,4 @@ class BullguardDetectLibs(Signature):
             if self.pid:
                 self.mark_call()
             return True
+

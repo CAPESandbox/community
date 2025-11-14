@@ -20,7 +20,7 @@ class BypassChromiumProtection(Signature):
     name = "bypass_chromium_protection"
     description = "Attempts to bypass Chromium's cookie data protection"
     severity = 2
-    categories = ["anti-av"]
+    categories = ["evasion"]
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True
