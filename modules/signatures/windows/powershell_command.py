@@ -462,3 +462,26 @@ class PowershellRequest(Signature):
             return True
         else:
             return False
+
+class PowershellHistorySaveMod(Signature):
+    name = "powershell_history_save_mod"
+    description = "Attempts to modify or disable PowerShell history logs."
+    severity = 2
+    categories = ["command"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1562", "T1562.003"]
+
+    def run(self):
+        ret = False
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            if "powershell" not in lower:
+                continue
+            if "historysavestyle" in lower:
+                ret = True
+                self.data.append({"command": cmdline})
+
+        return ret
