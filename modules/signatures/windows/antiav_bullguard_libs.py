@@ -38,4 +38,3 @@ class BullguardDetectLibs(Signature):
             if self.pid:
                 self.mark_call()
             return True
-

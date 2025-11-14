@@ -463,6 +463,7 @@ class PowershellRequest(Signature):
         else:
             return False
 
+
 class PowershellHistorySaveMod(Signature):
     name = "powershell_history_save_mod"
     description = "Attempts to modify or disable PowerShell history logs."
