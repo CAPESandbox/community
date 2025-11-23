@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class ReadsPasswordDatabase(Signature):
     name = "reads_password_database"
     description = "A file with a password database extension was accessed"
@@ -32,12 +33,12 @@ class ReadsPasswordDatabase(Signature):
 
     def run(self):
         exts = [
-            ".kdb",           # KeePass legacy
-            ".kdbx",          # KeePass
-            ".opvault",       # 1Password
-            ".1pif",          # 1Password
-            ".psafe3",        # Password Safe
-            ".walletx",       # Enpass
+            ".kdb",  # KeePass legacy
+            ".kdbx",  # KeePass
+            ".opvault",  # 1Password
+            ".1pif",  # 1Password
+            ".psafe3",  # Password Safe
+            ".walletx",  # Enpass
             ".enpassbackup",  # Enpass backup
         ]
 
