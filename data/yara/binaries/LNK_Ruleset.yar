@@ -227,3 +227,18 @@ condition:
 	isLNK and any of them
 }
 
+rule WebDAV_in_LNK
+{
+	description = "Identifies WebDAV in shortcut (LNK) file."
+	author = "@bartblaze"
+	date = "2025-11"
+	tlp = "White"
+
+    strings:
+        $ = "\\DavWWWRoot\\" ascii wide nocase
+        $ = "\\webdav\\" ascii wide nocase
+
+    condition:
+        isLNK and any of them
+}
+
