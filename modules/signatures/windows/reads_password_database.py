@@ -31,8 +31,6 @@ class ReadsPasswordDatabase(Signature):
     evented = True
 
     def run(self):
-        found = False
-
         exts = [
             ".kdb",           # KeePass legacy
             ".kdbx",          # KeePass
@@ -48,8 +46,6 @@ class ReadsPasswordDatabase(Signature):
 
         matches = self.check_file(pattern=pattern, regex=True, all=True)
         if matches:
-            for m in matches:
-                self.data.append({"file": m})
-            found = True
+            self.data.extend([{"file": m} for m in matches])
 
-        return found
+        return bool(matches)
