@@ -1,23 +1,14 @@
 rule BroEx
 {
-meta:
-	id = "5MNXppaMBFMS0DMQ63eCJO"
-	fingerprint = "8eea2d3d8d4e8ca6ef89d474232d1117e2a5a5b4c714b4c82493293f31e4f2c6"
-	version = "1.0"
-	first_imported = "2023-09-18"
-	last_modified = "2023-09-18"
-	status = "RELEASED"
-	sharing = "TLP:WHITE"
-	source = "BARTBLAZE"
-	author = "@bartblaze"
+    meta:
 	description = "Detects BroEx, a type of agressive adware."
-	category = "MALWARE"
-	malware = "BROEX"
-	malware_type = "ADWARE"
+	author = "@bartblaze"
+	date = "2023-09-18"
+	tlp = "Clear" 
 	hash = "7f103012a143b9e358087cf94dbdd160362a57e5ebc65c560e352ac7541bd80e"
-  cape_type = "BroEx payload"
+	cape_type = "BroEx payload"
 
-strings:
+    strings:
 	//PDB
 	$pdb = "I:\\Repository2\\test\\Project21\\event\\Release\\event.pdb" ascii wide
 	
@@ -45,7 +36,7 @@ strings:
 	*/
 	$str_decode = { 4? 53 4? 83 ec 20 4? 33 c0 4? c7 41 18 07 00 00 00 4? 8b d9 4? 89 41 10 66 4? 89 01 66 4? 39 02 74 11 4? 83 c8 ff  }
 
-condition:
+    condition:
 	uint16(0) == 0x5a4d and ($pdb or 2 of ($mut*) or all of ($browser*) 
-	or 2 of ($svc*) or $str_decode)
+	or 2 of ($svc*) or (any of ($mut*, $browser*, $svc*) and $str_decode))
 }

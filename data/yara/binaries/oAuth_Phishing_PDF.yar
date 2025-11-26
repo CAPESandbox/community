@@ -1,18 +1,10 @@
 rule oAuth_Phishing_PDF
 {
     meta:
-        id = "789YmThaTvLDaE1V2Oqx7q"
-        fingerprint = "c367bca866de0b066e291b4e45216cbb68cc23297b002a29ca3c8d640a7db78e"
-        version = "1.0"
-        creation_date = "2022-01-01"
-        first_imported = "2022-02-03"
-        last_modified = "2022-02-03"
-        status = "RELEASED"
-        sharing = "TLP:WHITE"
-        source = "BARTBLAZE"
-        author = "@bartblaze"
         description = "Identifies potential phishing PDFs that target oAuth."
-        category = "MALWARE"
+        author = "@bartblaze"
+        date = "2022-01-01"
+        tlp = "Clear"
         reference = "https://twitter.com/ffforward/status/1484127442679836676"
 
     strings:
