@@ -56,24 +56,23 @@ class HtmlScraper(Thread, Auxiliary):
 
     def scrape_html(self):
         if not HAVE_SELENIUM:
-            log.debug("Selenium not installed on machine, not scraping", self.driver_path)
+            log.warning(f"Selenium not installed on machine, not scraping: {self.driver_path}")
             return
 
         if not os.path.isfile(self.driver_path):
-            log.debug("Web driver not found in path %s, not scraping", self.driver_path)
+            log.warning(f"Web driver not found in path %s, not scraping: {self.driver_path}")
             return
 
-        if not hasattr(self.config, "category") or self.config.category != "file":
-            log.debug("Category is not file, not scraping", self.config.category)
+        if not hasattr(self.config, "category") or self.config.category not in ("file", "url"):
+            log.debug(f"Category is neither 'file' nor 'url', not scraping. (Category is {self.config.category})")
             return
 
-        if not hasattr(self.config, "file_type") or "HTML" not in self.config.file_type:
-            log.debug("File is not html, not scraping", self.config.category)
+        if (self.config.category == "file" and
+                (not hasattr(self.config, "file_type") or "HTML" not in self.config.file_type)):
+            log.debug(f"File is not html, not scraping (file_type is {self.config.file_type}")
             return
 
         try:
-            file_path = os.path.join(os.environ["TEMP"] + os.sep, str(self.config.file_name))
-
             service = Service(self.driver_path)
 
             # This flag ensures that gecko driver will run without opening a cmd window
@@ -82,29 +81,33 @@ class HtmlScraper(Thread, Auxiliary):
             firefox_options = webdriver.FirefoxOptions()
             firefox_options.add_argument("--disable-gpu")
             firefox_options.headless = True
-
             self.browser = webdriver.Firefox(options=firefox_options, service=service)
             self.browser.set_page_load_timeout(10)
 
-            sample_url = "file:///{}".format(os.path.abspath(file_path))
+            if self.config.category == "file":
+                file_path = os.path.join(os.environ["TEMP"] + os.sep, str(self.config.file_name))
+                sample_url = "file:///{}".format(os.path.abspath(file_path))
+            else:
+                sample_url = self.config.target
+
+            log.debug(f"html_scraper try to scrape {sample_url}")
             try:
                 self.browser.get(sample_url)
                 time.sleep(self.browser_runtime)
             except TimeoutException:
                 log.warning("Page load timed out")
 
-            log.debug("Starting upload")
             self.upload_to_htmldump_folder("html_dump.dump", self.browser.page_source.encode())
 
             if not self.browser.current_url.startswith("file://"):
                 self.upload_to_htmldump_folder("last_url.dump", self.browser.current_url.encode())
 
-            log.debug("HTML scraped successfully")
         except Exception as e:
             log.error(e, exc_info=True)
 
     def run(self):
         if not self.enabled:
+            log.debug("html_scraper RUN rejected because is disabled in config")
             return False
 
         self.scrape_html()

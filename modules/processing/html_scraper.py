@@ -6,6 +6,7 @@ from contextlib import suppress
 from typing import Optional
 
 from lib.cuckoo.common.abstracts import Processing
+from lib.cuckoo.common.exceptions import CuckooDependencyError
 
 from data.scraper_safe_url_list import safe_url_list
 
@@ -46,13 +47,14 @@ def force_decode(text: str, max_decode_depth: int) -> Optional[str]:
 
 
 class HtmlScraper(Processing):
-    def run(self):
-        if not HAVE_URLEXTRACT:
-            print("Missed optional dependency: poetry run pip install -r extra/optional_dependencies.txt")
-            return
-
-        log.debug("Started html dump processing")
+    def __init__(self, *args, **kwargs):
         self.key = "html_scraper"
+        if not HAVE_URLEXTRACT:
+            raise CuckooDependencyError("Missing dependency 'URLExtract'")
+        super().__init__(*args, **kwargs)
+
+    def run(self):
+        log.debug("Started html dump processing")
 
         html_dump_path = os.path.join(self.analysis_path, "htmldump", "html_dump.dump")
         last_url_path = os.path.join(self.analysis_path, "htmldump", "last_url.dump")
