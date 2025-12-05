@@ -19,7 +19,7 @@ __version__ = "1.0.0"
 # Constants for Docker configuration
 DOCKER_LOG_NAME = "tracee.data"
 DOCKER_CONTAINER_NAME = "tracee"  # Name of the Docker container to monitor
-TRACEE_VERSION = "latest"
+TRACEE_VERSION = "0.24.1"
 
 
 def is_docker_installed() -> bool:
@@ -56,12 +56,12 @@ def start_docker_container(container_name, tracee_version):
     """
     try:
         # Checks
-        tracee_cmd = [
+        tracee_cmd = (
             "sudo docker run --name tracee -d --pid=host --cgroupns=host --privileged "
             + f"-v /etc/os-release:/etc/os-release-host:ro -v {os.getcwd()}/tracee-artifacts/:/tmp/tracee/out/host -v /var/run:/var/run:ro -v {os.getcwd()}/modules/auxiliary/tracee:/policy "
-            + "aquasec/tracee:latest --output json --output option:parse-arguments,exec-env,exec-hash --policy /policy/policy.yml --cache cache-type=mem --cache mem-cache-size=1024 "
+            + f"aquasec/tracee:{tracee_version} --output json --output option:parse-arguments,exec-env,exec-hash --policy /policy/policy.yml "
             + "--capture bpf --capture module"
-        ][0]
+        )
 
         log.debug(tracee_cmd)
 
