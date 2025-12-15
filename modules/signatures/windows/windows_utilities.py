@@ -1008,7 +1008,7 @@ class MavInjectLolbin(Signature):
         return ret
 
 class UsesWindowsUtilitiesSetx(Signature):
-    name = "uses_windows_utilities_xcopy"
+    name = "uses_windows_utilities_setx"
     description = "Uses setx to set an environment variable, likely to read or load data from"
     severity = 2
     categories = ["evasion"]
