@@ -18,7 +18,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class ProtonBotMutexes(Signature):
     name = "protonbot_mutexes"
-    description = "Creates known rotonBot loader mutexes"
+    description = "Creates known ProtonBot loader mutexes"
     severity = 3
     categories = ["loader"]
     families = ["ProtonBot"]
@@ -38,3 +38,4 @@ class ProtonBotMutexes(Signature):
                 return True
 
         return False
+
