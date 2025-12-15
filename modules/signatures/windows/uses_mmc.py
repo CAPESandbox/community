@@ -59,7 +59,6 @@ class MMCDotNetLoad(Signature):
                                 return True
 
 
-
 class MMCDLLScriptLoad(Signature):
     name = "mmc_dll_script_load"
     description = "Microsoft Management Console (MMC) loads scripting engine DLL"
@@ -77,6 +76,13 @@ class MMCDLLScriptLoad(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.mmcproc = ["mmc.exe"]
+        self.script_dlls = {
+            "jscript.dll",
+            "vbscript.dll",
+            "apds.dll",
+            "msxml3.dll",
+            "jscript9.dll",
+        }
 
     def on_call(self, call, process):
         processname = process["process_name"]
@@ -84,7 +90,7 @@ class MMCDLLScriptLoad(Signature):
             if processname.lower() in self.mmcproc:
                 dllname = self.get_argument(call, "FileName")
                 if dllname:
-                    if ("jscript.dll" in dllname.lower() or "vbscript.dll" in dllname.lower() or "apds.dll" in dllname.lower() or "msxml3.dll" in dllname.lower() or "jscript9.dll" in dllname.lower()):
+                    if any(dll in dllname.lower() for dll in self.script_dlls):
                         if self.pid:
                             self.mark_call()
                         return True
