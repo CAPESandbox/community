@@ -14,7 +14,7 @@ class AbuseCH_SSL(Feed):
     def __init__(self):
         super().__init__(self)
         # Location of the feed to be fetched
-        self.downloadurl = "https://sslbl.abuse.ch/downloads/ssl_extended.csv"
+        self.downloadurl = "https://sslbl.abuse.ch/blacklist/sslblacklist.csv"
         # Used in creating the file path on disk
         self.feedname = "abuse_ch_ssl"
         # How much time must pass (in hours) before we update
