@@ -149,7 +149,6 @@ class RansomwareExtensionsKnown(Signature):
         return False
 
 
-
 class RansomwareExtensionsGeneric(Signature):
     name = "ransomware_extensions_generic"
     description = "Appends generic ransomware file extension to files that have been encrypted"
@@ -171,10 +170,7 @@ class RansomwareExtensionsGeneric(Signature):
         for pattern, extension in indicators.items():
             results = self.check_write_file(pattern=pattern, regex=True, all=True)
             if results and len(results) > 15:
-                self.description = (
-                    "Appends a generic '%s' ransomware file extension to files that have been encrypted"
-                    % extension
-                )
+                self.description = "Appends a generic '%s' ransomware file extension to files that have been encrypted" % extension
                 return True
 
         return False
