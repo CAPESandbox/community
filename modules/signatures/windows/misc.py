@@ -309,7 +309,7 @@ class AMSIBypassViaCOMRegistry(Signature):
 
 class LoadDLLViaControlPanel(Signature):
     name = "load_dll_via_control_panel"
-    description = "Attempt to load malicious DLL when Control Panel is executed"
+    description = "Attempts to load malicious DLL when Control Panel is executed"
     severity = 3
     categories = ["evasion", "bypass"]
     authors = ["@para0x0dise"]
@@ -688,7 +688,7 @@ class ExecuteFileDownloadedViaOpenSSH(Signature):
 
 class ExecuteScriptsViaMicrosoftManagementConsole(Signature):
     name = "execute_scripts_via_microsoft_management_console"
-    description = "Attempts to execute suspicious scripts via abusing an known XSS injection vulnerability in the APDS.dll"
+    description = "Attempts to execute suspicious scripts via abusing a known XSS injection vulnerability in the APDS.dll"
     severity = 3
     categories = ["evasion", "execution"]
     authors = ["@para0x0dise"]
