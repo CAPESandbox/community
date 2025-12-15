@@ -5,7 +5,7 @@ meta:
 	author = "@bartblaze"
 	date = "2020-01"
 	reference = "https://nao-sec.org/2020/01/an-overhead-view-of-the-royal-road.html"
-	tlp = "White"
+	tlp = "Clear"
 
 strings:
 	$rtf = "{\\rt"
@@ -18,3 +18,4 @@ strings:
 condition:
 	$rtf at 0 and any of ($RR*)
 }
+
