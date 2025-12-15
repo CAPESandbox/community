@@ -188,7 +188,7 @@ class PotentialLocationDiscoveryViaUnusualProcess(Signature):
                 cmdline = self.get_argument(call, "CommandLine")
                 lower = cmdline.lower()
                 if (
-                    any(process in lower for process in ("chrome.exe", "msedge.exe", "brave.exe", "browser.exe", "dragon.exe"))
+                    any(process in lower for process in ("chrome.exe", "msedge.exe", "brave.exe", "browser.exe", "dragon.exe", "vivaldi.exe"))
                     and "--dump-dom" in lower
                     and "http" in lower
                 ):
@@ -239,7 +239,7 @@ class ExecutionFromSelfExtractingArchive(Signature):
 
 class SuspiciousJavaExecutionViaWinScripts(Signature):
     name = "suspicious_java_execution_via_win_scripts"
-    description = "Attempts to execute jar files via Win Scripts to bypass whitelisting"
+    description = "Attempts to execute JAR files via Win Scripts to bypass whitelisting"
     severity = 3
     categories = ["bypass"]
     authors = ["@para0x0dise"]
@@ -309,7 +309,7 @@ class AMSIBypassViaCOMRegistry(Signature):
 
 class LoadDLLViaControlPanel(Signature):
     name = "load_dll_via_control_panel"
-    description = "Attempt to load malicious DLL when Control Panel is executed"
+    description = "Attempts to load malicious DLL when Control Panel is executed"
     severity = 3
     categories = ["evasion", "bypass"]
     authors = ["@para0x0dise"]
@@ -688,7 +688,7 @@ class ExecuteFileDownloadedViaOpenSSH(Signature):
 
 class ExecuteScriptsViaMicrosoftManagementConsole(Signature):
     name = "execute_scripts_via_microsoft_management_console"
-    description = "Attempts to execute suspicious scripts via abusing an known XSS injection vulnerability in the APDS.dll"
+    description = "Attempts to execute suspicious scripts via abusing a known XSS injection vulnerability in the APDS.dll"
     severity = 3
     categories = ["evasion", "execution"]
     authors = ["@para0x0dise"]
@@ -816,7 +816,7 @@ class CreateSuspiciousLNKFiles(Signature):
         )
 
     def on_call(self, call, process):
-        if process["process_name"] in ("winrar.exe", "7zFM.exe"):
+        if process["process_name"] in ("winrar.exe", "7zFM.exe", "7z.exe", "7zg.exe"):
             if call["api"] == "NtWriteFile":
                 fileBuf = self.get_raw_argument(call, "Buffer")
                 fileLen = self.get_raw_argument(call, "Length")

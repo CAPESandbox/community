@@ -695,7 +695,7 @@ class UsesWindowsUtilitiesDSQuery(Signature):
 class UsesWindowsUtilitiesEsentutl(Signature):
     name = "uses_windows_utilities_esentutl"
     description = "Uses esentutl for copying files"
-    severity = 3
+    severity = 2
     categories = ["evasion"]
     authors = ["bartblaze"]
     minimum = "1.3"
@@ -835,7 +835,7 @@ class UsesWindowsUtilitiesNTDSutil(Signature):
 class UsesWindowsUtilitiesXcopy(Signature):
     name = "uses_windows_utilities_xcopy"
     description = "Uses XCOPY for copying files"
-    severity = 3
+    severity = 2
     categories = ["evasion"]
     authors = ["bartblaze"]
     minimum = "1.3"
@@ -1004,5 +1004,31 @@ class MavInjectLolbin(Signature):
             if "mavinject" in lower and ("injectrunning" in lower or "hmodule" in lower):
                 ret = True
                 self.data.append({"command": cmdline})
+
+        return ret
+
+class UsesWindowsUtilitiesSetx(Signature):
+    name = "uses_windows_utilities_setx"
+    description = "Uses setx to set an environment variable, likely to read or load data from"
+    severity = 2
+    categories = ["evasion"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    evented = True
+
+    def run(self):
+        utilities = (
+            "setx ",
+            "setx.exe ",
+        )
+
+        ret = False
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
+        for cmdline in cmdlines:
+            lower = cmdline.lower()
+            for utility in utilities:
+                if utility in lower:
+                    ret = True
+                    self.data.append({"command": cmdline})
 
         return ret

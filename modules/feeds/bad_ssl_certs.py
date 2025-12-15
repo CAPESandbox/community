@@ -12,9 +12,9 @@ class AbuseCH_SSL(Feed):
     enabled = True
 
     def __init__(self):
-        super().__init__(self)
+        super().__init__()
         # Location of the feed to be fetched
-        self.downloadurl = "https://sslbl.abuse.ch/downloads/ssl_extended.csv"
+        self.downloadurl = "https://sslbl.abuse.ch/blacklist/sslblacklist.csv"
         # Used in creating the file path on disk
         self.feedname = "abuse_ch_ssl"
         # How much time must pass (in hours) before we update
@@ -23,14 +23,31 @@ class AbuseCH_SSL(Feed):
     def modify(self):
         newdata = ""
         seen = set()
-        for line in self.downloaddata.splitlines():
-            item = line.split(",")
-            # Ignore comments
-            if len(item) == 6:
-                # Ignore header column and deduplicate data
-                if "SSL" not in item[4] and item[4] not in seen:
-                    newdata += f"{','.join(item[4:6])}\n"
-                seen.add(item[4])
-        # When we modify download data, we must save this to the self.data
-        # variable instead of self.downloaddata.
+        for line in (self.downloaddata or "").splitlines():
+            line = line.strip()
+            # skip empty lines and comments
+            if not line or line.startswith("#"):
+                continue
+
+            # split into fields: Listingdate,SHA1,Listingreason
+            parts = line.split(",")
+            # skip header or malformed lines
+            if parts[0].lower().startswith("listingdate"):
+                continue
+            if len(parts) < 2:
+                continue
+
+            sha1 = parts[1].strip()
+            reason = parts[2].strip() if len(parts) > 2 else ""
+
+            if not sha1:
+                continue
+
+            if sha1 in seen:
+                continue
+
+            seen.add(sha1)
+            newdata += f"{sha1},{reason}\n"
+
+        # Save modified content to self.data (required by Feed)
         self.data = newdata

@@ -19,7 +19,7 @@ from lib.cuckoo.common.abstracts import Signature
 class UsesMSProtocol(Signature):
     name = "uses_ms_protocol"
     description = "Uses a Microsoft default handler or protocol."
-    severity = 3
+    severity = 2
     categories = ["evasion"]
     authors = ["bartblaze"]
     minimum = "1.3"
