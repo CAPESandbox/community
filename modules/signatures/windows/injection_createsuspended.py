@@ -42,4 +42,4 @@ class CreatesSuspendedProcess(Signature):
                 pass
 
     def on_complete(self):
-        return self.has_marks()
+        return self.has_matches()
