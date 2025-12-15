@@ -1,9 +1,9 @@
 from lib.cuckoo.common.abstracts import Signature
 
 
-class RansomwareExtensions(Signature):
-    name = "ransomware_extensions"
-    description = "Appends known ransomware file extensions to files that have been encrypted"
+class RansomwareExtensionsKnown(Signature):
+    name = "ransomware_extensions_known"
+    description = "Appends known ransomware file extension to files that have been encrypted"
     severity = 3
     families = []
     categories = ["ransomware"]
@@ -22,7 +22,6 @@ class RansomwareExtensions(Signature):
             (".*\.cerber$", ["Cerber"]),
             (".*\.cerber2$", ["Cerber"]),
             (".*\.cerber3$", ["Cerber"]),
-            (".*\.encrypt$", ["multi-family"]),
             (".*\.R5A$", ["7ev3n"]),
             (".*\.R4A$", ["7ev3n"]),
             (".*\.herbst$", ["Herbst"]),
@@ -55,8 +54,6 @@ class RansomwareExtensions(Signature):
             (".*\.aesir$", ["Locky"]),
             (".*\.zzzzz$", ["Locky"]),
             (".*\.osiris$", ["Locky"]),
-            (".*\.locked$", ["multi-family"]),
-            (".*\.encrypted$", ["multi-family"]),
             (".*dxxd$", ["DXXD"]),
             (".*\.~HL[A-Z0-9]{5}$", ["HadesLocker"]),
             (".*\.exotic$", ["Exotic"]),
@@ -147,6 +144,37 @@ class RansomwareExtensions(Signature):
                     self.description = (
                         "Appends a known %s ransomware file extension to " "files that have been encrypted" % "/".join(indicator[1])
                     )
+                return True
+
+        return False
+
+
+
+class RansomwareExtensionsGeneric(Signature):
+    name = "ransomware_extensions_generic"
+    description = "Appends generic ransomware file extension to files that have been encrypted"
+    severity = 3
+    categories = ["ransomware"]
+    authors = ["Kevin Ross", "bartblaze"]
+    minimum = "1.2"
+    ttps = ["T1486"]  # MITRE v6,7,8
+    mbcs = ["OB0008", "E1486"]
+    mbcs += ["OC0001", "C0015"]  # micro-behaviour
+
+    def run(self):
+        indicators = [
+            r".*\.encrypt$",
+            r".*\.locked$",
+            r".*\.encrypted$",
+        ]
+
+        for pattern in indicators:
+            results = self.check_write_file(pattern=pattern, regex=True, all=True)
+            if results and len(results) > 15:
+                self.description = (
+                    "Appends a generic '%s' ransomware file extension to files that have been encrypted"
+                    % pattern.replace(r".*\.", "").replace("$", "")
+                )
                 return True
 
         return False
