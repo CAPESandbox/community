@@ -20,6 +20,7 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class MMCDotNetLoad(Signature):
     name = "mmc_dotnet_load"
     description = "Microsoft Management Console (MMC) loads .NET assembly or DLL"

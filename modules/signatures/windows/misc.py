@@ -188,7 +188,10 @@ class PotentialLocationDiscoveryViaUnusualProcess(Signature):
                 cmdline = self.get_argument(call, "CommandLine")
                 lower = cmdline.lower()
                 if (
-                    any(process in lower for process in ("chrome.exe", "msedge.exe", "brave.exe", "browser.exe", "dragon.exe", "vivaldi.exe"))
+                    any(
+                        process in lower
+                        for process in ("chrome.exe", "msedge.exe", "brave.exe", "browser.exe", "dragon.exe", "vivaldi.exe")
+                    )
                     and "--dump-dom" in lower
                     and "http" in lower
                 ):

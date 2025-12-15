@@ -38,4 +38,3 @@ class ProtonBotMutexes(Signature):
                 return True
 
         return False
-
