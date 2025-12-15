@@ -162,18 +162,18 @@ class RansomwareExtensionsGeneric(Signature):
     mbcs += ["OC0001", "C0015"]  # micro-behaviour
 
     def run(self):
-        indicators = [
-            r".*\.encrypt$",
-            r".*\.locked$",
-            r".*\.encrypted$",
-        ]
+        indicators = {
+            r".*\.encrypt$": "encrypt",
+            r".*\.locked$": "locked",
+            r".*\.encrypted$": "encrypted",
+        }
 
-        for pattern in indicators:
+        for pattern, extension in indicators.items():
             results = self.check_write_file(pattern=pattern, regex=True, all=True)
             if results and len(results) > 15:
                 self.description = (
                     "Appends a generic '%s' ransomware file extension to files that have been encrypted"
-                    % pattern.replace(r".*\.", "").replace("$", "")
+                    % extension
                 )
                 return True
 
