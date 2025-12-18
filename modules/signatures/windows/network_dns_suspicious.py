@@ -532,7 +532,7 @@ class NetworkDNSURLShortener(Signature):
             "adflav\.com$",
             "aiy\.ooo$",
             "aka\.gr$",
-            "amzn\.to",
+            "amzn\.to$",
             "artist\.link$",
             "b2n\.ir$",
             "bc\.vc$",
