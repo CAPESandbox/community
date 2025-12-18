@@ -700,7 +700,7 @@ class NetworkDNSURLShortener(Signature):
             "urlshort\.dev$",
             "urltin\.com$",
             "urlz\.fr$",
-            "ux9.de",
+            "ux9\.de$",
             "v\.gd$",
             "v\.ht$",
             "vtaurl\.com$",
@@ -775,4 +775,5 @@ class Suspicious_TLD(Signature):
                         self.data.append({"domain": tld_match})
 
         return len(self.data) > 0
+
 
