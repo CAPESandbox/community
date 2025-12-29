@@ -16,10 +16,10 @@
 from lib.cuckoo.common.abstracts import Signature
 
 
-class EnumeratesDisplayDevices(Signature):
-    name = "enumerates_display_devices"
-    description = "Enumerates display devices"
-    severity = 2
+class AntiVMDisplay(Signature):
+    name = "antivm_display"
+    description = "Attempts to query display device information, possibly to determine if the process is running in a virtualized environment"
+    severity = 3
     categories = ["anti-vm"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
