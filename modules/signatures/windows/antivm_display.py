@@ -18,7 +18,9 @@ from lib.cuckoo.common.abstracts import Signature
 
 class AntiVMDisplay(Signature):
     name = "antivm_display"
-    description = "Attempts to query display device information, possibly to determine if the process is running in a virtualized environment"
+    description = (
+        "Attempts to query display device information, possibly to determine if the process is running in a virtualized environment"
+    )
     severity = 3
     categories = ["anti-vm"]
     authors = ["Kevin Ross"]

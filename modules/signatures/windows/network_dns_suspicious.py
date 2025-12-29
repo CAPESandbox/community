@@ -775,5 +775,3 @@ class Suspicious_TLD(Signature):
                         self.data.append({"domain": tld_match})
 
         return len(self.data) > 0
-
-
