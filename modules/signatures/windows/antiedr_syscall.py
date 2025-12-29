@@ -37,7 +37,7 @@ class Suspicious_NTDLL_DiskLoad(Signature):
     def on_call(self, call, process):
         if call["api"] in ["NtCreateFile", "NtOpenFile"]:
             filename = self.get_argument(call, "FileName")
-            if filename.lower() == "c:\windows\system32\ntdll.dll":
+            if filename and filename.lower().endswith(r"\system32\ntdll.dll"):
                 filehandle = self.get_argument(call, "FileHandle")
                 self.filehandle == filehandle
                 self.mark_call()
