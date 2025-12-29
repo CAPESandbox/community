@@ -16,9 +16,9 @@
 from lib.cuckoo.common.abstracts import Signature
 
 
-class QueriesDisplayDevices(Signature):
-    name = "queries_display_devices"
-    description = "Queries display devices"
+class EnumeratesDisplayDevices(Signature):
+    name = "enumerates_display_devices"
+    description = "Enumerates display devices"
     severity = 2
     categories = ["anti-vm"]
     authors = ["Kevin Ross"]
