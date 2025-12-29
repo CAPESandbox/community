@@ -59,7 +59,7 @@ class Suspicious_NTDLL_DiskLoad(Signature):
         if call["api"] == ("NtProtectVirtualMemory"):
             if self.mapped:
                 modulename = self.get_argument(call, "ModuleName")
-                if modulename.lower == "ntdll.dll":
+                if modulename and modulename.lower() == "ntdll.dll":
                     protection = self.get_argument(call, "NewAccessProtection")
                     # 0x40 PAGE_EXECUTE_READWRITE, 0x80 PAGE_EXECUTE_WRITECOPY, 0x04 PAGE_READWRITE
                     if protection in ["0x00000040", "0x00000080", "0x00000004"]:
