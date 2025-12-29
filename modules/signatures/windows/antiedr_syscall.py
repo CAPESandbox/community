@@ -46,7 +46,7 @@ class Suspicious_NTDLL_DiskLoad(Signature):
         if call["api"] == ("NtReadFile"):
             filehandle = self.get_argument(call, "FileHandle")
             handlename = self.get_argument(call, "HandleName")
-            if filehandle == self.filehandle and "ntdll.dll" in handlename.lower():
+            if self.filehandle and filehandle == self.filehandle and handlename and "ntdll.dll" in handlename.lower():
                 self.mark_call()
 
         if call["api"] == ("NtCreateSection"):
