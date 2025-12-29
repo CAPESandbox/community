@@ -20,7 +20,7 @@ class Suspicious_NTDLL_DiskLoad(Signature):
     name = "suspicious_ntdll_disk_load"
     description = "Loads clean ntdll.dll from disk (possibly for syscall/anti-EDR)"
     severity = 3
-    categories = [""syscall", "anti-edr", "unhooking"]
+    categories = ["syscall", "anti-edr", "unhooking"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
