@@ -28,13 +28,8 @@ class AntiVMDisplay(Signature):
 
     filter_apinames = set(["EnumDisplayDevicesA", "EnumDisplayDevicesW"])
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.ret = False
-
     def on_call(self, call, process):
         self.mark_call()
-        self.ret = True
 
     def on_complete(self):
-        return self.ret
+        return self.has_matches()
