@@ -108,7 +108,8 @@ class HollowsHunter(Auxiliary):
             # We first care about modules that contain PEs
             if scan_report_json in only_files:
                 scan_report_path = os.path.join(dirpath, scan_report_json)
-                report_json = json.loads(open(scan_report_path, "rb").read())
+                with open(scan_report_path, "rb") as f:
+                    report_json = json.loads(f.read())
                 scans = report_json["scans"]
                 for scan in scans:
                     if "workingset_scan" in scan:
@@ -142,7 +143,8 @@ class HollowsHunter(Auxiliary):
 
                 log.debug(file_path)
                 try:
-                    file_contents = open(file_path, "rb").read()
+                    with open(file_path, "rb") as f:
+                        file_contents = f.read()
                     if any(item in file_contents for item in strings_of_interest):
                         # We got a hit!
                         files_to_upload.add(file_path)

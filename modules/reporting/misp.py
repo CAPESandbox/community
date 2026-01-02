@@ -42,10 +42,12 @@ logging.getLogger("pymisp").setLevel(logging.WARNING)
 ttps_json = {}
 mitre_json_path = os.path.join(CUCKOO_ROOT, "data", "mitre_attack.json")
 if os.path.exists(mitre_json_path):
-    ttps_json = json.load(open(mitre_json_path))
+    with open(mitre_json_path) as f:
+        ttps_json = json.load(f)
 malpedia_json_path = os.path.join(CUCKOO_ROOT, "data", "malpedia.json")
 if os.path.exists(malpedia_json_path):
-    malpedia_json = json.load(open(os.path.join(CUCKOO_ROOT, "data", "malpedia.json")))
+    with open(os.path.join(CUCKOO_ROOT, "data", "malpedia.json")) as f:
+        malpedia_json = json.load(f)
 else:
     malpedia_json = False
 

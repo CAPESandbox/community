@@ -33,7 +33,8 @@ class HollowsHunter(Processing):
         for report in report_list:
             report_path = os.path.join(hh_path, report)
             try:
-                report_contents = open(report_path).read()
+                with open(report_path) as f:
+                    report_contents = f.read()
                 report_json = json.loads(report_contents)
             except Exception as e:
                 raise CuckooProcessingError("Failed parsing report %s due to %s" % (report_path, str(e)))

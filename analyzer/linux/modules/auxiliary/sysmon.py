@@ -50,10 +50,11 @@ class Sysmon(Thread, Auxiliary):
             '"Linux-Sysmon"',
         ]
         try:
-            _ = subprocess.run(
-                args,
-                stdout=open(SYSMON_LOG_PATH, "wb"),
-            )
+            with open(SYSMON_LOG_PATH, "wb") as f:
+                _ = subprocess.run(
+                    args,
+                    stdout=f,
+                )
         except Exception as e:
             log.error("Could not create sysmon log file - %s", e)
 

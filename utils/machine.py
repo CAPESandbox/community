@@ -20,42 +20,44 @@ def update_conf(machinery, args):
     path = os.path.join(CUCKOO_ROOT, "conf", "%s.conf" % machinery)
 
     lines = []
-    for line in open(path, "rb"):
-        line = line.strip()
+    with open(path, "rb") as f:
+        for line in f:
+            line = line.strip()
 
-        if line.split("=", 1)[0].strip() == "machines":
-            # If there are already one or more labels then append the new
-            # label to the list, otherwise make a new list.
-            if line.split("=", 1)[1].strip():
-                line += ", %s" % args.vmname
-            else:
-                line += " %s" % args.vmname
+            if line.split(b"=", 1)[0].strip() == b"machines":
+                # If there are already one or more labels then append the new
+                # label to the list, otherwise make a new list.
+                if line.split(b"=", 1)[1].strip():
+                    line += b", %s" % args.vmname.encode()
+                else:
+                    line += b" %s" % args.vmname.encode()
 
-        lines.append(line)
+            lines.append(line)
 
     lines += [
-        "",
-        "[%s]" % args.vmname,
-        "label = %s" % args.vmname,
-        "platform = %s" % args.platform,
-        "ip = %s" % args.ip,
+        b"",
+        b"[%s]" % args.vmname.encode(),
+        b"label = %s" % args.vmname.encode(),
+        b"platform = %s" % args.platform.encode(),
+        b"ip = %s" % args.ip.encode(),
     ]
 
     if args.snapshot:
-        lines.append("snapshot = %s" % args.snapshot)
+        lines.append(b"snapshot = %s" % args.snapshot.encode())
 
     if args.interface:
-        lines.append("interface = %s" % args.interface)
+        lines.append(b"interface = %s" % args.interface.encode())
 
     if args.resultserver:
         ip, port = args.resultserver.split(":")
-        lines.append("resultserver_ip = %s" % ip)
-        lines.append("resultserver_port = %s" % port)
+        lines.append(b"resultserver_ip = %s" % ip.encode())
+        lines.append(b"resultserver_port = %s" % port.encode())
 
     if args.tags:
-        lines.append("tags = %s" % args.tags)
+        lines.append(b"tags = %s" % args.tags.encode())
 
-    open(path, "wb").write("\n".join(lines))
+    with open(path, "wb") as f:
+        f.write(b"\n".join(lines))
 
 
 def main():

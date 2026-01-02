@@ -37,7 +37,8 @@ if __name__ == "__main__":
     ttps_map_file = os.path.join(CUCKOO_ROOT, "data", "mitre", "TTPs.json")
     if os.path.exists(ttps_map_file):
         try:
-            ttpDict = json.loads(open(ttps_map_file, "r").read())
+            with open(ttps_map_file, "r") as f:
+                ttpDict = json.loads(f.read())
         except Exception as e:
             print("Can't load TTPs.json file", e)
 
@@ -52,6 +53,7 @@ if __name__ == "__main__":
             ttpDict[ttp.upper()] = mapMitre(ttp)
 
     # Save the configuration to a file
-    open(ttps_map_file, "w").write(json.dumps(ttpDict, indent=4))
+    with open(ttps_map_file, "w") as f:
+        f.write(json.dumps(ttpDict, indent=4))
     print("Done")
     # print(mapMitre("T1215"))

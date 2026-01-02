@@ -85,11 +85,13 @@ class Sysmon(Processing):
         data = None
         try:
             if windows:
-                xml = open(sysmon_path, "rb").read()
+                with open(sysmon_path, "rb") as f:
+                    xml = f.read()
                 xml = xml.decode("latin1").encode("utf8")
                 data = xmltodict.parse(xml)["Events"]["Event"]
             elif linux:
-                journalctl_output = open(sysmon_path, "rb").readlines()
+                with open(sysmon_path, "rb") as f:
+                    journalctl_output = f.readlines()
                 xml = massage_linux_data(journalctl_output)
                 data = xmltodict.parse(xml)["Events"]["Event"]
             else:

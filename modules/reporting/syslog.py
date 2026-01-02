@@ -230,12 +230,10 @@ class Syslog(Report):
             logfile = self.options.get("logname", "syslog.txt")
             # Log syslog results to the reports directory
             try:
-                syslogfile = open(str(os.path.join(self.reports_path, logfile)), "w")
-                syslogfile.write(result)
+                with open(str(os.path.join(self.reports_path, logfile)), "w") as syslogfile:
+                    syslogfile.write(result)
             except Exception:
                 raise CuckooReportError("Error writing the syslog output file")
-            finally:
-                syslogfile.close()
         # Attempt to connect to the syslog server
         try:
             server_address = (server, port)

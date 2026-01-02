@@ -39,10 +39,9 @@ def MD5digest(filename=None, data=None):
     """Return an MD5 digest for a file or a string."""
     h = hashlib.md5()
     if filename:
-        f = open(filename, "rb")
-        for data in chunked(f, 1024 * 1024):
-            h.update(data)
-        f.close()
+        with open(filename, "rb") as f:
+            for data in chunked(f, 1024 * 1024):
+                h.update(data)
     elif data:
         h.update(data)
     return h.hexdigest()
@@ -104,9 +103,8 @@ def main():
 
     print("Checking defs integrity...")
     if MD5digest(data=trdpack) == newdigest:
-        f = open(trdfilename, "wb")
-        f.write(trdpack)
-        f.close()
+        with open(trdfilename, "wb") as f:
+            f.write(trdpack)
         print("OK.")
     else:
         errexit("Digest don't match. Retry!")

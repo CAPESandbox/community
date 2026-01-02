@@ -27,19 +27,20 @@ class Curtain(Thread, Auxiliary):
 
     def collectLogs(self):
         try:
-            subprocess.call(
-                [
-                    "C:\\Windows\\System32\\wevtutil.exe",
-                    "query-events",
-                    "microsoft-windows-powershell/operational",
-                    "/rd:true",
-                    "/e:root",
-                    "/format:xml",
-                    "/uni:true",
-                ],
-                startupinfo=self.startupinfo,
-                stdout=open("C:\\curtain.log", "w"),
-            )
+            with open("C:\\curtain.log", "w") as f:
+                subprocess.call(
+                    [
+                        "C:\\Windows\\System32\\wevtutil.exe",
+                        "query-events",
+                        "microsoft-windows-powershell/operational",
+                        "/rd:true",
+                        "/e:root",
+                        "/format:xml",
+                        "/uni:true",
+                    ],
+                    startupinfo=self.startupinfo,
+                    stdout=f,
+                )
         except Exception as e:
             log.error("Curtain - Error collecting PowerShell events - %s", e)
 

@@ -2,17 +2,16 @@ import base64
 import json
 import logging
 import os
-import subprocess
 import zlib
 
-from lib.cuckoo.common.abstracts import Processing
+from lib.cuckoo.common.abstracts import Processing, CUCKOO_ROOT
 
 log = logging.getLogger(__name__)
 
 __author__ = "@theoleecj2"
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
-sec_events = [
+sec_events = {
     "sched_process_exec",
     "stdio_over_socket",
     "k8s_api_connection",
@@ -44,7 +43,7 @@ sec_events = [
     "proc_fops_hooking",
     "syscall_hooking",
     "dropped_executable",
-]
+}
 
 
 def load_syscalls_args():
@@ -54,15 +53,20 @@ def load_syscalls_args():
     The values include the signature of the syscall and the category
     extracted from the definition location.
     """
-    syscalls_json = open("/opt/CAPEv2/data/linux/linux-syscalls.json", "r")
-    syscalls_dict = json.load(syscalls_json)
-    return {
-        syscall["name"]: {
-            "signature": syscall["signature"],
-            "category": "kernel" if "kernel" in syscall["file"] else syscall["file"].split("/")[0],
+    syscalls_path = os.path.join(CUCKOO_ROOT, "data", "linux", "linux-syscalls.json")
+    try:
+        with open(syscalls_path, "r") as syscalls_json:
+            syscalls_dict = json.load(syscalls_json)
+        return {
+            syscall["name"]: {
+                "signature": syscall["signature"],
+                "category": "kernel" if "kernel" in syscall["file"] else syscall["file"].split("/")[0],
+            }
+            for syscall in syscalls_dict["syscalls"]
         }
-        for syscall in syscalls_dict["syscalls"]
-    }
+    except Exception as e:
+        log.error("Failed to load syscalls from %s: %s", syscalls_path, e)
+        return {}
 
 
 class ProcTree:
@@ -71,26 +75,10 @@ class ProcTree:
         self.pid = pid
         self.details = details
 
-    def add_child(self, pid, details):
-        self.children[pid] = ProcTree(pid, details)
-
-    def update_details(self, details):
-        self.details = details
-
-    def get_child(self, pid):
-        if pid == self.pid:
-            return self
-        else:
-            for child in self.children:
-                result = self.children[child].get_child(pid)
-                if result:
-                    return result
-        return None
-
     def to_dict(self):
         output = {"pid": self.pid, "details": dict(self.details), "children": {}}
-        for child in self.children:
-            output["children"][child] = self.children[child].to_dict()
+        for pid, child in self.children.items():
+            output["children"][pid] = child.to_dict()
         return output
 
 
@@ -105,79 +93,101 @@ class TraceeAnalysis(Processing):
         Run analysis on tracee logs and files
         @return: results dict.
         """
-
         self.key = "tracee"
-
         log.info("Tracee Processor Running.")
 
         syscall_catalog = load_syscalls_args()
-        tree = ProcTree(0, {"desc": "(ABSTRACTION) root process"})
+
+        # Initialize the process tree with a root node
+        root = ProcTree(0, {"desc": "(ABSTRACTION) root process"})
+        # Flat map for O(1) process lookup by PID
+        process_map = {0: root}
 
         logpath = os.path.join(self.analysis_path, "logs", "tracee.log")
-        subprocess.run(
-            r"""grep -v '\\"processName\\":\\"strace\\"' """ + logpath + " > " + logpath + ".cleaner",
-            shell=True,
-            capture_output=True,
-            text=True,
-        )
+        if not os.path.exists(logpath):
+            log.warning("Tracee log file not found at %s", logpath)
+            return {}
 
-        f = open(logpath + ".cleaner", "r")
-        ln = f.readline()
-
-        output = {"metadata": {"security_events": []}, "syscalls": []}  # trace security events and store process tree
+        output = {"metadata": {"security_events": []}, "syscalls": []}
         all_syscalls = output["syscalls"]
         output_metadata = output["metadata"]
         ev_idx = -1
 
-        while ln:
-            ln = f.readline()
-            if len(ln) == 0:
-                continue
-            lg = None
+        try:
+            # Read the log file directly, skipping the grep subprocess and temp file
+            with open(logpath, "r", encoding="utf-8", errors="replace") as f:
+                for ln in f:
+                    # Filter out strace process lines (equivalent to grep -v "processName":"strace")
+                    if '"processName":"strace"' in ln:
+                        continue
 
-            try:
-                lg = json.loads(json.loads(ln)["log"])
-            except Exception as e:
-                log.info("Could not process Tracee line: %s - %s", str(lg), e)
-                continue
+                    ln = ln.strip()
+                    if not ln:
+                        continue
 
-            if lg.get("syscall", None):
-                ev_idx += 1
-                lg["idx"] = ev_idx
-                lg["cat"] = syscall_catalog.get(lg["syscall"], {"category": "misc"})["category"]
-                # outfile.write(json.dumps(lg) + "\n")
-                all_syscalls.append(lg)
+                    try:
+                        # Parse the outer JSON
+                        wrapper_json = json.loads(ln)
+                        # Parse the inner "log" JSON string
+                        lg = json.loads(wrapper_json["log"])
+                    except (ValueError, KeyError, TypeError):
+                        # Skip malformed lines
+                        continue
 
-                if lg["syscall"] == "execve":
-                    for arg in lg["args"]:
-                        if arg["name"] == "argv":
-                            if not tree.get_child(lg["parentProcessId"]):
-                                tree.add_child(lg["parentProcessId"], {"desc": "PARENT"})
+                    # Process Syscalls
+                    syscall_name = lg.get("syscall")
+                    event_name = lg.get("eventName")
 
-                            arg2 = []
-                            for a in lg["args"]:
-                                if "env" in a["name"]:
-                                    arg2 = a["value"]
+                    if syscall_name:
+                        ev_idx += 1
+                        lg["idx"] = ev_idx
+                        lg["cat"] = syscall_catalog.get(syscall_name, {"category": "misc"})["category"]
+                        all_syscalls.append(lg)
 
-                            tree.get_child(lg["parentProcessId"]).add_child(
-                                lg["processId"],
-                                {
-                                    "desc": arg["value"],
-                                    "cmdline": arg["value"],  # "full": lg,
-                                    "env": arg2,
-                                },
-                            )
-            elif lg.get("eventName", None) in sec_events:
-                ev_idx += 1
-                lg["idx"] = ev_idx
-                all_syscalls.append(lg)
+                        if syscall_name == "execve":
+                            # Extract arguments
+                            argv = None
+                            env = []
+                            for arg in lg.get("args", []):
+                                if arg["name"] == "argv":
+                                    argv = arg["value"]
+                                elif "env" in arg["name"]:
+                                    env = arg["value"]
 
-            if lg.get("eventName", None) in sec_events:
-                lg["idx"] = ev_idx
-                output_metadata["security_events"].append(lg)
+                            if argv is not None:
+                                parent_pid = lg.get("parentProcessId")
+                                process_id = lg.get("processId")
 
-        f.close()
+                                # Ensure parent exists in the tree
+                                if parent_pid not in process_map:
+                                    parent_node = ProcTree(parent_pid, {"desc": "PARENT"})
+                                    root.children[parent_pid] = parent_node
+                                    process_map[parent_pid] = parent_node
 
-        output_metadata["proctree"] = tree.to_dict()
+                                # Create and add new process node
+                                new_node = ProcTree(process_id, {
+                                    "desc": argv,
+                                    "cmdline": argv,
+                                    "env": env,
+                                })
+
+                                # Link to parent
+                                process_map[parent_pid].children[process_id] = new_node
+                                # Register in map
+                                process_map[process_id] = new_node
+
+                    elif event_name in sec_events:
+                        ev_idx += 1
+                        lg["idx"] = ev_idx
+                        all_syscalls.append(lg)
+
+                    if event_name in sec_events:
+                        lg["idx"] = ev_idx
+                        output_metadata["security_events"].append(lg)
+
+        except Exception as e:
+            log.error("Error analyzing Tracee logs: %s", e)
+
+        output_metadata["proctree"] = root.to_dict()
 
         return str(base64.b64encode(zlib.compress(bytearray(json.dumps(output), "utf-8"))), "ascii")

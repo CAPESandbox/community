@@ -14,20 +14,20 @@ def main():
         print("Usage: listdump.py <dump file>")
         return None
     try:
-        f = open(sys.argv[1], "rb")
-        while True:
-            data = f.read(24)
-            if data == "":
-                break
-            addr, size, mem_state, mem_type, mem_prot = struct.unpack("QIIII", data)
-            offset = f.tell()
-            extra = ""
-            if mem_prot == PAGE_EXECUTE_READWRITE:
-                extra += ", RWX"
-            if f.read(2) == "MZ":
-                extra += ", HAS PE"
-            print("0x%x: " % offset + "(0x%x" % addr + " -> " + "0x%x)" % (addr + size) + extra)
-            f.seek(size - 2, 1)
+        with open(sys.argv[1], "rb") as f:
+            while True:
+                data = f.read(24)
+                if data == "":
+                    break
+                addr, size, mem_state, mem_type, mem_prot = struct.unpack("QIIII", data)
+                offset = f.tell()
+                extra = ""
+                if mem_prot == PAGE_EXECUTE_READWRITE:
+                    extra += ", RWX"
+                if f.read(2) == "MZ":
+                    extra += ", HAS PE"
+                print("0x%x: " % offset + "(0x%x" % addr + " -> " + "0x%x)" % (addr + size) + extra)
+                f.seek(size - 2, 1)
     except Exception:
         print("Unable to open {0}.".format(sys.argv[1]))
         return None
