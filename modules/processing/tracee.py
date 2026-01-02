@@ -4,7 +4,7 @@ import logging
 import os
 import zlib
 
-from lib.cuckoo.common.abstracts import Processing, CUCKOO_ROOT
+from lib.cuckoo.common.abstracts import CUCKOO_ROOT, Processing
 
 log = logging.getLogger(__name__)
 
@@ -165,11 +165,14 @@ class TraceeAnalysis(Processing):
                                     process_map[parent_pid] = parent_node
 
                                 # Create and add new process node
-                                new_node = ProcTree(process_id, {
-                                    "desc": argv,
-                                    "cmdline": argv,
-                                    "env": env,
-                                })
+                                new_node = ProcTree(
+                                    process_id,
+                                    {
+                                        "desc": argv,
+                                        "cmdline": argv,
+                                        "env": env,
+                                    },
+                                )
 
                                 # Link to parent
                                 process_map[parent_pid].children[process_id] = new_node
