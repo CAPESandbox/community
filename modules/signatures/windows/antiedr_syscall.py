@@ -50,11 +50,11 @@ class Suspicious_NTDLL_DiskLoad(Signature):
                 self.mark_call()
 
         if call["api"] == ("NtCreateSection"):
-             filehandle = self.get_argument(call, "FileHandle")
-             filename = self.get_argument(call, "FileName")
-             if filehandle == self.filehandle and "ntdll.dll" in filename.lower:
-                 self.mapped = True
-                 self.mark_call()
+            filehandle = self.get_argument(call, "FileHandle")
+            filename = self.get_argument(call, "FileName")
+            if filehandle == self.filehandle and "ntdll.dll" in filename.lower():
+                self.mapped = True
+                self.mark_call()
 
         if call["api"] == ("NtProtectVirtualMemory"):
             if self.mapped:
