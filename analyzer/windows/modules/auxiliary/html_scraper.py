@@ -56,20 +56,20 @@ class HtmlScraper(Thread, Auxiliary):
 
     def scrape_html(self):
         if not HAVE_SELENIUM:
-            log.warning(f"Selenium not installed on machine, not scraping: {self.driver_path}")
+            log.warning("Selenium not installed on machine, not scraping", self.driver_path)
             return
 
         if not os.path.isfile(self.driver_path):
-            log.warning(f"Web driver not found in path %s, not scraping: {self.driver_path}")
+            log.warning("Web driver not found in path %s, not scraping", self.driver_path)
             return
 
         if not hasattr(self.config, "category") or self.config.category not in ("file", "url"):
-            log.debug(f"Category is neither 'file' nor 'url', not scraping. (Category is {self.config.category})")
+            log.debug("Category %s is neither 'file' nor 'url', not scraping", self.config.category)
             return
 
         if (self.config.category == "file" and
                 (not hasattr(self.config, "file_type") or "HTML" not in self.config.file_type)):
-            log.debug(f"File is not html, not scraping (file_type is {self.config.file_type}")
+            log.debug("File is not html, not scraping (file_type is %s)", self.config.file_type)
             return
 
         try:
@@ -90,7 +90,7 @@ class HtmlScraper(Thread, Auxiliary):
             else:
                 sample_url = self.config.target
 
-            log.debug(f"html_scraper try to scrape {sample_url}")
+            log.debug("html_scraper try to scrape: %s", sample_url)
             try:
                 self.browser.get(sample_url)
                 time.sleep(self.browser_runtime)
