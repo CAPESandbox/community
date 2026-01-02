@@ -67,8 +67,7 @@ class HtmlScraper(Thread, Auxiliary):
             log.debug("Category %s is neither 'file' nor 'url', not scraping", self.config.category)
             return
 
-        if (self.config.category == "file" and
-                (not hasattr(self.config, "file_type") or "HTML" not in self.config.file_type)):
+        if self.config.category == "file" and (not hasattr(self.config, "file_type") or "HTML" not in self.config.file_type):
             log.debug("File is not html, not scraping (file_type is %s)", self.config.file_type)
             return
 
