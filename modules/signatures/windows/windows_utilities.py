@@ -163,6 +163,8 @@ class SuspiciousCommandTools(Signature):
             "csvde",
             "del ",
             "del.exe",
+            "devcon ",
+            "devcon.exe",
             "diskshadow",
             "dsquery",
             "icacls",
