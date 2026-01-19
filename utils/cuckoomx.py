@@ -95,7 +95,7 @@ def get_new_emails(db):
     conn.login(email_config.cuckoomx.get("user"), email_config.cuckoomx.get("password"))
     conn.select("Inbox")
 
-    (retcode, messages) = conn.search(None, "(UNSEEN)")
+    retcode, messages = conn.search(None, "(UNSEEN)")
     if retcode == "OK" and messages:
         for num in messages[0].split(" "):
             if num:
