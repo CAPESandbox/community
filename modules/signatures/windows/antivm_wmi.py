@@ -25,7 +25,7 @@ class AntiVMWMI(Signature):
     minimum = "1.3"
     evented = True
     enabled = True
-    ttps = ["T1497.001", "T1082", "T1047", "T1497"]
+    ttps = ["T1497", "T1082", "T1047"]
     mbcs = ["B0001.002", "B0007", "OB0001"]
 
     filter_apinames = set(["WMI_ExecQuery"])
