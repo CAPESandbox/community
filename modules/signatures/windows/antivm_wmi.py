@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiVMWMI(Signature):
     name = "antivm_wmi"
     description = "Executes WMI queries that can be used for anti-virtualization"
@@ -35,16 +36,37 @@ class AntiVMWMI(Signature):
         self.ret = False
         self.indicators = (
             # Files
-            "acpi.sys", "hdaudbus.sys", "monitor.sys", "mssmbios.sys",
-            "ndis.sys", "pci.sys", "portcls.sys", "processr.sys",
-            "vboxguest.sys", "vboxmouse.sys", "vboxvideo.sys",
-            "vmmouse.sys", "vmtoolsd.exe", "vmumouse.sys", "vmvga.sys",
+            "acpi.sys",
+            "hdaudbus.sys",
+            "monitor.sys",
+            "mssmbios.sys",
+            "ndis.sys",
+            "pci.sys",
+            "portcls.sys",
+            "processr.sys",
+            "vboxguest.sys",
+            "vboxmouse.sys",
+            "vboxvideo.sys",
+            "vmmouse.sys",
+            "vmtoolsd.exe",
+            "vmumouse.sys",
+            "vmvga.sys",
             # WMI classes
-            "msacpi_thermalzonetemperature", "win32_baseboard", "win32_battery",
-            "win32_bios", "win32_cachememory", "win32_computersystem",
-            "win32_desktopmonitor", "win32_diskdrive", "win32_fan",
-            "win32_networkadapter", "win32_physicalmedia", "win32_physicalmemory",
-            "win32_pnpentity", "win32_processor", "win32_videocontroller",
+            "msacpi_thermalzonetemperature",
+            "win32_baseboard",
+            "win32_battery",
+            "win32_bios",
+            "win32_cachememory",
+            "win32_computersystem",
+            "win32_desktopmonitor",
+            "win32_diskdrive",
+            "win32_fan",
+            "win32_networkadapter",
+            "win32_physicalmedia",
+            "win32_physicalmemory",
+            "win32_pnpentity",
+            "win32_processor",
+            "win32_videocontroller",
         )
 
     def on_call(self, call, process):
