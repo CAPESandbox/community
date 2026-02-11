@@ -33,7 +33,7 @@ class AntiVMWMI(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
-        self.indicators = [
+        self.indicators = (
             # Files
             "acpi.sys", "hdaudbus.sys", "monitor.sys", "mssmbios.sys",
             "ndis.sys", "pci.sys", "portcls.sys", "processr.sys",
@@ -45,21 +45,16 @@ class AntiVMWMI(Signature):
             "win32_desktopmonitor", "win32_diskdrive", "win32_fan",
             "win32_networkadapter", "win32_physicalmedia", "win32_physicalmemory",
             "win32_pnpentity", "win32_processor", "win32_videocontroller",
-        ]
+        )
 
     def on_call(self, call, process):
         if call["api"] == "WMI_ExecQuery":
             query = self.get_argument(call, "Query")
             if query:
                 querylower = query.lower()
-                for filename in self.filenames:
-                    if filename in querylower:
-                        self.ret = True
-                        self.mark_call()
-                for wmiclass in self.wmiclasses:
-                    if wmiclass in querylower:
-                        self.ret = True
-                        self.mark_call()
+                if any(indicator in querylower for indicator in self.indicators):
+                    self.ret = True
+                    self.mark_call()
 
     def on_complete(self):
         return self.ret
