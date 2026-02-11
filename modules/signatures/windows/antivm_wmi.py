@@ -33,18 +33,18 @@ class AntiVMWMI(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
-        self.filenames = [
+        self.indicators = [
+            # Files
             "acpi.sys", "hdaudbus.sys", "monitor.sys", "mssmbios.sys",
             "ndis.sys", "pci.sys", "portcls.sys", "processr.sys",
-            "vboxguest.sys", "vboxmouse.sys", "vboxvideo.sys", 
-            "vmmouse.sys", "vmtoolsd.exe", "vmumouse.sys", "vmvga.sys"
-        ]
-        self.wmiclasses = [
+            "vboxguest.sys", "vboxmouse.sys", "vboxvideo.sys",
+            "vmmouse.sys", "vmtoolsd.exe", "vmumouse.sys", "vmvga.sys",
+            # WMI classes
             "msacpi_thermalzonetemperature", "win32_baseboard", "win32_battery",
             "win32_bios", "win32_cachememory", "win32_computersystem",
             "win32_desktopmonitor", "win32_diskdrive", "win32_fan",
             "win32_networkadapter", "win32_physicalmedia", "win32_physicalmemory",
-            "win32_pnpentity", "win32_processor", "win32_videocontroller"
+            "win32_pnpentity", "win32_processor", "win32_videocontroller",
         ]
 
     def on_call(self, call, process):
