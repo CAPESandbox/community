@@ -61,6 +61,7 @@ class AntiVMWMI(Signature):
             "win32_desktopmonitor",
             "win32_diskdrive",
             "win32_fan",
+            "win32_motherboarddevice",
             "win32_networkadapter",
             "win32_physicalmedia",
             "win32_physicalmemory",
