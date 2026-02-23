@@ -291,3 +291,32 @@ class SuspiciusIOControlCodes(Signature):
 
     def on_complete(self):
         return self.ret
+
+class ReadFileRawDiskAccess(Signature):
+    name = "read_file_raw_disk_access"
+    description = "Reads the raw physical disk, bypassing standard file system protections. Used by wipers to parse the MFT, or to prepare to install a bootkit."
+    severity = 3
+    confidence = 50
+    categories = ["bootkit", "wiper"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    enabled = True
+    ttps = ["T1006", "T1561.002", "T1542.003"] 
+    mbcs = ["E1006", "C0032", "F0001"]
+
+    filter_apinames = set(["NtReadFile"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
+
+    def on_call(self, call, process):
+        handlename = self.get_argument(call, "HandleName")
+        # Fixed: Null check, raw string, and syntax
+        if handlename and handlename.startswith(r"\Device\Harddisk"):
+            self.ret = True
+            self.mark_call()    
+
+    def on_complete(self):
+        return self.ret
