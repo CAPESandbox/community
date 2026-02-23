@@ -17,10 +17,10 @@ from lib.cuckoo.common.abstracts import Signature
 
 class FolderEnumeration(Signature):
     name = "folder_enumeration"
-    description = "Systematically searches multiple user directories using wildcards, common in ransomware/wiper pre-encryption phases"
+    description = "Systematically searches multiple user directories using wildcards, common in ransomware/wipers/infostealers"
     severity = 3
     confidence = 70
-    categories = ["ransomware", "wiper", "discovery"]
+    categories = ["ransomware", "wiper", "infostealer", "discovery"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
