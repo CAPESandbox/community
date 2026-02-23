@@ -15,7 +15,6 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-
 class DriverLoad(Signature):
     name = "driver_load"
     description = "Loads a driver"
@@ -44,3 +43,39 @@ class DriverLoad(Signature):
 
     def on_complete(self):
         return self.found_driverload
+
+class InstallKernelDriverService(Signature):
+    name = "install_kernel_driver_service"
+    description = "Installs a new kernel driver service, indicative of Bring Your Own Vulnerable Driver (BYOVD) attacks or a rootkit"
+    severity = 3
+    confidence = 80
+    categories = ["driver", "rootkit", "bypass", "wiper"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    enabled = True
+    ttps = ["T1543.003", "T1068", "T1070.004"] 
+    mbcs = ["E1543.003", "F0011"]
+
+    filter_apinames = set(["CreateServiceA", "CreateServiceW"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
+
+    def on_call(self, call, process):
+        service_type = self.get_argument(call, "ServiceType")
+        binary_path = self.get_argument(call, "BinaryPathName")
+        is_kernel_driver = False
+        if isinstance(service_type, str) and "SERVICE_KERNEL_DRIVER" in service_type:
+            is_kernel_driver = True
+        elif service_type in (1, 0x1, "1", "0x00000001"):
+            is_kernel_driver = True
+
+        if is_kernel_driver:
+            if binary_path and binary_path.lower().endswith(".sys"):
+                self.ret = True
+                self.mark_call()
+                
+    def on_complete(self):
+        return self.ret
