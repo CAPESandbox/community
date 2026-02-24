@@ -34,7 +34,7 @@ class RansomwareMessage(Signature):
     filter_apinames = {"NtWriteFile"}
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        Signature.__init__(self, *args, **kwargs)
         self.ret = False
         
         self.indicators = [
