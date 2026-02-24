@@ -110,7 +110,7 @@ class RansomwareMessage(Signature):
                 else:
                     filename = str(raw_name).lower()
                 
-                if filename.endswith((".txt", ".html", ".hta", ".rtf")) or "read_me" in filename or "readme" in filename:
+                if filename.endswith((".txt", ".html", ".hta", ".rtf")) or "read_me" in filename or "readme" in filename or "read-me" in filename:
                     filedata = dropped.get("data")
                     
                     if isinstance(filedata, str):
