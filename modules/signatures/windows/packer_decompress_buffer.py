@@ -39,7 +39,7 @@ class DecompressEXE(Signature):
             return None
         if call["api"] == "RtlDecompressBuffer":
             buf = self.get_argument(call, "UncompressedBuffer")
-            if buf.startswith("MZ"):
+            if buf and buf.startswith("MZ"):
                 self.ret = True
                 self.mark_call()    
 
