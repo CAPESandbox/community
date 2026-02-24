@@ -83,6 +83,7 @@ class Bootkit(Signature):
 
         return None
 
+
 class DirectHDDAccess(Signature):
     name = "direct_hdd_access"
     description = "Attempted to write to a harddisk volume"
@@ -102,7 +103,7 @@ class DirectHDDAccess(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
 
-    def on_call(self, call, process):            
+    def on_call(self, call, process):
         handle_name = origfile = self.get_argument(call, "HandleName")
         if handle_name and handle_name.lower().startswith(r"\device\harddiskvolume"):
             self.ret = True
@@ -150,11 +151,13 @@ class PhysicalDriveAccess(Signature):
                 handle = self.get_argument(call, "FileHandle")
                 if handle:
                     self.physical_handles.add(handle)
-    
+
         elif call["api"] == "NtWriteFile":
             handle_name = self.get_argument(call, "HandleName")
             handle = self.get_argument(call, "FileHandle")
-            if (handle_name and handle_name.lower().startswith((r"\device\harddisk", r"\??\physicaldrive"))) or (handle in self.physical_handles):
+            if (handle_name and handle_name.lower().startswith((r"\device\harddisk", r"\??\physicaldrive"))) or (
+                handle in self.physical_handles
+            ):
                 self.ret = True
                 self.mark_call()
 
@@ -200,7 +203,7 @@ class EnumeratesPhysicalDrives(Signature):
 
         return ret
 
-        
+
 class PotentialOverWriteMBR(Signature):
     name = "potential_overwrite_mbr"
     description = "Wrote 512 bytes to physical drive potentially indicative of overwriting the Master Boot Record (MBR)"
@@ -273,7 +276,7 @@ class SuspiciusIOControlCodes(Signature):
                     self.ret = True
                     self.mark_call()
             except (ValueError, TypeError):
-                pass        
+                pass
 
     def on_complete(self):
         return self.ret
@@ -302,7 +305,7 @@ class ReadFileRawDiskAccess(Signature):
         handlename = self.get_argument(call, "HandleName")
         if handlename and handlename.lower().startswith(r"\device\harddisk"):
             self.ret = True
-            self.mark_call()    
+            self.mark_call()
 
     def on_complete(self):
         return self.ret
