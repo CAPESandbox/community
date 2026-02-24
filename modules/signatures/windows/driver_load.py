@@ -54,28 +54,25 @@ class InstallKernelDriverService(Signature):
     minimum = "1.3"
     evented = True
     enabled = True
-    ttps = ["T1543.003", "T1068", "T1070.004"] 
+    ttps = ["T1543.003", "T1068", "T1547.006"]
     mbcs = ["E1543.003", "F0011"]
 
     filter_apinames = set(["CreateServiceA", "CreateServiceW"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.ret = False
+        self.found = False
 
     def on_call(self, call, process):
         service_type = self.get_argument(call, "ServiceType")
         binary_path = self.get_argument(call, "BinaryPathName")
-        is_kernel_driver = False
-        if isinstance(service_type, str) and "SERVICE_KERNEL_DRIVER" in service_type:
-            is_kernel_driver = True
-        elif service_type in (1, 0x1, "1", "0x00000001"):
-            is_kernel_driver = True
 
-        if is_kernel_driver:
-            if binary_path and binary_path.lower().endswith(".sys"):
-                self.ret = True
-                self.mark_call()
+        is_kernel_driver = (isinstance(service_type, str) and "SERVICE_KERNEL_DRIVER" in service_type) or \
+                           service_type in (1, "1", "0x00000001")
+
+        if is_kernel_driver and binary_path and binary_path.lower().endswith(".sys"):
+            self.found = True
+            self.mark_call()
                 
     def on_complete(self):
-        return self.ret
+        return self.found
