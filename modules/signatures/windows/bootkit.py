@@ -219,11 +219,11 @@ class PotentialOverWriteMBR(Signature):
 
     def on_call(self, call, process):
         if call["api"] == "NtWriteFile":
-            handle = self.get_raw_argument(call, "HandleName")
+            handle_name = self.get_raw_argument(call, "HandleName")
             writelength = self.get_raw_argument(call, "Length")
 
-            if handle and handle.lower().startswith((r"\device\harddisk", r"\??\physicaldrive")) and writelength == 512:
-                self.data.append({"modified_drive": "%s" % (filepath)})
+            if handle_name and handle_name.lower().startswith((r"\device\harddisk", r"\??\physicaldrive")) and writelength == 512:
+                self.data.append({"modified_drive": "%s" % (handle_name)})
                 self.ret = True
                 if self.pid:
                     self.mark_call()
