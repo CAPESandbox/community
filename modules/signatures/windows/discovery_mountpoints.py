@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DiscoverRegistryMountPoints(Signature):
     name = "discover_registry_mount_points"
     description = "Queries registry mount points to identify historical or connected removable/network drives"
@@ -25,13 +26,13 @@ class DiscoverRegistryMountPoints(Signature):
 
     def run(self):
         found_mounts = set()
-        
+
         # We look for the CPC\Volume subkeys which contain the specific hardware IDs
         # The regex captures the GUIDs usually found in MountPoints2
         pattern = r".*\\Explorer\\MountPoints2\\CPC\\Volume\\\{[a-fA-F0-9-]+\}"
-        
+
         matches = self.check_key(pattern=pattern, regex=True, all=True)
-        
+
         if matches:
             for match in matches:
                 # Normalize to prevent duplicates in the report
@@ -45,6 +46,7 @@ class DiscoverRegistryMountPoints(Signature):
 
         return False
 
+
 class MountPointsVolumeDiscovery(Signature):
     name = "mountpoints_volume_discovery"
     description = "Queries the mount points and then resolves volume paths to enumerate storage devices"
@@ -55,12 +57,18 @@ class MountPointsVolumeDiscovery(Signature):
     minimum = "1.3"
     evented = True
     enabled = True
-    ttps = ["T1082", "T1120"] 
+    ttps = ["T1082", "T1120"]
 
-    filter_apinames = set([
-        "NtOpenKey", "NtOpenKeyEx", "RegOpenKeyExW", "RegOpenKeyExA",
-        "GetVolumeNameForVolumeMountPointW", "GetVolumeNameForVolumeMountPointA"
-    ])
+    filter_apinames = set(
+        [
+            "NtOpenKey",
+            "NtOpenKeyEx",
+            "RegOpenKeyExW",
+            "RegOpenKeyExA",
+            "GetVolumeNameForVolumeMountPointW",
+            "GetVolumeNameForVolumeMountPointA",
+        ]
+    )
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -83,7 +91,7 @@ class MountPointsVolumeDiscovery(Signature):
             if self.accessed_mountpoints:
                 self.mark_call()
                 self.resolved_volumes += 1
-                
+
                 # If it resolves multiple volumes after querying the registry, it's looping/enumerating
                 if self.resolved_volumes >= 2:
                     self.ret = True
