@@ -66,3 +66,67 @@ class MassDataEncryption(Signature):
                 self.data.append({"encryption": "The crypto key %s was used %s times to encrypt data" % (key, value)})
 
         return ret
+
+
+class KernelCryptoDriverAbuse(Signature):
+    name = "kernel_crypto_driver_abuse"
+    description = "Excessive IOCTL calls to the Kernel Security Device Driver (KsecDD), indicative of ransomware/wiper hardware-accelerated mass encryption"
+    severity = 3
+    categories = ["ransomware", "wiper", "crypto"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1486", "T1562.001"]
+    mbcs = ["OB0008", "E1486"]
+
+    filter_apinames = {"NtCreateFile", "NtOpenFile", "DeviceIoControl", "NtDeviceIoControlFile"}
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ksec_handles = {}
+        self.ioctl_counts = {}
+        self.process_names = {}
+        self.ignore_procs = {
+            "chrome.exe", "firefox.exe", "msedge.exe", "iexplore.exe", 
+            "opera.exe", "brave.exe", "safari.exe"
+        }
+
+    def on_call(self, call, process):
+        pname = process.get("process_name", "").lower()
+        if pname in self.ignore_procs:
+            return None      
+
+        pid = process.get("process_id")
+
+        if pid not in self.ksec_handles:
+            self.ksec_handles[pid] = set()
+            self.ioctl_counts[pid] = 0
+            self.process_names[pid] = pname
+
+        if call["api"] in ("NtCreateFile", "NtOpenFile"):
+            filename = self.get_argument(call, "FileName") 
+            if filename and "\\device\\ksecdd" in filename.lower():
+                handle = self.get_argument(call, "FileHandle")
+                if handle:
+                    self.ksec_handles[pid].add(handle)
+
+        elif call["api"] in ("DeviceIoControl", "NtDeviceIoControlFile"):
+            handle_name = self.get_argument(call, "HandleName")
+            handle = self.get_argument(call, "DeviceHandle") or self.get_argument(call, "FileHandle")
+
+            if (handle in self.ksec_handles[pid]) or (handle_name and "\\device\\ksecdd" in handle_name.lower()):
+                self.ioctl_counts[pid] += 1
+                
+                if self.ioctl_counts[pid] <= 20:
+                    self.mark_call()
+
+    def on_complete(self):
+        ret = False
+
+        for pid, count in self.ioctl_counts.items():
+            if count > 50:
+                pname = self.process_names.get(pid, "unknown")
+                self.data.append({"ksecdd_abuse": "Process %s pid %s issued %s IOCTLs calls to KsecDD" % (pname, pid, count)})
+                ret = True
+
+        return ret
