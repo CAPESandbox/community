@@ -103,8 +103,8 @@ class DirectHDDAccess(Signature):
         self.ret = False
 
     def on_call(self, call, process):            
-        handle = origfile = self.get_argument(call, "HandleName")
-        if handle and handle.lower().startswith(r"\device\harddiskvolume"):
+        handle_name = origfile = self.get_argument(call, "HandleName")
+        if handle_name and handle_name.lower().startswith(r"\device\harddiskvolume"):
             self.ret = True
             self.mark_call()
 
@@ -289,7 +289,7 @@ class ReadFileRawDiskAccess(Signature):
     minimum = "1.3"
     evented = True
     enabled = True
-    ttps = ["T1006", "T1561.002", "T1542.003"] 
+    ttps = ["T1006", "T1561.002", "T1542.003"]
     mbcs = ["E1006", "C0032", "F0001"]
 
     filter_apinames = set(["NtReadFile"])
@@ -300,7 +300,7 @@ class ReadFileRawDiskAccess(Signature):
 
     def on_call(self, call, process):
         handlename = self.get_argument(call, "HandleName")
-        if handlename and handlename.startswith(r"\Device\Harddisk"):
+        if handlename and handlename.lower().startswith(r"\device\harddisk"):
             self.ret = True
             self.mark_call()    
 
