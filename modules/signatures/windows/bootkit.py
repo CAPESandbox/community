@@ -300,7 +300,6 @@ class ReadFileRawDiskAccess(Signature):
 
     def on_call(self, call, process):
         handlename = self.get_argument(call, "HandleName")
-        # Fixed: Null check, raw string, and syntax
         if handlename and handlename.startswith(r"\Device\Harddisk"):
             self.ret = True
             self.mark_call()    
