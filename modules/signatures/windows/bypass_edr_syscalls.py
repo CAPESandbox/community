@@ -71,7 +71,7 @@ class DirectSyscallEvasion(Signature):
     def on_complete(self):
         ret = False
         if len(self.evasive_syscalls) > 0:
-            self.data.append({"evasive_syscall_modules": list(self.evasive_syscalls)})
+            self.data.append({"direct_syscalls": list(self.evasive_syscalls)})
             ret = True
 
         return ret
