@@ -33,27 +33,37 @@ class SyscallEvasion(Signature):
         self.evasive_syscalls = set()
 
     def on_call(self, call, process):
-        caller = call.get("caller", "")
-        if not caller or caller == "0x00000000":
+        # FIX: We MUST evaluate the Return Address for sysenter, NOT the caller
+        ret_addr = self.get_argument(call, "Return Address")
+        
+        if not ret_addr or ret_addr == "0x00000000":
             return
             
         try:
-            caller_addr = int(caller, 16) if caller.startswith("0x") else int(caller)
+            addr_val = int(ret_addr, 16) if ret_addr.startswith("0x") else int(ret_addr)
              
             # System DLLs (ntdll.dll, kernel32.dll) load very high in memory.
             # 32-bit: > 0x70000000 | 64-bit: > 0x7FF000000000
-            # If the return address (caller) is in low memory, the malware is 
+            # If the literal Return Address is in low memory, the malware is 
             # manually executing the syscall (Direct) or jumping to it (Indirect).
             is_evasive = False
-            if 0 < caller_addr < 0x70000000:
+            if 0 < addr_val < 0x70000000:
                 is_evasive = True
-            elif 0x0000000100000000 <= caller_addr < 0x0000700000000000:
+            elif 0x0000000100000000 <= addr_val < 0x0000700000000000:
                 is_evasive = True
 
+            # Extra FP resistance: Explicity whitelist legitimate high-memory system modules
+            module = self.get_argument(call, "Module")
+            if module:
+                module_lower = module.lower()
+                safe_modules = ["kernel32", "kernelbase", "ntdll", "wow64"]
+                if any(safe in module_lower for safe in safe_modules) and not is_evasive:
+                    return
+
             if is_evasive:
-                module = self.get_argument(call, "Module")
-                if module not in self.evasive_syscalls:
-                    self.evasive_syscalls.add(module)
+                mod_name = module if module else "Unknown_Memory"
+                if mod_name not in self.evasive_syscalls:
+                    self.evasive_syscalls.add(mod_name)
                     if len(self.evasive_syscalls) <= 10:
                         self.mark_call()
 
