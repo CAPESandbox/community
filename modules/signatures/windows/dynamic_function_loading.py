@@ -15,7 +15,7 @@
 # along with this program.If not, see <http://www.gnu.org/licenses/>.
 
 from lib.cuckoo.common.abstracts import Signature
-
+import re
 
 class dynamic_function_loading(Signature):
     name = "dynamic_function_loading"
@@ -52,3 +52,44 @@ class dynamic_function_loading(Signature):
         elif self.loadctr > 20:
             self.severity = 2
         return True
+
+
+class MalformedDllLoading(Signature):
+    name = "malformed_dll_loading"
+    description = "Attempts to load a DLL with a heavily malformed name or decoded API name, indicative an error in the API hashing routine or anti-sandbox/emulation"
+    severity = 3
+    confidence = 40
+    categories = ["evasion", "stealth", "anti-sandbox", "anti-emulation"]
+    authors = ["Kevin Ross", "Gemini"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1027"]
+
+    filter_apinames = {"LdrGetDllHandle", "LdrLoadDll", "LoadLibraryA", "LoadLibraryW", "LoadLibraryExA", "LoadLibraryExW"}
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
+        self.malformed_dlls = set()
+        
+    def on_call(self, call, process):
+        filename = self.get_argument(call, "FileName") or self.get_argument(call, "lpLibFileName")
+        if not filename or not isinstance(filename, str):
+            return
+            
+        # Check if the filename contains massive amounts of raw hex escapes (\x).
+        # This occurs when CAPE dumps unprintable bytes that the malware accidentally passed.
+        hex_escape_count = len(re.findall(r"\\x[0-9a-fA-F]{2,4}", filename))
+        
+        # Check if they accidentally passed known API strings to a DLL loader
+        api_strings = ["Rtl", "NtQuery", "GetSystem", "MachinePreferred", "Filemark"]
+        is_api_name = any(api in filename for api in api_strings) and (".dll" not in filename.lower())
+        
+        if hex_escape_count >= 4 or is_api_name:
+            if filename not in self.malformed_dlls:
+                self.malformed_dlls.add(filename)              
+                self.mark_call()
+                self.ret = True
+
+    def on_complete(self):
+        return self.ret
