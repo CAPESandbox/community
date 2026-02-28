@@ -18,13 +18,13 @@ from lib.cuckoo.common.abstracts import Signature
 
 class Suspicious_NTDLL_DiskLoad(Signature):
     name = "suspicious_ntdll_disk_load"
-    description = "Loads clean ntdll.dll from disk (possibly for syscall/anti-EDR)"
+    description = "Loads clean ntdll.dll from disk, possibly for syscall/anti-EDR"
     severity = 3
     categories = ["syscall", "anti-edr", "unhooking"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1106"]  # MITRE v6,7,8
+    ttps = ["T1562.001", "T1055"]  # MITRE v6,7,8
 
     filter_apinames = set(["NtCreateFile", "NtCreateSection", "NtOpenFile", "NtProtectVirtualMemory", "NtReadFile"])
 
@@ -66,4 +66,57 @@ class Suspicious_NTDLL_DiskLoad(Signature):
                         self.mark_call()
 
     def on_complete(self):
+        return self.ret
+
+
+class NtdllMemoryUnhooking(Signature):
+    name = "ntdll_memory_unhooking"
+    description = "Modifies the memory protection of ntdll.dll to PAGE_READWRITE, indicative of EDR unhooking"
+    severity = 3
+    confidence = 100
+    categories = ["evasion"]
+    authors = ["Kevin Ross", "Gemini"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1562.001", "T1055"]
+
+    filter_apinames = {"NtProtectVirtualMemory", "VirtualProtectEx", "VirtualProtect"}
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
+        self.unhooked_modules = set()
+
+    def on_call(self, call, process):
+        module_name = self.get_argument(call, "ModuleName")
+        if not module_name:
+            return
+            
+        if "ntdll.dll" in module_name.lower():
+            protection = self.get_argument(call, "NewAccessProtection") or self.get_argument(call, "Protection")
+            if not protection:
+                return
+                
+            try:
+                prot_val = int(protection, 16) if str(protection).startswith("0x") else int(protection)
+                
+                # 0x04 is PAGE_READWRITE, 0x40 is PAGE_EXECUTE_READWRITE
+                if prot_val == 0x04 or prot_val == 0x40:
+                    self.unhooked_modules.add(module_name)
+                    self.mark_call()
+                    self.ret = True
+            except ValueError:
+                # Fallback: check the pretty_value translated by CAPE
+                for arg in call.get("arguments", []):
+                    if arg.get("name") in ("NewAccessProtection", "Protection"):
+                        pretty_prot = arg.get("pretty_value", "").upper()
+                        if "READWRITE" in pretty_prot:
+                            self.unhooked_modules.add(module_name)
+                            self.mark_call()
+                            self.ret = True
+                        break
+
+    def on_complete(self):
+        if self.ret:
+            self.data.append({"unhooked_module": list(self.unhooked_modules)})
         return self.ret
