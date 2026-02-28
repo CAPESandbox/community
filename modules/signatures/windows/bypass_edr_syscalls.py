@@ -33,7 +33,6 @@ class SyscallEvasion(Signature):
         self.evasive_syscalls = set()
 
     def on_call(self, call, process):
-        # FIX: We MUST evaluate the Return Address for sysenter, NOT the caller
         ret_addr = self.get_argument(call, "Return Address")
         
         if not ret_addr or ret_addr == "0x00000000":
@@ -52,7 +51,6 @@ class SyscallEvasion(Signature):
             elif 0x0000000100000000 <= addr_val < 0x0000700000000000:
                 is_evasive = True
 
-            # Extra FP resistance: Explicity whitelist legitimate high-memory system modules
             module = self.get_argument(call, "Module")
             if module:
                 module_lower = module.lower()
