@@ -15,8 +15,8 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class SyscallEvasion(Signature):
-    name = "syscall_evasion"
+class DirectSyscallEvasion(Signature):
+    name = "direct_syscall_evasion"
     description = "Executes direct syscalls to evade EDR and user-land API hooks"
     severity = 3
     confidence = 80
