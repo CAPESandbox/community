@@ -56,10 +56,10 @@ class dynamic_function_loading(Signature):
 
 class MalformedDllLoading(Signature):
     name = "malformed_dll_loading"
-    description = "Attempts to load a DLL with a heavily malformed name or decoded API name, indicative an error in the API hashing routine"
+    description = "Attempts to load a DLL with a heavily malformed name or decoded API name, indicative an error in the API hashing routine or anti-sandbox/emulation"
     severity = 3
     confidence = 40
-    categories = ["evasion", "stealth"]
+    categories = ["evasion", "stealth", "anti-sandbox", "anti-emulation"]
     authors = ["Kevin Ross", "Gemini"]
     minimum = "1.3"
     evented = True
