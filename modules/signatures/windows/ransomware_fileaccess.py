@@ -72,7 +72,7 @@ class RansomwareAttributeStripping(Signature):
 
 class MassFileModificationAccess(Signature):
     name = "mass_file_modification_access"
-    description = "Opens a large number of existing files requesting WRITE or DELETE access, indicative of ransomware/wipers"
+    description = "Opens a large number of files requesting WRITE or DELETE access, indicative of ransomware/wipers"
     severity = 3
     confidence = 50
     categories = ["ransomware", "wiper"]
