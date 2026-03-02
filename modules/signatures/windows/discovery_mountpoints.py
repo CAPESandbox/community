@@ -19,7 +19,7 @@ from lib.cuckoo.common.abstracts import Signature
 class DiscoverRegistryMountPoints(Signature):
     name = "discover_registry_mount_points"
     description = "Queries registry mount points to identify historical or connected removable/network drives"
-    severity = 1
+    severity = 2
     confidence = 20
     categories = ["discovery", "ransomware", "wiper"]
     authors = ["Kevin Ross"]
@@ -51,7 +51,7 @@ class DiscoverRegistryMountPoints(Signature):
 class MountPointsVolumeDiscovery(Signature):
     name = "mountpoints_volume_discovery"
     description = "Queries the mount points and then resolves volume paths to enumerate storage devices"
-    severity = 1
+    severity = 2
     confidence = 20
     categories = ["discovery", "ransomware", "wiper"]
     authors = ["Kevin Ross"]
