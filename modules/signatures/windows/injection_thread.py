@@ -87,7 +87,7 @@ class ApcInjection(Signature):
             pid = process.get("process_id")
             targetpid = self.get_argument(call, "ProcessId")
 
-            if str(apc_routine) != "0x00000000" and pid != targetpid:
+            if str(apc_routine) != "0x00000000" and str(pid) != str(targetpid):
                 if target_thread not in self.apc_targets:
                     self.apc_targets.add(target_thread)
                     self.mark_call()
