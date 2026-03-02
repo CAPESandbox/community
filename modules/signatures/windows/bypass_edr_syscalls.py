@@ -44,7 +44,7 @@ class DirectSyscallEvasion(Signature):
             # System DLLs (ntdll.dll, kernel32.dll) load very high in memory.
             # 32-bit: > 0x70000000 | 64-bit: > 0x7FF000000000
             # If the literal Return Address is in low memory, the malware is 
-            # manually executing the syscall (Direct) or jumping to it (Indirect).
+            # manually executing the syscall (Direct) and the return address will point back to the malware.
             is_evasive = False
             if 0 < addr_val < 0x70000000:
                 is_evasive = True
