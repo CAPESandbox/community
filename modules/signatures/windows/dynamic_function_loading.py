@@ -87,7 +87,7 @@ class MalformedDllLoading(Signature):
         
         if hex_escape_count >= 4 or is_api_name:
             if filename not in self.malformed_dlls:
-                self.malformed_dlls.add(filename)              
+                self.malformed_dlls.add(filename)
                 self.mark_call()
                 self.ret = True
 
