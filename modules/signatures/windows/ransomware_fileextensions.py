@@ -139,7 +139,7 @@ class RansomwareExtensionsKnown(Signature):
         for indicator in indicators:
             results = self.check_write_file(pattern=indicator[0], regex=True, all=True)
             if results and len(results) > 15:
-                if indicator[1] and indicator[1] is not "multi-family":
+                if indicator[1] and indicator[1] != "multi-family":
                     self.families = indicator[1]
                     self.description = (
                         "Appends a known %s ransomware file extension to " "files that have been encrypted" % "/".join(indicator[1])
