@@ -80,18 +80,19 @@ class ApcInjection(Signature):
             target_thread = self.get_argument(call, "ThreadId")
             apc_routine = self.get_argument(call, "ApcRoutine")
         else:
-            target_thread = self.get_argument(call, "ThreadHandle")  
+            target_thread = self.get_argument(call, "ThreadHandle")
             apc_routine = self.get_argument(call, "pfnAPC")
-        
         if target_thread and apc_routine:
             pid = process.get("process_id")
-            targetpid = self.get_argument(call, "ProcessId")
+            targetpid_str = self.get_argument(call, "ProcessId")
 
-            if str(apc_routine) != "0x00000000" and str(pid) != str(targetpid):
-                if target_thread not in self.apc_targets:
-                    self.apc_targets.add(target_thread)
-                    self.mark_call()
-                    self.ret = True
+            if targetpid_str and int(apc_routine, 16) != 0:
+                targetpid = int(targetpid_str)
+                if pid != targetpid:
+                    if target_thread not in self.apc_targets:
+                        self.apc_targets.add(target_thread)
+                        self.mark_call()
+                        self.ret = True
 
     def on_complete(self):
         return self.ret
