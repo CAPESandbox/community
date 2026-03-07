@@ -92,11 +92,13 @@ class KernelCryptoDriverAbuse(Signature):
         }
 
     def on_call(self, call, process):
-        pname = process.get("process_name", "").lower()
-        if pname in self.ignore_procs:
-            return None      
-
         pid = process.get("process_id")
+        if not pid:
+            return None
+
+        pname = process.get("process_name", "").lower()
+        if not pname or pname in self.ignore_procs:
+            return None
 
         if pid not in self.ksec_handles:
             self.ksec_handles[pid] = set()
