@@ -86,7 +86,6 @@ class MassFileModificationAccess(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.targeted_files = set()
-        self.example_file = None
         self.dangerous_strings = ("WRITE", "DELETE", "MAXIMUM_ALLOWED", "GENERIC_ALL")
 
     def on_call(self, call, process):
