@@ -40,10 +40,8 @@ class RansomwareExtensionHijack(Signature):
             filepath_lower = filepath.lower()
             regkey_lower = regkey.lower()
             
-            is_icon_hijack = filepath_lower.endswith(".ico") and (r"\defaulticon" in regkey_lower or r"\applications" in regkey_lower)
-            is_userchoice_hijack = r"\userchoice" in regkey_lower
-            
-            if is_icon_hijack or is_userchoice_hijack:
+            is_icon_hijack = filepath_lower.endswith(".ico") and (r"\defaulticon" in regkey_lower or r"\applications" in regkey_lower)            
+            if is_icon_hijack:
                 self.mark_call()
                 self.ret = True
 
