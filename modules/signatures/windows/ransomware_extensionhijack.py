@@ -15,8 +15,8 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class RansomwareSetsIcon(Signature):
-    name = "ransomware_sets_icon"
+class RansomwareExtensionHijack(Signature):
+    name = "ransomware_extension_hijack"
     description = "Modifies registry keys for file-extension hijacking, possible ransomware behavior"
     severity = 3
     categories = ["ransomware"]
