@@ -29,7 +29,7 @@ class FolderEnumeration(Signature):
 
     def run(self):
         targeted_folders = set()
-        pattern = r".*(Users|Documents|Desktop|Downloads|Music|Videos|Pictures|AppData).*\\\*.*"      
+        pattern = r"(?i).*?(Users|Documents|Desktop|Downloads|Music|Videos|Pictures|AppData).*\\\*.*"   
         matches = self.check_file(pattern=pattern, regex=True, all=True)
         
         if matches:
