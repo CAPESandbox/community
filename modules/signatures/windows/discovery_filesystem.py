@@ -26,7 +26,6 @@ class FolderEnumeration(Signature):
     evented = True
     enabled = True
     ttps = ["T1083"]
-    mbcs = ["B0002.001"]
 
     def run(self):
         targeted_folders = set()
