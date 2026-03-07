@@ -37,7 +37,7 @@ class RansomwareAttributeStripping(Signature):
         
         if call["api"] == "NtSetInformationFile":
             info_class = self.get_argument(call, "FileInformationClass")
-            if info_class == 4 or str(info_class) == "4":  
+            if str(info_class) == "4":
                 file_info = self.get_argument(call, "FileInformation")
                 # 0x80 is the bitmask for FILE_ATTRIBUTE_NORMAL
                 if isinstance(file_info, str) and "\\x80\\x00\\x00\\x00" in file_info:
@@ -98,7 +98,7 @@ class MassFileModificationAccess(Signature):
                     pretty_access = str(arg.get("value", ""))
                 break
                 
-        pretty_access = pretty_access.upper()       
+        pretty_access = pretty_access.upper()
         if not any(flag in pretty_access for flag in self.dangerous_strings):
             return
 
@@ -109,7 +109,7 @@ class MassFileModificationAccess(Signature):
             if "\\??\\" in filepath_lower or "\\device\\" in filepath_lower:
                 return
 
-            if filepath_lower not in self.targeted_files:                   
+            if filepath_lower not in self.targeted_files:
                 self.targeted_files.add(filepath_lower)
                 if len(self.targeted_files) <= 15:
                     self.mark_call()
