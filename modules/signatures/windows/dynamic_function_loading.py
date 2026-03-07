@@ -79,7 +79,7 @@ class MalformedDllLoading(Signature):
             
         # Check if the filename contains massive amounts of raw hex escapes (\x).
         # This occurs when CAPE dumps unprintable bytes that the malware accidentally passed.
-        hex_escape_count = len(re.findall(r"\\x[0-9a-fA-F]{2,4}", filename))
+        hex_escape_count = len(re.findall(r"\\x[0-9a-fA-F]{2}", filename))
         
         # Check if they accidentally passed known API strings to a DLL loader
         api_strings = ["Rtl", "NtQuery", "GetSystem", "MachinePreferred", "Filemark"]
