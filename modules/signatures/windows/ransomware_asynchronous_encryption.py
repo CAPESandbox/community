@@ -52,11 +52,9 @@ class RansomwareIOCPAsynchronousEncryption(Signature):
                         self.mark_call()
 
     def on_complete(self):
-        ret = False
         if len(self.iocp_files) > 50:
             self.data.append({
                 "total_files_bound_to_iocp": len(self.iocp_files),
             })
-            ret = True
-            
-        return ret
+            return True
+        return False
