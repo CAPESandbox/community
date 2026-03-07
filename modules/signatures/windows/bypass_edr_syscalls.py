@@ -45,7 +45,11 @@ class DirectSyscallEvasion(Signature):
             # 32-bit: > 0x70000000 | 64-bit: > 0x7FF000000000
             # If the literal Return Address is in low memory, the malware is 
             # manually executing the syscall (Direct) and the return address will point back to the malware.
-            is_evasive = (0 < caller_addr < 0x70000000) or (0x0000000100000000 <= caller_addr < 0x0000700000000000)
+            is_evasive = False
+            if 0 < addr_val < 0x70000000:
+                is_evasive = True
+            elif 0x0000000100000000 <= addr_val < 0x0000700000000000:
+                is_evasive = True
 
             module = self.get_argument(call, "Module")
             if module:
