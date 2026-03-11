@@ -1,0 +1,51 @@
+{
+    "filters": [
+        {
+            "comment": "Suppress script interpreter (ps1/js/vbs/etc) launches from temp folder when parent is sandbox python.exe",
+            "rules": [
+                "Suspicious Script Execution From Temp Folder",
+                "a6a39bdb-935c-4f0a-ab77-35f4bbf44d33"
+            ],
+            "packages": ["ps1", "js", "js_antivm", "vbs", "vbejse", "hta", "wsf", "sct", "batch", "autoit", "nodejs", "python"],
+            "scope": "event",
+            "action": "suppress",
+            "matches": {
+                "sandbox_parent": {
+                    "ParentProcessName": {"pattern": "python\\.exe$", "flags": "i"}
+                }
+            }
+        },
+        {
+            "comment": "Suppress script interpreter (ps1/js/vbs/etc) launches from suspicious folders when parent is sandbox python.exe",
+            "rules": [
+                "Script Interpreter Execution From Suspicious Folder",
+                "1228c958-e64e-4e71-92ad-7d429f4138ba"
+            ],
+            "packages": ["ps1", "js", "js_antivm", "vbs", "vbejse", "hta", "wsf", "sct", "batch", "autoit", "nodejs", "python"],
+            "scope": "event",
+            "action": "suppress",
+            "matches": {
+                "sandbox_parent": {
+                    "ParentProcessName": {"pattern": "python\\.exe$", "flags": "i"}
+                }
+            }
+        },
+        {
+            "comment": "Suppress net.exe service starts caused by sandbox tooling (python.exe parent)",
+            "rules": ["Start Windows Service Via Net.EXE"],
+            "scope": "event",
+            "action": "suppress",
+            "matches": {
+                "sandbox_net_syswow64": {
+                    "NewProcessName": {"pattern": "C:\\\\Windows\\\\SysWOW64\\\\net\\.exe", "flags": "i"},
+                    "ParentProcessName": {"pattern": "C:\\\\python\\\\python\\.exe", "flags": "i"}
+                },
+                "sandbox_net_system32": {
+                    "NewProcessName": {"pattern": "C:\\\\Windows\\\\System32\\\\net\\.exe", "flags": "i"},
+                    "ParentProcessName": {"pattern": "C:\\\\python\\\\python\\.exe", "flags": "i"}
+                }
+            },
+            "match_logic": "sandbox_net_syswow64 or sandbox_net_system32"
+        }
+    ]
+}
