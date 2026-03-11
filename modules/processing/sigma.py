@@ -40,7 +40,7 @@ def _parse_flags(flags_str):
     """Parse flag string like 'im' into re flags int and negate bool."""
     flags = 0
     negate = False
-    for ch in (flags_str or ""):
+    for ch in flags_str or "":
         if ch == "n":
             negate = True
         elif ch in FLAG_MAP:
@@ -78,6 +78,7 @@ def _compile_match_group(group):
 
 class _BoolExpr:
     """Simple AST nodes for boolean match_logic expressions."""
+
     pass
 
 
@@ -273,17 +274,19 @@ def _load_filters(filters_path):
         if packages:
             packages = {p.lower() for p in packages}
 
-        compiled_filters.append({
-            "comment": filt.get("comment", ""),
-            "rules": set(rules),
-            "wildcard": "*" in rules,
-            "packages": packages,
-            "scope": filt.get("scope", "detection"),
-            "action": action,
-            "score": filt.get("score"),
-            "groups": compiled_groups,
-            "logic": logic,
-        })
+        compiled_filters.append(
+            {
+                "comment": filt.get("comment", ""),
+                "rules": set(rules),
+                "wildcard": "*" in rules,
+                "packages": packages,
+                "scope": filt.get("scope", "detection"),
+                "action": action,
+                "score": filt.get("score"),
+                "groups": compiled_groups,
+                "logic": logic,
+            }
+        )
 
     log.debug("Loaded %d sigma filters from %s", len(compiled_filters), filters_path)
     return compiled_filters
@@ -347,10 +350,7 @@ def apply_filters(detection, filters, package):
             continue
 
         if filt["scope"] == "event" and matched_events:
-            surviving_events = [
-                evt for evt in matched_events
-                if not _evaluate_filter_against_event(filt, evt)
-            ]
+            surviving_events = [evt for evt in matched_events if not _evaluate_filter_against_event(filt, evt)]
 
             if filt["action"] == "suppress":
                 if len(surviving_events) < len(matched_events):
@@ -473,8 +473,10 @@ class Sigma(Processing):
             cmd = [
                 sys.executable,
                 zircolite_path,
-                "-e", input_path,
-                "-o", output_file,
+                "-e",
+                input_path,
+                "-o",
+                output_file,
                 "-q",
             ]
             for rs in rulesets:
