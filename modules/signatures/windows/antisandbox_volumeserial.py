@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class HardwareIdProfiling(Signature):
     name = "hardware_id_profiling"
     description = "Queries the Volume Serial Number or Physical Hardware ID, possibly for anti-sandbox, victim profiling or environmental keying"
@@ -24,13 +25,15 @@ class HardwareIdProfiling(Signature):
     authors = ["Kevin Ross", "Gemini"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1082", "T1480"] 
+    ttps = ["T1082", "T1480"]
     mbcs = ["E1082", "E1480.001"]
 
     filter_apinames = {
-        "GetVolumeInformationW", "GetVolumeInformationA", 
+        "GetVolumeInformationW",
+        "GetVolumeInformationA",
         "GetVolumeInformationByHandleW",
-        "DeviceIoControl", "NtDeviceIoControlFile"
+        "DeviceIoControl",
+        "NtDeviceIoControlFile",
     }
 
     def __init__(self, *args, **kwargs):
@@ -45,11 +48,11 @@ class HardwareIdProfiling(Signature):
 
         elif api in ("DeviceIoControl", "NtDeviceIoControlFile"):
             code = self.get_argument(call, "IoControlCode") or self.get_argument(call, "dwIoControlCode")
-            
+
             if code:
                 try:
                     code_val = int(code, 16) if isinstance(code, str) and str(code).startswith("0x") else int(code)
-                    
+
                     # 0x2D1400 = IOCTL_STORAGE_QUERY_PROPERTY (Retrieves the true hardware serial number)
                     # 0x070000 = IOCTL_DISK_GET_DRIVE_GEOMETRY (Often used to check if running in a VM)
                     if code_val == 0x2D1400:
