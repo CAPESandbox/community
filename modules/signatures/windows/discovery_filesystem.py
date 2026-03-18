@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class FolderEnumeration(Signature):
     name = "folder_enumeration"
     description = "Systematically searches multiple user directories using wildcards, common in ransomware/wipers/infostealers"
@@ -29,12 +30,12 @@ class FolderEnumeration(Signature):
 
     def run(self):
         targeted_folders = set()
-        pattern = r"(?i).*?(Users|Documents|Desktop|Downloads|Music|Videos|Pictures|AppData).*\\\*.*"   
+        pattern = r"(?i).*?(Users|Documents|Desktop|Downloads|Music|Videos|Pictures|AppData).*\\\*.*"
         matches = self.check_file(pattern=pattern, regex=True, all=True)
-        
+
         if matches:
             for match in matches:
-                folder = match.rsplit('\\', 1)[0].lower()
+                folder = match.rsplit("\\", 1)[0].lower()
                 if folder not in targeted_folders:
                     targeted_folders.add(folder)
                     self.data.append({"target_folder": match})

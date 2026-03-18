@@ -91,15 +91,15 @@ class NtdllMemoryUnhooking(Signature):
         module_name = self.get_argument(call, "ModuleName")
         if not module_name:
             return
-            
+
         if "ntdll.dll" in module_name.lower():
             protection = self.get_argument(call, "NewAccessProtection") or self.get_argument(call, "Protection")
             if not protection:
                 return
-                
+
             try:
                 prot_val = int(protection, 16) if str(protection).startswith("0x") else int(protection)
-                
+
                 # 0x04 is PAGE_READWRITE, 0x40 is PAGE_EXECUTE_READWRITE
                 if prot_val == 0x04 or prot_val == 0x40:
                     self.unhooked_modules.add(module_name)
