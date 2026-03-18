@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class RansomwareExtensionHijack(Signature):
     name = "ransomware_extension_hijack"
     description = "Modifies registry keys for file-extension hijacking, possible ransomware behavior"
@@ -23,7 +24,7 @@ class RansomwareExtensionHijack(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1486", "T1564"] 
+    ttps = ["T1486", "T1564"]
     mbcs = ["OB0008", "E1486"]
 
     filter_apinames = {"RegSetValueExA", "RegSetValueExW"}
@@ -31,16 +32,18 @@ class RansomwareExtensionHijack(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
-        
+
     def on_call(self, call, process):
-        filepath = self.get_argument(call, "Buffer")         
+        filepath = self.get_argument(call, "Buffer")
         regkey = self.get_argument(call, "FullName")
-        
+
         if isinstance(filepath, str) and isinstance(regkey, str):
             filepath_lower = filepath.lower()
             regkey_lower = regkey.lower()
-            
-            is_icon_hijack = filepath_lower.endswith(".ico") and (r"\defaulticon" in regkey_lower or r"\applications" in regkey_lower)            
+
+            is_icon_hijack = filepath_lower.endswith(".ico") and (
+                r"\defaulticon" in regkey_lower or r"\applications" in regkey_lower
+            )
             if is_icon_hijack:
                 self.mark_call()
                 self.ret = True

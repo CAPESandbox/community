@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DirectSyscallEvasion(Signature):
     name = "direct_syscall_evasion"
     description = "Executes direct syscalls to evade EDR and user-land API hooks"
@@ -34,16 +35,16 @@ class DirectSyscallEvasion(Signature):
 
     def on_call(self, call, process):
         ret_addr = self.get_argument(call, "Return Address")
-        
+
         if not ret_addr or ret_addr == "0x00000000":
             return
-            
+
         try:
             addr_val = int(ret_addr, 16) if ret_addr.startswith("0x") else int(ret_addr)
-             
+
             # System DLLs (ntdll.dll, kernel32.dll) load very high in memory.
             # 32-bit: > 0x70000000 | 64-bit: > 0x7FF000000000
-            # If the literal Return Address is in low memory, the malware is 
+            # If the literal Return Address is in low memory, the malware is
             # manually executing the syscall (Direct) and the return address will point back to the malware.
             is_evasive = False
             if 0 < addr_val < 0x70000000:

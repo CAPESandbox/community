@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class RegistersVectoredExceptionHandler(Signature):
     name = "registers_vectored_exception_handler"
     description = "Registers a vectored exception handler (VEH), possibly to hijack execution flow"
@@ -33,7 +34,7 @@ class RegistersVectoredExceptionHandler(Signature):
         self.ret = False
 
     def on_call(self, call, process):
-        handler_address = self.get_argument(call, "Handler") or self.get_argument(call, "VectorHandler") 
+        handler_address = self.get_argument(call, "Handler") or self.get_argument(call, "VectorHandler")
         if handler_address:
             self.mark_call()
             self.ret = True

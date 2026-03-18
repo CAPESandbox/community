@@ -14,8 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.If not, see <http://www.gnu.org/licenses/>.
 
-from lib.cuckoo.common.abstracts import Signature
 import re
+
+from lib.cuckoo.common.abstracts import Signature
+
 
 class dynamic_function_loading(Signature):
     name = "dynamic_function_loading"
@@ -71,20 +73,20 @@ class MalformedDllLoading(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
         self.malformed_dlls = set()
-        
+
     def on_call(self, call, process):
         filename = self.get_argument(call, "FileName") or self.get_argument(call, "lpLibFileName")
         if not filename or not isinstance(filename, str):
             return
-            
+
         # Check if the filename contains massive amounts of raw hex escapes (\x).
         # This occurs when CAPE dumps unprintable bytes that the malware accidentally passed.
         hex_escape_count = len(re.findall(r"\\x[0-9a-fA-F]{2}", filename))
-        
+
         # Check if they accidentally passed known API strings to a DLL loader
         api_strings = ["Rtl", "NtQuery", "GetSystem", "MachinePreferred", "Filemark"]
         is_api_name = any(api in filename for api in api_strings) and (".dll" not in filename.lower())
-        
+
         if hex_escape_count >= 4 or is_api_name:
             if filename not in self.malformed_dlls:
                 self.malformed_dlls.add(filename)

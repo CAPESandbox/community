@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class RansomwareAttributeStripping(Signature):
     name = "ransomware_attribute_stripping"
     description = "Strips file attributes to bypass read-only restrictions on a large number of files, possibly prior to ransomware/wiper destruction"
@@ -34,7 +35,7 @@ class RansomwareAttributeStripping(Signature):
 
     def on_call(self, call, process):
         filepath = None
-        
+
         if call["api"] == "NtSetInformationFile":
             info_class = self.get_argument(call, "FileInformationClass")
             if str(info_class) == "4":
@@ -42,7 +43,7 @@ class RansomwareAttributeStripping(Signature):
                 # 0x80 is the bitmask for FILE_ATTRIBUTE_NORMAL
                 if isinstance(file_info, str) and "\\x80\\x00\\x00\\x00" in file_info:
                     filepath = self.get_argument(call, "HandleName")
-                    
+
         elif call["api"].startswith("SetFileAttributes"):
             attrs = self.get_argument(call, "FileAttributes")
             try:
@@ -62,9 +63,11 @@ class RansomwareAttributeStripping(Signature):
     def on_complete(self):
         ret = False
         if len(self.stripped_files) > 30:
-            self.data.append({
-                "total_files_stripped": len(self.stripped_files),
-            })
+            self.data.append(
+                {
+                    "total_files_stripped": len(self.stripped_files),
+                }
+            )
             ret = True
 
         return ret
@@ -96,7 +99,7 @@ class MassFileModificationAccess(Signature):
                 if not pretty_access:
                     pretty_access = str(arg.get("value", ""))
                 break
-                
+
         pretty_access = pretty_access.upper()
         if not any(flag in pretty_access for flag in self.dangerous_strings):
             return
@@ -116,9 +119,11 @@ class MassFileModificationAccess(Signature):
     def on_complete(self):
         ret = False
         if len(self.targeted_files) > 40:
-            self.data.append({
-                "total_existing_files_opened_for_modification": len(self.targeted_files),
-            })
+            self.data.append(
+                {
+                    "total_existing_files_opened_for_modification": len(self.targeted_files),
+                }
+            )
             ret = True
 
         return ret

@@ -20,6 +20,7 @@ try:
 except ImportError:
     import re
 
+
 class RansomwareMessage(Signature):
     name = "ransomware_message"
     description = "Writes a potential ransom message to disk"
@@ -125,7 +126,7 @@ class RansomwareMessage(Signature):
             "your documents",
             "your files",
             "your key",
-            "your network"
+            "your network",
         ]
 
         indicators_str = [re.escape(i.lower()) for i in self.indicators]
@@ -134,36 +135,36 @@ class RansomwareMessage(Signature):
 
     def on_call(self, call, process):
         filepath = self.get_argument(call, "HandleName") or self.get_argument(call, "FileName")
-        
+
         if not filepath:
             return
-            
+
         filepath_lower = filepath.lower()
-        
+
         is_target_path = (
-            filepath_lower == "\\??\\physicaldrive0" or 
-            filepath_lower.startswith("\\device\\harddisk") or 
-            filepath_lower.endswith((".txt", ".html", ".hta", ".rtf")) or
-            "readme" in filepath_lower or 
-            "read_me" in filepath_lower or
-            "decrypt" in filepath_lower
+            filepath_lower == "\\??\\physicaldrive0"
+            or filepath_lower.startswith("\\device\\harddisk")
+            or filepath_lower.endswith((".txt", ".html", ".hta", ".rtf"))
+            or "readme" in filepath_lower
+            or "read_me" in filepath_lower
+            or "decrypt" in filepath_lower
         )
-        
+
         if not is_target_path:
             return
 
         buff = self.get_argument(call, "Buffer")
-        
+
         if buff:
             if isinstance(buff, bytes) or isinstance(buff, bytearray):
-                buff_str = bytes(buff).decode('utf-8', errors='ignore')
+                buff_str = bytes(buff).decode("utf-8", errors="ignore")
             else:
                 buff_str = str(buff)
 
             if len(buff_str) >= 32:
                 buff_lower = buff_str.lower()
                 matches = set(self.regex.findall(buff_lower))
-            
+
                 if len(matches) > 1:
                     self.mark_call()
                     return True
@@ -171,22 +172,22 @@ class RansomwareMessage(Signature):
     def on_complete(self):
         if not self.ret and "dropped" in self.results:
             for dropped in self.results["dropped"]:
-                
+
                 raw_name = dropped.get("name", "")
                 if isinstance(raw_name, list) and len(raw_name) > 0:
                     filename = str(raw_name[0]).lower()
                 else:
                     filename = str(raw_name).lower()
-                
+
                 if filename.endswith((".txt", ".html", ".hta", ".rtf")) or "read_me" in filename or "readme" in filename:
                     filedata = dropped.get("data")
-                    
+
                     if filedata:
                         if isinstance(filedata, bytes) or isinstance(filedata, bytearray):
-                            filedata_str = bytes(filedata).decode('utf-8', errors='ignore')
+                            filedata_str = bytes(filedata).decode("utf-8", errors="ignore")
                         else:
                             filedata_str = str(filedata)
-                            
+
                         if len(filedata_str) >= 32:
                             filedata_lower = filedata_str.lower()
                             matches = set(self.regex.findall(filedata_lower))
@@ -211,11 +212,20 @@ class MassRansomNoteDrop(Signature):
     ttps = ["T1486"]
     mbcs = ["OB0008", "E1486"]
 
-    filter_apinames = set([
-        "NtWriteFile", "WriteFile", 
-        "CopyFileA", "CopyFileW", "CopyFileExA", "CopyFileExW",
-        "MoveFileA", "MoveFileW", "MoveFileExA", "MoveFileExW"
-    ])
+    filter_apinames = set(
+        [
+            "NtWriteFile",
+            "WriteFile",
+            "CopyFileA",
+            "CopyFileW",
+            "CopyFileExA",
+            "CopyFileExW",
+            "MoveFileA",
+            "MoveFileW",
+            "MoveFileExA",
+            "MoveFileExW",
+        ]
+    )
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -228,7 +238,9 @@ class MassRansomNoteDrop(Signature):
     def on_call(self, call, process):
         pid = process.get("process_id")
 
-        filepath = self.get_argument(call, "NewFileName") or self.get_argument(call, "HandleName") or self.get_argument(call, "FileName")
+        filepath = (
+            self.get_argument(call, "NewFileName") or self.get_argument(call, "HandleName") or self.get_argument(call, "FileName")
+        )
 
         if not isinstance(filepath, str):
             return
@@ -239,7 +251,7 @@ class MassRansomNoteDrop(Signature):
 
         dirname, _, filename = filepath.rpartition("\\")
         filename_lower = filename.lower()
-        
+
         if not filename_lower.endswith(self.extensions):
             return
 
@@ -272,9 +284,5 @@ class MassRansomNoteDrop(Signature):
             for pid, notes in self.dropped_notes.items():
                 for note_name, dirs in notes.items():
                     if len(dirs) >= 5:
-                        self.data.append({
-                            "ransom_note": note_name,
-                            "pid": pid,
-                            "directories_count": len(dirs)
-                        })
+                        self.data.append({"ransom_note": note_name, "pid": pid, "directories_count": len(dirs)})
         return self.ret

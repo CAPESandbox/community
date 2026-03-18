@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class RansomwareIOCPAsynchronousEncryption(Signature):
     name = "ransomware_iocp_asynchronous_encryption"
     description = "Binds a large number of files to I/O Completion Ports (IOCP), possible ransomware asynchronous encryption"
@@ -38,23 +39,25 @@ class RansomwareIOCPAsynchronousEncryption(Signature):
 
         if info_class == 30 or str(info_class) == "30" or str(info_class).upper() == "FILECOMPLETIONINFORMATION":
             filepath = self.get_argument(call, "HandleName")
-            
+
             if isinstance(filepath, str) and "\\" in filepath:
                 filepath_lower = filepath.lower()
-                
+
                 # Ignore system devices/pipes
                 if "\\??\\" in filepath_lower or "\\device\\" in filepath_lower:
                     return
-                    
-                if filepath_lower not in self.iocp_files:                       
-                    self.iocp_files.add(filepath_lower)                   
+
+                if filepath_lower not in self.iocp_files:
+                    self.iocp_files.add(filepath_lower)
                     if len(self.iocp_files) <= 15:
                         self.mark_call()
 
     def on_complete(self):
         if len(self.iocp_files) > 50:
-            self.data.append({
-                "total_files_bound_to_iocp": len(self.iocp_files),
-            })
+            self.data.append(
+                {
+                    "total_files_bound_to_iocp": len(self.iocp_files),
+                }
+            )
             return True
         return False

@@ -86,10 +86,7 @@ class KernelCryptoDriverAbuse(Signature):
         self.ksec_handles = {}
         self.ioctl_counts = {}
         self.process_names = {}
-        self.ignore_procs = {
-            "chrome.exe", "firefox.exe", "msedge.exe", "iexplore.exe", 
-            "opera.exe", "brave.exe", "safari.exe"
-        }
+        self.ignore_procs = {"chrome.exe", "firefox.exe", "msedge.exe", "iexplore.exe", "opera.exe", "brave.exe", "safari.exe"}
 
     def on_call(self, call, process):
         pid = process.get("process_id")
@@ -106,7 +103,7 @@ class KernelCryptoDriverAbuse(Signature):
             self.process_names[pid] = pname
 
         if call["api"] in ("NtCreateFile", "NtOpenFile"):
-            filename = self.get_argument(call, "FileName") 
+            filename = self.get_argument(call, "FileName")
             if filename and "\\device\\ksecdd" in filename.lower():
                 handle = self.get_argument(call, "FileHandle")
                 if handle:
@@ -118,7 +115,7 @@ class KernelCryptoDriverAbuse(Signature):
 
             if (handle in self.ksec_handles[pid]) or (handle_name and "\\device\\ksecdd" in handle_name.lower()):
                 self.ioctl_counts[pid] += 1
-                
+
                 if self.ioctl_counts[pid] <= 20:
                     self.mark_call()
 
