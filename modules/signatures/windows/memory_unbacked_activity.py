@@ -611,3 +611,68 @@ class UnbackedComInstantiation(Signature):
         if self.ret:
             self.data.append({"unbacked_com_instantiations": self.com_events})
         return self.ret
+
+
+class UnbackedCryptoOperations(Signature):
+    name = "unbacked_crypto_operations"
+    description = "A thread executing in dynamically allocated (unbacked) memory invoked native Windows cryptographic APIs, indicative of a data encryption/decryption of payloads, c2, files or data"
+    severity = 3
+    confidence = 100
+    categories = ["evasion", "c2", "fileless", "obfuscation"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1027", "T1573"]
+
+    filter_apinames = {
+        "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
+        "CryptEncrypt", "CryptDecrypt", "BCryptEncrypt", "BCryptDecrypt", "CryptHashData"
+    }
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
+        self.unbacked_ranges = {}
+        self.crypto_events = []
+
+    def on_call(self, call, process):
+        api = call["api"]
+        pid = process.get("process_id")
+
+        if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
+            base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
+            region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")
+            
+            if base_address and region_size:
+                try:
+                    base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
+                    size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)
+                    
+                    if pid not in self.unbacked_ranges:
+                        self.unbacked_ranges[pid] = []
+                    self.unbacked_ranges[pid].append((base_val, base_val + size_val))
+                except (ValueError, TypeError):
+                    pass
+
+        elif api in ("CryptEncrypt", "CryptDecrypt", "BCryptEncrypt", "BCryptDecrypt", "CryptHashData"):
+            caller_addr = call.get("caller")
+            
+            if caller_addr and pid in self.unbacked_ranges:
+                try:
+                    caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
+                    
+                    for start_addr, end_addr in self.unbacked_ranges[pid]:
+                        if start_addr <= caller_val <= end_addr:
+                            proc_name = process.get("process_name", "unknown")
+                            
+                            self.crypto_events.append(f"{proc_name} executed {api} from unbacked caller {caller_addr}")
+                            self.mark_call()
+                            self.ret = True
+                            break
+                except (ValueError, TypeError):
+                    pass
+
+    def on_complete(self):
+        if self.ret:
+            self.data.append({"unbacked_crypto_operations": self.crypto_events})
+        return self.ret
