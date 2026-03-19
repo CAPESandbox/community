@@ -67,7 +67,7 @@ class ExecutesHeadlessBrowser(Signature):
 
 class SuspiciousBrowserArguments(Signature):
     name = "suspicious_browser_arguments"
-    description = "Executes a browser with suspicious arguments"
+    description = "Executed a browser with suspicious arguments"
     severity = 2
     confidence = 80
     categories = ["command", "evasion", "stealth", "defense_evasion"]
