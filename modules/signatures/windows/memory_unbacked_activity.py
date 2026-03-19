@@ -234,7 +234,7 @@ class UnbackedMemoryNetworkConnection(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
-        self.unbacked_allocations = {}
+        self.unbacked_ranges = {}
         self.malicious_threads = set() 
         self.unbacked_network_conns = []
 
@@ -244,20 +244,37 @@ class UnbackedMemoryNetworkConnection(Signature):
         tid = call.get("thread_id")
 
         if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
-            address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
-            if address:
-                if pid not in self.unbacked_allocations:
-                    self.unbacked_allocations[pid] = set()
-                self.unbacked_allocations[pid].add(str(address).lower())
+            base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
+            region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")
+            
+            if base_address and region_size:
+                try:
+                    base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
+                    size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)
+                    
+                    if pid not in self.unbacked_ranges:
+                        self.unbacked_ranges[pid] = []
+                    # Append the (start, end) tuple
+                    self.unbacked_ranges[pid].append((base_val, base_val + size_val))
+                except (ValueError, TypeError):
+                    pass
 
         elif api in ("NtCreateThreadEx", "CreateThread"):
-            if pid in self.unbacked_allocations:
+            if pid in self.unbacked_ranges:
                 start_address = self.get_argument(call, "StartAddress") or self.get_argument(call, "lpStartAddress")
                 
-                if start_address and str(start_address).lower() in self.unbacked_allocations[pid]:
-                    new_tid = self.get_argument(call, "ThreadId") or self.get_argument(call, "lpThreadId")
-                    if new_tid:
-                        self.malicious_threads.add(str(new_tid))
+                if start_address:
+                    try:
+                        start_val = int(start_address, 16) if isinstance(start_address, str) else int(start_address)
+                        
+                        for start_addr, end_addr in self.unbacked_ranges[pid]:
+                            if start_addr <= start_val <= end_addr:
+                                new_tid = self.get_argument(call, "ThreadId") or self.get_argument(call, "lpThreadId")
+                                if new_tid:
+                                    self.malicious_threads.add(str(new_tid))
+                                break # Properly indented to only break if a match is found
+                    except (ValueError, TypeError):
+                        pass
 
         elif api in ("HttpSendRequestA", "HttpSendRequestW", "InternetConnectA", "connect", "send"):
             if tid and str(tid) in self.malicious_threads:
@@ -270,7 +287,6 @@ class UnbackedMemoryNetworkConnection(Signature):
         if self.ret:
             self.data.append({"unbacked_network_connections": self.unbacked_network_conns})
         return self.ret
-
 
 class UnbackedNamedPipeCreation(Signature):
     name = "unbacked_named_pipe_creation"
