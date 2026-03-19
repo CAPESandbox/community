@@ -94,7 +94,7 @@ class UnbackedMemoryNetworkConnection(Signature):
  
 class UnbackedDnsResolution(Signature):
     name = "unbacked_dns_resolution"
-    description = "A thread executing in unbacked memory attempted to resolve a domain name"
+    description = "A thread executing in dynamically allocated (unbacked) memory attempted to resolve a domain name"
     severity = 5
     confidence = 100
     categories = ["network", "c2", "fileless", "shellcode"]
