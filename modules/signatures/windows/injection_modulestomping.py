@@ -47,7 +47,7 @@ class InjectionModuleStompingProbing(Signature):
             
             if protection:
                 try:
-                    prot_val = int(protection, 16) if isinstance(protection, str) and protection.startswith("0x") else int(protection)
+                    prot_val = int(protection, 16) if isinstance(protection, str) else protection
                     
                     # 0x40 is PAGE_EXECUTE_READWRITE (RWX)
                     if prot_val == 0x40:
@@ -77,6 +77,9 @@ class InjectionModuleStompingProbing(Signature):
 
                 if count > 5:
                     formatted_results.append(f"pid {pid} process {proc_name} executed {count} probes")
-            self.data.append({"rwx_probing_loops_detected": formatted_results})
-            
-        return self.ret
+
+            if formatted_results:
+                self.data.append({"rwx_probing_loops_detected": formatted_results})
+                return True
+
+        return False
