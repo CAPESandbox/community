@@ -290,7 +290,7 @@ class UnbackedMemoryNetworkConnection(Signature):
 
 class UnbackedNamedPipeCreation(Signature):
     name = "unbacked_named_pipe_creation"
-    description = "A thread executing in unbacked memory attempting to create a named pipe, possibly indicative of a Peer-to-Peer (P2P) SMB beacon initializing"
+    description = "A thread executing in unbacked memory attempted to create a named pipe, possibly indicative of a Peer-to-Peer (P2P) SMB beacon initializing"
     severity = 3
     confidence = 100
     categories = ["command_and_control", "lateral_movement", "fileless"]
