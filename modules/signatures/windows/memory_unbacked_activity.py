@@ -484,3 +484,53 @@ class UnbackedProcessCreation(Signature):
         if self.ret:
             self.data.append({"unbacked_processes": self.unbacked_processes})
         return self.ret
+
+
+class UnbackedMemoryApcExecution(Signature):
+    name = "unbacked_memory_apc_execution"
+    description = "Queues an Asynchronous Procedure Call (APC) where the routine points to dynamically allocated (unbacked) memory, possibly to execute shellcode"
+    severity = 3
+    confidence = 100
+    categories = ["execution", "fileless", "evasion"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1055"]
+
+    filter_apinames = {
+        "NtAllocateVirtualMemory", "VirtualAllocEx", "VirtualAlloc",
+        "NtQueueApcThread", "QueueUserAPC"
+    }
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
+        self.allocations = {}
+        self.unbacked_apcs = []
+
+    def on_call(self, call, process):
+        api = call["api"]
+        pid = process.get("process_id")
+
+        if api in ("NtAllocateVirtualMemory", "VirtualAllocEx", "VirtualAlloc"):
+            address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
+            if address:
+                if pid not in self.allocations:
+                    self.allocations[pid] = set()
+                self.allocations[pid].add(str(address))
+
+        elif api in ("NtQueueApcThread", "QueueUserAPC"):
+            apc_routine = self.get_argument(call, "ApcRoutine") or self.get_argument(call, "pfnAPC")
+            
+            if apc_routine and pid in self.allocations:
+                # If the APC routine pointer matches an address we explicitly allocated
+                if str(apc_routine) in self.allocations[pid]:
+                    proc_name = process.get("process_name", "unknown")
+                    self.unbacked_apcs.append(f"Process {proc_name} queued APC to unbacked memory at {apc_routine}")
+                    self.mark_call()
+                    self.ret = True
+
+    def on_complete(self):
+        if self.ret:
+            self.data.append({"unbacked_apc_executions": self.unbacked_apcs})
+        return self.ret
