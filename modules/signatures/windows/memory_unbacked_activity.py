@@ -618,7 +618,7 @@ class ThreadUnbackedMemory(Signature):
 
 class UnbackedComInstantiation(Signature):
     name = "unbacked_com_instantiation"
-    description = "A thread executing in unbacked memory attempted to instantiate a COM object (CoCreateInstance), possibly for WMI reconnaissance or DCOM lateral movement"
+    description = "A thread executing in unbacked memory attempted to use a COM object (CoCreateInstance), possibly for WMI reconnaissance or DCOM lateral movement"
     severity = 3
     confidence = 80
     categories = ["execution", "discovery", "lateral_movement", "fileless"]
