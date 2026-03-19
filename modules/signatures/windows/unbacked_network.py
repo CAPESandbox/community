@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class UnbackedMemoryNetworkConnection(Signature):
     name = "unbacked_memory_network_connection"
-    description = "Network connection initiated directly from dynamically allocated (unbacked) memory, indicating fileless C2 beaconing"
+    description = "Network connection initiated directly from dynamically allocated (unbacked) memory, indicative of fileless C2 activity"
     severity = 3
     confidence = 100
     categories = ["network", "c2", "fileless", "shellcode"]
@@ -28,9 +28,11 @@ class UnbackedMemoryNetworkConnection(Signature):
 
     filter_apinames = {
         "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
-        "HttpSendRequestA", "HttpSendRequestW", "InternetConnectA", "InternetConnectW", 
-        "connect", "send", "WSASend", "WinHttpSendRequest", "WinHttpConnect",
-        "recv", "WSARecv", "InternetReadFile", "WinHttpReadData"
+        "HttpSendRequestA", "HttpSendRequestW", "InternetConnectA", "InternetConnectW",
+        "WinHttpSendRequest", "WinHttpConnect", "InternetOpenUrlA", "InternetOpenUrlW",
+        "connect", "WSAConnect", "send", "WSASend", "sendto", "WSASendTo",
+        "recv", "WSARecv", "recvfrom", "WSARecvFrom", 
+        "InternetReadFile", "WinHttpReadData"
     }
 
     def __init__(self, *args, **kwargs):
@@ -60,9 +62,11 @@ class UnbackedMemoryNetworkConnection(Signature):
                     pass
 
         elif api in (
-            "HttpSendRequestA", "HttpSendRequestW", "InternetConnectA", "InternetConnectW", 
-            "connect", "send", "WSASend", "WinHttpSendRequest", "WinHttpConnect",
-            "recv", "WSARecv", "InternetReadFile", "WinHttpReadData"
+            "HttpSendRequestA", "HttpSendRequestW", "InternetConnectA", "InternetConnectW",
+            "WinHttpSendRequest", "WinHttpConnect", "InternetOpenUrlA", "InternetOpenUrlW",
+            "connect", "WSAConnect", "send", "WSASend", "sendto", "WSASendTo",
+            "recv", "WSARecv", "recvfrom", "WSARecvFrom", 
+            "InternetReadFile", "WinHttpReadData"
         ):
             caller_addr = call.get("caller")
             
@@ -78,7 +82,7 @@ class UnbackedMemoryNetworkConnection(Signature):
                             self.unbacked_network_conns.append(f"{proc_name} initiated network API {api} from unbacked caller {caller_addr}")
                             self.mark_call()
                             self.ret = True
-                            break # Match found, stop checking ranges
+                            break
                 except (ValueError, TypeError):
                     pass
 
@@ -90,18 +94,18 @@ class UnbackedMemoryNetworkConnection(Signature):
  
 class UnbackedDnsResolution(Signature):
     name = "unbacked_dns_resolution"
-    description = "A thread executing in dynamically allocated (unbacked) memory attempted to resolve a domain name"
-    severity = 3
+    description = "A thread executing in unbacked memory attempted to resolve a domain name"
+    severity = 5
     confidence = 100
-    categories = ["network", "c2", "fileless"]
+    categories = ["network", "c2", "fileless", "shellcode"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1071", "T1568"]
+    ttps = ["T1071", "T1568"] 
 
     filter_apinames = {
         "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
-        "getaddrinfo", "GetAddrInfoW", "GetAddrInfoExW", "DnsQuery_A", "DnsQuery_W", "gethostbyname"
+        "getaddrinfo", "GetAddrInfoW", "GetAddrInfoExW", "DnsQuery_A", "DnsQuery_W", "DnsQueryEx", "gethostbyname"
     }
 
     def __init__(self, *args, **kwargs):
@@ -129,7 +133,7 @@ class UnbackedDnsResolution(Signature):
                 except (ValueError, TypeError):
                     pass
 
-        elif api in ("getaddrinfo", "GetAddrInfoW", "GetAddrInfoExW", "DnsQuery_A", "DnsQuery_W", "gethostbyname"):
+        elif api in ("getaddrinfo", "GetAddrInfoW", "GetAddrInfoExW", "DnsQuery_A", "DnsQuery_W", "DnsQueryEx", "gethostbyname"):
             caller_addr = call.get("caller")
             
             if caller_addr and pid in self.unbacked_ranges:
@@ -138,8 +142,8 @@ class UnbackedDnsResolution(Signature):
                     
                     for start_addr, end_addr in self.unbacked_ranges[pid]:
                         if start_addr <= caller_val <= end_addr:
-                            # Extract the domain name being requested
-                            domain = self.get_argument(call, "NodeName") or self.get_argument(call, "pName") or self.get_argument(call, "name") or "Unknown"
+                            # FIXED: Added "Name" to catch GetAddrInfoExW correctly
+                            domain = self.get_argument(call, "Name") or self.get_argument(call, "NodeName") or self.get_argument(call, "pName") or self.get_argument(call, "name") or "Unknown"
                             proc_name = process.get("process_name", "unknown")
                             
                             self.dns_events.append(f"{proc_name} resolved domain '{domain}' from unbacked caller {caller_addr}")
@@ -160,7 +164,7 @@ class UnbackedBindShell(Signature):
     description = "A thread executing in dynamically allocated (unbacked) memory bound a network socket to listen for inbound connections, indicating a fileless TCP bind shell or P2P"
     severity = 3
     confidence = 100
-    categories = ["network", "c2", "fileless", "lateral_movement"]
+    categories = ["network", "c2", "fileless", "lateral_movement", "shellcode"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
