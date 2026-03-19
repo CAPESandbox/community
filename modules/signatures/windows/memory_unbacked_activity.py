@@ -348,7 +348,7 @@ class UnbackedVehRegistration(Signature):
 
 class UnbackedProcessCreation(Signature):
     name = "unbacked_process_creation"
-    description = "Thread executing in unbacked memory attempted to spawn a new child process"
+    description = "A thread executing in dynamically allocated (unbacked) memory attempted to spawn a new child process"
     severity = 3
     confidence = 100
     categories = ["execution", "evasion", "fileless"]
@@ -549,7 +549,7 @@ class ThreadUnbackedMemory(Signature):
 
 class UnbackedComInstantiation(Signature):
     name = "unbacked_com_instantiation"
-    description = "A thread executing in unbacked memory attempted to use a COM object (CoCreateInstance), possibly for WMI reconnaissance or DCOM lateral movement"
+    description = "A thread executing in dynamically allocated (unbacked) memory attempted to use a COM object (CoCreateInstance), possibly for WMI reconnaissance or DCOM lateral movement"
     severity = 3
     confidence = 80
     categories = ["execution", "discovery", "lateral_movement", "fileless"]
