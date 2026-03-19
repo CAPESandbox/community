@@ -534,3 +534,62 @@ class UnbackedMemoryApcExecution(Signature):
         if self.ret:
             self.data.append({"unbacked_apc_executions": self.unbacked_apcs})
         return self.ret
+
+
+class ThreadUnbackedMemory(Signature):
+    name = "thread_unbacked_memory"
+    description = "Creates a thread executing from dynamically allocated (unbacked) memory rather than a file on disk, likely to execute shellcode"
+    severity = 3
+    confidence = 80
+    categories = ["execution", "evasion", "fileless"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1055"] # Process Injection
+
+    filter_apinames = {
+        "NtAllocateVirtualMemory", "VirtualAllocEx", "VirtualAlloc",
+        "NtCreateThreadEx", "CreateRemoteThread", "CreateThread"
+    }
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
+        self.allocations = {}
+        self.suspicious_threads = []
+
+    def on_call(self, call, process):
+        api = call["api"]
+        pid = process.get("process_id")
+
+        if api in ("NtAllocateVirtualMemory", "VirtualAllocEx", "VirtualAlloc"):
+            address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
+            protection = self.get_argument(call, "Protection") or self.get_argument(call, "flProtect")
+            
+            if address and protection:
+                try:
+                    prot_val = int(protection, 16) if isinstance(protection, str) and protection.startswith("0x") else int(protection)
+                    
+                    # Track RWX (0x40) or RX (0x20) memory creation
+                    if prot_val in (0x40, 0x20):
+                        if pid not in self.allocations:
+                            self.allocations[pid] = set()
+                        self.allocations[pid].add(str(address))
+                except (ValueError, TypeError):
+                    pass
+
+        elif api in ("NtCreateThreadEx", "CreateRemoteThread", "CreateThread"):
+            start_address = self.get_argument(call, "StartAddress") or self.get_argument(call, "lpStartAddress")
+            
+            if start_address and pid in self.allocations:
+                # If the thread starts EXACTLY at the base address we just allocated, it's shellcode!
+                if str(start_address) in self.allocations[pid]:
+                    proc_name = process.get("process_name", "unknown")
+                    self.suspicious_threads.append(f"Process {proc_name} (PID {pid}) created thread at unbacked address {start_address}")
+                    self.mark_call()
+                    self.ret = True
+
+    def on_complete(self):
+        if self.ret:
+            self.data.append({"unbacked_memory_threads": self.suspicious_threads})
+        return self.ret
