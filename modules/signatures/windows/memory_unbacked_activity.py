@@ -212,76 +212,7 @@ class UnbackedRegistryPersistence(Signature):
         if self.ret:
             self.data.append({"unbacked_registry_modifications": self.malicious_registry_writes})
         return self.ret
-
-
-class UnbackedMemoryNetworkConnection(Signature):
-    name = "unbacked_memory_network_connection"
-    description = "Network connection initiated directly from dynamically allocated (unbacked) memory, indicating fileless C2 beaconing"
-    severity = 3
-    confidence = 100
-    categories = ["network", "c2", "fileless", "shellcode"]
-    authors = ["Kevin Ross"]
-    minimum = "1.3"
-    evented = True
-    ttps = ["T1071", "T1055"] 
-
-    filter_apinames = {
-        "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
-        "HttpSendRequestA", "HttpSendRequestW", "InternetConnectA", "InternetConnectW", 
-        "connect", "send", "WSASend", "WinHttpSendRequest", "WinHttpConnect"
-    }
-
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.ret = False
-        self.unbacked_ranges = {}
-        self.unbacked_network_conns = []
-
-    def on_call(self, call, process):
-        api = call["api"]
-        pid = process.get("process_id")
-
-        # 1. Track the boundaries of unbacked memory allocations
-        if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
-            base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
-            region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")
-            
-            if base_address and region_size:
-                try:
-                    base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
-                    size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)
-                    
-                    if pid not in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = []
-                    # Append the (start, end) tuple
-                    self.unbacked_ranges[pid].append((base_val, base_val + size_val))
-                except (ValueError, TypeError):
-                    pass
-
-        # 2. Catch network APIs where the CALLER originates from unbacked memory
-        elif api in ("HttpSendRequestA", "HttpSendRequestW", "InternetConnectA", "InternetConnectW", "connect", "send", "WSASend", "WinHttpSendRequest", "WinHttpConnect"):
-            caller_addr = call.get("caller")
-            
-            if caller_addr and pid in self.unbacked_ranges:
-                try:
-                    caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
-                    
-                    for start_addr, end_addr in self.unbacked_ranges[pid]:
-                        # If the execution pointer that called the Network API is inside our unbacked heap
-                        if start_addr <= caller_val <= end_addr:
-                            proc_name = process.get("process_name", "unknown")
-                            
-                            self.unbacked_network_conns.append(f"{proc_name} initiated network API {api} from unbacked caller {caller_addr}")
-                            self.mark_call()
-                            self.ret = True
-                            break # Match found, stop checking ranges
-                except (ValueError, TypeError):
-                    pass
-
-    def on_complete(self):
-        if self.ret:
-            self.data.append({"unbacked_network_connections": self.unbacked_network_conns})
-        return self.ret
+        
 
 class UnbackedNamedPipeCreation(Signature):
     name = "unbacked_named_pipe_creation"
