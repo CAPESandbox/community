@@ -217,7 +217,7 @@ class UnbackedRegistryPersistence(Signature):
 class UnbackedMemoryNetworkConnection(Signature):
     name = "unbacked_memory_network_connection"
     description = "Network connection initiated directly from dynamically allocated (unbacked) memory, indicating fileless C2 beaconing"
-    severity = 5
+    severity = 3
     confidence = 100
     categories = ["network", "c2", "fileless", "shellcode"]
     authors = ["Kevin Ross"]
