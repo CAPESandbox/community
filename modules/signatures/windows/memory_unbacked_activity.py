@@ -92,7 +92,7 @@ class UnbackedTokenManipulation(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1134", "T1134"]
+    ttps = ["T1134"]
 
     filter_apinames = {
         "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
