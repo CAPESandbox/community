@@ -67,7 +67,7 @@ class InterProcessCommsNamedPipe(Signature):
                     event = {
                         "pipe_name": pipe_name,
                         "server_process": f"{creator['name']} (PID: {creator['pid']})",
-                        "injected_client_process": f"{proc_name} (PID: {pid})"
+                        "client_process": f"{proc_name} (PID: {pid})"
                     }
                     
                     if event not in self.ipc_events:
@@ -202,7 +202,7 @@ class InterProcessCommsSharedMemory(Signature):
             if section_lower.endswith(".exe") or section_lower.endswith(".bin") or section_lower.endswith(".tmp"):
                 is_suspicious_mapping = True
                 
-            elif "\\users\\" in section_lower and ("\\temp\\" in section_lower or "\\appdata\\" in section_lower or "\\downloads\\" in section_lower):
+            elif "\\users\\" in section_lower and any(p in section_lower for p in ("\\temp\\", "\\appdata\\", "\\downloads\\")):
                 is_suspicious_mapping = True
 
             if not is_suspicious_mapping:
