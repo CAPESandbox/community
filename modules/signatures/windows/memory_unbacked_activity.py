@@ -216,8 +216,8 @@ class UnbackedRegistryPersistence(Signature):
 
 class UnbackedMemoryNetworkConnection(Signature):
     name = "unbacked_memory_network_connection"
-    description = "Network connection from a thread executing in dynamically allocated (unbacked) memory"
-    severity = 3
+    description = "Network connection initiated directly from dynamically allocated (unbacked) memory, indicating fileless C2 beaconing"
+    severity = 5
     confidence = 100
     categories = ["network", "c2", "fileless", "shellcode"]
     authors = ["Kevin Ross"]
@@ -227,22 +227,21 @@ class UnbackedMemoryNetworkConnection(Signature):
 
     filter_apinames = {
         "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
-        "NtCreateThreadEx", "CreateThread",
-        "HttpSendRequestA", "HttpSendRequestW", "InternetConnectA", "connect", "send"
+        "HttpSendRequestA", "HttpSendRequestW", "InternetConnectA", "InternetConnectW", 
+        "connect", "send", "WSASend", "WinHttpSendRequest", "WinHttpConnect"
     }
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
         self.unbacked_ranges = {}
-        self.malicious_threads = set() 
         self.unbacked_network_conns = []
 
     def on_call(self, call, process):
         api = call["api"]
         pid = process.get("process_id")
-        tid = call.get("thread_id")
 
+        # 1. Track the boundaries of unbacked memory allocations
         if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
             base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
             region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")
@@ -259,29 +258,25 @@ class UnbackedMemoryNetworkConnection(Signature):
                 except (ValueError, TypeError):
                     pass
 
-        elif api in ("NtCreateThreadEx", "CreateThread"):
-            if pid in self.unbacked_ranges:
-                start_address = self.get_argument(call, "StartAddress") or self.get_argument(call, "lpStartAddress")
-                
-                if start_address:
-                    try:
-                        start_val = int(start_address, 16) if isinstance(start_address, str) else int(start_address)
-                        
-                        for start_addr, end_addr in self.unbacked_ranges[pid]:
-                            if start_addr <= start_val <= end_addr:
-                                new_tid = self.get_argument(call, "ThreadId") or self.get_argument(call, "lpThreadId")
-                                if new_tid:
-                                    self.malicious_threads.add(str(new_tid))
-                                break # Properly indented to only break if a match is found
-                    except (ValueError, TypeError):
-                        pass
-
-        elif api in ("HttpSendRequestA", "HttpSendRequestW", "InternetConnectA", "connect", "send"):
-            if tid and str(tid) in self.malicious_threads:
-                proc_name = process.get("process_name", "unknown")
-                self.unbacked_network_conns.append(f"Thread {tid} in {proc_name} initiated network API {api} from unbacked memory")
-                self.mark_call()
-                self.ret = True
+        # 2. Catch network APIs where the CALLER originates from unbacked memory
+        elif api in ("HttpSendRequestA", "HttpSendRequestW", "InternetConnectA", "InternetConnectW", "connect", "send", "WSASend", "WinHttpSendRequest", "WinHttpConnect"):
+            caller_addr = call.get("caller")
+            
+            if caller_addr and pid in self.unbacked_ranges:
+                try:
+                    caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
+                    
+                    for start_addr, end_addr in self.unbacked_ranges[pid]:
+                        # If the execution pointer that called the Network API is inside our unbacked heap
+                        if start_addr <= caller_val <= end_addr:
+                            proc_name = process.get("process_name", "unknown")
+                            
+                            self.unbacked_network_conns.append(f"{proc_name} initiated network API {api} from unbacked caller {caller_addr}")
+                            self.mark_call()
+                            self.ret = True
+                            break # Match found, stop checking ranges
+                except (ValueError, TypeError):
+                    pass
 
     def on_complete(self):
         if self.ret:
@@ -505,7 +500,7 @@ class UnbackedMemoryApcExecution(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
-        self.allocations = {}
+        self.unbacked_ranges = {} # Fixed: Now using range tracking
         self.unbacked_apcs = []
 
     def on_call(self, call, process):
@@ -513,22 +508,37 @@ class UnbackedMemoryApcExecution(Signature):
         pid = process.get("process_id")
 
         if api in ("NtAllocateVirtualMemory", "VirtualAllocEx", "VirtualAlloc"):
-            address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
-            if address:
-                if pid not in self.allocations:
-                    self.allocations[pid] = set()
-                self.allocations[pid].add(str(address))
+            base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
+            region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")
+            
+            if base_address and region_size:
+                try:
+                    base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
+                    size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)
+                    
+                    if pid not in self.unbacked_ranges:
+                        self.unbacked_ranges[pid] = []
+                    self.unbacked_ranges[pid].append((base_val, base_val + size_val))
+                except (ValueError, TypeError):
+                    pass
 
         elif api in ("NtQueueApcThread", "QueueUserAPC"):
             apc_routine = self.get_argument(call, "ApcRoutine") or self.get_argument(call, "pfnAPC")
             
-            if apc_routine and pid in self.allocations:
-                # If the APC routine pointer matches an address we explicitly allocated
-                if str(apc_routine) in self.allocations[pid]:
-                    proc_name = process.get("process_name", "unknown")
-                    self.unbacked_apcs.append(f"Process {proc_name} queued APC to unbacked memory at {apc_routine}")
-                    self.mark_call()
-                    self.ret = True
+            if apc_routine and pid in self.unbacked_ranges:
+                try:
+                    apc_val = int(apc_routine, 16) if isinstance(apc_routine, str) else int(apc_routine)
+                    
+                    for start_addr, end_addr in self.unbacked_ranges[pid]:
+                        # Fixed: Checks if the APC routine points ANYWHERE inside the unbacked allocation
+                        if start_addr <= apc_val <= end_addr:
+                            proc_name = process.get("process_name", "unknown")
+                            self.unbacked_apcs.append(f"Process {proc_name} queued APC to unbacked memory at {apc_routine}")
+                            self.mark_call()
+                            self.ret = True
+                            break
+                except (ValueError, TypeError):
+                    pass
 
     def on_complete(self):
         if self.ret:
@@ -555,7 +565,7 @@ class ThreadUnbackedMemory(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
-        self.allocations = {}
+        self.unbacked_ranges = {} # Fixed: Now using range tracking
         self.suspicious_threads = []
 
     def on_call(self, call, process):
@@ -563,31 +573,42 @@ class ThreadUnbackedMemory(Signature):
         pid = process.get("process_id")
 
         if api in ("NtAllocateVirtualMemory", "VirtualAllocEx", "VirtualAlloc"):
-            address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
+            base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
+            region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")
             protection = self.get_argument(call, "Protection") or self.get_argument(call, "flProtect")
             
-            if address and protection:
+            if base_address and region_size and protection:
                 try:
                     prot_val = int(protection, 16) if isinstance(protection, str) and protection.startswith("0x") else int(protection)
                     
                     # Track RWX (0x40) or RX (0x20) memory creation
                     if prot_val in (0x40, 0x20):
-                        if pid not in self.allocations:
-                            self.allocations[pid] = set()
-                        self.allocations[pid].add(str(address))
+                        base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
+                        size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)
+                        
+                        if pid not in self.unbacked_ranges:
+                            self.unbacked_ranges[pid] = []
+                        self.unbacked_ranges[pid].append((base_val, base_val + size_val))
                 except (ValueError, TypeError):
                     pass
 
         elif api in ("NtCreateThreadEx", "CreateRemoteThread", "CreateThread"):
             start_address = self.get_argument(call, "StartAddress") or self.get_argument(call, "lpStartAddress")
             
-            if start_address and pid in self.allocations:
-                # If the thread starts EXACTLY at the base address we just allocated, it's shellcode!
-                if str(start_address) in self.allocations[pid]:
-                    proc_name = process.get("process_name", "unknown")
-                    self.suspicious_threads.append(f"Process {proc_name} (PID {pid}) created thread at unbacked address {start_address}")
-                    self.mark_call()
-                    self.ret = True
+            if start_address and pid in self.unbacked_ranges:
+                try:
+                    start_val = int(start_address, 16) if isinstance(start_address, str) else int(start_address)
+                    
+                    for start_addr, end_addr in self.unbacked_ranges[pid]:
+                        # Fixed: Checks if the new thread starts ANYWHERE inside the unbacked allocation
+                        if start_addr <= start_val <= end_addr:
+                            proc_name = process.get("process_name", "unknown")
+                            self.suspicious_threads.append(f"Process {proc_name} (PID {pid}) created thread at unbacked address {start_address}")
+                            self.mark_call()
+                            self.ret = True
+                            break
+                except (ValueError, TypeError):
+                    pass
 
     def on_complete(self):
         if self.ret:
