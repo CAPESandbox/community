@@ -676,3 +676,136 @@ class UnbackedCryptoOperations(Signature):
         if self.ret:
             self.data.append({"unbacked_crypto_operations": self.crypto_events})
         return self.ret
+
+
+class UnbackedServiceManipulation(Signature):
+    name = "unbacked_service_manipulation"
+    description = "A thread executing in dynamically allocated (unbacked) memory attempted to interact with the Service Control Manager"
+    severity = 3
+    confidence = 100
+    categories = ["lateral_movement", "persistence", "fileless"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1543", "T1569"]
+
+    filter_apinames = {
+        "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
+        "OpenSCManagerA", "OpenSCManagerW", "CreateServiceA", "CreateServiceW", "StartServiceA", "StartServiceW"
+    }
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
+        self.unbacked_ranges = {}
+        self.scm_events = []
+
+    def on_call(self, call, process):
+        api = call["api"]
+        pid = process.get("process_id")
+
+        if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
+            base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
+            region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")
+            
+            if base_address and region_size:
+                try:
+                    base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
+                    size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)
+                    
+                    if pid not in self.unbacked_ranges:
+                        self.unbacked_ranges[pid] = []
+                    self.unbacked_ranges[pid].append((base_val, base_val + size_val))
+                except (ValueError, TypeError):
+                    pass
+
+        elif api in ("OpenSCManagerA", "OpenSCManagerW", "CreateServiceA", "CreateServiceW", "StartServiceA", "StartServiceW"):
+            caller_addr = call.get("caller")
+            
+            if caller_addr and pid in self.unbacked_ranges:
+                try:
+                    caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
+                    
+                    for start_addr, end_addr in self.unbacked_ranges[pid]:
+                        if start_addr <= caller_val <= end_addr:
+                            machine_name = self.get_argument(call, "MachineName") or self.get_argument(call, "lpMachineName") or "Localhost"
+                            service_name = self.get_argument(call, "ServiceName") or self.get_argument(call, "lpServiceName") or "Unknown"
+                            proc_name = process.get("process_name", "unknown")
+                            
+                            self.scm_events.append(f"{proc_name} executed {api} targeting {machine_name}\\{service_name} from unbacked caller {caller_addr}")
+                            self.mark_call()
+                            self.ret = True
+                            break
+                except (ValueError, TypeError):
+                    pass
+
+    def on_complete(self):
+        if self.ret:
+            self.data.append({"unbacked_service_manipulations": self.scm_events})
+        return self.ret
+        
+
+class UnbackedFileDropping(Signature):
+    name = "unbacked_file_dropping"
+    description = "A thread executing in dynamically allocated (unbacked) memory attempted to write data to the filesystem"
+    severity = 3
+    confidence = 100
+    categories = ["execution", "exfiltration", "fileless"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1105", "T1074"]
+
+    filter_apinames = {
+        "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
+        "NtWriteFile", "WriteFile"
+    }
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
+        self.unbacked_ranges = {}
+        self.file_drops = []
+
+    def on_call(self, call, process):
+        api = call["api"]
+        pid = process.get("process_id")
+
+        if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
+            base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
+            region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")
+            
+            if base_address and region_size:
+                try:
+                    base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
+                    size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)
+                    
+                    if pid not in self.unbacked_ranges:
+                        self.unbacked_ranges[pid] = []
+                    self.unbacked_ranges[pid].append((base_val, base_val + size_val))
+                except (ValueError, TypeError):
+                    pass
+
+        elif api in ("NtWriteFile", "WriteFile"):
+            caller_addr = call.get("caller")
+            
+            if caller_addr and pid in self.unbacked_ranges:
+                try:
+                    caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
+                    
+                    for start_addr, end_addr in self.unbacked_ranges[pid]:
+                        if start_addr <= caller_val <= end_addr:
+                            file_name = self.get_argument(call, "FileName") or self.get_argument(call, "HandleName") or "Unknown Handle"
+                            proc_name = process.get("process_name", "unknown")
+                            
+                            self.file_drops.append(f"{proc_name} wrote to file '{file_name}' from unbacked caller {caller_addr}")
+                            self.mark_call()
+                            self.ret = True
+                            break
+                except (ValueError, TypeError):
+                    pass
+
+    def on_complete(self):
+        if self.ret:
+            self.data.append({"unbacked_file_drops": self.file_drops})
+        return self.ret
