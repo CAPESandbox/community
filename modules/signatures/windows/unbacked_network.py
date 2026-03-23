@@ -94,8 +94,8 @@ class UnbackedMemoryNetworkConnection(Signature):
  
 class UnbackedDnsResolution(Signature):
     name = "unbacked_dns_resolution"
-    description = "A thread executing in dynamically allocated (unbacked) memory attempted to resolve a domain name"
-    severity = 5
+    description = "Attempted to resolve a domain name from dynamically allocated (unbacked) memory"
+    severity = 3
     confidence = 100
     categories = ["network", "c2", "fileless", "shellcode"]
     authors = ["Kevin Ross"]
@@ -161,7 +161,7 @@ class UnbackedDnsResolution(Signature):
 
 class UnbackedBindShell(Signature):
     name = "unbacked_bind_shell"
-    description = "A thread executing in dynamically allocated (unbacked) memory bound a network socket to listen for inbound connections, indicating a fileless TCP bind shell or P2P"
+    description = "Bound a network socket to listen for inbound connections from dynamically allocated (unbacked) memory, indicating a fileless TCP bind shell or P2P"
     severity = 3
     confidence = 100
     categories = ["network", "c2", "fileless", "lateral_movement", "shellcode"]
