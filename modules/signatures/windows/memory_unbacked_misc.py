@@ -536,3 +536,71 @@ class UnbackedWmiExecution(Signature):
         if self.ret:
             self.data.append({"unbacked_wmi_executions": self.wmi_executions})
         return self.ret
+
+
+class UnbackedProcessEnumeration(Signature):
+    name = "unbacked_process_enumeration"
+    description = "Attempted to enumerate running processes from dynamically allocated (unbacked) memory"
+    severity = 3
+    confidence = 100
+    categories = ["discovery", "fileless", "reconnaissance", "shellcode"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1057"]
+
+    filter_apinames = {
+        "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
+        "CreateToolhelp32Snapshot", "EnumProcesses", "NtQuerySystemInformation", "Process32FirstW", "Process32NextW"
+    }
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
+        self.unbacked_ranges = {}
+        self.enum_events = []
+
+    def on_call(self, call, process):
+        api = call["api"]
+        pid = process.get("process_id")
+
+        if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
+            base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
+            region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")           
+            if base_address and region_size:
+                try:
+                    base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
+                    size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)                   
+                    if pid not in self.unbacked_ranges:
+                        self.unbacked_ranges[pid] = []
+                    self.unbacked_ranges[pid].append((base_val, base_val + size_val))
+                except (ValueError, TypeError):
+                    pass
+
+        elif api in ("CreateToolhelp32Snapshot", "EnumProcesses", "NtQuerySystemInformation", "Process32FirstW", "Process32NextW"):
+            caller_addr = call.get("caller")         
+            if caller_addr and pid in self.unbacked_ranges:
+                try:
+                    caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)                    
+                    for start_addr, end_addr in self.unbacked_ranges[pid]:
+                        if start_addr <= caller_val <= end_addr:
+                            if api == "NtQuerySystemInformation":
+                                info_class = self.get_argument(call, "SystemInformationClass")
+                                if str(info_class) != "5":
+                                    continue
+                            
+                            proc_name = process.get("process_name", "unknown")
+                            
+                            event_msg = f"{proc_name} executed {api} (Process Discovery) from unbacked caller {caller_addr}"
+                            if event_msg not in self.enum_events:
+                                self.enum_events.append(event_msg)
+                                self.mark_call()
+                                self.ret = True
+                            break
+                except (ValueError, TypeError):
+                    pass
+
+    def on_complete(self):
+        if self.ret:
+            self.data.append({"unbacked_process_enumerations": self.enum_events})
+        return self.ret
