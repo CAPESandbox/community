@@ -262,9 +262,8 @@ class UnbackedMemoryApcExecution(Signature):
             if apc_routine and pid in self.unbacked_ranges:
                 try:
                     apc_val = int(apc_routine, 16) if isinstance(apc_routine, str) else int(apc_routine)
-                    for start_addr, end_addr in self.unbacked_ranges[pid]:
+                    for start_addr, end_addr in self.unbacked_ranges[pid]:                        
                         if start_addr <= apc_val <= end_addr:
-                    for start_addr, end_addr in self.unbacked_ranges[pid]:                        if start_addr <= apc_val <= end_addr:
                             proc_name = process.get("process_name", "unknown")
                             self.unbacked_apcs.append(f"Process {proc_name} queued APC to unbacked memory at {apc_routine}")
                             self.mark_call()
