@@ -25,7 +25,7 @@ class DirectSyscallEvasion(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1055"]
+    ttps = ["T1055", "T1106"]
 
     filter_apinames = {"sysenter", "syscall"}
 
@@ -63,7 +63,7 @@ class DirectSyscallEvasion(Signature):
                 mod_name = module if module else "Unknown_Memory"
                 if mod_name not in self.evasive_syscalls:
                     self.evasive_syscalls.add(mod_name)
-                    if len(self.evasive_syscalls) <= 10:
+                    if len(self.evasive_syscalls) <= 20:
                         self.mark_call()
 
         except ValueError:
@@ -76,3 +76,72 @@ class DirectSyscallEvasion(Signature):
             ret = True
 
         return ret
+        
+
+class UnbackedSyscallExecution(Signature):
+    name = "unbacked_syscall_execution"
+    description = "Executes direct syscalls where the return address points to dynamically allocated (unbacked) memory"
+    severity = 3
+    confidence = 100
+    categories = ["evasion", "stealth", "fileless", "shellcode"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1055", "T1106"]
+
+    filter_apinames = {
+        "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
+        "sysenter", "syscall"
+    }
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
+        self.unbacked_ranges = {}
+        self.unbacked_syscalls = []
+
+    def on_call(self, call, process):
+        api = call["api"]
+        pid = process.get("process_id")
+
+        if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
+            base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
+            region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")
+            
+            if base_address and region_size:
+                try:
+                    base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
+                    size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)
+                    
+                    if pid not in self.unbacked_ranges:
+                        self.unbacked_ranges[pid] = []
+                    self.unbacked_ranges[pid].append((base_val, base_val + size_val))
+                except (ValueError, TypeError):
+                    pass
+
+        elif api in ("sysenter", "syscall"):
+            ret_addr = self.get_argument(call, "Return Address")
+            caller_addr = call.get("caller")
+            target_addr = caller_addr if caller_addr and str(caller_addr) != "0x00000000" else ret_addr
+            
+            if target_addr and pid in self.unbacked_ranges:
+                try:
+                    target_val = int(target_addr, 16) if isinstance(target_addr, str) else int(target_addr)
+                    
+                    for start_addr, end_addr in self.unbacked_ranges[pid]:
+                        if start_addr <= target_val <= end_addr:
+                            proc_name = process.get("process_name", "unknown")
+                            syscall = self.get_argument(call, "Module") or "Unknown SSN"
+                            event_msg = f"{proc_name} executed {api} ({syscall}) from unbacked memory at {target_addr}"
+                            if event_msg not in self.unbacked_syscalls:
+                                self.unbacked_syscalls.append(event_msg)
+                                self.mark_call()
+                                self.ret = True
+                            break
+                except (ValueError, TypeError):
+                    pass
+
+    def on_complete(self):
+        if self.ret:
+            self.data.append({"unbacked_syscalls": self.unbacked_syscalls})
+        return self.ret
