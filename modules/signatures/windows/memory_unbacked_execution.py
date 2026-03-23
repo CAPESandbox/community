@@ -345,3 +345,66 @@ class ThreadUnbackedMemory(Signature):
         if self.ret:
             self.data.append({"unbacked_memory_threads": self.suspicious_threads})
         return self.ret
+
+
+class UnbackedApiResolution(Signature):
+    name = "unbacked_api_resolution"
+    description = "Manually resolves API addresses from dynamically allocated (unbacked) memory, indicative of shellcode or an unpacker"
+    severity = 3
+    confidence = 100
+    categories = ["evasion", "shellcode", "fileless"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1129", "T1055"]
+
+    filter_apinames = {
+        "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
+        "GetProcAddress", "LdrGetProcedureAddress", "LdrGetProcedureAddressForCaller"
+    }
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
+        self.unbacked_ranges = {}
+        self.resolved_apis = set()
+
+    def on_call(self, call, process):
+        api = call["api"]
+        pid = process.get("process_id")
+
+        if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
+            base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
+            region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")        
+            if base_address and region_size:
+                try:
+                    base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
+                    size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)                    
+                    if pid not in self.unbacked_ranges:
+                        self.unbacked_ranges[pid] = []
+                    self.unbacked_ranges[pid].append((base_val, base_val + size_val))
+                except (ValueError, TypeError):
+                    pass
+
+        elif api in ("GetProcAddress", "LdrGetProcedureAddress", "LdrGetProcedureAddressForCaller"):
+            caller_addr = call.get("caller")     
+            if caller_addr and pid in self.unbacked_ranges:
+                try:
+                    caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)                   
+                    for start_addr, end_addr in self.unbacked_ranges[pid]:
+                        if start_addr <= caller_val <= end_addr:
+                            target_api = self.get_argument(call, "FunctionName") or self.get_argument(call, "lpProcName") or "Unknown API"
+                            proc_name = process.get("process_name", "unknown")                           
+                            event_msg = f"{proc_name} resolved API '{target_api}' from unbacked caller {caller_addr}"
+                            if event_msg not in self.resolved_apis:
+                                self.resolved_apis.add(event_msg)
+                                self.mark_call()
+                                self.ret = True
+                            break
+                except (ValueError, TypeError):
+                    pass
+
+    def on_complete(self):
+        if self.ret:
+            self.data.append({"unbacked_api_resolutions": list(self.resolved_apis)})
+        return self.ret
