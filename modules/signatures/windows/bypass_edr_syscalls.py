@@ -80,7 +80,7 @@ class DirectSyscallEvasion(Signature):
 
 class UnbackedSyscallExecution(Signature):
     name = "unbacked_syscall_execution"
-    description = "Executes direct syscalls where the return address points to dynamically allocated (unbacked) memory"
+    description = "Executes syscalls where the return address or caller points to dynamically allocated (unbacked) memory"
     severity = 3
     confidence = 100
     categories = ["evasion", "stealth", "fileless", "shellcode"]
@@ -122,24 +122,32 @@ class UnbackedSyscallExecution(Signature):
         elif api in ("sysenter", "syscall"):
             ret_addr = self.get_argument(call, "Return Address")
             caller_addr = call.get("caller")
-            target_addr = caller_addr if caller_addr and str(caller_addr) != "0x00000000" else ret_addr
             
-            if target_addr and pid in self.unbacked_ranges:
-                try:
-                    target_val = int(target_addr, 16) if isinstance(target_addr, str) else int(target_addr)
-                    
-                    for start_addr, end_addr in self.unbacked_ranges[pid]:
-                        if start_addr <= target_val <= end_addr:
-                            proc_name = process.get("process_name", "unknown")
-                            syscall = self.get_argument(call, "Module") or "Unknown SSN"
-                            event_msg = f"{proc_name} executed {api} ({syscall}) from unbacked memory at {target_addr}"
-                            if event_msg not in self.unbacked_syscalls:
-                                self.unbacked_syscalls.append(event_msg)
-                                self.mark_call()
-                                self.ret = True
-                            break
-                except (ValueError, TypeError):
-                    pass
+            addresses_to_check = []
+            if ret_addr and str(ret_addr) != "0x00000000":
+                addresses_to_check.append(("Return Address", ret_addr))
+            if caller_addr and str(caller_addr) != "0x00000000":
+                addresses_to_check.append(("Caller", caller_addr))
+            
+            if addresses_to_check and pid in self.unbacked_ranges:
+                for addr_type, addr_str in addresses_to_check:
+                    try:
+                        addr_val = int(addr_str, 16) if isinstance(addr_str, str) else int(addr_str)
+                        
+                        for start_addr, end_addr in self.unbacked_ranges[pid]:
+                            if start_addr <= addr_val <= end_addr:
+                                proc_name = process.get("process_name", "unknown")
+                                syscall_module = self.get_argument(call, "Module") or "Unknown SSN"
+                                
+                                event_msg = f"{proc_name} executed {api} ({syscall_module}) where {addr_type} points to unbacked memory at {addr_str}"
+                                
+                                if event_msg not in self.unbacked_syscalls:
+                                    self.unbacked_syscalls.append(event_msg)
+                                    self.mark_call()
+                                    self.ret = True
+                                break
+                    except (ValueError, TypeError):
+                        pass
 
     def on_complete(self):
         if self.ret:
