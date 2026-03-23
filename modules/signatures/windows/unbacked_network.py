@@ -29,7 +29,7 @@ class UnbackedMemoryNetworkConnection(Signature):
     filter_apinames = {
         "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
         "HttpSendRequestA", "HttpSendRequestW", "InternetConnectA", "InternetConnectW",
-        "WinHttpSendRequest", "WinHttpConnect", "InternetOpenUrlA", "InternetOpenUrlW",
+        "WinHttpSendRequest", "WinHttpConnect", "WinHttpOpenRequest", "InternetOpenUrlA", "InternetOpenUrlW",
         "connect", "WSAConnect", "send", "WSASend", "sendto", "WSASendTo",
         "recv", "WSARecv", "recvfrom", "WSARecvFrom", 
         "InternetReadFile", "WinHttpReadData"
@@ -63,7 +63,7 @@ class UnbackedMemoryNetworkConnection(Signature):
 
         elif api in (
             "HttpSendRequestA", "HttpSendRequestW", "InternetConnectA", "InternetConnectW",
-            "WinHttpSendRequest", "WinHttpConnect", "InternetOpenUrlA", "InternetOpenUrlW",
+            "WinHttpSendRequest", "WinHttpConnect", "WinHttpOpenRequest", "InternetOpenUrlA", "InternetOpenUrlW",
             "connect", "WSAConnect", "send", "WSASend", "sendto", "WSASendTo",
             "recv", "WSARecv", "recvfrom", "WSARecvFrom", 
             "InternetReadFile", "WinHttpReadData"
