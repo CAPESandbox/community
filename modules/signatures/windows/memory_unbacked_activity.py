@@ -85,7 +85,7 @@ class UnbackedLibraryLoad(Signature):
 
 class UnbackedTokenManipulation(Signature):
     name = "unbacked_token_manipulation"
-    description = "A thread executing in unbacked memory attempted to open, duplicate, or impersonate an access token, indicative credential theft or lateral movement"
+    description = "Attempted to open, duplicate, or impersonate an access token from dynamically allocated (unbacked) memory, indicative credential theft or lateral movement"
     severity = 3
     confidence = 100
     categories = ["privilege_escalation", "credential_access", "lateral_movement"]
@@ -150,7 +150,7 @@ class UnbackedTokenManipulation(Signature):
 
 class UnbackedRegistryPersistence(Signature):
     name = "unbacked_registry_persistence"
-    description = "A thread executing in unbacked memory attempted to modify the Windows registry"
+    description = "Attempted to modify the Windows registry from dynamically allocated (unbacked) memory"
     severity = 3
     confidence = 100
     categories = ["persistence", "evasion", "fileless"]
@@ -216,7 +216,7 @@ class UnbackedRegistryPersistence(Signature):
 
 class UnbackedNamedPipeCreation(Signature):
     name = "unbacked_named_pipe_creation"
-    description = "A thread executing in unbacked memory attempted to create a named pipe, possibly indicative of a Peer-to-Peer (P2P) SMB beacon initializing"
+    description = "Attempted to create a named pipe from dynamically allocated (unbacked) memory, possibly indicative of fileless Peer-to-Peer (P2P) SMB beacon"
     severity = 3
     confidence = 100
     categories = ["command_and_control", "lateral_movement", "fileless"]
@@ -348,7 +348,7 @@ class UnbackedVehRegistration(Signature):
 
 class UnbackedProcessCreation(Signature):
     name = "unbacked_process_creation"
-    description = "A thread executing in dynamically allocated (unbacked) memory attempted to spawn a new child process"
+    description = "Attempted to spawn a new child process from dynamically allocated (unbacked) memory"
     severity = 3
     confidence = 100
     categories = ["execution", "evasion", "fileless"]
@@ -460,9 +460,7 @@ class UnbackedMemoryApcExecution(Signature):
                 try:
                     apc_val = int(apc_routine, 16) if isinstance(apc_routine, str) else int(apc_routine)
                     
-                    for start_addr, end_addr in self.unbacked_ranges[pid]:
-                        # Fixed: Checks if the APC routine points ANYWHERE inside the unbacked allocation
-                        if start_addr <= apc_val <= end_addr:
+                    for start_addr, end_addr in self.unbacked_ranges[pid]:                        if start_addr <= apc_val <= end_addr:
                             proc_name = process.get("process_name", "unknown")
                             self.unbacked_apcs.append(f"Process {proc_name} queued APC to unbacked memory at {apc_routine}")
                             self.mark_call()
@@ -531,7 +529,6 @@ class ThreadUnbackedMemory(Signature):
                     start_val = int(start_address, 16) if isinstance(start_address, str) else int(start_address)
                     
                     for start_addr, end_addr in self.unbacked_ranges[pid]:
-                        # Fixed: Checks if the new thread starts ANYWHERE inside the unbacked allocation
                         if start_addr <= start_val <= end_addr:
                             proc_name = process.get("process_name", "unknown")
                             self.suspicious_threads.append(f"Process {proc_name} (PID {pid}) created thread at unbacked address {start_address}")
@@ -549,7 +546,7 @@ class ThreadUnbackedMemory(Signature):
 
 class UnbackedComInstantiation(Signature):
     name = "unbacked_com_instantiation"
-    description = "A thread executing in dynamically allocated (unbacked) memory attempted to use a COM object (CoCreateInstance), possibly for WMI reconnaissance or DCOM lateral movement"
+    description = "Attempted to use a COM object (CoCreateInstance) from dynamically allocated (unbacked) memory, possibly for WMI reconnaissance or DCOM lateral movement"
     severity = 3
     confidence = 80
     categories = ["execution", "discovery", "lateral_movement", "fileless"]
@@ -615,10 +612,10 @@ class UnbackedComInstantiation(Signature):
 
 class UnbackedCryptoOperations(Signature):
     name = "unbacked_crypto_operations"
-    description = "A thread executing in dynamically allocated (unbacked) memory invoked native Windows cryptographic APIs, indicative of a data encryption/decryption of payloads, c2, files or data"
+    description = "Invoked native Windows cryptographic APIs from dynamically allocated (unbacked) memory, possible encryption/decryption of payloads, c2, files or data"
     severity = 3
-    confidence = 100
-    categories = ["evasion", "c2", "fileless", "obfuscation"]
+    confidence = 40
+    categories = ["evasion", "c2", "fileless", "obfuscation", "shellcode"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -680,10 +677,10 @@ class UnbackedCryptoOperations(Signature):
 
 class UnbackedServiceManipulation(Signature):
     name = "unbacked_service_manipulation"
-    description = "A thread executing in dynamically allocated (unbacked) memory attempted to interact with the Service Control Manager"
+    description = "Attempted to interact with the Service Control Manager from dynamically allocated (unbacked) memory"
     severity = 3
     confidence = 100
-    categories = ["lateral_movement", "persistence", "fileless"]
+    categories = ["lateral_movement", "persistence", "fileless", "shellcode"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -747,10 +744,10 @@ class UnbackedServiceManipulation(Signature):
 
 class UnbackedFileDropping(Signature):
     name = "unbacked_file_dropping"
-    description = "A thread executing in dynamically allocated (unbacked) memory attempted to write data to the filesystem"
+    description = "Attempted to write data to the filesystem from dynamically allocated (unbacked) memory"
     severity = 3
     confidence = 100
-    categories = ["execution", "exfiltration", "fileless"]
+    categories = ["execution", "exfiltration", "fileless", "shellcode"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
