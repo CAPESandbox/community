@@ -409,3 +409,130 @@ class UnbackedFileDropping(Signature):
         if self.ret:
             self.data.append({"unbacked_file_drops": self.file_drops})
         return self.ret
+
+
+class UnbackedDelayExecution(Signature):
+    name = "unbacked_delay_execution"
+    description = "Paused execution (sleep/delay) in a thread executing in dynamically allocated (unbacked) memory, indicative of sandbox evasion or C2 sleeping between callbacks"
+    severity = 3
+    confidence = 100
+    categories = ["evasion", "c2", "fileless", "shellcode"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1027", "T1497"]
+
+    filter_apinames = {
+        "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
+        "NtDelayExecution", "Sleep", "SleepEx", "WaitForSingleObject", "WaitForSingleObjectEx"
+    }
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
+        self.unbacked_ranges = {}
+        self.delay_events = set()
+
+    def on_call(self, call, process):
+        api = call["api"]
+        pid = process.get("process_id")
+
+        if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
+            base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
+            region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")       
+            if base_address and region_size:
+                try:
+                    base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
+                    size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)                  
+                    if pid not in self.unbacked_ranges:
+                        self.unbacked_ranges[pid] = []
+                    self.unbacked_ranges[pid].append((base_val, base_val + size_val))
+                except (ValueError, TypeError):
+                    pass
+
+        elif api in ("NtDelayExecution", "Sleep", "SleepEx", "WaitForSingleObject", "WaitForSingleObjectEx"):
+            caller_addr = call.get("caller")           
+            if caller_addr and pid in self.unbacked_ranges:
+                try:
+                    caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)                 
+                    for start_addr, end_addr in self.unbacked_ranges[pid]:
+                        if start_addr <= caller_val <= end_addr:
+                            proc_name = process.get("process_name", "unknown")
+                            delay_time = self.get_argument(call, "Milliseconds") or self.get_argument(call, "DelayInterval") or "Unknown Time"                    
+                            event_msg = f"{proc_name} executed {api} (Time: {delay_time}) from unbacked caller {caller_addr}"
+                            if event_msg not in self.delay_events:
+                                self.delay_events.add(event_msg)
+                                self.mark_call()
+                                self.ret = True
+                            break
+                except (ValueError, TypeError):
+                    pass
+
+    def on_complete(self):
+        if self.ret:
+            self.data.append({"unbacked_delay_executions": list(self.delay_events)})
+        return self.ret
+
+
+class UnbackedWmiExecution(Signature):
+    name = "unbacked_wmi_execution"
+    description = "Invoked a WMI method from a thread executing in dynamically allocated (unbacked) memory"
+    severity = 3
+    confidence = 100
+    categories = ["execution", "lateral_movement", "fileless", "shellcode"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1047"]
+
+    filter_apinames = {
+        "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
+        "IWbemServices_ExecMethod", "IWbemServices_ExecMethodAsync", 
+        "WMIExec", "WMIExecute"
+    }
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
+        self.unbacked_ranges = {}
+        self.wmi_executions = []
+
+    def on_call(self, call, process):
+        api = call["api"]
+        pid = process.get("process_id")
+
+        if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
+            base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
+            region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize") 
+            if base_address and region_size:
+                try:
+                    base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
+                    size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)                    
+                    if pid not in self.unbacked_ranges:
+                        self.unbacked_ranges[pid] = []
+                    self.unbacked_ranges[pid].append((base_val, base_val + size_val))
+                except (ValueError, TypeError):
+                    pass
+
+        elif api in ("IWbemServices_ExecMethod", "IWbemServices_ExecMethodAsync", "WMIExec", "WMIExecute"):
+            caller_addr = call.get("caller")
+            if caller_addr and pid in self.unbacked_ranges:
+                try:
+                    caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
+                    
+                    for start_addr, end_addr in self.unbacked_ranges[pid]:
+                        if start_addr <= caller_val <= end_addr:
+                            obj_path = self.get_argument(call, "ObjectPath") or self.get_argument(call, "strObjectPath") or "Unknown Object"
+                            method_name = self.get_argument(call, "MethodName") or self.get_argument(call, "strMethodName") or "Unknown Method"
+                            proc_name = process.get("process_name", "unknown")
+                            self.wmi_executions.append(f"{proc_name} executed WMI Method '{obj_path}::{method_name}' from unbacked caller {caller_addr}")
+                            self.mark_call()
+                            self.ret = True
+                            break
+                except (ValueError, TypeError):
+                    pass
+
+    def on_complete(self):
+        if self.ret:
+            self.data.append({"unbacked_wmi_executions": self.wmi_executions})
+        return self.ret
