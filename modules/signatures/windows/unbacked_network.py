@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class UnbackedMemoryNetworkConnection(Signature):
     name = "unbacked_memory_network_connection"
-    description = "Network connection initiated directly from dynamically allocated (unbacked) memory, indicative of fileless C2 activity"
+    description = "Network connection initiated from dynamically allocated (unbacked) memory, indicative of fileless C2 activity"
     severity = 3
     confidence = 100
     categories = ["network", "c2", "fileless", "shellcode"]
