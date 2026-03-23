@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class UnbackedLibraryLoad(Signature):
     name = "unbacked_library_load"
     description = "Loads a new DLL where the caller address originates from dynamically allocated (unbacked) memory"
