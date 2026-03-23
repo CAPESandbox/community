@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class UnbackedMemoryNetworkConnection(Signature):
     name = "unbacked_memory_network_connection"
-    description = "A thread executing in dynamically allocated (unbacked) memory initiated a network connection, indicative of fileless C2 activity"
+    description = "Network connection initiated directly from dynamically allocated (unbacked) memory, indicative of fileless C2 activity"
     severity = 3
     confidence = 100
     categories = ["network", "c2", "fileless", "shellcode"]
@@ -29,10 +29,10 @@ class UnbackedMemoryNetworkConnection(Signature):
     filter_apinames = {
         "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
         "HttpSendRequestA", "HttpSendRequestW", "InternetConnectA", "InternetConnectW",
-        "WinHttpSendRequest", "WinHttpConnect", "WinHttpOpenRequest", "InternetOpenUrlA", "InternetOpenUrlW",
+        "WinHttpSendRequest", "WinHttpConnect", "InternetOpenUrlA", "InternetOpenUrlW",
         "connect", "WSAConnect", "send", "WSASend", "sendto", "WSASendTo",
         "recv", "WSARecv", "recvfrom", "WSARecvFrom", 
-        "InternetReadFile", "WinHttpReadData"
+        "InternetReadFile", "WinHttpReadData", "WinHttpOpenRequest"
     }
 
     def __init__(self, *args, **kwargs):
@@ -63,10 +63,10 @@ class UnbackedMemoryNetworkConnection(Signature):
 
         elif api in (
             "HttpSendRequestA", "HttpSendRequestW", "InternetConnectA", "InternetConnectW",
-            "WinHttpSendRequest", "WinHttpConnect", "WinHttpOpenRequest", "InternetOpenUrlA", "InternetOpenUrlW",
+            "WinHttpSendRequest", "WinHttpConnect", "InternetOpenUrlA", "InternetOpenUrlW",
             "connect", "WSAConnect", "send", "WSASend", "sendto", "WSASendTo",
             "recv", "WSARecv", "recvfrom", "WSARecvFrom", 
-            "InternetReadFile", "WinHttpReadData"
+            "InternetReadFile", "WinHttpReadData", "WinHttpOpenRequest"
         ):
             caller_addr = call.get("caller")
             
