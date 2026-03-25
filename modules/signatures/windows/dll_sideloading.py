@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DLLLoadSuspiciousDirectory(Signature):
     name = "dllload_suspicious_directory"
     description = "A DLL was loaded from a suspicious directory"
@@ -57,7 +58,12 @@ class DLLLoadSuspiciousDirectory(Signature):
                 is_ignored = any(dllnamelower.startswith(d) for d in self.ignore_directories)
                 if not is_ignored:
                     self.mark_call()
-                    self.data.append({"suspicious_dll_load": "Process %s loaded a DLL from a suspicious directory, this is possibly indicative of DLL side loading/search order hijacking" % (pname)})
+                    self.data.append(
+                        {
+                            "suspicious_dll_load": "Process %s loaded a DLL from a suspicious directory, this is possibly indicative of DLL side loading/search order hijacking"
+                            % (pname)
+                        }
+                    )
                     self.ret = True
 
     def on_complete(self):

@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class PrivilegeElevationCheck(Signature):
     name = "privilege_elevation_check"
     description = "Queries process token information to check for Administrator privileges or UAC elevation status"
@@ -24,11 +25,9 @@ class PrivilegeElevationCheck(Signature):
     authors = ["Kevin Ross", "Gemini"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1033", "T1082"] 
+    ttps = ["T1033", "T1082"]
 
-    filter_apinames = {
-        "NtQueryInformationToken", "GetTokenInformation", "CheckTokenMembership"
-    }
+    filter_apinames = {"NtQueryInformationToken", "GetTokenInformation", "CheckTokenMembership"}
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -40,7 +39,11 @@ class PrivilegeElevationCheck(Signature):
             token_class = self.get_argument(call, "TokenInformationClass")
             if token_class:
                 try:
-                    class_val = int(token_class, 16) if isinstance(token_class, str) and str(token_class).startswith("0x") else int(token_class)
+                    class_val = (
+                        int(token_class, 16)
+                        if isinstance(token_class, str) and str(token_class).startswith("0x")
+                        else int(token_class)
+                    )
                     # Class 18 = TokenElevationType (Checks if UAC is active/filtering)
                     # Class 20 = TokenElevation (Checks if token is currently elevated)
                     if class_val in (18, 20):
