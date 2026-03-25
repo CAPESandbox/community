@@ -14,7 +14,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
+
 from lib.cuckoo.common.abstracts import Signature
+
 
 class ExecutesHeadlessBrowser(Signature):
     name = "executes_headless_browser"
@@ -25,26 +27,16 @@ class ExecutesHeadlessBrowser(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1202", "T1564"] 
+    ttps = ["T1202", "T1564"]
     mbcs = ["OB0009"]
 
     def run(self):
         ret = False
-        browsers = [
-            r"chrome\.exe",
-            r"brave\.exe",
-            r"opera\.exe",
-            r"vivaldi\.exe",
-            r"msedge\.exe",
-            r"firefox\.exe"
-        ]
-        headless_flags = [
-            r"--headless",
-            r"-headless" 
-        ]
+        browsers = [r"chrome\.exe", r"brave\.exe", r"opera\.exe", r"vivaldi\.exe", r"msedge\.exe", r"firefox\.exe"]
+        headless_flags = [r"--headless", r"-headless"]
         # Compile regexes for performance (Ignore Case)
-        browser_regex = re.compile(r'(?:' + '|'.join(browsers) + r')', re.IGNORECASE)
-        headless_regex = re.compile(r'(?:' + '|'.join(headless_flags) + r')', re.IGNORECASE)
+        browser_regex = re.compile(r"(?:" + "|".join(browsers) + r")", re.IGNORECASE)
+        headless_regex = re.compile(r"(?:" + "|".join(headless_flags) + r")", re.IGNORECASE)
 
         # Whitelist for known legitimate headless processes
         whitelist = [
@@ -57,7 +49,7 @@ class ExecutesHeadlessBrowser(Signature):
             if browser_regex.search(lower_cmdline):
                 if headless_regex.search(lower_cmdline):
                     is_whitelisted = any(re.search(w, lower_cmdline) for w in whitelist)
-                    
+
                     if not is_whitelisted:
                         ret = True
                         self.data.append({"command": cmdline})
@@ -74,48 +66,41 @@ class SuspiciousBrowserArguments(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1562", "T1564", "T1218"] 
+    ttps = ["T1562", "T1564", "T1218"]
 
     def run(self):
         ret = False
-        
+
         # Target Web Browsers
-        browsers = [
-            r"chrome\.exe",
-            r"brave\.exe",
-            r"opera\.exe",
-            r"vivaldi\.exe",
-            r"msedge\.exe",
-            r"firefox\.exe"
-        ]
+        browsers = [r"chrome\.exe", r"brave\.exe", r"opera\.exe", r"vivaldi\.exe", r"msedge\.exe", r"firefox\.exe"]
 
         suspicious_flags = {
             "security_bypass": [
-                r"--no-sandbox",                    # Disables the browser's core security sandbox
-                r"--disable-web-security",          # Disables Same-Origin Policy (SOP)
-                r"--ignore-certificate-errors",     # Allows interception/MitM of HTTPS traffic
-                r"--allow-running-insecure-content",# Bypasses mixed content warnings
-                r"--disable-features=.*isolateorigins" # Disables site isolation
+                r"--no-sandbox",  # Disables the browser's core security sandbox
+                r"--disable-web-security",  # Disables Same-Origin Policy (SOP)
+                r"--ignore-certificate-errors",  # Allows interception/MitM of HTTPS traffic
+                r"--allow-running-insecure-content",  # Bypasses mixed content warnings
+                r"--disable-features=.*isolateorigins",  # Disables site isolation
             ],
             "remote_control": [
-                r"--remote-debugging-port",         # Opens the Chrome DevTools Protocol (CDP) for remote C2
-                r"--remote-allow-origins",          # Allows external scripts to connect to the CDP
-                r"--enable-automation"              # Used by Puppeteer/Selenium, suppresses some UI warnings
+                r"--remote-debugging-port",  # Opens the Chrome DevTools Protocol (CDP) for remote C2
+                r"--remote-allow-origins",  # Allows external scripts to connect to the CDP
+                r"--enable-automation",  # Used by Puppeteer/Selenium, suppresses some UI warnings
             ],
             "stealth_and_evasion": [
-                r"--window-position=-\d+",          # e.g., --window-position=-32000 (Moves window off-screen)
-                r"--mute-audio",                    # Prevents ad/video audio from alerting the user
-                r"--disable-crash-reporter",        # Prevents Windows from catching browser crashes
-                r"--disable-notifications",         # Suppresses push notifications
-                r"--hide-scrollbars",               # UI hiding
-                r"--no-first-run"                   # Bypasses the initial setup prompts
-            ]
+                r"--window-position=-\d+",  # e.g., --window-position=-32000 (Moves window off-screen)
+                r"--mute-audio",  # Prevents ad/video audio from alerting the user
+                r"--disable-crash-reporter",  # Prevents Windows from catching browser crashes
+                r"--disable-notifications",  # Suppresses push notifications
+                r"--hide-scrollbars",  # UI hiding
+                r"--no-first-run",  # Bypasses the initial setup prompts
+            ],
         }
 
-        browser_regex = re.compile(r'(?:' + '|'.join(browsers) + r')', re.IGNORECASE)
+        browser_regex = re.compile(r"(?:" + "|".join(browsers) + r")", re.IGNORECASE)
         compiled_flags = {}
         for category, flags in suspicious_flags.items():
-            compiled_flags[category] = re.compile(r'(?:' + '|'.join(flags) + r')', re.IGNORECASE)
+            compiled_flags[category] = re.compile(r"(?:" + "|".join(flags) + r")", re.IGNORECASE)
 
         # Whitelist for known legitimate automated processes
         whitelist = [
@@ -137,9 +122,6 @@ class SuspiciousBrowserArguments(Signature):
 
                 if detected_categories:
                     ret = True
-                    self.data.append({
-                        "command": cmdline,
-                        "flagged_categories": detected_categories
-                    })
+                    self.data.append({"command": cmdline, "flagged_categories": detected_categories})
 
         return ret

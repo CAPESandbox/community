@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class DecompressEXE(Signature):
     name = "decompress_exe"
     description = "Decompresses an executable in memory, may be indicative of a packer or manual loader"
@@ -25,7 +26,7 @@ class DecompressEXE(Signature):
     minimum = "1.3"
     evented = True
     enabled = True
-    ttps = ["T1027", "T1027.002", "T1620"] 
+    ttps = ["T1027", "T1027.002", "T1620"]
     mbcs = ["B0002", "F0001", "OB0006"]
 
     filter_apinames = set(["RtlDecompressBuffer"])
@@ -41,7 +42,7 @@ class DecompressEXE(Signature):
             buf = self.get_argument(call, "UncompressedBuffer")
             if buf and buf.startswith("MZ"):
                 self.ret = True
-                self.mark_call()    
+                self.mark_call()
 
     def on_complete(self):
         return self.ret

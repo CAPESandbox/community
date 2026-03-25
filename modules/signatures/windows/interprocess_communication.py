@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class InterProcessCommsNamedPipe(Signature):
     name = "interprocess_comms_named_pipe"
     description = "Inter-process communication via named pipes, possibly to route local C2 traffic"
@@ -28,14 +29,18 @@ class InterProcessCommsNamedPipe(Signature):
     mbcs = ["E1559"]
 
     filter_apinames = {
-        "CreateNamedPipeW", "CreateNamedPipeA", "NtCreateNamedPipeFile", 
-        "CreateFileW", "CreateFileA", "CallNamedPipeW"
+        "CreateNamedPipeW",
+        "CreateNamedPipeA",
+        "NtCreateNamedPipeFile",
+        "CreateFileW",
+        "CreateFileA",
+        "CallNamedPipeW",
     }
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
-        self.pipe_creators = {} 
+        self.pipe_creators = {}
         self.ipc_events = []
 
     def on_call(self, call, process):
@@ -43,10 +48,10 @@ class InterProcessCommsNamedPipe(Signature):
         pid = process.get("process_id")
         proc_name = process.get("process_name", "unknown")
 
-        pipe_name = self.get_argument(call, "FileName") or self.get_argument(call, "lpName") or self.get_argument(call, "Name")       
+        pipe_name = self.get_argument(call, "FileName") or self.get_argument(call, "lpName") or self.get_argument(call, "Name")
         if not pipe_name or not isinstance(pipe_name, str):
             return
-            
+
         pipe_lower = pipe_name.lower()
         if "\\pipe\\" not in pipe_lower:
             return
@@ -67,9 +72,9 @@ class InterProcessCommsNamedPipe(Signature):
                     event = {
                         "pipe_name": pipe_name,
                         "server_process": f"{creator['name']} (PID: {creator['pid']})",
-                        "client_process": f"{proc_name} (PID: {pid})"
+                        "client_process": f"{proc_name} (PID: {pid})",
                     }
-                    
+
                     if event not in self.ipc_events:
                         self.ipc_events.append(event)
                         self.mark_call()
@@ -79,6 +84,7 @@ class InterProcessCommsNamedPipe(Signature):
         if self.ret:
             self.data.append({"ipc_named_pipe_communications": self.ipc_events})
         return self.ret
+
 
 class InterProcessCommsMutex(Signature):
     name = "interprocess_comms_mutex"
@@ -92,10 +98,7 @@ class InterProcessCommsMutex(Signature):
     ttps = ["T1559"]
     mbcs = ["E1559"]
 
-    filter_apinames = {
-        "CreateMutexW", "CreateMutexA", "NtCreateMutant", 
-        "OpenMutexW", "OpenMutexA"
-    }
+    filter_apinames = {"CreateMutexW", "CreateMutexA", "NtCreateMutant", "OpenMutexW", "OpenMutexA"}
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -103,20 +106,24 @@ class InterProcessCommsMutex(Signature):
         self.created_mutexes = {}
         self.ipc_events = []
         self.noisy_prefixes = {
-            "\\basenamedobjects\\ctf", "\\basenamedobjects\\msctf",
-            "\\sessions\\", "local\\zoneio", "global\\msdtc"
+            "\\basenamedobjects\\ctf",
+            "\\basenamedobjects\\msctf",
+            "\\sessions\\",
+            "local\\zoneio",
+            "global\\msdtc",
         }
 
     def on_call(self, call, process):
         api = call["api"]
         pid = process.get("process_id")
         proc_name = process.get("process_name", "unknown")
-    
 
-        mutex_name = self.get_argument(call, "Name") or self.get_argument(call, "MutexName") or self.get_argument(call, "ObjectName")        
+        mutex_name = (
+            self.get_argument(call, "Name") or self.get_argument(call, "MutexName") or self.get_argument(call, "ObjectName")
+        )
         if not mutex_name or not isinstance(mutex_name, str):
             return
-            
+
         mutex_lower = mutex_name.lower()
 
         if any(noisy in mutex_lower for noisy in self.noisy_prefixes):
@@ -140,9 +147,9 @@ class InterProcessCommsMutex(Signature):
         event = {
             "mutex_name": mutex_name,
             "creator_process": f"{creator['name']} (PID: {creator['pid']})",
-            "accessor_process": f"{accessor_name} (PID: {accessor_pid})"
+            "accessor_process": f"{accessor_name} (PID: {accessor_pid})",
         }
-        
+
         if event not in self.ipc_events:
             self.ipc_events.append(event)
             self.mark_call()
@@ -156,7 +163,9 @@ class InterProcessCommsMutex(Signature):
 
 class InterProcessCommsSharedMemory(Signature):
     name = "interprocess_comms_shared_memory"
-    description = "Inter-process communication via named shared memory (file mappings), possibly for routing local C2 traffic or injection"
+    description = (
+        "Inter-process communication via named shared memory (file mappings), possibly for routing local C2 traffic or injection"
+    )
     severity = 3
     confidence = 100
     categories = ["lateral_movement", "c2", "ipc", "stealth"]
@@ -167,8 +176,12 @@ class InterProcessCommsSharedMemory(Signature):
     mbcs = ["E1559"]
 
     filter_apinames = {
-        "CreateFileMappingW", "CreateFileMappingA", "NtCreateSection",
-        "OpenFileMappingW", "OpenFileMappingA", "NtOpenSection"
+        "CreateFileMappingW",
+        "CreateFileMappingA",
+        "NtCreateSection",
+        "OpenFileMappingW",
+        "OpenFileMappingA",
+        "NtOpenSection",
     }
 
     def __init__(self, *args, **kwargs):
@@ -178,30 +191,38 @@ class InterProcessCommsSharedMemory(Signature):
         self.ipc_events = []
 
         self.noisy_prefixes = {
-            "\\basenamedobjects\\cor_teb_", "\\basenamedobjects\\__comcatalogcache__",
-            "\\basenamedobjects\\sxs", "\\basenamedobjects\\coremessaging",
-            "\\basenamedobjects\\windows.ui", "\\sessions\\", "local\\sm0:"
+            "\\basenamedobjects\\cor_teb_",
+            "\\basenamedobjects\\__comcatalogcache__",
+            "\\basenamedobjects\\sxs",
+            "\\basenamedobjects\\coremessaging",
+            "\\basenamedobjects\\windows.ui",
+            "\\sessions\\",
+            "local\\sm0:",
         }
 
     def on_call(self, call, process):
         api = call["api"]
         pid = process.get("process_id")
         proc_name = process.get("process_name", "unknown")
-        
-        section_name = self.get_argument(call, "Name") or self.get_argument(call, "FileName") or self.get_argument(call, "ObjectAttributesName")
+
+        section_name = (
+            self.get_argument(call, "Name")
+            or self.get_argument(call, "FileName")
+            or self.get_argument(call, "ObjectAttributesName")
+        )
         if not section_name or not isinstance(section_name, str):
             return
-            
+
         section_lower = section_name.lower()
         if any(noisy in section_lower for noisy in self.noisy_prefixes):
             return
 
         if "c:\\" in section_lower or "\\??\\c:\\" in section_lower:
             is_suspicious_mapping = False
-            
+
             if section_lower.endswith(".exe") or section_lower.endswith(".bin") or section_lower.endswith(".tmp"):
                 is_suspicious_mapping = True
-                
+
             elif "\\users\\" in section_lower and any(p in section_lower for p in ("\\temp\\", "\\appdata\\", "\\downloads\\")):
                 is_suspicious_mapping = True
 
@@ -227,9 +248,9 @@ class InterProcessCommsSharedMemory(Signature):
         event = {
             "shared_memory_name": section_name,
             "creator_process": f"{creator['name']} (PID: {creator['pid']})",
-            "accessor_process": f"{accessor_name} (PID: {accessor_pid})"
+            "accessor_process": f"{accessor_name} (PID: {accessor_pid})",
         }
-        
+
         if event not in self.ipc_events:
             self.ipc_events.append(event)
             self.mark_call()

@@ -76,7 +76,7 @@ class DirectSyscallEvasion(Signature):
             ret = True
 
         return ret
-        
+
 
 class UnbackedSyscallExecution(Signature):
     name = "unbacked_syscall_execution"
@@ -89,10 +89,7 @@ class UnbackedSyscallExecution(Signature):
     evented = True
     ttps = ["T1055", "T1106"]
 
-    filter_apinames = {
-        "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
-        "sysenter", "syscall"
-    }
+    filter_apinames = {"NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx", "sysenter", "syscall"}
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -107,12 +104,12 @@ class UnbackedSyscallExecution(Signature):
         if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
             base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
             region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")
-            
+
             if base_address and region_size:
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)
-                    
+
                     if pid not in self.unbacked_ranges:
                         self.unbacked_ranges[pid] = []
                     self.unbacked_ranges[pid].append((base_val, base_val + size_val))
@@ -122,25 +119,25 @@ class UnbackedSyscallExecution(Signature):
         elif api in ("sysenter", "syscall"):
             ret_addr = self.get_argument(call, "Return Address")
             caller_addr = call.get("caller")
-            
+
             addresses_to_check = []
             if ret_addr and str(ret_addr) != "0x00000000":
                 addresses_to_check.append(("Return Address", ret_addr))
             if caller_addr and str(caller_addr) != "0x00000000":
                 addresses_to_check.append(("Caller", caller_addr))
-            
+
             if addresses_to_check and pid in self.unbacked_ranges:
                 for addr_type, addr_str in addresses_to_check:
                     try:
                         addr_val = int(addr_str, 16) if isinstance(addr_str, str) else int(addr_str)
-                        
+
                         for start_addr, end_addr in self.unbacked_ranges[pid]:
                             if start_addr <= addr_val <= end_addr:
                                 proc_name = process.get("process_name", "unknown")
                                 syscall_module = self.get_argument(call, "Module") or "Unknown SSN"
-                                
+
                                 event_msg = f"{proc_name} executed {api} ({syscall_module}) where {addr_type} points to unbacked memory at {addr_str}"
-                                
+
                                 if event_msg not in self.unbacked_syscalls:
                                     self.unbacked_syscalls.append(event_msg)
                                     self.mark_call()

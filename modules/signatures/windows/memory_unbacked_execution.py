@@ -28,14 +28,19 @@ class UnbackedLibraryLoad(Signature):
     ttps = ["T1129", "T1059"]
 
     filter_apinames = {
-        "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
-        "LdrLoadDll", "LoadLibraryA", "LoadLibraryW", "LoadLibraryExW"
+        "NtAllocateVirtualMemory",
+        "VirtualAlloc",
+        "VirtualAllocEx",
+        "LdrLoadDll",
+        "LoadLibraryA",
+        "LoadLibraryW",
+        "LoadLibraryExW",
     }
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
-        self.unbacked_ranges = {} # { pid: [(start_addr, end_addr)] }
+        self.unbacked_ranges = {}  # { pid: [(start_addr, end_addr)] }
         self.suspicious_loads = []
 
     def on_call(self, call, process):
@@ -46,12 +51,12 @@ class UnbackedLibraryLoad(Signature):
         if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
             base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
             region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")
-            
+
             if base_address and region_size:
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)
-                    
+
                     if pid not in self.unbacked_ranges:
                         self.unbacked_ranges[pid] = []
                     self.unbacked_ranges[pid].append((base_val, base_val + size_val))
@@ -60,16 +65,16 @@ class UnbackedLibraryLoad(Signature):
 
         elif api in ("LdrLoadDll", "LoadLibraryA", "LoadLibraryW", "LoadLibraryExW"):
             caller_addr = call.get("caller")
-            
+
             if caller_addr and pid in self.unbacked_ranges:
                 try:
                     caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
-                    
+
                     for start_addr, end_addr in self.unbacked_ranges[pid]:
                         if start_addr <= caller_val <= end_addr:
                             dll_name = self.get_argument(call, "FileName") or self.get_argument(call, "lpLibFileName")
                             proc_name = process.get("process_name", "unknown")
-                            
+
                             self.suspicious_loads.append(f"{proc_name} loaded {dll_name} from unbacked caller {caller_addr}")
                             self.mark_call()
                             self.ret = True
@@ -94,10 +99,7 @@ class UnbackedVehRegistration(Signature):
     evented = True
     ttps = ["T1562", "T1055"]
 
-    filter_apinames = {
-        "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
-        "AddVectoredExceptionHandler"
-    }
+    filter_apinames = {"NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx", "AddVectoredExceptionHandler"}
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -112,12 +114,12 @@ class UnbackedVehRegistration(Signature):
         if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
             base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
             region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")
-            
+
             if base_address and region_size:
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)
-                    
+
                     if pid not in self.unbacked_ranges:
                         self.unbacked_ranges[pid] = []
                     self.unbacked_ranges[pid].append((base_val, base_val + size_val))
@@ -126,16 +128,16 @@ class UnbackedVehRegistration(Signature):
 
         elif api == "AddVectoredExceptionHandler":
             handler_addr = self.get_argument(call, "Handler")
-            
+
             if handler_addr and pid in self.unbacked_ranges:
                 try:
                     handler_val = int(handler_addr, 16) if isinstance(handler_addr, str) else int(handler_addr)
-                    
+
                     for start_addr, end_addr in self.unbacked_ranges[pid]:
                         # If the registered handler points inside our unbacked ranges
                         if start_addr <= handler_val <= end_addr:
                             proc_name = process.get("process_name", "unknown")
-                            
+
                             self.malicious_vehs.append(f"{proc_name} registered VEH pointing to unbacked memory at {handler_addr}")
                             self.mark_call()
                             self.ret = True
@@ -161,8 +163,12 @@ class UnbackedProcessCreation(Signature):
     ttps = ["T1055", "T1106"]
 
     filter_apinames = {
-        "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
-        "CreateProcessInternalW", "CreateProcessWithTokenW", "NtCreateUserProcess"
+        "NtAllocateVirtualMemory",
+        "VirtualAlloc",
+        "VirtualAllocEx",
+        "CreateProcessInternalW",
+        "CreateProcessWithTokenW",
+        "NtCreateUserProcess",
     }
 
     def __init__(self, *args, **kwargs):
@@ -178,12 +184,12 @@ class UnbackedProcessCreation(Signature):
         if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
             base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
             region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")
-            
+
             if base_address and region_size:
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)
-                    
+
                     if pid not in self.unbacked_ranges:
                         self.unbacked_ranges[pid] = []
                     self.unbacked_ranges[pid].append((base_val, base_val + size_val))
@@ -192,17 +198,19 @@ class UnbackedProcessCreation(Signature):
 
         elif api in ("CreateProcessInternalW", "CreateProcessWithTokenW", "NtCreateUserProcess"):
             caller_addr = call.get("caller")
-            
+
             if caller_addr and pid in self.unbacked_ranges:
                 try:
                     caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
-                    
+
                     for start_addr, end_addr in self.unbacked_ranges[pid]:
                         if start_addr <= caller_val <= end_addr:
                             app_name = self.get_argument(call, "ApplicationName") or self.get_argument(call, "CommandLine")
                             proc_name = process.get("process_name", "unknown")
-                            
-                            self.unbacked_processes.append(f"{proc_name} spawned sacrificial child '{app_name}' from unbacked caller {caller_addr}")
+
+                            self.unbacked_processes.append(
+                                f"{proc_name} spawned sacrificial child '{app_name}' from unbacked caller {caller_addr}"
+                            )
                             self.mark_call()
                             self.ret = True
                             break
@@ -226,15 +234,12 @@ class UnbackedMemoryApcExecution(Signature):
     evented = True
     ttps = ["T1055"]
 
-    filter_apinames = {
-        "NtAllocateVirtualMemory", "VirtualAllocEx", "VirtualAlloc",
-        "NtQueueApcThread", "QueueUserAPC"
-    }
+    filter_apinames = {"NtAllocateVirtualMemory", "VirtualAllocEx", "VirtualAlloc", "NtQueueApcThread", "QueueUserAPC"}
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
-        self.unbacked_ranges = {} # Fixed: Now using range tracking
+        self.unbacked_ranges = {}  # Fixed: Now using range tracking
         self.unbacked_apcs = []
 
     def on_call(self, call, process):
@@ -244,12 +249,12 @@ class UnbackedMemoryApcExecution(Signature):
         if api in ("NtAllocateVirtualMemory", "VirtualAllocEx", "VirtualAlloc"):
             base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
             region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")
-            
+
             if base_address and region_size:
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)
-                    
+
                     if pid not in self.unbacked_ranges:
                         self.unbacked_ranges[pid] = []
                     self.unbacked_ranges[pid].append((base_val, base_val + size_val))
@@ -258,11 +263,11 @@ class UnbackedMemoryApcExecution(Signature):
 
         elif api in ("NtQueueApcThread", "QueueUserAPC"):
             apc_routine = self.get_argument(call, "ApcRoutine") or self.get_argument(call, "pfnAPC")
-            
+
             if apc_routine and pid in self.unbacked_ranges:
                 try:
                     apc_val = int(apc_routine, 16) if isinstance(apc_routine, str) else int(apc_routine)
-                    for start_addr, end_addr in self.unbacked_ranges[pid]:                        
+                    for start_addr, end_addr in self.unbacked_ranges[pid]:
                         if start_addr <= apc_val <= end_addr:
                             proc_name = process.get("process_name", "unknown")
                             self.unbacked_apcs.append(f"Process {proc_name} queued APC to unbacked memory at {apc_routine}")
@@ -287,17 +292,21 @@ class ThreadUnbackedMemory(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1055"] # Process Injection
+    ttps = ["T1055"]  # Process Injection
 
     filter_apinames = {
-        "NtAllocateVirtualMemory", "VirtualAllocEx", "VirtualAlloc",
-        "NtCreateThreadEx", "CreateRemoteThread", "CreateThread"
+        "NtAllocateVirtualMemory",
+        "VirtualAllocEx",
+        "VirtualAlloc",
+        "NtCreateThreadEx",
+        "CreateRemoteThread",
+        "CreateThread",
     }
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
-        self.unbacked_ranges = {} # Fixed: Now using range tracking
+        self.unbacked_ranges = {}  # Fixed: Now using range tracking
         self.suspicious_threads = []
 
     def on_call(self, call, process):
@@ -308,16 +317,18 @@ class ThreadUnbackedMemory(Signature):
             base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
             region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")
             protection = self.get_argument(call, "Protection") or self.get_argument(call, "flProtect")
-            
+
             if base_address and region_size and protection:
                 try:
-                    prot_val = int(protection, 16) if isinstance(protection, str) and protection.startswith("0x") else int(protection)
-                    
+                    prot_val = (
+                        int(protection, 16) if isinstance(protection, str) and protection.startswith("0x") else int(protection)
+                    )
+
                     # Track RWX (0x40) or RX (0x20) memory creation
                     if prot_val in (0x40, 0x20):
                         base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                         size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)
-                        
+
                         if pid not in self.unbacked_ranges:
                             self.unbacked_ranges[pid] = []
                         self.unbacked_ranges[pid].append((base_val, base_val + size_val))
@@ -326,15 +337,17 @@ class ThreadUnbackedMemory(Signature):
 
         elif api in ("NtCreateThreadEx", "CreateRemoteThread", "CreateThread"):
             start_address = self.get_argument(call, "StartAddress") or self.get_argument(call, "lpStartAddress")
-            
+
             if start_address and pid in self.unbacked_ranges:
                 try:
                     start_val = int(start_address, 16) if isinstance(start_address, str) else int(start_address)
-                    
+
                     for start_addr, end_addr in self.unbacked_ranges[pid]:
                         if start_addr <= start_val <= end_addr:
                             proc_name = process.get("process_name", "unknown")
-                            self.suspicious_threads.append(f"Process {proc_name} (PID {pid}) created thread at unbacked address {start_address}")
+                            self.suspicious_threads.append(
+                                f"Process {proc_name} (PID {pid}) created thread at unbacked address {start_address}"
+                            )
                             self.mark_call()
                             self.ret = True
                             break
@@ -349,7 +362,9 @@ class ThreadUnbackedMemory(Signature):
 
 class UnbackedApiResolution(Signature):
     name = "unbacked_api_resolution"
-    description = "Manually resolves API addresses from dynamically allocated (unbacked) memory, indicative of shellcode or an unpacker"
+    description = (
+        "Manually resolves API addresses from dynamically allocated (unbacked) memory, indicative of shellcode or an unpacker"
+    )
     severity = 3
     confidence = 100
     categories = ["evasion", "shellcode", "fileless"]
@@ -359,8 +374,12 @@ class UnbackedApiResolution(Signature):
     ttps = ["T1129", "T1055"]
 
     filter_apinames = {
-        "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
-        "GetProcAddress", "LdrGetProcedureAddress", "LdrGetProcedureAddressForCaller"
+        "NtAllocateVirtualMemory",
+        "VirtualAlloc",
+        "VirtualAllocEx",
+        "GetProcAddress",
+        "LdrGetProcedureAddress",
+        "LdrGetProcedureAddressForCaller",
     }
 
     def __init__(self, *args, **kwargs):
@@ -375,11 +394,11 @@ class UnbackedApiResolution(Signature):
 
         if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
             base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
-            region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")        
+            region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")
             if base_address and region_size:
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
-                    size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)                    
+                    size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)
                     if pid not in self.unbacked_ranges:
                         self.unbacked_ranges[pid] = []
                     self.unbacked_ranges[pid].append((base_val, base_val + size_val))
@@ -387,14 +406,16 @@ class UnbackedApiResolution(Signature):
                     pass
 
         elif api in ("GetProcAddress", "LdrGetProcedureAddress", "LdrGetProcedureAddressForCaller"):
-            caller_addr = call.get("caller")     
+            caller_addr = call.get("caller")
             if caller_addr and pid in self.unbacked_ranges:
                 try:
-                    caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)                   
+                    caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
                     for start_addr, end_addr in self.unbacked_ranges[pid]:
                         if start_addr <= caller_val <= end_addr:
-                            target_api = self.get_argument(call, "FunctionName") or self.get_argument(call, "lpProcName") or "Unknown API"
-                            proc_name = process.get("process_name", "unknown")                           
+                            target_api = (
+                                self.get_argument(call, "FunctionName") or self.get_argument(call, "lpProcName") or "Unknown API"
+                            )
+                            proc_name = process.get("process_name", "unknown")
                             event_msg = f"{proc_name} resolved API '{target_api}' from unbacked caller {caller_addr}"
                             if event_msg not in self.resolved_apis:
                                 self.resolved_apis.add(event_msg)
@@ -422,8 +443,12 @@ class UnbackedMemoryProtectionAlteration(Signature):
     ttps = ["T1055"]
 
     filter_apinames = {
-        "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
-        "NtProtectVirtualMemory", "VirtualProtect", "VirtualProtectEx"
+        "NtAllocateVirtualMemory",
+        "VirtualAlloc",
+        "VirtualAllocEx",
+        "NtProtectVirtualMemory",
+        "VirtualProtect",
+        "VirtualProtectEx",
     }
 
     def __init__(self, *args, **kwargs):
@@ -439,12 +464,12 @@ class UnbackedMemoryProtectionAlteration(Signature):
         if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
             base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
             region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")
-            
+
             if base_address and region_size:
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)
-                    
+
                     if pid not in self.unbacked_ranges:
                         self.unbacked_ranges[pid] = []
                     self.unbacked_ranges[pid].append((base_val, base_val + size_val))
@@ -453,17 +478,25 @@ class UnbackedMemoryProtectionAlteration(Signature):
 
         elif api in ("NtProtectVirtualMemory", "VirtualProtect", "VirtualProtectEx"):
             caller_addr = call.get("caller")
-            
+
             if caller_addr and pid in self.unbacked_ranges:
                 try:
                     caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
-                    
+
                     for start_addr, end_addr in self.unbacked_ranges[pid]:
                         if start_addr <= caller_val <= end_addr:
-                            target_addr = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress") or "Unknown"
-                            new_prot = self.get_argument(call, "NewAccessProtection") or self.get_argument(call, "flNewProtect") or "Unknown"
-                            proc_name = process.get("process_name", "unknown")                      
-                            self.protection_events.append(f"{proc_name} changed memory protection at {target_addr} to {new_prot} from unbacked caller {caller_addr}")
+                            target_addr = (
+                                self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress") or "Unknown"
+                            )
+                            new_prot = (
+                                self.get_argument(call, "NewAccessProtection")
+                                or self.get_argument(call, "flNewProtect")
+                                or "Unknown"
+                            )
+                            proc_name = process.get("process_name", "unknown")
+                            self.protection_events.append(
+                                f"{proc_name} changed memory protection at {target_addr} to {new_prot} from unbacked caller {caller_addr}"
+                            )
                             self.mark_call()
                             self.ret = True
                             break
