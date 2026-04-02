@@ -587,7 +587,7 @@ class Sigma(Processing):
             # Filter analyzer noise: convert evtx to JSONL via evtx_dump,
             # strip events from the CAPE analyzer parent process, and
             # feed clean JSONL to zircolite.
-            evtx_dump_bin = "/usr/local/bin/evtx_dump"
+            evtx_dump_bin = self.options.get("evtx_dump_bin", "/usr/local/bin/evtx_dump")
             # Load analyzer noise filter from shared config
             analyzer_exclude = set()
             try:
@@ -610,6 +610,8 @@ class Sigma(Processing):
                 pass
             if not analyzer_exclude:
                 analyzer_exclude = {"icacls.exe", "python.exe", "wevtutil.exe", "conhost.exe"}
+            # Compile a single regex for efficient matching
+            exclude_re = re.compile("|".join(re.escape(p) for p in analyzer_exclude), re.IGNORECASE)
 
             if os.path.isfile(evtx_dump_bin):
                 filtered_dir = os.path.join(tmpdir, "filtered")
@@ -617,24 +619,33 @@ class Sigma(Processing):
                 has_filtered = False
                 for evtx_file in evtx_files:
                     try:
-                        result = subprocess.run(
-                            [evtx_dump_bin, "-o", "jsonl", evtx_file],
-                            capture_output=True, text=True, timeout=60
-                        )
-                        if result.returncode != 0:
-                            continue
-                        basename = os.path.basename(evtx_file).rsplit(".", 1)[0] + ".json"
+                        # Use unique name per snapshot to avoid collisions
+                        rel_path = os.path.relpath(evtx_file, tmpdir)
+                        basename = rel_path.replace(os.sep, "_").rsplit(".", 1)[0] + ".json"
                         jsonl_path = os.path.join(filtered_dir, basename)
+                        # Stream output line-by-line to avoid loading all into memory
+                        proc = subprocess.Popen(
+                            [evtx_dump_bin, "-o", "jsonl", evtx_file],
+                            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True,
+                        )
                         with open(jsonl_path, "w") as out:
-                            for line in result.stdout.splitlines():
-                                skip = False
-                                line_lower = line.lower()
-                                for parent in analyzer_exclude:
-                                    if parent in line_lower:
-                                        skip = True
-                                        break
-                                if not skip and line.strip():
-                                    out.write(line + "\n")
+                            for line in proc.stdout:
+                                line = line.rstrip("\n")
+                                if not line.strip():
+                                    continue
+                                # Check specific JSON fields rather than substring on whole line
+                                try:
+                                    evt = json.loads(line)
+                                    event_data = evt.get("Event", {}).get("EventData", {})
+                                    image = str(event_data.get("Image", ""))
+                                    parent = str(event_data.get("ParentImage", ""))
+                                    target = str(event_data.get("TargetFilename", ""))
+                                    if exclude_re.search(image) or exclude_re.search(parent) or exclude_re.search(target):
+                                        continue
+                                except (json.JSONDecodeError, AttributeError):
+                                    pass
+                                out.write(line + "\n")
+                        proc.wait(timeout=120)
                         if os.path.getsize(jsonl_path) > 0:
                             has_filtered = True
                     except Exception as e:
