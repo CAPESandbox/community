@@ -522,7 +522,8 @@ class UnbackedMutexCreation(Signature):
 
     filter_apinames = {
         "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
-        "NtOpenMutant", "NtCreateMutant", "CreateMutexA", "CreateMutexW", "CreateMutexExA", "CreateMutexExW"
+        "NtOpenMutant", "NtCreateMutant", "CreateMutexA", "CreateMutexW", "CreateMutexExA", "CreateMutexExW",
+        "OpenMutexA", "OpenMutexW"
     }
 
     def __init__(self, *args, **kwargs):
@@ -543,13 +544,14 @@ class UnbackedMutexCreation(Signature):
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)
                     
-                    if pid not in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = []
-                    self.unbacked_ranges[pid].append((base_val, base_val + size_val))
+                    if base_val:
+                        if pid not in self.unbacked_ranges:
+                            self.unbacked_ranges[pid] = []
+                        self.unbacked_ranges[pid].append((base_val, base_val + size_val))
                 except (ValueError, TypeError):
                     pass
 
-        elif api in ("NtOpenMutant", "NtCreateMutant", "CreateMutexA", "CreateMutexW", "CreateMutexExA", "CreateMutexExW"):
+        elif api in ("NtOpenMutant", "NtCreateMutant", "CreateMutexA", "CreateMutexW", "CreateMutexExA", "CreateMutexExW", "OpenMutexA", "OpenMutexW"):
             caller_addr = call.get("caller")
             
             if caller_addr and pid in self.unbacked_ranges:
