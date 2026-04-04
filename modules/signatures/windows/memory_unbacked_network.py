@@ -348,7 +348,7 @@ class UnbackedNamedPipeCreation(Signature):
 
 class UnbackedUserAgentRetrieval(Signature):
     name = "unbacked_useragent_retrieval"
-    description = "Retrieved the system's user-agent string from dynamically allocated (unbacked) memory, likely to use in C2 to avoid a hardcoded user-agent"
+    description = "Queried the system's user-agent string from dynamically allocated (unbacked) memory, likely to use in C2 to avoid a hardcoded user-agent"
     severity = 3
     confidence = 100
     categories = ["c2", "defense_evasion", "fileless"]
