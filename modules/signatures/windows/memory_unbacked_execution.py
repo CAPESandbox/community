@@ -507,3 +507,69 @@ class UnbackedMemoryProtectionAlteration(Signature):
         if self.ret:
             self.data.append({"unbacked_memory_protection_alterations": self.protection_events})
         return self.ret
+
+
+class UnbackedMutexCreation(Signature):
+    name = "unbacked_mutex_creation"
+    description = "Created or queried a mutex from dynamically allocated (unbacked) memory, possibly a fileless payload checking or creating an infection marker"
+    severity = 3
+    confidence = 100
+    categories = ["execution", "evasion", "fileless"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1055", "T1480"]
+
+    filter_apinames = {
+        "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
+        "NtOpenMutant", "NtCreateMutant", "CreateMutexA", "CreateMutexW", "CreateMutexExA", "CreateMutexExW"
+    }
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
+        self.unbacked_ranges = {}
+        self.mutex_events = set()
+
+    def on_call(self, call, process):
+        api = call["api"]
+        pid = process.get("process_id")
+
+        if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
+            base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
+            region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")            
+            if base_address and region_size:
+                try:
+                    base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
+                    size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)
+                    
+                    if pid not in self.unbacked_ranges:
+                        self.unbacked_ranges[pid] = []
+                    self.unbacked_ranges[pid].append((base_val, base_val + size_val))
+                except (ValueError, TypeError):
+                    pass
+
+        elif api in ("NtOpenMutant", "NtCreateMutant", "CreateMutexA", "CreateMutexW", "CreateMutexExA", "CreateMutexExW"):
+            caller_addr = call.get("caller")
+            
+            if caller_addr and pid in self.unbacked_ranges:
+                try:
+                    caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)                    
+                    for start_addr, end_addr in self.unbacked_ranges[pid]:
+                        if start_addr <= caller_val <= end_addr:
+                            mutex_name = self.get_argument(call, "MutexName") or self.get_argument(call, "Name") or self.get_argument(call, "lpName") or "Unknown Mutex"
+                            proc_name = process.get("process_name", "unknown")
+                            
+                            event_msg = f"{proc_name} queried/created Mutex '{mutex_name}' from unbacked caller {caller_addr}"
+                            if event_msg not in self.mutex_events:
+                                self.mutex_events.add(event_msg)
+                                self.mark_call()
+                                self.ret = True
+                            break
+                except (ValueError, TypeError):
+                    pass
+
+    def on_complete(self):
+        if self.ret:
+            self.data.append({"unbacked_mutex_creation": list(self.mutex_events)})
+        return self.ret
