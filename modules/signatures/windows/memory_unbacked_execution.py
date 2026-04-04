@@ -511,7 +511,7 @@ class UnbackedMemoryProtectionAlteration(Signature):
 
 class UnbackedDotNetExecution(Signature):
     name = "unbacked_dotnet_execution"
-    description = "Attempted to load .NET engine DLLs or call CLR APIs from dynamically allocated (unbacked) memory, indicative of fileless .NET"
+    description = "Attempted to load .NET DLLs or call CLR APIs from dynamically allocated (unbacked) memory, indicative of fileless .NET"
     severity = 3
     confidence = 100
     categories = ["execution", "fileless", "evasion", "dotnet"]
