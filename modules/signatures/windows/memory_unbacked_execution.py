@@ -511,7 +511,7 @@ class UnbackedMemoryProtectionAlteration(Signature):
 
 class UnbackedMutexCreation(Signature):
     name = "unbacked_mutex_creation"
-    description = "Created or queried a mutex from dynamically allocated (unbacked) memory, possibly a fileless payload checking or creating an infection marker"
+    description = "Created or queried a mutex from dynamically allocated (unbacked) memory, indicative of a fileless payload checking or creating an infection marker"
     severity = 3
     confidence = 100
     categories = ["execution", "evasion", "fileless"]
