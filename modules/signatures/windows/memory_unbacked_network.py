@@ -351,7 +351,7 @@ class UnbackedUserAgentRetrieval(Signature):
     description = "Queried the system's user-agent string from dynamically allocated (unbacked) memory, likely to use in C2 to avoid a hardcoded user-agent"
     severity = 3
     confidence = 100
-    categories = ["c2", "defense_evasion", "fileless"]
+    categories = ["network", "c2", "defense_evasion", "fileless", "shellcode"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
@@ -398,7 +398,8 @@ class UnbackedUserAgentRetrieval(Signature):
                         if start_addr <= caller_val <= end_addr:
                             ua_string = self.get_argument(call, "UserAgent") or "Unknown UA"
                             proc_name = process.get("process_name", "unknown")                          
-                            self.ua_events.append(f"{proc_name} dynamically retrieved User-Agent '{ua_string[:50]}...' from unbacked caller {caller_addr}")
+                            ua_display = f"{ua_string[:50]}..." if len(ua_string) > 50 else ua_string
+                            self.ua_events.append(f"{proc_name} dynamically retrieved User-Agent '{ua_display}' from unbacked caller {caller_addr}")
                             self.mark_call()
                             self.ret = True
                             break
