@@ -29,7 +29,7 @@ class EtherHidingSmartContractCall(Signature):
     filter_apinames = {
         "HttpSendRequestA", "HttpSendRequestW", 
         "WinHttpSendRequest", "WinHttpWriteData", 
-        "InternetWriteFile", "send", "WSASend", "sendto"
+        "InternetWriteFile", "send", "WSASend", "sendto", "WSASendTo"
     }
 
     def __init__(self, *args, **kwargs):
@@ -42,11 +42,11 @@ class EtherHidingSmartContractCall(Signature):
         
         # Dynamically grab the payload regardless of which networking API was used
         buffer_data = (
-            self.get_argument(call, "PostData") or 
-            self.get_argument(call, "Buffer") or 
+            self.get_argument(call, "buffer") or 
             self.get_argument(call, "lpBuffer") or 
-            self.get_argument(call, "Optional") or 
-            self.get_argument(call, "lpOptional")
+            self.get_argument(call, "lpOptional") or 
+            self.get_argument(call, "Buffer") or 
+            self.get_argument(call, "PostData")
         )
 
         if buffer_data and isinstance(buffer_data, str):
