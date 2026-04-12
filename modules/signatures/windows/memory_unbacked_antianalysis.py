@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class UnbackedExceptionFilter(Signature):
     name = "unbacked_exception_filter"
-    description = "Altered the unhandled exception filter from dynamically allocated (unbacked) memory, indicative of fileless anti-debugging or silent crash suppression"
+    description = "Modified exception handling mechanisms (UEF/VEH) from dynamically allocated (unbacked) memory, indicative of fileless anti-debugging or silent crash suppression"
     severity = 3
     confidence = 100
     categories = ["defense_evasion", "anti_debugging", "fileless"]
@@ -28,7 +28,7 @@ class UnbackedExceptionFilter(Signature):
 
     filter_apinames = {
         "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
-        "SetUnhandledExceptionFilter", "RtlAddVectoredExceptionHandler"
+        "SetUnhandledExceptionFilter", "AddVectoredExceptionHandler", "RtlAddVectoredExceptionHandler"
     }
 
     def __init__(self, *args, **kwargs):
@@ -56,7 +56,7 @@ class UnbackedExceptionFilter(Signature):
                 except (ValueError, TypeError):
                     pass
 
-        elif api in ("SetUnhandledExceptionFilter", "RtlAddVectoredExceptionHandler"):
+        elif api in ("SetUnhandledExceptionFilter", "AddVectoredExceptionHandler", "RtlAddVectoredExceptionHandler"):
             caller_addr = call.get("caller")
             
             if caller_addr and pid in self.unbacked_ranges:
