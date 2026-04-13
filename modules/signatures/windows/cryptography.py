@@ -67,7 +67,7 @@ class QueryFipsReconnaissance(Signature):
             proc_name = process.get("process_name", "unknown")
             pid = process.get("process_id", "unknown")
             
-            event_msg = f"{proc_name} (PID: {pid}) probed FIPS encryption policy at '{key_name}'"
+            event_msg = "{} (PID: {}) probed FIPS encryption policy at '{}'".format(proc_name, pid, key_name)
             
             if event_msg not in self.fips_events:
                 self.fips_events.add(event_msg)
