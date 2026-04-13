@@ -38,9 +38,9 @@ class AmsiEnumeration(Signature):
 
     def on_call(self, call, process):
         # Extract the registry key being queried directly
-        key_name = self.get_argument(call, "FullName") or self.get_argument(call, "ObjectAttributes") or self.get_argument(call, "SubKey") or ""
+        key_name = self.get_argument(call, "FullName") or self.get_argument(call, "ObjectAttributes") or self.get_argument(call, "SubKey")
         
-        if "software\\microsoft\\amsi" in str(key_name).lower():
+        if key_name and "software\\microsoft\\amsi" in str(key_name).lower():
             proc_name = process.get("process_name", "unknown")
             pid = process.get("process_id", "unknown")
             event_msg = f"{proc_name} (PID: {pid}) probed AMSI registry '{key_name}'"
