@@ -52,5 +52,5 @@ class AmsiEnumeration(Signature):
 
     def on_complete(self):
         if self.ret:
-            self.data.append({"behavioral_amsi_reconnaissance": list(self.amsi_events)})
+            self.data.append({"amsi_enumeration": list(self.amsi_events)})
         return self.ret
