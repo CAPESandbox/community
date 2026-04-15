@@ -92,6 +92,7 @@ class UnbackedMemoryNetworkConnection(Signature):
             "InternetOpenUrlA",
             "InternetOpenUrlW",
             "connect",
+            "ConnectEx",
             "WSAConnect",
             "send",
             "WSASend",
@@ -104,6 +105,7 @@ class UnbackedMemoryNetworkConnection(Signature):
             "InternetReadFile",
             "WinHttpReadData",
             "WinHttpOpenRequest",
+            "WinHttpGetProxyForUrl",
         ):
             caller_addr = call.get("caller")
 
