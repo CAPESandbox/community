@@ -40,6 +40,7 @@ class UnbackedMemoryNetworkConnection(Signature):
         "InternetOpenUrlA",
         "InternetOpenUrlW",
         "connect",
+        "ConnectEx",
         "WSAConnect",
         "send",
         "WSASend",
