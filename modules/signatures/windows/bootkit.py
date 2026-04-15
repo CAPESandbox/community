@@ -235,7 +235,7 @@ class PotentialOverWriteMBR(Signature):
         return self.ret
 
 
-class SuspiciusIOControlCodes(Signature):
+class SuspiciousIOControlCodes(Signature):
     name = "suspicious_iocontrol_codes"
     description = "Uses suspicious IO control codes, indicative of disk enumeration or a bootkit/wiper"
     severity = 3
