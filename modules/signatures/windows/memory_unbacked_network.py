@@ -52,6 +52,7 @@ class UnbackedMemoryNetworkConnection(Signature):
         "InternetReadFile",
         "WinHttpReadData",
         "WinHttpOpenRequest",
+        "WinHttpGetProxyForUrl",
     }
 
     def __init__(self, *args, **kwargs):
