@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class EtherHidingSmartContractCall(Signature):
     name = "etherhiding_smart_contract_call"
     description = "Transmitted an Ethereum JSON-RPC command over the network, indicative of retrieving a payload/C2 from a smart contract using EtherHiding"
@@ -27,9 +28,15 @@ class EtherHidingSmartContractCall(Signature):
     ttps = ["T1102", "T1568"]
 
     filter_apinames = {
-        "HttpSendRequestA", "HttpSendRequestW", 
-        "WinHttpSendRequest", "WinHttpWriteData", 
-        "InternetWriteFile", "send", "WSASend", "sendto", "WSASendTo"
+        "HttpSendRequestA",
+        "HttpSendRequestW",
+        "WinHttpSendRequest",
+        "WinHttpWriteData",
+        "InternetWriteFile",
+        "send",
+        "WSASend",
+        "sendto",
+        "WSASendTo",
     }
 
     def __init__(self, *args, **kwargs):
@@ -39,27 +46,31 @@ class EtherHidingSmartContractCall(Signature):
 
     def on_call(self, call, process):
         api = call["api"]
-        
+
         # Dynamically grab the payload regardless of which networking API was used
         buffer_data = (
-            self.get_argument(call, "buffer") or 
-            self.get_argument(call, "lpBuffer") or 
-            self.get_argument(call, "lpOptional") or 
-            self.get_argument(call, "Buffer") or 
-            self.get_argument(call, "PostData")
+            self.get_argument(call, "buffer")
+            or self.get_argument(call, "lpBuffer")
+            or self.get_argument(call, "lpOptional")
+            or self.get_argument(call, "Buffer")
+            or self.get_argument(call, "PostData")
         )
 
         if buffer_data and isinstance(buffer_data, str):
             buffer_lower = buffer_data.lower()
-            
+
             # Look for the JSON-RPC payload format
             if '"jsonrpc"' in buffer_lower and '"method"' in buffer_lower:
-                if '"eth_call"' in buffer_lower or '"eth_gettransactionbyhash"' in buffer_lower or '"eth_getstorageat"' in buffer_lower:
+                if (
+                    '"eth_call"' in buffer_lower
+                    or '"eth_gettransactionbyhash"' in buffer_lower
+                    or '"eth_getstorageat"' in buffer_lower
+                ):
                     proc_name = process.get("process_name", "unknown")
-                    
+
                     # Truncate buffer to prevent massive strings blowing up the UI
                     event_msg = f"{proc_name} transmitted a smart contract query via {api}: {buffer_data[:150]}..."
-                    
+
                     if event_msg not in self.contract_calls:
                         self.contract_calls.add(event_msg)
                         self.mark_call()

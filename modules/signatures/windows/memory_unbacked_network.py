@@ -373,10 +373,7 @@ class UnbackedUserAgentRetrieval(Signature):
     evented = True
     ttps = ["T1071"]
 
-    filter_apinames = {
-        "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
-        "ObtainUserAgentString"
-    }
+    filter_apinames = {"NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx", "ObtainUserAgentString"}
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -391,12 +388,12 @@ class UnbackedUserAgentRetrieval(Signature):
         if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
             base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
             region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")
-            
+
             if base_address and region_size:
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)
-                    
+
                     if pid not in self.unbacked_ranges:
                         self.unbacked_ranges[pid] = []
                     self.unbacked_ranges[pid].append((base_val, base_val + size_val))
@@ -405,17 +402,19 @@ class UnbackedUserAgentRetrieval(Signature):
 
         elif api == "ObtainUserAgentString":
             caller_addr = call.get("caller")
-            
+
             if caller_addr and pid in self.unbacked_ranges:
                 try:
                     caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
-                    
+
                     for start_addr, end_addr in self.unbacked_ranges[pid]:
                         if start_addr <= caller_val <= end_addr:
                             ua_string = self.get_argument(call, "UserAgent") or "Unknown UA"
-                            proc_name = process.get("process_name", "unknown")                          
+                            proc_name = process.get("process_name", "unknown")
                             ua_display = f"{ua_string[:50]}..." if len(ua_string) > 50 else ua_string
-                            self.ua_events.append(f"{proc_name} dynamically retrieved User-Agent '{ua_display}' from unbacked caller {caller_addr}")
+                            self.ua_events.append(
+                                f"{proc_name} dynamically retrieved User-Agent '{ua_display}' from unbacked caller {caller_addr}"
+                            )
                             self.mark_call()
                             self.ret = True
                             break
