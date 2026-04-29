@@ -42,7 +42,9 @@ class CryptGenKey(Signature):
 
 class QueryFipsReconnaissance(Signature):
     name = "query_fips_reconnaissance"
-    description = "Queried the FIPS cryptography policy, can be used to adapt C2 network encryption or by legitimate encryption software"
+    description = (
+        "Queried the FIPS cryptography policy, can be used to adapt C2 network encryption or by legitimate encryption software"
+    )
     severity = 2
     confidence = 50
     categories = ["discovery", "c2"]
@@ -51,9 +53,7 @@ class QueryFipsReconnaissance(Signature):
     evented = True
     ttps = ["T1082", "T1008"]
 
-    filter_apinames = {
-        "NtOpenKey", "NtOpenKeyEx", "NtQueryValueKey", "RegQueryValueExA", "RegQueryValueExW"
-    }
+    filter_apinames = {"NtOpenKey", "NtOpenKeyEx", "NtQueryValueKey", "RegQueryValueExA", "RegQueryValueExW"}
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -62,13 +62,13 @@ class QueryFipsReconnaissance(Signature):
 
     def on_call(self, call, process):
         key_name = self.get_argument(call, "FullName") or self.get_argument(call, "ObjectAttributes") or ""
-        
+
         if "lsa\\fipsalgorithmpolicy" in str(key_name).lower():
             proc_name = process.get("process_name", "unknown")
             pid = process.get("process_id", "unknown")
-            
+
             event_msg = "{} (PID: {}) probed FIPS encryption policy at '{}'".format(proc_name, pid, key_name)
-            
+
             if event_msg not in self.fips_events:
                 self.fips_events.add(event_msg)
                 self.mark_call()
