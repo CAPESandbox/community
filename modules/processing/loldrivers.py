@@ -79,8 +79,12 @@ POST_LOAD_WINDOW_SEC = 120
 
 EXPLOITATION_KILL_CATEGORIES = {"EDR", "AV"}
 ANTI_ANALYSIS_KILL_CATEGORIES = {
-    "NetworkAnalysis", "ProcessInspection", "ReverseEngineering",
-    "Forensics", "Sysinternals", "Sandbox",
+    "NetworkAnalysis",
+    "ProcessInspection",
+    "ReverseEngineering",
+    "Forensics",
+    "Sysinternals",
+    "Sandbox",
 }
 
 
@@ -98,6 +102,8 @@ def _load_loldrivers():
     try:
         with open(LOLDRIVERS_PATH) as f:
             raw = json.load(f)
+        if not isinstance(raw, list):
+            raise ValueError("expected JSON array, got %s" % type(raw).__name__)
     except Exception as e:
         log.error("failed loading loldrivers feed: %s", e)
         _LOLD_CACHE = {"by_sha256": {}, "by_signer_name": {}, "by_name": {}, "entries": 0}
@@ -107,14 +113,22 @@ def _load_loldrivers():
     by_signer_name = {}
     by_name = defaultdict(list)
     for entry in raw:
+        if not isinstance(entry, dict):
+            continue
         category = entry.get("Category", "")
         eid = entry.get("Id", "")
-        for sample in entry.get("KnownVulnerableSamples", []) or []:
+        for sample in entry.get("KnownVulnerableSamples") or []:
+            if not isinstance(sample, dict):
+                continue
             sha = (sample.get("SHA256") or "").lower()
             fname = (sample.get("Filename") or "").lower()
             signers = []
             for sig in sample.get("Signatures") or []:
+                if not isinstance(sig, dict):
+                    continue
                 for cert in sig.get("Certificates") or []:
+                    if not isinstance(cert, dict):
+                        continue
                     sub = cert.get("Subject") or ""
                     m = re.search(r"CN=([^,]+)", sub)
                     if m:
@@ -140,7 +154,10 @@ def _load_loldrivers():
     }
     log.info(
         "loldrivers loaded: %d entries, %d sha256, %d (signer,name), %d names",
-        _LOLD_CACHE["entries"], len(by_sha256), len(by_signer_name), len(by_name),
+        _LOLD_CACHE["entries"],
+        len(by_sha256),
+        len(by_signer_name),
+        len(by_name),
     )
     return _LOLD_CACHE
 
@@ -155,7 +172,17 @@ def _load_tools():
     try:
         with open(SECURITY_TOOLS_PATH) as f:
             raw = json.load(f)
-        _TOOLS_CACHE = raw.get("tools", {}) or {}
+        if not isinstance(raw, dict):
+            raise ValueError("expected JSON object with 'tools' key, got %s" % type(raw).__name__)
+        tools = raw.get("tools") or {}
+        if not isinstance(tools, dict):
+            raise ValueError("'tools' must be a JSON object, got %s" % type(tools).__name__)
+        # Reject entries that aren't well-formed.
+        _TOOLS_CACHE = {
+            k: v
+            for k, v in tools.items()
+            if isinstance(k, str) and isinstance(v, dict) and "category" in v
+        }
     except Exception as e:
         log.error("failed loading security_tools feed: %s", e)
         _TOOLS_CACHE = {}
@@ -174,6 +201,30 @@ def _is_suspicious_path(path):
         return False
     p = path.lower()
     return any(h in p for h in SUSPICIOUS_DRIVER_PATH_HINTS)
+
+
+def _service_create_cmdline_for(driver_path, driver_basename, executed_commands):
+    """Return True if executed_commands contains a kernel-driver service create/start
+    that targets this driver. Matches `sc(.exe)? create ...` or `sc(.exe)? start ...`
+    when the cmdline references the driver's full path or its basename. We don't
+    require type=kernel because some loaders omit it (sc inherits the type from
+    binPath= ".sys" via SCM defaults in some Windows versions), but we do require
+    the literal verb (create / start) to keep the gate tight."""
+    if not executed_commands:
+        return False
+    bn = (driver_basename or "").lower()
+    dp = (driver_path or "").lower()
+    if not (bn or dp):
+        return False
+    for cmd in executed_commands:
+        low = cmd.lower()
+        if "sc " not in low and "sc.exe" not in low:
+            continue
+        if "create" not in low and "start" not in low:
+            continue
+        if (dp and dp in low) or (bn and bn in low):
+            return True
+    return False
 
 
 def _basename(path):
@@ -234,7 +285,7 @@ def _parse_evtx_records(evtx_path, wanted_eids):
         log.warning("evtx parse failed for %s: %s", evtx_path, e)
 
 
-def _extract_evtx(zip_path, name_filters, target_dir, max_size=5*1024*1024*1024):
+def _extract_evtx(zip_path, name_filters, target_dir, max_size=5 * 1024 * 1024 * 1024):
     """Extract evtx files matching any of name_filters into target_dir; return list of paths."""
     paths = []
     if not os.path.exists(zip_path):
@@ -340,8 +391,10 @@ class LolDrivers(Processing):
                 break
         return signals
 
-    def _correlate_exploitation(self, driver_load_time, pid_name_map, sysmon_records):
-        """Find post-load suspicious activity within POST_LOAD_WINDOW_SEC of driver_load_time."""
+    def _correlate_eid5_kills(self, driver_load_time, sysmon_records):
+        """Per-driver EID 5 correlation: process-terminate events within
+        POST_LOAD_WINDOW_SEC of the driver load whose image basename matches a known
+        security tool. Time-bounded because each EID 5 record carries its own timestamp."""
         if not driver_load_time:
             return []
         t0 = _filetime_to_dt(driver_load_time)
@@ -351,27 +404,6 @@ class LolDrivers(Processing):
 
         tools = _load_tools()
         findings = []
-
-        # Cmdline patterns: taskkill / wmic / Stop-Process targeting a known security tool
-        cmds = (self.results.get("behavior") or {}).get("summary", {}).get("executed_commands") or []
-        for cmd in cmds:
-            low = cmd.lower()
-            kill_keyword = ("taskkill" in low) or ("stop-process" in low) or ("wmic" in low and "delete" in low)
-            if not kill_keyword:
-                continue
-            for exe, info in tools.items():
-                if exe in low and info["category"] in (EXPLOITATION_KILL_CATEGORIES | ANTI_ANALYSIS_KILL_CATEGORIES):
-                    sev = "high" if info["category"] in EXPLOITATION_KILL_CATEGORIES else "medium"
-                    findings.append({
-                        "kind": "kill_security_tool",
-                        "severity": sev,
-                        "tool": info["tool"],
-                        "vendor": info["vendor"],
-                        "category": info["category"],
-                        "detail": cmd,
-                    })
-
-        # Sysmon EID 5 (process terminated) within window — image basename matches a security tool
         for rec in sysmon_records:
             if rec["eid"] != "5":
                 continue
@@ -383,15 +415,59 @@ class LolDrivers(Processing):
             info = tools.get(bn)
             if info and info["category"] in (EXPLOITATION_KILL_CATEGORIES | ANTI_ANALYSIS_KILL_CATEGORIES):
                 sev = "high" if info["category"] in EXPLOITATION_KILL_CATEGORIES else "medium"
-                findings.append({
-                    "kind": "process_terminated_security_tool",
-                    "severity": sev,
-                    "tool": info["tool"],
-                    "vendor": info["vendor"],
-                    "category": info["category"],
-                    "image": img,
-                    "time": rec.get("time"),
-                })
+                findings.append(
+                    {
+                        "kind": "process_terminated_security_tool",
+                        "severity": sev,
+                        "tool": info["tool"],
+                        "vendor": info["vendor"],
+                        "category": info["category"],
+                        "image": img,
+                        "time": rec.get("time"),
+                    }
+                )
+        return findings
+
+    def _correlate_kill_cmdlines(self, executed_commands):
+        """Analysis-global cmdline correlation: kill verbs (taskkill / Stop-Process /
+        wmic delete) targeting a known security tool in any executed_command captured
+        during the analysis. Run once per analysis (not per driver) — Sysmon EID 5 only
+        fires when the *target* was actually running and Sysmon observed the termination,
+        and many sandbox VMs ship without Defender/EDR enabled, so the EID 5 path misses
+        *attempted* kills. We accept any matching cmdline within the analysis because:
+        (a) BYOD analyses are short and bounded by the timeout, (b) the kill verbs are
+        highly specific, and (c) the caller only attaches the result when at least one
+        driver actually loaded."""
+        if not executed_commands:
+            return []
+        tools = _load_tools()
+        findings = []
+        seen = set()
+        for cmd in executed_commands:
+            low = cmd.lower()
+            kill_keyword = ("taskkill" in low) or ("stop-process" in low) or ("wmic" in low and "delete" in low)
+            if not kill_keyword:
+                continue
+            for exe, info in tools.items():
+                if exe not in low:
+                    continue
+                if info["category"] not in (EXPLOITATION_KILL_CATEGORIES | ANTI_ANALYSIS_KILL_CATEGORIES):
+                    continue
+                key = (exe, cmd)
+                if key in seen:
+                    continue
+                seen.add(key)
+                sev = "high" if info["category"] in EXPLOITATION_KILL_CATEGORIES else "medium"
+                findings.append(
+                    {
+                        "kind": "kill_security_tool",
+                        "severity": sev,
+                        "tool": info["tool"],
+                        "vendor": info["vendor"],
+                        "category": info["category"],
+                        "detail": cmd,
+                    }
+                )
         return findings
 
     def run(self):
@@ -420,6 +496,8 @@ class LolDrivers(Processing):
             for p in system_paths:
                 system_records.extend(_parse_evtx_records(p, {"7045"}))
 
+        executed_commands = (self.results.get("behavior") or {}).get("summary", {}).get("executed_commands") or []
+
         # File-create map: path → creator pid (for dropped_by_sample heuristic)
         file_creators = {}
         for rec in sysmon_records:
@@ -431,20 +509,25 @@ class LolDrivers(Processing):
 
         pid_name_map = self._build_pid_name_map()
 
+        raw_service_installs = []
+
         # System EID 7045 — kernel-driver service installs
         for rec in system_records:
             d = rec["data"]
             ipath = d.get("ImagePath", "")
             stype = d.get("ServiceType", "")
             if ipath.lower().endswith(".sys") or "kernel" in stype.lower() or "driver" in stype.lower():
-                result["service_installs"].append({
-                    "service_name": d.get("ServiceName", ""),
-                    "image_path": ipath,
-                    "service_type": stype,
-                    "time": rec.get("time"),
-                })
+                raw_service_installs.append(
+                    {
+                        "service_name": d.get("ServiceName", ""),
+                        "image_path": ipath,
+                        "service_type": stype,
+                        "time": rec.get("time"),
+                    }
+                )
 
         # Sysmon EID 6 driver loads
+        seen_service_installs = set()
         for rec in sysmon_records:
             if rec["eid"] != "6":
                 continue
@@ -484,18 +567,74 @@ class LolDrivers(Processing):
                 result["matches"].append(rec_match)
 
             if not sample_under_test:
-                novel_signals = self._classify_novel(driver, result["service_installs"])
+                novel_signals = self._classify_novel(driver, raw_service_installs)
                 if novel_signals:
                     result["novel_candidates"].append({**driver, "signals": novel_signals})
 
-            expl = self._correlate_exploitation(rec.get("time"), pid_name_map, sysmon_records)
+            related_service_installs = []
+            for svc in raw_service_installs:
+                image_path = svc.get("image_path", "")
+                if image_path.lower() == path.lower() or _basename(image_path) == _basename(path):
+                    related_service_installs.append(svc)
+
+            # Emit service installs that can be tied back to the analyzed sample. The
+            # cmdline branch catches the common loader/dropper pattern where the sample
+            # is a script/binary that invokes `sc create ... binPath=...sys ... type=kernel`
+            # (or sc start) — this fires even when the .sys was extracted by the analyzer
+            # itself rather than written by a monitored process, and even when the .sys
+            # basename differs from the submission name. We deliberately do NOT gate on
+            # path location: the analyzer drops user-uploaded samples into the same Temp
+            # directories that look "suspicious", so a path-based gate would FP on an
+            # analyst submitting a raw .sys to scan it.
+            service_invoked_by_sample = _service_create_cmdline_for(path, _basename(path), executed_commands)
+            if sample_under_test or created_by_sample or service_invoked_by_sample:
+                for svc in related_service_installs:
+                    dedupe_key = (
+                        svc.get("service_name", ""),
+                        svc.get("image_path", "").lower(),
+                        svc.get("time", ""),
+                    )
+                    if dedupe_key in seen_service_installs:
+                        continue
+                    seen_service_installs.add(dedupe_key)
+                    result["service_installs"].append(
+                        {
+                            **svc,
+                            "driver_path": path,
+                            "driver_sha256": sha256,
+                            "sample_under_test": sample_under_test,
+                            "created_by_sample": created_by_sample,
+                            "creator_pid": creator_pid,
+                            "creator_name": pid_name_map.get(creator_pid) if creator_pid else None,
+                        }
+                    )
+
+            expl = self._correlate_eid5_kills(rec.get("time"), sysmon_records)
             if expl:
-                result["exploitation"].append({
-                    "driver_path": path,
-                    "driver_sha256": sha256,
-                    "driver_time": rec.get("time"),
-                    "findings": expl,
-                })
+                result["exploitation"].append(
+                    {
+                        "driver_path": path,
+                        "driver_sha256": sha256,
+                        "driver_time": rec.get("time"),
+                        "findings": expl,
+                    }
+                )
+
+        # Cmdline-based kill correlation: emit once per analysis (not per driver) and
+        # only when at least one driver actually loaded. Otherwise we'd raise a BYOD
+        # exploitation signal on a non-BYOD sample that just runs taskkill.
+        if result["drivers_loaded"]:
+            cmdline_kills = self._correlate_kill_cmdlines(executed_commands)
+            if cmdline_kills:
+                result["exploitation"].append(
+                    {
+                        "driver_path": None,
+                        "driver_sha256": None,
+                        "driver_time": None,
+                        "scope": "analysis",
+                        "findings": cmdline_kills,
+                    }
+                )
 
         result["summary"] = {
             "drivers_loaded": len(result["drivers_loaded"]),
