@@ -71,7 +71,7 @@ def fetch(url: str, dest: str) -> int:
         print(f"error: expected JSON array, got {type(parsed).__name__}", file=sys.stderr)
         return 3
 
-    samples = sum(len(e.get("KnownVulnerableSamples") or []) for e in parsed)
+    samples = sum(len(e.get("KnownVulnerableSamples") or []) for e in parsed if isinstance(e, dict))
     if not parsed or samples == 0:
         os.unlink(tmp)
         print("error: feed contained no entries with KnownVulnerableSamples", file=sys.stderr)

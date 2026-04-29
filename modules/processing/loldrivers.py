@@ -100,7 +100,7 @@ def _load_loldrivers():
         _LOLD_CACHE = {"by_sha256": {}, "by_signer_name": {}, "by_name": {}, "entries": 0}
         return _LOLD_CACHE
     try:
-        with open(LOLDRIVERS_PATH) as f:
+        with open(LOLDRIVERS_PATH, encoding="utf-8") as f:
             raw = json.load(f)
         if not isinstance(raw, list):
             raise ValueError("expected JSON array, got %s" % type(raw).__name__)
@@ -170,7 +170,7 @@ def _load_tools():
         _TOOLS_CACHE = {}
         return _TOOLS_CACHE
     try:
-        with open(SECURITY_TOOLS_PATH) as f:
+        with open(SECURITY_TOOLS_PATH, encoding="utf-8") as f:
             raw = json.load(f)
         if not isinstance(raw, dict):
             raise ValueError("expected JSON object with 'tools' key, got %s" % type(raw).__name__)
@@ -203,6 +203,55 @@ def _is_suspicious_path(path):
     return any(h in p for h in SUSPICIOUS_DRIVER_PATH_HINTS)
 
 
+_SC_CREATE_RE = re.compile(r"sc(?:\.exe)?\s+create\s+(?P<name>[^\s\"]+)", re.IGNORECASE)
+_BINPATH_RE = re.compile(r'binpath\s*=\s*"?(?P<path>[A-Za-z]:\\[^"\s]+\.sys|\\\\[^"\s]+\.sys|[^"\s]+\.sys)"?', re.IGNORECASE)
+
+
+def _synthesize_service_installs_from_cmdlines(executed_commands):
+    """Parse `sc(.exe) create ... binPath=...sys ...` cmdlines from
+    executed_commands to synthesize kernel-driver service-install entries.
+
+    CAPE deployments that don't dump System.evtx (only Sysmon) won't have
+    System EID 7045, so byod_driver_service_install would never fire even
+    on real BYOD chains. This synthesis path keeps the signature working
+    on Sysmon-only deployments by mining the cape-monitor-captured
+    executed_commands stream for sc.exe service-create activity.
+
+    Only emits entries with a `.sys` binPath. type=kernel is preferred but
+    not required — sc auto-detects driver type from a `.sys` binPath on
+    modern Windows."""
+    if not executed_commands:
+        return []
+    out = []
+    for cmd in executed_commands:
+        m_create = _SC_CREATE_RE.search(cmd)
+        if not m_create:
+            continue
+        m_bin = _BINPATH_RE.search(cmd)
+        if not m_bin:
+            continue
+        bin_path = m_bin.group("path").strip().rstrip('"')
+        if not bin_path.lower().endswith(".sys"):
+            continue
+        # Look for type=kernel within ~40 chars of the type= token.
+        low = cmd.lower()
+        is_kernel = False
+        idx = low.find("type=")
+        if idx >= 0:
+            tail = low[idx + 5 : idx + 5 + 40]
+            is_kernel = "kernel" in tail
+        out.append(
+            {
+                "service_name": m_create.group("name"),
+                "image_path": bin_path,
+                "service_type": "kernel mode driver" if is_kernel else "service",
+                "time": None,
+                "synthesized_from": "cmdline",
+            }
+        )
+    return out
+
+
 def _service_create_cmdline_for(driver_path, driver_basename, executed_commands):
     """Return True if executed_commands contains a kernel-driver service create/start
     that targets this driver. Matches `sc(.exe)? create ...` or `sc(.exe)? start ...`
@@ -233,20 +282,39 @@ def _basename(path):
     return path.replace("\\", "/").rsplit("/", 1)[-1].lower()
 
 
+_FRAC_TRUNC_RE = re.compile(r"^(?P<head>.+\.\d{6})\d+(?P<tail>.*)$")
+
+
 def _filetime_to_dt(s):
-    """Parse Sysmon UtcTime (e.g. '2026-04-28 16:57:01.123') → aware UTC datetime."""
+    """Parse Sysmon SystemTime / UtcTime (e.g. '2026-04-28 16:57:01.123' or
+    '2026-04-29 05:38:58.8893300+00:00') → aware UTC datetime. Handles 100ns
+    precision (>6 fractional digits) and ISO timezone offsets."""
     if not s:
         return None
-    s = s.strip().rstrip("Z")
+    s = s.strip()
+    if s.endswith("Z"):
+        s = s[:-1] + "+00:00"
+    # Sysmon SystemTime can emit 7 digits of fractional seconds (100ns ticks).
+    # Python's %f and pre-3.11 fromisoformat both cap at 6 — truncate.
+    m = _FRAC_TRUNC_RE.match(s)
+    if m:
+        s = m.group("head") + m.group("tail")
+    # Try ISO-8601 first (handles "T" or " " separator and timezone offsets on 3.11+).
+    try:
+        iso = s if "T" in s else s.replace(" ", "T", 1)
+        dt = datetime.fromisoformat(iso)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt
+    except Exception:
+        pass
+    # Fallback: strict strptime (no timezone, no fractional seconds beyond 6).
     for fmt in ("%Y-%m-%d %H:%M:%S.%f", "%Y-%m-%d %H:%M:%S"):
         try:
             return datetime.strptime(s, fmt).replace(tzinfo=timezone.utc)
         except ValueError:
             pass
-    try:
-        return datetime.fromisoformat(s).replace(tzinfo=timezone.utc)
-    except Exception:
-        return None
+    return None
 
 
 _EID_RE = re.compile(r"<EventID[^>]*>(\d+)</EventID>")
@@ -286,21 +354,51 @@ def _parse_evtx_records(evtx_path, wanted_eids):
 
 
 def _extract_evtx(zip_path, name_filters, target_dir, max_size=5 * 1024 * 1024 * 1024):
-    """Extract evtx files matching any of name_filters into target_dir; return list of paths."""
+    """Extract evtx files matching any of name_filters into target_dir; return list of paths.
+
+    Defense-in-depth on the analyzer-produced zip:
+      - Reject symlink entries (Unix-mode bits).
+      - Sanitize each entry's filename to its basename (drops absolute paths and `..`).
+      - Realpath-check the destination stays inside target_dir.
+      - Cap total extracted size.
+      - Stream via zf.open + chunked write (avoids zf.extract's reliance on info.filename).
+    """
     paths = []
     if not os.path.exists(zip_path):
         return paths
+    target_dir_real = os.path.realpath(target_dir)
     total_extracted = 0
     try:
         with zipfile.ZipFile(zip_path) as zf:
             for info in zf.infolist():
-                if any(f.lower() in info.filename.lower() for f in name_filters):
-                    total_extracted += info.file_size
-                    if total_extracted > max_size:
-                        log.warning("evtx zip extraction exceeded %d bytes, aborting", max_size)
-                        break
-                    extracted_path = zf.extract(info, target_dir)
-                    paths.append(extracted_path)
+                if not any(f.lower() in info.filename.lower() for f in name_filters):
+                    continue
+                total_extracted += info.file_size
+                if total_extracted > max_size:
+                    log.warning("evtx zip extraction exceeded %d bytes, aborting", max_size)
+                    break
+                # Reject symlink entries.
+                mode = (info.external_attr >> 16) & 0o177777
+                if (mode & 0o170000) == 0o120000:
+                    log.warning("skipping symlink in evtx zip: %s", info.filename)
+                    continue
+                if info.is_dir():
+                    continue
+                safe_name = os.path.basename(info.filename)
+                if not safe_name:
+                    continue
+                dest_path = os.path.join(target_dir_real, safe_name)
+                real_dest = os.path.realpath(dest_path)
+                if real_dest != target_dir_real and not real_dest.startswith(target_dir_real + os.sep):
+                    log.warning("skipping unsafe evtx zip member path: %s", info.filename)
+                    continue
+                with zf.open(info) as src, open(dest_path, "wb") as dst:
+                    while True:
+                        chunk = src.read(1024 * 1024)
+                        if not chunk:
+                            break
+                        dst.write(chunk)
+                paths.append(dest_path)
     except Exception as e:
         log.warning("zip extract failed for %s: %s", zip_path, e)
     return paths
@@ -322,16 +420,23 @@ class LolDrivers(Processing):
                 m[int(pid)] = name
         return m
 
-    def _is_sample_being_analyzed(self, driver_path):
-        """Return True if the driver file IS the sample under test."""
+    def _is_sample_being_analyzed(self, driver_path, driver_sha256=None):
+        """Return True if the driver file IS the sample under test.
+
+        Prefers SHA256 comparison when both the driver hash and the sample
+        hash are available — eliminates basename collisions where the sample
+        and a different driver happen to share a filename. Falls back to
+        basename when hashes are missing."""
         if not driver_path:
             return False
         target = (self.results.get("target") or {}).get("file") or {}
+        sample_sha = (target.get("sha256") or "").lower()
+        drv_sha = (driver_sha256 or "").lower()
+        if sample_sha and drv_sha:
+            return sample_sha == drv_sha
         sample_name = (target.get("name") or "").lower()
         bn = _basename(driver_path)
-        if sample_name and bn == sample_name:
-            return True
-        return False
+        return bool(sample_name and bn == sample_name)
 
     def _classify_driver(self, driver):
         feed = _load_loldrivers()
@@ -486,7 +591,11 @@ class LolDrivers(Processing):
 
         with tempfile.TemporaryDirectory() as td:
             sysmon_paths = _extract_evtx(evtx_zip, ["Sysmon"], td)
-            system_paths = _extract_evtx(evtx_zip, ["_System.evtx"], td)
+            # System.evtx provides EID 7045 (service install) used by the BYOD
+            # service-install signature. CAPE deployments that don't collect the
+            # System log (only Sysmon) will simply produce no service_installs
+            # entries — the other three BYOD signatures still fire.
+            system_paths = _extract_evtx(evtx_zip, ["System.evtx"], td)
 
             sysmon_records = []
             for p in sysmon_paths:
@@ -526,6 +635,20 @@ class LolDrivers(Processing):
                     }
                 )
 
+        # Supplement EID 7045 with cmdline-synthesized installs — covers CAPE
+        # deployments that don't dump System.evtx. Skip synth entries already
+        # represented by an EID 7045 entry (same service_name + .sys basename).
+        covered = {
+            (s.get("service_name", "").lower(), _basename(s.get("image_path", "")))
+            for s in raw_service_installs
+        }
+        for s in _synthesize_service_installs_from_cmdlines(executed_commands):
+            key = (s.get("service_name", "").lower(), _basename(s.get("image_path", "")))
+            if key in covered:
+                continue
+            covered.add(key)
+            raw_service_installs.append(s)
+
         # Sysmon EID 6 driver loads
         seen_service_installs = set()
         for rec in sysmon_records:
@@ -544,7 +667,7 @@ class LolDrivers(Processing):
 
             creator_pid = file_creators.get(path.lower())
             created_by_sample = bool(creator_pid and creator_pid in pid_name_map)
-            sample_under_test = self._is_sample_being_analyzed(path)
+            sample_under_test = self._is_sample_being_analyzed(path, sha256)
 
             driver = {
                 "time": rec.get("time"),
