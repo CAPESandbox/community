@@ -15,11 +15,12 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AmsiEnumeration(Signature):
     name = "amsi_enumeration"
     description = "Enumerated Anti-Malware Scan Interface (AMSI) providers, a potential precursor to AMSI bypass or EDR unhooking"
     severity = 3
-    confidence = 40    
+    confidence = 40
     categories = ["discovery", "defense_evasion"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
@@ -27,8 +28,14 @@ class AmsiEnumeration(Signature):
     ttps = ["T1518", "T1562"]
 
     filter_apinames = {
-        "NtOpenKey", "NtOpenKeyEx", "RegOpenKeyExA", "RegOpenKeyExW", 
-        "RegEnumKeyExA", "RegEnumKeyExW", "RegQueryValueExA", "RegQueryValueExW"
+        "NtOpenKey",
+        "NtOpenKeyEx",
+        "RegOpenKeyExA",
+        "RegOpenKeyExW",
+        "RegEnumKeyExA",
+        "RegEnumKeyExW",
+        "RegQueryValueExA",
+        "RegQueryValueExW",
     }
 
     def __init__(self, *args, **kwargs):
@@ -38,13 +45,15 @@ class AmsiEnumeration(Signature):
 
     def on_call(self, call, process):
         # Extract the registry key being queried directly
-        key_name = self.get_argument(call, "FullName") or self.get_argument(call, "ObjectAttributes") or self.get_argument(call, "SubKey")
-        
+        key_name = (
+            self.get_argument(call, "FullName") or self.get_argument(call, "ObjectAttributes") or self.get_argument(call, "SubKey")
+        )
+
         if key_name and "software\\microsoft\\amsi" in str(key_name).lower():
             proc_name = process.get("process_name", "unknown")
             pid = process.get("process_id", "unknown")
             event_msg = f"{proc_name} (PID: {pid}) probed AMSI registry '{key_name}'"
-            
+
             if event_msg not in self.amsi_events:
                 self.amsi_events.add(event_msg)
                 self.mark_call()
