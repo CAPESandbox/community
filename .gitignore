@@ -181,3 +181,6 @@ cython_debug/
 
 # Ignore YARA rules that were downloaded from the core for MACO extractors
 */parsers/yara/*.yar
+
+# LOLDrivers community feed (download via utils/fetch_loldrivers.py)
+data/loldrivers.json
