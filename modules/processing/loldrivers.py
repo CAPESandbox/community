@@ -178,11 +178,7 @@ def _load_tools():
         if not isinstance(tools, dict):
             raise ValueError("'tools' must be a JSON object, got %s" % type(tools).__name__)
         # Reject entries that aren't well-formed.
-        _TOOLS_CACHE = {
-            k: v
-            for k, v in tools.items()
-            if isinstance(k, str) and isinstance(v, dict) and "category" in v
-        }
+        _TOOLS_CACHE = {k: v for k, v in tools.items() if isinstance(k, str) and isinstance(v, dict) and "category" in v}
     except Exception as e:
         log.error("failed loading security_tools feed: %s", e)
         _TOOLS_CACHE = {}
@@ -336,6 +332,7 @@ def _parse_evtx_records(evtx_path, wanted_eids):
     The yielded shape is identical for both backends."""
     try:
         from evtx import PyEvtxParser  # evtx-rs (Rust-backed)
+
         _backend = "evtx-rs"
     except ImportError:
         PyEvtxParser = None
@@ -692,10 +689,7 @@ class LolDrivers(Processing):
         # Supplement EID 7045 with cmdline-synthesized installs — covers CAPE
         # deployments that don't dump System.evtx. Skip synth entries already
         # represented by an EID 7045 entry (same service_name + .sys basename).
-        covered = {
-            (s.get("service_name", "").lower(), _basename(s.get("image_path", "")))
-            for s in raw_service_installs
-        }
+        covered = {(s.get("service_name", "").lower(), _basename(s.get("image_path", ""))) for s in raw_service_installs}
         for s in _synthesize_service_installs_from_cmdlines(executed_commands):
             key = (s.get("service_name", "").lower(), _basename(s.get("image_path", "")))
             if key in covered:
