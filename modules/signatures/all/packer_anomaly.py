@@ -68,3 +68,94 @@ class PackerUnknownPESectionName(Signature):
                         self.data.append({"unknown section": section})
 
         return ret
+
+
+class PEDeepEntrypoint(Signature):
+    name = "pe_deep_entrypoint"
+    description = "The PE entry point is located unusually far into section, indicative of an appended packer stub that jumps to the original entry point (OEP)"
+    severity = 2
+    confidence = 100
+    categories = ["static", "packer", "evasion", "anomaly"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    ttps = ["T1027"]
+    mbcs = ["E1027"]
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.depth_threshold_percentage = 80.0
+
+    @staticmethod
+    def _parse_hex_or_int(value, default=0):
+        """Safely parse a value that may be a hex string, decimal string, or int."""
+        if isinstance(value, int):
+            return value
+        if isinstance(value, str):
+            try:
+                return int(value, 16) if value.startswith("0x") else int(value)
+            except (ValueError, TypeError):
+                return default
+        return default
+
+    def run(self):
+        target = self.results.get("target", {})
+        if target.get("category") not in ("file", "static") or not target.get("file"):
+            return False
+
+        pe = target["file"].get("pe", {})
+        if not pe:
+            return False
+
+        ep_raw = pe.get("entrypoint")
+        if ep_raw is None:
+            return False
+
+        ep_val = self._parse_hex_or_int(ep_raw)
+        if ep_val == 0:
+            return False
+
+        sections = pe.get("sections", [])
+        if not sections:
+            return False
+
+        for sec in sections:
+            vaddr = self._parse_hex_or_int(sec.get("virtual_address", 0))
+            vsize = self._parse_hex_or_int(sec.get("virtual_size", 0))
+
+            if vsize == 0:
+                continue
+            if vaddr <= ep_val < (vaddr + vsize):
+                offset = ep_val - vaddr
+                percentage = (offset / float(vsize)) * 100.0
+
+                if percentage >= self.depth_threshold_percentage:
+                    sec_name = sec.get("name", "unknown")
+                    try:
+                        entropy = float(sec.get("entropy", 0.0))
+                    except (ValueError, TypeError):
+                        entropy = 0.0
+                    if percentage >= 95.0 or entropy >= 7.0:
+                        self.severity = 3
+                    dynamic_desc = (
+                        f"The PE entry point (0x{ep_val:x}) is located {percentage:.1f}% "
+                        f"deep into the '{sec_name}' section. Normal compilers place the EP "
+                        f"near the beginning. This strongly indicates an appended packer stub "
+                        f"or shellcode."
+                    )
+                    self.data.append({
+                        "anomaly_description": dynamic_desc,
+                        "entry_point": hex(ep_val),
+                        "section_name": sec_name,
+                        "section_virtual_address": hex(vaddr),
+                        "section_virtual_size": hex(vsize),
+                        "offset_bytes": hex(offset),
+                        "depth_percentage": round(percentage, 2),
+                        "section_entropy": round(entropy, 2),
+                    })
+
+                    return True
+
+                # EP is in section but not deep enough — no need to keep searching
+                return False
+
+        return False
