@@ -529,11 +529,7 @@ class Sigma(Processing):
             return None
 
         # Collect all evtx zip files (evtx.zip + evtx_snapshot_*.zip)
-        evtx_zips = sorted(
-            os.path.join(evtx_dir, f)
-            for f in os.listdir(evtx_dir)
-            if f.endswith(".zip")
-        )
+        evtx_zips = sorted(os.path.join(evtx_dir, f) for f in os.listdir(evtx_dir) if f.endswith(".zip"))
         if not evtx_zips:
             log.debug("No evtx zip files found in %s", evtx_dir)
             return None
@@ -626,7 +622,9 @@ class Sigma(Processing):
                         # Stream output line-by-line to avoid loading all into memory
                         proc = subprocess.Popen(
                             [evtx_dump_bin, "-o", "jsonl", evtx_file],
-                            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.DEVNULL,
+                            text=True,
                         )
                         with open(jsonl_path, "w") as out:
                             for line in proc.stdout:
@@ -652,10 +650,7 @@ class Sigma(Processing):
                         log.debug("evtx_dump filter failed for %s: %s", evtx_file, e)
 
                 if has_filtered:
-                    return self._run_zircolite(
-                        zircolite_path, rulesets, timeout, filtered_dir,
-                        extra_args=["--jsonl"]
-                    )
+                    return self._run_zircolite(zircolite_path, rulesets, timeout, filtered_dir, extra_args=["--jsonl"])
                 log.debug("evtx_dump filtering produced no output, falling back to raw evtx")
 
             return self._run_zircolite(zircolite_path, rulesets, timeout, tmpdir)
