@@ -1,8 +1,13 @@
 import re
+from datetime import datetime
 from lib.cuckoo.common.abstracts import Signature
 
 
 def _get_pe(results):
+    # digital_signers/guest_signers live under static.pe (populated by parse_pe)
+    static_pe = results.get("static", {}).get("pe", {})
+    if static_pe:
+        return static_pe
     return (results.get("target") or {}).get("file", {}).get("pe", {})
 
 
@@ -120,7 +125,6 @@ class PECertSuspiciousIssuer(Signature):
 
             # Very short validity (< 180 days)
             try:
-                from datetime import datetime
                 nb = datetime.fromisoformat(cert.get("not_before", "").replace("Z", ""))
                 na = datetime.fromisoformat(cert.get("not_after", "").replace("Z", ""))
                 days = (na - nb).days

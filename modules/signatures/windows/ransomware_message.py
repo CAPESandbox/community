@@ -132,7 +132,7 @@ class RansomwareMessage(Signature):
         self.regex = re.compile(pattern_str)
 
     def on_call(self, call, process):
-        filepath = self.get_argument(call, "HandleName")
+        filepath = self.get_argument(call, "HandleName") or self.get_argument(call, "FileName")
 
         if not filepath:
             return

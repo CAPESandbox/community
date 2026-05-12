@@ -2,7 +2,7 @@ import re
 from lib.cuckoo.common.abstracts import Signature
 
 BROWSER_RE = re.compile(
-    r'\\(?:chrome|brave|msedge|firefox|opera)\.exe',
+    r'(?<!\w)(?:chrome|brave|msedge|firefox|opera)\.exe',
     re.IGNORECASE
 )
 
@@ -47,7 +47,7 @@ class BrowserCredentialTheftHeadless(Signature):
             lower = cmd.lower()
             if not BROWSER_RE.search(cmd):
                 continue
-            if "--headless" not in lower:
+            if "--headless" not in lower and " -headless" not in lower:
                 continue
             if "--disable-logging" not in lower and "--log-level=3" not in lower:
                 continue
