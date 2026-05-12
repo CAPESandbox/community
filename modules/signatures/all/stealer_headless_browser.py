@@ -61,28 +61,23 @@ class BrowserCredentialTheftHeadless(Signature):
 
         # Require suspicious parent — find via process tree
         suspicious_parent = None
-        for proc in (
-            self.results.get("behavior", {}).get("processes", []) or []
-        ):
+        processes = self.results.get("behavior", {}).get("processes", []) or []
+        proc_by_pid = {p["process_id"]: p for p in processes if p.get("process_id") is not None}
+
+        for proc in processes:
             path = proc.get("module_path", "") or proc.get("process_name", "") or ""
             if not BROWSER_RE.search(path):
                 continue
             parent_id = proc.get("parent_id")
             if parent_id is None:
                 continue
-            # Find parent process
-            for parent in (
-                self.results.get("behavior", {}).get("processes", []) or []
-            ):
-                if parent.get("process_id") != parent_id:
-                    continue
+            parent = proc_by_pid.get(parent_id)
+            if parent:
                 parent_path = parent.get("module_path", "") or ""
                 if SUSPICIOUS_PARENT_RE.search(parent_path) and not LEGITIMATE_LAUNCHERS.search(parent_path):
                     suspicious_parent = parent_path
                     self.data.append({"suspicious_parent": parent_path})
                     break
-            if suspicious_parent:
-                break
 
         # Also accept if 3+ browsers launched headless (multi-browser sweep = high confidence
         # even without confirmed parent — covers cases where process tree is incomplete)
