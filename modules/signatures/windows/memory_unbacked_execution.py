@@ -521,9 +521,17 @@ class UnbackedMutexCreation(Signature):
     ttps = ["T1055", "T1480"]
 
     filter_apinames = {
-        "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
-        "NtOpenMutant", "NtCreateMutant", "CreateMutexA", "CreateMutexW", "CreateMutexExA", "CreateMutexExW",
-        "OpenMutexA", "OpenMutexW"
+        "NtAllocateVirtualMemory",
+        "VirtualAlloc",
+        "VirtualAllocEx",
+        "NtOpenMutant",
+        "NtCreateMutant",
+        "CreateMutexA",
+        "CreateMutexW",
+        "CreateMutexExA",
+        "CreateMutexExW",
+        "OpenMutexA",
+        "OpenMutexW",
     }
 
     def __init__(self, *args, **kwargs):
@@ -538,12 +546,12 @@ class UnbackedMutexCreation(Signature):
 
         if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
             base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
-            region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")            
+            region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")
             if base_address and region_size:
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)
-                    
+
                     if base_val:
                         if pid not in self.unbacked_ranges:
                             self.unbacked_ranges[pid] = []
@@ -551,17 +559,31 @@ class UnbackedMutexCreation(Signature):
                 except (ValueError, TypeError):
                     pass
 
-        elif api in ("NtOpenMutant", "NtCreateMutant", "CreateMutexA", "CreateMutexW", "CreateMutexExA", "CreateMutexExW", "OpenMutexA", "OpenMutexW"):
+        elif api in (
+            "NtOpenMutant",
+            "NtCreateMutant",
+            "CreateMutexA",
+            "CreateMutexW",
+            "CreateMutexExA",
+            "CreateMutexExW",
+            "OpenMutexA",
+            "OpenMutexW",
+        ):
             caller_addr = call.get("caller")
-            
+
             if caller_addr and pid in self.unbacked_ranges:
                 try:
-                    caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)                    
+                    caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
                     for start_addr, end_addr in self.unbacked_ranges[pid]:
                         if start_addr <= caller_val <= end_addr:
-                            mutex_name = self.get_argument(call, "MutexName") or self.get_argument(call, "Name") or self.get_argument(call, "lpName") or "Unknown Mutex"
+                            mutex_name = (
+                                self.get_argument(call, "MutexName")
+                                or self.get_argument(call, "Name")
+                                or self.get_argument(call, "lpName")
+                                or "Unknown Mutex"
+                            )
                             proc_name = process.get("process_name", "unknown")
-                            
+
                             event_msg = f"{proc_name} queried/created Mutex '{mutex_name}' from unbacked caller {caller_addr}"
                             if event_msg not in self.mutex_events:
                                 self.mutex_events.add(event_msg)
@@ -579,7 +601,9 @@ class UnbackedMutexCreation(Signature):
 
 class UnbackedDotNetExecution(Signature):
     name = "unbacked_dotnet_execution"
-    description = "Attempted to load .NET DLLs or call CLR APIs from dynamically allocated (unbacked) memory, indicative of fileless .NET"
+    description = (
+        "Attempted to load .NET DLLs or call CLR APIs from dynamically allocated (unbacked) memory, indicative of fileless .NET"
+    )
     severity = 3
     confidence = 100
     categories = ["execution", "fileless", "evasion", "dotnet"]
@@ -589,9 +613,17 @@ class UnbackedDotNetExecution(Signature):
     ttps = ["T1055", "T1564"]
 
     filter_apinames = {
-        "NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx",
-        "CLRCreateInstance", "CorBindToRuntimeEx", "CorBindToRuntimeHost", "CorBindToCurrentRuntime",
-        "LdrLoadDll", "LoadLibraryA", "LoadLibraryW", "LoadLibraryExW"
+        "NtAllocateVirtualMemory",
+        "VirtualAlloc",
+        "VirtualAllocEx",
+        "CLRCreateInstance",
+        "CorBindToRuntimeEx",
+        "CorBindToRuntimeHost",
+        "CorBindToCurrentRuntime",
+        "LdrLoadDll",
+        "LoadLibraryA",
+        "LoadLibraryW",
+        "LoadLibraryExW",
     }
 
     def __init__(self, *args, **kwargs):
@@ -606,41 +638,55 @@ class UnbackedDotNetExecution(Signature):
         if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
             base_address = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
             region_size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")
-            
+
             if base_address and region_size:
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     size_val = int(region_size, 16) if isinstance(region_size, str) else int(region_size)
-                    
+
                     if pid not in self.unbacked_ranges:
                         self.unbacked_ranges[pid] = []
                     self.unbacked_ranges[pid].append((base_val, base_val + size_val))
                 except (ValueError, TypeError):
                     pass
 
-        elif api in ("CLRCreateInstance", "CorBindToRuntimeEx", "CorBindToRuntimeHost", "CorBindToCurrentRuntime", "LdrLoadDll", "LoadLibraryA", "LoadLibraryW", "LoadLibraryExW"):
+        elif api in (
+            "CLRCreateInstance",
+            "CorBindToRuntimeEx",
+            "CorBindToRuntimeHost",
+            "CorBindToCurrentRuntime",
+            "LdrLoadDll",
+            "LoadLibraryA",
+            "LoadLibraryW",
+            "LoadLibraryExW",
+        ):
             caller_addr = call.get("caller")
-            
+
             if caller_addr and pid in self.unbacked_ranges:
                 try:
                     caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
-                    
+
                     for start_addr, end_addr in self.unbacked_ranges[pid]:
                         if start_addr <= caller_val <= end_addr:
                             proc_name = process.get("process_name", "unknown")
-                            if api in ("CLRCreateInstance", "CorBindToRuntimeEx", "CorBindToRuntimeHost", "CorBindToCurrentRuntime"):
+                            if api in (
+                                "CLRCreateInstance",
+                                "CorBindToRuntimeEx",
+                                "CorBindToRuntimeHost",
+                                "CorBindToCurrentRuntime",
+                            ):
                                 event_msg = f"{proc_name} bootstrapped .NET CLR via API '{api}' from unbacked caller {caller_addr}"
                                 if event_msg not in self.dotnet_events:
                                     self.dotnet_events.add(event_msg)
                                     self.mark_call()
                                     self.ret = True
-                                break 
-     
+                                break
+
                             else:
                                 dll_name = self.get_argument(call, "FileName") or self.get_argument(call, "lpLibFileName")
                                 if dll_name and isinstance(dll_name, str):
                                     dll_lower = dll_name.lower()
-                                    dotnet_targets = ["mscoree.dll", "mscoreei.dll", "clr.dll", "coreclr.dll", "mscorwks.dll"]                                 
+                                    dotnet_targets = ["mscoree.dll", "mscoreei.dll", "clr.dll", "coreclr.dll", "mscorwks.dll"]
                                     if any(target in dll_lower for target in dotnet_targets):
                                         event_msg = f"{proc_name} manually loaded .NET engine DLL '{dll_name}' from unbacked caller {caller_addr}"
                                         if event_msg not in self.dotnet_events:

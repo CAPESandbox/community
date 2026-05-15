@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class SectionMappingInjection(Signature):
     name = "section_mapping_injection"
     description = "Maps a shared memory section into both the local and a remote process, possibly to inject code without using WriteProcessMemory"
@@ -25,7 +26,7 @@ class SectionMappingInjection(Signature):
     minimum = "1.3"
     evented = True
     ttps = ["T1055"]
-    
+
     filter_apinames = {"NtMapViewOfSection", "MapViewOfFile"}
 
     def __init__(self, *args, **kwargs):
@@ -37,17 +38,17 @@ class SectionMappingInjection(Signature):
     def on_call(self, call, process):
         section_handle = self.get_argument(call, "SectionHandle") or self.get_argument(call, "hFileMappingObject")
         process_handle = self.get_argument(call, "ProcessHandle") or self.get_argument(call, "hProcess")
-        
+
         if section_handle and process_handle:
             sec_str = str(section_handle)
             proc_handle_str = str(process_handle)
-            
+
             if sec_str not in self.mapped_sections:
                 self.mapped_sections[sec_str] = set()
-                
+
             self.mapped_sections[sec_str].add(proc_handle_str)
             has_local = any(h in ("-1", "0xffffffff", "0xffffffffffffffff") for h in self.mapped_sections[sec_str])
-            has_remote = any(h not in ("-1", "0xffffffff", "0xffffffffffffffff") for h in self.mapped_sections[sec_str])          
+            has_remote = any(h not in ("-1", "0xffffffff", "0xffffffffffffffff") for h in self.mapped_sections[sec_str])
             if has_local and has_remote:
                 proc_name = process.get("process_name", "unknown")
                 self.injected_sections.append(f"Process {proc_name} mapped shared Section {sec_str} into a remote process")
