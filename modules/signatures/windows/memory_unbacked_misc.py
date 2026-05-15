@@ -383,7 +383,7 @@ class UnbackedServiceManipulation(Signature):
 
 class UnbackedFileDropping(Signature):
     name = "unbacked_file_dropping"
-    description = "Attempted to write data to the filesystem from dynamically allocated (unbacked) memory"
+    description = "Wrote data to the filesystem from dynamically allocated (unbacked) memory"
     severity = 3
     confidence = 100
     categories = ["execution", "exfiltration", "fileless", "shellcode"]
