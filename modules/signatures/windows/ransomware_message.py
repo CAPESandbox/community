@@ -32,81 +32,38 @@ class RansomwareMessage(Signature):
     ttps = ["T1486"]
     mbcs = ["OB0008", "E1486", "OC0001", "C0016"]
 
-    filter_apinames = {"NtWriteFile", "WriteFile"}
+    filter_apinames = {"NtWriteFile"}
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
 
         self.indicators = [
-            ".onion",
-            "aes 128",
-            "aes 256",
-            "aes-128",
-            "aes-256",
-            "aes128",
-            "aes256",
-            "all data",
-            "attention!",
-            "bit coin",
-            "bitcoin",
-            "bootkit",
-            "btc",
-            "decrypt",
-            "decrypter",
-            "decryptor",
-            "device id",
-            "download tor",
-            "encrypt",
-            "encrypted",
-            "encryption id",
-            "enter code",
-            "ethereum",
-            "get back my",
-            "get back your",
-            "hardwareid",
-            "has been locked",
-            "install tor",
-            "localbitcoins",
-            "military grade encryption",
-            "pay a fine",
-            "pay fine",
-            "pay the fine",
-            "payment",
-            "personal code",
-            "personal id",
-            "personal identification code",
-            "personal identifier",
-            "personal key",
-            "private code",
-            "private key",
-            "ransom",
-            "recover data",
+            "your files",
+            "your data",
+            "your documents",
+            "restore files",
+            "restore data",
+            "restore the files",
+            "restore the data",
             "recover files",
-            "recover my",
-            "recover personal",
-            "recover the data",
+            "recover data",
             "recover the files",
+            "recover the data",
+            "has been locked",
+            "pay fine",
+            "pay a fine",
+            "pay the fine",
+            "decrypt",
+            "encrypt",
             "recover them",
             "recover your",
-            "restore data",
-            "restore files",
-            "restore system",
-            "restore the data",
-            "restore the files",
-            "restore the system",
-            "rootkit",
-            "rsa 1024",
-            "rsa 2048",
-            "rsa 4096",
-            "rsa-1024",
-            "rsa-2048",
-            "rsa-4096",
-            "rsa1024",
-            "rsa2048",
-            "rsa4096",
-            "secret internet server",
+            "recover personal",
+            "bitcoin",
             "secret server",
+            "secret internet server",
+            "install tor",
+            "download tor",
             "tor browser",
             "tor gateway",
             "tor-browser",
@@ -115,22 +72,63 @@ class RansomwareMessage(Signature):
             "torgateway",
             "torproject.org",
             "tox.chat",
-            "unique id",
-            "unique key",
+            "ransom",
+            "bootkit",
+            "rootkit",
+            "payment",
             "victim",
-            "wallet address",
-            "what happened",
+            "AES128",
+            "AES256",
+            "AES 128",
+            "AES 256",
+            "AES-128",
+            "AES-256",
+            "RSA1024",
+            "RSA2048",
+            "RSA4096",
+            "RSA 1024",
+            "RSA 2048",
+            "RSA 4096",
+            "RSA-1024",
+            "RSA-2048",
+            "RSA-4096",
+            "private key",
+            "personal key",
             "your code",
-            "your data",
-            "your database",
-            "your documents",
-            "your files",
+            "private code",
+            "personal code",
+            "enter code",
             "your key",
+            "unique key",
+            "your database",
+            "encrypted",
+            "bit coin",
+            "BTC",
+            "ethereum",
+            "what happened",
+            "decryptor",
+            "decrypter",
+            "personal ID",
+            "unique ID",
+            "encryption ID",
+            "device ID",
+            "hardwareid",
+            "recover my",
+            "wallet address",
+            "localbitcoins",
+            "Attention!",
+            "restore the system",
+            "restore system",
+            "military grade encryption",
+            "personal identifier",
+            "personal identification code",
+            "get back my",
+            "get back your",
             "your network",
         ]
 
-        indicators_str = [re.escape(i.lower()) for i in self.indicators]
-        pattern_str = "|".join(indicators_str)
+        indicators_lower = [i.lower() for i in self.indicators]
+        pattern_str = "|".join(re.escape(i) for i in indicators_lower)
         self.regex = re.compile(pattern_str)
 
     def on_call(self, call, process):
@@ -153,21 +151,19 @@ class RansomwareMessage(Signature):
         if not is_target_path:
             return
 
-        buff = self.get_argument(call, "Buffer")
-
+        buff = self.get_raw_argument(call, "Buffer")
         if buff:
-            if isinstance(buff, bytes) or isinstance(buff, bytearray):
-                buff_str = bytes(buff).decode("utf-8", errors="ignore")
-            else:
-                buff_str = str(buff)
-
-            if len(buff_str) >= 32:
-                buff_lower = buff_str.lower()
+            if isinstance(buff, (bytes, bytearray)):
+                buff = buff.decode("utf-8", errors="replace")
+            if len(buff) >= 128:
+                buff_lower = buff.lower()
                 matches = set(self.regex.findall(buff_lower))
-
                 if len(matches) > 1:
-                    self.mark_call()
-                    return True
+                    self.data.append({"ransom_note": filepath})
+                    self.data.append({"beginning_of_ransom_message": buff[:2000]})
+                    if self.pid:
+                        self.mark_call()
+                    self.ret = True
 
     def on_complete(self):
         if not self.ret and "dropped" in self.results:
@@ -179,24 +175,28 @@ class RansomwareMessage(Signature):
                 else:
                     filename = str(raw_name).lower()
 
-                if filename.endswith((".txt", ".html", ".hta", ".rtf")) or "read_me" in filename or "readme" in filename:
+                if (
+                    filename.endswith((".txt", ".html", ".hta", ".rtf"))
+                    or "read_me" in filename
+                    or "readme" in filename
+                    or "read-me" in filename
+                ):
                     filedata = dropped.get("data")
 
-                    if filedata:
-                        if isinstance(filedata, bytes) or isinstance(filedata, bytearray):
-                            filedata_str = bytes(filedata).decode("utf-8", errors="ignore")
-                        else:
-                            filedata_str = str(filedata)
+                    if isinstance(filedata, (bytes, bytearray)):
+                        filedata = filedata.decode("utf-8", errors="replace")
+                    elif not isinstance(filedata, str):
+                        filedata = str(filedata) if filedata else ""
 
-                        if len(filedata_str) >= 32:
-                            filedata_lower = filedata_str.lower()
-                            matches = set(self.regex.findall(filedata_lower))
+                    if filedata and len(filedata) >= 128:
+                        filedata_lower = filedata.lower()
+                        matches = set(self.regex.findall(filedata_lower))
 
-                            if len(matches) > 1:
-                                self.data.append({"ransom_note": filename})
-                                self.data.append({"beginning_of_ransom_message": filedata_str})
-                                self.ret = True
-                                break
+                        if len(matches) > 1:
+                            self.data.append({"ransom_note": filename})
+                            self.data.append({"beginning_of_ransom_message": filedata[:2000]})
+                            self.ret = True
+                            break
 
         return self.ret
 
