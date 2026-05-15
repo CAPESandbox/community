@@ -142,16 +142,18 @@ class PEDeepEntrypoint(Signature):
                         f"near the beginning. This strongly indicates an appended packer stub "
                         f"or shellcode."
                     )
-                    self.data.append({
-                        "anomaly_description": dynamic_desc,
-                        "entry_point": hex(ep_val),
-                        "section_name": sec_name,
-                        "section_virtual_address": hex(vaddr),
-                        "section_virtual_size": hex(vsize),
-                        "offset_bytes": hex(offset),
-                        "depth_percentage": round(percentage, 2),
-                        "section_entropy": round(entropy, 2),
-                    })
+                    self.data.append(
+                        {
+                            "anomaly_description": dynamic_desc,
+                            "entry_point": hex(ep_val),
+                            "section_name": sec_name,
+                            "section_virtual_address": hex(vaddr),
+                            "section_virtual_size": hex(vsize),
+                            "offset_bytes": hex(offset),
+                            "depth_percentage": round(percentage, 2),
+                            "section_entropy": round(entropy, 2),
+                        }
+                    )
 
                     return True
 
