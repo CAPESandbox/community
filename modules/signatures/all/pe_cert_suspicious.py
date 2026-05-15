@@ -1,5 +1,6 @@
 import re
 from datetime import datetime
+
 from lib.cuckoo.common.abstracts import Signature
 
 
@@ -12,13 +13,29 @@ def _get_pe(results):
 
 
 KNOWN_CA_TERMS = (
-    "digicert", "entrust", "comodo", "sectigo", "verisign",
-    "globalsign", "usertrust", "thawte", "geotrust", "amazon",
-    "microsoft", "google", "apple", "root ca", "root authority",
-    "symantec", "godaddy", "rapidssl", "network solutions", "ssl.com",
+    "digicert",
+    "entrust",
+    "comodo",
+    "sectigo",
+    "verisign",
+    "globalsign",
+    "usertrust",
+    "thawte",
+    "geotrust",
+    "amazon",
+    "microsoft",
+    "google",
+    "apple",
+    "root ca",
+    "root authority",
+    "symantec",
+    "godaddy",
+    "rapidssl",
+    "network solutions",
+    "ssl.com",
 )
 
-DOMAIN_RE = re.compile(r'^[a-z0-9][a-z0-9\-\.]+\.(nl|com|net|org|ru|cn|de|io|co|info|biz|xyz|top|site)$', re.I)
+DOMAIN_RE = re.compile(r"^[a-z0-9][a-z0-9\-\.]+\.(nl|com|net|org|ru|cn|de|io|co|info|biz|xyz|top|site)$", re.I)
 
 
 def _is_known_ca(name):
@@ -54,11 +71,13 @@ class PECertSelfSigned(Signature):
                 continue
             if _is_known_ca(subject):
                 continue
-            self.data.append({
-                "subject": subject,
-                "sha1": cert.get("sha1_fingerprint", ""),
-                "not_after": cert.get("not_after", ""),
-            })
+            self.data.append(
+                {
+                    "subject": subject,
+                    "sha1": cert.get("sha1_fingerprint", ""),
+                    "not_after": cert.get("not_after", ""),
+                }
+            )
 
         if not self.data:
             for signer in gs.get("aux_signers") or []:
@@ -67,11 +86,13 @@ class PECertSelfSigned(Signature):
                 issued_to = signer.get("Issued to", "")
                 issued_by = signer.get("Issued by", "")
                 if issued_to and issued_to == issued_by and not _is_known_ca(issued_to):
-                    self.data.append({
-                        "subject": issued_to,
-                        "sha1": signer.get("SHA1 hash", ""),
-                        "expires": signer.get("Expires", ""),
-                    })
+                    self.data.append(
+                        {
+                            "subject": issued_to,
+                            "sha1": signer.get("SHA1 hash", ""),
+                            "expires": signer.get("Expires", ""),
+                        }
+                    )
 
         return bool(self.data)
 
@@ -97,8 +118,7 @@ class PECertSuspiciousIssuer(Signature):
         gs = pe.get("guest_signers") or {}
 
         # Only one cert in chain = no intermediate CA, incomplete chain
-        chain_certs = [s for s in (gs.get("aux_signers") or [])
-                       if "Certificate Chain" in (s.get("name") or "")]
+        chain_certs = [s for s in (gs.get("aux_signers") or []) if "Certificate Chain" in (s.get("name") or "")]
         single_cert_chain = len(chain_certs) == 1
 
         for cert in ds:
@@ -135,12 +155,14 @@ class PECertSuspiciousIssuer(Signature):
                 pass
 
             if suspicious:
-                self.data.append({
-                    "subject": subject,
-                    "issuer": issuer,
-                    "sha1": cert.get("sha1_fingerprint", ""),
-                    "reasons": ", ".join(reasons),
-                })
+                self.data.append(
+                    {
+                        "subject": subject,
+                        "issuer": issuer,
+                        "sha1": cert.get("sha1_fingerprint", ""),
+                        "reasons": ", ".join(reasons),
+                    }
+                )
 
         return bool(self.data)
 
@@ -160,11 +182,11 @@ class PECertInvalidSignature(Signature):
     BAD_ERRORS = (
         "did not verify",
         "revoked",
-        "chain could not be built",      # 0x800B010A
+        "chain could not be built",  # 0x800B010A
         "0x800b010a",
-        "0x800b0109",                     # revoked
-        "0x80096010",                     # hash mismatch
-        "0x800b0101",                     # expired
+        "0x800b0109",  # revoked
+        "0x80096010",  # hash mismatch
+        "0x800b0101",  # expired
     )
 
     def run(self):
@@ -180,14 +202,13 @@ class PECertInvalidSignature(Signature):
             return False
 
         signers = gs.get("aux_signers") or []
-        leaf = next(
-            (s for s in signers if "Certificate Chain" in (s.get("name") or "")),
-            {}
+        leaf = next((s for s in signers if "Certificate Chain" in (s.get("name") or "")), {})
+        self.data.append(
+            {
+                "error": gs.get("aux_error_desc", ""),
+                "signer": leaf.get("Issued to", "unknown"),
+                "issuer": leaf.get("Issued by", "unknown"),
+                "sha1": gs.get("aux_sha1") or leaf.get("SHA1 hash", ""),
+            }
         )
-        self.data.append({
-            "error": gs.get("aux_error_desc", ""),
-            "signer": leaf.get("Issued to", "unknown"),
-            "issuer": leaf.get("Issued by", "unknown"),
-            "sha1": gs.get("aux_sha1") or leaf.get("SHA1 hash", ""),
-        })
         return True

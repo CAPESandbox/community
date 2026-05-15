@@ -1,19 +1,15 @@
 import re
+
 from lib.cuckoo.common.abstracts import Signature
 
-BROWSER_RE = re.compile(
-    r'(?<!\w)(?:chrome|brave|msedge|firefox|opera)\.exe',
-    re.IGNORECASE
-)
+BROWSER_RE = re.compile(r"(?<!\w)(?:chrome|brave|msedge|firefox|opera)\.exe", re.IGNORECASE)
 
 SUSPICIOUS_PARENT_RE = re.compile(
-    r'\\(?:Temp|AppData|ProgramData|Users\\[^\\]+\\(?:AppData|Downloads)|Users\\Public)\\',
-    re.IGNORECASE
+    r"\\(?:Temp|AppData|ProgramData|Users\\[^\\]+\\(?:AppData|Downloads)|Users\\Public)\\", re.IGNORECASE
 )
 
 LEGITIMATE_LAUNCHERS = re.compile(
-    r'(?:GoogleUpdate|BraveUpdate|MicrosoftEdgeUpdate|BraveCrashHandler|setup|installer)\.exe$',
-    re.IGNORECASE
+    r"(?:GoogleUpdate|BraveUpdate|MicrosoftEdgeUpdate|BraveCrashHandler|setup|installer)\.exe$", re.IGNORECASE
 )
 
 
@@ -35,11 +31,7 @@ class BrowserCredentialTheftHeadless(Signature):
     evented = False
 
     def run(self):
-        cmdlines = (
-            self.results.get("behavior", {})
-            .get("summary", {})
-            .get("executed_commands", []) or []
-        )
+        cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", []) or []
 
         # Find browsers launched headless with logging suppressed
         headless_browsers = set()

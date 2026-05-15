@@ -113,11 +113,13 @@ class MartiansOffice(Signature):
         # Also check COM-logical children: processes whose com_logical_parent_pid
         # points to an Office process (LethalHTA / DCOM broker pattern).
         office_pids = set()
+
         def _collect_office_pids(nodes):
             for n in nodes:
                 if self.office_paths_re.match((n.get("module_path") or "").lower()):
                     office_pids.add(n["pid"])
                 _collect_office_pids(n.get("children") or [])
+
         _collect_office_pids(processes)
 
         def _check_com_martians(nodes):
@@ -125,14 +127,18 @@ class MartiansOffice(Signature):
                 if n.get("com_logical_parent_pid") in office_pids:
                     child_path = (n.get("module_path") or "").lower()
                     if child_path and not any(wl.search(child_path) for wl in self.white_list_re_compiled):
-                        self.data.append({
-                            "office_com_martian": child_path,
-                            "activated_by": "%s (pid %s) via COM" % (
-                                n.get("com_logical_parent_name", ""),
-                                n.get("com_logical_parent_pid", ""),
-                            ),
-                            "clsid_progid": n.get("com_progid") or n.get("com_clsid", ""),
-                        })
+                        self.data.append(
+                            {
+                                "office_com_martian": child_path,
+                                "activated_by": "%s (pid %s) via COM"
+                                % (
+                                    n.get("com_logical_parent_name", ""),
+                                    n.get("com_logical_parent_pid", ""),
+                                ),
+                                "clsid_progid": n.get("com_progid") or n.get("com_clsid", ""),
+                            }
+                        )
                 _check_com_martians(n.get("children") or [])
+
         _check_com_martians(processes)
         return bool(self.data)
