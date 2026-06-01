@@ -30,148 +30,206 @@ class RansomwareFileModifications(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    enabled = True
     ttps = ["T1486"]  # MITRE v6,7,8
     mbcs = ["OB0008", "E1486"]
 
-    filter_apinames = set(["MoveFileWithProgressW", "MoveFileWithProgressTransactedW", "NtCreateFile", "NtWriteFile"])
+    filter_apinames = set(["MoveFileWithProgressW", "MoveFileWithProgressTransactedW", "NtCreateFile", "NtWriteFile", "NtSetInformationFile"])
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
+        self.ret = False
         self.movefilecount = 0
         self.appendcount = 0
         self.appendemailcount = 0
         self.modifiedexistingcount = 0
         self.newextensions = []
-        self.handles = []
+        self.handles_by_pid = {}
+        self._overwritten_files = set()
+        self._behaviour_tags = []
+        self.dispositiondeletecount = 0
+        self._disposition_deleted = set()
+        self.noise_paths = [
+            "\\appdata\\local\\microsoft\\windows\\explorer\\iconcache_",
+            "\\appdata\\local\\microsoft\\windows\\explorer\\iconcachetodelete\\",
+            "\\inetcache",
+            "\\temporary internet files",
+            "\\cache",
+            "\\temp\\",
+            "\\windows\\",
+            "\\program files\\",
+            "\\program files (x86)\\",
+            "\\programdata\\microsoft\\",
+        ]
+        self.handle_noise_paths = [
+            "\\device\\",
+            "\\pipe\\",
+            "\\??\\pipe",
+            "\\windows\\",
+            "\\program files\\",
+            "\\program files (x86)\\",
+            "\\programdata\\microsoft\\",
+            "\\systemroot\\",
+        ]
+
+    def _is_noise_path(self, path, table=None):
+        if table is None:
+            table = self.noise_paths
+        pl = path.lower()
+        return any(fragment in pl for fragment in table)
+
+    def _append_tag(self, tag, mbcs_extra=None):
+        if tag not in self._behaviour_tags:
+            self._behaviour_tags.append(tag)
+            if mbcs_extra:
+                self.mbcs += mbcs_extra
+
+    def _handle_rename(self, origfile, newfile):
+        if not origfile or not newfile:
+            return
+        if self._is_noise_path(origfile) or self._is_noise_path(newfile):
+            return
+
+        self.movefilecount += 1
+
+        if origfile == newfile:
+            return
+
+        if "@" in newfile:
+            self.appendemailcount += 1
+            if self.pid and self.appendemailcount <= 10:
+                self.mark_call()
+            return
+
+        orig_basename = origfile.rsplit("\\", 1)[-1].lower()
+        new_basename = newfile.rsplit("\\", 1)[-1].lower()
+        if not new_basename.startswith(orig_basename):
+            return
+
+        origextextract = re.search(r"^.*(\.[a-zA-Z0-9_\-]{1,}$)", origfile)
+        newextextract = re.search(r"^.*(\.[a-zA-Z0-9_\-]{1,}$)", newfile)
+        if not origextextract or not newextextract:
+            return
+        origextension = origextextract.group(1).lower()
+        newextension = newextextract.group(1).lower()
+
+        if newextension != ".tmp" and origextension != newextension:
+            self.appendcount += 1
+            if newextension not in self.newextensions:
+                self.newextensions.append(newextension)
 
     def on_call(self, call, process):
         if not call["status"]:
             return None
+
+        pid = str(process.get("process_id", ""))
+
         if call["api"].startswith("MoveFileWithProgress"):
-            origfile = self.get_argument(call, "ExistingFileName")
-            newfile = self.get_argument(call, "NewFileName")
-            if origfile.find("\\AppData\\Local\\Microsoft\\Windows\\Explorer\\iconcache_") and newfile.find(
-                "\\AppData\\Local\\Microsoft\\Windows\\Explorer\\IconCacheToDelete\\"
+            origfile = self.get_argument(call, "ExistingFileName") or ""
+            newfile = self.get_argument(call, "NewFileName") or ""
+            if (
+                "\\appdata\\local\\microsoft\\windows\\explorer\\iconcache_" in origfile.lower()
+                and "\\appdata\\local\\microsoft\\windows\\explorer\\iconcachetodelete\\" in newfile.lower()
             ):
                 return None
-            self.movefilecount += 1
-            if origfile != newfile and "@" not in newfile:
-                origextextract = re.search("^.*(\.[a-zA-Z0-9_\-]{1,}$)", origfile)
-                if not origextextract:
+            self._handle_rename(origfile, newfile)
+
+        elif call["api"] == "NtCreateFile":
+            if self.get_argument(call, "ExistedBefore") != "yes":
+                return None
+            filepath = self.get_argument(call, "FileName") or ""
+            if self._is_noise_path(filepath, self.handle_noise_paths):
+                return None
+            handle = self.get_argument(call, "FileHandle")
+            if handle and pid:
+                if pid not in self.handles_by_pid:
+                    self.handles_by_pid[pid] = set()
+                self.handles_by_pid[pid].add(handle)
+
+        elif call["api"] == "NtWriteFile":
+            pid_handles = self.handles_by_pid.get(pid)
+            if not pid_handles:
+                return None
+            handle = self.get_argument(call, "FileHandle")
+            if handle not in pid_handles:
+                return None
+            file_name = self.get_argument(call, "HandleName") or ""
+            if self._is_noise_path(file_name):
+                return None
+            if file_name in self._overwritten_files:
+                return None
+            self._overwritten_files.add(file_name)
+            self.modifiedexistingcount += 1
+            if self.modifiedexistingcount <= 10:
+                self.mark_call()
+            self.data.append({"overwritten_file": file_name})
+
+        elif call["api"] == "NtSetInformationFile":
+            info_class = self.get_argument(call, "FileInformationClass")
+            # FileRenameInformation
+            if info_class == 10:
+                self._handle_rename(
+                    self.get_argument(call, "HandleName") or "",
+                    self.get_argument(call, "FileName") or "",
+                )
+            # FileDispositionInformation — file marked for delete-on-close
+            elif info_class == 13:
+                filepath = self.get_argument(call, "HandleName") or ""
+                if not filepath or self._is_noise_path(filepath):
                     return None
-                origextension = origextextract.group(1)
-                newextextract = re.search("^.*(\.[a-zA-Z0-9_\-]{1,}$)", newfile)
-                if not newextextract:
-                    return None
-                newextension = newextextract.group(1)
-                if newextension != ".tmp":
-                    if origextension != newextension:
-                        self.appendcount += 1
-                        if self.newextensions.count(newextension) == 0:
-                            self.newextensions.append(newextension)
-            if origfile != newfile and "@" in newfile:
-                self.appendemailcount += 1
-                if self.pid and self.appendemailcount <= 10:
-                    self.mark_call()
-
-        if call["api"] == "NtCreateFile":
-            existed = self.get_argument(call, "ExistedBefore")
-            if existed == "yes":
-                if self.pid:
-                    # This is a list of all handles that already existed before being created again
-                    handle = self.get_argument(call, "FileHandle")
-                    if handle and handle not in self.handles:
-                        self.handles.append(handle)
-
-        if call["api"] == "NtWriteFile":
-            if self.handles:
-                if self.get_argument(call, "FileHandle") in self.handles:
-                    file_name = self.get_argument(call, "HandleName")
-
-                    if "\\inetcache" in file_name.lower():
-                        return None
-
-                    # If a process rewrites the same file over and over again, this is not ransomware...
-                    if {"file": file_name} in self.data:
-                        return None
-
-                    if self.modifiedexistingcount <= 10:
+                if filepath not in self._disposition_deleted:
+                    self._disposition_deleted.add(filepath)
+                    self.dispositiondeletecount += 1
+                    if self.dispositiondeletecount <= 10:
                         self.mark_call()
-                    self.modifiedexistingcount += 1
-                    self.data.append({"file": file_name})
 
     def on_complete(self):
-        ret = False
-
         deletedfiles = self.results.get("behavior", {}).get("summary", {}).get("delete_files", [])
         deletedcount = 0
         for deletedfile in deletedfiles:
-            if (
-                "\\temp\\" not in deletedfile.lower()
-                and "\\temporary internet files\\" not in deletedfile.lower()
-                and "\\cache" not in deletedfile.lower()
-                and "\\inetcache" not in deletedfile.lower()
-                and not deletedfile.lower().endswith(".tmp")
-            ):
-                self.data.append({"file": deletedfile})
+            if not self._is_noise_path(deletedfile):
+                self.data.append({"deleted_file": deletedfile})
                 deletedcount += 1
-        if deletedcount > 60:
-            if ":" in self.description:
-                self.description += " mass_file_deletion"
+
+        effective_deletedcount = deletedcount + self.dispositiondeletecount
+
+        if effective_deletedcount > 40:
+            self._append_tag("mass_file_deletion", ["OC0001", "C0047"])
+
+        if self.movefilecount > 20:
+            self._append_tag("suspicious_file_moves", ["OC0005", "C0027"])
+
+        if self.appendemailcount > 20:
+            self._append_tag("appends_email_to_filenames")
+
+        if self.modifiedexistingcount > 30:
+            self._append_tag("overwrites_existing_files")
+
+        if self.appendcount > 25:
+            if len(self.newextensions) > 15:
+                self._append_tag("appends_new_extensions_to_files", ["OC0001", "C0015"])
             else:
-                self.description += ": mass_file_deletion"
-            self.mbcs += ["OC0001", "C0047"]  # micro-behaviour
-            ret = True
+                self._append_tag(
+                    "appends_new_extensions_to_files({})".format(",".join(sorted(self.newextensions))),
+                    ["OC0001", "C0015"],
+                )
 
-        if self.movefilecount > 30:
-            if ":" in self.description:
-                self.description += " suspicious_file_moves"
-            else:
-                self.description += ": suspicious_file_moves"
-            self.mbcs += ["OC0005", "C0027"]  # micro-behaviour
-            ret = True
+        # Fire if 2 or more sub-behaviours each exceed a lower watermark,
+        # catching ransomware that spreads activity across multiple axes.
+        composite_hits = sum([
+            effective_deletedcount > 20,
+            self.movefilecount > 10,
+            self.appendemailcount > 10,
+            self.modifiedexistingcount > 15,
+            self.appendcount > 12,
+        ])
+        if composite_hits >= 2:
+            self._append_tag("composite_ransomware_file_behaviour")
 
-        if self.appendemailcount > 30:
-            if ":" in self.description:
-                self.description += " appends_email_to_filenames"
-            else:
-                self.description += ": appends_email_to_filenames"
-            ret = True
+        if self._behaviour_tags:
+            self.ret = True
+            self.description = (
+                "Exhibits possible ransomware or wiper file modification behavior: "
+                + ", ".join(self._behaviour_tags)
+            )
 
-        if self.modifiedexistingcount > 50:
-            if ":" in self.description:
-                self.description += " overwrites_existing_files"
-            else:
-                self.description += ": overwrites_existing_files"
-            ret = True
-
-        # This needs tweaked. No longer works due to dropped files limits in CAPE
-        if "dropped" in self.results:
-            droppedunknowncount = 0
-            for dropped in self.results["dropped"]:
-                mimetype = dropped["type"]
-                filename = dropped["name"]
-                if mimetype == "data" and ".tmp" not in filename and "CryptnetUrlCache" not in filename:
-                    self.data.append({"file": filename})
-                    droppedunknowncount += 1
-            if droppedunknowncount > 50 and self.results["info"]["package"] != "pdf":
-                if ":" in self.description:
-                    self.description += " mass_drops_unknown_filetypes"
-                else:
-                    self.description += ": mass_drops_unknown_filetypes"
-                ret = True
-
-        # Note: Always make sure this check is at bottom so that appended file extensions are underneath behavior alerts
-        if self.appendcount > 40:
-            # This check is to prevent any cases where there is a large number of unique appended extensions resulting in an overly large list
-            newcount = len(self.newextensions)
-            if newcount > 15:
-                if ":" in self.description:
-                    self.description += " overwrites_existing_files"
-                else:
-                    self.description += ": overwrites_existing_files"
-                self.mbcs += ["OC0001", "C0015"]  # micro-behaviour
-            ret = True
-
-        return ret
+        return self.ret
