@@ -70,7 +70,7 @@ class PackerUnknownPESectionName(Signature):
         return ret
 
 
-class PEDeepEntrypoint(Signature):
+lass PEDeepEntrypoint(Signature):
     name = "pe_deep_entrypoint"
     description = "The PE entry point is located unusually far into its section, indicative of an appended packer stub"
     severity = 2
@@ -80,27 +80,30 @@ class PEDeepEntrypoint(Signature):
     minimum = "1.3"
     ttps = ["T1027"]
     mbcs = ["OB0013", "B0002"]
-
+ 
     def run(self):
         pe = self.results.get("target", {}).get("file", {}).get("pe", {})
         if not pe:
             return False
-
+ 
         # Skip .NET binaries — the CLR bootstrap EP is always at the tail of .text
         dirents = pe.get("dirents", [])
         for d in dirents:
             if d.get("name") == "IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR":
-                if int(d.get("virtual_address", "0x0"), 16) != 0:
-                    return False
-
+                try:
+                    if int(d.get("virtual_address") or "0x0", 16) != 0:
+                        return False
+                except (ValueError, TypeError):
+                    pass
+ 
         try:
             ep_rva = int(pe.get("entrypoint", "0x0"), 16)
         except (ValueError, TypeError):
             return False
-
+ 
         if ep_rva == 0:
             return False
-
+ 
         for section in pe.get("sections", []):
             try:
                 va    = int(section["virtual_address"], 16)
@@ -108,15 +111,15 @@ class PEDeepEntrypoint(Signature):
                 rsize = int(section["size_of_data"], 16)
             except (ValueError, TypeError, KeyError):
                 continue
-
+ 
             span = max(vsize, rsize)
             if span == 0:
                 continue
-
+ 
             if va <= ep_rva < va + span:
                 ep_offset = ep_rva - va
                 ep_pct = ep_offset / span
-
+ 
                 if ep_pct >= 0.80:
                     self.data.append({
                         "section": section.get("name", "?"),
@@ -127,7 +130,7 @@ class PEDeepEntrypoint(Signature):
                     })
                     self.severity = 3
                     return True
-
+ 
                 if ep_pct >= 0.60:
                     self.data.append({
                         "section": section.get("name", "?"),
@@ -137,7 +140,7 @@ class PEDeepEntrypoint(Signature):
                         "percent_into_section": f"{ep_pct:.0%}",
                     })
                     return True
-
+ 
         return False
 
 
