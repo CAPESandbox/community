@@ -390,7 +390,7 @@ class PEExportsInExecutable(Signature):
 
 class PESectionVsizeRsizeAnomaly(Signature):
     name = "pe_section_vsize_rsize_anomaly"
-    description = "A PE section has a virtual size significantly larger than its raw size, consistent with an in-place unpacker expanding into virtual memory at runtime"
+    description = "A PE section has a virtual size significantly larger than its raw size, consistent with packed code expanding into virtual memory at runtime"
     severity = 2
     confidence = 50
     categories = ["packer", "static"]
