@@ -241,7 +241,7 @@ class PEEntrypointInNonCodeSection(Signature):
 class PEWritableExecutableSection(Signature):
     name = "pe_writable_executable_section"
     description = "A PE section has both write and execute permissions (W+X), indicating a self-modifying stub or in-place unpacker"
-    severity = 3
+    severity = 2
     confidence = 70
     categories = ["packer", "static"]
     authors = ["Kevin Ross"]
