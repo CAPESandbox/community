@@ -70,7 +70,7 @@ class PackerUnknownPESectionName(Signature):
         return ret
 
 
-lass PEDeepEntrypoint(Signature):
+class PEDeepEntrypoint(Signature):
     name = "pe_deep_entrypoint"
     description = "The PE entry point is located unusually far into its section, indicative of an appended packer stub"
     severity = 2
