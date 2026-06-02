@@ -181,11 +181,7 @@ class PEEntrypointOutsideSections(Signature):
         self.data.append({"ep_rva": hex(ep_rva)})
         return True
 
-
-                # EP is in section but not deep enough — no need to keep searching
-                return False
-
-        return False
+    return False
 
 
 class PEEntrypointInNonCodeSection(Signature):
