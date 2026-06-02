@@ -386,3 +386,45 @@ class PEExportsInExecutable(Signature):
             "exports": [e.get("name") or f"ordinal_{e.get('ordinal')}" for e in exports[:10]],
         })
         return True
+
+
+class PESectionVsizeRsizeAnomaly(Signature):
+    name = "pe_section_vsize_rsize_anomaly"
+    description = "A PE section has a virtual size significantly larger than its raw size, consistent with an in-place unpacker expanding into virtual memory at runtime"
+    severity = 2
+    confidence = 50
+    categories = ["packer", "static"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    ttps = ["T1027"]
+    mbcs = ["OB0013", "B0002"]
+
+    def run(self):
+        pe = self.results.get("target", {}).get("file", {}).get("pe", {})
+        if not pe:
+            return False
+
+        ret = False
+        for section in pe.get("sections", []):
+            try:
+                vsize = int(section["virtual_size"], 16)
+                rsize = int(section["size_of_data"], 16)
+            except (ValueError, TypeError, KeyError):
+                continue
+
+            if rsize == 0 or vsize == 0:
+                continue
+
+            # vsize >> rsize: section expands significantly in memory.
+            # 4x threshold with a minimum absolute size avoids flagging
+            # small BSS-style sections which legitimately have large vsize.
+            if vsize > rsize * 4 and vsize > 0x10000:
+                self.data.append({
+                    "section": section.get("name", "?"),
+                    "virtual_size": hex(vsize),
+                    "raw_size": hex(rsize),
+                    "expansion_ratio": f"{vsize // rsize}x",
+                })
+                ret = True
+
+        return ret
