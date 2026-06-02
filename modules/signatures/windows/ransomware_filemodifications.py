@@ -91,7 +91,7 @@ class RansomwareFileModifications(Signature):
 
         self.movefilecount += 1
 
-        if origfile == newfile:
+        if origfile.lower() == newfile.lower():
             return
 
         if "@" in newfile:
@@ -100,17 +100,18 @@ class RansomwareFileModifications(Signature):
                 self.mark_call()
             return
 
-        orig_basename = origfile.rsplit("\\", 1)[-1].lower()
-        new_basename = newfile.rsplit("\\", 1)[-1].lower()
-        if not new_basename.startswith(orig_basename):
+        orig_basename = origfile.rsplit("\\\\", 1)[-1].lower()
+        new_basename = newfile.rsplit("\\\\", 1)[-1].lower()
+        orig_base_no_ext = orig_basename.rsplit(".", 1)[0] or orig_basename
+        if not new_basename.startswith(orig_base_no_ext):
             return
 
-        origextextract = re.search(r"^.*(\.[a-zA-Z0-9_\-]{1,}$)", origfile)
-        newextextract = re.search(r"^.*(\.[a-zA-Z0-9_\-]{1,}$)", newfile)
+        origextextract = re.search(r"(\\.[a-zA-Z0-9_\\-]{1,})$", orig_basename)
+        newextextract = re.search(r"(\\.[a-zA-Z0-9_\\-]{1,})$", new_basename)
         if not origextextract or not newextextract:
             return
-        origextension = origextextract.group(1).lower()
-        newextension = newextextract.group(1).lower()
+        origextension = origextextract.group(1)
+        newextension = newextextract.group(1)
 
         if newextension != ".tmp" and origextension != newextension:
             self.appendcount += 1
@@ -166,13 +167,13 @@ class RansomwareFileModifications(Signature):
         elif call["api"] == "NtSetInformationFile":
             info_class = self.get_argument(call, "FileInformationClass")
             # FileRenameInformation
-            if info_class == 10:
+            if info_class in (10, "10"):
                 self._handle_rename(
                     self.get_argument(call, "HandleName") or "",
                     self.get_argument(call, "FileName") or "",
                 )
             # FileDispositionInformation — file marked for delete-on-close
-            elif info_class == 13:
+            elif info_class in (13, "13"):
                 filepath = self.get_argument(call, "HandleName") or ""
                 if not filepath or self._is_noise_path(filepath):
                     return None
