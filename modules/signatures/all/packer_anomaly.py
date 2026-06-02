@@ -181,8 +181,6 @@ class PEEntrypointOutsideSections(Signature):
         self.data.append({"ep_rva": hex(ep_rva)})
         return True
 
-    return False
-
 
 class PEEntrypointInNonCodeSection(Signature):
     name = "pe_entrypoint_in_non_code_section"
