@@ -422,3 +422,36 @@ class PESectionVsizeRsizeAnomaly(Signature):
                 ret = True
 
         return ret
+
+
+class PEExportsInExecutable(Signature):
+    name = "pe_exports_in_executable"
+    description = "A PE executable (not DLL) exports symbols, which is unusual and may indicate a dual-mode loader or packer that exposes its own entry points"
+    severity = 2
+    confidence = 50
+    categories = ["packer", "static"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    ttps = ["T1027"]
+    mbcs = ["OB0013"]
+
+    def run(self):
+        pe = self.results.get("target", {}).get("file", {}).get("pe", {})
+        if not pe:
+            return False
+
+        # Only flag EXEs (not DLLs)
+        machine = pe.get("machine_type", "")
+        target_type = self.results.get("target", {}).get("file", {}).get("type", "")
+        if "DLL" in target_type.upper():
+            return False
+
+        exports = pe.get("exports", [])
+        if not exports:
+            return False
+
+        self.data.append({
+            "export_count": len(exports),
+            "exports": [e.get("name") or f"ordinal_{e.get('ordinal')}" for e in exports[:10]],
+        })
+        return True
