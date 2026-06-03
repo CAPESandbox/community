@@ -78,3 +78,56 @@ class QueryFipsReconnaissance(Signature):
         if self.ret:
             self.data.append({"behavioral_fips_reconnaissance": list(self.fips_events)})
         return self.ret
+
+
+class CngLargeDecryption(Signature):
+    name = "cng_large_decryption"
+    description = "Uses Windows Cryptography APIs (CNG/CryptoAPI) to decrypt a large chunk of data, may be used to decrypt a secondary payload or shellcode into memory"
+    severity = 2
+    confidence = 100
+    categories = ["obfuscation", "packer", "evasion", "crypto"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1027", "T1140"] 
+
+    filter_apinames = {
+        "BCryptDecrypt", "CryptDecrypt"
+    }
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
+        self.decryption_events = set()
+        
+        # 50KB threshold. Normal config decryption is usually a few hundred bytes.
+        self.payload_size_threshold = 50000 
+
+    def on_call(self, call, process):
+        api = call["api"]
+        pid = process.get("process_id", "unknown")
+        proc_name = process.get("process_name", "unknown")
+
+        size = 0
+        if api == "BCryptDecrypt":
+            size_raw = self.get_argument(call, "Length") or self.get_argument(call, "cbOutput")
+        elif api == "CryptDecrypt":
+            size_raw = self.get_argument(call, "pdwDataLen")
+
+        if size_raw:
+            try:
+                size = int(size_raw, 16) if isinstance(size_raw, str) and size_raw.startswith("0x") else int(size_raw)
+            except (ValueError, TypeError):
+                pass
+
+        if size >= self.payload_size_threshold:
+            event_msg = f"Process '{proc_name}' (PID: {pid}) decrypted a massive {size} byte payload using {api}."
+            if event_msg not in self.decryption_events:
+                self.decryption_events.add(event_msg)
+                self.mark_call()
+                self.ret = True
+
+    def on_complete(self):
+        if self.ret:
+            self.data.append({"payload_decryptions": list(self.decryption_events)})
+        return self.ret
