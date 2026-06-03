@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class ExceptionDrivenExecution(Signature):
     name = "exception_driven_execution"
-    description = "The malware registered a Vectored Exception Handler (VEH) and intentionally triggered exceptions or manipulated thread contexts. May be used to hijack the OS error dispatcher to execute a payload or shellcode"
+    description = "Registered a Vectored Exception Handler (VEH) and intentionally triggered exceptions or manipulated thread contexts. May be used to hijack the OS error dispatcher to execute a payload or shellcode"
     severity = 3
     confidence = 50
     categories = ["evasion", "anti_debugging", "stealth", "obfuscation"]
