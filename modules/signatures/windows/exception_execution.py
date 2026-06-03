@@ -28,7 +28,7 @@ class ExceptionDrivenExecution(Signature):
 
     filter_apinames = {
         # VEH Registration
-        "RtlAddVectoredExceptionHandler", 
+        "RtlAddVectoredExceptionHandler", "AddVectoredExceptionHandler",
         # Context Manipulation (Post-Crash recovery/redirection)
         "NtGetContextThread", "GetThreadContext",
         "NtSetContextThread", "SetThreadContext",
@@ -48,7 +48,7 @@ class ExceptionDrivenExecution(Signature):
         pid = process.get("process_id", "unknown")
         proc_name = process.get("process_name", "unknown")
 
-        if api == "RtlAddVectoredExceptionHandler":
+        if api in ("RtlAddVectoredExceptionHandler", "AddVectoredExceptionHandler"):
             self.veh_pids.add(pid)
 
         elif api in ("RaiseException", "RtlRaiseException", "DebugBreak", "DbgBreakPoint"):
@@ -116,18 +116,19 @@ class AllocatedMemoryProtectionNoAccess(Signature):
             self.allocated_memory[pid] = []
 
         if api in ("NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx"):
-            base = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress")
+            base = self.get_argument(call, "BaseAddress") if api == "NtAllocateVirtualMemory" else call.get("retval")
             size = self.get_argument(call, "RegionSize") or self.get_argument(call, "dwSize")
             
             if base and size:
                 try:
-                    base_val = int(base, 16) if isinstance(base, str) else int(base)
-                    size_val = int(size, 16) if isinstance(size, str) else int(size)
+                    base_val = int(base, 0) if isinstance(base, str) else int(base)
+                    size_val = int(size, 0) if isinstance(size, str) else int(size)
                     
-                    self.allocated_memory[pid].append({
-                        "base": base_val,
-                        "end": base_val + size_val
-                    })
+                    if base_val:
+                        self.allocated_memory[pid].append({
+                            "base": base_val,
+                            "end": base_val + size_val
+                        })
                 except (ValueError, TypeError):
                     pass
 
@@ -137,8 +138,8 @@ class AllocatedMemoryProtectionNoAccess(Signature):
             
             if protection and base_address:
                 try:
-                    prot_val = int(protection, 16) if isinstance(protection, str) else int(protection)
-                    base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
+                    prot_val = int(protection, 0) if isinstance(protection, str) else int(protection)
+                    base_val = int(base_address, 0) if isinstance(base_address, str) else int(base_address)
                     
                     # 0x01 is the Windows constant for PAGE_NOACCESS
                     if prot_val == 0x01:
