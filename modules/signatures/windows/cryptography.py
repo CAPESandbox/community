@@ -109,11 +109,11 @@ class CngLargeDecryption(Signature):
         proc_name = process.get("process_name", "unknown")
 
         size = 0
+        size_raw = None
         if api == "BCryptDecrypt":
             size_raw = self.get_argument(call, "Length") or self.get_argument(call, "cbOutput")
         elif api == "CryptDecrypt":
             size_raw = self.get_argument(call, "pdwDataLen")
-
         if size_raw:
             try:
                 size = int(size_raw, 16) if isinstance(size_raw, str) and size_raw.startswith("0x") else int(size_raw)
