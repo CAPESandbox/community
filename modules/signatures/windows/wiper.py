@@ -520,7 +520,7 @@ class WiperRmDirDrive(Signature):
 
 class WiperFileEofTruncation(Signature):
     name = "wiper_file_eof_truncation"
-    description = "Truncates files to zero bytes via NtSetInformationFile FileEndOfFileInformation, indicative of wiper file destruction"
+    description = "Truncates files to zero bytes, indicative of wiper file destruction"
     severity = 3
     confidence = 80
     categories = ["wiper", "impact"]
