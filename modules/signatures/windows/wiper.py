@@ -516,3 +516,61 @@ class WiperRmDirDrive(Signature):
             if self.rmdir_pattern.search(cmd):
                 self.data.append({"command": cmd})
         return bool(self.data)
+
+
+class WiperFileEofTruncation(Signature):
+    name = "wiper_file_eof_truncation"
+    description = "Truncates files to zero bytes via NtSetInformationFile FileEndOfFileInformation, indicative of wiper file destruction"
+    severity = 3
+    confidence = 80
+    categories = ["wiper", "impact"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1485", "T1561"]
+    mbcs = ["OB0010", "E1485", "C0052"]
+
+    filter_apinames = set(["NtSetInformationFile"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.target_class = 14
+        self.noise_paths = [
+            "\\windows\\",
+            "\\program files\\",
+            "\\programdata\\microsoft\\",
+            "\\device\\",
+        ]
+        self.truncated_files = []
+        self.threshold = 3
+
+    def on_call(self, call, process):
+        if not call["status"]:
+            return None
+
+        try:
+            info_class = int(self.get_argument(call, "FileInformationClass") or 0)
+        except (ValueError, TypeError):
+            return None
+
+        if info_class != self.target_class:
+            return None
+
+        filepath = self.get_argument(call, "HandleName") or ""
+        if not filepath:
+            return None
+
+        fl = filepath.lower()
+        if any(n in fl for n in self.noise_paths):
+            return None
+
+        file_info = self.get_argument(call, "FileInformation") or ""
+        # FileEndOfFileInformation is an 8-byte LARGE_INTEGER.
+        # Value of all nulls or \\x00 sequences = truncate to zero.
+        if file_info and file_info.replace("\\x00", "").replace("\\\\x00", "").strip():
+            return None
+
+        if filepath not in self.truncated_files:
+            self.truncated_files.append(filepath)
+            if self.pid:
+                self.mark_call()
