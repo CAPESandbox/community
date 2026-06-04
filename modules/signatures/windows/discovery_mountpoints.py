@@ -126,7 +126,8 @@ class MountPointManagerAccess(Signature):
         if "mountpointmanager" not in fname:
             return None
         self.count += 1
-        self.pids_seen.add(str(process.get("process_id", "")))
+        if process and process.get("process_id") is not None:
+            self.pids_seen.add(str(process["process_id"]))
         if self.count == self.threshold:
             self.mark_call()
 
