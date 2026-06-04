@@ -93,7 +93,7 @@ class AdfindDomainEnumeration(Signature):
 
 class LsarpRpcDomainCheck(Signature):
     name = "lsarpc_domain_check"
-    description = "Opens the LSARPC named pipe and issues a DCE/RPC bind request, indicative of using the DsRoleGetPrimaryDomainInformation check if domain controller"
+    description = "Opens the LSARPC named pipe and issues a DCE/RPC bind request, indicative of using the DsRoleGetPrimaryDomainInformation to check if domain controller"
     severity = 3
     confidence = 80
     categories = ["wiper", "discovery"]
