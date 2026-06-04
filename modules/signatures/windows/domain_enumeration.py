@@ -129,13 +129,13 @@ class LsarpRpcDomainCheck(Signature):
 
         elif call["api"] == "NtWriteFile" and self.pipe_opened and not self.rpc_sent:
             hname = (self.get_argument(call, "HandleName") or "").lower()
-            if "namedpipe" in hname or "lsass" in hname or "lsarpc" in hname:
+            if "lsass" in hname or "lsarpc" in hname:
                 buf = self.get_argument(call, "Buffer") or ""
-                if self.rpc_bind_header in buf or buf.startswith("\\x05\\x00\\x0b"):
+                if buf.startswith(self.rpc_bind_header):
                     self.rpc_sent = True
                     self.data.append({"rpc_bind_sent": "DsRoleGetPrimaryDomainInformation (domain controller check)"})
                     self.mark_call()
                     return True
 
     def on_complete(self):
-        return self.pipe_opened
+        return self.rpc_sent
