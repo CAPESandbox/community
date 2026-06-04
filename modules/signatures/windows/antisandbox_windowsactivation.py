@@ -19,7 +19,7 @@ from lib.cuckoo.common.abstracts import Signature
 class AntiSandboxWindowsActivation(Signature):
     name = "antisandbox_windows_activation"
     description = "Queries Windows licensing, activation, or genuine status, possibly to detect unactivated sandbox or analysis environments."
-    severity = 3
+    severity = 2
     confidence = 100
     categories = ["anti_sandbox", "evasion", "discovery"]
     authors = ["Kevin Ross"]
