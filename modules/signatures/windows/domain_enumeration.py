@@ -89,3 +89,53 @@ class AdfindDomainEnumeration(Signature):
                 self.data.append({"command": cmdline})
 
         return ret
+
+
+class LsarpRpcDomainCheck(Signature):
+    name = "lsarpc_domain_check"
+    description = "Opens the LSARPC named pipe and issues a DCE/RPC bind request, indicative of using the DsRoleGetPrimaryDomainInformation check if domain controller"
+    severity = 3
+    confidence = 80
+    categories = ["wiper", "discovery"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1082", "T1485"]
+    mbcs = ["OB0007", "E1082", "OB0010"]
+
+    filter_apinames = set(["NtCreateFile", "NtOpenFile", "NtWriteFile"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.lsarpc_paths = [
+            "\\??\\pipe\\lsarpc",
+            "\\device\\namedpipe\\lsass",
+            "\\??\\pipe\\lsass",
+        ]
+        self.rpc_bind_header = "\\x05\\x00\\x0b"
+        self.pipe_opened = False
+        self.rpc_sent = False
+
+    def on_call(self, call, process):
+        if not call["status"]:
+            return None
+
+        if call["api"] in ("NtCreateFile", "NtOpenFile"):
+            fname = (self.get_argument(call, "FileName") or "").lower()
+            if any(p in fname for p in self.lsarpc_paths):
+                self.pipe_opened = True
+                self.data.append({"lsarpc_pipe_opened": self.get_argument(call, "FileName")})
+                self.mark_call()
+
+        elif call["api"] == "NtWriteFile" and self.pipe_opened and not self.rpc_sent:
+            hname = (self.get_argument(call, "HandleName") or "").lower()
+            if "namedpipe" in hname or "lsass" in hname or "lsarpc" in hname:
+                buf = self.get_argument(call, "Buffer") or ""
+                if self.rpc_bind_header in buf or buf.startswith("\\x05\\x00\\x0b"):
+                    self.rpc_sent = True
+                    self.data.append({"rpc_bind_sent": "DsRoleGetPrimaryDomainInformation (domain controller check)"})
+                    self.mark_call()
+                    return True
+
+    def on_complete(self):
+        return self.pipe_opened
