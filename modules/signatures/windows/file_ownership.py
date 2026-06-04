@@ -118,3 +118,77 @@ class FileOwnershipTakeover(Signature):
                 ret = True
 
         return ret
+
+
+class TakeOwnershipCheck(Signature):
+    name = "takeownership_check"
+    description = "Looks up SeTakeOwnershipPrivilege repeatedly, likely taking file ownership restrictions as preparation for ransomware/wiper destruction or information theft"
+    severity = 2
+    confidence = 60
+    categories = ["wiper", "impact", "ransomware", "infostealer"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1222.001", "T1485"]
+    mbcs = ["OB0010", "E1222"]
+
+    filter_apinames = set(["LookupPrivilegeValueW", "LookupPrivilegeValueA"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.threshold = 5
+        self.count = 0
+
+    def on_call(self, call, process):
+        if not call["status"]:
+            return None
+        priv = (self.get_argument(call, "PrivilegeName") or
+                self.get_argument(call, "Name") or "").lower()
+        if priv in ("setakeownershipprivilege", "se take ownership privilege"):
+            self.count += 1
+            if self.count == self.threshold:
+                self.mark_call()
+
+    def on_complete(self):
+        if self.count >= self.threshold:
+            self.data.append({"privilege_lookup_count": self.count,
+                               "privilege": "SeTakeOwnershipPrivilege"})
+            return True
+        return False
+
+
+class PerFileAclTokenCheck(Signature):
+    name = "per_file_acl_token_check"
+    description = "Performs high-volume NtQueryInformationToken calls for TokenUser and TokenGroups, indicative of wiper/ransomware checking whether it has write permission to each file"
+    severity = 2
+    confidence = 50
+    categories = ["wiper", "ransomware"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1485", "T1069"]
+    mbcs = ["OB0010", "E1485"]
+
+    filter_apinames = set(["NtQueryInformationToken"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.watched_classes = {"5", "6"}
+        self.threshold = 100
+        self.count = 0
+
+    def on_call(self, call, process):
+        if not call["status"]:
+            return None
+        cls = self.get_argument(call, "TokenInformationClass") or ""
+        if cls in self.watched_classes:
+            self.count += 1
+            if self.count == self.threshold:
+                self.mark_call()
+
+    def on_complete(self):
+        if self.count >= self.threshold:
+            self.data.append({"token_query_count": self.count,
+                               "indicates": "per-file permission evaluation on large file set"})
+            return True
+        return False
