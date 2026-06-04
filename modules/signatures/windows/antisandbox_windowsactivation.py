@@ -50,48 +50,49 @@ class AntiSandboxWindowsActivation(Signature):
         if api in ("SLIsGenuineLocal", "SLGetWindowsInformation"):
             value_name = self.get_argument(call, "ValueName")
             if value_name:
-                self.activation_checks.add(f"Called Licensing API directly: {api} ({value_name})")
+                self.activation_checks.add("Called Licensing API directly: {0} ({1})".format(api, value_name))
             else:
-                self.activation_checks.add(f"Called Licensing API directly: {api}")
+                self.activation_checks.add("Called Licensing API directly: {0}".format(api))
             self.mark_call()
             self.ret = True
 
         elif api in ("LdrGetProcedureAddress", "GetProcAddress"):
             func_name = self.get_argument(call, "FunctionName") or self.get_argument(call, "lpProcName")
-            if func_name and isinstance(func_name, str):
+            if func_name:
                 func_lower = func_name.lower()
                 
                 if func_lower in ("slisgenuinelocal", "slgetwindowsinformation", "slgetwindowsinformationdword", "slgetlicensingstatusinfo"):
-                    self.activation_checks.add(f"Resolved Licensing API: {func_name}")
+                    self.activation_checks.add("Resolved Licensing API: {0}".format(func_name))
                     self.mark_call()
                     self.ret = True
 
         elif api in ("NtQueryValueKey", "RegQueryValueExA", "RegQueryValueExW"):
-            key_name = self.get_argument(call, "FullName") or self.get_argument(call, "ValueName") or ""
-            key_lower = str(key_name).lower()
-            
-            if "softwareprotectionplatform" in key_lower or "wpa\\events" in key_lower or "security-spp-genuinelocalstatus" in key_lower:
-                self.activation_checks.add(f"Queried Licensing Value/Registry: {key_name}")
-                self.mark_call()
-                self.ret = True
+            key_name = self.get_argument(call, "FullName") or self.get_argument(call, "ValueName")
+            if key_name:
+                key_lower = key_name.lower()
+                
+                if "softwareprotectionplatform" in key_lower or "wpa\\events" in key_lower or "security-spp-genuinelocalstatus" in key_lower:
+                    self.activation_checks.add("Queried Licensing Value/Registry: {0}".format(key_name))
+                    self.mark_call()
+                    self.ret = True
 
         elif api in ("IWbemServices_ExecQuery", "ExecQuery"):
             query = self.get_argument(call, "Query")
-            if query and isinstance(query, str):
+            if query:
                 query_lower = query.lower()
                 
                 if "softwarelicensingproduct" in query_lower or "softwarelicensingservice" in query_lower:
-                    self.activation_checks.add(f"WMI Licensing Query: {query}")
+                    self.activation_checks.add("WMI Licensing Query: {0}".format(query))
                     self.mark_call()
                     self.ret = True
 
         elif api in ("CreateProcessInternalW", "NtCreateUserProcess", "ShellExecuteExW"):
             cmdline = self.get_argument(call, "CommandLine") or self.get_argument(call, "lpCommandLine") or self.get_argument(call, "lpFile")
-            if cmdline and isinstance(cmdline, str):
+            if cmdline:
                 cmd_lower = cmdline.lower()
                 
                 if "slmgr" in cmd_lower or "slmgr.vbs" in cmd_lower:
-                    self.activation_checks.add(f"Executed Licensing Script: {cmdline}")
+                    self.activation_checks.add("Executed Licensing Script: {0}".format(cmdline))
                     self.mark_call()
                     self.ret = True
 
