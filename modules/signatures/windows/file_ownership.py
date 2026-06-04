@@ -89,9 +89,10 @@ class FileOwnershipTakeover(Signature):
             # takeown.exe
             if "takeown" in lower:
                 is_bulk = any(f in lower for f in self.takeown_bulk_flags)
-                if is_bulk:
+                is_high_value = any(p in lower.replace("/", "\\") for p in self.high_value_paths)
+                if is_bulk or is_high_value:
                     self.data.append({"command": cmdline})
-                    if any(p in lower for p in self.high_value_paths):
+                    if is_high_value:
                         self.severity = 3
                     ret = True
 
@@ -99,7 +100,7 @@ class FileOwnershipTakeover(Signature):
             elif "icacls" in lower and any(f in lower for f in self.icacls_owner_flags):
                 is_recursive = any(f in lower for f in self.icacls_recursive_flags)
                 self.data.append({"command": cmdline})
-                if is_recursive or any(p in lower for p in self.high_value_paths):
+                if is_recursive or any(p in lower.replace("/", "\\") for p in self.high_value_paths):
                     self.severity = 3
                 ret = True
 
@@ -107,12 +108,12 @@ class FileOwnershipTakeover(Signature):
             elif "powershell" in lower or "pwsh" in lower:
                 if any(p in lower for p in self.ps_ownership_patterns):
                     self.data.append({"command": cmdline})
-                    if any(p in lower for p in self.high_value_paths):
+                    if any(p in lower.replace("/", "\\") for p in self.high_value_paths):
                         self.severity = 3
                     ret = True
 
             # secedit /configure applying a security template
-            elif "secedit" in lower and "/configure" in lower:
+            elif "secedit" in lower and any(f in lower for f in ["/configure", "-configure"]):
                 self.data.append({"command": cmdline})
                 ret = True
 
