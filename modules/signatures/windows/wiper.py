@@ -209,7 +209,7 @@ class WiperDiskFillAttack(Signature):
             if total >= self.total_threshold:
                 self.data.append({
                     "fill_file": fname,
-                    "total_mb": round(total / 1048576, 1),
+                    "total_mb": round(total / 1048576.0, 1),
                 })
         return bool(self.data)
 
@@ -235,9 +235,9 @@ class WiperCommandLineDiskDestruction(Signature):
         # dd if=/dev/zero: Unix-style zero fill via Windows ports (e.g. msys)
         self.destruction_patterns = [
             (r"format\s+[a-z]:", "format_volume"),
-            (r"format\.exe.*\/y", "format_volume_noconfirm"),
-            (r"cipher\s+\/w", "cipher_free_space_wipe"),
-            (r"sdelete.*\-p\s+\d", "sdelete_overwrite"),
+            (r"format(\.exe)?.*\/y", "format_volume_noconfirm"),
+            (r"cipher(\.exe)?\s+\/w", "cipher_free_space_wipe"),
+            (r"sdelete.*\-p\s*\d", "sdelete_overwrite"),
             (r"diskpart.*clean", "diskpart_clean"),
             (r"diskpart.*delete\s+partition", "diskpart_delete_partition"),
             (r"diskpart.*convert", "diskpart_convert"),
@@ -308,7 +308,7 @@ class WiperEPMNTDRVRawDisk(Signature):
             if self.write_count:
                 self.data.append({
                     "sector_write_count": self.write_count,
-                    "total_mb_written": round(self.total_bytes / 1048576, 1),
+                    "total_mb_written": round(self.total_bytes / 1048576.0, 1),
                 })
             return True
         return False
@@ -353,13 +353,16 @@ class TransientKernelDriver(Signature):
  
         elif call["api"] in ("DeleteService", "NtUnloadDriver"):
             svc_name = (self.get_argument(call, "ServiceName") or
-                        self.get_argument(call, "lpDriverName") or "").lower()
+                        self.get_argument(call, "lpDriverName") or
+                        self.get_argument(call, "DriverServiceName") or "").lower()
+            if "\\" in svc_name:
+                svc_name = svc_name.split("\\")[-1]
             if svc_name in self.installed_drivers:
                 self.deleted_drivers.add(svc_name)
                 self.mark_call()
  
     def on_complete(self):
-        transient = self.deleted_drivers & self.installed_drivers.keys()
+        transient = self.deleted_drivers.intersection(self.installed_drivers)
         if not transient:
             return False
         for svc in transient:
