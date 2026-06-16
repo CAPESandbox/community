@@ -75,18 +75,18 @@ class SuspiciousHttpTimeouts(Signature):
                 # 6 = INTERNET_OPTION_RECEIVE_TIMEOUT
                 if opt_val in (2, 5, 6):
                     timeout_val = 0
-                    
-                    if isinstance(buffer_val, str):
-                        timeout_val = int(buffer_val, 16) if buffer_val.startswith("0x") else int(buffer_val)
-                    elif isinstance(buffer_val, int):
-                        timeout_val = buffer_val
-                    else:
-                        for arg in call.get("arguments", []):
-                            if arg.get("name") in ("Buffer", "lpBuffer"):
-                                p_val = arg.get("pretty_value", "")
-                                if p_val.isdigit():
-                                    timeout_val = int(p_val)
-                                break
+                    for arg in call.get("arguments", []):
+                        if arg.get("name") in ("Buffer", "lpBuffer"):
+                            p_val = arg.get("pretty_value", "")
+                            if p_val:
+                                timeout_val = int(p_val, 16) if p_val.startswith("0x") else int(p_val)
+                            break
+
+                    if not timeout_val:
+                        if isinstance(buffer_val, str):
+                            timeout_val = int(buffer_val, 16) if buffer_val.startswith("0x") else int(buffer_val)
+                        elif isinstance(buffer_val, int):
+                            timeout_val = buffer_val
 
                     if 0 < timeout_val <= 10000:
                         opt_name = "CONNECT_TIMEOUT" if opt_val == 2 else "SEND_TIMEOUT" if opt_val == 5 else "RECEIVE_TIMEOUT"
