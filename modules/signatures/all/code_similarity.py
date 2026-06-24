@@ -46,7 +46,7 @@ class SimilarityMatch(Signature):
                     continue
                     
                 family = m.get("family")
-                if not family or family == "unknown":
+                if not isinstance(family, str) or family == "unknown":
                     continue
                     
                 try:
@@ -58,8 +58,8 @@ class SimilarityMatch(Signature):
                 if sim < 50.0 or m.get("low_confidence"):
                     continue
 
-                engine = m.get("engine", "mcrit")
-                sample = m.get("sample_sha256", "unknown")
+                engine = m.get("engine") or "mcrit"
+                sample = m.get("sample_sha256") or "unknown"
                 
                 key = (family.lower(), sample, engine)
                 if key in seen:
@@ -72,8 +72,8 @@ class SimilarityMatch(Signature):
                     f"engine = {engine} "
                     f"artifact_sha256 = {artifact_sha} "
                     f"matched_sample = {sample} "
-                    f"matched_functions = {m.get('matched_functions', 0)} "
-                    f"total_functions = {m.get('total_functions', 0)}"
+                    f"matched_functions = {m.get('matched_functions') or 0} "
+                    f"total_functions = {m.get('total_functions') or 0}"
                 )
                 
                 self.data.append({"match_summary": match_line})
