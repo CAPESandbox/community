@@ -283,7 +283,6 @@ class WmCopyDataIPC(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
         self.ipc_events = set()
-        self.sending_pids = set()
 
     def on_call(self, call, process):
         api = call["api"]
@@ -294,12 +293,17 @@ class WmCopyDataIPC(Signature):
             msg = self.get_argument(call, "Msg")
             if msg:
                 try:
-                    msg_val = int(msg, 16) if isinstance(msg, str) else int(msg)
+                    if isinstance(msg, str):
+                        try:
+                            msg_val = int(msg, 0)
+                        except ValueError:
+                            msg_val = int(msg, 16)
+                    else:
+                        msg_val = int(msg)
                     # 0x004A is the Windows constant for WM_COPYDATA, which allows passing memory buffers between processes
                     if msg_val == 0x004A:
                         hwnd = self.get_argument(call, "hWnd") or "unknown"
-                        event_msg = f"Process '{proc_name}' (PID: {pid}) sent a WM_COPYDATA message (0x4A) to window handle {hwnd}."    
-                        self.sending_pids.add(pid)
+                        event_msg = f"Process '{proc_name}' (PID: {pid}) sent a WM_COPYDATA message (0x4A) to window handle {hwnd}."
                         self._add_event(event_msg)
                 except (ValueError, TypeError):
                     pass
