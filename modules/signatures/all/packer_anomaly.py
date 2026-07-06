@@ -80,12 +80,12 @@ class PEDeepEntrypoint(Signature):
     minimum = "1.3"
     ttps = ["T1027"]
     mbcs = ["OB0013", "B0002"]
- 
+
     def run(self):
         pe = self.results.get("target", {}).get("file", {}).get("pe", {})
         if not pe:
             return False
- 
+
         # Skip .NET binaries — the CLR bootstrap EP is always at the tail of .text
         dirents = pe.get("dirents", [])
         for d in dirents:
@@ -95,58 +95,64 @@ class PEDeepEntrypoint(Signature):
                         return False
                 except (ValueError, TypeError):
                     pass
- 
+
         try:
             ep_rva = int(pe.get("entrypoint", "0x0"), 16)
         except (ValueError, TypeError):
             return False
- 
+
         if ep_rva == 0:
             return False
- 
+
         for section in pe.get("sections", []):
             try:
-                va    = int(section["virtual_address"], 16)
+                va = int(section["virtual_address"], 16)
                 vsize = int(section["virtual_size"], 16)
                 rsize = int(section["size_of_data"], 16)
             except (ValueError, TypeError, KeyError):
                 continue
- 
+
             span = max(vsize, rsize)
             if span == 0:
                 continue
- 
+
             if va <= ep_rva < va + span:
                 ep_offset = ep_rva - va
                 ep_pct = ep_offset / span
- 
+
                 if ep_pct >= 0.80:
-                    self.data.append({
-                        "section": section.get("name", "?"),
-                        "ep_rva": hex(ep_rva),
-                        "ep_offset": hex(ep_offset),
-                        "section_span": hex(span),
-                        "percent_into_section": f"{ep_pct:.0%}",
-                    })
+                    self.data.append(
+                        {
+                            "section": section.get("name", "?"),
+                            "ep_rva": hex(ep_rva),
+                            "ep_offset": hex(ep_offset),
+                            "section_span": hex(span),
+                            "percent_into_section": f"{ep_pct:.0%}",
+                        }
+                    )
                     self.severity = 3
                     return True
- 
+
                 if ep_pct >= 0.60:
-                    self.data.append({
-                        "section": section.get("name", "?"),
-                        "ep_rva": hex(ep_rva),
-                        "ep_offset": hex(ep_offset),
-                        "section_span": hex(span),
-                        "percent_into_section": f"{ep_pct:.0%}",
-                    })
+                    self.data.append(
+                        {
+                            "section": section.get("name", "?"),
+                            "ep_rva": hex(ep_rva),
+                            "ep_offset": hex(ep_offset),
+                            "section_span": hex(span),
+                            "percent_into_section": f"{ep_pct:.0%}",
+                        }
+                    )
                     return True
- 
+
         return False
 
 
 class PEEntrypointOutsideSections(Signature):
     name = "pe_entrypoint_outside_sections"
-    description = "The PE entry point falls outside all declared sections, indicating manual stub injection or severe header corruption"
+    description = (
+        "The PE entry point falls outside all declared sections, indicating manual stub injection or severe header corruption"
+    )
     severity = 2
     confidence = 80
     categories = ["packer", "static"]
@@ -170,7 +176,7 @@ class PEEntrypointOutsideSections(Signature):
 
         for section in pe.get("sections", []):
             try:
-                va    = int(section["virtual_address"], 16)
+                va = int(section["virtual_address"], 16)
                 vsize = int(section["virtual_size"], 16)
                 rsize = int(section["size_of_data"], 16)
             except (ValueError, TypeError, KeyError):
@@ -184,7 +190,9 @@ class PEEntrypointOutsideSections(Signature):
 
 class PEEntrypointInNonCodeSection(Signature):
     name = "pe_entrypoint_in_non_code_section"
-    description = "The PE entry point is located in a non-executable section, consistent with a packer stub in a non-standard section"
+    description = (
+        "The PE entry point is located in a non-executable section, consistent with a packer stub in a non-standard section"
+    )
     severity = 2
     confidence = 70
     categories = ["packer", "static"]
@@ -208,7 +216,7 @@ class PEEntrypointInNonCodeSection(Signature):
 
         for section in pe.get("sections", []):
             try:
-                va    = int(section["virtual_address"], 16)
+                va = int(section["virtual_address"], 16)
                 vsize = int(section["virtual_size"], 16)
                 rsize = int(section["size_of_data"], 16)
                 chars = int(section["characteristics_raw"], 16)
@@ -222,11 +230,13 @@ class PEEntrypointInNonCodeSection(Signature):
             # IMAGE_SCN_MEM_EXECUTE = 0x20000000
             is_executable = bool(chars & 0x20000000)
             if not is_executable:
-                self.data.append({
-                    "section": section.get("name", "?"),
-                    "ep_rva": hex(ep_rva),
-                    "characteristics": section.get("characteristics", "?"),
-                })
+                self.data.append(
+                    {
+                        "section": section.get("name", "?"),
+                        "ep_rva": hex(ep_rva),
+                        "characteristics": section.get("characteristics", "?"),
+                    }
+                )
                 return True
 
         return False
@@ -255,13 +265,15 @@ class PEWritableExecutableSection(Signature):
             except (ValueError, TypeError, KeyError):
                 continue
 
-            is_exec  = bool(chars & 0x20000000)  # IMAGE_SCN_MEM_EXECUTE
+            is_exec = bool(chars & 0x20000000)  # IMAGE_SCN_MEM_EXECUTE
             is_write = bool(chars & 0x80000000)  # IMAGE_SCN_MEM_WRITE
             if is_exec and is_write:
-                self.data.append({
-                    "section": section.get("name", "?"),
-                    "characteristics": section.get("characteristics", "?"),
-                })
+                self.data.append(
+                    {
+                        "section": section.get("name", "?"),
+                        "characteristics": section.get("characteristics", "?"),
+                    }
+                )
                 ret = True
 
         return ret
@@ -298,12 +310,14 @@ class PESectionVsizeRsizeAnomaly(Signature):
             # 4x threshold with a minimum absolute size avoids flagging
             # small BSS-style sections which legitimately have large vsize.
             if vsize > rsize * 4 and vsize > 0x10000:
-                self.data.append({
-                    "section": section.get("name", "?"),
-                    "virtual_size": hex(vsize),
-                    "raw_size": hex(rsize),
-                    "expansion_ratio": f"{vsize // rsize}x",
-                })
+                self.data.append(
+                    {
+                        "section": section.get("name", "?"),
+                        "virtual_size": hex(vsize),
+                        "raw_size": hex(rsize),
+                        "expansion_ratio": f"{vsize // rsize}x",
+                    }
+                )
                 ret = True
 
         return ret
@@ -326,15 +340,12 @@ class PETLSCallbacks(Signature):
             return False
 
         dirents = pe.get("dirents", [])
-        tls_dirent = next(
-            (d for d in dirents if d.get("name") == "IMAGE_DIRECTORY_ENTRY_TLS"),
-            None
-        )
+        tls_dirent = next((d for d in dirents if d.get("name") == "IMAGE_DIRECTORY_ENTRY_TLS"), None)
         if not tls_dirent:
             return False
 
         try:
-            tls_va   = int(tls_dirent["virtual_address"], 16)
+            tls_va = int(tls_dirent["virtual_address"], 16)
             tls_size = int(tls_dirent["size"], 16)
         except (ValueError, TypeError, KeyError):
             return False
@@ -342,10 +353,12 @@ class PETLSCallbacks(Signature):
         if tls_va == 0 or tls_size == 0:
             return False
 
-        self.data.append({
-            "tls_directory_va": hex(tls_va),
-            "tls_directory_size": hex(tls_size),
-        })
+        self.data.append(
+            {
+                "tls_directory_va": hex(tls_va),
+                "tls_directory_size": hex(tls_size),
+            }
+        )
         return True
 
 
@@ -380,12 +393,14 @@ class PESectionVsizeRsizeAnomaly(Signature):
             # 4x threshold with a minimum absolute size avoids flagging
             # small BSS-style sections which legitimately have large vsize.
             if vsize > rsize * 4 and vsize > 0x10000:
-                self.data.append({
-                    "section": section.get("name", "?"),
-                    "virtual_size": hex(vsize),
-                    "raw_size": hex(rsize),
-                    "expansion_ratio": f"{vsize // rsize}x",
-                })
+                self.data.append(
+                    {
+                        "section": section.get("name", "?"),
+                        "virtual_size": hex(vsize),
+                        "raw_size": hex(rsize),
+                        "expansion_ratio": f"{vsize // rsize}x",
+                    }
+                )
                 ret = True
 
         return ret
@@ -417,8 +432,10 @@ class PEExportsInExecutable(Signature):
         if not exports:
             return False
 
-        self.data.append({
-            "export_count": len(exports),
-            "exports": [e.get("name") or f"ordinal_{e.get('ordinal')}" for e in exports[:10]],
-        })
+        self.data.append(
+            {
+                "export_count": len(exports),
+                "exports": [e.get("name") or f"ordinal_{e.get('ordinal')}" for e in exports[:10]],
+            }
+        )
         return True

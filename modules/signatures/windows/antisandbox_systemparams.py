@@ -93,37 +93,45 @@ class AntiSandboxSystemParametersInfo(Signature):
 
         for action, count in self.user_presence_counts.items():
             if count >= self.poll_threshold:
-                self.data.append({
-                    "technique": "user_presence_detection",
-                    "description": self.user_presence_actions[action],
-                    "call_count": count,
-                })
+                self.data.append(
+                    {
+                        "technique": "user_presence_detection",
+                        "description": self.user_presence_actions[action],
+                        "call_count": count,
+                    }
+                )
                 ret = True
 
         for action, count in self.fingerprint_counts.items():
             if count >= self.poll_threshold:
-                self.data.append({
-                    "technique": "environment_fingerprinting",
-                    "description": self.environment_fingerprint_actions[action],
-                    "call_count": count,
-                })
+                self.data.append(
+                    {
+                        "technique": "environment_fingerprinting",
+                        "description": self.environment_fingerprint_actions[action],
+                        "call_count": count,
+                    }
+                )
                 ret = True
 
         for action, count in self.input_sim_counts.items():
             if count >= self.poll_threshold:
-                self.data.append({
-                    "technique": "input_simulation_detection",
-                    "description": self.input_simulation_actions[action],
-                    "call_count": count,
-                })
+                self.data.append(
+                    {
+                        "technique": "input_simulation_detection",
+                        "description": self.input_simulation_actions[action],
+                        "call_count": count,
+                    }
+                )
                 ret = True
 
         for action, count in self.manipulation_hits.items():
-            self.data.append({
-                "technique": "environment_manipulation",
-                "description": self.manipulation_actions[action],
-                "call_count": count,
-            })
+            self.data.append(
+                {
+                    "technique": "environment_manipulation",
+                    "description": self.manipulation_actions[action],
+                    "call_count": count,
+                }
+            )
             ret = True
 
         return ret
