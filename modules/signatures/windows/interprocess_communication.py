@@ -260,3 +260,61 @@ class InterProcessCommsSharedMemory(Signature):
         if self.ret:
             self.data.append({"ipc_shared_memory_transfers": self.ipc_events})
         return self.ret
+
+
+class WmCopyDataIPC(Signature):
+    name = "wm_copydata_ipc"
+    description = "Possible Inter-Process Communication (IPC) via WM_COPYDATA messages"
+    severity = 3
+    confidence = 80
+    categories = ["evasion", "lateral_movement", "botnet", "ipc"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    references = ["https://cloud.google.com/blog/topics/threat-intelligence/stockstay-turla-intelligence-gathering"]
+    ttps = ["T1559"]
+    mbcs = ["E1559"]
+
+    filter_apinames = {
+        "SendMessageW", "SendMessageA", "SendMessageTimeoutW", "SendMessageTimeoutA"
+    }
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.ret = False
+        self.ipc_events = set()
+
+    def on_call(self, call, process):
+        api = call["api"]
+        pid = process.get("process_id", "unknown")
+        proc_name = process.get("process_name", "unknown")
+
+        if api in ("SendMessageW", "SendMessageA", "SendMessageTimeoutW", "SendMessageTimeoutA"):
+            msg = self.get_argument(call, "Msg")
+            if msg:
+                try:
+                    if isinstance(msg, str):
+                        try:
+                            msg_val = int(msg, 0)
+                        except ValueError:
+                            msg_val = int(msg, 16)
+                    else:
+                        msg_val = int(msg)
+                    # 0x004A is the Windows constant for WM_COPYDATA, which allows passing memory buffers between processes
+                    if msg_val == 0x004A:
+                        hwnd = self.get_argument(call, "hWnd") or "unknown"
+                        event_msg = f"Process '{proc_name}' (PID: {pid}) sent a WM_COPYDATA message (0x4A) to window handle {hwnd}."
+                        self._add_event(event_msg)
+                except (ValueError, TypeError):
+                    pass
+
+    def _add_event(self, msg):
+        if msg not in self.ipc_events:
+            self.ipc_events.add(msg)
+            self.mark_call()
+            self.ret = True
+
+    def on_complete(self):
+        if self.ret:              
+            self.data.append({"wm_copydata_ipc_detected": list(self.ipc_events)})
+        return self.ret
