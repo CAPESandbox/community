@@ -33,7 +33,9 @@ class RansomwareFileModifications(Signature):
     ttps = ["T1486"]  # MITRE v6,7,8
     mbcs = ["OB0008", "E1486"]
 
-    filter_apinames = set(["MoveFileWithProgressW", "MoveFileWithProgressTransactedW", "NtCreateFile", "NtWriteFile", "NtSetInformationFile"])
+    filter_apinames = set(
+        ["MoveFileWithProgressW", "MoveFileWithProgressTransactedW", "NtCreateFile", "NtWriteFile", "NtSetInformationFile"]
+    )
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -216,21 +218,22 @@ class RansomwareFileModifications(Signature):
 
         # Fire if 2 or more sub-behaviours each exceed a lower watermark,
         # catching ransomware that spreads activity across multiple axes.
-        composite_hits = sum([
-            effective_deletedcount > 20,
-            self.movefilecount > 10,
-            self.appendemailcount > 10,
-            self.modifiedexistingcount > 15,
-            self.appendcount > 12,
-        ])
+        composite_hits = sum(
+            [
+                effective_deletedcount > 20,
+                self.movefilecount > 10,
+                self.appendemailcount > 10,
+                self.modifiedexistingcount > 15,
+                self.appendcount > 12,
+            ]
+        )
         if composite_hits >= 2:
             self._append_tag("composite_ransomware_file_behaviour")
 
         if self._behaviour_tags:
             self.ret = True
-            self.description = (
-                "Exhibits possible ransomware or wiper file modification behavior: "
-                + ", ".join(self._behaviour_tags)
+            self.description = "Exhibits possible ransomware or wiper file modification behavior: " + ", ".join(
+                self._behaviour_tags
             )
 
         return self.ret
