@@ -16,27 +16,37 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class AntiSandboxWindowsActivation(Signature):
     name = "antisandbox_windows_activation"
-    description = "Queries Windows licensing, activation, or genuine status, possibly to detect unactivated sandbox or analysis environments."
+    description = (
+        "Queries Windows licensing, activation, or genuine status, possibly to detect unactivated sandbox or analysis environments."
+    )
     severity = 3
     confidence = 100
     categories = ["anti_sandbox", "evasion", "discovery"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1082", "T1497"] # System Information Discovery / Virtualization/Sandbox Evasion
+    ttps = ["T1082", "T1497"]  # System Information Discovery / Virtualization/Sandbox Evasion
 
     filter_apinames = {
         # 1. API Resolution & Direct SL Hooks
-        "LdrGetProcedureAddress", "GetProcAddress",
-        "SLIsGenuineLocal", "SLGetWindowsInformation",
+        "LdrGetProcedureAddress",
+        "GetProcAddress",
+        "SLIsGenuineLocal",
+        "SLGetWindowsInformation",
         # 2. Registry Queries
-        "NtQueryValueKey", "RegQueryValueExA", "RegQueryValueExW",
+        "NtQueryValueKey",
+        "RegQueryValueExA",
+        "RegQueryValueExW",
         # 3. WMI / COM Queries
-        "IWbemServices_ExecQuery", "ExecQuery",
+        "IWbemServices_ExecQuery",
+        "ExecQuery",
         # 4. Command Execution
-        "CreateProcessInternalW", "NtCreateUserProcess", "ShellExecuteExW"
+        "CreateProcessInternalW",
+        "NtCreateUserProcess",
+        "ShellExecuteExW",
     }
 
     def __init__(self, *args, **kwargs):
@@ -60,8 +70,13 @@ class AntiSandboxWindowsActivation(Signature):
             func_name = self.get_argument(call, "FunctionName") or self.get_argument(call, "lpProcName")
             if func_name:
                 func_lower = func_name.lower()
-                
-                if func_lower in ("slisgenuinelocal", "slgetwindowsinformation", "slgetwindowsinformationdword", "slgetlicensingstatusinfo"):
+
+                if func_lower in (
+                    "slisgenuinelocal",
+                    "slgetwindowsinformation",
+                    "slgetwindowsinformationdword",
+                    "slgetlicensingstatusinfo",
+                ):
                     self.activation_checks.add("Resolved Licensing API: {0}".format(func_name))
                     self.mark_call()
                     self.ret = True
@@ -70,8 +85,12 @@ class AntiSandboxWindowsActivation(Signature):
             key_name = self.get_argument(call, "FullName") or self.get_argument(call, "ValueName")
             if key_name:
                 key_lower = key_name.lower()
-                
-                if "softwareprotectionplatform" in key_lower or "wpa\\events" in key_lower or "security-spp-genuinelocalstatus" in key_lower:
+
+                if (
+                    "softwareprotectionplatform" in key_lower
+                    or "wpa\\events" in key_lower
+                    or "security-spp-genuinelocalstatus" in key_lower
+                ):
                     self.activation_checks.add("Queried Licensing Value/Registry: {0}".format(key_name))
                     self.mark_call()
                     self.ret = True
@@ -80,17 +99,21 @@ class AntiSandboxWindowsActivation(Signature):
             query = self.get_argument(call, "Query")
             if query:
                 query_lower = query.lower()
-                
+
                 if "softwarelicensingproduct" in query_lower or "softwarelicensingservice" in query_lower:
                     self.activation_checks.add("WMI Licensing Query: {0}".format(query))
                     self.mark_call()
                     self.ret = True
 
         elif api in ("CreateProcessInternalW", "NtCreateUserProcess", "ShellExecuteExW"):
-            cmdline = self.get_argument(call, "CommandLine") or self.get_argument(call, "lpCommandLine") or self.get_argument(call, "lpFile")
+            cmdline = (
+                self.get_argument(call, "CommandLine")
+                or self.get_argument(call, "lpCommandLine")
+                or self.get_argument(call, "lpFile")
+            )
             if cmdline:
                 cmd_lower = cmdline.lower()
-                
+
                 if "slmgr" in cmd_lower or "slmgr.vbs" in cmd_lower:
                     self.activation_checks.add("Executed Licensing Script: {0}".format(cmdline))
                     self.mark_call()
