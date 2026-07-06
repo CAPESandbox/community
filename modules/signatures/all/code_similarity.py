@@ -40,32 +40,32 @@ class SimilarityMatch(Signature):
         for artifact_sha, matches in by_sha256.items():
             if not isinstance(matches, list):
                 continue
-                
+
             for m in matches:
                 if not isinstance(m, dict):
                     continue
-                    
+
                 family = m.get("family")
                 if not isinstance(family, str) or family == "unknown":
                     continue
-                    
+
                 try:
                     sim = float(m.get("similarity") or 0.0)
                 except (TypeError, ValueError):
                     sim = 0.0
-                    
+
                 # Threshold check: skip low scores and explicit low_confidence flags
                 if sim < 50.0 or m.get("low_confidence"):
                     continue
 
                 engine = m.get("engine") or "mcrit"
                 sample = m.get("sample_sha256") or "unknown"
-                
+
                 key = (family.lower(), sample, engine)
                 if key in seen:
                     continue
                 seen.add(key)
-                
+
                 match_line = (
                     f"matched_family = {family} "
                     f"similarity_score = {round(sim, 2)} "
@@ -75,7 +75,7 @@ class SimilarityMatch(Signature):
                     f"matched_functions = {m.get('matched_functions') or 0} "
                     f"total_functions = {m.get('total_functions') or 0}"
                 )
-                
+
                 self.data.append({"match_summary": match_line})
                 self.ret = True
 

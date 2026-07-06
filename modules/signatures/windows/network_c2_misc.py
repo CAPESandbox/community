@@ -18,7 +18,9 @@ from lib.cuckoo.common.abstracts import Signature
 
 class SuspiciousHttpTimeouts(Signature):
     name = "suspicious_http_timeouts"
-    description = "Sets WinHTTP or WinINet timeouts to unusually low values (<= 10 seconds), possible C2 technique to prevent thread hanging"
+    description = (
+        "Sets WinHTTP or WinINet timeouts to unusually low values (<= 10 seconds), possible C2 technique to prevent thread hanging"
+    )
     severity = 2
     confidence = 60
     categories = ["c2", "network", "anomaly"]
@@ -50,11 +52,7 @@ class SuspiciousHttpTimeouts(Signature):
                     return
 
                 if (0 < res_val <= 10000) or (0 < con_val <= 10000):
-                    self.anomalous_timeouts.append({
-                        "api": api,
-                        "ResolveTimeout": res_val,
-                        "ConnectTimeout": con_val
-                    })
+                    self.anomalous_timeouts.append({"api": api, "ResolveTimeout": res_val, "ConnectTimeout": con_val})
                     self.mark_call()
                     self.ret = True
             except (ValueError, TypeError):
@@ -69,7 +67,7 @@ class SuspiciousHttpTimeouts(Signature):
 
             try:
                 opt_val = int(option, 16) if isinstance(option, str) and option.startswith("0x") else int(option)
-                
+
                 # 2 = INTERNET_OPTION_CONNECT_TIMEOUT
                 # 5 = INTERNET_OPTION_SEND_TIMEOUT
                 # 6 = INTERNET_OPTION_RECEIVE_TIMEOUT
@@ -90,12 +88,8 @@ class SuspiciousHttpTimeouts(Signature):
 
                     if 0 < timeout_val <= 10000:
                         opt_name = "CONNECT_TIMEOUT" if opt_val == 2 else "SEND_TIMEOUT" if opt_val == 5 else "RECEIVE_TIMEOUT"
-                        
-                        self.anomalous_timeouts.append({
-                            "api": api,
-                            "Option": opt_name,
-                            "Timeout_Ms": timeout_val
-                        })
+
+                        self.anomalous_timeouts.append({"api": api, "Option": opt_name, "Timeout_Ms": timeout_val})
                         self.mark_call()
                         self.ret = True
             except (ValueError, TypeError):
