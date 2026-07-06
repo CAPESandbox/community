@@ -89,19 +89,17 @@ class CngLargeDecryption(Signature):
     authors = ["Kevin Ross"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1027", "T1140"] 
+    ttps = ["T1027", "T1140"]
 
-    filter_apinames = {
-        "BCryptDecrypt", "CryptDecrypt"
-    }
+    filter_apinames = {"BCryptDecrypt", "CryptDecrypt"}
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
         self.decryption_events = set()
-        
+
         # 50KB threshold. Normal config decryption is usually a few hundred bytes.
-        self.payload_size_threshold = 50000 
+        self.payload_size_threshold = 50000
 
     def on_call(self, call, process):
         api = call["api"]
