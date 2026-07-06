@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class UnbackedExceptionFilter(Signature):
     name = "unbacked_exception_filter"
     description = "Modified exception handling mechanisms (UEF/VEH) from dynamically allocated (unbacked) memory, indicative of fileless anti-debugging or silent crash suppression"
@@ -83,9 +84,7 @@ class UnbackedExceptionFilter(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -109,6 +108,7 @@ class UnbackedExceptionFilter(Signature):
         if self.ret:
             self.data.append({"unbacked_exception_filters": list(self.exception_events)})
         return self.ret
+
 
 class UnbackedProcessMitigationAlteration(Signature):
     name = "unbacked_process_mitigation_alteration"
@@ -177,9 +177,7 @@ class UnbackedProcessMitigationAlteration(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -205,6 +203,7 @@ class UnbackedProcessMitigationAlteration(Signature):
         if self.ret:
             self.data.append({"unbacked_mitigation_alterations": list(self.mitigation_events)})
         return self.ret
+
 
 class UnbackedScheduledTaskCreation(Signature):
     name = "unbacked_scheduled_task_creation"
@@ -283,9 +282,7 @@ class UnbackedScheduledTaskCreation(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -308,26 +305,15 @@ class UnbackedScheduledTaskCreation(Signature):
             clsid = (self.get_argument(call, "rclsid") or "").lower()
             if clsid not in self.TASK_SCHEDULER_CLSIDS:
                 return
-            event_msg = (
-                f"{proc_name} instantiated Task Scheduler COM object ({clsid}) "
-                f"from unbacked caller {caller_addr}"
-            )
+            event_msg = f"{proc_name} instantiated Task Scheduler COM object ({clsid}) " f"from unbacked caller {caller_addr}"
         elif api == "SchRpcRegisterTask":
             task_path = self.get_argument(call, "path") or "Unknown Path"
             event_msg = (
-                f"{proc_name} registered scheduled task '{task_path}' via SchRpcRegisterTask "
-                f"from unbacked caller {caller_addr}"
+                f"{proc_name} registered scheduled task '{task_path}' via SchRpcRegisterTask " f"from unbacked caller {caller_addr}"
             )
         elif api in ("ITaskScheduler_NewWorkItem", "ITaskScheduler_AddWorkItem", "IRegisteredTaskCollection_get_Item"):
-            task_name = (
-                self.get_argument(call, "pwszTaskName")
-                or self.get_argument(call, "pwszTaskFolderName")
-                or "Unknown Task"
-            )
-            event_msg = (
-                f"{proc_name} called {api} (task: '{task_name}') "
-                f"from unbacked caller {caller_addr}"
-            )
+            task_name = self.get_argument(call, "pwszTaskName") or self.get_argument(call, "pwszTaskFolderName") or "Unknown Task"
+            event_msg = f"{proc_name} called {api} (task: '{task_name}') " f"from unbacked caller {caller_addr}"
         else:
             return
 
@@ -340,6 +326,7 @@ class UnbackedScheduledTaskCreation(Signature):
         if self.ret:
             self.data.append({"unbacked_scheduled_task_creations": list(self.task_events)})
         return self.ret
+
 
 class UnbackedPrivilegeEscalation(Signature):
     name = "unbacked_privilege_escalation"
@@ -421,9 +408,7 @@ class UnbackedPrivilegeEscalation(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -450,18 +435,12 @@ class UnbackedPrivilegeEscalation(Signature):
             or "Unknown Privilege"
         )
         priv_lower = priv_name.lower() if isinstance(priv_name, str) else ""
-        is_high_value = (
-            any(p in priv_lower for p in self.HIGH_VALUE_PRIVILEGES)
-            or priv_lower == "unknown privilege"
-        )
+        is_high_value = any(p in priv_lower for p in self.HIGH_VALUE_PRIVILEGES) or priv_lower == "unknown privilege"
         if not is_high_value:
             return
 
         proc_name = process.get("process_name", "unknown")
-        event_msg = (
-            f"{proc_name} adjusted token privileges ({priv_name}) via {api} "
-            f"from unbacked caller {caller_addr}"
-        )
+        event_msg = f"{proc_name} adjusted token privileges ({priv_name}) via {api} " f"from unbacked caller {caller_addr}"
         if event_msg not in self.priv_events:
             self.priv_events.add(event_msg)
             self.mark_call()
@@ -471,6 +450,7 @@ class UnbackedPrivilegeEscalation(Signature):
         if self.ret:
             self.data.append({"unbacked_privilege_escalations": list(self.priv_events)})
         return self.ret
+
 
 class UnbackedNtdllUnhooking(Signature):
     name = "unbacked_ntdll_unhooking"
@@ -553,9 +533,7 @@ class UnbackedNtdllUnhooking(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -575,35 +553,20 @@ class UnbackedNtdllUnhooking(Signature):
         proc_name = process.get("process_name", "unknown")
 
         if api in ("NtReadFile", "ReadFile"):
-            file_path = (
-                self.get_argument(call, "HandleName")
-                or self.get_argument(call, "FileName")
-                or ""
-            ).lower()
+            file_path = (self.get_argument(call, "HandleName") or self.get_argument(call, "FileName") or "").lower()
             if any(mod in file_path for mod in self.TARGET_MODULES):
                 if pid not in self._pid_phases:
                     self._pid_phases[pid] = set()
                 self._pid_phases[pid].add("read")
-                event_msg = (
-                    f"{proc_name} read module from disk ('{file_path}') "
-                    f"from unbacked caller {caller_addr}"
-                )
+                event_msg = f"{proc_name} read module from disk ('{file_path}') " f"from unbacked caller {caller_addr}"
                 if event_msg not in self.unhook_events:
                     self.unhook_events.add(event_msg)
                     self.mark_call()
 
         elif api in ("NtProtectVirtualMemory", "VirtualProtect", "VirtualProtectEx"):
-            new_prot = (
-                self.get_argument(call, "NewAccessProtection")
-                or self.get_argument(call, "flNewProtect")
-                or ""
-            )
+            new_prot = self.get_argument(call, "NewAccessProtection") or self.get_argument(call, "flNewProtect") or ""
             try:
-                prot_val = (
-                    int(new_prot, 16)
-                    if isinstance(new_prot, str) and new_prot.startswith("0x")
-                    else int(new_prot)
-                )
+                prot_val = int(new_prot, 16) if isinstance(new_prot, str) and new_prot.startswith("0x") else int(new_prot)
                 # PAGE_READWRITE (0x04), PAGE_WRITECOPY (0x08),
                 # PAGE_EXECUTE_READWRITE (0x40), PAGE_EXECUTE_WRITECOPY (0x80)
                 if prot_val in (0x04, 0x08, 0x40, 0x80):
@@ -611,8 +574,7 @@ class UnbackedNtdllUnhooking(Signature):
                         self._pid_phases[pid] = set()
                     self._pid_phases[pid].add("protect")
                     event_msg = (
-                        f"{proc_name} changed module memory protection to 0x{prot_val:02X} "
-                        f"from unbacked caller {caller_addr}"
+                        f"{proc_name} changed module memory protection to 0x{prot_val:02X} " f"from unbacked caller {caller_addr}"
                     )
                     if event_msg not in self.unhook_events:
                         self.unhook_events.add(event_msg)
@@ -623,11 +585,7 @@ class UnbackedNtdllUnhooking(Signature):
         elif api in ("NtWriteVirtualMemory", "WriteProcessMemory"):
             phases = self._pid_phases.get(pid, set())
             if "read" in phases and "protect" in phases:
-                target_addr = (
-                    self.get_argument(call, "BaseAddress")
-                    or self.get_argument(call, "lpBaseAddress")
-                    or "Unknown"
-                )
+                target_addr = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpBaseAddress") or "Unknown"
                 event_msg = (
                     f"{proc_name} overwrote loaded module memory at {target_addr} "
                     f"from unbacked caller {caller_addr} (EDR unhooking sequence complete)"
@@ -641,6 +599,7 @@ class UnbackedNtdllUnhooking(Signature):
         if self.ret:
             self.data.append({"unbacked_ntdll_unhooking": list(self.unhook_events)})
         return self.ret
+
 
 class UnbackedHardwareBreakpointSet(Signature):
     name = "unbacked_hardware_breakpoint_set"
@@ -709,9 +668,7 @@ class UnbackedHardwareBreakpointSet(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -749,10 +706,7 @@ class UnbackedHardwareBreakpointSet(Signature):
 
         proc_name = process.get("process_name", "unknown")
         regs_str = ", ".join(f"{k}={v}" for k, v in set_regs.items())
-        event_msg = (
-            f"{proc_name} set hardware breakpoint registers ({regs_str}) via {api} "
-            f"from unbacked caller {caller_addr}"
-        )
+        event_msg = f"{proc_name} set hardware breakpoint registers ({regs_str}) via {api} " f"from unbacked caller {caller_addr}"
         if event_msg not in self.hwbp_events:
             self.hwbp_events.add(event_msg)
             self.mark_call()
@@ -762,6 +716,7 @@ class UnbackedHardwareBreakpointSet(Signature):
         if self.ret:
             self.data.append({"unbacked_hardware_breakpoints": list(self.hwbp_events)})
         return self.ret
+
 
 class UnbackedEtwPatching(Signature):
     name = "unbacked_etw_patching"
@@ -840,9 +795,7 @@ class UnbackedEtwPatching(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -862,11 +815,7 @@ class UnbackedEtwPatching(Signature):
         proc_name = process.get("process_name", "unknown")
 
         if api in ("NtProtectVirtualMemory", "VirtualProtect", "VirtualProtectEx"):
-            target_addr = (
-                self.get_argument(call, "BaseAddress")
-                or self.get_argument(call, "lpAddress")
-                or ""
-            ).lower()
+            target_addr = (self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress") or "").lower()
             module_label = (self.get_argument(call, "ModuleName") or "").lower()
             if "ntdll" in target_addr + " " + module_label:
                 if pid not in self._pid_phases:
@@ -897,6 +846,7 @@ class UnbackedEtwPatching(Signature):
         if self.ret:
             self.data.append({"unbacked_etw_patching": list(self.etw_events)})
         return self.ret
+
 
 class UnbackedAmsiPatching(Signature):
     name = "unbacked_amsi_patching"
@@ -978,9 +928,7 @@ class UnbackedAmsiPatching(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -1000,11 +948,7 @@ class UnbackedAmsiPatching(Signature):
         proc_name = process.get("process_name", "unknown")
 
         if api in ("NtProtectVirtualMemory", "VirtualProtect", "VirtualProtectEx"):
-            target_addr = (
-                self.get_argument(call, "BaseAddress")
-                or self.get_argument(call, "lpAddress")
-                or ""
-            ).lower()
+            target_addr = (self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress") or "").lower()
             module_label = (self.get_argument(call, "ModuleName") or "").lower()
             if any(t in target_addr + " " + module_label for t in self.AMSI_TARGETS):
                 if pid not in self._pid_phases:
@@ -1032,16 +976,9 @@ class UnbackedAmsiPatching(Signature):
                     self.ret = True
 
         elif api in ("LdrUnloadDll", "FreeLibrary"):
-            dll_name = (
-                self.get_argument(call, "FileName")
-                or self.get_argument(call, "lpLibFileName")
-                or ""
-            ).lower()
+            dll_name = (self.get_argument(call, "FileName") or self.get_argument(call, "lpLibFileName") or "").lower()
             if any(t in dll_name for t in self.AMSI_TARGETS):
-                event_msg = (
-                    f"{proc_name} unloaded AMSI DLL ('{dll_name}') "
-                    f"from unbacked caller {caller_addr}"
-                )
+                event_msg = f"{proc_name} unloaded AMSI DLL ('{dll_name}') " f"from unbacked caller {caller_addr}"
                 if event_msg not in self.amsi_events:
                     self.amsi_events.add(event_msg)
                     self.mark_call()
@@ -1051,6 +988,7 @@ class UnbackedAmsiPatching(Signature):
         if self.ret:
             self.data.append({"unbacked_amsi_patching": list(self.amsi_events)})
         return self.ret
+
 
 class UnbackedDebugObjectQuery(Signature):
     name = "unbacked_debug_object_query"
@@ -1070,7 +1008,7 @@ class UnbackedDebugObjectQuery(Signature):
     DEBUGGER_INFO_CLASSES = {"7", "30", "31", "34"}
 
     CLASS_LABELS = {
-        "7":  "ProcessDebugPort",
+        "7": "ProcessDebugPort",
         "30": "ProcessDebugObjectHandle",
         "31": "ProcessDebugFlags",
         "34": "ProcessBreakOnTermination",
@@ -1131,9 +1069,7 @@ class UnbackedDebugObjectQuery(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -1159,10 +1095,7 @@ class UnbackedDebugObjectQuery(Signature):
 
         class_label = self.CLASS_LABELS.get(info_class, f"class {info_class}")
         proc_name = process.get("process_name", "unknown")
-        event_msg = (
-            f"{proc_name} queried {class_label} (class {info_class}) "
-            f"from unbacked caller {caller_addr}"
-        )
+        event_msg = f"{proc_name} queried {class_label} (class {info_class}) " f"from unbacked caller {caller_addr}"
         if event_msg not in self.debug_events:
             self.debug_events.add(event_msg)
             self.mark_call()

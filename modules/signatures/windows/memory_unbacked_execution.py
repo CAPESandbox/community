@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class UnbackedLibraryLoad(Signature):
     name = "unbacked_library_load"
     description = "Loads a new DLL where the caller address originates from dynamically allocated (unbacked) memory"
@@ -84,9 +85,7 @@ class UnbackedLibraryLoad(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -99,9 +98,7 @@ class UnbackedLibraryLoad(Signature):
                     if any(s <= caller_val <= e for s, e in self.unbacked_ranges.get(pid, [])):
                         dll_name = self.get_argument(call, "FileName") or self.get_argument(call, "lpLibFileName")
                         proc_name = process.get("process_name", "unknown")
-                        self.suspicious_loads.append(
-                            f"{proc_name} loaded {dll_name} from unbacked caller {caller_addr}"
-                        )
+                        self.suspicious_loads.append(f"{proc_name} loaded {dll_name} from unbacked caller {caller_addr}")
                         self.mark_call()
                         self.ret = True
                 except (ValueError, TypeError):
@@ -111,6 +108,7 @@ class UnbackedLibraryLoad(Signature):
         if self.ret:
             self.data.append({"unbacked_library_loads": self.suspicious_loads})
         return self.ret
+
 
 class UnbackedVehRegistration(Signature):
     name = "unbacked_veh_registration"
@@ -178,9 +176,7 @@ class UnbackedVehRegistration(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -192,9 +188,7 @@ class UnbackedVehRegistration(Signature):
                     handler_val = int(handler_addr, 16) if isinstance(handler_addr, str) else int(handler_addr)
                     if any(s <= handler_val <= e for s, e in self.unbacked_ranges.get(pid, [])):
                         proc_name = process.get("process_name", "unknown")
-                        self.malicious_vehs.append(
-                            f"{proc_name} registered VEH pointing to unbacked memory at {handler_addr}"
-                        )
+                        self.malicious_vehs.append(f"{proc_name} registered VEH pointing to unbacked memory at {handler_addr}")
                         self.mark_call()
                         self.ret = True
                 except (ValueError, TypeError):
@@ -204,6 +198,7 @@ class UnbackedVehRegistration(Signature):
         if self.ret:
             self.data.append({"unbacked_veh_handlers": self.malicious_vehs})
         return self.ret
+
 
 class UnbackedProcessCreation(Signature):
     name = "unbacked_process_creation"
@@ -273,9 +268,7 @@ class UnbackedProcessCreation(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -300,6 +293,7 @@ class UnbackedProcessCreation(Signature):
         if self.ret:
             self.data.append({"unbacked_processes": self.unbacked_processes})
         return self.ret
+
 
 class UnbackedMemoryApcExecution(Signature):
     name = "unbacked_memory_apc_execution"
@@ -368,9 +362,7 @@ class UnbackedMemoryApcExecution(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -384,16 +376,11 @@ class UnbackedMemoryApcExecution(Signature):
                     # Check all tracked unbacked ranges across all pids.
                     # VirtualAllocEx writes into unbacked_ranges[t_pid] so
                     # remote allocations are found here automatically.
-                    hit = any(
-                        any(s <= apc_val <= e for s, e in ranges)
-                        for ranges in self.unbacked_ranges.values()
-                    )
+                    hit = any(any(s <= apc_val <= e for s, e in ranges) for ranges in self.unbacked_ranges.values())
 
                     if hit:
                         proc_name = process.get("process_name", "unknown")
-                        self.unbacked_apcs.append(
-                            f"Process {proc_name} queued APC to unbacked memory at {apc_routine}"
-                        )
+                        self.unbacked_apcs.append(f"Process {proc_name} queued APC to unbacked memory at {apc_routine}")
                         self.mark_call()
                         self.ret = True
                 except (ValueError, TypeError):
@@ -403,6 +390,7 @@ class UnbackedMemoryApcExecution(Signature):
         if self.ret:
             self.data.append({"unbacked_apc_executions": self.unbacked_apcs})
         return self.ret
+
 
 class ThreadUnbackedMemory(Signature):
     name = "thread_unbacked_memory"
@@ -444,9 +432,7 @@ class ThreadUnbackedMemory(Signature):
             if base_address and region_size and protection:
                 try:
                     prot_val = (
-                        int(protection, 16)
-                        if isinstance(protection, str) and protection.startswith("0x")
-                        else int(protection)
+                        int(protection, 16) if isinstance(protection, str) and protection.startswith("0x") else int(protection)
                     )
                     if prot_val in (0x40, 0x20):  # PAGE_EXECUTE_READWRITE / PAGE_EXECUTE_READ
                         base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
@@ -481,9 +467,7 @@ class ThreadUnbackedMemory(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -497,10 +481,7 @@ class ThreadUnbackedMemory(Signature):
                     # Check all tracked unbacked ranges across all pids.
                     # VirtualAllocEx writes into unbacked_ranges[t_pid] so
                     # remote allocations are found here automatically.
-                    hit = any(
-                        any(s <= start_val <= e for s, e in ranges)
-                        for ranges in self.unbacked_ranges.values()
-                    )
+                    hit = any(any(s <= start_val <= e for s, e in ranges) for ranges in self.unbacked_ranges.values())
 
                     if hit:
                         proc_name = process.get("process_name", "unknown")
@@ -517,9 +498,12 @@ class ThreadUnbackedMemory(Signature):
             self.data.append({"unbacked_memory_threads": self.suspicious_threads})
         return self.ret
 
+
 class UnbackedApiResolution(Signature):
     name = "unbacked_api_resolution"
-    description = "Manually resolves API addresses from dynamically allocated (unbacked) memory, indicative of shellcode or an unpacker"
+    description = (
+        "Manually resolves API addresses from dynamically allocated (unbacked) memory, indicative of shellcode or an unpacker"
+    )
     severity = 3
     confidence = 100
     categories = ["evasion", "shellcode", "fileless"]
@@ -585,9 +569,7 @@ class UnbackedApiResolution(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -599,9 +581,7 @@ class UnbackedApiResolution(Signature):
                     caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
                     if any(s <= caller_val <= e for s, e in self.unbacked_ranges.get(pid, [])):
                         target_api = (
-                            self.get_argument(call, "FunctionName")
-                            or self.get_argument(call, "lpProcName")
-                            or "Unknown API"
+                            self.get_argument(call, "FunctionName") or self.get_argument(call, "lpProcName") or "Unknown API"
                         )
                         proc_name = process.get("process_name", "unknown")
                         event_msg = f"{proc_name} resolved API '{target_api}' from unbacked caller {caller_addr}"
@@ -616,6 +596,7 @@ class UnbackedApiResolution(Signature):
         if self.ret:
             self.data.append({"unbacked_api_resolutions": list(self.resolved_apis)})
         return self.ret
+
 
 class UnbackedMemoryProtectionAlteration(Signature):
     name = "unbacked_memory_protection_alteration"
@@ -685,9 +666,7 @@ class UnbackedMemoryProtectionAlteration(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -698,15 +677,9 @@ class UnbackedMemoryProtectionAlteration(Signature):
                 try:
                     caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
                     if any(s <= caller_val <= e for s, e in self.unbacked_ranges.get(pid, [])):
-                        target_addr = (
-                            self.get_argument(call, "BaseAddress")
-                            or self.get_argument(call, "lpAddress")
-                            or "Unknown"
-                        )
+                        target_addr = self.get_argument(call, "BaseAddress") or self.get_argument(call, "lpAddress") or "Unknown"
                         new_prot = (
-                            self.get_argument(call, "NewAccessProtection")
-                            or self.get_argument(call, "flNewProtect")
-                            or "Unknown"
+                            self.get_argument(call, "NewAccessProtection") or self.get_argument(call, "flNewProtect") or "Unknown"
                         )
                         proc_name = process.get("process_name", "unknown")
                         self.protection_events.append(
@@ -722,6 +695,7 @@ class UnbackedMemoryProtectionAlteration(Signature):
         if self.ret:
             self.data.append({"unbacked_memory_protection_alterations": self.protection_events})
         return self.ret
+
 
 class UnbackedMutexCreation(Signature):
     name = "unbacked_mutex_creation"
@@ -796,17 +770,20 @@ class UnbackedMutexCreation(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
 
         if api in (
-            "NtOpenMutant", "NtCreateMutant",
-            "CreateMutexA", "CreateMutexW", "CreateMutexExA", "CreateMutexExW",
-            "OpenMutexA", "OpenMutexW",
+            "NtOpenMutant",
+            "NtCreateMutant",
+            "CreateMutexA",
+            "CreateMutexW",
+            "CreateMutexExA",
+            "CreateMutexExW",
+            "OpenMutexA",
+            "OpenMutexW",
         ):
             caller_addr = call.get("caller")
             if caller_addr:
@@ -820,10 +797,7 @@ class UnbackedMutexCreation(Signature):
                             or "Unknown Mutex"
                         )
                         proc_name = process.get("process_name", "unknown")
-                        event_msg = (
-                            f"{proc_name} queried/created Mutex '{mutex_name}' "
-                            f"from unbacked caller {caller_addr}"
-                        )
+                        event_msg = f"{proc_name} queried/created Mutex '{mutex_name}' " f"from unbacked caller {caller_addr}"
                         if event_msg not in self.mutex_events:
                             self.mutex_events.add(event_msg)
                             self.mark_call()
@@ -836,9 +810,12 @@ class UnbackedMutexCreation(Signature):
             self.data.append({"unbacked_mutex_creation": list(self.mutex_events)})
         return self.ret
 
+
 class UnbackedDotNetExecution(Signature):
     name = "unbacked_dotnet_execution"
-    description = "Attempted to load .NET DLLs or call CLR APIs from dynamically allocated (unbacked) memory, indicative of fileless .NET"
+    description = (
+        "Attempted to load .NET DLLs or call CLR APIs from dynamically allocated (unbacked) memory, indicative of fileless .NET"
+    )
     severity = 3
     confidence = 100
     categories = ["execution", "fileless", "evasion", "dotnet"]
@@ -911,9 +888,7 @@ class UnbackedDotNetExecution(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -943,10 +918,7 @@ class UnbackedDotNetExecution(Signature):
             dll_name = self.get_argument(call, "FileName") or self.get_argument(call, "lpLibFileName")
             if dll_name and isinstance(dll_name, str):
                 if any(t in dll_name.lower() for t in self._DOTNET_DLLS):
-                    event_msg = (
-                        f"{proc_name} manually loaded .NET engine DLL '{dll_name}' "
-                        f"from unbacked caller {caller_addr}"
-                    )
+                    event_msg = f"{proc_name} manually loaded .NET engine DLL '{dll_name}' " f"from unbacked caller {caller_addr}"
                     if event_msg not in self.dotnet_events:
                         self.dotnet_events.add(event_msg)
                         self.mark_call()
