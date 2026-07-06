@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class UnbackedMemoryNetworkConnection(Signature):
     name = "unbacked_memory_network_connection"
     description = "Network connection initiated from dynamically allocated (unbacked) memory, indicative of fileless C2 activity"
@@ -63,20 +64,39 @@ class UnbackedMemoryNetworkConnection(Signature):
         "WinHttpGetProxyForUrl",
     }
 
-    _NETWORK_APIS = frozenset({
-        "HttpSendRequestA", "HttpSendRequestW",
-        "HttpOpenRequestA", "HttpOpenRequestW",
-        "HttpAddRequestHeadersA", "HttpAddRequestHeadersW",
-        "InternetConnectA", "InternetConnectW",
-        "WinHttpSendRequest", "WinHttpConnect",
-        "InternetCrackUrlA", "InternetCrackUrlW",
-        "InternetOpenUrlA", "InternetOpenUrlW",
-        "connect", "ConnectEx", "WSAConnect",
-        "send", "WSASend", "sendto", "WSASendTo",
-        "recv", "WSARecv", "recvfrom", "WSARecvFrom",
-        "InternetReadFile", "WinHttpReadData",
-        "WinHttpOpenRequest", "WinHttpGetProxyForUrl",
-    })
+    _NETWORK_APIS = frozenset(
+        {
+            "HttpSendRequestA",
+            "HttpSendRequestW",
+            "HttpOpenRequestA",
+            "HttpOpenRequestW",
+            "HttpAddRequestHeadersA",
+            "HttpAddRequestHeadersW",
+            "InternetConnectA",
+            "InternetConnectW",
+            "WinHttpSendRequest",
+            "WinHttpConnect",
+            "InternetCrackUrlA",
+            "InternetCrackUrlW",
+            "InternetOpenUrlA",
+            "InternetOpenUrlW",
+            "connect",
+            "ConnectEx",
+            "WSAConnect",
+            "send",
+            "WSASend",
+            "sendto",
+            "WSASendTo",
+            "recv",
+            "WSARecv",
+            "recvfrom",
+            "WSARecvFrom",
+            "InternetReadFile",
+            "WinHttpReadData",
+            "WinHttpOpenRequest",
+            "WinHttpGetProxyForUrl",
+        }
+    )
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -124,9 +144,7 @@ class UnbackedMemoryNetworkConnection(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -150,6 +168,7 @@ class UnbackedMemoryNetworkConnection(Signature):
         if self.ret:
             self.data.append({"unbacked_network_connections": self.unbacked_network_conns})
         return self.ret
+
 
 class UnbackedDnsResolution(Signature):
     name = "unbacked_dns_resolution"
@@ -177,11 +196,17 @@ class UnbackedDnsResolution(Signature):
         "gethostbyname",
     }
 
-    _DNS_APIS = frozenset({
-        "getaddrinfo", "GetAddrInfoW", "GetAddrInfoExW",
-        "DnsQuery_A", "DnsQuery_W", "DnsQueryEx",
-        "gethostbyname",
-    })
+    _DNS_APIS = frozenset(
+        {
+            "getaddrinfo",
+            "GetAddrInfoW",
+            "GetAddrInfoExW",
+            "DnsQuery_A",
+            "DnsQuery_W",
+            "DnsQueryEx",
+            "gethostbyname",
+        }
+    )
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -229,9 +254,7 @@ class UnbackedDnsResolution(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -250,9 +273,7 @@ class UnbackedDnsResolution(Signature):
                             or "Unknown"
                         )
                         proc_name = process.get("process_name", "unknown")
-                        self.dns_events.append(
-                            f"{proc_name} resolved domain '{domain}' from unbacked caller {caller_addr}"
-                        )
+                        self.dns_events.append(f"{proc_name} resolved domain '{domain}' from unbacked caller {caller_addr}")
                         self.mark_call()
                         self.ret = True
                 except (ValueError, TypeError):
@@ -262,6 +283,7 @@ class UnbackedDnsResolution(Signature):
         if self.ret:
             self.data.append({"unbacked_dns_resolutions": self.dns_events})
         return self.ret
+
 
 class UnbackedBindShell(Signature):
     name = "unbacked_bind_shell"
@@ -331,9 +353,7 @@ class UnbackedBindShell(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -346,8 +366,7 @@ class UnbackedBindShell(Signature):
                     if any(s <= caller_val <= e for s, e in self.unbacked_ranges.get(pid, [])):
                         proc_name = process.get("process_name", "unknown")
                         self.bind_events.append(
-                            f"{proc_name} executed {api} (listening for inbound connections) "
-                            f"from unbacked caller {caller_addr}"
+                            f"{proc_name} executed {api} (listening for inbound connections) " f"from unbacked caller {caller_addr}"
                         )
                         self.mark_call()
                         self.ret = True
@@ -358,6 +377,7 @@ class UnbackedBindShell(Signature):
         if self.ret:
             self.data.append({"unbacked_bind_shells": self.bind_events})
         return self.ret
+
 
 class UnbackedNamedPipeCreation(Signature):
     name = "unbacked_named_pipe_creation"
@@ -427,9 +447,7 @@ class UnbackedNamedPipeCreation(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -440,15 +458,10 @@ class UnbackedNamedPipeCreation(Signature):
                 try:
                     caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
                     if any(s <= caller_val <= e for s, e in self.unbacked_ranges.get(pid, [])):
-                        pipe_name = (
-                            self.get_argument(call, "Name")
-                            or self.get_argument(call, "lpName")
-                            or "Unknown"
-                        )
+                        pipe_name = self.get_argument(call, "Name") or self.get_argument(call, "lpName") or "Unknown"
                         proc_name = process.get("process_name", "unknown")
                         self.p2p_pipes.append(
-                            f"{proc_name} created P2P Named Pipe '{pipe_name}' "
-                            f"from unbacked caller {caller_addr}"
+                            f"{proc_name} created P2P Named Pipe '{pipe_name}' " f"from unbacked caller {caller_addr}"
                         )
                         self.mark_call()
                         self.ret = True
@@ -459,6 +472,7 @@ class UnbackedNamedPipeCreation(Signature):
         if self.ret:
             self.data.append({"unbacked_p2p_pipes": self.p2p_pipes})
         return self.ret
+
 
 class UnbackedUserAgentRetrieval(Signature):
     name = "unbacked_useragent_retrieval"
@@ -526,9 +540,7 @@ class UnbackedUserAgentRetrieval(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -543,8 +555,7 @@ class UnbackedUserAgentRetrieval(Signature):
                         proc_name = process.get("process_name", "unknown")
                         ua_display = f"{ua_string[:50]}..." if len(ua_string) > 50 else ua_string
                         self.ua_events.append(
-                            f"{proc_name} dynamically retrieved User-Agent '{ua_display}' "
-                            f"from unbacked caller {caller_addr}"
+                            f"{proc_name} dynamically retrieved User-Agent '{ua_display}' " f"from unbacked caller {caller_addr}"
                         )
                         self.mark_call()
                         self.ret = True
