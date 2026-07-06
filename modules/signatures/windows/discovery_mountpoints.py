@@ -133,10 +133,12 @@ class MountPointManagerAccess(Signature):
 
     def on_complete(self):
         if self.count >= self.threshold:
-            self.data.append({
-                "access_count": self.count,
-                "processes": len(self.pids_seen),
-            })
+            self.data.append(
+                {
+                    "access_count": self.count,
+                    "processes": len(self.pids_seen),
+                }
+            )
             if self.count >= 5:
                 self.severity = 3
             return True
