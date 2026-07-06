@@ -142,8 +142,7 @@ class TakeOwnershipCheck(Signature):
     def on_call(self, call, process):
         if not call["status"]:
             return None
-        priv = (self.get_argument(call, "PrivilegeName") or
-                self.get_argument(call, "Name") or "").lower()
+        priv = (self.get_argument(call, "PrivilegeName") or self.get_argument(call, "Name") or "").lower()
         if priv in ("setakeownershipprivilege", "se take ownership privilege"):
             self.count += 1
             if self.count == self.threshold:
@@ -151,8 +150,7 @@ class TakeOwnershipCheck(Signature):
 
     def on_complete(self):
         if self.count >= self.threshold:
-            self.data.append({"privilege_lookup_count": self.count,
-                               "privilege": "SeTakeOwnershipPrivilege"})
+            self.data.append({"privilege_lookup_count": self.count, "privilege": "SeTakeOwnershipPrivilege"})
             return True
         return False
 
@@ -188,7 +186,6 @@ class PerFileAclTokenCheck(Signature):
 
     def on_complete(self):
         if self.count >= self.threshold:
-            self.data.append({"token_query_count": self.count,
-                               "indicates": "per-file permission evaluation on large file set"})
+            self.data.append({"token_query_count": self.count, "indicates": "per-file permission evaluation on large file set"})
             return True
         return False
