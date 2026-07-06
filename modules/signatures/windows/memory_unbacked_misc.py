@@ -15,6 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+
 class UnbackedTokenManipulation(Signature):
     name = "unbacked_token_manipulation"
     description = "Attempted to open, duplicate, or impersonate an access token from dynamically allocated (unbacked) memory, indicative of credential theft or lateral movement"
@@ -85,16 +86,16 @@ class UnbackedTokenManipulation(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
 
         if api in (
-            "NtOpenProcessToken", "NtOpenProcessTokenEx",
-            "NtDuplicateToken", "DuplicateTokenEx",
+            "NtOpenProcessToken",
+            "NtOpenProcessTokenEx",
+            "NtDuplicateToken",
+            "DuplicateTokenEx",
             "ImpersonateLoggedOnUser",
         ):
             caller_addr = call.get("caller")
@@ -103,9 +104,7 @@ class UnbackedTokenManipulation(Signature):
                     caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
                     if any(s <= caller_val <= e for s, e in self.unbacked_ranges.get(pid, [])):
                         proc_name = process.get("process_name", "unknown")
-                        self.token_theft_events.append(
-                            f"{proc_name} invoked {api} from unbacked caller {caller_addr}"
-                        )
+                        self.token_theft_events.append(f"{proc_name} invoked {api} from unbacked caller {caller_addr}")
                         self.mark_call()
                         self.ret = True
                 except (ValueError, TypeError):
@@ -115,6 +114,7 @@ class UnbackedTokenManipulation(Signature):
         if self.ret:
             self.data.append({"unbacked_token_manipulations": self.token_theft_events})
         return self.ret
+
 
 class UnbackedRegistryModification(Signature):
     name = "unbacked_registry_modification"
@@ -184,9 +184,7 @@ class UnbackedRegistryModification(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -197,10 +195,7 @@ class UnbackedRegistryModification(Signature):
                 try:
                     caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
                     if any(s <= caller_val <= e for s, e in self.unbacked_ranges.get(pid, [])):
-                        value_name = (
-                            self.get_argument(call, "ValueName")
-                            or self.get_argument(call, "lpValueName")
-                        )
+                        value_name = self.get_argument(call, "ValueName") or self.get_argument(call, "lpValueName")
                         proc_name = process.get("process_name", "unknown")
                         self.malicious_registry_writes.append(
                             f"{proc_name} modified registry value '{value_name}' from unbacked caller {caller_addr}"
@@ -214,6 +209,7 @@ class UnbackedRegistryModification(Signature):
         if self.ret:
             self.data.append({"unbacked_registry_modifications": self.malicious_registry_writes})
         return self.ret
+
 
 class UnbackedComInstantiation(Signature):
     name = "unbacked_com_instantiation"
@@ -282,9 +278,7 @@ class UnbackedComInstantiation(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -297,9 +291,7 @@ class UnbackedComInstantiation(Signature):
                     if any(s <= caller_val <= e for s, e in self.unbacked_ranges.get(pid, [])):
                         clsid = self.get_argument(call, "rclsid") or "Unknown CLSID"
                         proc_name = process.get("process_name", "unknown")
-                        self.com_events.append(
-                            f"{proc_name} instantiated COM object {clsid} from unbacked caller {caller_addr}"
-                        )
+                        self.com_events.append(f"{proc_name} instantiated COM object {clsid} from unbacked caller {caller_addr}")
                         self.mark_call()
                         self.ret = True
                 except (ValueError, TypeError):
@@ -309,6 +301,7 @@ class UnbackedComInstantiation(Signature):
         if self.ret:
             self.data.append({"unbacked_com_instantiations": self.com_events})
         return self.ret
+
 
 class UnbackedCryptoOperations(Signature):
     name = "unbacked_crypto_operations"
@@ -380,9 +373,7 @@ class UnbackedCryptoOperations(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -394,9 +385,7 @@ class UnbackedCryptoOperations(Signature):
                     caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
                     if any(s <= caller_val <= e for s, e in self.unbacked_ranges.get(pid, [])):
                         proc_name = process.get("process_name", "unknown")
-                        self.crypto_events.append(
-                            f"{proc_name} executed {api} from unbacked caller {caller_addr}"
-                        )
+                        self.crypto_events.append(f"{proc_name} executed {api} from unbacked caller {caller_addr}")
                         self.mark_call()
                         self.ret = True
                 except (ValueError, TypeError):
@@ -406,6 +395,7 @@ class UnbackedCryptoOperations(Signature):
         if self.ret:
             self.data.append({"unbacked_crypto_operations": self.crypto_events})
         return self.ret
+
 
 class UnbackedServiceManipulation(Signature):
     name = "unbacked_service_manipulation"
@@ -478,17 +468,18 @@ class UnbackedServiceManipulation(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
 
         if api in (
-            "OpenSCManagerA", "OpenSCManagerW",
-            "CreateServiceA", "CreateServiceW",
-            "StartServiceA", "StartServiceW",
+            "OpenSCManagerA",
+            "OpenSCManagerW",
+            "CreateServiceA",
+            "CreateServiceW",
+            "StartServiceA",
+            "StartServiceW",
         ):
             caller_addr = call.get("caller")
             if caller_addr:
@@ -496,14 +487,10 @@ class UnbackedServiceManipulation(Signature):
                     caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
                     if any(s <= caller_val <= e for s, e in self.unbacked_ranges.get(pid, [])):
                         machine_name = (
-                            self.get_argument(call, "MachineName")
-                            or self.get_argument(call, "lpMachineName")
-                            or "Localhost"
+                            self.get_argument(call, "MachineName") or self.get_argument(call, "lpMachineName") or "Localhost"
                         )
                         service_name = (
-                            self.get_argument(call, "ServiceName")
-                            or self.get_argument(call, "lpServiceName")
-                            or "Unknown"
+                            self.get_argument(call, "ServiceName") or self.get_argument(call, "lpServiceName") or "Unknown"
                         )
                         proc_name = process.get("process_name", "unknown")
                         self.scm_events.append(
@@ -519,6 +506,7 @@ class UnbackedServiceManipulation(Signature):
         if self.ret:
             self.data.append({"unbacked_service_manipulations": self.scm_events})
         return self.ret
+
 
 class UnbackedFileDropping(Signature):
     name = "unbacked_file_dropping"
@@ -587,9 +575,7 @@ class UnbackedFileDropping(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -600,15 +586,9 @@ class UnbackedFileDropping(Signature):
                 try:
                     caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
                     if any(s <= caller_val <= e for s, e in self.unbacked_ranges.get(pid, [])):
-                        file_name = (
-                            self.get_argument(call, "FileName")
-                            or self.get_argument(call, "HandleName")
-                            or "Unknown Handle"
-                        )
+                        file_name = self.get_argument(call, "FileName") or self.get_argument(call, "HandleName") or "Unknown Handle"
                         proc_name = process.get("process_name", "unknown")
-                        self.file_drops.append(
-                            f"{proc_name} wrote to file '{file_name}' from unbacked caller {caller_addr}"
-                        )
+                        self.file_drops.append(f"{proc_name} wrote to file '{file_name}' from unbacked caller {caller_addr}")
                         self.mark_call()
                         self.ret = True
                 except (ValueError, TypeError):
@@ -618,6 +598,7 @@ class UnbackedFileDropping(Signature):
         if self.ret:
             self.data.append({"unbacked_file_drops": self.file_drops})
         return self.ret
+
 
 class UnbackedDelayExecution(Signature):
     name = "unbacked_delay_execution"
@@ -689,9 +670,7 @@ class UnbackedDelayExecution(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -704,14 +683,9 @@ class UnbackedDelayExecution(Signature):
                     if any(s <= caller_val <= e for s, e in self.unbacked_ranges.get(pid, [])):
                         proc_name = process.get("process_name", "unknown")
                         delay_time = (
-                            self.get_argument(call, "Milliseconds")
-                            or self.get_argument(call, "DelayInterval")
-                            or "Unknown Time"
+                            self.get_argument(call, "Milliseconds") or self.get_argument(call, "DelayInterval") or "Unknown Time"
                         )
-                        event_msg = (
-                            f"{proc_name} executed {api} (Time: {delay_time}) "
-                            f"from unbacked caller {caller_addr}"
-                        )
+                        event_msg = f"{proc_name} executed {api} (Time: {delay_time}) " f"from unbacked caller {caller_addr}"
                         if event_msg not in self.delay_events:
                             self.delay_events.add(event_msg)
                             self.mark_call()
@@ -723,6 +697,7 @@ class UnbackedDelayExecution(Signature):
         if self.ret:
             self.data.append({"unbacked_delay_executions": list(self.delay_events)})
         return self.ret
+
 
 class UnbackedWmiExecution(Signature):
     name = "unbacked_wmi_execution"
@@ -793,9 +768,7 @@ class UnbackedWmiExecution(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
@@ -807,19 +780,14 @@ class UnbackedWmiExecution(Signature):
                     caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
                     if any(s <= caller_val <= e for s, e in self.unbacked_ranges.get(pid, [])):
                         obj_path = (
-                            self.get_argument(call, "ObjectPath")
-                            or self.get_argument(call, "strObjectPath")
-                            or "Unknown Object"
+                            self.get_argument(call, "ObjectPath") or self.get_argument(call, "strObjectPath") or "Unknown Object"
                         )
                         method_name = (
-                            self.get_argument(call, "MethodName")
-                            or self.get_argument(call, "strMethodName")
-                            or "Unknown Method"
+                            self.get_argument(call, "MethodName") or self.get_argument(call, "strMethodName") or "Unknown Method"
                         )
                         proc_name = process.get("process_name", "unknown")
                         self.wmi_executions.append(
-                            f"{proc_name} executed WMI Method '{obj_path}::{method_name}' "
-                            f"from unbacked caller {caller_addr}"
+                            f"{proc_name} executed WMI Method '{obj_path}::{method_name}' " f"from unbacked caller {caller_addr}"
                         )
                         self.mark_call()
                         self.ret = True
@@ -830,6 +798,7 @@ class UnbackedWmiExecution(Signature):
         if self.ret:
             self.data.append({"unbacked_wmi_executions": self.wmi_executions})
         return self.ret
+
 
 class UnbackedProcessEnumeration(Signature):
     name = "unbacked_process_enumeration"
@@ -901,17 +870,17 @@ class UnbackedProcessEnumeration(Signature):
                 try:
                     base_val = int(base_address, 16) if isinstance(base_address, str) else int(base_address)
                     if pid in self.unbacked_ranges:
-                        self.unbacked_ranges[pid] = [
-                            (s, e) for s, e in self.unbacked_ranges[pid] if s != base_val
-                        ]
+                        self.unbacked_ranges[pid] = [(s, e) for s, e in self.unbacked_ranges[pid] if s != base_val]
                 except (ValueError, TypeError):
                     pass
             return
 
         if api in (
-            "CreateToolhelp32Snapshot", "EnumProcesses",
+            "CreateToolhelp32Snapshot",
+            "EnumProcesses",
             "NtQuerySystemInformation",
-            "Process32FirstW", "Process32NextW",
+            "Process32FirstW",
+            "Process32NextW",
         ):
             caller_addr = call.get("caller")
             if caller_addr:
@@ -924,10 +893,7 @@ class UnbackedProcessEnumeration(Signature):
                             if str(info_class) != "5":
                                 return
                         proc_name = process.get("process_name", "unknown")
-                        event_msg = (
-                            f"{proc_name} executed {api} (Process Discovery) "
-                            f"from unbacked caller {caller_addr}"
-                        )
+                        event_msg = f"{proc_name} executed {api} (Process Discovery) " f"from unbacked caller {caller_addr}"
                         if event_msg not in self.enum_events:
                             self.enum_events.append(event_msg)
                             self.mark_call()
