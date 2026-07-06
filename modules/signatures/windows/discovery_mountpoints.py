@@ -99,3 +99,45 @@ class MountPointsVolumeDiscovery(Signature):
 
     def on_complete(self):
         return self.ret
+
+
+class MountPointManagerAccess(Signature):
+    name = "mountpoint_manager_access"
+    description = "Repeatedly opens the MountPointManager device to enumerate drive letters and resolve volume paths to discover all attached drives and network shares"
+    severity = 2
+    confidence = 60
+    categories = ["ransomware", "wiper", "discovery"]
+    authors = ["Kevin Ross"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1082", "T1135"]
+    mbcs = ["OB0007", "E1082"]
+
+    filter_apinames = set(["NtCreateFile", "NtOpenFile"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.threshold = 3
+        self.count = 0
+        self.pids_seen = set()
+
+    def on_call(self, call, process):
+        fname = (self.get_argument(call, "FileName") or "").lower()
+        if "mountpointmanager" not in fname:
+            return None
+        self.count += 1
+        if process and process.get("process_id") is not None:
+            self.pids_seen.add(str(process["process_id"]))
+        if self.count == self.threshold:
+            self.mark_call()
+
+    def on_complete(self):
+        if self.count >= self.threshold:
+            self.data.append({
+                "access_count": self.count,
+                "processes": len(self.pids_seen),
+            })
+            if self.count >= 5:
+                self.severity = 3
+            return True
+        return False
