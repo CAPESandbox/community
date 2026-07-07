@@ -64,9 +64,6 @@ class UnbackedMemoryNetworkConnection(Signature):
         "WinHttpGetProxyForUrl",
     }
 
-    _ALLOC_APIS = {"NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx", "NtFreeVirtualMemory", "VirtualFree"}
-    NETWORK_APIS = filter_apinames - _ALLOC_APIS
-
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
@@ -118,20 +115,21 @@ class UnbackedMemoryNetworkConnection(Signature):
                     pass
             return
 
-        if api in self.NETWORK_APIS:
-            caller_addr = call.get("caller")
-            if caller_addr:
-                try:
-                    caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
-                    if any(s <= caller_val <= e for s, e in self.unbacked_ranges.get(pid, [])):
-                        proc_name = process.get("process_name", "unknown")
-                        self.unbacked_network_conns.append(
-                            f"{proc_name} initiated network API {api} from unbacked caller {caller_addr}"
-                        )
-                        self.mark_call()
-                        self.ret = True
-                except (ValueError, TypeError):
-                    pass
+        # filter_apinames only contains alloc/free APIs (handled and returned above)
+        # plus network APIs, so anything reaching here is a network call by elimination.
+        caller_addr = call.get("caller")
+        if caller_addr:
+            try:
+                caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
+                if any(s <= caller_val <= e for s, e in self.unbacked_ranges.get(pid, [])):
+                    proc_name = process.get("process_name", "unknown")
+                    self.unbacked_network_conns.append(
+                        f"{proc_name} initiated network API {api} from unbacked caller {caller_addr}"
+                    )
+                    self.mark_call()
+                    self.ret = True
+            except (ValueError, TypeError):
+                pass
 
     def on_complete(self):
         if self.ret:
@@ -164,9 +162,6 @@ class UnbackedDnsResolution(Signature):
         "DnsQueryEx",
         "gethostbyname",
     }
-
-    _ALLOC_APIS = {"NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx", "NtFreeVirtualMemory", "VirtualFree"}
-    DNS_APIS = filter_apinames - _ALLOC_APIS
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -219,25 +214,26 @@ class UnbackedDnsResolution(Signature):
                     pass
             return
 
-        if api in self.DNS_APIS:
-            caller_addr = call.get("caller")
-            if caller_addr:
-                try:
-                    caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
-                    if any(s <= caller_val <= e for s, e in self.unbacked_ranges.get(pid, [])):
-                        domain = (
-                            self.get_argument(call, "Name")
-                            or self.get_argument(call, "NodeName")
-                            or self.get_argument(call, "pName")
-                            or self.get_argument(call, "name")
-                            or "Unknown"
-                        )
-                        proc_name = process.get("process_name", "unknown")
-                        self.dns_events.append(f"{proc_name} resolved domain '{domain}' from unbacked caller {caller_addr}")
-                        self.mark_call()
-                        self.ret = True
-                except (ValueError, TypeError):
-                    pass
+        # filter_apinames only contains alloc/free APIs (handled and returned above)
+        # plus DNS APIs, so anything reaching here is a DNS call by elimination.
+        caller_addr = call.get("caller")
+        if caller_addr:
+            try:
+                caller_val = int(caller_addr, 16) if isinstance(caller_addr, str) else int(caller_addr)
+                if any(s <= caller_val <= e for s, e in self.unbacked_ranges.get(pid, [])):
+                    domain = (
+                        self.get_argument(call, "Name")
+                        or self.get_argument(call, "NodeName")
+                        or self.get_argument(call, "pName")
+                        or self.get_argument(call, "name")
+                        or "Unknown"
+                    )
+                    proc_name = process.get("process_name", "unknown")
+                    self.dns_events.append(f"{proc_name} resolved domain '{domain}' from unbacked caller {caller_addr}")
+                    self.mark_call()
+                    self.ret = True
+            except (ValueError, TypeError):
+                pass
 
     def on_complete(self):
         if self.ret:
