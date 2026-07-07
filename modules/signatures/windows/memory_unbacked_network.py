@@ -64,6 +64,9 @@ class UnbackedMemoryNetworkConnection(Signature):
         "WinHttpGetProxyForUrl",
     }
 
+    _ALLOC_APIS = {"NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx", "NtFreeVirtualMemory", "VirtualFree"}
+    NETWORK_APIS = filter_apinames - _ALLOC_APIS
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
@@ -115,7 +118,7 @@ class UnbackedMemoryNetworkConnection(Signature):
                     pass
             return
 
-        if api in self._NETWORK_APIS:
+        if api in self.NETWORK_APIS:
             caller_addr = call.get("caller")
             if caller_addr:
                 try:
@@ -161,6 +164,9 @@ class UnbackedDnsResolution(Signature):
         "DnsQueryEx",
         "gethostbyname",
     }
+
+    _ALLOC_APIS = {"NtAllocateVirtualMemory", "VirtualAlloc", "VirtualAllocEx", "NtFreeVirtualMemory", "VirtualFree"}
+    DNS_APIS = filter_apinames - _ALLOC_APIS
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -213,7 +219,7 @@ class UnbackedDnsResolution(Signature):
                     pass
             return
 
-        if api in self._DNS_APIS:
+        if api in self.DNS_APIS:
             caller_addr = call.get("caller")
             if caller_addr:
                 try:
