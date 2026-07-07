@@ -64,40 +64,6 @@ class UnbackedMemoryNetworkConnection(Signature):
         "WinHttpGetProxyForUrl",
     }
 
-    _NETWORK_APIS = frozenset(
-        {
-            "HttpSendRequestA",
-            "HttpSendRequestW",
-            "HttpOpenRequestA",
-            "HttpOpenRequestW",
-            "HttpAddRequestHeadersA",
-            "HttpAddRequestHeadersW",
-            "InternetConnectA",
-            "InternetConnectW",
-            "WinHttpSendRequest",
-            "WinHttpConnect",
-            "InternetCrackUrlA",
-            "InternetCrackUrlW",
-            "InternetOpenUrlA",
-            "InternetOpenUrlW",
-            "connect",
-            "ConnectEx",
-            "WSAConnect",
-            "send",
-            "WSASend",
-            "sendto",
-            "WSASendTo",
-            "recv",
-            "WSARecv",
-            "recvfrom",
-            "WSARecvFrom",
-            "InternetReadFile",
-            "WinHttpReadData",
-            "WinHttpOpenRequest",
-            "WinHttpGetProxyForUrl",
-        }
-    )
-
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
@@ -195,18 +161,6 @@ class UnbackedDnsResolution(Signature):
         "DnsQueryEx",
         "gethostbyname",
     }
-
-    _DNS_APIS = frozenset(
-        {
-            "getaddrinfo",
-            "GetAddrInfoW",
-            "GetAddrInfoExW",
-            "DnsQuery_A",
-            "DnsQuery_W",
-            "DnsQueryEx",
-            "gethostbyname",
-        }
-    )
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
