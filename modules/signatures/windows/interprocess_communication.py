@@ -275,9 +275,7 @@ class WmCopyDataIPC(Signature):
     ttps = ["T1559"]
     mbcs = ["E1559"]
 
-    filter_apinames = {
-        "SendMessageW", "SendMessageA", "SendMessageTimeoutW", "SendMessageTimeoutA"
-    }
+    filter_apinames = {"SendMessageW", "SendMessageA", "SendMessageTimeoutW", "SendMessageTimeoutA"}
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -315,6 +313,6 @@ class WmCopyDataIPC(Signature):
             self.ret = True
 
     def on_complete(self):
-        if self.ret:              
+        if self.ret:
             self.data.append({"wm_copydata_ipc_detected": list(self.ipc_events)})
         return self.ret
