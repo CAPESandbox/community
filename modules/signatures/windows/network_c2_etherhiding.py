@@ -62,9 +62,9 @@ class EtherHidingSmartContractCall(Signature):
             # Look for the JSON-RPC payload format
             if '"jsonrpc"' in buffer_lower and '"method"' in buffer_lower:
                 if (
-                    '"eth_call"' in buffer_lower
-                    or '"eth_gettransactionbyhash"' in buffer_lower
-                    or '"eth_getstorageat"' in buffer_lower
+                    "eth_call" in buffer_lower
+                    or "eth_gettransactionbyhash" in buffer_lower
+                    or "eth_getstorageat" in buffer_lower
                 ):
                     proc_name = process.get("process_name", "unknown")
 
