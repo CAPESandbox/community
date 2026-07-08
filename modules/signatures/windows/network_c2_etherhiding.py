@@ -50,9 +50,8 @@ class EtherHidingSmartContractCall(Signature):
         # Dynamically grab the payload regardless of which networking API was used
         buffer_data = (
             self.get_argument(call, "buffer")
-            or self.get_argument(call, "lpBuffer")
-            or self.get_argument(call, "lpOptional")
             or self.get_argument(call, "Buffer")
+            or self.get_argument(call, "Optional")
             or self.get_argument(call, "PostData")
         )
 
