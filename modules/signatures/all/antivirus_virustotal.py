@@ -28,9 +28,7 @@ class KnownVirustotal(Signature):
     def run(self):
         # CAPE stores file lookups in target.file and URL lookups in the url_analysis results
         virustotal = (
-            self.results.get("target", {}).get("file", {}).get("virustotal")
-            or self.results.get("url", {}).get("virustotal")
-            or {}
+            self.results.get("target", {}).get("file", {}).get("virustotal") or self.results.get("url", {}).get("virustotal") or {}
         )
         if "positives" in virustotal:
             positives = virustotal["positives"]
