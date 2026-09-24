@@ -35,13 +35,13 @@ class WHOIS_Create(Signature):
     def run(self):
         ret = False
         timestrs = list()
-        if "static" in self.results and self.results["static"]:
-            if "url" in self.results["static"] and self.results["static"]["url"]:
-                if "whois" in self.results["static"]["url"] and self.results["static"]["url"]["whois"]:
-                    p = r".*Creation Date:(?P<Dates>.*)Updated Date:"
-                    buf = re.match(p, self.results["static"]["url"]["whois"], re.DOTALL)
-                    if buf:
-                        timestrs = buf.group("Dates").split()[0::2]
+        # url_analysis stores the WHOIS text of URL tasks under results["url"]
+        whois = self.results.get("url", {}).get("whois")
+        if whois:
+            p = r".*Creation Date:(?P<Dates>.*)Updated Date:"
+            buf = re.match(p, whois, re.DOTALL)
+            if buf:
+                timestrs = buf.group("Dates").split()[0::2]
         if timestrs:
             earliest = None
             for time in timestrs:

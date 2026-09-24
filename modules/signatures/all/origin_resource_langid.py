@@ -38,9 +38,9 @@ class ResourceLangID(Signature):
             "SWEDISH",
         ]
 
-        if "static" in self.results and "pe" in self.results["static"]:
-            if "resources" in self.results["static"]["pe"]:
-                for resource in self.results["static"]["pe"]["resources"]:
+        if "file" in self.results.get("target", {}) and "pe" in self.results["target"]["file"]:
+            if "resources" in self.results["target"]["file"]["pe"]:
+                for resource in self.results["target"]["file"]["pe"]["resources"]:
                     splitlangs = []
                     splitlangs.append(resource["sublanguage"].split("_"))
                     buf = resource["language"]

@@ -29,9 +29,9 @@ class RTFEmbeddedContent(Signature):
 
     def run(self):
         ret = False
-        if "static" in self.results and "office_rtf" in self.results["static"]:
-            for key in self.results["static"]["office_rtf"]:
-                for block in self.results["static"]["office_rtf"][key]:
+        if "rtf" in self.results.get("target", {}).get("file", {}).get("office", {}):
+            for key in self.results["target"]["file"]["office"]["rtf"]:
+                for block in self.results["target"]["file"]["office"]["rtf"][key]:
                     if "type_embed" in block:
                         index = block["index"]
                         classname = block["class_name"]
@@ -61,9 +61,9 @@ class RTFExploitStatic(Signature):
 
     def run(self):
         ret = False
-        if "static" in self.results and "office_rtf" in self.results["static"]:
-            for key in self.results["static"]["office_rtf"]:
-                for block in self.results["static"]["office_rtf"][key]:
+        if "rtf" in self.results.get("target", {}).get("file", {}).get("office", {}):
+            for key in self.results["target"]["file"]["office"]["rtf"]:
+                for block in self.results["target"]["file"]["office"]["rtf"][key]:
                     if "CVE" in block:
                         index = block["index"]
                         cve = block["CVE"]
@@ -90,9 +90,9 @@ class RTFEmbeddedOfficeFile(Signature):
 
     def run(self):
         ret = False
-        if "static" in self.results and "office_rtf" in self.results["static"]:
-            for key in self.results["static"]["office_rtf"]:
-                for block in self.results["static"]["office_rtf"][key]:
+        if "rtf" in self.results.get("target", {}).get("file", {}).get("office", {}):
+            for key in self.results["target"]["file"]["office"]["rtf"]:
+                for block in self.results["target"]["file"]["office"]["rtf"][key]:
                     if "class_name" in block:
                         if "Word.Document." in block["class_name"]:
                             index = block["index"]
@@ -123,9 +123,9 @@ class RTFASLRBypass(Signature):
         ]
 
         ret = False
-        if "static" in self.results and "office_rtf" in self.results["static"]:
-            for key in self.results["static"]["office_rtf"]:
-                for block in self.results["static"]["office_rtf"][key]:
+        if "rtf" in self.results.get("target", {}).get("file", {}).get("office", {}):
+            for key in self.results["target"]["file"]["office"]["rtf"]:
+                for block in self.results["target"]["file"]["office"]["rtf"][key]:
                     if "class_name" in block:
                         for bypass in aslrbypass:
                             classname = block["class_name"]

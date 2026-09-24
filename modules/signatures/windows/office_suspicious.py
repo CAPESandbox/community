@@ -43,12 +43,13 @@ class OfficeAnamalousFeature(Signature):
 
         ret = False
 
-        if package != "xls" and self.results.get("static", {}).get("office", {}).get("Metadata", {}).get("SummaryInformation", {}):
-            words = self.results["static"]["office"]["Metadata"]["SummaryInformation"].get("num_words", "0")
+        office = self.results.get("target", {}).get("file", {}).get("office", {})
+        if package != "xls" and office.get("Metadata", {}).get("SummaryInformation", {}):
+            words = self.results["target"]["file"]["office"]["Metadata"]["SummaryInformation"].get("num_words", "0")
             if words == "0" or words == "None":
                 self.data.append({"content": "The file appears to have no content."})
 
-            pages = self.results["static"]["office"]["Metadata"]["SummaryInformation"].get("num_pages", "0")
+            pages = self.results["target"]["file"]["office"]["Metadata"]["SummaryInformation"].get("num_pages", "0")
             if pages == "0" or pages == "None":
                 self.data.append(
                     {
@@ -56,9 +57,9 @@ class OfficeAnamalousFeature(Signature):
                     }
                 )
 
-            edittime = self.results["static"]["office"]["Metadata"]["SummaryInformation"].get("total_edit_time")
-            createtime = self.results["static"]["office"]["Metadata"]["SummaryInformation"].get("create_time")
-            lastsaved = self.results["static"]["office"]["Metadata"]["SummaryInformation"].get("last_saved_time")
+            edittime = self.results["target"]["file"]["office"]["Metadata"]["SummaryInformation"].get("total_edit_time")
+            createtime = self.results["target"]["file"]["office"]["Metadata"]["SummaryInformation"].get("create_time")
+            lastsaved = self.results["target"]["file"]["office"]["Metadata"]["SummaryInformation"].get("last_saved_time")
             if edittime and int(edittime) > 0 and createtime == "None" and lastsaved == "None":
                 self.data.append(
                     {
@@ -66,8 +67,8 @@ class OfficeAnamalousFeature(Signature):
                     }
                 )
 
-            author = self.results["static"]["office"]["Metadata"]["SummaryInformation"].get("author")
-            lastauthor = self.results["static"]["office"]["Metadata"]["SummaryInformation"].get("last_saved_by")
+            author = self.results["target"]["file"]["office"]["Metadata"]["SummaryInformation"].get("author")
+            lastauthor = self.results["target"]["file"]["office"]["Metadata"]["SummaryInformation"].get("last_saved_by")
             numerical_author = re.compile("^[0-9]{1,}$")
             for malicious_author in known_malicious_authors:
                 if author == malicious_author:
@@ -140,8 +141,8 @@ class OfficeDDECommand(Signature):
 
     def run(self):
         ret = False
-        if "static" in self.results and "office_dde" in self.results["static"]:
-            dde = self.results["static"]["office_dde"]
+        if "dde" in self.results.get("target", {}).get("file", {}).get("office", {}):
+            dde = self.results["target"]["file"]["office"]["dde"]
             self.data.append({"command": dde})
             ret = True
         return ret

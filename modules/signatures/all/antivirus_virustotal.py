@@ -26,25 +26,30 @@ class KnownVirustotal(Signature):
     minimum = "0.5"
 
     def run(self):
-        if "virustotal" in self.results:
-            if "positives" in self.results["virustotal"]:
-                positives = self.results["virustotal"]["positives"]
-                if positives > 1:
-                    self.description = " has been identified by %s Antiviruses on VirusTotal as malicious" % positives
-                    if positives > 4:
-                        self.confidence = 75
-                        self.weight = positives - 4
-                    if positives > 10:
-                        self.severity = 3
-                        self.confidence = 100
-                        self.weight = positives
-                    for result in self.results["virustotal"]["results"]:
-                        if result["sig"]:
-                            self.data.append({result["vendor"]: result["sig"]})
-                    if self.results["info"]["category"] == "file":
-                        self.description = "File" + self.description
-                    else:
-                        self.description = "URL" + self.description
-                    return True
+        # CAPE stores file lookups in target.file and URL lookups in the url_analysis results
+        virustotal = (
+            self.results.get("target", {}).get("file", {}).get("virustotal")
+            or self.results.get("url", {}).get("virustotal")
+            or {}
+        )
+        if "positives" in virustotal:
+            positives = virustotal["positives"]
+            if positives > 1:
+                self.description = " has been identified by %s Antiviruses on VirusTotal as malicious" % positives
+                if positives > 4:
+                    self.confidence = 75
+                    self.weight = positives - 4
+                if positives > 10:
+                    self.severity = 3
+                    self.confidence = 100
+                    self.weight = positives
+                for result in virustotal["results"]:
+                    if result["sig"]:
+                        self.data.append({result["vendor"]: result["sig"]})
+                if self.results["info"]["category"] == "file":
+                    self.description = "File" + self.description
+                else:
+                    self.description = "URL" + self.description
+                return True
 
         return False

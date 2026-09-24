@@ -16,7 +16,7 @@ class VersionInfoAnomaly(Signature):
     def run(self):
         found_sig = False
 
-        if "static" not in self.results or "pe" not in self.results["static"] or "versioninfo" not in self.results["static"]["pe"]:
+        if "versioninfo" not in self.results.get("target", {}).get("file", {}).get("pe", {}):
             return False
 
         msincopyright = None
@@ -26,7 +26,7 @@ class VersionInfoAnomaly(Signature):
         # Microsoft Corporation sorted
         mscorpsorted = " CMacfiinoooooprrrstt"
 
-        for info in self.results["static"]["pe"]["versioninfo"]:
+        for info in self.results["target"]["file"]["pe"]["versioninfo"]:
             if info["name"] == "LegalCopyright":
                 if "microsoft" in info["value"].lower():
                     msincopyright = True

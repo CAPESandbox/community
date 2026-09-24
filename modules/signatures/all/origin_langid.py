@@ -98,9 +98,9 @@ class BuildLangID(Signature):
             {"language": "Vietnamese", "code": "0x042A"},
         ]
 
-        if "static" in self.results and "pe" in self.results["static"]:
-            if "versioninfo" in self.results["static"]["pe"]:
-                for info in self.results["static"]["pe"]["versioninfo"]:
+        if "file" in self.results.get("target", {}) and "pe" in self.results["target"]["file"]:
+            if "versioninfo" in self.results["target"]["file"]["pe"]:
+                for info in self.results["target"]["file"]["pe"]["versioninfo"]:
                     if info["name"] == "Translation":
                         try:
                             lang, charset = info["value"].strip().split(" ")

@@ -29,7 +29,7 @@ class Excel4MacroUrls(Signature):
 
     def run(self):
         ret = False
-        for line in self.results.get("static", {}).get("office", {}).get("XLMMacroDeobfuscator", []) or []:
+        for line in self.results.get("target", {}).get("file", {}).get("office", {}).get("XLMMacroDeobfuscator", []) or []:
             if "URLDownloadToFileA" not in line:
                 continue
 

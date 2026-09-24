@@ -97,7 +97,7 @@ class ThemidaPackedSection(Signature):
     mbcs = ["OB0001", "OB0002", "OB0006", "F0001", "F0001.011"]
 
     def run(self):
-        for section in self.results.get("static", {}).get("pe", {}).get("sections", []):
+        for section in self.results.get("target", {}).get("file", {}).get("pe", {}).get("sections", []):
             if section["name"].lower().startswith(".themida"):
                 self.data.append({"section": section})
                 return True

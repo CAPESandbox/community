@@ -253,7 +253,7 @@ class BadCerts(Signature):
             "8f594f2e0665ffd656160aac235d8c490059a9cc",
         ]
 
-        for sign in self.results.get("static", {}).get("pe", {}).get("digital_signers", []) or []:
+        for sign in self.results.get("target", {}).get("file", {}).get("pe", {}).get("digital_signers", []) or []:
             for md5 in md5_indicators:
                 if md5 == sign["md5_fingerprint"]:
                     self.data.append(sign)

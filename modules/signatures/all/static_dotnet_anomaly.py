@@ -51,12 +51,12 @@ class DotNetAnomaly(Signature):
     minimum = "1.3"
 
     def run(self):
-        if "static" not in self.results or "dotnet" not in self.results["static"]:
+        if "file" not in self.results.get("target", {}) or "dotnet" not in self.results["target"]["file"]:
             return False
 
-        if "assemblyinfo" in self.results["static"]["dotnet"] and self.results["static"]["dotnet"]["assemblyinfo"]:
-            if self.results["static"]["dotnet"]["assemblyinfo"]["version"]:
-                version = self.results["static"]["dotnet"]["assemblyinfo"]["version"].split(".")
+        if "assemblyinfo" in self.results["target"]["file"]["dotnet"] and self.results["target"]["file"]["dotnet"]["assemblyinfo"]:
+            if self.results["target"]["file"]["dotnet"]["assemblyinfo"]["version"]:
+                version = self.results["target"]["file"]["dotnet"]["assemblyinfo"]["version"].split(".")
                 if version:
                     nullversion = True
                     for vernum in version:
@@ -66,8 +66,8 @@ class DotNetAnomaly(Signature):
                         self.weight += 1
                         self.data.append({"anomalous_version": "Assembly version is set to 0"})
 
-        if "customattrs" in self.results["static"]["dotnet"] and self.results["static"]["dotnet"]["customattrs"]:
-            for attr in self.results["static"]["dotnet"]["customattrs"]:
+        if "customattrs" in self.results["target"]["file"]["dotnet"] and self.results["target"]["file"]["dotnet"]["customattrs"]:
+            for attr in self.results["target"]["file"]["dotnet"]["customattrs"]:
                 valLength = len(attr["value"])
                 if valLength > 512:
                     self.data.append({"large_attribute": 'Attribute "{0}" is abnormally large.'.format(attr["name"])})
