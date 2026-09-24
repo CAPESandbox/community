@@ -40,7 +40,7 @@ class MimicsExtension(Signature):
             "pdf": "PDF document",
             "xml": "XML document",
         }
-        pat = ".*[ _\-\.](?P<FakeExtension>{0})\.(?:{1})".format("|".join(exts.keys()), "|".join(execs))
+        pat = r".*[ _\-\.](?P<FakeExtension>{0})\.(?:{1})".format("|".join(exts.keys()), "|".join(execs))
         if self.results.get("target", {}).get("category", "") == "file":
             check = re.match(pat, self.results.get("target", {})["file"]["name"])
             if check:

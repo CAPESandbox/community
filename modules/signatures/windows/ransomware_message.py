@@ -15,10 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 
 class RansomwareMessage(Signature):
@@ -141,7 +138,7 @@ class RansomwareMessage(Signature):
 
         is_target_path = (
             filepath_lower == "\\??\\physicaldrive0"
-            or filepath_lower.startswith("\\device\\harddisk")
+            or filepath_lower.startswith(r"\\device\\harddisk")
             or filepath_lower.endswith((".txt", ".html", ".hta", ".rtf"))
             or "readme" in filepath_lower
             or "read_me" in filepath_lower

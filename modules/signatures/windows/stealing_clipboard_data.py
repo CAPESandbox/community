@@ -39,14 +39,9 @@ class StealingClipboardData(Signature):
         ]
     )
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.detected = False
 
     def on_call(self, call, process):
-        self.detected = True
+        return True
         if self.pid:
             self.mark_call()
 
-    def on_complete(self):
-        return self.detected

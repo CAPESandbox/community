@@ -32,7 +32,7 @@ class CRATMutexes(Signature):
             "CratKeyLog2Mutex",
             "CratScreenCaptureMutex",
             "CratClipboardMonitor2Mutex",
-            "^CRAT\d+\.\d+\.\d+\.\d+$",
+            r"^CRAT\d+\.\d+\.\d+\.\d+$",
         ]
 
         for indicator in indicators:

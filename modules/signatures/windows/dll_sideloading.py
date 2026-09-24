@@ -34,10 +34,10 @@ class DLLLoadSuspiciousDirectory(Signature):
         self.ret = False
         # Any exclusions added to this list needs to be in lower format.
         self.ignore_directories = [
-            "c:\\windows\\system32\\",
-            "c:\\windows\\syswow64\\",
-            "c:\\windows\\",
-            "c:\\windows\\winsxs\\",
+            r"c:\\windows\\system32\\",
+            r"c:\\windows\\syswow64\\",
+            r"c:\\windows\\",
+            r"c:\\windows\\winsxs\\",
             "c:\\program files\\",
             "c:\\program files (x86)\\",
             "c:\\programdata\\",

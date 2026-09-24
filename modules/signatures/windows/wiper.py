@@ -114,14 +114,13 @@ class WiperZeroedBytesLargeFile(Signature):
             "hiberfil.sys",
             "swapfile.sys",
         ]
-        self.hits = []
 
     def on_call(self, call, process):
         if not call["status"]:
             return None
 
         filepath = self.get_raw_argument(call, "HandleName")
-        if not filepath or filepath in self.hits:
+        if not filepath:
             return None
 
         fl = filepath.lower()
@@ -141,13 +140,10 @@ class WiperZeroedBytesLargeFile(Signature):
             return None
 
         if self.zero_pattern.match(buff):
-            self.hits.append(filepath)
             self.data.append({"file": filepath, "zeroed_bytes": length})
             if self.pid:
                 self.mark_call()
-
-    def on_complete(self):
-        return bool(self.hits)
+            return True
 
 
 class WiperDiskFillAttack(Signature):
@@ -455,7 +451,6 @@ class WiperActivityLog(Signature):
             "\\program files\\",
             "\\programdata\\microsoft\\",
         ]
-        self.hits = []
 
     def on_call(self, call, process):
         if not call["status"]:
@@ -480,19 +475,14 @@ class WiperActivityLog(Signature):
         for pattern in self.wiper_log_strings:
             if pattern in buf:
                 entry = self.get_argument(call, "HandleName")
-                if entry not in self.hits:
-                    self.hits.append(entry)
-                    self.data.append(
-                        {
-                            "log_file": entry,
-                            "wiper_string_matched": pattern,
-                        }
-                    )
-                    self.mark_call()
-                break
-
-    def on_complete(self):
-        return bool(self.hits)
+                self.data.append(
+                    {
+                        "log_file": entry,
+                        "wiper_string_matched": pattern,
+                    }
+                )
+                self.mark_call()
+                return True
 
 
 class WiperRmDirDrive(Signature):

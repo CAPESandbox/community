@@ -50,13 +50,13 @@ class Vawtrak_APIs(Signature):
         self.pidwalk = 0
 
     def on_call(self, call, process):
-        regsvr = "c:\\windows\\system32\\regsvr32.exe"
+        regsvr = r"c:\\windows\\system32\\regsvr32.exe"
         curproc = process["process_name"]
 
         if call["api"] == "RegSetValueExA":
             # Autorun registry / filesystem behavior
             buf = self.get_argument(call, "FullName").lower()
-            if "\\software\\microsoft\\windows\\currentversion\\run\\" in buf:
+            if r"\\software\\microsoft\\windows\\currentversion\\run\\" in buf:
                 val = self.get_argument(call, "ValueName").lower()
                 buff = self.get_argument(call, "Buffer").lower()
                 if "regsvr32.exe" in buff:
@@ -132,8 +132,8 @@ class Vawtrak_APIs(Signature):
         if self.pidwalk > 20:
             malscore += 2
 
-        dllpath = "c:\\windows\\system32\\regsvr32.exe"
-        explorerpath = "c:\\windows\\explorer.exe"
+        dllpath = r"c:\\windows\\system32\\regsvr32.exe"
+        explorerpath = r"c:\\windows\\explorer.exe"
         # Check for process injection into explorer trigger
         if dllpath in self.cevents and explorerpath in self.cevents:
             for event in self.cevents[dllpath]:

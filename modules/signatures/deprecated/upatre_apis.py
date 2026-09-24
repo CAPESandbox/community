@@ -13,10 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -112,7 +109,7 @@ class Upatre_APIs(Signature):
                     self.requestcount += 1
                     # Ignore Recon IP Checking Request
                     if self.requestcount > 1:
-                        rex = "/([^/]+)/" + self.hostname + "/[^/]+/\d{1,3}-"
+                        rex = "/([^/]+)/" + self.hostname + r"/[^/]+/\d{1,3}-"
                         tmp = re.match(rex, url)
                         if tmp:
                             # Upatre structured URI

@@ -34,7 +34,7 @@ class Crash(Signature):
                     self.mark_call()
                 return True
         elif call["api"] == "LdrLoadDll":
-            if self.check_argument_call(call, pattern=".*faultrep\.dll$", name="FileName", api="LdrLoadDll", regex=True):
+            if self.check_argument_call(call, pattern=r".*faultrep\.dll$", name="FileName", api="LdrLoadDll", regex=True):
                 if self.pid:
                     self.mark_call()
                 return True

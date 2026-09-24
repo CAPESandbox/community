@@ -15,10 +15,7 @@
 
 import os
 
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 from lib.cuckoo.common.abstracts import Signature
 from lib.cuckoo.common.constants import CUCKOO_ROOT
@@ -33,7 +30,7 @@ if os.path.exists(tld_path):
             if line and line.startswith("."):
                 tld = line.lstrip(".")
                 # The file already imports `re`, so we can use it.
-                # Escape dots for regex, e.g., 'co.ua' -> 'co\.ua'
+                # Escape dots for regex, e.g., 'co.ua' -> r'co\.ua'
                 escaped_tld = re.escape(tld)
                 tlds_re.append(r".*\.{0}$".format(escaped_tld))
 if tlds_re:
@@ -62,11 +59,11 @@ class NetworkDNSTunnelingRequest(Signature):
         self.match = False
         # base16, bas32, bas32hex, bas64, morse code
         self.patterns = [
-            re.compile(".*(\.)?[A-Fa-f0-9-_]{12,}.*"),
-            re.compile(".*(\.)?[A-Z2-7-_]{15,}.*"),
-            re.compile(".*(\.)?[A-V0-9-_]{15,}.*"),
-            re.compile(".*(\.)?[A-Za-z0-9-_]{20,}.*"),
-            re.compile("^([01\.]{3,}){5,}.*"),
+            re.compile(r".*(\.)?[A-Fa-f0-9-_]{12,}.*"),
+            re.compile(r".*(\.)?[A-Z2-7-_]{15,}.*"),
+            re.compile(r".*(\.)?[A-V0-9-_]{15,}.*"),
+            re.compile(r".*(\.)?[A-Za-z0-9-_]{20,}.*"),
+            re.compile(r"^([01\.]{3,}){5,}.*"),
         ]
         self.dwhitelist = [
             ".inaddr.arpa",
@@ -86,20 +83,15 @@ class NetworkDNSTunnelingRequest(Signature):
                         for pat in self.patterns:
                             if re.match(pat, qname):
                                 self.qcount += 1
-                                self.match = True
+                                return True
                                 if self.pid:
                                     self.mark_call()
                         if len(qname) > 50:
                             self.qcount += 1
-                            self.match = True
+                            return True
                             if self.pid:
                                 self.mark_call()
 
-    def on_complete(self):
-        if self.match and self.qcount > 5:
-            return True
-
-        return False
 
 
 class NetworkDNSIDN(Signature):
@@ -116,20 +108,15 @@ class NetworkDNSIDN(Signature):
 
     filter_apinames = set(["DnsQueryA"])
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.match = False
 
     def on_call(self, call, process):
         qname = self.get_argument(call, "Name")
         if qname:
             if qname.startswith("xn--"):
-                self.match = True
+                return True
                 if self.pid:
                     self.mark_call()
 
-    def on_complete(self):
-        return self.match
 
 
 class NetworkDNSSuspiciousQueryType(Signature):
@@ -156,12 +143,10 @@ class NetworkDNSSuspiciousQueryType(Signature):
         self.qtype = self.get_argument(call, "Type")
         if self.qtype:
             if self.qtype not in self.qtype_whitelist:
-                self.match = True
+                return True
                 if self.pid:
                     self.mark_call()
 
-    def on_complete(self):
-        return self.match
 
 
 class NetworkDNSBlockChain(Signature):
@@ -178,13 +163,13 @@ class NetworkDNSBlockChain(Signature):
 
     def run(self):
         domain_indictors = [
-            ".*\.bazar$",
-            ".*\.bit$",
-            ".*\.coin$",
-            ".*\.emc$",
-            ".*\.lib$",
-            "^ns(1|2)\.new-nations\.(ku|te|ti|uu|ko|rm)$",
-            "^seed(1|2)\.emercoin\.com$",
+            r".*\.bazar$",
+            r".*\.bit$",
+            r".*\.coin$",
+            r".*\.emc$",
+            r".*\.lib$",
+            r"^ns(1|2)\.new-nations\.(ku|te|ti|uu|ko|rm)$",
+            r"^seed(1|2)\.emercoin\.com$",
         ]
 
         for indicator in domain_indictors:
@@ -209,26 +194,26 @@ class NetworkDNSOpenNIC(Signature):
 
     def run(self):
         domain_indictors = [
-            ".*\.bbs$",
-            ".*\.chan$",
-            ".*\.dns\.opennic\.glue$",
-            ".*\.cyb$",
-            ".*\.cyb\.uptime\.party$",
-            ".*\.dyn$",
-            ".*\.epic\.okashi\.me$",
-            ".*\.fur$",
-            ".*\.geek$",
-            ".*\.gopher$",
-            ".*\.indy$",
-            ".*\.libre$",
-            ".*\.neo$",
-            ".*\.null$",
-            ".*\.o$",
-            ".*\.opennic\.epic$",
-            ".*\.oss$",
-            ".*\.oz$",
-            ".*\.parody$",
-            ".*\.pirate$",
+            r".*\.bbs$",
+            r".*\.chan$",
+            r".*\.dns\.opennic\.glue$",
+            r".*\.cyb$",
+            r".*\.cyb\.uptime\.party$",
+            r".*\.dyn$",
+            r".*\.epic\.okashi\.me$",
+            r".*\.fur$",
+            r".*\.geek$",
+            r".*\.gopher$",
+            r".*\.indy$",
+            r".*\.libre$",
+            r".*\.neo$",
+            r".*\.null$",
+            r".*\.o$",
+            r".*\.opennic\.epic$",
+            r".*\.oss$",
+            r".*\.oz$",
+            r".*\.parody$",
+            r".*\.pirate$",
         ]
 
         for indicator in domain_indictors:
@@ -417,8 +402,8 @@ class NetworkDNSReverseProxy(Signature):
 
     def run(self):
         domain_indictors = [
-            ".*\.portmap\.io$",
-            ".*\.ngrok\.io$",
+            r".*\.portmap\.io$",
+            r".*\.ngrok\.io$",
         ]
 
         for indicator in domain_indictors:
@@ -516,212 +501,212 @@ class NetworkDNSURLShortener(Signature):
 
     def run(self):
         domain_indicators = [
-            "1url\.com$",
-            "2ly\.link$",
-            "2no\.co$",
-            "2uuu\.me$",
-            "3c5\.com$",
-            "4x\.si$",
-            "42url\.com$",
-            "7x\.qa$",
-            "9lick\.me$",
-            "abre\.ai$",
-            "adcraft\.co$",
-            "adcrun\.ch$",
-            "adf\.ly$",
-            "adflav\.com$",
-            "aiy\.ooo$",
-            "aka\.gr$",
-            "amzn\.to$",
-            "artist\.link$",
-            "b2n\.ir$",
-            "bc\.vc$",
-            "bee4\.biz$",
-            "belea\.link$",
-            "bit\.do$",
-            "bit\.ly$",
-            "bitly\.com$",
-            "bitly\.com\.vn$",
-            "bitly\.lc$",
-            "bitly\.ws$",
-            "bom\.so$",
-            "buff\.ly$",
-            "buzurl\.com$",
-            "bx\.ms$",
-            "cektkp\.com$",
-            "ci\.ci$",
-            "clck\.ru$",
-            "cml\.lol$",
-            "coki\.me$",
-            "cur\.lv$",
-            "cut\.by$",
-            "cutt\.ly$",
-            "cutt\.us$",
-            "cuty\.io$",
-            "d\.to$",
-            "db\.tt$",
-            "dft\.ba$",
-            "dik\.si$",
-            "dub\.co$",
-            "dub\.sh$",
-            "dwz\.mk$",
-            "e\.vg$",
-            "encr\.pw$",
-            "encurtador\.dev$",
-            "etd\.bz$",
-            "filoops\.info$",
-            "fun\.ly$",
-            "fzy\.co$",
-            "gg-l\.xyz$",
-            "gog\.li$",
-            "golinks\.co$",
-            "goo\.by$",
-            "goo\.gd$",
-            "goo\.gl$",
-            "goo\.su$",
-            "han\.gl$",
-            "hit\.my$",
-            "hyp\.ae$",
-            "hyperurl\.co$",
-            "ic9\.in$",
-            "id\.tl$",
-            "idm\.in$",
-            "iii\.im$",
-            "iiil\.io$",
-            "ilang\.in$",
-            "insprl\.com$",
-            "iplogger\.com$",
-            "iplogger\.org$",
-            "is\.gd$",
-            "ito\.mx$",
-            "iurl\.vip$",
-            "ity\.im$",
-            "j\.mp$",
-            "jii\.li$",
-            "komin\.fo$",
-            "kortlink\.dk$",
-            "kutti\.co$",
-            "lc\.cx$",
-            "link\.zip\.net$",
-            "linksshortcut\.com$",
-            "linkto\.im$",
-            "litby\.us$",
-            "ln\.run$",
-            "lnk\.co$",
-            "lnk\.direct$",
-            "lnk\.ink$",
-            "lnk\.pw$",
-            "lnkd\.in$",
-            "lnkfi\.re$",
-            "long\.af$",
-            "longurl\.in$",
-            "maxiurl\.com$",
-            "mcaf\.ee$",
-            "me2\.do$",
-            "merky\.de$",
-            "mjt\.lu$",
-            "mtr\.bio$",
-            "my5353\.com$",
-            "mylinks\.ai$",
-            "n9\.cl$",
-            "nanourly\.in$",
-            "neya\.io$",
-            "nov\.io$",
-            "odesli\.co$",
-            "onx\.la$",
-            "ouvaton\.link$",
-            "ow\.ly$",
-            "p6l\.org$",
-            "picz\.us$",
-            "po\.st$",
-            "postly\.link$",
-            "prettylinkpro\.com$",
-            "q\.gs$",
-            "qr\.ae$",
-            "qr\.net$",
-            "qrco\.de$",
-            "rb\.gy$",
-            "rebrand\.ly$",
-            "rebrandly\.com$",
-            "rebrandly\.info$",
-            "relink\.is$",
-            "ricardo\.news$",
-            "s\.devh\.in$",
-            "s\.ee$",
-            "s\.id$",
-            "s\.rlp\.de$",
-            "s3r\.io$",
-            "s59\.site$",
-            "scrnch\.me$",
-            "shly\.link$",
-            "shorten\.ee$",
-            "shorten\.is$",
-            "shorten\.tv$",
-            "shortquik\.com$",
-            "shorturl\.ae$",
-            "shorturl\.at$",
-            "shrtcnl\.com$",
-            "sht\.ac$",
-            "sk\.gy$",
-            "sl8\.in$",
-            "smarturl\.it$",
-            "smurl\.fr$",
-            "sn\.rs$",
-            "snip\.ly$",
-            "song\.link$",
-            "spoo\.me$",
-            "sprl\.in$",
-            "srink\.co$",
-            "su\.pr$",
-            "surl\.li$",
-            "t\.co$",
-            "t\.ly$",
-            "temporary-url\.com$",
-            "tg\.pe$",
-            "tiny\.cc$",
-            "tinyarrows\.com$",
-            "tinyurl\.com$",
-            "tinyurl\.mobi$",
-            "tota2\.com$",
-            "tr\.im$",
-            "trimz\.me$",
-            "tt\.vg$",
-            "tweez\.me$",
-            "twitthis\.com$",
-            "twixar\.com$",
-            "twixar\.me$",
-            "tyny\.to$",
-            "u\.bb$",
-            "u\.to$",
-            "urled\.cc$",
-            "urled\.pro$",
-            "urless\.com$",
-            "urlr\.me$",
-            "urlshort\.dev$",
-            "urltin\.com$",
-            "urlz\.fr$",
-            "ux9\.de$",
-            "v\.gd$",
-            "v\.ht$",
-            "vtaurl\.com$",
-            "vzturl\.com$",
-            "webz\.cc$",
-            "wp\.me$",
-            "x\.co$",
-            "xlinkz\.info$",
-            "xtu\.me$",
-            "xy2\.eu$",
-            "ykm\.de$",
-            "yirra\.net$",
-            "yourls\.org$",
-            "youtu\.be$",
-            "yu2\.it$",
-            "yu3\.io$",
-            "zpag\.es$",
-            "zpr\.io$",
-            "zurl\.to$",
-            "zws\.im$",
-            "zzb\.bz$",
+            r"1url\.com$",
+            r"2ly\.link$",
+            r"2no\.co$",
+            r"2uuu\.me$",
+            r"3c5\.com$",
+            r"4x\.si$",
+            r"42url\.com$",
+            r"7x\.qa$",
+            r"9lick\.me$",
+            r"abre\.ai$",
+            r"adcraft\.co$",
+            r"adcrun\.ch$",
+            r"adf\.ly$",
+            r"adflav\.com$",
+            r"aiy\.ooo$",
+            r"aka\.gr$",
+            r"amzn\.to$",
+            r"artist\.link$",
+            r"b2n\.ir$",
+            r"bc\.vc$",
+            r"bee4\.biz$",
+            r"belea\.link$",
+            r"bit\.do$",
+            r"bit\.ly$",
+            r"bitly\.com$",
+            r"bitly\.com\.vn$",
+            r"bitly\.lc$",
+            r"bitly\.ws$",
+            r"bom\.so$",
+            r"buff\.ly$",
+            r"buzurl\.com$",
+            r"bx\.ms$",
+            r"cektkp\.com$",
+            r"ci\.ci$",
+            r"clck\.ru$",
+            r"cml\.lol$",
+            r"coki\.me$",
+            r"cur\.lv$",
+            r"cut\.by$",
+            r"cutt\.ly$",
+            r"cutt\.us$",
+            r"cuty\.io$",
+            r"d\.to$",
+            r"db\.tt$",
+            r"dft\.ba$",
+            r"dik\.si$",
+            r"dub\.co$",
+            r"dub\.sh$",
+            r"dwz\.mk$",
+            r"e\.vg$",
+            r"encr\.pw$",
+            r"encurtador\.dev$",
+            r"etd\.bz$",
+            r"filoops\.info$",
+            r"fun\.ly$",
+            r"fzy\.co$",
+            r"gg-l\.xyz$",
+            r"gog\.li$",
+            r"golinks\.co$",
+            r"goo\.by$",
+            r"goo\.gd$",
+            r"goo\.gl$",
+            r"goo\.su$",
+            r"han\.gl$",
+            r"hit\.my$",
+            r"hyp\.ae$",
+            r"hyperurl\.co$",
+            r"ic9\.in$",
+            r"id\.tl$",
+            r"idm\.in$",
+            r"iii\.im$",
+            r"iiil\.io$",
+            r"ilang\.in$",
+            r"insprl\.com$",
+            r"iplogger\.com$",
+            r"iplogger\.org$",
+            r"is\.gd$",
+            r"ito\.mx$",
+            r"iurl\.vip$",
+            r"ity\.im$",
+            r"j\.mp$",
+            r"jii\.li$",
+            r"komin\.fo$",
+            r"kortlink\.dk$",
+            r"kutti\.co$",
+            r"lc\.cx$",
+            r"link\.zip\.net$",
+            r"linksshortcut\.com$",
+            r"linkto\.im$",
+            r"litby\.us$",
+            r"ln\.run$",
+            r"lnk\.co$",
+            r"lnk\.direct$",
+            r"lnk\.ink$",
+            r"lnk\.pw$",
+            r"lnkd\.in$",
+            r"lnkfi\.re$",
+            r"long\.af$",
+            r"longurl\.in$",
+            r"maxiurl\.com$",
+            r"mcaf\.ee$",
+            r"me2\.do$",
+            r"merky\.de$",
+            r"mjt\.lu$",
+            r"mtr\.bio$",
+            r"my5353\.com$",
+            r"mylinks\.ai$",
+            r"n9\.cl$",
+            r"nanourly\.in$",
+            r"neya\.io$",
+            r"nov\.io$",
+            r"odesli\.co$",
+            r"onx\.la$",
+            r"ouvaton\.link$",
+            r"ow\.ly$",
+            r"p6l\.org$",
+            r"picz\.us$",
+            r"po\.st$",
+            r"postly\.link$",
+            r"prettylinkpro\.com$",
+            r"q\.gs$",
+            r"qr\.ae$",
+            r"qr\.net$",
+            r"qrco\.de$",
+            r"rb\.gy$",
+            r"rebrand\.ly$",
+            r"rebrandly\.com$",
+            r"rebrandly\.info$",
+            r"relink\.is$",
+            r"ricardo\.news$",
+            r"s\.devh\.in$",
+            r"s\.ee$",
+            r"s\.id$",
+            r"s\.rlp\.de$",
+            r"s3r\.io$",
+            r"s59\.site$",
+            r"scrnch\.me$",
+            r"shly\.link$",
+            r"shorten\.ee$",
+            r"shorten\.is$",
+            r"shorten\.tv$",
+            r"shortquik\.com$",
+            r"shorturl\.ae$",
+            r"shorturl\.at$",
+            r"shrtcnl\.com$",
+            r"sht\.ac$",
+            r"sk\.gy$",
+            r"sl8\.in$",
+            r"smarturl\.it$",
+            r"smurl\.fr$",
+            r"sn\.rs$",
+            r"snip\.ly$",
+            r"song\.link$",
+            r"spoo\.me$",
+            r"sprl\.in$",
+            r"srink\.co$",
+            r"su\.pr$",
+            r"surl\.li$",
+            r"t\.co$",
+            r"t\.ly$",
+            r"temporary-url\.com$",
+            r"tg\.pe$",
+            r"tiny\.cc$",
+            r"tinyarrows\.com$",
+            r"tinyurl\.com$",
+            r"tinyurl\.mobi$",
+            r"tota2\.com$",
+            r"tr\.im$",
+            r"trimz\.me$",
+            r"tt\.vg$",
+            r"tweez\.me$",
+            r"twitthis\.com$",
+            r"twixar\.com$",
+            r"twixar\.me$",
+            r"tyny\.to$",
+            r"u\.bb$",
+            r"u\.to$",
+            r"urled\.cc$",
+            r"urled\.pro$",
+            r"urless\.com$",
+            r"urlr\.me$",
+            r"urlshort\.dev$",
+            r"urltin\.com$",
+            r"urlz\.fr$",
+            r"ux9\.de$",
+            r"v\.gd$",
+            r"v\.ht$",
+            r"vtaurl\.com$",
+            r"vzturl\.com$",
+            r"webz\.cc$",
+            r"wp\.me$",
+            r"x\.co$",
+            r"xlinkz\.info$",
+            r"xtu\.me$",
+            r"xy2\.eu$",
+            r"ykm\.de$",
+            r"yirra\.net$",
+            r"yourls\.org$",
+            r"youtu\.be$",
+            r"yu2\.it$",
+            r"yu3\.io$",
+            r"zpag\.es$",
+            r"zpr\.io$",
+            r"zurl\.to$",
+            r"zws\.im$",
+            r"zzb\.bz$",
         ]
 
         for indicator in domain_indicators:
@@ -742,7 +727,7 @@ class NetworkDNSTempURLDNS(Signature):
 
     def run(self):
         domain_indicators = [
-            ".*\.requestbin.net$",
+            r".*\.requestbin.net$",
         ]
 
         for indicator in domain_indicators:

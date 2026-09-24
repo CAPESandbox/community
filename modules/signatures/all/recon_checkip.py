@@ -290,7 +290,7 @@ class CheckIP(Signature):
             if self.check_domain(pattern=indicator):
                 self.data.append({"domain": indicator})
                 found_matches = True
-        matches = self.check_domain(pattern="^stun[0-9]?\..*", regex=True, all=True)
+        matches = self.check_domain(pattern=r"^stun[0-9]?\..*", regex=True, all=True)
         if matches:
             found_matches = True
             for match in matches:

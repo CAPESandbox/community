@@ -49,9 +49,9 @@ class AntiVMServices(Signature):
         if not self.handle:
             if call["api"].startswith("RegOpenKeyEx"):
                 correct = False
-                if self.get_argument(call, "SubKey").lower() == "system\\controlset001\\services":
+                if self.get_argument(call, "SubKey").lower() == r"system\\controlset001\\services":
                     correct = True
-                elif self.get_argument(call, "SubKey").lower() == "system\\currentcontrolset\\services":
+                elif self.get_argument(call, "SubKey").lower() == r"system\\currentcontrolset\\services":
                     correct = True
 
                 if correct:

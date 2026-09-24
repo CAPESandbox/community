@@ -81,7 +81,7 @@ class SystemAccountDiscoveryCMD(Signature):
 
     def on_complete(self):
         indicators = [
-            ".*net\s(user|group|localgroup).*",
+            r".*net\s(user|group|localgroup).*",
         ]
 
         for indicator in indicators:
@@ -108,7 +108,7 @@ class SystemNetworkDiscoveryCMD(Signature):
     def on_complete(self):
         indicators = [
             r"([A-Za-z]:\\Windows\\System32\\)?route(.exe)?.*",
-            r'.*netsh(")?\swlan\sshow\s(profile|networks).*',
+            r'.*netsh(r")?\swlan\sshow\s(profile|networks).*',
             r"([A-Za-z]:\\Windows\\System32\\)?ipconfig(.exe)?.*",
             r"([A-Za-z]:\\Windows\\System32\\)?nltest(.exe)?.*",
             r".*net\sview.*",

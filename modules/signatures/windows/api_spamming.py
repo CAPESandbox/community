@@ -44,11 +44,11 @@ class APISpamming(Signature):
                 "GetSystemTime",
             ],
             "c:\\program files\\internet explorer\\iexplore.exe": ["NtQuerySystemTime", "GetSystemTimeAsFileTime", "GetSystemTime"],
-            "c:\\program files\\microsoft office\\office14\\winword.exe": ["GetLocalTime"],
-            "c:\\program files (x86)\\microsoft office\\office14\\winword.exe": ["GetLocalTime"],
-            "c:\\windows\\system32\\wbem\\wmiprvse.exe": ["GetSystemTimeAsFileTime"],
-            "c:\\windows\\system32\\wscript.exe": ["GetLocalTime", "NtQuerySystemTime"],
-            "c:\\windows\\system32\\services.exe": ["GetSystemTimeAsFileTime"],
+            r"c:\\program files\\microsoft office\\office14\\winword.exe": ["GetLocalTime"],
+            r"c:\\program files (x86)\\microsoft office\\office14\\winword.exe": ["GetLocalTime"],
+            r"c:\\windows\\system32\\wbem\\wmiprvse.exe": ["GetSystemTimeAsFileTime"],
+            r"c:\\windows\\system32\\wscript.exe": ["GetLocalTime", "NtQuerySystemTime"],
+            r"c:\\windows\\system32\\services.exe": ["GetSystemTimeAsFileTime"],
         }
         ret = False
         for pid, apis in self.spam.items():

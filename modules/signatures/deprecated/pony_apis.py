@@ -80,7 +80,7 @@ class Pony_APIs(Signature):
                         # Strip out the header
                         if buf and len(buf[0]) > 200:
                             data = buf[0][200:]
-                            output = re.findall("(https?:\/\/.+?(?:\.php|\.exe))", data)
+                            output = re.findall(r"(https?:\/\/.+?(?:\.php|\.exe))", data)
                             if output:
                                 for ioc in output:
                                     if all(z in string.printable for z in ioc):

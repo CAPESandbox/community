@@ -1,4 +1,4 @@
-# Copyright (C) 2015-2016 KillerInstinct
+n# Copyright (C) 2015-2016 KillerInstinct
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -12,10 +12,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -66,7 +63,7 @@ class Dridex_APIs(Signature):
             # There are many more ways to get the computer name, this is the
             # pattern observed with all Dridex varients 08/14 - 03/15 so far.
             testkey = self.get_argument(call, "FullName").lower()
-            if testkey == "hkey_local_machine\\system\\controlset001\\control\\computername\\computername\\computername":
+            if testkey == r"hkey_local_machine\\system\\controlset001\\control\\computername\\computername\\computername":
                 buf = self.get_argument(call, "Data")
                 if buf:
                     self.compname = buf.lower()

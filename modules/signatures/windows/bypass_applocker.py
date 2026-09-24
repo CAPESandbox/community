@@ -117,7 +117,7 @@ class OdbcconfBypass(Signature):
                 ret = True
                 self.data.append({"command": cmdline})
             else:
-                match = self.check_executed_command(pattern=".*odbcconf(\.exe)?.*-f.+\.rsp", regex=True)
+                match = self.check_executed_command(pattern=r".*odbcconf(\.exe)?.*-f.+\.rsp", regex=True)
                 if match:
                     self.data.append({"command": match})
                     return True

@@ -31,9 +31,6 @@ class move_file_on_reboot(Signature):
 
     filter_apinames = set(["MoveFileWithProgressTransactedW", "MoveFileWithProgressTransactedA"])
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.match = False
 
     def on_call(self, call, process):
         if (
@@ -52,9 +49,7 @@ class move_file_on_reboot(Signature):
                 and not newname.find("\\AppData\\Local\\Microsoft\\Windows\\Explorer\\IconCacheToDelete\\")
             ):
                 self.data.append({"File Move on Reboot": "Old: %s -> New: %s" % (existingname, newname)})
-                self.match = True
+                return True
                 if self.pid:
                     self.mark_call()
 
-    def on_complete(self):
-        return self.match

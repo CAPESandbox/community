@@ -30,7 +30,7 @@ class AddsAdminUser(Signature):
     ttps += ["T1136.001"]  # MITRE v7,8
 
     def run(self):
-        indicators = ".*net(\.exe)?.*localgroup\sadministrators.*/add"
+        indicators = r".*net(\.exe)?.*localgroup\sadministrators.*/add"
 
         match = self.check_executed_command(pattern=indicators, regex=True)
         if match:
@@ -51,7 +51,7 @@ class OverwritesAdminPassword(Signature):
     ttps = ["T1098"]  # MITRE v6,7,8
 
     def run(self):
-        indicators = ".*net(\.exe)?.*user\sadministrator\s.*"
+        indicators = r".*net(\.exe)?.*user\sadministrator\s.*"
 
         match = self.check_executed_command(pattern=indicators, regex=True)
         if match:
@@ -73,7 +73,7 @@ class AddsUser(Signature):
     ttps += ["T1136.001"]  # MITRE v7,8
 
     def run(self):
-        indicators = ".*net(1)?(\.exe)?\suser\s[^administrator(s)?\s].*/add"
+        indicators = r".*net(1)?(\.exe)?\suser\s[^administrator(s)?\s].*/add"
 
         match = self.check_executed_command(pattern=indicators, regex=True)
         if match:

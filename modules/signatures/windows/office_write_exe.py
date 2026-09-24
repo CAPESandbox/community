@@ -5,10 +5,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 
 class OfficeWriteEXE(Signature):

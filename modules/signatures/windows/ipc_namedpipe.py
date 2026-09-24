@@ -122,7 +122,7 @@ class EscalatePrivilegeViaNamedPipe(Signature):
             lower = cmdline.lower()
             if (
                 any(process in lower for process in ("cmd.exe", "powershell.exe", "sc.exe", "schtasks.exe"))
-                and "\\\\.\\pipe\\" in lower
+                and r"\\\\.\\pipe\\" in lower
             ):
                 return False
 
@@ -132,7 +132,7 @@ class EscalatePrivilegeViaNamedPipe(Signature):
             lower = cmdline.lower()
             if (
                 any(process in lower for process in ["cmd.exe", "powershell.exe", "sc.exe", "schtasks.exe"])
-                and "\\\\.\\pipe\\" in lower
+                and r"\\\\.\\pipe\\" in lower
             ):
                 return True
         return False

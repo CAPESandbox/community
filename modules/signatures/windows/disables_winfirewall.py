@@ -30,8 +30,8 @@ class DisablesWindowsFirewall(Signature):
 
     def run(self):
         indicators = [
-            "netsh\s+firewall\s+set.*disable",
-            "netsh\s+advfirewall\s+set.*off",
+            r"netsh\s+firewall\s+set.*disable",
+            r"netsh\s+advfirewall\s+set.*off",
         ]
 
         for indicator in indicators:
