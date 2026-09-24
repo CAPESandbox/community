@@ -45,8 +45,10 @@ class InvalidAuthenticodeSignature(Signature):
         ret = False
         if self.results.get("target", {}).get("file", {}).get("pe", {}).get("guest_signers"):
             signer = self.results["target"]["file"]["pe"]["guest_signers"]
-            if not signer.get("aux_valid") and signer.get("aux_error_desc"):
-                error = signer["aux_error_desc"]
+            # digisig reports unsigned files and formats signtool cannot check as errors too
+            not_signed = ("No signature found", "file format cannot be verified")
+            error = signer.get("aux_error_desc") or ""
+            if not signer.get("aux_valid") and error and not any(reason in error for reason in not_signed):
                 self.data.append({"authenticode error": "%s" % (error)})
                 ret = True
 
