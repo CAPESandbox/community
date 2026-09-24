@@ -62,12 +62,19 @@ class PECertSelfSigned(Signature):
         ds = pe.get("digital_signers") or []
         gs = pe.get("guest_signers") or {}
 
+        # A root CA signs itself, so a complete chain always holds a self-signed
+        # certificate. Only one that issued none of the others is the signer.
+        issuers = {
+            cert.get("issuer_commonName", "").lower()
+            for cert in ds
+            if cert.get("subject_commonName", "").lower() != cert.get("issuer_commonName", "").lower()
+        }
         for cert in ds:
             subject = cert.get("subject_commonName", "")
             issuer = cert.get("issuer_commonName", "")
             if not subject or not issuer:
                 continue
-            if subject.lower() != issuer.lower():
+            if subject.lower() != issuer.lower() or subject.lower() in issuers:
                 continue
             if _is_known_ca(subject):
                 continue
@@ -80,12 +87,12 @@ class PECertSelfSigned(Signature):
             )
 
         if not self.data:
-            for signer in gs.get("aux_signers") or []:
-                if "Certificate Chain" not in (signer.get("name") or ""):
-                    continue
+            chain = [s for s in gs.get("aux_signers") or [] if "Certificate Chain" in (s.get("name") or "")]
+            chain_issuers = {s.get("Issued by", "") for s in chain if s.get("Issued to") != s.get("Issued by")}
+            for signer in chain:
                 issued_to = signer.get("Issued to", "")
                 issued_by = signer.get("Issued by", "")
-                if issued_to and issued_to == issued_by and not _is_known_ca(issued_to):
+                if issued_to and issued_to == issued_by and issued_to not in chain_issuers and not _is_known_ca(issued_to):
                     self.data.append(
                         {
                             "subject": issued_to,
