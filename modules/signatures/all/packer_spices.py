@@ -29,7 +29,7 @@ class SpicesPacked(Signature):
     mbcs = ["OB0001", "OB0002", "OB0006", "F0001"]
 
     def run(self):
-        for attr in self.results.get("static", {}).get("dotnet", {}).get("customattrs", []):
+        for attr in self.results.get("target", {}).get("file", {}).get("dotnet", {}).get("customattrs", []):
             if "9rays.net" in attr["value"].lower() or "spices.net" in attr["value"].lower():
                 return True
 

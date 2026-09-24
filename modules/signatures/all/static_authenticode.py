@@ -20,9 +20,9 @@ class Authenticode(Signature):
     def run(self):
         found_sig = False
 
-        if "static" in self.results and "pe" in self.results["static"]:
-            if "digital_signers" in self.results["static"]["pe"] and self.results["static"]["pe"]["digital_signers"]:
-                for sign in self.results["static"]["pe"]["digital_signers"]:
+        if "file" in self.results.get("target", {}) and "pe" in self.results["target"]["file"]:
+            if self.results["target"]["file"]["pe"].get("digital_signers"):
+                for sign in self.results["target"]["file"]["pe"]["digital_signers"]:
                     self.data.append(sign)
                     found_sig = True
 
@@ -43,8 +43,8 @@ class InvalidAuthenticodeSignature(Signature):
 
     def run(self):
         ret = False
-        if self.results.get("static", {}).get("pe", {}).get("guest_signers"):
-            signer = self.results["static"]["pe"]["guest_signers"]
+        if self.results.get("target", {}).get("file", {}).get("pe", {}).get("guest_signers"):
+            signer = self.results["target"]["file"]["pe"]["guest_signers"]
             if not signer.get("aux_valid") and signer.get("aux_error_desc"):
                 error = signer["aux_error_desc"]
                 self.data.append({"authenticode error": "%s" % (error)})

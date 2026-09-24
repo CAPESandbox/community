@@ -29,11 +29,11 @@ class SmartAssemblyPacked(Signature):
     mbcs = ["OB0001", "OB0002", "OB0006", "F0001"]
 
     def run(self):
-        if "static" not in self.results or "dotnet" not in self.results["static"]:
+        if "file" not in self.results.get("target", {}) or "dotnet" not in self.results["target"]["file"]:
             return False
 
-        if "customattrs" in self.results["static"]["dotnet"] and self.results["static"]["dotnet"]["customattrs"]:
-            for attr in self.results["static"]["dotnet"]["customattrs"]:
+        if "customattrs" in self.results["target"]["file"]["dotnet"] and self.results["target"]["file"]["dotnet"]["customattrs"]:
+            for attr in self.results["target"]["file"]["dotnet"]["customattrs"]:
                 if "smartassembly" in attr["value"].lower():
                     return True
 

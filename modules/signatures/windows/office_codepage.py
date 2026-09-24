@@ -84,7 +84,7 @@ class Office_Code_Page(Signature):
         ]
 
         codepage = (
-            self.results.get("static", {})
+            self.results.get("target", {}).get("file", {})
             .get("office", {})
             .get("Metadata", {})
             .get("SummaryInformation", {})

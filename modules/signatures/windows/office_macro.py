@@ -28,12 +28,12 @@ class Office_Macro(Signature):
 
     def run(self):
         ret = False
-        if "static" in self.results and "office" in self.results["static"]:
+        if "file" in self.results.get("target", {}) and "office" in self.results["target"]["file"]:
             # 97-2003 OLE and 2007+ XML macros
-            if "Macro" in self.results["static"]["office"]:
-                if "Code" in self.results["static"]["office"]["Macro"]:
+            if "Macro" in self.results["target"]["file"]["office"]:
+                if "Code" in self.results["target"]["file"]["office"]["Macro"]:
                     ret = True
-                    total = len(self.results["static"]["office"]["Macro"]["Code"])
+                    total = len(self.results["target"]["file"]["office"]["Macro"]["Code"])
                     if total > 1:
                         self.description = "The office file contains %s macros" % str(total)
             # 97-2003 XML macros

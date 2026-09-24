@@ -10,7 +10,7 @@ class overlay(Signature):
     authors = ["annoy-o-mus"]
 
     def run(self):
-        overlay = self.results.get("static", {}).get("pe", {}).get("overlay")
+        overlay = self.results.get("target", {}).get("file", {}).get("pe", {}).get("overlay")
         if overlay:
             self.data.append({"Overlay Offset": overlay["offset"]})
             self.data.append({"Overlay Size": overlay["size"]})
