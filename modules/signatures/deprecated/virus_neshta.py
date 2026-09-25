@@ -13,10 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -66,7 +63,7 @@ class NeshtaRegKeys(Signature):
     def on_call(self, call, process):
         if call["api"] == "RegSetValueExA":
             key = self.get_argument(call, "FullName").lower()
-            if ".*\\software\classes\\exefile\\shell\\open\\command.*" in key:
+            if r".*\\software\classes\\exefile\\shell\\open\\command.*" in key:
                 buf = self.get_argument(call, "Buffer").lower()
                 if re.match(r"^c:\\windows\\svchost.com\ \"%1\"\ %\*$", buf):
                     self.match = True
@@ -102,7 +99,7 @@ class NeshtaFiles(Signature):
     def on_call(self, call, process):
         if call["api"] == "NtCreateFile":
             filename = self.get_argument(call, "FileName").lower()
-            if filename and "c:\\windows\\svchost.com" in filename:
+            if filename and r"c:\\windows\\svchost.com" in filename:
                 if self.pid:
                     self.mark_call()
                 return True

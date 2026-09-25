@@ -33,7 +33,7 @@ class XtremeMutexes(Signature):
     ]
 
     def run(self):
-        indicators = ["XTREMEUPDATE", "\(\(Mutex\)\).*"]
+        indicators = ["XTREMEUPDATE", r"\(\(Mutex\)\).*"]
 
         for indicator in indicators:
             if self.check_mutex(pattern=indicator, regex=True):

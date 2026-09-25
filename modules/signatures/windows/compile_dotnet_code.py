@@ -13,10 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -79,13 +76,13 @@ class CompilesDotNetCode(Signature):
         match = False
         expscore = 0
         indicators = [
-            ".*\.pdb",
-            ".*\.(cs|CS)",
-            ".*\.(vb|VB)",
-            ".*\.cmdline",
-            ".*\.(dll|DLL)",
-            ".*\.(exe|EXE)",
-            ".*\.(tmp|TMP)",
+            r".*\.pdb",
+            r".*\.(cs|CS)",
+            r".*\.(vb|VB)",
+            r".*\.cmdline",
+            r".*\.(dll|DLL)",
+            r".*\.(exe|EXE)",
+            r".*\.(tmp|TMP)",
         ]
 
         if (self.csccmd or self.cvtrescmd) and self.writemz:

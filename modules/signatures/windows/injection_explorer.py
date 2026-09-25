@@ -56,8 +56,8 @@ class InjectionExplorer(Signature):
         self.parent = (str(), int())
         self.injected = (str(), int())
         self.sharedsections = [
-            "\\basenamedobjects\\shimsharedmemory",
-            "\\basenamedobjects\\windows_shell_global_counters",
+            r"\\basenamedobjects\\shimsharedmemory",
+            r"\\basenamedobjects\\windows_shell_global_counters",
             "\\basenamedobjects\\msctf.shared.sfm.mih",
             "\\basenamedobjects\\msctf.shared.sfm.amf",
             "\\basenamedobjects\\urlzonessm_administrator",

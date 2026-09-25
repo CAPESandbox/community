@@ -50,27 +50,27 @@ class Secure_Login_Phish(Signature):
             buf = self.get_argument(call, "Buffer")
             if buf and not self.lasturl.startswith("https"):
                 if "<title>" in buf:
-                    if re.search("<title>\s*Secure\s*Login\s*</t", buf, re.I):
+                    if re.search(r"<title>\s*Secure\s*Login\s*</t", buf, re.I):
                         self.phishingurls.add(self.lasturl)
                         self.description = self.description.format("Secure Login")
                         if self.pid:
                             self.mark_call()
-                    elif re.search("<title>Goog[li]e\sDoc.*</t", buf, re.I):
+                    elif re.search(r"<title>Goog[li]e\sDoc.*</t", buf, re.I):
                         self.phishingurls.add(self.lasturl)
                         self.description = self.description.format("Google Doc")
                         if self.pid:
                             self.mark_call()
-                    elif re.search("<title>\s*Dropbox.*</t", buf, re.I):
+                    elif re.search(r"<title>\s*Dropbox.*</t", buf, re.I):
                         self.phishingurls.add(self.lasturl)
                         self.description = self.description.format("Dropbox")
                         if self.pid:
                             self.mark_call()
-                    elif re.search("<title>Goog[li]e\sDrive.*</t", buf, re.I):
+                    elif re.search(r"<title>Goog[li]e\sDrive.*</t", buf, re.I):
                         self.phishingurls.add(self.lasturl)
                         self.description = self.description.format("Google Drive")
                         if self.pid:
                             self.mark_call()
-                    elif re.search("<title>\s*Outlook.*</t", buf, re.I):
+                    elif re.search(r"<title>\s*Outlook.*</t", buf, re.I):
                         self.phishingurls.add(self.lasturl)
                         self.description = self.description.format("Microsoft Outlook")
                         if self.pid:

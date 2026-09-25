@@ -17,19 +17,12 @@ class PersistenceViaAutodialDLLRegistry(Signature):
 
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW"])
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.detected = False
 
     def on_call(self, call, _):
         if call["api"] in ("RegSetValueExA", "RegSetValueExW"):
             regKeyPath = self.get_argument(call, "FullName").lower()
             buf = self.get_argument(call, "Buffer")
 
-            if "\\services\\winsock2\\parameters\\autodialdll" in regKeyPath and not "rasadhlp.dll" in buf:
-                self.detected = True
+            if r"\\services\\winsock2\\parameters\\autodialdll" in regKeyPath and not "rasadhlp.dll" in buf:
+                return True
 
-    def on_complete(self):
-        if self.detected:
-            return True
-        return False

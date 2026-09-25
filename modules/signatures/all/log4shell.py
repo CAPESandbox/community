@@ -13,15 +13,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 from lib.cuckoo.common.abstracts import Signature
 
 user_agent = re.compile(
-    "(?i)((%(25){0,}20|\s)*(%(25){0,}24|\$)(%(25){0,}20|\s)*(%(25){0,}7B|{){0,1}(%(25){0,}20|\s)*(%(25){0,}(6A|4A)|J)(%(25){0,}(6E|4E)|N)(%(25){0,}(64|44)|D)(%(25){0,}(69|49)|I)(%(25){0,}20|\s)*(%(25){0,}3A|:)[\w\%]+(%(25){1,}3A|:)(%(25){1,}2F|\/)|\$((::-[A-Z%]}\$){1,}|(ENV|LOWER|UPPER):).+[:}]{2}\/)[^\n]+"
+    r"(?i)((%(25){0,}20|\s)*(%(25){0,}24|\$)(%(25){0,}20|\s)*(%(25){0,}7B|{){0,1}(%(25){0,}20|\s)*(%(25){0,}(6A|4A)|J)(%(25){0,}(6E|4E)|N)(%(25){0,}(64|44)|D)(%(25){0,}(69|49)|I)(%(25){0,}20|\s)*(%(25){0,}3A|:)[\w\%]+(%(25){1,}3A|:)(%(25){1,}2F|\/)|\$((::-[A-Z%]}\$){1,}|(ENV|LOWER|UPPER):).+[:}]{2}\/)[^\n]+"
 )
 
 

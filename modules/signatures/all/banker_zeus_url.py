@@ -31,9 +31,9 @@ class ZeusURL(Signature):
 
     def run(self):
         indicators = [
-            ".*\/config\.bin",
-            ".*\/gate\.php",
-            ".*\/cfg\.bin",
+            r".*\/config\.bin",
+            r".*\/gate\.php",
+            r".*\/cfg\.bin",
         ]
 
         for indicator in indicators:

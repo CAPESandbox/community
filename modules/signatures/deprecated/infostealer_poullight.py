@@ -33,18 +33,18 @@ class PoullightFiles(Signature):
         score = 0
         fpath = r".*\\AppData\\Local\\[a-z0-9]{8}\\"
         flist = [
-            "system\.txt",
-            "processlist\.txt",
-            "copyboard\.txt",
-            "screenshot\.png",
+            r"system\.txt",
+            r"processlist\.txt",
+            r"copyboard\.txt",
+            r"screenshot\.png",
             r"Grabber\\.*",
             r"FileZilla\\data\.txt",
             r"Pidgin\\data\.txt",
             r"Discord\\data\.txt",
             r"Telegram\\data\.txt",
             r"Steam\\data\.txt",
-            "webcam\.jpg",
-            "accountlogin\.txt",
+            r"webcam\.jpg",
+            r"accountlogin\.txt",
         ]
 
         for lfile in flist:

@@ -36,7 +36,7 @@ class Autoruns(Auxiliary):
             os.makedirs(self.output_dir)
             # reg.exe ADD "HKCU\Software\Sysinternals\Autoruns" /v EulaAccepted /t REG_DWORD /d 1 /f
         with suppress(OSError):
-            with CreateKeyEx(HKEY_CURRENT_USER, "Software\Sysinternals\Autoruns", 0, KEY_ALL_ACCESS) as key:
+            with CreateKeyEx(HKEY_CURRENT_USER, r"Software\Sysinternals\Autoruns", 0, KEY_ALL_ACCESS) as key:
                 SetValueEx(key, "EulaAccepted", 0, REG_DWORD, 1)
 
         bin_path = os.path.join(os.getcwd(), "bin")

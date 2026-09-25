@@ -13,10 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -40,7 +37,7 @@ class ADS(Signature):
                 continue
 
             if ":" in file_path.split("\\")[-1]:
-                if not file_path.lower().startswith("c:\\dosdevices\\") and not file_path[-1] == ":":
+                if not file_path.lower().startswith(r"c:\\dosdevices\\") and not file_path[-1] == ":":
                     # we have a different signature to deal with removal of Zone.Identifier
                     if (
                         not file_path.startswith("\\??\\http://")

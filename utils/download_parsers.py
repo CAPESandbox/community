@@ -17,7 +17,7 @@ PARSER_PATH = f"{ROOT}{PARSER_SUBPATH}"
 PARSER_URL = f"https://github.com/kevoreilly/CAPEv2/tree/master{PARSER_SUBPATH}/%s"
 PARSER_RAW_URL = f"https://raw.githubusercontent.com/kevoreilly/CAPEv2/master{PARSER_SUBPATH}/%s"
 
-PARSER_REGEX = "([\w\-\d]+\.py)"
+PARSER_REGEX = r"([\w\-\d]+\.py)"
 
 parser_file_names = set()
 

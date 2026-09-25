@@ -22,7 +22,7 @@ class HollowsHunter(Processing):
 
     def run(self):
         self.key = "hollowshunter"
-        hh_report_regex = "hh_process_[0-9]{3,}_(dump|scan)_report\.json$"
+        hh_report_regex = r"hh_process_[0-9]{3,}_(dump|scan)_report\.json$"
         report_pattern = re.compile(hh_report_regex)
         hh_path = "%s/hollowshunter/" % self.analysis_path
         if not os.path.exists(hh_path):

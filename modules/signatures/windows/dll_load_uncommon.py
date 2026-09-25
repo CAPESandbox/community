@@ -29,7 +29,7 @@ class DllLoadUncommonFileTypes(Signature):
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.indicator = ".+\.(?!dll).{1,4}$"
+        self.indicator = r".+\.(?!dll).{1,4}$"
         self.safelist = [
             "winspool.drv",
             "wdmaud.drv",

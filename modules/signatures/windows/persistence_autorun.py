@@ -17,10 +17,7 @@
 
 # Additional keys added from SysInternals Administrators Guide
 
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -65,7 +62,7 @@ class Autorun_scheduler(Signature):
         indicators = (r".*\\Microsoft\\Windows\\CurrentVersion\\Explorer\\SharedTaskScheduler\\.*",)
         whitelists = (
             r".*\\Software\\(Wow6432Node\\)?Classes\\clsid\\{CAFEEFAC-0017-0000-FFFF-ABCDEFFEDCBA}\\InprocServer32\\.*",
-            # ".*\\Software\\(Wow6432Node\\)?Classes\\clsid\\[^\\]*\\InprocServer32\\ThreadingModel$",
+            # r".*\\Software\\(Wow6432Node\\)?Classes\\clsid\\[^\\]*\\InprocServer32\\ThreadingModel$",
         )
 
         for indicator in indicators:
@@ -100,7 +97,7 @@ class Autorun_scheduler(Signature):
                     self.data.append({"file": match})
                 self.found_autorun = True
 
-        taskpat = ".*schtasks(\.exe)?.*/CREATE.*/SC\s+.*"
+        taskpat = r".*schtasks(\.exe)?.*/CREATE.*/SC\s+.*"
         tasked = self.check_executed_command(pattern=taskpat, regex=True)
         if tasked:
             self.found_autorun = True
@@ -166,7 +163,7 @@ class Autorun(Signature):
             r".*\\Microsoft\\Windows NT\\CurrentVersion\\Windows\\load$",
             r".*\\Microsoft\\Windows\\CurrentVersion\\ShellServiceObjectDelayLoad\\.*",
             r".*\\System\\(CurrentControlSet|ControlSet001)\\Control\\Session\\ Manager\\AppCertDlls\\.*",
-            # ".*\\Software\\(Wow6432Node\\)?Classes\\clsid\\[^\\]*\\InprocServer32\\.*",
+            # r".*\\Software\\(Wow6432Node\\)?Classes\\clsid\\[^\\]*\\InprocServer32\\.*",
             r".*\\Software\\(Wow6432Node\\)?Classes\\clsid\\[^\\]*\\LocalServer32\\.*",
             r".*\\Microsoft\\Command\\ Processor\\AutoRun$",
             r".*\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User\ Shell\ Folders\\Startup$",

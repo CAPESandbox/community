@@ -13,10 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -50,7 +47,7 @@ class EXEDropper_JS(Signature):
         if not buf:
             return
 
-        if re.search('(Save|Write)ToFile(\(|\/).*?\.exe"', buf, re.IGNORECASE | re.DOTALL):
+        if re.search(r'(Save|Write)ToFile(\(|\/).*?\.exe"', buf, re.IGNORECASE | re.DOTALL):
             self.data.append({"dropper_script": buf})
             if self.pid:
                 self.mark_call()

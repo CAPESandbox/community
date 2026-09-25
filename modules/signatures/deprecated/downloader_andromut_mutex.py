@@ -35,7 +35,7 @@ class AndromutMutexes(Signature):
     def run(self):
         indicators = [
             "mutshell" "mutshellmy",
-            "mutshellmy\d+",
+            r"mutshellmy\d+",
         ]
 
         for indicator in indicators:

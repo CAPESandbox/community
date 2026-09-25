@@ -79,7 +79,7 @@ class DiskInformation(Signature):
             handle = int(self.get_argument(call, "FileHandle"), 16)
             if filename and (
                 filename.lower() == "\\??\\physicaldrive0"
-                or filename.lower().startswith("\\device\\harddisk")
+                or filename.lower().startswith(r"\\device\\harddisk")
                 or "scsi0" in filename.lower()
             ):
                 if handle not in self.handles:
