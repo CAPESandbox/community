@@ -2,7 +2,6 @@ import logging
 import os
 import platform
 import subprocess
-import threading
 from itertools import product
 from zipfile import ZIP_DEFLATED, ZipFile
 
@@ -16,7 +15,7 @@ __author__ = "@FernandoDoming"
 __version__ = "1.0.1"
 
 
-class Sysmon(threading.Thread, Auxiliary):
+class Sysmon(Auxiliary):
     evtx_dump = "evtx.zip"
     windows_logs = [
         "Microsoft-Windows-Sysmon/Operational",

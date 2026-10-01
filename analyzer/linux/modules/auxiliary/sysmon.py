@@ -2,7 +2,6 @@ import logging
 import os
 import subprocess
 from datetime import datetime
-from threading import Thread
 
 from lib.common.abstracts import Auxiliary
 from lib.common.exceptions import CuckooPackageError
@@ -29,7 +28,7 @@ def is_sysmon_installed() -> bool:
         return True
 
 
-class Sysmon(Thread, Auxiliary):
+class Sysmon(Auxiliary):
     def __init__(self, options, config):
         Auxiliary.__init__(self, options, config)
         self.enabled = config.sysmon_linux

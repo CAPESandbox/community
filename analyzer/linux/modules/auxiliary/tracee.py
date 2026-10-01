@@ -103,7 +103,7 @@ def stop_docker_container(container_name):
         log.error(f"Error stopping Docker container '{container_name}': {e}")
 
 
-class Docker(Thread, Auxiliary):
+class Docker(Auxiliary):
     """
     Class for managing Docker operations.
     """
