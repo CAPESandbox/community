@@ -55,9 +55,10 @@ def start_docker_container(container_name, tracee_version):
     Start the Docker container.
     """
     try:
+        subprocess.run(f"sudo docker rm -f {container_name}", shell=True, capture_output=True)
         # Checks
         tracee_cmd = (
-            "sudo docker run --name tracee -d --pid=host --cgroupns=host --privileged "
+            "sudo docker run --name tracee --rm -d --pid=host --cgroupns=host --privileged "
             + f"-v /etc/os-release:/etc/os-release-host:ro -v {os.getcwd()}/tracee-artifacts/:/tmp/tracee/out/host -v /var/run:/var/run:ro -v {os.getcwd()}/modules/auxiliary/tracee:/policy "
             + f"aquasec/tracee:{tracee_version} --output json --output option:parse-arguments,exec-env,exec-hash --policy /policy/policy.yml "
             + "--capture bpf --capture module"
