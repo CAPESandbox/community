@@ -26,7 +26,7 @@ class DisablesWFP(Signature):
 
     def on_call(self, call, process):
         if call["api"] == "NtWriteFile":
-            filename = self.get_argument(call, "HandleName")
+            filename = self.get_argument(call, "HandleName") or ""
             filenamelower = filename.lower()
             if not self.saw_disable:
                 if filenamelower.endswith(r"pipe\\sfcapi"):
@@ -38,7 +38,7 @@ class DisablesWFP(Signature):
                 if self.pid:
                     self.mark_call()
         elif call["api"].startswith("CopyFile") and self.saw_disable and not self.nextopen:
-            filename = self.get_argument(call, "NewFileName")
+            filename = self.get_argument(call, "NewFileName") or ""
             filenamelower = filename.lower()
             if r"\\syswow64\\" in filenamelower or r"\\system32\\" in filenamelower:
                 self.nextopen = filename

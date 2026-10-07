@@ -42,6 +42,8 @@ class antidebug_guardpages(Signature):
             else:
                 protection = int(protection, 0)
             if protection & PAGE_GUARD:
+                if self.pid:
+                    self.mark_call()
                 return True
         elif call["api"] == "NtProtectVirtualMemory":
             protection = self.get_raw_argument(call, "NewAccessProtection")
@@ -50,7 +52,6 @@ class antidebug_guardpages(Signature):
             else:
                 protection = int(protection, 0)
             if protection & PAGE_GUARD:
+                if self.pid:
+                    self.mark_call()
                 return True
-        if self.found:
-            if self.pid:
-                self.mark_call()

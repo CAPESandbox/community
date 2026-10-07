@@ -18,7 +18,7 @@ class DisablesSPDY(Signature):
     filter_apinames = set(["NtWriteFile"])
 
     def on_call(self, call, process):
-        buf = self.get_argument(call, "Buffer")
+        buf = self.get_argument(call, "Buffer") or ""
         if "network.http.spdy.enabled" in buf and "false" in buf:
             if self.pid:
                 self.mark_call()
