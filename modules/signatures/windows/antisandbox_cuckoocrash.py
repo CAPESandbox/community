@@ -44,4 +44,3 @@ class CuckooCrash(Signature):
                 self.found_crash = True
                 if self.pid:
                     self.mark_call()
-

@@ -64,4 +64,3 @@ class NetworkFakeUserAgent(Signature):
                         self.data.append({"fake_useragent": useragent})
                         if self.pid:
                             self.mark_call()
-

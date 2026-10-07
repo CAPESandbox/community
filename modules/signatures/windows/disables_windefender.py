@@ -219,7 +219,6 @@ class AddWindowsDefenderExclusions(Signature):
 
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey"])
 
-
     def on_call(self, call, process):
         if not r"\\windows\\microsoft.net" in process["module_path"].lower():
             regKeyPath = self.get_argument(call, "FullName").lower()
@@ -249,7 +248,6 @@ class AddWindowsDefenderExclusions(Signature):
             ):
                 self.data.append({"regkey": regKeyPath})
                 return True
-
 
 
 class RemovesWindowsDefenderUpdates(Signature):

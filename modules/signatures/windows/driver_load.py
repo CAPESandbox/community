@@ -43,7 +43,6 @@ class DriverLoad(Signature):
             self.mark_call()
 
 
-
 class InstallKernelDriverService(Signature):
     name = "install_kernel_driver_service"
     description = (
@@ -61,7 +60,6 @@ class InstallKernelDriverService(Signature):
 
     filter_apinames = set(["CreateServiceA", "CreateServiceW"])
 
-
     def on_call(self, call, process):
         service_type = self.get_argument(call, "ServiceType")
         binary_path = self.get_argument(call, "BinaryPathName")
@@ -75,4 +73,3 @@ class InstallKernelDriverService(Signature):
         if is_kernel_driver and binary_path and binary_path.lower().endswith(".sys"):
             return True
             self.mark_call()
-

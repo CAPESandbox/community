@@ -13,9 +13,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from modules.signatures.utils import re
-
 from lib.cuckoo.common.abstracts import Signature
+
+from modules.signatures.utils import re
 
 
 class NetworkCnCHTTPSGeneric(Signature):
@@ -50,7 +50,6 @@ class NetworkCnCHTTPSGeneric(Signature):
                     self.data.append({"http_request": buff})
                     if self.pid:
                         self.mark_call()
-
 
 
 class NetworkCnCHTTPSSocialMedia(Signature):
@@ -540,7 +539,6 @@ class NetworkCnCHTTPSUserAgent(Signature):
                         self.mark_call()
 
 
-
 class NetworkCnCHTTPSTempURLDNS(Signature):
     name = "network_cnc_https_temp_urldns"
     description = "Establishes encrypted HTTPS connection to temporary URL or DNS service"
@@ -646,14 +644,12 @@ class NetworkCnCHTTPSPayload(Signature):
 
     filter_apinames = set(["SslDecryptPacket"])
 
-
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
         if buff and "MZ" in buff and "This program cannot be run in" in buff:
             return True
             if self.pid:
                 self.mark_call()
-
 
 
 class NetworkCnCHTTPSFreeWebHosting(Signature):
@@ -738,7 +734,6 @@ class NetworkCnCHTTPSTelegram(Signature):
                     self.mark_call()
 
 
-
 class NetworkCnCSMTPSGeneric(Signature):
     name = "network_cnc_smtps_generic"
     description = "Encrypted SMTPS communication was detected"
@@ -779,7 +774,6 @@ class NetworkCnCSMTPSGeneric(Signature):
                 self.data.append({"smtp_header": buff})
                 if self.pid:
                     self.mark_call()
-
 
 
 class NetworkCnCSMTPSExfil(Signature):
@@ -903,7 +897,6 @@ class NetworkCnCSMTPSExfil(Signature):
                     return True
                     if self.pid:
                         self.mark_call()
-
 
 
 class NetworkCnCHTTPSArchive(Signature):

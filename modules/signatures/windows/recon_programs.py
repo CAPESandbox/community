@@ -1,9 +1,9 @@
 # Copyright (C) 2014-2016 Optiv, Inc. (brad.spengler@optiv.com), KillerInstinct
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
-from modules.signatures.utils import re
-
 from lib.cuckoo.common.abstracts import Signature
+
+from modules.signatures.utils import re
 
 
 class InstalledApps(Signature):

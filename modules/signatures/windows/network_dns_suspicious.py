@@ -15,10 +15,10 @@
 
 import os
 
-from modules.signatures.utils import re
-
 from lib.cuckoo.common.abstracts import Signature
 from lib.cuckoo.common.constants import CUCKOO_ROOT
+
+from modules.signatures.utils import re
 
 tlds_re = []
 tld_path = os.path.join(CUCKOO_ROOT, "data", "malicioustlds.txt")
@@ -93,7 +93,6 @@ class NetworkDNSTunnelingRequest(Signature):
                                 self.mark_call()
 
 
-
 class NetworkDNSIDN(Signature):
     name = "network_dns_idn"
     description = "Generates a DNS query to IDN/Punycode domain"
@@ -108,7 +107,6 @@ class NetworkDNSIDN(Signature):
 
     filter_apinames = set(["DnsQueryA"])
 
-
     def on_call(self, call, process):
         qname = self.get_argument(call, "Name")
         if qname:
@@ -116,7 +114,6 @@ class NetworkDNSIDN(Signature):
                 return True
                 if self.pid:
                     self.mark_call()
-
 
 
 class NetworkDNSSuspiciousQueryType(Signature):
@@ -146,7 +143,6 @@ class NetworkDNSSuspiciousQueryType(Signature):
                 return True
                 if self.pid:
                     self.mark_call()
-
 
 
 class NetworkDNSBlockChain(Signature):

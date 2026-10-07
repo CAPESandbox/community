@@ -13,9 +13,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from modules.signatures.utils import re
-
 from lib.cuckoo.common.abstracts import Signature
+
+from modules.signatures.utils import re
 
 
 class Silverlight_JS(Signature):

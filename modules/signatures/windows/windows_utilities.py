@@ -1,9 +1,9 @@
 # Copyright (C) 2010-2015 Cuckoo Foundation.
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
-from modules.signatures.utils import re
-
 from lib.cuckoo.common.abstracts import Signature
+
+from modules.signatures.utils import re
 
 
 class UsesWindowsUtilitiesScheduler(Signature):
@@ -895,7 +895,6 @@ class UsesMicrosoftHTMLHelpExecutable(Signature):
 
     filter_apinames = set(["NtCreateFile", "CreateProcessInternalW"])
 
-
     def on_call(self, call, process):
         if process["process_name"].lower() == "hh.exe":
             if call["api"] == "NtCreateFile":
@@ -907,7 +906,6 @@ class UsesMicrosoftHTMLHelpExecutable(Signature):
                 lower = cmdline.lower()
                 if ".exe" in lower:
                     return True
-
 
 
 class PotentialWebShellViaScreenConnectServer(Signature):
@@ -925,7 +923,6 @@ class PotentialWebShellViaScreenConnectServer(Signature):
 
     filter_apinames = set(["CreateProcessInternalW"])
 
-
     def on_call(self, call, process):
         pname = process["process_name"].lower()
         if pname == "screenConnect.service.exe" and call["api"] == "CreateProcessInternalW":
@@ -933,7 +930,6 @@ class PotentialWebShellViaScreenConnectServer(Signature):
             lower = cmdline.lower()
             if any(process in lower for process in ("cmd.exe", "powershell.exe", "pwsh.exe", "powershell_ise.exe", "csc.exe")):
                 return True
-
 
 
 class PotentialLateralMovementViaSMBEXEC(Signature):
@@ -951,14 +947,12 @@ class PotentialLateralMovementViaSMBEXEC(Signature):
 
     filter_apinames = set(["CreateProcessInternalW"])
 
-
     def on_call(self, call, process):
         if process["process_name"].lower() == "services.exe" and call["api"] == "CreateProcessInternalW":
             cmdline = self.get_argument(call, "CommandLine")
             lower = cmdline.lower()
             if any(process in lower for process in ["cmd.exe"]) and any(arg in lower for arg in ("/q", "echo", ".bat", "del")):
                 return True
-
 
 
 class MavInjectLolbin(Signature):

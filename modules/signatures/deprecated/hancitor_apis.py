@@ -13,9 +13,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from modules.signatures.utils import re
-
 from lib.cuckoo.common.abstracts import Signature
+
+from modules.signatures.utils import re
 
 struct_pat = re.compile(r"\\x11\"3D\d{2}\.\d{2}(?:[A-Za-z]|\\x00)(?:\\x00){2}(?:\d{4}|(?:\\x00){4})(?:\\x00){12}http")
 url_pat = re.compile(r"(https?://[^\|]+)(?:\||\\x00)")

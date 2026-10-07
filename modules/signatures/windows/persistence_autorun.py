@@ -17,9 +17,9 @@
 
 # Additional keys added from SysInternals Administrators Guide
 
-from modules.signatures.utils import re
-
 from lib.cuckoo.common.abstracts import Signature
+
+from modules.signatures.utils import re
 
 
 class Autorun_scheduler(Signature):

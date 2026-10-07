@@ -18,7 +18,6 @@ class SuspiciousExecutionViaMicrosoftExchangeTransportAgent(Signature):
 
     filter_apinames = set(["CreateProcessInternalW"])
 
-
     def on_call(self, call, process):
         if (
             process["process_name"].lower() in ("msexchangetransport.exe", "edgetransport.exe")
@@ -41,7 +40,6 @@ class SuspiciousExecutionViaMicrosoftExchangeTransportAgent(Signature):
                 )
             ):
                 return True
-
 
 
 class SuspiciousScheduledTaskCreationviaMasqueradedXMLFile(Signature):
@@ -171,7 +169,8 @@ class PotentialLocationDiscoveryViaUnusualProcess(Signature):
         pnameFullPath = process["module_path"].lower()
         if (
             "\\endpoint protection sdk\\endpointprotection.exe" not in pnameFullPath
-            and r"\\aemagent\\rmm.advancedthreatdetection\\dattoav\\endpoint protection sdk\\endpointprotection.exe" not in pnameFullPath
+            and r"\\aemagent\\rmm.advancedthreatdetection\\dattoav\\endpoint protection sdk\\endpointprotection.exe"
+            not in pnameFullPath
         ):
             if call["api"] == "CreateProcessInternalW":
                 cmdline = self.get_argument(call, "CommandLine")
@@ -240,7 +239,6 @@ class SuspiciousJavaExecutionViaWinScripts(Signature):
 
     filter_apinames = set(["CreateProcessInternalW"])
 
-
     def on_call(self, call, process):
         if process["process_name"].lower() in ("wscript.exe", "cscript.exe") and call["api"] == "CreateProcessInternalW":
             cmdline = self.get_argument(call, "CommandLine")
@@ -251,7 +249,6 @@ class SuspiciousJavaExecutionViaWinScripts(Signature):
                 and any(arg in lower for arg in ("\\appdata\\", "\\public\\", "\\programdata\\"))
             ):
                 return True
-
 
 
 class AMSIBypassViaCOMRegistry(Signature):
@@ -270,7 +267,6 @@ class AMSIBypassViaCOMRegistry(Signature):
 
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW"])
 
-
     def on_call(self, call, _):
         if call["api"] in ("RegSetValueExA", "RegSetValueExW"):
             regKeyPath = self.get_argument(call, "FullName").lower()
@@ -278,7 +274,6 @@ class AMSIBypassViaCOMRegistry(Signature):
             if "{fdb00e52-a214-4aa1-8fba-4357bb0072ec}\\inprocserver" in regKeyPath and buf != "amsi.dll":
                 self.data.append({"Value": buf})
                 return True
-
 
 
 class LoadDLLViaControlPanel(Signature):
@@ -327,7 +322,6 @@ class LoadDLLViaControlPanel(Signature):
                     return True
 
 
-
 class DLLHijackingViaWaaSMedicSvcCOMTypeLib(Signature):
     name = "dll_hijacking_via_waas_medic_svc_com_typelib"
     description = "Attempts to load malicious DLL via WaaSMedicSvc COM TypeLib"
@@ -344,7 +338,6 @@ class DLLHijackingViaWaaSMedicSvcCOMTypeLib(Signature):
 
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW"])
 
-
     def on_call(self, call, process):
         if not r"\\Windows\\System32\\svchost.exe" in process["module_path"]:
             if call["api"] in ("RegSetValueExA", "RegSetValueExW"):
@@ -355,7 +348,6 @@ class DLLHijackingViaWaaSMedicSvcCOMTypeLib(Signature):
                 ) and not buf.endswith("WaaSMedicPS.dll"):
                     self.data.append({"Value": buf})
                     return True
-
 
 
 class MSOfficeCMDRCE(Signature):
@@ -396,7 +388,6 @@ class StoreExecutableRegistry(Signature):
 
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey"])
 
-
     def on_call(self, call, process):
         if call["api"] in ("RegSetValueExA", "RegSetValueExW", "NtSetValueKey"):
             valueName = self.get_argument(call, "ValueName")
@@ -411,7 +402,6 @@ class StoreExecutableRegistry(Signature):
                     if self.pid:
                         self.mark_call()
                     return True
-
 
 
 class DLLHijackingViaMicrosoftExchange(Signature):
@@ -429,7 +419,6 @@ class DLLHijackingViaMicrosoftExchange(Signature):
 
     filter_apinames = set(["NtCreateFile"])
 
-
     def on_call(self, call, process):
         if process["process_name"].lower() == "w3wp.exe":
             if call["api"] == "NtCreateFile":
@@ -438,7 +427,6 @@ class DLLHijackingViaMicrosoftExchange(Signature):
                     if self.pid:
                         self.mark_call()
                     return True
-
 
 
 class IPAddressDiscoveryViaTrustedProgram(Signature):
@@ -535,7 +523,6 @@ class IPAddressDiscoveryViaTrustedProgram(Signature):
                                 self.mark_call()
 
 
-
 class MountCopyToWebDavShare(Signature):
     name = "mount_copy_to_webdav_share"
     description = "Attempts to Mount a Remote WebDav Share"
@@ -593,7 +580,6 @@ class ExecuteFileDownloadedViaOpenSSH(Signature):
 
     filter_apinames = set(["NtCreateFile"])
 
-
     def on_call(self, call, process):
         if process["process_name"].lower() == "scp.exe" or process["process_name"].lower() == "ssh.exe":
             if call["api"] == "NtCreateFile":
@@ -623,7 +609,6 @@ class ExecuteFileDownloadedViaOpenSSH(Signature):
                     return True
 
 
-
 class ExecuteScriptsViaMicrosoftManagementConsole(Signature):
     name = "execute_scripts_via_microsoft_management_console"
     description = "Attempts to execute suspicious scripts via abusing a known XSS injection vulnerability in the APDS.dll"
@@ -640,7 +625,6 @@ class ExecuteScriptsViaMicrosoftManagementConsole(Signature):
 
     filter_apinames = set(["NtCreateFile"])
 
-
     def on_call(self, call, process):
         if process["process_name"] == "mmc.exe":
             if call["api"] == "NtCreateFile":
@@ -649,7 +633,6 @@ class ExecuteScriptsViaMicrosoftManagementConsole(Signature):
                     if self.pid:
                         self.mark_call()
                     return True
-
 
 
 class ExecuteSuspiciousProcessesViaWindowsMSSQLService(Signature):
@@ -666,7 +649,6 @@ class ExecuteSuspiciousProcessesViaWindowsMSSQLService(Signature):
     ]
 
     filter_apinames = set(["CreateProcessInternalW"])
-
 
     def on_call(self, call, process):
         if process["process_name"] == "sqlservr.exe":
@@ -694,7 +676,6 @@ class ExecuteSuspiciousProcessesViaWindowsMSSQLService(Signature):
                     if self.pid:
                         self.mark_call()
                     return True
-
 
 
 class CreateSuspiciousLNKFiles(Signature):
@@ -751,7 +732,6 @@ class CreateSuspiciousLNKFiles(Signature):
                     return True
 
 
-
 class ExecuteSafeModeFromSuspiciousProcess(Signature):
     name = "execute_safe_mode_from_suspicious_process"
     description = "Attempts to enter the safe mode using bcdedit.exe from suspicious process"
@@ -798,7 +778,6 @@ class ExecuteSafeModeFromSuspiciousProcess(Signature):
                     if self.pid:
                         self.mark_call()
                     return True
-
 
 
 class AccessAutoLogonsViaRegistry(Signature):
@@ -851,7 +830,6 @@ class AccessAutoLogonsViaRegistry(Signature):
                     return True
 
 
-
 class CredentialAccessViaWindowsCredentialHistory(Signature):
     name = "credential_access_via_windows_credential_history"
     description = "Attempts to access Users Windows Credential History File that is used by Microsoft's DPAPI"
@@ -899,7 +877,6 @@ class CredentialAccessViaWindowsCredentialHistory(Signature):
                     return True
 
 
-
 class AccessBootKeyViaRegistry(Signature):
     name = "access_boot_key_via_registry"
     description = (
@@ -931,7 +908,6 @@ class AccessBootKeyViaRegistry(Signature):
                     if self.pid:
                         self.mark_call()
                     return True
-
 
 
 class NetworkConnectionViaSuspiciousProcess(Signature):
@@ -993,7 +969,6 @@ class NetworkConnectionViaSuspiciousProcess(Signature):
         if call["status"] and any(proc in process["process_name"] for proc in self.blacklisterProcesses):
             return True
             self.data.append({"suspicious_process": process["process_name"]})
-
 
 
 class SuspiciousExecutionViaDotnetRemoting(Signature):

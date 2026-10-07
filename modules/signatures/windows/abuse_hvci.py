@@ -16,7 +16,6 @@ class PendingFileRenameOperations(Signature):
 
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW"])
 
-
     def on_call(self, call, process):
         if not any(path in process["module_path"] for path in ("\\Program Files\\", "\\Program Files (86)\\")):
             if call["api"] in ("RegSetValueExA", "RegSetValueExW"):
@@ -25,7 +24,6 @@ class PendingFileRenameOperations(Signature):
                 if "allowprotectedrenames" in regKeyPath and buf == "1":
                     self.data.append({"regkey": regKeyPath})
                     return True
-
 
 
 class DisableDriverViaHVCIDisallowedImages(Signature):
@@ -44,7 +42,6 @@ class DisableDriverViaHVCIDisallowedImages(Signature):
 
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW"])
 
-
     def on_call(self, call, _):
         if call["api"] in ("RegSetValueExA", "RegSetValueExW"):
             regKeyPath = self.get_argument(call, "FullName").lower()
@@ -52,7 +49,6 @@ class DisableDriverViaHVCIDisallowedImages(Signature):
             if "hvcidisallowedimages" in regKeyPath and ".sys" in buf:
                 self.data.append({"Value": buf})
                 return True
-
 
 
 class DisableDriverViaBlocklist(Signature):
@@ -84,7 +80,6 @@ class DisableDriverViaBlocklist(Signature):
                 if "\\ci\\config\\vulnerabledriverblocklistenable" in regKeyPath and buf == "0":
                     self.data.append({"regkey": regKeyPath})
                     return True
-
 
 
 class DisableHypervisorProtectedCodeIntegrity(Signature):
@@ -134,4 +129,3 @@ class DisableHypervisorProtectedCodeIntegrity(Signature):
                 ):
                     self.data.append({"regkey": regKeyPath})
                     return True
-

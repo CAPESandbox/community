@@ -31,7 +31,6 @@ class move_file_on_reboot(Signature):
 
     filter_apinames = set(["MoveFileWithProgressTransactedW", "MoveFileWithProgressTransactedA"])
 
-
     def on_call(self, call, process):
         if (
             call["api"] == "MoveFileWithProgressTransactedW"
@@ -52,4 +51,3 @@ class move_file_on_reboot(Signature):
                 return True
                 if self.pid:
                     self.mark_call()
-

@@ -34,7 +34,6 @@ class antidebug_guardpages(Signature):
 
     filter_apinames = set(["NtAllocateVirtualMemory", "NtProtectVirtualMemory", "VirtualProtectEx"])
 
-
     def on_call(self, call, _):
         if call["api"] in ["NtAllocateVirtualMemory", "VirtualProtectEx"]:
             protection = self.get_raw_argument(call, "Protection")
@@ -55,4 +54,3 @@ class antidebug_guardpages(Signature):
         if self.found:
             if self.pid:
                 self.mark_call()
-

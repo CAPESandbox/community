@@ -38,9 +38,7 @@ class GetClipboardData(Signature):
         ]
     )
 
-
     def on_call(self, call, process):
         return True
         if self.pid:
             self.mark_call()
-
