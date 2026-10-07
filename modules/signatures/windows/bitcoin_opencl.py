@@ -26,7 +26,7 @@ class BitcoinOpenCL(Signature):
     mbcs = ["OB0009", "B0023"]
 
     def run(self):
-        if self.check_file(pattern=".*OpenCL\.dll$", regex=True):
+        if self.check_file(pattern=r".*OpenCL\.dll$", regex=True):
             return True
 
         return False

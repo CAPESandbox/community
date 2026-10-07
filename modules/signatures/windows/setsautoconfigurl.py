@@ -37,7 +37,7 @@ class SetsAutoconfigURL(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.pathbuf = str()
         self.keybuf = str()
-        self.configpath = r"^[A-Za-z]:\\.*\\Mozilla\\Firefox\\Profiles\\.*\\" "prefs\.js"
+        self.configpath = r"^[A-Za-z]:\\.*\\Mozilla\\Firefox\\Profiles\\.*\\" r"prefs\.js"
         self.configkey = r"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\" r"CurrentVersion\\Internet Settings\\AutoConfigURL"
 
         self.procwhitelist = [

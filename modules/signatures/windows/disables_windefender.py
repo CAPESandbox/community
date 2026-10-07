@@ -219,17 +219,14 @@ class AddWindowsDefenderExclusions(Signature):
 
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey"])
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.detected = False
 
     def on_call(self, call, process):
-        if not "\\windows\\microsoft.net" in process["module_path"].lower():
+        if not r"\\windows\\microsoft.net" in process["module_path"].lower():
             regKeyPath = self.get_argument(call, "FullName").lower()
             valueName = self.get_argument(call, "ValueName")
             buf = self.get_argument(call, "Buffer")
             if buf == "0" and (
-                "software\\policies\\microsoft\\windows defender\\exclusions\\extensions\\" in regKeyPath
+                r"software\\policies\\microsoft\\windows defender\\exclusions\\extensions\\" in regKeyPath
                 and any(
                     extension in valueName
                     for extension in (
@@ -251,12 +248,8 @@ class AddWindowsDefenderExclusions(Signature):
                 )
             ):
                 self.data.append({"regkey": regKeyPath})
-                self.detected = True
+                return True
 
-    def on_complete(self):
-        if self.detected:
-            return True
-        return False
 
 
 class RemovesWindowsDefenderUpdates(Signature):

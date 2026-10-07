@@ -1,10 +1,7 @@
 # Copyright (C) 2010-2015 Cuckoo Foundation.
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -898,28 +895,19 @@ class UsesMicrosoftHTMLHelpExecutable(Signature):
 
     filter_apinames = set(["NtCreateFile", "CreateProcessInternalW"])
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.detected = False
 
     def on_call(self, call, process):
         if process["process_name"].lower() == "hh.exe":
             if call["api"] == "NtCreateFile":
                 fileName = self.get_argument(call, "FileName")
                 if ".exe" in fileName:
-                    self.detected = True
-                    return
+                    return True
             if call["api"] == "CreateProcessInternalW":
                 cmdline = self.get_argument(call, "CommandLine")
                 lower = cmdline.lower()
                 if ".exe" in lower:
-                    self.detected = True
-                    return
+                    return True
 
-    def on_complete(self):
-        if self.detected:
-            return True
-        return False
 
 
 class PotentialWebShellViaScreenConnectServer(Signature):
@@ -937,9 +925,6 @@ class PotentialWebShellViaScreenConnectServer(Signature):
 
     filter_apinames = set(["CreateProcessInternalW"])
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.detected = False
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()
@@ -947,13 +932,8 @@ class PotentialWebShellViaScreenConnectServer(Signature):
             cmdline = self.get_argument(call, "CommandLine")
             lower = cmdline.lower()
             if any(process in lower for process in ("cmd.exe", "powershell.exe", "pwsh.exe", "powershell_ise.exe", "csc.exe")):
-                self.detected = True
-                return
+                return True
 
-    def on_complete(self):
-        if self.detected:
-            return True
-        return False
 
 
 class PotentialLateralMovementViaSMBEXEC(Signature):
@@ -971,22 +951,14 @@ class PotentialLateralMovementViaSMBEXEC(Signature):
 
     filter_apinames = set(["CreateProcessInternalW"])
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.detected = False
 
     def on_call(self, call, process):
         if process["process_name"].lower() == "services.exe" and call["api"] == "CreateProcessInternalW":
             cmdline = self.get_argument(call, "CommandLine")
             lower = cmdline.lower()
             if any(process in lower for process in ["cmd.exe"]) and any(arg in lower for arg in ("/q", "echo", ".bat", "del")):
-                self.detected = True
-                return
+                return True
 
-    def on_complete(self):
-        if self.detected:
-            return True
-        return False
 
 
 class MavInjectLolbin(Signature):

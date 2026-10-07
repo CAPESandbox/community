@@ -15,10 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 
 class RansomwareFileModifications(Signature):
@@ -51,26 +48,26 @@ class RansomwareFileModifications(Signature):
         self.dispositiondeletecount = 0
         self._disposition_deleted = set()
         self.noise_paths = [
-            "\\appdata\\local\\microsoft\\windows\\explorer\\iconcache_",
-            "\\appdata\\local\\microsoft\\windows\\explorer\\iconcachetodelete\\",
+            r"\\appdata\\local\\microsoft\\windows\\explorer\\iconcache_",
+            r"\\appdata\\local\\microsoft\\windows\\explorer\\iconcachetodelete\\",
             "\\inetcache",
             "\\temporary internet files",
             "\\cache",
             "\\temp\\",
-            "\\windows\\",
+            r"\\windows\\",
             "\\program files\\",
             "\\program files (x86)\\",
             "\\programdata\\microsoft\\",
         ]
         self.handle_noise_paths = [
-            "\\device\\",
+            r"\\device\\",
             "\\pipe\\",
             "\\??\\pipe",
-            "\\windows\\",
+            r"\\windows\\",
             "\\program files\\",
             "\\program files (x86)\\",
             "\\programdata\\microsoft\\",
-            "\\systemroot\\",
+            r"\\systemroot\\",
         ]
 
     def _is_noise_path(self, path, table=None):
@@ -130,8 +127,8 @@ class RansomwareFileModifications(Signature):
             origfile = self.get_argument(call, "ExistingFileName") or ""
             newfile = self.get_argument(call, "NewFileName") or ""
             if (
-                "\\appdata\\local\\microsoft\\windows\\explorer\\iconcache_" in origfile.lower()
-                and "\\appdata\\local\\microsoft\\windows\\explorer\\iconcachetodelete\\" in newfile.lower()
+                r"\\appdata\\local\\microsoft\\windows\\explorer\\iconcache_" in origfile.lower()
+                and r"\\appdata\\local\\microsoft\\windows\\explorer\\iconcachetodelete\\" in newfile.lower()
             ):
                 return None
             self._handle_rename(origfile, newfile)

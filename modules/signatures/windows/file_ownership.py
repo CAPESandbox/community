@@ -13,10 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -71,10 +68,10 @@ class FileOwnershipTakeover(Signature):
 
         # High-value target paths that escalate severity when targeted
         self.high_value_paths = [
-            "\\windows\\system32",
-            "\\windows\\syswow64",
-            "\\windows\\system",
-            "c:\\windows",
+            r"\\windows\\system32",
+            r"\\windows\\syswow64",
+            r"\\windows\\system",
+            r"c:\\windows",
             "\\program files",
             "\\program files (x86)",
         ]

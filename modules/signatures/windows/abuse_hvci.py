@@ -16,9 +16,6 @@ class PendingFileRenameOperations(Signature):
 
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW"])
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.detected = False
 
     def on_call(self, call, process):
         if not any(path in process["module_path"] for path in ("\\Program Files\\", "\\Program Files (86)\\")):
@@ -27,12 +24,8 @@ class PendingFileRenameOperations(Signature):
                 buf = self.get_argument(call, "Buffer")
                 if "allowprotectedrenames" in regKeyPath and buf == "1":
                     self.data.append({"regkey": regKeyPath})
-                    self.detected = True
+                    return True
 
-    def on_complete(self):
-        if self.detected:
-            return True
-        return False
 
 
 class DisableDriverViaHVCIDisallowedImages(Signature):
@@ -51,9 +44,6 @@ class DisableDriverViaHVCIDisallowedImages(Signature):
 
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW"])
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.detected = False
 
     def on_call(self, call, _):
         if call["api"] in ("RegSetValueExA", "RegSetValueExW"):
@@ -61,13 +51,8 @@ class DisableDriverViaHVCIDisallowedImages(Signature):
             buf = self.get_argument(call, "Buffer")
             if "hvcidisallowedimages" in regKeyPath and ".sys" in buf:
                 self.data.append({"Value": buf})
-                self.detected = True
+                return True
 
-    def on_complete(self):
-        if self.detected:
-            self.data.append({"Value": self.buf})
-            return True
-        return False
 
 
 class DisableDriverViaBlocklist(Signature):
@@ -98,12 +83,8 @@ class DisableDriverViaBlocklist(Signature):
                 buf = self.get_argument(call, "Buffer")
                 if "\\ci\\config\\vulnerabledriverblocklistenable" in regKeyPath and buf == "0":
                     self.data.append({"regkey": regKeyPath})
-                    self.detected = True
+                    return True
 
-    def on_complete(self):
-        if self.detected:
-            return True
-        return False
 
 
 class DisableHypervisorProtectedCodeIntegrity(Signature):
@@ -145,16 +126,12 @@ class DisableHypervisorProtectedCodeIntegrity(Signature):
                     any(
                         key in regKeyPath
                         for key in (
-                            "\\deviceguard\\hypervisorenforcedcodeintegrity",
-                            "\\deviceguard\\scenarios\\hypervisorenforcedcodeintegrity\\enabled",
+                            r"\\deviceguard\\hypervisorenforcedcodeintegrity",
+                            r"\\deviceguard\\scenarios\\hypervisorenforcedcodeintegrity\\enabled",
                         )
                     )
                     and buf == "0"
                 ):
                     self.data.append({"regkey": regKeyPath})
-                    self.detected = True
+                    return True
 
-    def on_complete(self):
-        if self.detected:
-            return True
-        return False

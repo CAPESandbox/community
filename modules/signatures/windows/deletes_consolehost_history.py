@@ -30,7 +30,7 @@ class DeletesExecutedFiles(Signature):
             "winword.exe",
             "excel.exe",
         )
-        self.blacklistedPaths = ["\\users\\", "\\windows\\temp\\", "\\programdata\\", "\\windows\\microsoft.net\\"]
+        self.blacklistedPaths = ["\\users\\", r"\\windows\\temp\\", "\\programdata\\", r"\\windows\\microsoft.net\\"]
 
     def on_call(self, call, process):
         if call["api"] in ("NtDeleteFile", "DeleteFileA", "DeleteFileW"):

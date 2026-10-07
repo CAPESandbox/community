@@ -13,10 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -38,8 +35,8 @@ class MassLoggerVersion(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.pathpat = r"[A-Z]:\\.*\\AppData\\Local\\Temp\\[A-F0-9]{10}\\Log\.txt$"
         self.verpats = [
-            "MassLogger\sv\d+\.\d+\.\d+\.\d+",
-            "<\|\|\s(v)?\d+\.\d+\.\d+\.\d+\s\|\|>",
+            r"MassLogger\sv\d+\.\d+\.\d+\.\d+",
+            r"<\|\|\s(v)?\d+\.\d+\.\d+\.\d+\s\|\|>",
         ]
 
     def on_call(self, call, process):
@@ -119,7 +116,7 @@ class MassLoggerFiles(Signature):
 
         try:
             indicators.append(
-                ".*\\AppData\\Local\\Temp\\[A-F0-9]{10}\\" + user.decode("utf-8") + "_.*_[A-F0-9]{10}_\d{2}-\d{2}-\d{4}\s.*.zip"
+                r".*\\AppData\\Local\\Temp\\[A-F0-9]{10}\\" + user.decode("utf-8") + r"_.*_[A-F0-9]{10}_\d{2}-\d{2}-\d{4}\s.*.zip"
             )
         except Exception:
             return False

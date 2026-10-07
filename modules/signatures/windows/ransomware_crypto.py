@@ -104,7 +104,7 @@ class KernelCryptoDriverAbuse(Signature):
 
         if call["api"] in ("NtCreateFile", "NtOpenFile"):
             filename = self.get_argument(call, "FileName")
-            if filename and "\\device\\ksecdd" in filename.lower():
+            if filename and r"\\device\\ksecdd" in filename.lower():
                 handle = self.get_argument(call, "FileHandle")
                 if handle:
                     self.ksec_handles[pid].add(handle)
@@ -113,7 +113,7 @@ class KernelCryptoDriverAbuse(Signature):
             handle_name = self.get_argument(call, "HandleName")
             handle = self.get_argument(call, "DeviceHandle") or self.get_argument(call, "FileHandle")
 
-            if (handle in self.ksec_handles[pid]) or (handle_name and "\\device\\ksecdd" in handle_name.lower()):
+            if (handle in self.ksec_handles[pid]) or (handle_name and r"\\device\\ksecdd" in handle_name.lower()):
                 self.ioctl_counts[pid] += 1
 
                 if self.ioctl_counts[pid] <= 20:

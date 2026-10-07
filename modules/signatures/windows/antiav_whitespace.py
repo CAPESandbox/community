@@ -16,7 +16,7 @@ class AntiAVWhitespace(Signature):
     mbcs = ["OB0006", "F0004"]
 
     def run(self):
-        indicator = "\s{10,}"
+        indicator = r"\s{10,}"
 
         matches = self.check_executed_command(pattern=indicator, regex=True, all=True)
         if matches:

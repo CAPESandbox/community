@@ -1,10 +1,7 @@
 # Copyright (C) 2014-2016 Optiv, Inc. (brad.spengler@optiv.com), KillerInstinct
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -38,7 +35,7 @@ class InstalledApps(Signature):
 
         if call["api"].startswith("RegQueryValueEx"):
             keyname = self.get_argument(call, "FullName")
-            uninstall = "\\microsoft\\windows\\currentversion\\uninstall"
+            uninstall = r"\\microsoft\\windows\\currentversion\\uninstall"
             if keyname and uninstall in keyname.lower() and keyname.lower().endswith("displayname"):
                 app = self.get_argument(call, "Data")
                 if app:

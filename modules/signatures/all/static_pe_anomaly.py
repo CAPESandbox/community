@@ -186,7 +186,7 @@ class StaticPEPDBPath(Signature):
             "windowsApplication",
             "windowsformsapplication",
             "visual studio ",
-            "\\desktop",
+            r"\\desktop",
             "\\users",
             "\\new folder",
             "- copy",
@@ -218,7 +218,7 @@ class StaticPEPDBPath(Signature):
                             self.description = "The PE file contains a suspicious PDB path"
                             break
 
-                    regex = re.compile("[a-zA-Z]:\\\\[\x00-\xff]{0,500}[^\x00-\x7f]{1,}[\x00-\xff]{0,500}\.pdb")
+                    regex = re.compile(r"[a-zA-Z]:\\\\[\x00-\xff]{0,500}[^\x00-\x7f]{1,}[\x00-\xff]{0,500}\.pdb")
                     if re.match(regex, pdbpath):
                         if self.severity != 2 and self.severity != 3:
                             self.severity = 2

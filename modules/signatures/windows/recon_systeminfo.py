@@ -31,7 +31,7 @@ class SystemInfo(Signature):
 
     def on_call(self, call, process):
         match = self.check_argument_call(
-            call, pattern="(^cmd\.exe).*[(systeminfo)|(ipconfig)|(netstat)]", name="CommandLine", category="process", regex=True
+            call, pattern=r"(^cmd\.exe).*[(systeminfo)|(ipconfig)|(netstat)]", name="CommandLine", category="process", regex=True
         )
         if match:
             if self.pid:

@@ -47,7 +47,7 @@ class RansomwareFiles(Signature):
             (r".*\\howto_restore_files.*\.(txt|html)$", ["TeslaCrypt", "AlphaCrypt"]),
             (r".*\\+-xxx-HELP-xxx-+.*\.(png|txt|html)$", ["TeslaCrypt", "AlphaCrypt"]),
             (r".*\\HELP_RECOVER_instructions\+.*\.(txt|html)$", ["TeslaCrypt", "AlphaCrypt"]),
-            # r (".*\\YOUR_FILES_ARE_ENCRYPTED\.HTML$", ["Chimera"]),
+            # r (r".*\\YOUR_FILES_ARE_ENCRYPTED\.HTML$", ["Chimera"]),
             (r".*\\_?how_recover.*\.(txt|html)$", ["TeslaCrypt", "AlphaCrypt"]),
             (r".*\\cl_data.*\.bak$", ["WinPlock"]),
             (r".*\\READ\ ME\ FOR\ DECRYPT\.txt$", ["Fakben"]),

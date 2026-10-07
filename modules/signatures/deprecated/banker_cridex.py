@@ -37,7 +37,7 @@ class Cridex(Signature):
     def run(self):
         indicators = [".*Local.QM.*", ".*Local.XM.*"]
 
-        match_file = self.check_file(pattern=".*\\\KB[0-9]{8}\.exe", regex=True)
+        match_file = self.check_file(pattern=r".*\\\KB[0-9]{8}\.exe", regex=True)
         match_batch_file = self.check_file(pattern=r".*\\Temp\\\S{4}\.tmp\.bat", regex=True)
 
         if match_file and match_batch_file:

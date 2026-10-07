@@ -28,7 +28,7 @@ SERVER_SIDE_YARA_URL = f"https://github.com/kevoreilly/CAPEv2/tree/master{SERVER
 SERVER_SIDE_YARA_RAW_URL = f"https://raw.githubusercontent.com/kevoreilly/CAPEv2/master{SERVER_SIDE_YARA_SUBPATH}%s"
 
 
-YARA_REGEX = "([\w\-\d]+\.yar)"
+YARA_REGEX = r"([\w\-\d]+\.yar)"
 
 yara_file_names = set()
 

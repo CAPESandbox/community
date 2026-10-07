@@ -43,7 +43,7 @@ class UACBypassEventvwr(Signature):
             if process["process_name"].lower() == "eventvwr.exe":
                 fullname = self.get_argument(call, "FullName")
                 data = self.get_argument(call, "Data")
-                if "\classes\mscfile\shell\open\command" in fullname.lower():
+                if r"\classes\mscfile\shell\open\command" in fullname.lower():
                     self.eventvrw = True
                     self.data.append({"reg_query_name": fullname})
                     self.data.append({"reg_query_data": data})

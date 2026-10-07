@@ -13,10 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -36,7 +33,7 @@ class NetworkHTTPPOST(Signature):
     def on_complete(self):
         safelist = [
             "microsoft.com",
-            "windowsupdate\.com",
+            r"windowsupdate\.com",
             "adobe.com",
         ]
 
@@ -73,9 +70,9 @@ class NetworkCnCHTTP(Signature):
 
     def run(self):
         whitelist = [
-            "^http://.*\.microsoft\.com/.*",
-            "^http://.*\.windowsupdate\.com/.*",
-            "http://.*\.adobe\.com/.*",
+            r"^http://.*\.microsoft\.com/.*",
+            r"^http://.*\.windowsupdate\.com/.*",
+            r"http://.*\.adobe\.com/.*",
         ]
 
         # HTTP request Features. Done like this due to for loop appending data each time instead of once so we wait to end of checks to add summary of anomalies
@@ -98,7 +95,7 @@ class NetworkCnCHTTP(Signature):
 
                 # Check HTTP features
                 request = req["uri"]
-                ip = re.compile("^http\:\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}")
+                ip = re.compile(r"^http\:\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}")
                 if not is_whitelisted and req["method"] == "POST" and "Referer:" not in req["data"]:
                     post_noreferer = True
                     cnc_score += 1
@@ -162,7 +159,7 @@ class NetworkIPEXE(Signature):
     minimum = "1.2"
 
     def run(self):
-        indicator = "(https?://)?\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}.*\.exe"
+        indicator = r"(https?://)?\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}.*\.exe"
         # Downloading an EXE from an IP is ALWAYS SKETCHY
         matches = self.check_url(pattern=indicator, regex=True, all=True)
         if matches:

@@ -51,7 +51,7 @@ class NetworkFakeUserAgent(Signature):
             if useragent:
                 for fakeua in self.fakeuas:
                     if fakeua in useragent:
-                        self.match = True
+                        return True
                         self.data.append({"fake_useragent": useragent})
                         if self.pid:
                             self.mark_call()
@@ -60,10 +60,8 @@ class NetworkFakeUserAgent(Signature):
             if useragent:
                 for fakeua in self.fakeuas:
                     if fakeua in useragent:
-                        self.match = True
+                        return True
                         self.data.append({"fake_useragent": useragent})
                         if self.pid:
                             self.mark_call()
 
-    def on_complete(self):
-        return self.match

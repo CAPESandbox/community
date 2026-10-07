@@ -23,7 +23,7 @@ class EmailStealer(Signature):
             return False
 
         file_indicators = (
-            ".*\.pst$",
+            r".*\.pst$",
             r".*\\Microsoft\\Windows\\ Live\\ Mail.*",
             r".*\\Microsoft\\Address\\ Book\\.*\.wab$",
             r".*\\Microsoft\\Outlook\\ Express\\.*\.dbx$",

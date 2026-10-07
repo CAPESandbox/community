@@ -31,8 +31,8 @@ class CypherITMutexes(Signature):
 
     def run(self):
         indicators = [
-            "frenchy_shellcode_\d+$",
-            "Startup_shellcode_\d+$",
+            r"frenchy_shellcode_\d+$",
+            r"Startup_shellcode_\d+$",
         ]
 
         for indicator in indicators:

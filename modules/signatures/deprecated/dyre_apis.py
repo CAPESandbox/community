@@ -13,10 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -108,9 +105,9 @@ class Dyre_APIs(Signature):
             for httpreq in self.networkapis:
                 # Generate patterns (should only ever be one per indicator)
                 indicators = [
-                    "/(\d{4}[a-z]{2}\d{2})/" + self.compname + "_",
-                    "/([^/]+)/" + self.compname + "/\d+/\d+/\d+/$",
-                    "/([^/]+)/" + self.compname + "_W\d{6}\.[0-9A-F]{32}",
+                    r"/(\d{4}[a-z]{2}\d{2})/" + self.compname + "_",
+                    "/([^/]+)/" + self.compname + r"/\d+/\d+/\d+/$",
+                    "/([^/]+)/" + self.compname + r"_W\d{6}\.[0-9A-F]{32}",
                 ]
                 for indicator in indicators:
                     buf = re.match(indicator, httpreq)
@@ -153,7 +150,7 @@ class Dyre_APIs(Signature):
                         ]
                         with open(dump_path, "rb") as dump_file:
                             dump_data = dump_file.read()
-                        ippat = "\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{2,5}"
+                        ippat = r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{2,5}"
                         ips = re.findall(ippat, dump_data)
                         for ip in set(ips):
                             addit = True

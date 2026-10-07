@@ -135,7 +135,7 @@ def get_new_emails(db):
                                     else:
                                         send_notification(db, new_file)
                 # mark as seen
-                typ, data = conn.store(num, "+FLAGS", "\Seen")
+                typ, data = conn.store(num, "+FLAGS", "\\Seen")
 
     conn.close()
     conn.logout()

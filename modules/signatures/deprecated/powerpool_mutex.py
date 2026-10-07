@@ -28,7 +28,7 @@ class PowerpoolMutexes(Signature):
 
     def run(self):
         indicators = [
-            "MyDemonMutex\d+$",
+            r"MyDemonMutex\d+$",
         ]
 
         for indicator in indicators:

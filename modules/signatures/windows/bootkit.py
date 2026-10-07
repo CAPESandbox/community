@@ -58,7 +58,7 @@ class Bootkit(Signature):
             # FILE_WRITE_ACCESS or GENERIC_WRITE
             if (
                 filename
-                and (filename.lower() == "\\??\\physicaldrive0" or filename.lower().startswith("\\device\\harddisk"))
+                and (filename.lower() == "\\??\\physicaldrive0" or filename.lower().startswith(r"\\device\\harddisk"))
                 and access & 0x40000002
             ):
                 if handle not in self.handles:

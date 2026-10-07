@@ -13,10 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -37,14 +34,14 @@ class NetworkHTTP(Signature):
     def run(self):
         urls = []
         whitelist = [
-            "^http://(crl|ctldl)\.microsoft\.com/.*",
-            "^http://www\.microsoft\.com/.*\.crl$",
-            "^http://ctldl\.windowsupdate\.com/.*",
-            "^http://go\.microsoft\.com/.*",
+            r"^http://(crl|ctldl)\.microsoft\.com/.*",
+            r"^http://www\.microsoft\.com/.*\.crl$",
+            r"^http://ctldl\.windowsupdate\.com/.*",
+            r"^http://go\.microsoft\.com/.*",
         ]
         if "file" in self.results.get("target", {}):
             if "PDF" in self.results["target"]["file"].get("type", "") or self.results["info"]["package"] == "pdf":
-                whitelist.append("^http://.*\.adobe\.com/.*")
+                whitelist.append(r"^http://.*\.adobe\.com/.*")
 
         if "network" in self.results and "http" in self.results["network"]:
             for req in self.results["network"]["http"]:

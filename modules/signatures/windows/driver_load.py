@@ -42,8 +42,6 @@ class DriverLoad(Signature):
         if self.pid:
             self.mark_call()
 
-    def on_complete(self):
-        return self.found_driverload
 
 
 class InstallKernelDriverService(Signature):
@@ -63,9 +61,6 @@ class InstallKernelDriverService(Signature):
 
     filter_apinames = set(["CreateServiceA", "CreateServiceW"])
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.found = False
 
     def on_call(self, call, process):
         service_type = self.get_argument(call, "ServiceType")
@@ -78,8 +73,6 @@ class InstallKernelDriverService(Signature):
         )
 
         if is_kernel_driver and binary_path and binary_path.lower().endswith(".sys"):
-            self.found = True
+            return True
             self.mark_call()
 
-    def on_complete(self):
-        return self.found

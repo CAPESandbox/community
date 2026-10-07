@@ -36,9 +36,9 @@ class ClearsLogs(Signature):
             r".*\\Windows\\Logs.*",
             r".*\\inetpub\\logs\\LogFiles.*",
             r".*\\Windows\\System32\\Winevt.*",
-            ".*\.etl$",
-            ".*\.evt$",
-            ".*\.evtx$",
+            r".*\.etl$",
+            r".*\.evt$",
+            r".*\.evtx$",
         ]
 
         ret = False

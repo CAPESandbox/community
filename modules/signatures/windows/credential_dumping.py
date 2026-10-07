@@ -97,7 +97,7 @@ class RegistryCredentialDumping(Signature):
         cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if "reg" in lower and "save" in lower and ("hklm\\system" in lower or "hklm\\sam" in lower):
+            if "reg" in lower and "save" in lower and (r"hklm\\system" in lower or r"hklm\\sam" in lower):
                 ret = True
                 self.data.append({"command": cmdline})
 

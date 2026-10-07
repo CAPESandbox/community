@@ -2,10 +2,7 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 import struct
 
@@ -54,7 +51,7 @@ class HandleInfo:
             or (self.changetime != 0 and self.changetime == other.changetime)
         ):
             file = other.filename.lower()
-            if re.match(r"^[A-Z]?:\\Windows\\.*", file, re.IGNORECASE) or "\\system32\\" in file or "\\syswow64\\" in file:
+            if re.match(r"^[A-Z]?:\\Windows\\.*", file, re.IGNORECASE) or r"\\system32\\" in file or r"\\syswow64\\" in file:
                 return other.filename
         return None
 

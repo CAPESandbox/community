@@ -27,7 +27,7 @@ class BlackNETMutexes(Signature):
 
     def run(self):
         indicators = [
-            "^BN\[[A-Za-z]{6,10}-[0-9]{6,10}\]$",
+            r"^BN\[[A-Za-z]{6,10}-[0-9]{6,10}\]$",
         ]
 
         for indicator in indicators:

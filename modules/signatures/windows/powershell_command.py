@@ -19,10 +19,7 @@ import binascii
 from lib.cuckoo.common.abstracts import Signature
 from lib.cuckoo.common.utils import convert_to_printable
 
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 
 class PowershellCommandSuspicious(Signature):

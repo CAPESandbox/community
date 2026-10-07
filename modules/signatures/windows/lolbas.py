@@ -254,7 +254,7 @@ class LOLBAS_RegisterDLLViaOdbcconf(Signature):
 
             # Falses:
             # REF: https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/defense_evasion_suspicious_imageload_via_odbc_driver_configuration_program.toml
-            if ("installmanager.exe" in lower and "\\windows\\syswow64\\odbcconf.rsp" in lower) or (
+            if ("installmanager.exe" in lower and r"\\windows\\syswow64\\odbcconf.rsp" in lower) or (
                 "{configsysdsn" in lower and "sql server" in lower
             ):
                 return False
@@ -485,8 +485,8 @@ class LOLBAS_ExecuteBinaryViaInternetExplorerExporter(Signature):
         self.whitelistedDirectories = [
             "\\program files (x86)\\",
             "\\program files\\",
-            "\\windows\\system32\\",
-            "\\windows\\syswow64\\",
+            r"\\windows\\system32\\",
+            r"\\windows\\syswow64\\",
         ]
 
     def on_call(self, call, _):

@@ -13,10 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -46,7 +43,7 @@ class Vawtrak_APIs(Signature):
         if call["api"] == "RegSetValueExA":
             # Autorun registry / filesystem behavior
             key = self.get_argument(call, "FullName").lower()
-            if "\\software\\microsoft\\windows\\currentversion\\run\\" in key:
+            if r"\\software\\microsoft\\windows\\currentversion\\run\\" in key:
                 buf = self.get_argument(call, "Buffer").lower()
                 if re.match(r"^[A-Z]:\\ProgramData\\\w+\\\w+\.exe$", buf):
                     self.ttps += ["T1060"]  # MITRE v6

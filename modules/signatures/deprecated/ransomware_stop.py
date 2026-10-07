@@ -53,7 +53,7 @@ class StopRansomwareCMD(Signature):
     evented = True
 
     def run(self):
-        indicators = [".*--(Admin|ForNetRes)\s.*is(Not)?(AutoStart|Task).*"]
+        indicators = [r".*--(Admin|ForNetRes)\s.*is(Not)?(AutoStart|Task).*"]
 
         for indicator in indicators:
             match = self.check_executed_command(pattern=indicator, regex=True)

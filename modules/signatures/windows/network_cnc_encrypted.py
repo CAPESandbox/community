@@ -13,10 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-try:
-    import re2 as re
-except ImportError:
-    import re
+from modules.signatures.utils import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -49,13 +46,11 @@ class NetworkCnCHTTPSGeneric(Signature):
         if buff:
             for verb in self.httpverbs:
                 if buff.startswith(verb):
-                    self.match = True
+                    return True
                     self.data.append({"http_request": buff})
                     if self.pid:
                         self.mark_call()
 
-    def on_complete(self):
-        return self.match
 
 
 class NetworkCnCHTTPSSocialMedia(Signature):
@@ -539,13 +534,11 @@ class NetworkCnCHTTPSUserAgent(Signature):
         if buff:
             for ua in self.useragents:
                 if ua in buff:
-                    self.match = True
+                    return True
                     self.data.append({"http_request": buff})
                     if self.pid:
                         self.mark_call()
 
-    def on_complete(self):
-        return self.match
 
 
 class NetworkCnCHTTPSTempURLDNS(Signature):
@@ -653,19 +646,14 @@ class NetworkCnCHTTPSPayload(Signature):
 
     filter_apinames = set(["SslDecryptPacket"])
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.match = False
 
     def on_call(self, call, process):
         buff = self.get_argument(call, "Buffer")
         if buff and "MZ" in buff and "This program cannot be run in" in buff:
-            self.match = True
+            return True
             if self.pid:
                 self.mark_call()
 
-    def on_complete(self):
-        return self.match
 
 
 class NetworkCnCHTTPSFreeWebHosting(Signature):
@@ -749,17 +737,6 @@ class NetworkCnCHTTPSTelegram(Signature):
                 if self.pid:
                     self.mark_call()
 
-    def on_complete(self):
-        if self.found_snake:
-            self.description = "{0} {1}".format("Snake Keylogger", self.description)
-            self.families = ["Snake"]
-            return True
-        elif self.found_matiex:
-            self.description = "{0} {1}".format("Matiex Keylogger", self.description)
-            self.families = ["Matiex"]
-            return True
-
-        return False
 
 
 class NetworkCnCSMTPSGeneric(Signature):
@@ -792,19 +769,17 @@ class NetworkCnCSMTPSGeneric(Signature):
         if buff:
             for header in self.smtpheaders:
                 if buff.startswith(header):
-                    self.match = True
+                    return True
                     self.data.append({"smtp_header": buff})
                     if self.pid:
                         self.mark_call()
 
             if "From: " in buff or "To: " in buff or "Subject: " in buff:
-                self.match = True
+                return True
                 self.data.append({"smtp_header": buff})
                 if self.pid:
                     self.mark_call()
 
-    def on_complete(self):
-        return self.match
 
 
 class NetworkCnCSMTPSExfil(Signature):
@@ -925,72 +900,10 @@ class NetworkCnCSMTPSExfil(Signature):
                     if self.pid:
                         self.mark_call()
                 if "Screen Capture" in buff or "Keylog" in buff:
-                    self.match = True
+                    return True
                     if self.pid:
                         self.mark_call()
 
-    def on_complete(self):
-        if self.found_orion:
-            self.description = "{0} {1}".format("Orion", self.description)
-            self.families = ["OrionKeylogger"]
-            return True
-        elif self.found_hawkeye:
-            self.description = "{0} {1}".format("HawkEye", self.description)
-            self.families = ["HawkEye"]
-            return True
-        elif self.found_phoenix:
-            self.description = "{0} {1}".format("Phoenix", self.description)
-            self.families = ["Phoenix"]
-            return True
-        elif self.found_agentteslat1:
-            self.description = "{0} {1}".format("AgentTeslaV1", self.description)
-            self.families = ["AgentTesla"]
-            return True
-        elif self.found_agentteslat2:
-            self.description = "{0} {1}".format("AgentTeslaV3", self.description)
-            self.families = ["AgentTesla"]
-            return True
-        elif self.found_aspire:
-            self.description = "{0} {1}".format("AspireLogger", self.description)
-            self.families = ["AspireLogger"]
-            return True
-        elif self.found_m00nd3v:
-            self.description = "{0} {1}".format("M00nD3v", self.description)
-            self.families = ["M00nD3v"]
-            return True
-        elif self.found_masslogger:
-            self.description = "{0} {1}".format("MassLogger", self.description)
-            self.families = ["MassLogger"]
-            return True
-        elif self.found_firebirdrat:
-            self.description = "{0} {1}".format("Firebird/Hive", self.description)
-            self.families = ["FirebirdRAT"]
-            return True
-        elif self.found_snake:
-            self.description = "{0} {1}".format("Snake", self.description)
-            self.families = ["Snake"]
-            return True
-        elif self.found_a310logger:
-            self.description = "{0} {1}".format("A310Logger", self.description)
-            self.families = ["A310Logger"]
-            return True
-        elif self.found_matiex:
-            self.description = "{0} {1}".format("Matiex", self.description)
-            self.families = ["Matiex"]
-            return True
-        elif self.found_neptune:
-            self.description = "{0} {1}".format("Neptune", self.description)
-            self.families = ["Neptune"]
-            return True
-        elif self.found_kraken:
-            self.description = "{0} {1}".format("Kraken", self.description)
-            self.families = ["KrakenStealer"]
-            return True
-        elif self.match:
-            self.description = "{0} {1}".format("Generic", self.description)
-            return True
-
-        return False
 
 
 class NetworkCnCHTTPSArchive(Signature):

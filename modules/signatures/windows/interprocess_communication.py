@@ -56,7 +56,7 @@ class InterProcessCommsNamedPipe(Signature):
         if "\\pipe\\" not in pipe_lower:
             return
 
-        noisy_pipes = {"\\pipe\\lsass", "\\pipe\\samr", "\\pipe\\wkssvc", "\\pipe\\srvsvc", "\\pipe\\cng"}
+        noisy_pipes = {"\\pipe\\lsass", r"\\pipe\\samr", r"\\pipe\\wkssvc", r"\\pipe\\srvsvc", "\\pipe\\cng"}
         if any(noisy in pipe_lower for noisy in noisy_pipes):
             return
 
@@ -108,7 +108,7 @@ class InterProcessCommsMutex(Signature):
         self.noisy_prefixes = {
             "\\basenamedobjects\\ctf",
             "\\basenamedobjects\\msctf",
-            "\\sessions\\",
+            r"\\sessions\\",
             "local\\zoneio",
             "global\\msdtc",
         }
@@ -193,11 +193,11 @@ class InterProcessCommsSharedMemory(Signature):
         self.noisy_prefixes = {
             "\\basenamedobjects\\cor_teb_",
             "\\basenamedobjects\\__comcatalogcache__",
-            "\\basenamedobjects\\sxs",
+            r"\\basenamedobjects\\sxs",
             "\\basenamedobjects\\coremessaging",
-            "\\basenamedobjects\\windows.ui",
-            "\\sessions\\",
-            "local\\sm0:",
+            r"\\basenamedobjects\\windows.ui",
+            r"\\sessions\\",
+            r"local\\sm0:",
         }
 
     def on_call(self, call, process):
@@ -223,7 +223,7 @@ class InterProcessCommsSharedMemory(Signature):
             if section_lower.endswith(".exe") or section_lower.endswith(".bin") or section_lower.endswith(".tmp"):
                 is_suspicious_mapping = True
 
-            elif "\\users\\" in section_lower and any(p in section_lower for p in ("\\temp\\", "\\appdata\\", "\\downloads\\")):
+            elif "\\users\\" in section_lower and any(p in section_lower for p in ("\\temp\\", "\\appdata\\", r"\\downloads\\")):
                 is_suspicious_mapping = True
 
             if not is_suspicious_mapping:

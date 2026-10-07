@@ -108,7 +108,7 @@ class MassFileModificationAccess(Signature):
         if isinstance(filepath, str) and "\\" in filepath:
             filepath_lower = filepath.lower()
             # Ignore raw devices, named pipes, and typical volume queries
-            if "\\??\\" in filepath_lower or "\\device\\" in filepath_lower:
+            if "\\??\\" in filepath_lower or r"\\device\\" in filepath_lower:
                 return
 
             if filepath_lower not in self.targeted_files:

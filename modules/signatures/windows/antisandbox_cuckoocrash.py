@@ -45,5 +45,3 @@ class CuckooCrash(Signature):
                 if self.pid:
                     self.mark_call()
 
-    def on_complete(self):
-        return self.found_crash
