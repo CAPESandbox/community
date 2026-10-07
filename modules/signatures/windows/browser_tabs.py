@@ -30,7 +30,7 @@ class FirefoxDisablesProcessPerTab(Signature):
     filter_apinames = set(["NtWriteFile"])
 
     def on_call(self, call, process):
-        buf = self.get_argument(call, "Buffer")
+        buf = self.get_argument(call, "Buffer") or ""
         if "browser.tabs.remote.autostart" in buf.lower():
             handlename = self.get_argument(call, "HandleName")
             self.data.append({"handlename": handlename})

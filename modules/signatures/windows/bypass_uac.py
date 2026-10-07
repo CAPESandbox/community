@@ -133,9 +133,9 @@ class UACBypassCMSTP(Signature):
     def on_call(self, call, process):
         # This is a straight catch of the .inf file with content we want being dropped
         if call["api"] == "NtWriteFile":
-            filename = self.get_argument(call, "HandleName")
+            filename = self.get_argument(call, "HandleName") or ""
             if filename.endswith(".inf"):
-                buf = self.get_argument(call, "Buffer")
+                buf = self.get_argument(call, "Buffer") or ""
                 if "runpresetupcommands" in buf.lower():
                     self.data.append({"dropped .inf file": filename})
                     self.droppedinf.append(filename)
@@ -146,7 +146,7 @@ class UACBypassCMSTP(Signature):
         # This is for a file being moved/renamed into .inf. This is to avoid a possible evasion that could be created by dropped the content in a .txt or something and then renaming the file/moving it into a .inf for use my cmstp. Also in case of copying .inf files into new ones too.
         if call["api"] in ("CopyFileExA", "CopyFileExW", "MoveFileWithProgressW", "MoveFileWithProgressTransactedW"):
             origfile = self.get_argument(call, "ExistingFileName")
-            destfile = self.get_argument(call, "NewFileName")
+            destfile = self.get_argument(call, "NewFileName") or ""
             if destfile.endswith(".inf"):
                 self.data.append({"dropped .inf file": "%s was moved to destination file %s" % (origfile, destfile)})
                 self.droppedinf.append(destfile)
