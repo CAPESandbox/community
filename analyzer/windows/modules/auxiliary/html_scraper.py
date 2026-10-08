@@ -13,6 +13,13 @@ log = logging.getLogger(__name__)
 
 HAVE_SELENIUM = False
 
+
+def normalize_url(url: str) -> str:
+    url = str(url).strip()
+    if not url.lower().startswith(("http://", "https://")):
+        url = f"https://{url}"
+    return url
+
 try:
     from selenium import webdriver
     from selenium.common.exceptions import TimeoutException
@@ -79,7 +86,7 @@ class HtmlScraper(Thread, Auxiliary):
 
             firefox_options = webdriver.FirefoxOptions()
             firefox_options.add_argument("--disable-gpu")
-            firefox_options.headless = True
+            firefox_options.add_argument("-headless")
             self.browser = webdriver.Firefox(options=firefox_options, service=service)
             self.browser.set_page_load_timeout(10)
 
@@ -87,7 +94,7 @@ class HtmlScraper(Thread, Auxiliary):
                 file_path = os.path.join(os.environ["TEMP"] + os.sep, str(self.config.file_name))
                 sample_url = "file:///{}".format(os.path.abspath(file_path))
             else:
-                sample_url = self.config.target
+                sample_url = normalize_url(self.config.target)
 
             log.debug("html_scraper try to scrape: %s", sample_url)
             try:
