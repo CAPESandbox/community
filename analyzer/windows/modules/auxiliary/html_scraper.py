@@ -20,6 +20,7 @@ def normalize_url(url: str) -> str:
         url = f"https://{url}"
     return url
 
+
 try:
     from selenium import webdriver
     from selenium.common.exceptions import TimeoutException
