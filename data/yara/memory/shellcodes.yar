@@ -198,3 +198,59 @@ rule shellcode_shikataganai_encoding
     condition:
         any of them
 }
+
+rule Shellcode_PEB_Walk_x86 {
+    meta:
+        description = "Detects possible 32-bit PEB walking and Export Directory resolution"
+        reference = "https://moval0x1.github.io/posts/the-peb-walk-anatomy/"
+
+    strings:
+        $peb_1 = { 64 A1 30 00 00 00 }
+        $peb_2 = { 64 8B ?? 30 }
+        $peb_3 = { 64 8B ?? ?? 30 }
+        $peb_4 = { 64 8B ?? 30 00 00 00 }
+        $peb_5 = { 64 FF 35 30 00 00 00 }
+        $peb_6 = { 6A 30 [0-4] 5? [0-4] 64 8B }
+        $peb_7 = { 64 A1 18 00 00 00 [0-16] 8B ?? 30 }
+        $peb_8 = { 64 8B ?? 18 [0-16] 8B ?? 30 }
+
+        $ldr_chain = { 8B ( 4? | 5? | 6? | 7? ) 0C [0-48] ( 8B | 8D ) [1-2] ( 0C | 14 | 1C ) }
+        $ldr_base_name = { 8B ( 4? | 5? | 6? | 7? ) ( 18 | 20 | 28 ) [0-32] ( 8B | 8D ) [1-2] ( 24 | 2C | 30 ) }
+        $eat_lookup = { 8B ( 4? | 5? | 6? | 7? ) 3C [0-32] 8B [1-3] 78 [0-32] 8B [1-2] ( 18 | 1C | 20 | 24 ) }
+
+    condition:
+        for any of ($peb_*) : (
+            $ldr_chain in (@ .. @ + 64) and (
+                $ldr_base_name in (@ .. @ + 160) or
+                $eat_lookup in (@ - 220 .. @ + 220)
+            )
+        )
+}
+
+rule Shellcode_PEB_Walk_x64 {
+    meta:
+        description = "Detects possible 64-bit PEB walking and Export Directory resolution"
+        reference = "https://moval0x1.github.io/posts/the-peb-walk-anatomy/"
+
+    strings:
+        $peb64_1 = { 65 ( 48 | 4C ) 8B ?? 25 60 00 00 00 }
+        $peb64_2 = { 65 ( 48 | 4C ) 8B ?? 60 }
+        $peb64_3 = { 65 ( 48 | 4C ) 8B 04 ?? 60 00 00 00 }
+        $peb64_4 = { 6A 60 [0-4] ( 5? | 41 5? ) [0-4] 65 ( 48 | 4C ) 8B }
+        $peb64_5 = { 65 ( 48 | 4C ) 8B ?? 25 30 00 00 00 [0-16] ( 48 | 4C ) 8B ?? 60 }
+        $peb64_6 = { 65 ( 48 | 4C ) 8B ?? 30 [0-16] ( 48 | 4C ) 8B ?? 60 }
+
+        $ldr64_chain = { ( 48 | 4C ) 8B ( 4? | 5? | 6? | 7? ) 18 [0-48] ( 48 | 4C ) ( 8B | 8D ) [1-2] ( 10 | 20 | 30 ) }
+        $ldr64_base_name = { ( 48 | 4C ) 8B ( 4? | 5? | 6? | 7? ) ( 30 | 48 | 50 | 58 | 60 ) [0-36] ( 48 | 4C | 66 ) ( 8B | 8D ) [1-2] ( 30 | 48 | 50 | 58 | 60 ) }
+        $eat64_lookup = { ( 8B | 41 8B | 44 8B | 45 8B ) [1-2] 3C [0-48] 8B ?? ?? 88 00 00 00 }
+        $eat64_lookup_sib = { ( 8B | 41 8B | 44 8B | 45 8B ) [1-2] 3C [0-48] 8B ?? 88 00 00 00 }
+
+    condition:
+        for any of ($peb64_*) : (
+            $ldr64_chain in (@ .. @ + 64) and (
+                $ldr64_base_name in (@ .. @ + 160) or
+                $eat64_lookup in (@ - 220 .. @ + 220) or
+                $eat64_lookup_sib in (@ - 220 .. @ + 220)
+            )
+        )
+}
