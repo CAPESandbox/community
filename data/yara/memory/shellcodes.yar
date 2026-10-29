@@ -254,3 +254,17 @@ rule Shellcode_PEB_Walk_x64 {
             )
         )
 }
+
+rule Shellcode_GetPC_Bootstrap_Known_Prologue {
+    meta:
+        description = "Detects various common position-independent shellcode bootstrap prologues in the first 16 bytes"
+
+    strings:
+        $boot_x64_1 = { E8 00 00 00 00 59 48 8D 49 FB }
+        $boot_x64_2 = { E8 00 00 00 00 5A 48 8D 12 }
+        $boot_x86_1 = { E8 00 00 00 00 ( 58 | 59 | 5A | 5B | 5C | 5D | 5E | 5F ) }
+        $boot_x86_fpu = { D9 EE D9 74 24 }
+
+    condition:
+        any of them in (0 .. 16)
+}
