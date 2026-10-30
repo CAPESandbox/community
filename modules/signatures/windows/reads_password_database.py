@@ -37,6 +37,7 @@ class ReadsPasswordDatabase(Signature):
             ".psafe3",  # Password Safe
             ".walletx",  # Enpass
             ".enpassbackup",  # Enpass backup
+            ".spdb"  # Sticky Password
         ]
 
         ext_pattern = "|".join(re.escape(e.lstrip(".")) for e in exts)
