@@ -88,13 +88,20 @@ class InjectionCRT(Signature):
                     if self.pid:
                         self.mark_call()
                     return True
-        elif (call["api"] == "CreateRemoteThread" or call["api"].startswith("NtCreateThread")) and self.sequence == 2:
+        # Win10/11 inject via CreateRemoteThreadEx, whose NtCreateThreadEx uses a handle of its own,
+        # so also accept the target by its ProcessId.
+        elif (call["api"] in ("CreateRemoteThread", "CreateRemoteThreadEx") or call["api"].startswith("NtCreateThread")) and (
+            self.sequence == 2
+        ):
             handle = self.get_argument(call, "ProcessHandle")
-            if handle in self.process_handles:
-                procname = self.get_name_from_pid(self.handle_map[handle])
-                desc = "{0}({1}) -> {2}({3})".format(
-                    process["process_name"], str(process["process_id"]), procname, self.handle_map[handle]
-                )
+            target = self.handle_map.get(handle)
+            if not target:
+                pid = str(self.get_argument(call, "ProcessId"))
+                if pid in self.process_pids:
+                    target = pid
+            if target:
+                procname = self.get_name_from_pid(target)
+                desc = "{0}({1}) -> {2}({3})".format(process["process_name"], str(process["process_id"]), procname, target)
                 self.data.append({"injection": desc})
                 if self.pid:
                     self.mark_call()
