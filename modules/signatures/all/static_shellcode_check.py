@@ -18,7 +18,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class CAPEShellcodeConfirmed(Signature):
     name = "cape_shellcode_confirmed"
-    description = "CAPE extracted a payload statically confirmed as shellcode"
+    description = "CAPE extracted payload statically confirmed as shellcode"
     severity = 3
     confidence = 90
     categories = ["shellcode", "injection", "static"]
