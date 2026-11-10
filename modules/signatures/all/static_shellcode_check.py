@@ -238,7 +238,7 @@ class CAPEShellcodeNetworkIOC(Signature):
 
 class CAPEShellcodeFramework(Signature):
     name = "cape_shellcode_framework"
-    description = "CAPE extracted shellcode produced by a known generator"
+    description = "CAPE extracted shellcode produced by a known framework"
     severity = 3
     confidence = 90
     categories = ["shellcode", "injection", "static"]
