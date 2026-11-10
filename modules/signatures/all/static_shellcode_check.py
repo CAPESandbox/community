@@ -29,11 +29,20 @@ class CAPEShellcodeConfirmed(Signature):
 
     def run(self):
         ret = False
-        for payload in self.results.get("CAPE", {}).get("payloads", []) or []:
+        # the submitted file (shellcode / shellcode_x64 packages) and CAPE's extracted payloads
+        target = (self.results.get("target") or {}).get("file") or {}
+        files = [("submitted file", target)] if target.get("static_shellcode_check") else []
+        files += [("CAPE payload", payload) for payload in self.results.get("CAPE", {}).get("payloads", []) or []]
+        seen = set()
+        for source, payload in files:
             check = payload.get("static_shellcode_check") or {}
+            if not check or payload.get("sha256") in seen:
+                continue  # a dump of the submitted shellcode is reported once
+            seen.add(payload.get("sha256"))
             if check.get("verdict") != "shellcode":
                 continue
             entry = {
+                "source": source,
                 "process": payload.get("process_name", ""),
                 "pid": payload.get("pid", ""),
                 "cape_type": payload.get("cape_type", ""),
@@ -64,11 +73,20 @@ class CAPEShellcodeLikely(Signature):
 
     def run(self):
         ret = False
-        for payload in self.results.get("CAPE", {}).get("payloads", []) or []:
+        # the submitted file (shellcode / shellcode_x64 packages) and CAPE's extracted payloads
+        target = (self.results.get("target") or {}).get("file") or {}
+        files = [("submitted file", target)] if target.get("static_shellcode_check") else []
+        files += [("CAPE payload", payload) for payload in self.results.get("CAPE", {}).get("payloads", []) or []]
+        seen = set()
+        for source, payload in files:
             check = payload.get("static_shellcode_check") or {}
+            if not check or payload.get("sha256") in seen:
+                continue  # a dump of the submitted shellcode is reported once
+            seen.add(payload.get("sha256"))
             if check.get("verdict") != "likely":
                 continue
             entry = {
+                "source": source,
                 "process": payload.get("process_name", ""),
                 "pid": payload.get("pid", ""),
                 "cape_type": payload.get("cape_type", ""),
@@ -100,8 +118,16 @@ class CAPEShellcodePELoader(Signature):
 
     def run(self):
         ret = False
-        for payload in self.results.get("CAPE", {}).get("payloads", []) or []:
+        # the submitted file (shellcode / shellcode_x64 packages) and CAPE's extracted payloads
+        target = (self.results.get("target") or {}).get("file") or {}
+        files = [("submitted file", target)] if target.get("static_shellcode_check") else []
+        files += [("CAPE payload", payload) for payload in self.results.get("CAPE", {}).get("payloads", []) or []]
+        seen = set()
+        for source, payload in files:
             check = payload.get("static_shellcode_check") or {}
+            if not check or payload.get("sha256") in seen:
+                continue  # a dump of the submitted shellcode is reported once
+            seen.add(payload.get("sha256"))
             if check.get("verdict") not in ("shellcode", "likely"):
                 continue
             tags = set(check.get("tags", []))
@@ -109,6 +135,7 @@ class CAPEShellcodePELoader(Signature):
             if not (tags & {"reflective_pe_loader", "executable_pe_header", "staged_pe"} or hidden):
                 continue
             entry = {
+                "source": source,
                 "process": payload.get("process_name", ""),
                 "pid": payload.get("pid", ""),
                 "cape_type": payload.get("cape_type", ""),
@@ -162,8 +189,16 @@ class CAPEShellcodeTechnique(Signature):
 
     def run(self):
         ret = False
-        for payload in self.results.get("CAPE", {}).get("payloads", []) or []:
+        # the submitted file (shellcode / shellcode_x64 packages) and CAPE's extracted payloads
+        target = (self.results.get("target") or {}).get("file") or {}
+        files = [("submitted file", target)] if target.get("static_shellcode_check") else []
+        files += [("CAPE payload", payload) for payload in self.results.get("CAPE", {}).get("payloads", []) or []]
+        seen = set()
+        for source, payload in files:
             check = payload.get("static_shellcode_check") or {}
+            if not check or payload.get("sha256") in seen:
+                continue  # a dump of the submitted shellcode is reported once
+            seen.add(payload.get("sha256"))
             # 'image' covers a copy of ntdll's syscall stubs (unhooking) found on its own
             if check.get("verdict") not in ("shellcode", "likely", "image"):
                 continue
@@ -173,6 +208,7 @@ class CAPEShellcodeTechnique(Signature):
             if not hits:
                 continue
             entry = {
+                "source": source,
                 "process": payload.get("process_name", ""),
                 "pid": payload.get("pid", ""),
                 "cape_type": payload.get("cape_type", ""),
@@ -207,8 +243,16 @@ class CAPEShellcodeNetworkIOC(Signature):
 
     def run(self):
         ret = False
-        for payload in self.results.get("CAPE", {}).get("payloads", []) or []:
+        # the submitted file (shellcode / shellcode_x64 packages) and CAPE's extracted payloads
+        target = (self.results.get("target") or {}).get("file") or {}
+        files = [("submitted file", target)] if target.get("static_shellcode_check") else []
+        files += [("CAPE payload", payload) for payload in self.results.get("CAPE", {}).get("payloads", []) or []]
+        seen = set()
+        for source, payload in files:
             check = payload.get("static_shellcode_check") or {}
+            if not check or payload.get("sha256") in seen:
+                continue  # a dump of the submitted shellcode is reported once
+            seen.add(payload.get("sha256"))
             if check.get("verdict") not in ("shellcode", "likely"):
                 continue
             iocs = check.get("iocs") or {}
@@ -216,6 +260,7 @@ class CAPEShellcodeNetworkIOC(Signature):
             if not found:
                 continue
             entry = {
+                "source": source,
                 "process": payload.get("process_name", ""),
                 "pid": payload.get("pid", ""),
                 "cape_type": payload.get("cape_type", ""),
@@ -249,14 +294,23 @@ class CAPEShellcodeFramework(Signature):
 
     def run(self):
         ret = False
-        for payload in self.results.get("CAPE", {}).get("payloads", []) or []:
+        # the submitted file (shellcode / shellcode_x64 packages) and CAPE's extracted payloads
+        target = (self.results.get("target") or {}).get("file") or {}
+        files = [("submitted file", target)] if target.get("static_shellcode_check") else []
+        files += [("CAPE payload", payload) for payload in self.results.get("CAPE", {}).get("payloads", []) or []]
+        seen = set()
+        for source, payload in files:
             check = payload.get("static_shellcode_check") or {}
+            if not check or payload.get("sha256") in seen:
+                continue  # a dump of the submitted shellcode is reported once
+            seen.add(payload.get("sha256"))
             if check.get("verdict") != "shellcode":
                 continue
             for fw in check.get("frameworks") or []:
                 if fw.get("confidence") != "identified":
                     continue
                 entry = {
+                    "source": source,
                     "process": payload.get("process_name", ""),
                     "pid": payload.get("pid", ""),
                     "cape_type": payload.get("cape_type", ""),
@@ -291,14 +345,23 @@ class CAPEShellcodeEncoder(Signature):
 
     def run(self):
         ret = False
-        for payload in self.results.get("CAPE", {}).get("payloads", []) or []:
+        # the submitted file (shellcode / shellcode_x64 packages) and CAPE's extracted payloads
+        target = (self.results.get("target") or {}).get("file") or {}
+        files = [("submitted file", target)] if target.get("static_shellcode_check") else []
+        files += [("CAPE payload", payload) for payload in self.results.get("CAPE", {}).get("payloads", []) or []]
+        seen = set()
+        for source, payload in files:
             check = payload.get("static_shellcode_check") or {}
+            if not check or payload.get("sha256") in seen:
+                continue  # a dump of the submitted shellcode is reported once
+            seen.add(payload.get("sha256"))
             if check.get("verdict") != "shellcode":
                 continue
             enc = check.get("encoder")
             if not enc:
                 continue
             entry = {
+                "source": source,
                 "process": payload.get("process_name", ""),
                 "pid": payload.get("pid", ""),
                 "cape_type": payload.get("cape_type", ""),
