@@ -19,7 +19,6 @@ from urllib.parse import urlsplit
 from lib.cuckoo.common.abstracts import Signature
 from lib.cuckoo.common.constants import CUCKOO_ROOT
 
-
 DOMAINS_FILE = os.path.join(CUCKOO_ROOT, "data", "rmm_domains.txt")
 
 
@@ -56,10 +55,7 @@ def match_domain(observed_domain, listed_domains):
         return None
 
     for listed_domain in sorted(listed_domains, key=len, reverse=True):
-        if (
-            observed_domain == listed_domain
-            or observed_domain.endswith("." + listed_domain)
-        ):
+        if observed_domain == listed_domain or observed_domain.endswith("." + listed_domain):
             return listed_domain
 
     return None
@@ -95,9 +91,9 @@ class NetworkDnsRmm(Signature):
     ttps = ["T1219"]
     ttps += ["T1219.002"]
     references = [
-    "https://lolrmm.io/api/rmm_tools.json",
-    "bartblaze",
-]
+        "https://lolrmm.io/api/rmm_tools.json",
+        "bartblaze",
+    ]
 
     def run(self):
         domains = load_domains()
@@ -146,9 +142,9 @@ class NetworkHttpRmm(Signature):
     ttps = ["T1219"]
     ttps += ["T1219.002"]
     references = [
-    "https://lolrmm.io/api/rmm_tools.json",
-    "bartblaze",
-]
+        "https://lolrmm.io/api/rmm_tools.json",
+        "bartblaze",
+    ]
 
     filter_apinames = set(
         [
@@ -249,4 +245,3 @@ class NetworkHttpRmm(Signature):
             )
 
         return bool(matches)
-
