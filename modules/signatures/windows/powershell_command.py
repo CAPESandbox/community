@@ -77,7 +77,7 @@ class PowershellCommandSuspicious(Signature):
             lower = cmdline.lower()
             if "powershell" in lower:
                 for command in commands:
-                    if command in lower:
+                    if command in lower or command in cmdline:
                         ret = True
                         self.data.append({"command": cmdline})
                         break
@@ -168,7 +168,7 @@ class PowershellRenamed(Signature):
             lower = cmdline.lower()
             if "powershell" not in lower:
                 for command in commands:
-                    if command in lower:
+                    if command in lower or command in cmdline:
                         ret = True
                         self.data.append({"command": cmdline})
                         break
@@ -263,7 +263,7 @@ class PowershellReversed(Signature):
         for cmdline in cmdlines:
             lower = cmdline.lower()
             for command in commands:
-                if command[::-1] in lower:
+                if command[::-1] in lower or command[::-1] in cmdline:
                     ret = True
                     self.data.append({"command": cmdline})
                     break

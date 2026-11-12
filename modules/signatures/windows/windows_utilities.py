@@ -30,7 +30,7 @@ class UsesWindowsUtilitiesScheduler(Signature):
     def on_call(self, _, process):
         if process["process_name"].lower() in self.filter_processnames:
             # ToDo this doesn't apply MITRE map conversion for newer versions
-            self.ttps += ["T1053.005"] if process["process_name"].lower() == "schtasks" else ["T1053.002"]  # MITRE v7,8
+            self.ttps += ["T1053.005"] if "schtasks" in process["process_name"].lower() else ["T1053.002"]  # MITRE v7,8
             for cmdline in self.results.get("behavior", {}).get("summary", {}).get("executed_commands", []):
                 if re.search(process["process_name"].lower(), cmdline.lower()):
                     self.data.append({"command": cmdline})
@@ -57,7 +57,8 @@ class UsesWindowsUtilities(Signature):
             "copy",
             "dir ",
             "dir.exe",
-            "echo" "erase",
+            "echo",
+            "erase",
             "fsutil",
             "getmac",
             "ipconfig",
@@ -83,7 +84,7 @@ class UsesWindowsUtilities(Signature):
             "qwinsta",
             "reg ",
             "reg.exe",
-            "regsrv32",
+            "regsvr32",
             "ren ",
             "ren.exe",
             "rename",
@@ -348,19 +349,18 @@ class AltersWindowsUtility(Signature):
             "netsh.exe",
             "nslookup.exe",
             "powershell.exe",
-            "regsrv32.exe",
+            "regsvr32.exe",
             "sc.exe",
             "schtasks.exe",
             "systeminfo.exe",
             "tasklist.exe",
             "vssadmin.exe",
-            "wevutil.exe",
+            "wevtutil.exe",
             "wmic.exe",
             "wscript.exe",
         ]
 
     def on_call(self, call, process):
-        self.ret = False
         origfile = self.get_argument(call, "ExistingFileName")
         destfile = self.get_argument(call, "NewFileName")
         for utility in self.utilities:
@@ -428,7 +428,6 @@ class OverwritesAccessibilityUtility(Signature):
         ]
 
     def on_call(self, call, process):
-        self.ret = False
         origfile = self.get_argument(call, "ExistingFileName")
         destfile = self.get_argument(call, "NewFileName")
         for utility in self.utilities:
@@ -532,8 +531,8 @@ class UsesWindowsUtilitiesAppCmd(Signature):
 
     def run(self):
         utilities = [
-            "AppCmd ",
-            "AppCmd.exe ",
+            "appcmd ",
+            "appcmd.exe ",
         ]
 
         ret = False
@@ -617,10 +616,10 @@ class UsesWindowsUtilitiesCSVDELDFIDE(Signature):
 
     def run(self):
         utilities = [
-            "CSVDE ",
-            "CSVDE.exe ",
-            "LDIFDE ",
-            "LDIFDE.exe ",
+            "csvde ",
+            "csvde.exe ",
+            "ldifde ",
+            "ldifde.exe ",
         ]
 
         ret = False
@@ -675,8 +674,8 @@ class UsesWindowsUtilitiesDSQuery(Signature):
 
     def run(self):
         utilities = [
-            "DSQuery ",
-            "DSQuery.exe ",
+            "dsquery ",
+            "dsquery.exe ",
         ]
 
         ret = False
@@ -925,7 +924,7 @@ class PotentialWebShellViaScreenConnectServer(Signature):
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()
-        if pname == "screenConnect.service.exe" and call["api"] == "CreateProcessInternalW":
+        if pname == "screenconnect.service.exe" and call["api"] == "CreateProcessInternalW":
             cmdline = self.get_argument(call, "CommandLine")
             lower = cmdline.lower()
             if any(process in lower for process in ("cmd.exe", "powershell.exe", "pwsh.exe", "powershell_ise.exe", "csc.exe")):

@@ -33,13 +33,13 @@ class MimikatzModules(Signature):
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if (
-                "CRYPTO::" in lower
-                or "KERBEROS::" in lower
-                or "LSADUMP::" in lower
-                or "MISC::" in lower
-                or "PRIVILEGE::" in lower
-                or "SEKURLSA::" in lower
-                or "TOKEN::" in lower
+                "crypto::" in lower
+                or "kerberos::" in lower
+                or "lsadump::" in lower
+                or "misc::" in lower
+                or "privilege::" in lower
+                or "sekurlsa::" in lower
+                or "token::" in lower
             ):
                 ret = True
                 self.data.append({"module": cmdline})

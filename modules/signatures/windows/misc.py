@@ -117,7 +117,7 @@ class PotentialProtocolTunnelingViaLegitUtilities(Signature):
             lower = cmdline.lower()
             if (
                 "3389" in lower
-                and any(arg in lower for arg in ("-L", "-P", "-R", "-pw", "-ssh"))
+                and any(arg in lower for arg in ("-l", "-p", "-r", "-pw", "-ssh"))
                 or "ssh.exe" in lower
                 and any(arg in lower for arg in ("127.0.0", "localhost"))
                 or "ngrok" in lower

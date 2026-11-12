@@ -231,7 +231,7 @@ class DumpLSAViaWindowsErrorReporting(Signature):
 
     def on_call(self, call, process):
         # Checking parent process for false positives.
-        if process["process_name"].lower() in ("WerFaultSecure.exe", "WerFault.exe") and call["api"] == "NtCreateFile":
+        if process["process_name"].lower() in ("werfaultsecure.exe", "werfault.exe") and call["api"] == "NtCreateFile":
             filename = self.get_argument(call, "FileName")
             if filename.endswith(".dmp") and "lsass_" in filename:
                 return True

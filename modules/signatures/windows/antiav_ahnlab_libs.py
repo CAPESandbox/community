@@ -35,10 +35,10 @@ class AhnlabDetectLibs(Signature):
     def on_call(self, call, process):
         dllname = self.get_argument(call, "FileName")
         if (
-            "AhnTrust" in dllname.lower()
-            or "AhnI18N2" in dllname.lower()
-            or "AhnACtrl" in dllname.lower()
-            or "AhnI2" in dllname.lower()
+            "ahntrust" in dllname.lower()
+            or "ahni18n2" in dllname.lower()
+            or "ahnactrl" in dllname.lower()
+            or "ahni2" in dllname.lower()
         ):
             if self.pid:
                 self.mark_call()
