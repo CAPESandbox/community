@@ -236,7 +236,9 @@ class NetworkDOHTLS(Signature):
         domain_indicators = [
             "cloudflare-dns.com",
             "commons.host",
+            "dns.google",
             "dns10.quad9.net",
+            "dns12.quad9.net",
             "dns.233py.com",
             "dns9.quad9.net",
             "dns.aaflalo.me",

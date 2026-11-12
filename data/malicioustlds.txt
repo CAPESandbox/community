@@ -102,6 +102,7 @@
 .rugby
 .run
 .sale
+.sbs
 .science
 .sew
 .site
