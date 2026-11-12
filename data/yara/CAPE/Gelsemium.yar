@@ -12,11 +12,10 @@ rule Gelsemine {
         $s6 = "echo FOO" fullword wide
         $s7 = "?_Tidy@?$basic_string@DU?$char_traits@D@std@@V" ascii
         $o1 = { eb 08 c7 44 24 34 fd ff ff ff 8b 44 24 54 8b 4c }
-        $o2 = { eb 08 c7 44 24 34 fd ff ff ff 8b 44 24 54 8b 4c }
-        $o3 = { 8b 76 08 2b f0 a1 34 ff 40 00 03 f0 89 35 38 ff }
-        $o4 = { 83 c4 34 c3 8b 4e 20 6a 05 e8 73 10 00 00 8b 76 }
-        $o5 = { 8b 44 24 44 2b d1 03 d0 8b f2 e9 14 ff ff ff 8d }
-        $o6 = { 68 00 06 00 00 6a 00 e8 d3 ff ff ff a2 48 00 41 }
+        $o2 = { 8b 76 08 2b f0 a1 34 ff 40 00 03 f0 89 35 38 ff }
+        $o3 = { 83 c4 34 c3 8b 4e 20 6a 05 e8 73 10 00 00 8b 76 }
+        $o4 = { 8b 44 24 44 2b d1 03 d0 8b f2 e9 14 ff ff ff 8d }
+        $o5 = { 68 00 06 00 00 6a 00 e8 d3 ff ff ff a2 48 00 41 }
     condition:
         uint16(0) == 0x5a4d and (6 of ($s*) or (all of ($o*) and 2 of ($s*)))
 }
@@ -78,7 +77,6 @@ rule Gelsevirine {
         $m5 = "131C8113-E083-4C7F-BEAF-82D73B01F2C5" ascii wide
         $m6 = "4CCF506D-2F61-4C3A-B9C6-9FA47D43A3FC" ascii wide
         $m7 = "B2DC745A-66AE-4A19-B11C-AD74D46B7EE0" ascii wide
-        $m8 = "6BDA7FEF-232F-4EA6-8FC8-24F58CD7B366" ascii wide
     condition:
         uint16(0) == 0x5a4d and (6 of ($s*) or (2 of ($c*) and 4 of ($s*)) or (5 of ($m*) and (1 of ($c*) or 3 of ($s*))))
 }

@@ -29,11 +29,10 @@ rule MALWARE_Win_Houdini {
          $mk1 = "keylogger_thread" fullword ascii
          $mk2 = "keyloger_host" fullword ascii
          $mk3 = "keylogger_port" fullword ascii
-         $mk4 = "keylogger_thread" fullword ascii
-         $mk5 = "keylogger_init" fullword wide
-         $mk6 = "keylogger_stop" fullword wide
-         $mk7 = "keylogger_offline" fullword wide
-         $mk8 = "silence_keylogger" fullword wide
+         $mk4 = "keylogger_init" fullword wide
+         $mk5 = "keylogger_stop" fullword wide
+         $mk6 = "keylogger_offline" fullword wide
+         $mk7 = "silence_keylogger" fullword wide
          // module screenshot
          $ms1 = "screenshot_thread" fullword ascii
          $ms2 = "screen_host" fullword ascii
