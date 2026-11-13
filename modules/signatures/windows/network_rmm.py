@@ -83,7 +83,7 @@ def hostname_from_url(value):
 class NetworkDnsRmm(Signature):
     name = "network_dns_rmm"
     description = "Resolves a known remote access, RMM, or tunnelling service domain"
-    severity = 1
+    severity = 2
     confidence = 60
     categories = ["network"]
     authors = ["bartblaze"]
@@ -133,7 +133,7 @@ class NetworkDnsRmm(Signature):
 class NetworkHttpRmm(Signature):
     name = "network_http_rmm"
     description = "Accesses a known remote access, RMM, or tunnelling service URL"
-    severity = 1
+    severity = 2
     confidence = 60
     categories = ["network"]
     authors = ["bartblaze"]
