@@ -12,11 +12,11 @@ rule UNK_DeadDrop_Overlord_Wallet_Agent_Experimental
         license = "MIT"
     strings:
         $elf = { 7F 45 4C 46 }
-        $framework = "overlord-client/cmd/agent" ascii wide
-        $env = "OVERLORD_SERVER_RAW" ascii wide
-        $wallet1 = "OVERLORD_COMPANY_WALLET_EP" ascii wide
-        $wallet2 = "X-Company-Wallet-Client-Id" ascii wide
-        $wallet3 = "/api/company-wallet/upload" ascii wide
+        $framework = "overlord-client/cmd/agent" ascii
+        $env = "OVERLORD_SERVER_RAW" ascii
+        $wallet1 = "OVERLORD_COMPANY_WALLET_EP" ascii
+        $wallet2 = "X-Company-Wallet-Client-Id" ascii
+        $wallet3 = "/api/company-wallet/upload" ascii
     condition:
         filesize < 64MB and $elf at 0 and $framework and $env and 2 of ($wallet*)
 }
@@ -63,8 +63,8 @@ rule UNK_DeadDrop_ClickFix_Stage2_Installer_Experimental
         $fallback = "GUARD_STORE_FALLBACK" ascii wide
         $runner = "deepfake_guard_run.sh" ascii wide
         $log = "guard-install-log" ascii wide
-        $encoded_guard = "ZGVlcGZha2VfZ3VhcmQ" ascii
-        $encoded_fallback = "R1VBUkRfU1RPUkVfRkFMTEJBQ0s" ascii
+        $encoded_guard = "deepfake_guard" base64 base64wide
+        $encoded_fallback = "GUARD_STORE_FALLBACK" base64 base64wide
     condition:
         filesize < 2MB and (2 of ($work, $fallback, $runner, $log) or
                             all of ($encoded_guard, $encoded_fallback))
