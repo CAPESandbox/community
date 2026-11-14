@@ -28,12 +28,16 @@ class UsesWindowsUtilitiesScheduler(Signature):
     )
 
     def on_call(self, _, process):
-        if process["process_name"].lower() in self.filter_processnames:
+        pname = process["process_name"].lower()
+        if pname in self.filter_processnames:
             # ToDo this doesn't apply MITRE map conversion for newer versions
-            self.ttps += ["T1053.005"] if "schtasks" in process["process_name"].lower() else ["T1053.002"]  # MITRE v7,8
+            ttp = "T1053.005" if "schtasks" in pname else "T1053.002"  # MITRE v7,8
+            self.ttps = [*self.ttps, ttp]
             for cmdline in self.results.get("behavior", {}).get("summary", {}).get("executed_commands", []):
-                if re.search(process["process_name"].lower(), cmdline.lower()):
+                if re.search(pname, cmdline.lower()):
                     self.data.append({"command": cmdline})
+            if self.pid:
+                self.mark_call()
             return True
         return False
 
@@ -57,7 +61,7 @@ class UsesWindowsUtilities(Signature):
             "copy",
             "dir ",
             "dir.exe",
-            "echo",
+            "echo ",
             "erase",
             "fsutil",
             "getmac",
@@ -124,6 +128,7 @@ class UsesWindowsUtilities(Signature):
                     ):
                         ret = True
                         self.data.append({"command": cmdline})
+                        break
 
         return ret
 
@@ -241,10 +246,11 @@ class ScriptToolExecuted(Signature):
             lower = cmdline.lower()
             for utility in utilities:
                 if utility in lower:
-                    if utility == "powershell":
-                        self.ttps += ["T1059.001"]  # MITRE v7,8
+                    if utility == "powershell" and "T1059.001" not in self.ttps:
+                        self.ttps = [*self.ttps, "T1059.001"]  # MITRE v7,8
                     ret = True
                     self.data.append({"command": cmdline})
+                    break
 
         return ret
 
@@ -337,7 +343,7 @@ class AltersWindowsUtility(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
-        self.utilities = [
+        self.utilities = (
             "at.exe",
             "bcdedit.exe",
             "bitsadmin.exe",
@@ -358,18 +364,16 @@ class AltersWindowsUtility(Signature):
             "wevtutil.exe",
             "wmic.exe",
             "wscript.exe",
-        ]
+        )
 
     def on_call(self, call, process):
-        origfile = self.get_argument(call, "ExistingFileName")
-        destfile = self.get_argument(call, "NewFileName")
-        for utility in self.utilities:
-            lower = origfile.lower()
-            if lower.endswith(utility):
-                self.ret = True
-                self.data.append({"utility": "source file %s destination file %s" % (origfile, destfile)})
-                if self.pid:
-                    self.mark_call()
+        origfile = self.get_argument(call, "ExistingFileName") or ""
+        destfile = self.get_argument(call, "NewFileName") or ""
+        if origfile.lower().endswith(self.utilities):
+            self.ret = True
+            self.data.append({"utility": f"source file {origfile} destination file {destfile}"})
+            if self.pid:
+                self.mark_call()
 
     def on_complete(self):
         return self.ret
@@ -417,7 +421,7 @@ class OverwritesAccessibilityUtility(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.ret = False
-        self.utilities = [
+        self.utilities = (
             "atbroker.exe",
             "displayswitch.exe",
             "magnify.exe",
@@ -425,18 +429,16 @@ class OverwritesAccessibilityUtility(Signature):
             "osk.exe",
             "sethc.exe",
             "utilman.exe",
-        ]
+        )
 
     def on_call(self, call, process):
-        origfile = self.get_argument(call, "ExistingFileName")
-        destfile = self.get_argument(call, "NewFileName")
-        for utility in self.utilities:
-            lower = destfile.lower()
-            if lower.endswith(utility):
-                self.ret = True
-                self.data.append({"utility": "source file %s destination file %s" % (origfile, destfile)})
-                if self.pid:
-                    self.mark_call()
+        origfile = self.get_argument(call, "ExistingFileName") or ""
+        destfile = self.get_argument(call, "NewFileName") or ""
+        if destfile.lower().endswith(self.utilities):
+            self.ret = True
+            self.data.append({"utility": f"source file {origfile} destination file {destfile}"})
+            if self.pid:
+                self.mark_call()
 
     def on_complete(self):
         return self.ret
@@ -925,9 +927,11 @@ class PotentialWebShellViaScreenConnectServer(Signature):
     def on_call(self, call, process):
         pname = process["process_name"].lower()
         if pname == "screenconnect.service.exe" and call["api"] == "CreateProcessInternalW":
-            cmdline = self.get_argument(call, "CommandLine")
+            cmdline = self.get_argument(call, "CommandLine") or ""
             lower = cmdline.lower()
-            if any(process in lower for process in ("cmd.exe", "powershell.exe", "pwsh.exe", "powershell_ise.exe", "csc.exe")):
+            if any(proc in lower for proc in ("cmd.exe", "powershell.exe", "pwsh.exe", "powershell_ise.exe", "csc.exe")):
+                if self.pid:
+                    self.mark_call()
                 return True
 
 
@@ -941,7 +945,7 @@ class PotentialLateralMovementViaSMBEXEC(Signature):
     evented = True
     ttps = ["T1059"]
     references = [
-        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows\lateral_movement_potential_lateral_movement_via_smbexec.toml"
+        "https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/lateral_movement_potential_lateral_movement_via_smbexec.toml"
     ]
 
     filter_apinames = set(["CreateProcessInternalW"])

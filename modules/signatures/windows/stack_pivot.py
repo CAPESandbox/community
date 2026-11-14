@@ -45,16 +45,18 @@ class StackPivot(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.procs = set()
-        self.processes = [
-            "acrobat.exe",
-            "chrome.exe",
-            "fltldr.exe",
-            "firefox.exe",
-            "himtrayicon.exe",
-            "hwp.exe",
-            "iexplore.exe",
-            "outlook.exe",
-        ]
+        self.processes = frozenset(
+            [
+                "acrobat.exe",
+                "chrome.exe",
+                "fltldr.exe",
+                "firefox.exe",
+                "himtrayicon.exe",
+                "hwp.exe",
+                "iexplore.exe",
+                "outlook.exe",
+            ]
+        )
 
     def on_call(self, call, process):
         if process["process_name"].lower() in self.processes:
@@ -93,20 +95,22 @@ class StackPivotFileCreated(Signature):
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.processes = [
-            "acrobat.exe",
-            "acrord32.exe",
-            "chrome.exe",
-            "excel.exe",
-            "fltldr.exe",
-            "firefox.exe",
-            "himtrayicon.exe",
-            "hwp.exe",
-            "iexplore.exe",
-            "outlook.exe",
-            "powerpnt.exe",
-            "winword.exe",
-        ]
+        self.processes = frozenset(
+            [
+                "acrobat.exe",
+                "acrord32.exe",
+                "chrome.exe",
+                "excel.exe",
+                "fltldr.exe",
+                "firefox.exe",
+                "himtrayicon.exe",
+                "hwp.exe",
+                "iexplore.exe",
+                "outlook.exe",
+                "powerpnt.exe",
+                "winword.exe",
+            ]
+        )
 
     def on_call(self, call, process):
         pname = process["process_name"]
@@ -142,20 +146,22 @@ class StackPivotProcessCreate(Signature):
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.processes = [
-            "acrobat.exe",
-            "acrord32.exe",
-            "chrome.exe",
-            "excel.exe",
-            "fltldr.exe",
-            "firefox.exe",
-            "himtrayicon.exe",
-            "hwp.exe",
-            "iexplore.exe",
-            "outlook.exe",
-            "powerpnt.exe",
-            "winword.exe",
-        ]
+        self.processes = frozenset(
+            [
+                "acrobat.exe",
+                "acrord32.exe",
+                "chrome.exe",
+                "excel.exe",
+                "fltldr.exe",
+                "firefox.exe",
+                "himtrayicon.exe",
+                "hwp.exe",
+                "iexplore.exe",
+                "outlook.exe",
+                "powerpnt.exe",
+                "winword.exe",
+            ]
+        )
 
     def on_call(self, call, process):
         pname = process["process_name"]

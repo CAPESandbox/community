@@ -33,13 +33,8 @@ class AhnlabDetectLibs(Signature):
     filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])
 
     def on_call(self, call, process):
-        dllname = self.get_argument(call, "FileName")
-        if (
-            "ahntrust" in dllname.lower()
-            or "ahni18n2" in dllname.lower()
-            or "ahnactrl" in dllname.lower()
-            or "ahni2" in dllname.lower()
-        ):
+        dllname = (self.get_argument(call, "FileName") or "").lower()
+        if any(lib in dllname for lib in ("ahntrust", "ahni18n2", "ahnactrl", "ahni2")):
             if self.pid:
                 self.mark_call()
             return True

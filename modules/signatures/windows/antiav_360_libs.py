@@ -33,15 +33,8 @@ class QihooDetectLibs(Signature):
     filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])
 
     def on_call(self, call, process):
-        dllname = self.get_argument(call, "FileName")
-        if (
-            "360net" in dllname.lower()
-            or "360safemonpro" in dllname.lower()
-            or "360base" in dllname.lower()
-            or "360base64" in dllname.lower()
-            or "360sd" in dllname.lower()
-            or "360tray" in dllname.lower()
-        ):
+        dllname = (self.get_argument(call, "FileName") or "").lower()
+        if any(lib in dllname for lib in ("360net", "360safemonpro", "360base", "360base64", "360sd", "360tray")):
             if self.pid:
                 self.mark_call()
             return True

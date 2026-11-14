@@ -89,34 +89,28 @@ class PowershellCommandSuspicious(Signature):
                 if "-e " in lower or "/e " in lower or "-en " in lower or "/en " in lower or "-enc" in lower or "/enc" in lower:
                     b64strings = re.findall(r"[-\/][eE][nNcCoOdDeEmMaA]{0,13}\ (\S+)", cmdline)
                     for b64string in b64strings:
-                        b64 = True
                         encoded = str(b64string)
                         try:
-                            base64.b64decode(encoded)
-                        except binascii.Error:
-                            b64 = False
-                        if b64:
                             decoded = base64.b64decode(encoded)
-                            if b"\x00" in decoded:
-                                decoded = base64.b64decode(encoded).decode("UTF-16")
-                            self.data.append({"decoded_base64_string": convert_to_printable(decoded)})
+                        except binascii.Error:
+                            continue
+                        if b"\x00" in decoded:
+                            decoded = decoded.decode("UTF-16", errors="replace")
+                        self.data.append({"decoded_base64_string": convert_to_printable(decoded)})
 
                 if "frombase64string(" in lower:
                     b64strings = re.findall(
                         r"[fF][rR][oO][mM][bB][aA][sS][eE]64[sS][tT][rR][iI][nN][gG]\([\"\'](\S+)[\"\']\)", cmdline
                     )
                     for b64string in b64strings:
-                        b64 = True
                         encoded = str(b64string)
                         try:
-                            base64.b64decode(encoded)
-                        except binascii.Error:
-                            b64 = False
-                        if b64:
                             decoded = base64.b64decode(encoded)
-                            if b"\x00" in decoded:
-                                decoded = base64.b64decode(encoded).decode("UTF-16")
-                            self.data.append({"decoded_base64_string": convert_to_printable(decoded)})
+                        except binascii.Error:
+                            continue
+                        if b"\x00" in decoded:
+                            decoded = decoded.decode("UTF-16", errors="replace")
+                        self.data.append({"decoded_base64_string": convert_to_printable(decoded)})
 
         return ret
 
@@ -189,7 +183,7 @@ class PowershellRenamed(Signature):
                             self.data.append({"command": cmdline})
                             decoded = base64.b64decode(encoded)
                             if b"\x00" in decoded:
-                                decoded = base64.b64decode(encoded).decode("UTF-16")
+                                decoded = decoded.decode("UTF-16", errors="replace")
                             self.data.append({"decoded_base64_string": convert_to_printable(decoded)})
 
                 if "frombase64string(" in lower:
@@ -202,8 +196,8 @@ class PowershellRenamed(Signature):
                             ret = True
                             self.data.append({"command": cmdline})
                             decoded = base64.b64decode(encoded)
-                            if "\x00" in decoded:
-                                decoded = base64.b64decode(encoded).decode("UTF-16")
+                            if b"\x00" in decoded:
+                                decoded = decoded.decode("UTF-16", errors="replace")
                             self.data.append({"decoded_base64_string": convert_to_printable(decoded)})
 
         return ret
@@ -294,7 +288,7 @@ class PowershellVariableObfuscation(Signature):
         for cmdline in cmdlines:
             lower = cmdline.lower()
             if "powershell" in lower:
-                if re.search("\$[^env=]*=.*\$[^env=]*=", lower):
+                if re.search(r"\$[^env=]*=.*\$[^env=]*=", lower):
                     ret = True
                     self.data.append({"command": cmdline})
 
