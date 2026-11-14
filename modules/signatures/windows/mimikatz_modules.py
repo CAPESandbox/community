@@ -29,18 +29,11 @@ class MimikatzModules(Signature):
 
     def run(self):
         ret = False
+        modules = ("crypto::", "kerberos::", "lsadump::", "misc::", "privilege::", "sekurlsa::", "token::")
         cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             lower = cmdline.lower()
-            if (
-                "CRYPTO::" in lower
-                or "KERBEROS::" in lower
-                or "LSADUMP::" in lower
-                or "MISC::" in lower
-                or "PRIVILEGE::" in lower
-                or "SEKURLSA::" in lower
-                or "TOKEN::" in lower
-            ):
+            if any(mod in lower for mod in modules):
                 ret = True
                 self.data.append({"module": cmdline})
 

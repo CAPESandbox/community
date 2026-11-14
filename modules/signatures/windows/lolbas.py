@@ -67,11 +67,12 @@ class LOLBAS_ExecuteBinaryVisualStudioLiveShare(Signature):
             # False-Positives
             # REF: https://github.com/elastic/protections-artifacts/blob/main/behavior/rules/windows/defense_evasion_dll_execution_via_visual_studio_live_share.toml
             if "--pipe" in lower and "visualstudio.com/" in lower:
-                return False
+                continue
 
-            elif "vsls-agent.exe" in lower and "--agentExtensionPath" in lower:
+            elif "vsls-agent.exe" in lower and "--agentextensionpath" in lower:
                 self.data.append({"command": cmdline})
                 return True
+        return False
 
 
 class LOLBAS_EvadeExecutionViaDeviceCredentialDeployment(Signature):
@@ -131,7 +132,7 @@ class LOLBAS_EvadeExecutionViaFilterManagerControl(Signature):
     def run(self):
         for cmdline in self.results.get("behavior", {}).get("summary", {}).get("executed_commands", []):
             lower = cmdline.lower()
-            if "fltmc" in lower and "unload" in lower and any(arg in lower for arg in ("security", "sysmon", "esensor", "Elastic")):
+            if "fltmc" in lower and "unload" in lower and any(arg in lower for arg in ("security", "sysmon", "esensor", "elastic")):
                 self.data.append({"command": cmdline})
                 return True
         return False
@@ -229,7 +230,7 @@ class LOLBAS_RegisterDLLViaMSIEXEC(Signature):
                 "msiexec" in lower
                 and any(arg in lower for arg in ("/z", "/y", "-y", "-z"))
                 and ".dll" in lower
-                and not any(arg in lower for arg in ("\\Program Files\\", "\\Program Files %(x86%)\\"))
+                and not any(arg in lower for arg in ("\\program files\\", "\\program files (x86)\\"))
             ):
                 self.data.append({"command": cmdline})
                 return True
@@ -257,7 +258,7 @@ class LOLBAS_RegisterDLLViaOdbcconf(Signature):
             if ("installmanager.exe" in lower and r"\\windows\\syswow64\\odbcconf.rsp" in lower) or (
                 "{configsysdsn" in lower and "sql server" in lower
             ):
-                return False
+                continue
 
             if "odbcconf" in lower and any(arg in lower for arg in ("-a", "-f", "/a", "/f")) and ".dll" in lower:
                 self.data.append({"command": cmdline})

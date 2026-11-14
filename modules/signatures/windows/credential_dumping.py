@@ -231,9 +231,11 @@ class DumpLSAViaWindowsErrorReporting(Signature):
 
     def on_call(self, call, process):
         # Checking parent process for false positives.
-        if process["process_name"].lower() in ("WerFaultSecure.exe", "WerFault.exe") and call["api"] == "NtCreateFile":
-            filename = self.get_argument(call, "FileName")
+        if process["process_name"].lower() in ("werfaultsecure.exe", "werfault.exe") and call["api"] == "NtCreateFile":
+            filename = (self.get_argument(call, "FileName") or "").lower()
             if filename.endswith(".dmp") and "lsass_" in filename:
+                if self.pid:
+                    self.mark_call()
                 return True
 
 
@@ -253,7 +255,7 @@ class KerberosCredentialAccessViaRubeus(Signature):
     def run(self):
         for cmdline in self.results.get("behavior", {}).get("summary", {}).get("executed_commands", []):
             lower = cmdline.lower()
-            if "rebeus" in lower and any(
+            if "rubeus" in lower and any(
                 arg in lower
                 for arg in (
                     "asreproast",
