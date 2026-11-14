@@ -12,7 +12,7 @@ class IsMaliciousTests(unittest.TestCase):
     def setUp(self):
         self.provider = IsMaliciousProvider({"api_key": "synthetic-key", "timeout": 25})
 
-    @patch("requests.get")
+    @patch("requests.Session.get")
     def check(self, payload, mock_get):
         mock_get.return_value = Mock(status_code=200, json=Mock(return_value=payload))
         return self.provider.lookup("example.invalid", "domain")
@@ -48,7 +48,7 @@ class IsMaliciousTests(unittest.TestCase):
         result = self.check([])
         self.assertEqual(result.status, "error")
 
-    @patch("requests.get")
+    @patch("requests.Session.get")
     def test_auth_and_rate_limit(self, mock_get):
         for status in (401, 403, 429, 500, 302):
             mock_get.return_value = Mock(status_code=status)
@@ -56,20 +56,24 @@ class IsMaliciousTests(unittest.TestCase):
             self.assertEqual(result.status, "error")
             self.assertIn(str(status), result.error)
 
-    @patch("requests.get", side_effect=requests.Timeout)
+    @patch("requests.Session.get", side_effect=requests.Timeout)
     def test_timeout(self, mock_get):
         self.assertEqual(self.provider.lookup("example.invalid", "domain").status, "timeout")
 
-    @patch("requests.get")
-    def test_url_encoded_by_client_no_redirects(self, mock_get):
+    @patch("requests.Session.get")
+    def test_url_encoded_by_client_no_redirects_and_reuses_session(self, mock_get):
         mock_get.return_value = Mock(status_code=200, json=Mock(return_value={"malicious": False}))
         query = "https://example.invalid/path?a=1&b=2"
         self.provider.lookup(query, "url")
-        self.assertEqual(mock_get.call_args.kwargs["params"]["query"], query)
-        self.assertEqual(mock_get.call_args.kwargs["headers"]["X-API-KEY"], "synthetic-key")
-        self.assertFalse(mock_get.call_args.kwargs["allow_redirects"])
+        first_session = self.provider._session
+        self.provider.lookup("8.8.8.8", "ip")
+        self.assertIsNotNone(first_session)
+        self.assertIs(self.provider._session, first_session)
+        self.assertEqual(first_session.headers["X-API-KEY"], "synthetic-key")
+        self.assertEqual(mock_get.call_args_list[0].kwargs["params"]["query"], query)
+        self.assertFalse(mock_get.call_args_list[0].kwargs["allow_redirects"])
 
-    @patch("requests.get")
+    @patch("requests.Session.get")
     def test_empty_and_disabled_do_not_call(self, mock_get):
         self.assertEqual(self.provider.lookup("", "ip").status, "skipped")
         self.assertEqual(IsMaliciousProvider({}).lookup("8.8.8.8", "ip").status, "disabled")

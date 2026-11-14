@@ -2,6 +2,7 @@
 # See README-ismalicious.md for installation and configuration.
 
 import logging
+import threading
 from urllib.parse import quote
 
 from lib.cuckoo.common.integrations.threatintelligence.base import (
@@ -27,6 +28,8 @@ class IsMaliciousProvider(IndicatorProvider):
     def __init__(self, options):
         super().__init__(options)
         self.api_key = str(self.options.get("api_key") or "").strip()
+        self._session = None
+        self._session_lock = threading.Lock()
 
     def available(self):
         if not self.api_key:
@@ -37,6 +40,21 @@ class IsMaliciousProvider(IndicatorProvider):
             return False
         return True
 
+    def _get_session(self):
+        if self._session is None:
+            with self._session_lock:
+                if self._session is None:
+                    import requests
+                    from requests.adapters import HTTPAdapter
+
+                    session = requests.Session()
+                    adapter = HTTPAdapter(pool_connections=4, pool_maxsize=8)
+                    session.mount("https://", adapter)
+                    session.mount("http://", adapter)
+                    session.headers.update({"X-API-KEY": self.api_key, "Accept": "application/json"})
+                    self._session = session
+        return self._session
+
     def lookup(self, indicator, indicator_type, ports=None):
         if not self.api_key:
             return ProviderResult(status="disabled")
@@ -46,20 +64,20 @@ class IsMaliciousProvider(IndicatorProvider):
         import requests
 
         try:
-            response = requests.get(
+            response = self._get_session().get(
                 API_URL,
                 params={"query": indicator, "enrichment": "standard"},
-                headers={"X-API-KEY": self.api_key, "Accept": "application/json"},
                 timeout=self.timeout,
                 allow_redirects=False,
             )
         except requests.Timeout:
             return ProviderResult(status="timeout", error="IsMalicious request timed out")
-        except requests.RequestException:
+        except requests.RequestException as err:
+            log.debug("IsMalicious lookup failed for %s: %s", indicator, err)
             return ProviderResult(status="error", error="IsMalicious request failed")
 
         if response.status_code != 200:
-            message = "IsMalicious HTTP %s" % response.status_code
+            message = f"IsMalicious HTTP {response.status_code}"
             if response.status_code in (401, 403):
                 message += "; check the API key and account permissions"
             elif response.status_code == 429:

@@ -22,7 +22,7 @@ Register the provider by adding this entry to `_INDICATOR_MODULES` in
 "ismalicious": "lib.cuckoo.common.integrations.threatintelligence.ismalicious_provider.IsMaliciousProvider",
 ```
 
-Add this section to the local `conf/threat_intel.conf` (keep credentials out of Git):
+Add this section to the local `custom/conf/threat_intel.conf` (keep credentials out of Git):
 
 ```ini
 [ismalicious]
@@ -36,8 +36,8 @@ The `api_key` setting is the complete `X-API-KEY` credential: Base64 of
 `apiKey:apiSecret`, available from your account. It is not the raw API key
 alone. Keep the encoded credential secret.
 
-Enable `[threatintelligence]` in `conf/processing.conf`. Select indicator types
-in the global `[threatintelligence]` section of `conf/threat_intel.conf`.
+Enable `[threatintelligence]` in `custom/conf/processing.conf`. Select indicator types
+in the global `[threatintelligence]` section of `custom/conf/threat_intel.conf`.
 Keep `promote_to_detection = no` unless your team separately validates a policy
 for promotion. URLs and submitted SHA256 lookups are off by default in CAPE.
 
