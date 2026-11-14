@@ -16,6 +16,50 @@
 from lib.cuckoo.common.abstracts import Signature
 
 
+def _iter_shellcode_files(results):
+    # the submitted file (shellcode / shellcode_x64 packages) and CAPE's extracted payloads
+    # Prefer CAPE payloads first so runtime process/PID/injection context is retained on duplicate SHA256s.
+    files = [("CAPE payload", payload) for payload in (results.get("CAPE") or {}).get("payloads") or []]
+    target = (results.get("target") or {}).get("file") or {}
+    if target.get("static_shellcode_check"):
+        files.append(("submitted file", target))
+
+    seen = set()
+    for source, payload in files:
+        if not isinstance(payload, dict):
+            continue
+        check = payload.get("static_shellcode_check") or {}
+        sha256 = payload.get("sha256")
+        if not check or (sha256 and sha256 in seen):
+            continue  # a dump of the submitted shellcode is reported once
+        if sha256:
+            seen.add(sha256)
+        yield source, payload, check
+
+
+def _build_shellcode_entry(source, payload, check):
+    entry = {"source": source}
+    if payload.get("process_name"):
+        entry["process"] = payload["process_name"]
+    if payload.get("pid") not in (None, ""):
+        entry["pid"] = payload["pid"]
+    if payload.get("cape_type"):
+        entry["cape_type"] = payload["cape_type"]
+    if payload.get("sha256"):
+        entry["sha256"] = payload["sha256"]
+    if check.get("arch"):
+        entry["arch"] = check["arch"]
+    if check.get("tags"):
+        entry["indicators"] = ", ".join(check["tags"])
+    if payload.get("target_process"):
+        entry["target"] = f"{payload['target_process']} ({payload.get('target_pid', '')})"
+    if payload.get("virtual_address"):
+        entry["virtual_address"] = payload["virtual_address"]
+    if check.get("capabilities"):
+        entry["capabilities"] = ", ".join(check["capabilities"])
+    return entry
+
+
 class CAPEShellcodeConfirmed(Signature):
     name = "cape_shellcode_confirmed"
     description = "CAPE extracted payload statically confirmed as shellcode"
@@ -24,39 +68,14 @@ class CAPEShellcodeConfirmed(Signature):
     categories = ["shellcode", "injection", "static"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    evented = True
     ttps = ["T1055", "T1620"]
 
     def run(self):
         ret = False
-        # the submitted file (shellcode / shellcode_x64 packages) and CAPE's extracted payloads
-        target = (self.results.get("target") or {}).get("file") or {}
-        files = [("submitted file", target)] if target.get("static_shellcode_check") else []
-        files += [("CAPE payload", payload) for payload in self.results.get("CAPE", {}).get("payloads", []) or []]
-        seen = set()
-        for source, payload in files:
-            check = payload.get("static_shellcode_check") or {}
-            if not check or payload.get("sha256") in seen:
-                continue  # a dump of the submitted shellcode is reported once
-            seen.add(payload.get("sha256"))
+        for source, payload, check in _iter_shellcode_files(self.results):
             if check.get("verdict") != "shellcode":
                 continue
-            entry = {
-                "source": source,
-                "process": payload.get("process_name", ""),
-                "pid": payload.get("pid", ""),
-                "cape_type": payload.get("cape_type", ""),
-                "sha256": payload.get("sha256", ""),
-                "arch": check.get("arch", ""),
-                "indicators": ", ".join(check.get("tags", [])),
-            }
-            if payload.get("target_process"):
-                entry["target"] = f"{payload['target_process']} ({payload.get('target_pid', '')})"
-            if payload.get("virtual_address"):
-                entry["virtual_address"] = payload["virtual_address"]
-            if check.get("capabilities"):
-                entry["capabilities"] = ", ".join(check["capabilities"])
-            self.data.append(entry)
+            self.data.append(_build_shellcode_entry(source, payload, check))
             ret = True
         return ret
 
@@ -69,38 +88,13 @@ class CAPEShellcodeLikely(Signature):
     categories = ["shellcode"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    evented = True
 
     def run(self):
         ret = False
-        # the submitted file (shellcode / shellcode_x64 packages) and CAPE's extracted payloads
-        target = (self.results.get("target") or {}).get("file") or {}
-        files = [("submitted file", target)] if target.get("static_shellcode_check") else []
-        files += [("CAPE payload", payload) for payload in self.results.get("CAPE", {}).get("payloads", []) or []]
-        seen = set()
-        for source, payload in files:
-            check = payload.get("static_shellcode_check") or {}
-            if not check or payload.get("sha256") in seen:
-                continue  # a dump of the submitted shellcode is reported once
-            seen.add(payload.get("sha256"))
+        for source, payload, check in _iter_shellcode_files(self.results):
             if check.get("verdict") != "likely":
                 continue
-            entry = {
-                "source": source,
-                "process": payload.get("process_name", ""),
-                "pid": payload.get("pid", ""),
-                "cape_type": payload.get("cape_type", ""),
-                "sha256": payload.get("sha256", ""),
-                "arch": check.get("arch", ""),
-                "indicators": ", ".join(check.get("tags", [])),
-            }
-            if payload.get("target_process"):
-                entry["target"] = f"{payload['target_process']} ({payload.get('target_pid', '')})"
-            if payload.get("virtual_address"):
-                entry["virtual_address"] = payload["virtual_address"]
-            if check.get("capabilities"):
-                entry["capabilities"] = ", ".join(check["capabilities"])
-            self.data.append(entry)
+            self.data.append(_build_shellcode_entry(source, payload, check))
             ret = True
         return ret
 
@@ -113,49 +107,27 @@ class CAPEShellcodePELoader(Signature):
     categories = ["shellcode", "injection"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    evented = True
     ttps = ["T1620"]
 
     def run(self):
         ret = False
-        # the submitted file (shellcode / shellcode_x64 packages) and CAPE's extracted payloads
-        target = (self.results.get("target") or {}).get("file") or {}
-        files = [("submitted file", target)] if target.get("static_shellcode_check") else []
-        files += [("CAPE payload", payload) for payload in self.results.get("CAPE", {}).get("payloads", []) or []]
-        seen = set()
-        for source, payload in files:
-            check = payload.get("static_shellcode_check") or {}
-            if not check or payload.get("sha256") in seen:
-                continue  # a dump of the submitted shellcode is reported once
-            seen.add(payload.get("sha256"))
+        for source, payload, check in _iter_shellcode_files(self.results):
             if check.get("verdict") not in ("shellcode", "likely"):
                 continue
             tags = set(check.get("tags", []))
             hidden = [r for r in check.get("regions") or [] if r.get("result_type") == "pe"]
             if not (tags & {"reflective_pe_loader", "executable_pe_header", "staged_pe"} or hidden):
                 continue
-            entry = {
-                "source": source,
-                "process": payload.get("process_name", ""),
-                "pid": payload.get("pid", ""),
-                "cape_type": payload.get("cape_type", ""),
-                "sha256": payload.get("sha256", ""),
-                "arch": check.get("arch", ""),
-                "indicators": ", ".join(check.get("tags", [])),
-            }
-            if payload.get("target_process"):
-                entry["target"] = f"{payload['target_process']} ({payload.get('target_pid', '')})"
-            if payload.get("virtual_address"):
-                entry["virtual_address"] = payload["virtual_address"]
-            if check.get("capabilities"):
-                entry["capabilities"] = ", ".join(check["capabilities"])
+            entry = _build_shellcode_entry(source, payload, check)
             pes = check.get("embedded_pe") or []
             if pes:
                 entry["embedded_pe"] = ", ".join(f"{p['offset']} {p['arch']} {'DLL' if p['dll'] else 'EXE'}" for p in pes)
             if hidden:
                 # decoded by a linked decoder, or carried by a known generator (Donut module, sRDI DLL)
                 entry["carried_pe"] = ", ".join(
-                    f"{r['start']}-{r['end']} {r['result']}" + (f" ({r['framework']})" if r.get("framework") else "")
+                    (f"{r['start']}-{r['end']}" if r.get("end") else str(r["start"]))
+                    + f" {r['result']}"
+                    + (f" ({r['framework']})" if r.get("framework") else "")
                     for r in hidden
                 )
             self.data.append(entry)
@@ -171,7 +143,6 @@ class CAPEShellcodeTechnique(Signature):
     categories = ["shellcode", "evasion", "static"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    evented = True
     ttps = ["T1106"]
 
     TECHNIQUES = (
@@ -189,16 +160,7 @@ class CAPEShellcodeTechnique(Signature):
 
     def run(self):
         ret = False
-        # the submitted file (shellcode / shellcode_x64 packages) and CAPE's extracted payloads
-        target = (self.results.get("target") or {}).get("file") or {}
-        files = [("submitted file", target)] if target.get("static_shellcode_check") else []
-        files += [("CAPE payload", payload) for payload in self.results.get("CAPE", {}).get("payloads", []) or []]
-        seen = set()
-        for source, payload in files:
-            check = payload.get("static_shellcode_check") or {}
-            if not check or payload.get("sha256") in seen:
-                continue  # a dump of the submitted shellcode is reported once
-            seen.add(payload.get("sha256"))
+        for source, payload, check in _iter_shellcode_files(self.results):
             # 'image' covers a copy of ntdll's syscall stubs (unhooking) found on its own
             if check.get("verdict") not in ("shellcode", "likely", "image"):
                 continue
@@ -207,21 +169,7 @@ class CAPEShellcodeTechnique(Signature):
                 hits = [t for t in hits if t == "ntdll_copy"]
             if not hits:
                 continue
-            entry = {
-                "source": source,
-                "process": payload.get("process_name", ""),
-                "pid": payload.get("pid", ""),
-                "cape_type": payload.get("cape_type", ""),
-                "sha256": payload.get("sha256", ""),
-                "arch": check.get("arch", ""),
-                "indicators": ", ".join(check.get("tags", [])),
-            }
-            if payload.get("target_process"):
-                entry["target"] = f"{payload['target_process']} ({payload.get('target_pid', '')})"
-            if payload.get("virtual_address"):
-                entry["virtual_address"] = payload["virtual_address"]
-            if check.get("capabilities"):
-                entry["capabilities"] = ", ".join(check["capabilities"])
+            entry = _build_shellcode_entry(source, payload, check)
             entry["technique"] = ", ".join(hits)
             self.data.append(entry)
             ret = True
@@ -236,44 +184,20 @@ class CAPEShellcodeNetworkIOC(Signature):
     categories = ["shellcode", "network", "static"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    evented = True
     ttps = ["T1071"]
 
     NETWORK_IOCS = ("urls", "network", "ips", "domains", "user_agents", "pipes")
 
     def run(self):
         ret = False
-        # the submitted file (shellcode / shellcode_x64 packages) and CAPE's extracted payloads
-        target = (self.results.get("target") or {}).get("file") or {}
-        files = [("submitted file", target)] if target.get("static_shellcode_check") else []
-        files += [("CAPE payload", payload) for payload in self.results.get("CAPE", {}).get("payloads", []) or []]
-        seen = set()
-        for source, payload in files:
-            check = payload.get("static_shellcode_check") or {}
-            if not check or payload.get("sha256") in seen:
-                continue  # a dump of the submitted shellcode is reported once
-            seen.add(payload.get("sha256"))
+        for source, payload, check in _iter_shellcode_files(self.results):
             if check.get("verdict") not in ("shellcode", "likely"):
                 continue
             iocs = check.get("iocs") or {}
             found = {k: iocs[k] for k in self.NETWORK_IOCS if iocs.get(k)}
             if not found:
                 continue
-            entry = {
-                "source": source,
-                "process": payload.get("process_name", ""),
-                "pid": payload.get("pid", ""),
-                "cape_type": payload.get("cape_type", ""),
-                "sha256": payload.get("sha256", ""),
-                "arch": check.get("arch", ""),
-                "indicators": ", ".join(check.get("tags", [])),
-            }
-            if payload.get("target_process"):
-                entry["target"] = f"{payload['target_process']} ({payload.get('target_pid', '')})"
-            if payload.get("virtual_address"):
-                entry["virtual_address"] = payload["virtual_address"]
-            if check.get("capabilities"):
-                entry["capabilities"] = ", ".join(check["capabilities"])
+            entry = _build_shellcode_entry(source, payload, check)
             for k, v in found.items():
                 entry[k] = ", ".join(v[:10])
             self.data.append(entry)
@@ -289,44 +213,21 @@ class CAPEShellcodeFramework(Signature):
     categories = ["shellcode", "injection", "static"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    evented = True
     ttps = ["T1620"]
 
     def run(self):
         ret = False
-        # the submitted file (shellcode / shellcode_x64 packages) and CAPE's extracted payloads
-        target = (self.results.get("target") or {}).get("file") or {}
-        files = [("submitted file", target)] if target.get("static_shellcode_check") else []
-        files += [("CAPE payload", payload) for payload in self.results.get("CAPE", {}).get("payloads", []) or []]
-        seen = set()
-        for source, payload in files:
-            check = payload.get("static_shellcode_check") or {}
-            if not check or payload.get("sha256") in seen:
-                continue  # a dump of the submitted shellcode is reported once
-            seen.add(payload.get("sha256"))
+        for source, payload, check in _iter_shellcode_files(self.results):
             if check.get("verdict") != "shellcode":
                 continue
             for fw in check.get("frameworks") or []:
                 if fw.get("confidence") != "identified":
                     continue
-                entry = {
-                    "source": source,
-                    "process": payload.get("process_name", ""),
-                    "pid": payload.get("pid", ""),
-                    "cape_type": payload.get("cape_type", ""),
-                    "sha256": payload.get("sha256", ""),
-                    "arch": check.get("arch", ""),
-                    "indicators": ", ".join(check.get("tags", [])),
-                }
-                if payload.get("target_process"):
-                    entry["target"] = f"{payload['target_process']} ({payload.get('target_pid', '')})"
-                if payload.get("virtual_address"):
-                    entry["virtual_address"] = payload["virtual_address"]
-                if check.get("capabilities"):
-                    entry["capabilities"] = ", ".join(check["capabilities"])
+                entry = _build_shellcode_entry(source, payload, check)
                 entry["framework"] = fw["name"]
                 for k, v in (fw.get("details") or {}).items():
-                    entry[k] = v
+                    if v not in (None, ""):
+                        entry[k if k not in entry else f"framework_{k}"] = v
                 self.data.append(entry)
                 ret = True
         return ret
@@ -340,41 +241,17 @@ class CAPEShellcodeEncoder(Signature):
     categories = ["shellcode", "obfuscation", "static"]
     authors = ["Kevin Ross"]
     minimum = "1.3"
-    evented = True
     ttps = ["T1027"]
 
     def run(self):
         ret = False
-        # the submitted file (shellcode / shellcode_x64 packages) and CAPE's extracted payloads
-        target = (self.results.get("target") or {}).get("file") or {}
-        files = [("submitted file", target)] if target.get("static_shellcode_check") else []
-        files += [("CAPE payload", payload) for payload in self.results.get("CAPE", {}).get("payloads", []) or []]
-        seen = set()
-        for source, payload in files:
-            check = payload.get("static_shellcode_check") or {}
-            if not check or payload.get("sha256") in seen:
-                continue  # a dump of the submitted shellcode is reported once
-            seen.add(payload.get("sha256"))
+        for source, payload, check in _iter_shellcode_files(self.results):
             if check.get("verdict") != "shellcode":
                 continue
             enc = check.get("encoder")
             if not enc:
                 continue
-            entry = {
-                "source": source,
-                "process": payload.get("process_name", ""),
-                "pid": payload.get("pid", ""),
-                "cape_type": payload.get("cape_type", ""),
-                "sha256": payload.get("sha256", ""),
-                "arch": check.get("arch", ""),
-                "indicators": ", ".join(check.get("tags", [])),
-            }
-            if payload.get("target_process"):
-                entry["target"] = f"{payload['target_process']} ({payload.get('target_pid', '')})"
-            if payload.get("virtual_address"):
-                entry["virtual_address"] = payload["virtual_address"]
-            if check.get("capabilities"):
-                entry["capabilities"] = ", ".join(check["capabilities"])
+            entry = _build_shellcode_entry(source, payload, check)
             entry["encoder"] = enc["name"]
             if enc.get("payload"):
                 entry["decodes_to"] = enc["payload"]
