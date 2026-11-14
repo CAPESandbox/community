@@ -16,6 +16,15 @@
 from lib.cuckoo.common.abstracts import Signature
 
 
+def _normalize_remote_pid(raw_pid, current_pid):
+    if raw_pid in (None, "", 0, "0"):
+        return None
+    pid_str = str(raw_pid).strip()
+    if not pid_str.isdigit() or pid_str == "0" or pid_str == str(current_pid):
+        return None
+    return pid_str
+
+
 class InjectionCRT(Signature):
     name = "injection_createremotethread"
     description = "Code injection with CreateRemoteThread in a remote process"
@@ -28,7 +37,25 @@ class InjectionCRT(Signature):
     ttps += ["U1226"]  # Unprotect
     mbcs = ["OB0006", "OB0013", "E1055"]
 
-    filter_categories = set(["process", "threading"])
+    filter_categories = {"process", "threading"}
+    filter_apinames = {
+        "OpenProcess",
+        "NtOpenProcess",
+        "NtMapViewOfSection",
+        "NtMapViewOfSectionEx",
+        "VirtualAllocEx",
+        "NtAllocateVirtualMemory",
+        "NtAllocateVirtualMemoryEx",
+        "NtWriteVirtualMemory",
+        "NtWow64WriteVirtualMemory64",
+        "WriteProcessMemory",
+        "CreateRemoteThread",
+        "CreateRemoteThreadEx",
+        "NtCreateThread",
+        "NtCreateThreadEx",
+        "NtQueueApcThread",
+        "NtQueueApcThreadEx",
+    }
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -39,75 +66,73 @@ class InjectionCRT(Signature):
             self.sequence = 0
             self.process_handles = set()
             self.process_pids = set()
-            self.handle_map = dict()
+            self.handle_map = {}
             self.lastprocess = process
 
-        if call["api"] == "OpenProcess" and call["status"] is True:
-            if self.get_argument(call, "ProcessId") != process["process_id"]:
+        api = call["api"]
+        if api == "OpenProcess" and call["status"] is True:
+            pid = _normalize_remote_pid(self.get_argument(call, "ProcessId"), process["process_id"])
+            if pid:
                 handle = call["return"]
-                pid = str(self.get_argument(call, "ProcessId"))
                 self.process_handles.add(handle)
                 self.process_pids.add(pid)
                 self.handle_map[handle] = pid
-        elif call["api"] == "NtOpenProcess" and call["status"] is True:
-            if self.get_argument(call, "ProcessIdentifier") != process["process_id"]:
+        elif api == "NtOpenProcess" and call["status"] is True:
+            pid = _normalize_remote_pid(self.get_argument(call, "ProcessIdentifier"), process["process_id"])
+            if pid:
                 handle = self.get_argument(call, "ProcessHandle")
-                pid = str(self.get_argument(call, "ProcessIdentifier"))
                 self.process_handles.add(handle)
                 self.process_pids.add(pid)
                 self.handle_map[handle] = pid
-        elif (call["api"] == "NtMapViewOfSection") and self.sequence == 0:
+        elif api in ("NtMapViewOfSection", "NtMapViewOfSectionEx") and self.sequence == 0:
             if self.get_argument(call, "ProcessHandle") in self.process_handles:
                 self.sequence = 2
-        elif (call["api"] == "VirtualAllocEx" or call["api"] == "NtAllocateVirtualMemory") and self.sequence == 0:
+        elif api in ("VirtualAllocEx", "NtAllocateVirtualMemory", "NtAllocateVirtualMemoryEx") and self.sequence == 0:
             if self.get_argument(call, "ProcessHandle") in self.process_handles:
                 self.sequence = 1
-        elif (
-            call["api"] == "NtWriteVirtualMemory"
-            or call["api"] == "NtWow64WriteVirtualMemory64"
-            or call["api"] == "WriteProcessMemory"
-        ) and self.sequence == 1:
+        elif api in ("NtWriteVirtualMemory", "NtWow64WriteVirtualMemory64", "WriteProcessMemory") and self.sequence == 1:
             if self.get_argument(call, "ProcessHandle") in self.process_handles:
                 self.sequence = 2
-        elif (
-            call["api"] == "NtWriteVirtualMemory"
-            or call["api"] == "NtWow64WriteVirtualMemory64"
-            or call["api"] == "WriteProcessMemory"
-        ) and self.sequence == 2:
+        elif api in ("NtWriteVirtualMemory", "NtWow64WriteVirtualMemory64", "WriteProcessMemory") and self.sequence == 2:
             handle = self.get_argument(call, "ProcessHandle")
             if handle in self.process_handles:
                 addr = int(self.get_argument(call, "BaseAddress"), 16)
-                buf = self.get_argument(call, "Buffer")
-                if addr >= 0x7C900000 and addr < 0x80000000 and buf.startswith("\\xe9"):
+                buf = self.get_argument(call, "Buffer") or ""
+                if 0x7C900000 <= addr < 0x80000000 and buf.startswith("\\xe9"):
                     self.description = "Code injection via WriteProcessMemory-modified NTDLL code in a remote process"
-                    procname = self.get_name_from_pid(self.handle_map[handle])
-                    desc = "{0}({1}) -> {2}({3})".format(
-                        process["process_name"], str(process["process_id"]), procname, self.handle_map[handle]
-                    )
+                    target = self.handle_map[handle]
+                    procname = self.get_name_from_pid(target)
+                    desc = f"{process['process_name']}({process['process_id']}) -> {procname}({target})"
                     self.data.append({"injection": desc})
                     if self.pid:
                         self.mark_call()
                     return True
-        elif (call["api"] == "CreateRemoteThread" or call["api"].startswith("NtCreateThread")) and self.sequence == 2:
+        # Win10/11 inject via CreateRemoteThreadEx, whose NtCreateThreadEx uses a handle of its own,
+        # so also accept the target by its ProcessId.
+        elif (api in ("CreateRemoteThread", "CreateRemoteThreadEx") or api.startswith("NtCreateThread")) and self.sequence == 2:
+            if not call.get("status"):
+                return None
             handle = self.get_argument(call, "ProcessHandle")
-            if handle in self.process_handles:
-                procname = self.get_name_from_pid(self.handle_map[handle])
-                desc = "{0}({1}) -> {2}({3})".format(
-                    process["process_name"], str(process["process_id"]), procname, self.handle_map[handle]
-                )
+            target = self.handle_map.get(handle)
+            if not target:
+                pid = _normalize_remote_pid(self.get_argument(call, "ProcessId"), process["process_id"])
+                if pid in self.process_pids:
+                    target = pid
+            if target:
+                procname = self.get_name_from_pid(target)
+                desc = f"{process['process_name']}({process['process_id']}) -> {procname}({target})"
                 self.data.append({"injection": desc})
                 if self.pid:
                     self.mark_call()
                 return True
-        elif call["api"].startswith("NtQueueApcThread") and self.sequence == 2:
-            if str(self.get_argument(call, "ProcessId")) in self.process_pids:
+        elif api.startswith("NtQueueApcThread") and self.sequence == 2:
+            if not call.get("status"):
+                return None
+            pid = _normalize_remote_pid(self.get_argument(call, "ProcessId"), process["process_id"])
+            if pid in self.process_pids:
                 self.description = "Code injection with NtQueueApcThread in a remote process"
-                desc = "{0}({1}) -> {2}({3})".format(
-                    self.lastprocess["process_name"],
-                    str(self.lastprocess["process_id"]),
-                    process["process_name"],
-                    str(process["process_id"]),
-                )
+                procname = self.get_name_from_pid(pid)
+                desc = f"{process['process_name']}({process['process_id']}) -> {procname}({pid})"
                 self.data.append({"injection": desc})
                 if self.pid:
                     self.mark_call()
