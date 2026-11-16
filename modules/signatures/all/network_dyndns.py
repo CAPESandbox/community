@@ -52,6 +52,7 @@ class NetworkDynDNS(Signature):
             r".*\\.mooo\\.com",
             r".*\\.dnsget\\.org",
             r".*\\.f3322\\.org",
+            r".*\\.freedynamicdns\\.org",
             r".*\\.publicvm\\.com",
             r".*\\.dlinkddns\\.com",
             r".*\\.authorizeddns\\.",
