@@ -29,18 +29,18 @@ class DisablesWFP(Signature):
             filename = self.get_argument(call, "HandleName") or ""
             filenamelower = filename.lower()
             if not self.saw_disable:
-                if filenamelower.endswith(r"pipe\\sfcapi"):
+                if filenamelower.endswith("pipe\\sfcapi"):
                     self.saw_disable = True
                     if self.pid:
                         self.mark_call()
-            elif not self.nextopen and (r"\\syswow64\\" in filenamelower or r"\\system32\\" in filenamelower):
+            elif not self.nextopen and ("\\syswow64\\" in filenamelower or "\\system32\\" in filenamelower):
                 self.nextopen = filename
                 if self.pid:
                     self.mark_call()
         elif call["api"].startswith("CopyFile") and self.saw_disable and not self.nextopen:
             filename = self.get_argument(call, "NewFileName") or ""
             filenamelower = filename.lower()
-            if r"\\syswow64\\" in filenamelower or r"\\system32\\" in filenamelower:
+            if "\\syswow64\\" in filenamelower or "\\system32\\" in filenamelower:
                 self.nextopen = filename
                 if self.pid:
                     self.mark_call()

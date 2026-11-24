@@ -31,7 +31,7 @@ class DetectVirtualizationViaRecentFiles(Signature):
 
         if call["api"] == "FindFirstFileExW":
             folder = self.get_argument(call, "FileName").lower()
-            if r"\\windows\\recent\\" in folder:
+            if "\\windows\\recent\\" in folder:
                 if self.pid:
                     self.mark_call()
                 self.enumerate = True

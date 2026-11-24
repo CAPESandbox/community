@@ -34,10 +34,10 @@ class DLLLoadSuspiciousDirectory(Signature):
         self.ret = False
         # Any exclusions added to this list needs to be in lower format.
         self.ignore_directories = [
-            r"c:\\windows\\system32\\",
-            r"c:\\windows\\syswow64\\",
-            r"c:\\windows\\",
-            r"c:\\windows\\winsxs\\",
+            "c:\\windows\\system32\\",
+            "c:\\windows\\syswow64\\",
+            "c:\\windows\\",
+            "c:\\windows\\winsxs\\",
             "c:\\program files\\",
             "c:\\program files (x86)\\",
             "c:\\programdata\\",
@@ -52,7 +52,7 @@ class DLLLoadSuspiciousDirectory(Signature):
         if call["api"] == "DllLoadNotification":
             notificationreason = self.get_argument(call, "NotificationReason")
             dllname = self.get_argument(call, "DllName")
-            if notificationreason == "load":
+            if notificationreason == "load" and dllname:
                 pname = process["process_name"].lower()
                 dllnamelower = dllname.lower()
                 is_ignored = any(dllnamelower.startswith(d) for d in self.ignore_directories)

@@ -44,7 +44,7 @@ class SuspiciousExecutionViaMicrosoftExchangeTransportAgent(Signature):
 
 class SuspiciousScheduledTaskCreationviaMasqueradedXMLFile(Signature):
     name = "Suspicious_Scheduled_Task_Creation_Via_Masqueraded_XML_File"
-    description = "Attempts to schedule tasks using an XML files that doesnr't have .xml extensions"
+    description = "Attempts to schedule tasks using an XML files that doesn't have .xml extensions"
     severity = 3
     categories = ["evasion", "execution", "persistence"]
     authors = ["@para0x0dise"]
@@ -169,7 +169,7 @@ class PotentialLocationDiscoveryViaUnusualProcess(Signature):
         pnameFullPath = process["module_path"].lower()
         if (
             "\\endpoint protection sdk\\endpointprotection.exe" not in pnameFullPath
-            and r"\\aemagent\\rmm.advancedthreatdetection\\dattoav\\endpoint protection sdk\\endpointprotection.exe"
+            and "\\aemagent\\rmm.advancedthreatdetection\\dattoav\\endpoint protection sdk\\endpointprotection.exe"
             not in pnameFullPath
         ):
             if call["api"] == "CreateProcessInternalW":
@@ -298,8 +298,8 @@ class LoadDLLViaControlPanel(Signature):
 
     def on_call(self, call, process):
         if not (
-            process["process_name"].lower in self.falseProcess
-            or r"windows\\system32\\driverstore\\filerepository" in process["module_path"].lower()
+            process["process_name"].lower() in self.falseProcess
+            or "windows\\system32\\driverstore\\filerepository" in process["module_path"].lower()
         ):
 
             if call["api"] in ("RegSetValueExA", "RegSetValueExW"):
@@ -311,8 +311,8 @@ class LoadDLLViaControlPanel(Signature):
                     any(
                         key in regKeyPath
                         for key in (
-                            r"software\\microsoft\\windows\\currentversion\\control panel\\cpls",
-                            r"software\\microsoft\\windows\\currentversion\\control panel\\cpls\\",
+                            "software\\microsoft\\windows\\currentversion\\control panel\\cpls",
+                            "software\\microsoft\\windows\\currentversion\\control panel\\cpls\\",
                         )
                     )
                     and not buf != ""
@@ -339,12 +339,12 @@ class DLLHijackingViaWaaSMedicSvcCOMTypeLib(Signature):
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW"])
 
     def on_call(self, call, process):
-        if not r"\\Windows\\System32\\svchost.exe" in process["module_path"]:
+        if "\\windows\\system32\\svchost.exe" not in process["module_path"].lower():
             if call["api"] in ("RegSetValueExA", "RegSetValueExW"):
                 regKeyPath = self.get_argument(call, "FullName").lower()
                 buf = self.get_argument(call, "Buffer")
                 if (
-                    r"\\software\\classes\\typelib\\{3ff1aab8-f3d8-11d4-825d-00104b3646c0}\\" in regKeyPath and buf.endswith(".dll")
+                    "\\software\\classes\\typelib\\{3ff1aab8-f3d8-11d4-825d-00104b3646c0}\\" in regKeyPath and buf.endswith(".dll")
                 ) and not buf.endswith("WaaSMedicPS.dll"):
                     self.data.append({"Value": buf})
                     return True
@@ -543,9 +543,9 @@ class MountCopyToWebDavShare(Signature):
                 any(
                     proc in lower
                     for proc in (
-                        r"c:\\program files\\microsoft office\\root\\office16\\winproj.exe",
-                        r"d:\\sf-deploy\\console\\console.exe",
-                        r"c:\\program files\\windowsapps\\mycaseinc.mycasefilesync_*\\app\\mycase desktop.exe",
+                        "c:\\program files\\microsoft office\\root\\office16\\winproj.exe",
+                        "d:\\sf-deploy\\console\\console.exe",
+                        "c:\\program files\\windowsapps\\mycaseinc.mycasefilesync_*\\app\\mycase desktop.exe",
                     )
                 )
             ):
@@ -557,7 +557,7 @@ class MountCopyToWebDavShare(Signature):
                 or (any(arg in lower for arg in ("http", "webdav")) and "/user" in lower and "//localhost" not in lower)
                 or (
                     any(proc in lower for proc in ("expand.exe", "xcopy.exe", "cmd.exe"))
-                    and any(arg in lower for arg in (r"\\\\webdav", "davwwwroot"))
+                    and any(arg in lower for arg in ("\\\\webdav", "davwwwroot"))
                 )
             ):
                 return True
@@ -799,32 +799,32 @@ class AccessAutoLogonsViaRegistry(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.detected = False
         self.whitelistProcessPaths = (
-            r"\\windows\\system32\\logonui.exe",
-            r"\\sources\\setuphost.exe",
-            r"\\sources\\setupplatform.exe",
-            r"\\sources\\windowsupdatebox.exe",
-            r"\\windows\\system32\\svchost.exe",
-            r"\\windows\\system32\\wbem\\wmiprvse.exe",
-            r"\\windows\\syswow64\\wbem\\wmiprvse.exe",
-            r"\\windows\\system32\\musnotification.exe",
-            r"\\windows\\syswow64\\musnotification.exe",
-            r"\\windows\\system32\\wsmprovhost.exe",
-            r"\\windows\\system32\\conhost.exe",
-            r"\\windows\\system32\\securityhealthsystray.exe",
-            r"\\windows\\regedit.exe",
+            "\\windows\\system32\\logonui.exe",
+            "\\sources\\setuphost.exe",
+            "\\sources\\setupplatform.exe",
+            "\\sources\\windowsupdatebox.exe",
+            "\\windows\\system32\\svchost.exe",
+            "\\windows\\system32\\wbem\\wmiprvse.exe",
+            "\\windows\\syswow64\\wbem\\wmiprvse.exe",
+            "\\windows\\system32\\musnotification.exe",
+            "\\windows\\syswow64\\musnotification.exe",
+            "\\windows\\system32\\wsmprovhost.exe",
+            "\\windows\\system32\\conhost.exe",
+            "\\windows\\system32\\securityhealthsystray.exe",
+            "\\windows\\regedit.exe",
             "\\program files\\",
             "\\program files (x86)\\",
-            r"\\windows\\system32\\cmd.exe",
-            r"\\windows\\system32\\windowspowershell\\",
-            r"\\programdata\\microsoft\\windows defender\\platform\\",
-            r"\\users\\*\\appdata\\local\\microsoft\\onedrive\\onedrive.exe",
+            "\\windows\\system32\\cmd.exe",
+            "\\windows\\system32\\windowspowershell\\",
+            "\\programdata\\microsoft\\windows defender\\platform\\",
+            "\\users\\*\\appdata\\local\\microsoft\\onedrive\\onedrive.exe",
         )
 
     def on_call(self, call, process):
         if not any(path in process["module_path"].lower() for path in self.whitelistProcessPaths):
             if call["api"].startswith("RegQueryValueEx"):
                 keyName = self.get_argument(call, "FullName")
-                if r"\\microsoft\\windows nt\\currentversion\\winlogon\\defaultpassword" in keyName.lower():
+                if "\\microsoft\\windows nt\\currentversion\\winlogon\\defaultpassword" in keyName.lower():
                     if self.pid:
                         self.mark_call()
                     return True
@@ -851,19 +851,19 @@ class CredentialAccessViaWindowsCredentialHistory(Signature):
         self.whitelistProcessPaths = (
             "\\program files\\",
             "\\program files (x86)\\",
-            r"\\windows\\system32\\lsass.exe",
-            r"\\windows\\system32\\svchost.exe",
-            r"\\windows\\system32\\robocopy.exe",
-            r"\\windows\\ccmcache\\",
-            r"\\windows\\ccm\\",
-            r"\\windows\\explorer.exe",
-            r"\\programdata\\microsoft\\windows defender\\",
-            r"\\windows\\system32\\werfault.exe",
-            r"\\windows\\syswow64\\werfault.exe",
-            r"\\windows\\system32\\dllhost.exe",
-            r"\\windows\\system32\\sdclt.exe",
-            r"\\windows\\system32\\pickerhost.exe",
-            r"\\windows\\system32\\mrt.exe",
+            "\\windows\\system32\\lsass.exe",
+            "\\windows\\system32\\svchost.exe",
+            "\\windows\\system32\\robocopy.exe",
+            "\\windows\\ccmcache\\",
+            "\\windows\\ccm\\",
+            "\\windows\\explorer.exe",
+            "\\programdata\\microsoft\\windows defender\\",
+            "\\windows\\system32\\werfault.exe",
+            "\\windows\\syswow64\\werfault.exe",
+            "\\windows\\system32\\dllhost.exe",
+            "\\windows\\system32\\sdclt.exe",
+            "\\windows\\system32\\pickerhost.exe",
+            "\\windows\\system32\\mrt.exe",
         )
 
     def on_call(self, call, process):
@@ -897,8 +897,8 @@ class AccessBootKeyViaRegistry(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.detected = False
-        self.whitelistProcessPaths = (r"\\windows\\system32\\lsass.exe", r"\\windows\\system32\\svchost.exe")
-        self.regKeys = (r"\\control\\lsa\\skew1", "\\control\\lsa\\jd", "\\control\\lsa\\jdlsa\\gbg")
+        self.whitelistProcessPaths = ("\\windows\\system32\\lsass.exe", "\\windows\\system32\\svchost.exe")
+        self.regKeys = ("\\control\\lsa\\skew1", "\\control\\lsa\\jd", "\\control\\lsa\\jdlsa\\gbg")
 
     def on_call(self, call, process):
         if not any(path in process["module_path"].lower() for path in self.whitelistProcessPaths):

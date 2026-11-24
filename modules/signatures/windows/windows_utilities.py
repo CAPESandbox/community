@@ -133,8 +133,8 @@ class UsesWindowsUtilities(Signature):
         return ret
 
 
-GENERIC_CMD = r'"c:\\windows\\system32\\cmd.exe" /c start /wait "" '
-SUBSEQUENT_GENERIC_CMD = r"c:\\windows\\system32\\cmd.exe  /k "
+GENERIC_CMD = '"c:\\windows\\system32\\cmd.exe" /c start /wait "" '
+SUBSEQUENT_GENERIC_CMD = "c:\\windows\\system32\\cmd.exe  /k "
 
 
 class SuspiciousCommandTools(Signature):

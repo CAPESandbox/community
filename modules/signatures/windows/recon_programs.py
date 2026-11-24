@@ -35,7 +35,7 @@ class InstalledApps(Signature):
 
         if call["api"].startswith("RegQueryValueEx"):
             keyname = self.get_argument(call, "FullName")
-            uninstall = r"\\microsoft\\windows\\currentversion\\uninstall"
+            uninstall = "\\microsoft\\windows\\currentversion\\uninstall"
             if keyname and uninstall in keyname.lower() and keyname.lower().endswith("displayname"):
                 app = self.get_argument(call, "Data")
                 if app:

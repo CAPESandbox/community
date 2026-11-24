@@ -108,7 +108,7 @@ class SystemNetworkDiscoveryCMD(Signature):
     def on_complete(self):
         indicators = [
             r"([A-Za-z]:\\Windows\\System32\\)?route(.exe)?.*",
-            r'.*netsh(r")?\swlan\sshow\s(profile|networks).*',
+            r'.*netsh(")?\swlan\sshow\s(profile|networks).*',
             r"([A-Za-z]:\\Windows\\System32\\)?ipconfig(.exe)?.*",
             r"([A-Za-z]:\\Windows\\System32\\)?nltest(.exe)?.*",
             r".*net\sview.*",
@@ -191,7 +191,7 @@ class SystemCurrentlyLoggedinUserCMD(Signature):
 
     def on_complete(self):
         indicators = [
-            ".*\squser(.exe)?.*",
+            r".*\squser(.exe)?.*",
         ]
 
         for indicator in indicators:

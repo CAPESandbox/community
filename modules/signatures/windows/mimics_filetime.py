@@ -51,7 +51,7 @@ class HandleInfo:
             or (self.changetime != 0 and self.changetime == other.changetime)
         ):
             file = other.filename.lower()
-            if re.match(r"^[A-Z]?:\\Windows\\.*", file, re.IGNORECASE) or r"\\system32\\" in file or r"\\syswow64\\" in file:
+            if re.match(r"^[A-Z]?:\\Windows\\.*", file, re.IGNORECASE) or "\\system32\\" in file or "\\syswow64\\" in file:
                 return other.filename
         return None
 
@@ -117,7 +117,7 @@ class MimicsFiletime(Signature):
                 obj.set_file_times(self.get_raw_argument(call, "FileInformation"))
             except Exception:
                 return None
-            for val in self.handles.itervalues():
+            for val in self.handles.values():
                 filename = obj.check_file_times(val)
                 if filename:
                     break

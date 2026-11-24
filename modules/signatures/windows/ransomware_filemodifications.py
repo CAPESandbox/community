@@ -48,26 +48,26 @@ class RansomwareFileModifications(Signature):
         self.dispositiondeletecount = 0
         self._disposition_deleted = set()
         self.noise_paths = [
-            r"\\appdata\\local\\microsoft\\windows\\explorer\\iconcache_",
-            r"\\appdata\\local\\microsoft\\windows\\explorer\\iconcachetodelete\\",
+            "\\appdata\\local\\microsoft\\windows\\explorer\\iconcache_",
+            "\\appdata\\local\\microsoft\\windows\\explorer\\iconcachetodelete\\",
             "\\inetcache",
             "\\temporary internet files",
             "\\cache",
             "\\temp\\",
-            r"\\windows\\",
+            "\\windows\\",
             "\\program files\\",
             "\\program files (x86)\\",
             "\\programdata\\microsoft\\",
         ]
         self.handle_noise_paths = [
-            r"\\device\\",
+            "\\device\\",
             "\\pipe\\",
             "\\??\\pipe",
-            r"\\windows\\",
+            "\\windows\\",
             "\\program files\\",
             "\\program files (x86)\\",
             "\\programdata\\microsoft\\",
-            r"\\systemroot\\",
+            "\\systemroot\\",
         ]
 
     def _is_noise_path(self, path, table=None):
@@ -99,14 +99,14 @@ class RansomwareFileModifications(Signature):
                 self.mark_call()
             return
 
-        orig_basename = origfile.rsplit("\\\\", 1)[-1].lower()
-        new_basename = newfile.rsplit("\\\\", 1)[-1].lower()
+        orig_basename = origfile.rsplit("\\", 1)[-1].lower()
+        new_basename = newfile.rsplit("\\", 1)[-1].lower()
         orig_base_no_ext = orig_basename.rsplit(".", 1)[0] or orig_basename
         if not new_basename.startswith(orig_base_no_ext):
             return
 
-        origextextract = re.search(r"(\\.[a-zA-Z0-9_\\-]{1,})$", orig_basename)
-        newextextract = re.search(r"(\\.[a-zA-Z0-9_\\-]{1,})$", new_basename)
+        origextextract = re.search(r"(\.[a-zA-Z0-9_-]{1,})$", orig_basename)
+        newextextract = re.search(r"(\.[a-zA-Z0-9_-]{1,})$", new_basename)
         if not origextextract or not newextextract:
             return
         origextension = origextextract.group(1)
@@ -127,8 +127,8 @@ class RansomwareFileModifications(Signature):
             origfile = self.get_argument(call, "ExistingFileName") or ""
             newfile = self.get_argument(call, "NewFileName") or ""
             if (
-                r"\\appdata\\local\\microsoft\\windows\\explorer\\iconcache_" in origfile.lower()
-                and r"\\appdata\\local\\microsoft\\windows\\explorer\\iconcachetodelete\\" in newfile.lower()
+                "\\appdata\\local\\microsoft\\windows\\explorer\\iconcache_" in origfile.lower()
+                and "\\appdata\\local\\microsoft\\windows\\explorer\\iconcachetodelete\\" in newfile.lower()
             ):
                 return None
             self._handle_rename(origfile, newfile)
