@@ -25,7 +25,7 @@ class AntiAVDetectFile(Signature):
             r".*\\Avira\ GmbH",
             r".*\\Avira",
             r".*\\Kaspersky\ Lab",
-            r".*\\Kaspersky\ Lab\\ Setup\\ Files",
+            r".*\\Kaspersky\ Lab Setup Files",
             r".*\\DrWeb",
             r".*\\Norton\ AntiVirus",
             r".*\\Norton\ (Security with Backup|Internet Security)\\",
@@ -49,7 +49,7 @@ class AntiAVDetectFile(Signature):
             r".*\\avg8",
             r".*\\Doctor\ Web",
             r".*\\f-secure",
-            r".*\\F-Secure\\ Internet\ Security",
+            r".*\\F-Secure Internet\ Security",
             r".*\\G\ DATA",
             r".*\\P\ Tools",
             r".*\\P\ Tools\ Internet\ Security",
@@ -72,8 +72,8 @@ class AntiAVDetectFile(Signature):
             r".*\\Malwarebytes",
             r".*\\Malwarebytes'\ Anti-Malware",
             r".*\\Microsoft\ Security\ Client",
-            r".*\\System32\\drivers\\kl1\\.sys$",
-            r".*\\System32\\drivers\\(tm((actmon|comm)\\.|e(vtmgr\\.|ext\\.)|(nciesc|tdi)\\.)|TMEBC32\\.)sys$",
+            r".*\\System32\\drivers\\kl1\.sys$",
+            r".*\\System32\\drivers\\(tm((actmon|comm)\.|e(vtmgr\.|ext\.)|(nciesc|tdi)\.)|TMEBC32\.)sys$",
         )
         found = False
         for indicator in file_indicators:

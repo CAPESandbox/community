@@ -30,9 +30,9 @@ class Fingerprint(Signature):
 
     def run(self):
         indicators = (
-            r".*\\Microsoft\\Windows\\ NT\\CurrentVersion\\DigitalProductId$",
-            r".*\\Microsoft\\Windows\\ NT\\CurrentVersion\\ProductId$",
-            r".*\\Microsoft\\Internet\\ Explorer\\Registration\\ProductId$",
+            r".*\\Microsoft\\Windows NT\\CurrentVersion\\DigitalProductId$",
+            r".*\\Microsoft\\Windows NT\\CurrentVersion\\ProductId$",
+            r".*\\Microsoft\\Internet Explorer\\Registration\\ProductId$",
             r".*\\Microsoft\\Cryptography\\MachineGuid$",
             r".*\\HARDWARE\\DESCRIPTION\\System\\SystemBIOSDate$",
         )

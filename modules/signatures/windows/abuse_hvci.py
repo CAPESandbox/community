@@ -113,7 +113,7 @@ class DisableHypervisorProtectedCodeIntegrity(Signature):
         )
 
     def on_call(self, call, process):
-        if not process["process_name"].lower in self.falseProcess:
+        if process["process_name"].lower() not in self.falseProcess:
             if call["api"] in ("RegSetValueExA", "RegSetValueExW"):
                 regKeyPath = self.get_argument(call, "FullName").lower()
                 buf = self.get_argument(call, "Buffer")
@@ -121,8 +121,8 @@ class DisableHypervisorProtectedCodeIntegrity(Signature):
                     any(
                         key in regKeyPath
                         for key in (
-                            r"\\deviceguard\\hypervisorenforcedcodeintegrity",
-                            r"\\deviceguard\\scenarios\\hypervisorenforcedcodeintegrity\\enabled",
+                            "\\deviceguard\\hypervisorenforcedcodeintegrity",
+                            "\\deviceguard\\scenarios\\hypervisorenforcedcodeintegrity\\enabled",
                         )
                     )
                     and buf == "0"

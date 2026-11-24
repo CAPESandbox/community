@@ -48,8 +48,8 @@ class VBoxDetectFiles(Signature):
             r".*\\VBoxGuest\.[a-zA-Z]{3}$",
             r".*\\VBoxMouse\.[a-zA-Z]{3}$",
             r".*\\VBoxVideo\.[a-zA-Z]{3}$",
-            r".*\\VirtualBox\\ Guest\\ Additions\\.+\\.(exe|dll)$",
-            r".*\\drivers\\vboxdrv\\.sys$",
+            r".*\\VirtualBox Guest Additions\\.+\.(exe|dll)$",
+            r".*\\drivers\\vboxdrv\.sys$",
         ]
         found = False
         for indicator in file_indicators:

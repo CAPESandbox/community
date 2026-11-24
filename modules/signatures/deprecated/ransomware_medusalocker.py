@@ -29,9 +29,9 @@ class MedusaLockerMutexes(Signature):
 
     def run(self):
         indicators = [
-            "\{3E5FC7F9-9A51-4367-9063-A120244FBEC7\}$",
-            "\{6EDD6D74-C007-4E75-B76A-E5740995E24C\}$",
-            "\{8761ABBD-7F85-42EE-B272-A76179687C63\}$",
+            r"\{3E5FC7F9-9A51-4367-9063-A120244FBEC7\}$",
+            r"\{6EDD6D74-C007-4E75-B76A-E5740995E24C\}$",
+            r"\{8761ABBD-7F85-42EE-B272-A76179687C63\}$",
         ]
 
         for indicator in indicators:

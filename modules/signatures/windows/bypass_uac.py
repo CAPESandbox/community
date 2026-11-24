@@ -180,7 +180,7 @@ class UACBypassFodhelper(Signature):
 
     def run(self):
         ret = False
-        reg_indicators = (r"HKEY_CURRENT_USER\\Software\\Classes\\ms-settings\\shell \\open\\command\\*.",)
+        reg_indicators = (r"HKEY_CURRENT_USER\\Software\\Classes\\ms-settings\\shell\\open\\command\\.*",)
 
         for indicator in reg_indicators:
             match = self.check_write_key(pattern=indicator, regex=True)

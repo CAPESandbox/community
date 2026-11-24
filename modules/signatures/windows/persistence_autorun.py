@@ -77,7 +77,7 @@ class Autorun_scheduler(Signature):
 
                     if not in_whitelist:
                         data = self.registry_writes.get(match, "unknown")
-                        if data.lower() != "c:\\program files\\java\\jre7\\bin\jp2iexp.dll":
+                        if data.lower() != "c:\\program files\\java\\jre7\\bin\\jp2iexp.dll":
                             self.data.append({"regkey": match})
                             self.data.append({"data": data})
                             self.found_autorun = True
@@ -150,22 +150,22 @@ class Autorun(Signature):
             r".*\\Microsoft\\Windows\\CurrentVersion\\RunServices\\.*",
             r".*\\Microsoft\\Windows\\CurrentVersion\\RunOnceEx\\.*",
             r".*\\Microsoft\\Windows\\CurrentVersion\\RunServicesOnce\\.*",
-            r".*\\Microsoft\\Windows\\ NT\\CurrentVersion\\Winlogon\\Notify\\.*",
-            r".*\\Microsoft\\Windows\\ NT\\CurrentVersion\\Winlogon\\Userinit$",
+            r".*\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Notify\\.*",
+            r".*\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Userinit$",
             r".*\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run\\.*",
-            r".*\\Microsoft\\Active\\ Setup\\Installed Components\\.*",
-            r".*\\Microsoft\\Windows\\ NT\\CurrentVersion\\Windows\\AppInit_DLLs$",
-            r".*\\Microsoft\\Windows\\ NT\\CurrentVersion\\Image\\ File\\ Execution\\ Options\\[^\\]*\\\Debugger$",
-            r".*\\Microsoft\\Windows\\ NT\\CurrentVersion\\Winlogon\\Shell$",
+            r".*\\Microsoft\\Active Setup\\Installed Components\\.*",
+            r".*\\Microsoft\\Windows NT\\CurrentVersion\\Windows\\AppInit_DLLs$",
+            r".*\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\[^\\]*\\Debugger$",
+            r".*\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Shell$",
             r".*\\System\\(CurrentControlSet|ControlSet001)\\Services\\[^\\]*\\ImagePath$",
             r".*\\System\\(CurrentControlSet|ControlSet001)\\Services\\[^\\]*\\Parameters\\ServiceDLL$",
             r".*\\Software\\(Wow6432Node\\)?Classes\\Exefile\\Shell\\Open\\Command\\\(Default\)$",
             r".*\\Microsoft\\Windows NT\\CurrentVersion\\Windows\\load$",
             r".*\\Microsoft\\Windows\\CurrentVersion\\ShellServiceObjectDelayLoad\\.*",
-            r".*\\System\\(CurrentControlSet|ControlSet001)\\Control\\Session\\ Manager\\AppCertDlls\\.*",
+            r".*\\System\\(CurrentControlSet|ControlSet001)\\Control\\Session Manager\\AppCertDlls\\.*",
             # r".*\\Software\\(Wow6432Node\\)?Classes\\clsid\\[^\\]*\\InprocServer32\\.*",
             r".*\\Software\\(Wow6432Node\\)?Classes\\clsid\\[^\\]*\\LocalServer32\\.*",
-            r".*\\Microsoft\\Command\\ Processor\\AutoRun$",
+            r".*\\Microsoft\\Command Processor\\AutoRun$",
             r".*\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User\ Shell\ Folders\\Startup$",
         )
         whitelists = [

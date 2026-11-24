@@ -36,7 +36,7 @@ class Pony_APIs(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.urls = set()
         self.badpid = str()
-        self.guidpat = "\{[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}\}"
+        self.guidpat = r"\{[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}\}"
         self.whitelist = [
             "http://download.oracle.com/",
         ]

@@ -29,8 +29,8 @@ class DisablesWindowsFileProtection(Signature):
         ret = False
 
         keys = (
-            r".*\\Microsoft\\Windows\\ NT\\CurrentVersion\\Winlogon\\SFCDisable$",
-            r".*\\Microsoft\\Windows\\ NT\\CurrentVersion\\Winlogon\\SFCScan$",
+            r".*\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\SFCDisable$",
+            r".*\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\SFCScan$",
         )
 
         for check in keys:

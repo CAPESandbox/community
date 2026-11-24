@@ -22,21 +22,21 @@ from modules.signatures.utils import re
 # YOU MAY HAVE TO CUSTOMIZE THIS FOR YOUR ENV#
 #############################################
 white_list_re = (
-    r"C\\:\\Program Files(?:\s\\(x86\\))?\\Adobe\\Reader\\ \\d+\\.\\d+\\Reader\\AcroRd32\\.exe$",
-    r"C\\:\\Program Files(?:\s\\(x86\\))?\\Java\\jre\\d+\\bin\\j(?:avaw?|p2launcher)\\.exe$",
-    r"C\\:\\Program Files(?:\s\\(x86\\))?\\Microsoft SilverLight\\(?:\\d+\\.)+\\d\\agcp\\.exe$",
-    r"C\\:\\Windows\\System32\\ntvdm\\.exe$",
-    r"C\\:\\Windows\\System32\\svchost\\.exe$",
-    r"C\\:\\Program Files(?:\s\\(x86\\))?\\internet explorer\\iexplore\.exe$",
+    r"C:\\Program Files(?:\s\(x86\))?\\Adobe\\Reader \d+\.\d+\\Reader\\AcroRd32\.exe$",
+    r"C:\\Program Files(?:\s\(x86\))?\\Java\\jre\d+\\bin\\j(?:avaw?|p2launcher)\.exe$",
+    r"C:\\Program Files(?:\s\(x86\))?\\Microsoft SilverLight\\(?:\d+\.)+\d\\agcp\.exe$",
+    r"C:\\Windows\\System32\\ntvdm\.exe$",
+    r"C:\\Windows\\System32\\svchost\.exe$",
+    r"C:\\Program Files(?:\s\(x86\))?\\internet explorer\\iexplore\.exe$",
     # remove this one at some point
-    r"C\\:\\Windows\\System32\\rundll32\\.exe$",
-    r"C\\:\\Windows\\System32\\drwtsn32\\.exe$",
-    r"C\\:\\Windows\\splwow64\\.exe$",
-    r"C\\:\\Program Files(?:\s\\(x86\\))?\\Common Files\\Microsoft Shared\\office1[1-6]\\off(?:lb|diag)\\.exe$",
-    r"C\\:\\Program Files(?:\s\\(x86\\))?\\Common Files\\Microsoft Shared\\dw\\dw(?:20)?\\.exe$",
-    r"C\\:\\Windows\\system32\\dwwin\\.exe$",
-    r"C\\:\\Windows\\system32\\WerFault\\.exe$",
-    r"C\\:\\Windows\\syswow64\\WerFault\\.exe$",
+    r"C:\\Windows\\System32\\rundll32\.exe$",
+    r"C:\\Windows\\System32\\drwtsn32\.exe$",
+    r"C:\\Windows\\splwow64\.exe$",
+    r"C:\\Program Files(?:\s\(x86\))?\\Common Files\\Microsoft Shared\\office1[1-6]\\off(?:lb|diag)\.exe$",
+    r"C:\\Program Files(?:\s\(x86\))?\\Common Files\\Microsoft Shared\\dw\\dw(?:20)?\.exe$",
+    r"C:\\Windows\\system32\\dwwin\.exe$",
+    r"C:\\Windows\\system32\\WerFault\.exe$",
+    r"C:\\Windows\\syswow64\\WerFault\.exe$",
 )
 
 

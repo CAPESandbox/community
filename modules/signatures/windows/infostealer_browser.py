@@ -43,14 +43,14 @@ class BrowserStealer(Signature):
         self.saw_stealer = False
         self.indicators = [
             # Firefox
-            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\signons\.sqlite$", re.I),
-            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\cookies\.sqlite$", re.I),
-            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\secmod\.db$", re.I),
-            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\cert8\.db$", re.I),
-            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\key3\.db$", re.I),
-            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\places\.sqlite$", re.I),
-            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\logins\.json$", re.I),
-            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\\.default\\formhistory\.sqlite$", re.I),
+            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\.default\\signons\.sqlite$", re.I),
+            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\.default\\cookies\.sqlite$", re.I),
+            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\.default\\secmod\.db$", re.I),
+            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\.default\\cert8\.db$", re.I),
+            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\.default\\key3\.db$", re.I),
+            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\.default\\places\.sqlite$", re.I),
+            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\.default\\logins\.json$", re.I),
+            re.compile(r".*\\Mozilla\\Firefox\\Profiles\\.*\.default\\formhistory\.sqlite$", re.I),
             # Internet Explorer/Edge
             re.compile(r".*\\History\\History.IE5\\index\.dat$", re.I),
             re.compile(r".*\\Cookies\\.*", re.I),

@@ -70,9 +70,9 @@ class Kibex_APIs(Signature):
                 bad_score += 3
 
         stealer_regkeys = [
-            r".*\\Google\\Google\\ Talk\\Accounts$",
-            r".*\\Google\\Google\\ Desktop\\Mailboxes$",
-            r".*\\Microsoft\\Internet\\ Account\\ Manager\\Accounts$",
+            r".*\\Google\\Google Talk\\Accounts$",
+            r".*\\Google\\Google Desktop\\Mailboxes$",
+            r".*\\Microsoft\\Internet Account Manager\\Accounts$",
         ]
         for ioc in stealer_regkeys:
             match = self.check_key(pattern=ioc, regex=True)

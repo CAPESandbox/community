@@ -31,13 +31,13 @@ class BrowserAddon(Signature):
 
     def run(self):
         reg_indicators = [
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet\\ Explorer\\Toolbar\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet Explorer\\Toolbar\\.*",
             r".*\\SOFTWARE\\(Wow6432Node\\)?Mozilla\\Firefox\\Extensions\\.*",
             r".*\\SOFTWARE\\(Wow6432Node\\)?MozillaPlugins\\.*",
             r".*\\SOFTWARE\\(Wow6432Node\\)?Google\\Chrome\\Extensions\\.*",
         ]
         whitelist = [
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet\\ Explorer\\Toolbar\\Locked$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet Explorer\\Toolbar\\Locked$",
         ]
         found = False
         for indicator in reg_indicators:

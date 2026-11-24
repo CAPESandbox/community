@@ -72,8 +72,8 @@ class XpertRATFiles(Signature):
         except Exception:
             return False
 
-        indicators.append(r".*\\AppData\\Roaming\\" + guid + "\\ut$")
-        indicators.append(r".*\\AppData\\Roaming\\" + guid + "\\" + guid + r"\.(exe|pas)")
+        indicators.append(r".*\\AppData\\Roaming\\" + guid + r"\\ut$")
+        indicators.append(r".*\\AppData\\Roaming\\" + guid + r"\\" + guid + r"\.(exe|pas)")
 
         for indicator in indicators:
             match = self.check_write_file(pattern=indicator, regex=True)

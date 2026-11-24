@@ -138,7 +138,7 @@ class RansomwareMessage(Signature):
 
         is_target_path = (
             filepath_lower == "\\??\\physicaldrive0"
-            or filepath_lower.startswith(r"\\device\\harddisk")
+            or filepath_lower.startswith("\\device\\harddisk")
             or filepath_lower.endswith((".txt", ".html", ".hta", ".rtf"))
             or "readme" in filepath_lower
             or "read_me" in filepath_lower

@@ -22,8 +22,8 @@ class DisablesWindowsDefender(Signature):
         ret = False
 
         keys = (
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Windows\\ Defender\\.*",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Policies\\Microsoft\\Windows\\ Defender\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Windows Defender\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Policies\\Microsoft\\Windows Defender\\.*",
             r".*\\SYSTEM\\(CurrentControlSet|ControlSet001)\\services\\WinDefend\\.*",
         )
 
@@ -192,7 +192,7 @@ class DisablesWindowsDefenderDISM(Signature):
 
     def on_complete(self):
         indicators = [
-            ".*\/Disable-Feature.*\/FeatureName:Windows-Defender.*",
+            r".*/Disable-Feature.*/FeatureName:Windows-Defender.*",
         ]
 
         for indicator in indicators:
@@ -220,12 +220,12 @@ class AddWindowsDefenderExclusions(Signature):
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey"])
 
     def on_call(self, call, process):
-        if not r"\\windows\\microsoft.net" in process["module_path"].lower():
+        if "\\windows\\microsoft.net" not in process["module_path"].lower():
             regKeyPath = self.get_argument(call, "FullName").lower()
             valueName = self.get_argument(call, "ValueName")
             buf = self.get_argument(call, "Buffer")
             if buf == "0" and (
-                r"software\\policies\\microsoft\\windows defender\\exclusions\\extensions\\" in regKeyPath
+                "software\\policies\\microsoft\\windows defender\\exclusions\\extensions\\" in regKeyPath
                 and any(
                     extension in valueName
                     for extension in (

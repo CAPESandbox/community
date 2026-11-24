@@ -18,7 +18,7 @@ import re
 
 from lib.cuckoo.common.abstracts import Signature
 
-""" Chepy doesnt provide anymore url_decode. if you need it, search a replacement and PR update.
+r""" Chepy doesnt provide anymore url_decode. if you need it, search a replacement and PR update.
 class HTMLPhisher_0(Signature):
     name = "phishing_kit_detected"
     description = "Phishing Kit Detected, sample is trying to harvest credentials"

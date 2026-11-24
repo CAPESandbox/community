@@ -31,14 +31,14 @@ class OfficeAddinLoading(Signature):
 
     def run(self):
         indicators = [
-            r".*\\AppData\\Roaming\\Microsoft\\Word\\startup\\*.wll",
-            r".*\\AppData\\Roaming\\Microsoft\\Excel\\XLSTART\\*.xll",
-            r".*\\AppData\\Roaming\\Microsoft\\AddIns\\*.xlam",
-            r".*\\AppData\\Roaming\\Microsoft\\AddIns\\*.xla",
+            r".*\\AppData\\Roaming\\Microsoft\\Word\\startup\\.*\.wll$",
+            r".*\\AppData\\Roaming\\Microsoft\\Excel\\XLSTART\\.*\.xll$",
+            r".*\\AppData\\Roaming\\Microsoft\\AddIns\\.*\.xlam$",
+            r".*\\AppData\\Roaming\\Microsoft\\AddIns\\.*\.xla$",
         ]
 
         for indicator in indicators:
-            match = self.check_write_file(pattern=indicator)
+            match = self.check_write_file(pattern=indicator, regex=True)
             if match:
                 self.data.append({"file": match})
                 return True

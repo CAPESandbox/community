@@ -3,8 +3,8 @@ from lib.cuckoo.common.abstracts import Signature
 powershell = "RwBlAHQALQBXAG0AaQBPAGIAagBlAGMAdAAgAFcAaQBuADMAMgBfAFMAaABhAGQAbwB3AGMAbwBwAHkAIAB8ACAARgBvAHIARQBhAGMAaAAtAE8AYgBqAGUAYwB0ACAAewAkAF8ALgBEAGUAbABlAHQAZQAoACkAOwB9AA=="
 
 reg = (
-    "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\QtProject\OrganizationDefaults\SdXX6SS",
-    "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\QtProject\OrganizationDefaults\Xq71vG",
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\QtProject\OrganizationDefaults\SdXX6SS",
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\QtProject\OrganizationDefaults\Xq71vG",
 )
 
 

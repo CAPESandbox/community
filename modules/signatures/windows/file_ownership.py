@@ -68,10 +68,10 @@ class FileOwnershipTakeover(Signature):
 
         # High-value target paths that escalate severity when targeted
         self.high_value_paths = [
-            r"\\windows\\system32",
-            r"\\windows\\syswow64",
-            r"\\windows\\system",
-            r"c:\\windows",
+            "\\windows\\system32",
+            "\\windows\\syswow64",
+            "\\windows\\system",
+            "c:\\windows",
             "\\program files",
             "\\program files (x86)",
         ]

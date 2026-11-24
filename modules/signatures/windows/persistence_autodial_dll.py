@@ -22,5 +22,5 @@ class PersistenceViaAutodialDLLRegistry(Signature):
             regKeyPath = self.get_argument(call, "FullName").lower()
             buf = self.get_argument(call, "Buffer")
 
-            if r"\\services\\winsock2\\parameters\\autodialdll" in regKeyPath and not "rasadhlp.dll" in buf:
+            if "\\services\\winsock2\\parameters\\autodialdll" in regKeyPath and not "rasadhlp.dll" in buf:
                 return True

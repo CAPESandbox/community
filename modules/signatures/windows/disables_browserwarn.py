@@ -20,15 +20,15 @@ class DisablesBrowserWarn(Signature):
 
     def run(self):
         indicators = (
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\WarnOnBadCertRecving$",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\WarnOnBadCertSending$",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\WarnOnHTTPSToHTTPRedirect$",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\WarnOnZoneCrossing$",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\WarnOnPostRedirect$",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\IEHardenIENoWarn$",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet\\ Explorer\\Main\\NoProtectedModeBanner$",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet\\ Explorer\\Main\\IE9RunOncePerInstallCompleted$",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet\\ Explorer\\Main\\IE9TourShown$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet Settings\\WarnOnBadCertRecving$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet Settings\\WarnOnBadCertSending$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet Settings\\WarnOnHTTPSToHTTPRedirect$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet Settings\\WarnOnZoneCrossing$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet Settings\\WarnOnPostRedirect$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet Settings\\IEHardenIENoWarn$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet Explorer\\Main\\NoProtectedModeBanner$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet Explorer\\Main\\IE9RunOncePerInstallCompleted$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet Explorer\\Main\\IE9TourShown$",
         )
         found_match = False
         for indicator in indicators:

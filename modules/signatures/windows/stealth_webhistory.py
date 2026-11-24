@@ -17,7 +17,7 @@ class StealthWebHistory(Signature):
     def run(self):
         file_indicators = [
             r".*\\History\\History\.IE5\\.*",
-            r".*\\Temporary\\ Internet\\ Files\\Content\.IE5\\.*",
+            r".*\\Temporary Internet Files\\Content\.IE5\\.*",
         ]
         if self.results.get("target", {}).get("category", "") == "file":
             file_indicators.append(r".*\\Cookies\\.*")

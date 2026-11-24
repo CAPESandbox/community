@@ -88,7 +88,7 @@ class CmdlineSwitches(Signature):
         ret = False
         cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
-            if "cmd" in cmdline.lower() and ("/V" in cmdline or "\V" in cmdline):
+            if "cmd" in cmdline.lower() and ("/V" in cmdline or "\\V" in cmdline):
                 ret = True
                 self.data.append({"command": cmdline})
 
@@ -110,7 +110,7 @@ class CmdlineTerminate(Signature):
         ret = False
         cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
-            if "cmd" in cmdline.lower() and ("/C" in cmdline or "\C" in cmdline or "/R" in cmdline or "\R" in cmdline):
+            if "cmd" in cmdline.lower() and ("/C" in cmdline or "\\C" in cmdline or "/R" in cmdline or "\\R" in cmdline):
                 ret = True
                 self.data.append({"command": cmdline})
 
@@ -241,7 +241,7 @@ class PowershellRenamedCommandLine(Signature):
         cmdlines = self.results.get("behavior", {}).get("summary", {}).get("executed_commands", [])
         for cmdline in cmdlines:
             if "powershell" in cmdline.lower() and not cmdline.lower().startswith("powershell"):
-                if re.findall("=\W+powershell", cmdline.lower()):
+                if re.findall(r"=\W+powershell", cmdline.lower()):
                     ret = True
                     self.data.append({"command": cmdline})
 

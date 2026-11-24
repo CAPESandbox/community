@@ -37,7 +37,7 @@ class ADS(Signature):
                 continue
 
             if ":" in file_path.split("\\")[-1]:
-                if not file_path.lower().startswith(r"c:\\dosdevices\\") and not file_path[-1] == ":":
+                if not file_path.lower().startswith("c:\\dosdevices\\") and not file_path[-1] == ":":
                     # we have a different signature to deal with removal of Zone.Identifier
                     if (
                         not file_path.startswith("\\??\\http://")

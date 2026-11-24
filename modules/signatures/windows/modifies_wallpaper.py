@@ -39,8 +39,8 @@ class ModifiesDesktopWallpaper(Signature):
 
     def on_complete(self):
         reg_indicators = (
-            r".*\\Control\\ Panel\\Desktop\\Wallpaper$",
-            r".*\\Internet\\ Explorer\\Desktop\\General\\Wallpaper$",
+            r".*\\Control Panel\\Desktop\\Wallpaper$",
+            r".*\\Internet Explorer\\Desktop\\General\\Wallpaper$",
         )
         for indicator in reg_indicators:
             if self.check_write_key(pattern=indicator, regex=True):

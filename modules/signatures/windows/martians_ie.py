@@ -20,17 +20,17 @@ from modules.signatures.utils import re
 ie_paths_re = re.compile(r"^c:\\program files(?:\s\(x86\))?\\internet explorer\\iexplore.exe$", re.I)
 # run through re.escape()
 white_list_re = [
-    r"^C\\:\\Program Files(?:\s\\(x86\\))?\\Adobe\\Reader\\ \\d+\\.\\d+\\Reader\\AcroRd32\\.exe$",
-    r"^C\\:\\Program Files(?:\s\\(x86\\))?\\Java\\jre\\d+\\bin\\j(?:avaw?|p2launcher)\\.exe$",
-    r"^C\\:\\Program Files(?:\s\\(x86\\))?\\Microsoft SilverLight\\(?:\\d+\\.)+\\d\\agcp.exe$",
-    r"^C\\:\\Windows\\System32\\ntvdm\\.exe$",
-    r"^C\\:\\Windows\\system32\\rundll32\\.exe$",
-    r"^C\\:\\Windows\\syswow64\\rundll32\\.exe$",
-    r"^C\\:\\Windows\\system32\\drwtsn32\\.exe$",
-    r"^C\\:\\Windows\\syswow64\\drwtsn32\\.exe$",
-    r"^C\\:\\Windows\\system32\\dwwin\\.exe$",
-    r"^C\\:\\Windows\\system32\\WerFault\\.exe$",
-    r"^C\\:\\Windows\\syswow64\\WerFault\\.exe$",
+    r"^C:\\Program Files(?:\s\(x86\))?\\Adobe\\Reader \d+\.\d+\\Reader\\AcroRd32\.exe$",
+    r"^C:\\Program Files(?:\s\(x86\))?\\Java\\jre\d+\\bin\\j(?:avaw?|p2launcher)\.exe$",
+    r"^C:\\Program Files(?:\s\(x86\))?\\Microsoft SilverLight\\(?:\d+\.)+\d\\agcp\.exe$",
+    r"^C:\\Windows\\System32\\ntvdm\.exe$",
+    r"^C:\\Windows\\system32\\rundll32\.exe$",
+    r"^C:\\Windows\\syswow64\\rundll32\.exe$",
+    r"^C:\\Windows\\system32\\drwtsn32\.exe$",
+    r"^C:\\Windows\\syswow64\\drwtsn32\.exe$",
+    r"^C:\\Windows\\system32\\dwwin\.exe$",
+    r"^C:\\Windows\\system32\\WerFault\.exe$",
+    r"^C:\\Windows\\syswow64\\WerFault\.exe$",
 ]
 # means we can be evaded but also means we can have relatively tight paths between 32-bit and 64-bit
 white_list_re_compiled = []

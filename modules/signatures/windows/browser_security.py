@@ -35,17 +35,17 @@ class BrowserSecurity(Signature):
         safelist = ["zoom.exe"]
 
         reg_indicators = (
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet\\ Explorer\\Privacy\\EnableInPrivateMode$",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet\\ Explorer\\PhishingFilter\\.*",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\Zones\\[0-4]\\.*",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\ZoneMap\\Domains\\.*",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\ZoneMap\\EscDomains\\.*",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\ZoneMap\\EscRanges\\.*",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\ZoneMap\\IEHarden$",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet\\ Settings\\CertificateRevocation$",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet\\ Explorer\\Main\\NoUpdateCheck$",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet\\ Explorer\\Security\\.*",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet\\ Explorer\\Main\\FeatureControl\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet Explorer\\Privacy\\EnableInPrivateMode$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet Explorer\\PhishingFilter\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\[0-4]\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet Settings\\ZoneMap\\Domains\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet Settings\\ZoneMap\\EscDomains\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet Settings\\ZoneMap\\EscRanges\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet Settings\\ZoneMap\\IEHarden$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Internet Settings\\CertificateRevocation$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet Explorer\\Main\\NoUpdateCheck$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet Explorer\\Security\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Internet Explorer\\Main\\FeatureControl\\.*",
         )
 
         for indicator in reg_indicators:

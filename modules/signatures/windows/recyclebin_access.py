@@ -33,7 +33,7 @@ class Accesses_RecycleBin(Signature):
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.filepattern = r"^[A-Z]:\\\$Recycle.Bin\\*"
+        self.filepattern = r"^[A-Z]:\\\$Recycle\.Bin(\\|$)"
         self.filematch = False
         self.filenames = list()
 

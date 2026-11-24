@@ -38,7 +38,7 @@ class RansomwareDMALocker(Signature):
             key = re.compile(r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Run\\cryptedinfo$")
             buff = self.get_argument(call, "Buffer").lower()
             fullname = self.get_argument(call, "FullName")
-            if buff == "notepad c:\programdata\cryptinfo.txt" and key.match(fullname):
+            if buff == r"notepad c:\programdata\cryptinfo.txt" and key.match(fullname):
                 if self.pid:
                     self.mark_call()
                 return True

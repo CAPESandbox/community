@@ -31,7 +31,7 @@ class CryptoMixMutexes(Signature):
         indicators = [
             "CLOP#666",
             "MoneyP#666",
-            "HappyLife\^_-",
+            r"HappyLife\^_-",
         ]
 
         for indicator in indicators:

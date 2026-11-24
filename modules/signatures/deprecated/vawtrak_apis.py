@@ -43,7 +43,7 @@ class Vawtrak_APIs(Signature):
         if call["api"] == "RegSetValueExA":
             # Autorun registry / filesystem behavior
             key = self.get_argument(call, "FullName").lower()
-            if r"\\software\\microsoft\\windows\\currentversion\\run\\" in key:
+            if "\\software\\microsoft\\windows\\currentversion\\run\\" in key:
                 buf = self.get_argument(call, "Buffer").lower()
                 if re.match(r"^[A-Z]:\\ProgramData\\\w+\\\w+\.exe$", buf):
                     self.ttps += ["T1060"]  # MITRE v6
@@ -83,8 +83,8 @@ class Vawtrak_APIs(Signature):
             self.malscore += 2
         if self.malscore >= 10:
             uri_indicators = [
-                ".*\/rss\/feed\/stream",
-                ".*\/modules\/[a-f0-9]{32}",
+                r".*/rss/feed/stream",
+                r".*/modules/[a-f0-9]{32}",
             ]
             for ioc in uri_indicators:
                 match = self.check_url(pattern=ioc, regex=True)
