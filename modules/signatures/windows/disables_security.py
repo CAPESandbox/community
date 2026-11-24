@@ -24,27 +24,27 @@ class DisablesSecurity(Signature):
                 "attempts to disable user access control",
             ),
             (
-                r"HKEY_LOCAL_MACHINE\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Security\\ Center\\AntiVirusOverride",
+                r"HKEY_LOCAL_MACHINE\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Security Center\\AntiVirusOverride",
                 "attempts to disable antivirus notifications",
             ),
             (
-                r"HKEY_LOCAL_MACHINE\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Security\\ Center\\AntiVirusDisableNotify",
+                r"HKEY_LOCAL_MACHINE\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Security Center\\AntiVirusDisableNotify",
                 "attempts to disable antivirus notifications",
             ),
             (
-                r"HKEY_LOCAL_MACHINE\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Security\\ Center\\FirewallDisableNotify",
+                r"HKEY_LOCAL_MACHINE\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Security Center\\FirewallDisableNotify",
                 "attempts to disable firewall notifications",
             ),
             (
-                r"HKEY_LOCAL_MACHINE\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Security\\ Center\\FirewallOverride",
+                r"HKEY_LOCAL_MACHINE\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Security Center\\FirewallOverride",
                 "attempts to disable firewall notifications",
             ),
             (
-                r"HKEY_LOCAL_MACHINE\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Security\\ Center\\UpdatesDisableNotify",
+                r"HKEY_LOCAL_MACHINE\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Security Center\\UpdatesDisableNotify",
                 "attempts to disable windows update notifications",
             ),
             (
-                r"HKEY_LOCAL_MACHINE\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Security\\ Center\\UacDisableNotify",
+                r"HKEY_LOCAL_MACHINE\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Security Center\\UacDisableNotify",
                 "disables user access control notifications",
             ),
             (
@@ -59,9 +59,9 @@ class DisablesSecurity(Signature):
                 r"HKEY_LOCAL_MACHINE\\SYSTEM\\ControlSet001\\services\\SharedAccess\\Parameters\\FirewallPolicy\\StandardProfile\\DisableNotifications",
                 "attempts to disable firewall notifications",
             ),
-            (r".*\\SOFTWARE\\(Wow6432Node\\)?Windows\\ Defender\\.*", "attempts to disable windows defender"),
+            (r".*\\SOFTWARE\\(Wow6432Node\\)?Windows Defender\\.*", "attempts to disable windows defender"),
             (
-                r".*\\SOFTWARE\\(Wow6432Node\\)?Policies\\Microsoft\\Windows\\ Defender\\.*",
+                r".*\\SOFTWARE\\(Wow6432Node\\)?Policies\\Microsoft\\Windows Defender\\.*",
                 "attempts to modify windows defender policies",
             ),
             (
@@ -69,7 +69,7 @@ class DisablesSecurity(Signature):
                 "attempts to disable windows defender",
             ),
             (
-                r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings\\Windows\\.Defender\\.SecurityCenter\\.*",
+                r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings\\Windows\.Defender\.SecurityCenter\\.*",
                 "attempts to modify windows defender notifications",
             ),
             (

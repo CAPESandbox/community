@@ -63,7 +63,7 @@ class Dridex_APIs(Signature):
             # There are many more ways to get the computer name, this is the
             # pattern observed with all Dridex varients 08/14 - 03/15 so far.
             testkey = self.get_argument(call, "FullName").lower()
-            if testkey == r"hkey_local_machine\\system\\controlset001\\control\\computername\\computername\\computername":
+            if testkey == "hkey_local_machine\\system\\controlset001\\control\\computername\\computername\\computername":
                 buf = self.get_argument(call, "Data")
                 if buf:
                     self.compname = buf.lower()

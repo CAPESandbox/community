@@ -36,11 +36,11 @@ class PersistenceShimDatabase(Signature):
     def run(self):
         ret = False
         reg_indicators = (
-            r".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\Windows\\ NT\\\\CurrentVersion\\\\AppCompatFlags\\\\Custom.*",
-            r".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\Windows\\ NT\\\\CurrentVersion\\\\AppCompatFlags\\\\InstalledSDB.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\Windows NT\\CurrentVersion\\AppCompatFlags\\Custom.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\Windows NT\\CurrentVersion\\AppCompatFlags\\InstalledSDB.*",
         )
 
-        file_indicators = (r".*\\\\Windows\\\\AppPatch\\\\Custom\\\\Custom64\\\\.*\.sdb$",)
+        file_indicators = (r".*\\Windows\\AppPatch\\Custom\\Custom64\\.*\.sdb$",)
 
         for indicator in reg_indicators:
             match = self.check_write_key(pattern=indicator, regex=True)

@@ -52,10 +52,10 @@ class QulabFiles(Signature):
 
     def run(self):
         indicators = (
-            r".*\\\\(x86|amd6)_microsoft-windows-.*\\\\(Screen\.jpg|Information\.txt|ShortInformation\.txt)$",
-            r".*\\\\(x86|amd6)_microsoft-windows-.*\\\\Desktop\sTXT\sFiles\\\\.*",
-            r".*\\\\(x86|amd6)microsoft-windows-.*\\\\.*sqlite3\.module\.dll$",
-            r".*\\\\(x86|amd6)microsoft-windows-.*\\\\ENU_[A-F0-9]{20}$",
+            r".*\\(x86|amd6)_microsoft-windows-.*\\(Screen\.jpg|Information\.txt|ShortInformation\.txt)$",
+            r".*\\(x86|amd6)_microsoft-windows-.*\\Desktop\sTXT\sFiles\\.*",
+            r".*\\(x86|amd6)microsoft-windows-.*\\.*sqlite3\.module\.dll$",
+            r".*\\(x86|amd6)microsoft-windows-.*\\ENU_[A-F0-9]{20}$",
         )
         score = 0
 

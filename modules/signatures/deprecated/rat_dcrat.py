@@ -32,8 +32,8 @@ class DCRatFiles(Signature):
 
     def run(self):
         indicators = [
-            r".*\\\\dclib\\\.*\.dclib$",
-            r".*\\\\dclib\\\\AntiVM.dclib$",
+            r".*\\dclib\\.*\.dclib$",
+            r".*\\dclib\\AntiVM.dclib$",
         ]
 
         for indicator in indicators:

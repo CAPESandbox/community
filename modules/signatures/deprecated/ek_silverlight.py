@@ -43,7 +43,7 @@ class Silverlight_JS(Signature):
             buf = self.get_argument(call, "Script")
 
         if re.search(
-            "application\/x\-silverlight.*?\<param name[ \t\n]*=.*?value[ \t\n]*=.*?\<\/object\>.*", buf, re.IGNORECASE | re.DOTALL
+            r"application/x-silverlight.*?<param name[ \t\n]*=.*?value[ \t\n]*=.*?</object>.*", buf, re.IGNORECASE | re.DOTALL
         ):
             if self.pid:
                 self.mark_call()

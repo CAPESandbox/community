@@ -30,8 +30,8 @@ class VBoxDetectKeys(Signature):
 
     def run(self):
         indicators = [
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Oracle\\VirtualBox\\ Guest\\ Additions$",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Uninstall\\Oracle\\ VM\\ VirtualBox\\ Guest\\ Additions$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Oracle\\VirtualBox Guest Additions$",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\Uninstall\\Oracle VM VirtualBox Guest Additions$",
             r".*\\SYSTEM\\(CurrentControlSet|ControlSet001)\\Enum\\PCI\\VEN_80EE&DEV_BEEF&SUBSYS_00000000&REV_00$",
             r".*\\SYSTEM\\(CurrentControlSet|ControlSet001)\\Enum\\PCI\\VEN_80EE&DEV_CAFE&SUBSYS_00000000&REV_00$",
             r".*\\SYSTEM\\(CurrentControlSet|ControlSet001)\\Control\\VirtualDeviceDrivers$",

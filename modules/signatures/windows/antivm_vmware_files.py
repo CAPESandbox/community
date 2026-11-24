@@ -32,9 +32,9 @@ class VMwareDetectFiles(Signature):
             r".*\\drivers\\vmmouse\.sys$",
             r".*\\drivers\\vmhgfs\.sys$",
             r".*\\vmguestlib\.dll$",
-            r".*\\VMware\\ Tools\\TPAutoConnSvc\.exe$",
-            r".*\\VMware\\ Tools\\TPAutoConnSvc\.exe\.dll$",
-            r".*\\Program\\ Files(\\ \(x86\))?\\VMware\\VMware\\ Tools.*",
+            r".*\\VMware Tools\\TPAutoConnSvc\.exe$",
+            r".*\\VMware Tools\\TPAutoConnSvc\.exe\.dll$",
+            r".*\\Program Files( \(x86\))?\\VMware\\VMware Tools.*",
         ]
 
         for indicator in indicators:

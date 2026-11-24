@@ -43,7 +43,7 @@ class BetaBot_APIs(Signature):
         if call["api"] == "NtCreateEvent" or call["api"] == "NtOpenEvent":
             self.events.add(self.get_argument(call, "EventName"))
         elif call["api"] == "HttpSendRequestA":
-            if str(process["module_path"]).lower() == r"c:\\windows\\explorer.exe":
+            if str(process["module_path"]).lower() == "c:\\windows\\explorer.exe":
                 buf = self.get_argument(call, "PostData")
                 if buf:
                     self.postreqs.add(buf)
@@ -57,7 +57,7 @@ class BetaBot_APIs(Signature):
         # TODO: make this use environ info
         ads_paths = [
             r"C:\\ProgramData\\.*:Zone\.Identifier$",
-            r"C:\\Program\\ Files\\Common\\ Files\\Microsoft\\.*:Zone\.Identifier$",
+            r"C:\\Program Files\\Common Files\\Microsoft\\.*:Zone\.Identifier$",
         ]
         for indicator in ads_paths:
             if self.check_delete_file(pattern=indicator, regex=True):
@@ -68,8 +68,8 @@ class BetaBot_APIs(Signature):
         file_paths = [
             r".*\\jagexcache$",
             r".*\\AppData\\Roaming\\\.minecraft$",
-            r".*\\Application\\ Data\\\.minecraft$",
-            r".*\\League\\ of\\ Legends$",
+            r".*\\Application Data\\\.minecraft$",
+            r".*\\League of Legends$",
         ]
         for indicator in file_paths:
             if self.check_file(pattern=indicator, regex=True):
@@ -78,7 +78,7 @@ class BetaBot_APIs(Signature):
         # Check for known registry behavior
         reg_paths = [
             r".*\\SOFTWARE\\Classes\\origin$",
-            r".*\\SOFTWARE\\Blizzard\\ Entertainment$",
+            r".*\\SOFTWARE\\Blizzard Entertainment$",
         ]
         for indicator in reg_paths:
             if self.check_key(pattern=indicator, regex=True):

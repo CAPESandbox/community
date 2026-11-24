@@ -60,13 +60,13 @@ class FTPStealer(Signature):
             r".*\\Software\\(Wow6432Node\\)?TurboFTP.*",
             r".*\\Software\\(Wow6432Node\\)?Sota\\FFFTP.*",
             r".*\\Software\\(Wow6432Node\\)?FTPWare\\CoreFTP\\.*",
-            r".*\\Software\\(Wow6432Node\\)?FTP\\ Explorer\\.*",
+            r".*\\Software\\(Wow6432Node\\)?FTP Explorer\\.*",
             r".*\\Software\\(Wow6432Node\\)?FTPClient\\.*",
             r".*\\Software\\(Wow6432Node\\)?LinasFTP\\.*",
             r".*\\Software\\(Wow6432Node\\)?Robo-FTP.*",
             r".*\\Software\\(Wow6432Node\\)?MAS-Soft\\FTPInfo\\.*",
             r".*\\Software\\(Wow6432Node\\)?SoftX\.org\\FTPClient\\.*",
-            r".*\\Software\\(Wow6432Node\\)?NCH\\ Software\\CoreFTP\\.*",
+            r".*\\Software\\(Wow6432Node\\)?NCH Software\\CoreFTP\\.*",
             r".*\\Software\\(Wow6432Node\\)?BulletProof Software\\BulletProof FTP Client.*",
         ]
         found_stealer = False

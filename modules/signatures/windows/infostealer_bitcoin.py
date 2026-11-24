@@ -41,7 +41,7 @@ class BitcoinWallet(Signature):
             r".*\\BBQcoin\\.*",
             r".*\\Digitalcoin\\.*",
             r".*\\Mincoin\\.*",
-            r".*\\GoldCoin\\ \(GLD\)\\.*",
+            r".*\\GoldCoin \(GLD\)\\.*",
             r".*\\Yacoin\\.*",
             r".*\\Zetacoin\\.*",
             r".*\\Fastcoin\\.*",

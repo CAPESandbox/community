@@ -33,9 +33,9 @@ class DisablesSmartScreen(Signature):
         re_match = False
         cmd_match = False
         indicators = (
-            r".*\\\\Windows\\\\CurrentVersion\\\\explorer\\\\SmartScreenEnabled$",
-            r".*\\\\Windows\\\\CurrentVersion\\\\AppHost\\\\SmartScreenEnabled$",
-            r".*\\\\MicrosoftEdge\\\\PhishingFilter$",
+            r".*\\Windows\\CurrentVersion\\explorer\\SmartScreenEnabled$",
+            r".*\\Windows\\CurrentVersion\\AppHost\\SmartScreenEnabled$",
+            r".*\\MicrosoftEdge\\PhishingFilter$",
         )
 
         for indicator in indicators:

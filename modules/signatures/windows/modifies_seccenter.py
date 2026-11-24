@@ -19,8 +19,8 @@ class ModifySecurityCenterWarnings(Signature):
 
     def run(self):
         indicators = (
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Security\\ Center\\.*",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Policies\\Microsoft\\Windows\\ NT\\Security\\ Center\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Security Center\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Policies\\Microsoft\\Windows NT\\Security Center\\.*",
             r".*\\SOFTWARE\\(Wow6432Node\\)?Microsoft\\Windows\\CurrentVersion\\explorer\\ShellServiceObjects\\{FD6905CE-952F-41F1-9A6F-135D9C6622CC}$",
         )
         for indicator in indicators:

@@ -22,8 +22,8 @@ class DisablesWindowsDefender(Signature):
         ret = False
 
         keys = (
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Windows\\ Defender\\.*",
-            r".*\\SOFTWARE\\(Wow6432Node\\)?Policies\\Microsoft\\Windows\\ Defender\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Windows Defender\\.*",
+            r".*\\SOFTWARE\\(Wow6432Node\\)?Policies\\Microsoft\\Windows Defender\\.*",
             r".*\\SYSTEM\\(CurrentControlSet|ControlSet001)\\services\\WinDefend\\.*",
         )
 
@@ -192,7 +192,7 @@ class DisablesWindowsDefenderDISM(Signature):
 
     def on_complete(self):
         indicators = [
-            ".*\/Disable-Feature.*\/FeatureName:Windows-Defender.*",
+            r".*/Disable-Feature.*/FeatureName:Windows-Defender.*",
         ]
 
         for indicator in indicators:
