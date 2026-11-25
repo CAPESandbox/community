@@ -24,7 +24,7 @@ class WebshellFileWrite(Signature):
     authors = ["bartblaze"]
     minimum = "1.3"
     evented = True
-    ttps = ["T1505"] 
+    ttps = ["T1505"]
 
     def run(self):
         file_list = (
@@ -40,4 +40,3 @@ class WebshellFileWrite(Signature):
                 return True
 
         return False
-
