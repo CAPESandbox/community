@@ -17,7 +17,7 @@ class NetworkDynDNS(Signature):
     mbcs = ["B0030"]
 
     def run(self):
-        domains = [
+        domains_re = [
             r".*\.3322\.net",
             r".*\.3322\.org",
             r".*\.accesscam\.org",
