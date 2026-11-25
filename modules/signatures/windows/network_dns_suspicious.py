@@ -417,6 +417,7 @@ class NetworkDNSTempFileService(Signature):
     categories = ["network"]
     authors = ["ditekshen"]
     minimum = "1.2"
+    ttps = ["T1071"]
 
     def run(self):
         domain_indicators = [
@@ -457,6 +458,7 @@ class NetworkDNSPasteSite(Signature):
     categories = ["network"]
     authors = ["ditekshen"]
     minimum = "1.2"
+    ttps = ["T1071"]
 
     def run(self):
         domain_indicators = [
@@ -494,6 +496,7 @@ class NetworkDNSURLShortener(Signature):
     categories = ["network"]
     authors = ["ditekshen"]
     minimum = "1.2"
+    ttps = ["T1071"]
 
     def run(self):
         domain_indicators = [
@@ -720,6 +723,7 @@ class NetworkDNSTempURLDNS(Signature):
     categories = ["network"]
     authors = ["ditekshen"]
     minimum = "1.2"
+    ttps = ["T1071"]
 
     def run(self):
         domain_indicators = [
@@ -756,3 +760,41 @@ class Suspicious_TLD(Signature):
                         self.data.append({"domain": tld_match})
 
         return len(self.data) > 0
+        
+        
+class NetworkDNSLLMAPI(Signature):
+    name = "network_dns_llm_api"
+    description = "Generates DNS query to Large Language Model (LLM) API endpoint"
+    severity = 1
+    categories = ["network", "dns"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1071"]
+
+    def run(self):
+        domain_indictors = [
+            r"^api\.anthropic\.com$",
+            r"^api\.cerebras\.ai$",
+            r"^api\.cohere\.com$",
+            r"^api\.deepseek\.com$",
+            r"^api\.fireworks\.ai$",
+            r"^api\.groq\.com$",
+            r"^api\.mistral\.ai$",
+            r"^api\.openai\.com$",
+            r"^api\.perplexity\.ai$",
+            r"^api\.replicate\.com$",
+            r"^api\.sambanova\.ai$",
+            r"^api\.together\.xyz$",
+            r"^api\.x\.ai$",
+            r"^generativelanguage\.googleapis\.com$",
+            r"^open\.bigmodel\.cn$",
+        ]
+
+        for indicator in domain_indictors:
+            if self.check_domain(pattern=indicator, regex=True):
+                self.data.append({"domain": indicator})
+                return True
+
+        return False
+        
