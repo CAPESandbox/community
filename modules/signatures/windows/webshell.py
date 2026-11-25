@@ -35,6 +35,8 @@ class WebShellProcesses(Signature):
             "nginx.exe",
             "php-cgi.exe",
             "tomcat.exe",
+            "tomcat9.exe",
+            "sqlservr.exe",
             "aspnet_wp.exe",
         ]
 
