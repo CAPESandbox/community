@@ -104,7 +104,6 @@ class NetworkDynDNS(Signature):
             r".*\.zapto\.org",
         ]
 
-
         found_matches = False
         for indicator in domains_re:
             matches = self.check_domain(pattern=indicator, regex=True, all=True)

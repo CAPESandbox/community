@@ -45,4 +45,3 @@ class NetworkIPEmbeddedDNS(Signature):
                     return True
 
         return False
-

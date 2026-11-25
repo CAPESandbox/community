@@ -299,7 +299,6 @@ class NetworkDOHTLS(Signature):
             "freedns.controld.com",
             "open.dns0.eu",
             "zero.dns0.eu",
-
         ]
 
         ip_indicators = [
@@ -415,7 +414,6 @@ class NetworkDNSReverseProxy(Signature):
             r".*\.ngrok-free\.dev$",
             r".*\.pinggy\.io$",
             r".*\.trycloudflare\.com$",
-
         ]
 
         for indicator in domain_indictors:
@@ -460,7 +458,6 @@ class NetworkDNSTempFileService(Signature):
             "file.io",
             "litterbox.catbox.moe",
             "tmpfiles.org",
-
         ]
 
         for indicator in domain_indicators:
@@ -498,7 +495,7 @@ class NetworkDNSPasteSite(Signature):
             "stikked.ch",
             "dpaste.com",
             "pastebin.pl",
-             "dpaste.org",
+            "dpaste.org",
             "paste.org",
             "paste.rs",
         ]
