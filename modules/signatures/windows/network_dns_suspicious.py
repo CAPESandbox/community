@@ -295,6 +295,11 @@ class NetworkDOHTLS(Signature):
             "unicast.censurfridns.dk",
             "uw-dns.rubyfish.cn",
             "wdns.233py.com",
+            "dns.controld.com",
+            "freedns.controld.com",
+            "open.dns0.eu",
+            "zero.dns0.eu",
+
         ]
 
         ip_indicators = [
@@ -402,6 +407,15 @@ class NetworkDNSReverseProxy(Signature):
         domain_indictors = [
             r".*\.portmap\.io$",
             r".*\.ngrok\.io$",
+            r".*\.localtunnel\.me$",
+            r".*\.ngrok\.app$",
+            r".*\.ngrok\.dev$",
+            r".*\.ngrok\.pizza$",
+            r".*\.ngrok-free\.app$",
+            r".*\.ngrok-free\.dev$",
+            r".*\.pinggy\.io$",
+            r".*\.trycloudflare\.com$",
+
         ]
 
         for indicator in domain_indictors:
@@ -442,6 +456,11 @@ class NetworkDNSTempFileService(Signature):
             "dropmb.com",
             "transfer.sh",
             "1fichier.com",
+            "0x0.st",
+            "file.io",
+            "litterbox.catbox.moe",
+            "tmpfiles.org",
+
         ]
 
         for indicator in domain_indicators:
@@ -479,6 +498,9 @@ class NetworkDNSPasteSite(Signature):
             "stikked.ch",
             "dpaste.com",
             "pastebin.pl",
+             "dpaste.org",
+            "paste.org",
+            "paste.rs",
         ]
 
         for indicator in domain_indicators:
@@ -705,6 +727,10 @@ class NetworkDNSURLShortener(Signature):
             r"zurl\.to$",
             r"zws\.im$",
             r"zzb\.bz$",
+            r"0x0\.st$",
+            r"reurl\.cc$",
+            r"s\.gy$",
+            r"tiny\.one$",
         ]
 
         for indicator in domain_indicators:

@@ -81,6 +81,8 @@ class NetworkCnCHTTPSSocialMedia(Signature):
             "api.vkontakte.ru",
             "api.vk.com",
             "files.slack.com",
+            "api.slack.com",
+            "graph.instagram.com",
         ]
         self.urls = []
 
@@ -144,6 +146,7 @@ class NetworkCnCHTTPSPasteSite(Signature):
             "stikked.ch",
             "dpaste.com",
             "pastebin.pl",
+            "paste.rs",
         ]
         self.urls = []
 
@@ -396,6 +399,8 @@ class NetworkCnCHTTPSURLShortenerSite(Signature):
             "zurl.to",
             "zws.im",
             "zzb.bz",
+            "0x0.st",
+            "reurl.cc",
         ]
         self.urls = []
 
@@ -460,6 +465,9 @@ class NetworkCnCHTTPSTempStorageSite(Signature):
             "transfer.sh",
             "1fichier.com",
             "gofile.io",
+            "file.io",
+            "litterbox.catbox.moe",
+            "tmpfiles.org",
         ]
         self.urls = []
 
@@ -602,6 +610,12 @@ class NetworkCnCHTTPSInteractsh(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.domains = [
             ".interact.sh",
+            ".oast.fun",
+            ".oast.live",
+            ".oast.me",
+            ".oast.online",
+            ".oast.pro",
+            ".oast.site",
         ]
         self.urls = []
 
@@ -672,6 +686,7 @@ class NetworkCnCHTTPSFreeWebHosting(Signature):
             ".repl.co",
             ".glitch.me",
             ".ck.page",
+            ".vercel.app",
         ]
         self.urls = []
 
@@ -919,6 +934,7 @@ class NetworkCnCHTTPSArchive(Signature):
             "archive.is",
             "archive.ph",
             "archive.today",
+            "web.archive.org",
         ]
         self.urls = []
 
@@ -965,8 +981,11 @@ class NetworkCnCHTTPSOpenSource(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.domains = [
+            "bitbucket.org",
             "gist.github.com",
             "raw.githubusercontent.com",
+            "gitlab.com",
+            "gist.githubusercontent.com",
         ]
         self.urls = []
 
@@ -1017,6 +1036,7 @@ class NetworkCnCHTTPSServiceInterface(Signature):
             "run.mocky.io",
             "webhook.site",
             "devtunnels.ms",
+            "dnshook.site",
         ]
         self.urls = []
 
