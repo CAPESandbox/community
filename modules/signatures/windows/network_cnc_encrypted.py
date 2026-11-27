@@ -1065,3 +1065,111 @@ class NetworkCnCHTTPSServiceInterface(Signature):
         if self.data:
             return True
         return False
+        
+        
+class NetworkCnCHTTPSLLMAPI(Signature):
+    name = "network_cnc_https_llm_api"
+    description = "Establishes encrypted HTTPS connection to Large Language Model (LLM) API endpoint"
+    severity = 1
+    categories = ["network", "encryption"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1573"]
+
+    filter_apinames = set(["SslEncryptPacket", "InternetOpenUrlA", "InternetOpenUrlW"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.domains = [
+            "api.anthropic.com",
+            "api.cerebras.ai",
+            "api.cohere.com",
+            "api.deepseek.com",
+            "api.fireworks.ai",
+            "api.groq.com",
+            "api.mistral.ai",
+            "api.openai.com",
+            "api.perplexity.ai",
+            "api.replicate.com",
+            "api.sambanova.ai",
+            "api.together.xyz",
+            "api.x.ai",
+            "generativelanguage.googleapis.com",
+            "open.bigmodel.cn",
+        ]
+        self.urls = []
+
+    def on_call(self, call, process):
+        buff = self.get_argument(call, "Buffer")
+        if buff:
+            for domain in self.domains:
+                host_header = "Host: " + domain
+                if host_header in buff:
+                    self.data.append({"http_request": buff})
+                    if self.pid:
+                        self.mark_call()
+
+        elif call["api"] in ("InternetOpenUrlA", "InternetOpenUrlW"):
+            url = self.get_argument(call, "URL")
+            for domain in self.domains:
+                if url.startswith("https://" + domain):
+                    self.urls.append(url)
+                    if self.pid:
+                        self.mark_call()
+
+    def on_complete(self):
+        for url in list(set(self.urls)):
+            self.data.append({"url": url})
+
+        if self.data:
+            return True
+        return False
+        
+        
+class NetworkCnCHTTPSARTEXMarker(Signature):
+    name = "network_cnc_https_artex_marker"
+    description = "ARTEX HTTP request marker detected"
+    severity = 3
+    categories = ["network", "encryption"]
+    authors = ["bartblaze"]
+    minimum = "1.3"
+    evented = True
+    ttps = ["T1573"]
+    reference = ["https://github.com/unixfreaxjp/malwaremustdie/tree/master/etc/artex-stix-osquery-sigma-kql-snort-suricata-yara"]
+
+    filter_apinames = set(["SslEncryptPacket"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.markers = [
+            "ARTEX-PROBE-0001",
+            "ARTEX_WRITE_PROBE",
+            "ARTX123",
+            "ARTX_PERSIST_OK",
+            "MARKER123",
+            "X-ARTX-KEY",
+            "artex-probe-",
+            "artex_control_marker_zz9q",
+        ]
+
+    def on_call(self, call, process):
+        buff = self.get_argument(call, "Buffer")
+        if buff:
+            for marker in self.markers:
+                if marker in buff:
+                    self.data.append(
+                        {
+                            "http_request": buff,
+                            "marker": marker,
+                            "process": process["process_name"],
+                        }
+                    )
+
+                    if self.pid:
+                        self.mark_call()
+
+                    return True
+
+        return False
+        
